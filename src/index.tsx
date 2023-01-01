@@ -7,9 +7,23 @@ import reportWebVitals from './reportWebVitals';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+function callback(data: any) {
+  alert(JSON.stringify(data, null, 2));
+}
+const config = {
+  defaultDomains: [{
+    "value": "https://identifier.buildingsmart.org/uri/digibase/volkerwesselsbv-0.1",
+    "label": "VolkerWessels Bouw & Vastgoed"
+  }]
+}
+
 root.render(
   <React.StrictMode>
-    <App />
+    <App
+      callback={callback}
+      config={config}
+    />
   </React.StrictMode>
 );
 
