@@ -9,6 +9,7 @@ const root = ReactDOM.createRoot(
 );
 
 function callback(data: any) {
+  console.log(data);
   alert(JSON.stringify(data, null, 2));
 }
 const config = {

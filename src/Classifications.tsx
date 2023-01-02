@@ -1,6 +1,6 @@
 import { useState, useEffect, Children } from 'react';
 import { Form } from 'react-bootstrap';
-import { Api, ClassificationContractV4 } from './BsddApi';
+import { Api, ClassificationContractV4, DomainContractV3 } from './BsddApi';
 
 var api = new Api();
 api.baseUrl = 'https://test.bsdd.buildingsmart.org';
@@ -8,10 +8,12 @@ api.baseUrl = 'https://test.bsdd.buildingsmart.org';
 interface Props {
   activeClassificationUri: string | undefined;
   recursiveMode: boolean;
+  classifications: ClassificationContractV4[];
+  setClassifications: (value: ClassificationContractV4[]) => void;
+  domains: { [id: string]: DomainContractV3 };
 }
 
 function Classifications(props: Props) {
-  const [classifications, setClassifications] = useState<string[]>([]);
   const [classificationCount, setClassificationCount] = useState<number>(0);
   const [classificationUris, setClassificationUris] = useState<{ [id: string]: Promise<ClassificationContractV4 | null> }>({});
 
@@ -45,6 +47,12 @@ function Classifications(props: Props) {
     });
     return p;
   }
+  function getClassificationDomainName(classification: ClassificationContractV4): string {
+    if (classification && classification.domainNamespaceUri) {
+      return props.domains[classification.domainNamespaceUri].name;
+    }
+    return 'unknown';
+  }
 
   useEffect(() => {
     setClassificationCount(0);
@@ -66,17 +74,12 @@ function Classifications(props: Props) {
     Promise.allSettled(Object.values(classificationUris)).then(function (results) {
       var r = results.map((result) => {
         if (result.status === 'fulfilled') {
-          var c = result.value;
-          if (c && c.name) {
-            return c.name;
-          } else {
-            return 'unknown';
-          }
+          return result.value;
         }
-        return 'unknown';
-      });
+        return null;
+      }).filter((x): x is ClassificationContractV4 => x !== null);
 
-      setClassifications(r);
+      props.setClassifications(r);
       var r1 = results.map((result) => {
         if (result.status === 'fulfilled') {
           var c = result.value;
@@ -98,11 +101,11 @@ function Classifications(props: Props) {
   return (
     <div>
       {Children.toArray(
-        classifications.map((classification, index) =>
+        props.classifications.map((classification, index) =>
           <Form.Group className="mb-3 row" key={index}>
-            <Form.Label className="col-sm-5 col-form-label">{classification}</Form.Label>
+            <Form.Label className="col-sm-5 col-form-label">{getClassificationDomainName(classification)}</Form.Label>
             <div className="col-sm-7">
-              <Form.Control placeholder={classification} disabled />
+              <Form.Control placeholder={classification.name} disabled />
             </div>
           </Form.Group>
         )

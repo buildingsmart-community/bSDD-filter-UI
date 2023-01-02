@@ -7,6 +7,7 @@ import Classifications from './Classifications';
 import RecursiveMode from './RecursiveMode';
 import SelectDomains from './SelectDomains';
 import Apply from './Apply';
+import { Api, ClassificationContractV4, DomainContractV3 } from './BsddApi';
 
 interface Option {
   label: string;
@@ -24,17 +25,18 @@ interface Props {
 function App(props: Props) {
   // const [api, setApi] = useState(0);
 
+  const [activeClassificationUri, setActiveClassificationUri] = useState<string>();
+  const [recursiveMode, setRecursiveMode] = useState<boolean>(false);
+  const [activeDomains, setActiveDomains] = useState<Option[]>(getDefaultDomains());
+  const [domains, setDomains] = useState<{ [id: string]: DomainContractV3 }>({});
+  const [classifications, setClassifications] = useState<ClassificationContractV4[]>([]);
+
   function getDefaultDomains(): Option[] {
     if (props.config && props.config.defaultDomains && props.config.defaultDomains.length) {
       return props.config.defaultDomains;
     }
     return [];
   }
-
-  // const [activeClassification, setActiveClassification] = useState<TextSearchResponseClassificationContractV5>({});
-  const [activeClassificationUri, setActiveClassificationUri] = useState<string>();
-  const [recursiveMode, setRecursiveMode] = useState<boolean>(false);
-  const [activeDomains, setActiveDomains] = useState<Option[]>(getDefaultDomains());
 
   return (
     <Card>
@@ -55,6 +57,7 @@ function App(props: Props) {
               <SelectDomains
                 activeDomains={activeDomains}
                 setActiveDomains={setActiveDomains}
+                setDomains={setDomains}
               />
             </Col>
             <Col>
@@ -73,6 +76,9 @@ function App(props: Props) {
                   <Classifications
                     activeClassificationUri={activeClassificationUri}
                     recursiveMode={recursiveMode}
+                    classifications={classifications}
+                    setClassifications={setClassifications}
+                    domains={domains}
                   />
                 </Accordion.Body>
               </Accordion.Item>
@@ -88,6 +94,9 @@ function App(props: Props) {
           <Form.Group className="mb-3 row">
             <Apply
               callback={props.callback}
+              domains={domains}
+              classifications={classifications}
+              setClassifications={setClassifications}
             />
           </Form.Group>
         </Card.Body>
