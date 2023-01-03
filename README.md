@@ -1,6 +1,6 @@
 # bSDD Search Component for React
 
-![](https://github.com/BIM-Tools/react-bsdd-search/tree/master/docs/bSDD-search-component.png)
+![](https://github.com/BIM-Tools/react-bsdd-search/raw/master/docs/bSDD-search-component.png)
 
 ## Usage
 
