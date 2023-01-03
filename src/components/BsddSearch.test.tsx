@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from '@testing-library/react'
-import App from './App'
+import BsddSearch from './BsddSearch'
 
 function callback(data: any) {
   alert(data)
@@ -15,8 +15,8 @@ const config = {
   ],
 }
 
-test('Render App', () => {
+test('Render BsddSearch', () => {
   it('renders without crashing', () => {
-    render(<App callback={callback} config={config} />)
+    render(<BsddSearch callback={callback} config={config} />)
   })
 })
