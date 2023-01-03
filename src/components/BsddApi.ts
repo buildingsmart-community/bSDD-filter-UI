@@ -11,204 +11,204 @@
 
 export interface ClassificationContractV3 {
   /** Namespace URI of the domain */
-  domainNamespaceUri?: string | null;
+  domainNamespaceUri?: string | null
   /**
    * Date of activation
    * @format date-time
    */
-  activationDateUtc: string;
+  activationDateUtc: string
   /**
    * Code used originally by the domain
    * @minLength 1
    */
-  code: string;
+  code: string
   /** Language code of the creator */
-  creatorLanguageCode?: string | null;
+  creatorLanguageCode?: string | null
   /** List of countries where used */
-  countriesOfUse?: string[] | null;
+  countriesOfUse?: string[] | null
   /** Country of origin */
-  countryOfOrigin?: string | null;
+  countryOfOrigin?: string | null
   /**
    * Date of deactivation
    * @format date-time
    */
-  deActivationDateUtc?: string | null;
+  deActivationDateUtc?: string | null
   /** Definition */
-  definition?: string | null;
+  definition?: string | null
   /** Explanation of the deprecation */
-  deprecationExplanation?: string | null;
+  deprecationExplanation?: string | null
   /** Reference to a(n official) document */
-  documentReference?: string | null;
+  documentReference?: string | null
   /**
    * Name
    * @minLength 1
    */
-  name: string;
+  name: string
   /**
    * Unique identification
    * @minLength 1
    */
-  namespaceUri: string;
+  namespaceUri: string
   /** List of codes of the replaced items */
-  replacedObjectCodes?: string[] | null;
+  replacedObjectCodes?: string[] | null
   /** List of codes of the replacing items */
-  replacingObjectCodes?: string[] | null;
+  replacingObjectCodes?: string[] | null
   /**
    * Date of the revision
    * @format date-time
    */
-  revisionDateUtc?: string | null;
+  revisionDateUtc?: string | null
   /**
    * Revision number
    * @format int32
    */
-  revisionNumber?: number | null;
+  revisionNumber?: number | null
   /**
    * Status, can be: Preview, Active or Inactive
    * @minLength 1
    */
-  status: string;
+  status: string
   /** List of subdivisions (e.g. states) where used */
-  subdivisionsOfUse?: string[] | null;
+  subdivisionsOfUse?: string[] | null
   /** Alternative unique global identification */
-  uid?: string | null;
+  uid?: string | null
   /**
    * Date of the version
    * @format date-time
    */
-  versionDateUtc: string;
+  versionDateUtc: string
   /**
    * Version number
    * @format int32
    */
-  versionNumber?: number | null;
+  versionNumber?: number | null
   /** URI of a visual representation */
-  visualRepresentationUri?: string | null;
+  visualRepresentationUri?: string | null
   /** Type of Classification */
-  classificationType?: string | null;
+  classificationType?: string | null
   /** Code that can be used for domain specific purposes */
-  referenceCode?: string | null;
+  referenceCode?: string | null
   /** List of synonyms for the classification */
-  synonyms?: string[] | null;
+  synonyms?: string[] | null
   /** List of related IFC entity names (version independent) */
-  relatedIfcEntityNames?: string[] | null;
-  parentClassificationReference?: ClassificationReferenceContractV3;
+  relatedIfcEntityNames?: string[] | null
+  parentClassificationReference?: ClassificationReferenceContractV3
   /** List of the properties of this classification */
-  classificationProperties?: ClassificationPropertyContractV3[] | null;
+  classificationProperties?: ClassificationPropertyContractV3[] | null
   /** List of relations to other classifications, can be reference to classifications of other domains */
-  classificationRelations?: ClassificationRelationContractV3[] | null;
+  classificationRelations?: ClassificationRelationContractV3[] | null
   /** List of child classifications (only filled if requested) */
-  childClassificationReferences?: ClassificationReferenceContractV3[] | null;
+  childClassificationReferences?: ClassificationReferenceContractV3[] | null
 }
 
 export interface ClassificationContractV4 {
   /** Namespace URI of the domain */
-  domainNamespaceUri?: string | null;
+  domainNamespaceUri?: string | null
   /**
    * Date of activation
    * @format date-time
    */
-  activationDateUtc: string;
+  activationDateUtc: string
   /**
    * Code used originally by the domain
    * @minLength 1
    */
-  code: string;
+  code: string
   /** Language code of the creator */
-  creatorLanguageCode?: string | null;
+  creatorLanguageCode?: string | null
   /** List of countries where used */
-  countriesOfUse?: string[] | null;
+  countriesOfUse?: string[] | null
   /** Country of origin */
-  countryOfOrigin?: string | null;
+  countryOfOrigin?: string | null
   /**
    * Date of deactivation
    * @format date-time
    */
-  deActivationDateUtc?: string | null;
+  deActivationDateUtc?: string | null
   /** Definition */
-  definition?: string | null;
+  definition?: string | null
   /** Explanation of the deprecation */
-  deprecationExplanation?: string | null;
+  deprecationExplanation?: string | null
   /** Reference to a(n official) document */
-  documentReference?: string | null;
+  documentReference?: string | null
   /**
    * Name
    * @minLength 1
    */
-  name: string;
+  name: string
   /**
    * Unique identification
    * @minLength 1
    */
-  namespaceUri: string;
+  namespaceUri: string
   /** List of codes of the replaced items */
-  replacedObjectCodes?: string[] | null;
+  replacedObjectCodes?: string[] | null
   /** List of codes of the replacing items */
-  replacingObjectCodes?: string[] | null;
+  replacingObjectCodes?: string[] | null
   /**
    * Date of the revision
    * @format date-time
    */
-  revisionDateUtc?: string | null;
+  revisionDateUtc?: string | null
   /**
    * Revision number
    * @format int32
    */
-  revisionNumber?: number | null;
+  revisionNumber?: number | null
   /**
    * Status, can be: Preview, Active or Inactive
    * @minLength 1
    */
-  status: string;
+  status: string
   /** List of subdivisions (e.g. states) where used */
-  subdivisionsOfUse?: string[] | null;
+  subdivisionsOfUse?: string[] | null
   /** Alternative unique global identification */
-  uid?: string | null;
+  uid?: string | null
   /**
    * Date of the version
    * @format date-time
    */
-  versionDateUtc: string;
+  versionDateUtc: string
   /**
    * Version number
    * @format int32
    */
-  versionNumber?: number | null;
+  versionNumber?: number | null
   /** URI of a visual representation */
-  visualRepresentationUri?: string | null;
+  visualRepresentationUri?: string | null
   /** Type of Classification */
-  classificationType?: string | null;
+  classificationType?: string | null
   /** Code that can be used for domain specific purposes */
-  referenceCode?: string | null;
+  referenceCode?: string | null
   /** List of synonyms for the classification */
-  synonyms?: string[] | null;
+  synonyms?: string[] | null
   /** List of related IFC entity names (version independent) */
-  relatedIfcEntityNames?: string[] | null;
-  parentClassificationReference?: ClassificationReferenceContractV3;
+  relatedIfcEntityNames?: string[] | null
+  parentClassificationReference?: ClassificationReferenceContractV3
   /** List of the properties of this classification */
-  classificationProperties?: ClassificationPropertyContractV3[] | null;
+  classificationProperties?: ClassificationPropertyContractV3[] | null
   /** List of relations to other classifications, can be reference to classifications of other domains */
-  classificationRelations?: ClassificationRelationContractV3[] | null;
+  classificationRelations?: ClassificationRelationContractV3[] | null
   /** List of child classifications (only filled if requested) */
-  childClassificationReferences?: ClassificationReferenceContractV3[] | null;
+  childClassificationReferences?: ClassificationReferenceContractV3[] | null
 }
 
 export interface ClassificationListItemContractV2 {
-  namespaceUri?: string | null;
-  code?: string | null;
-  name?: string | null;
-  referenceCode?: string | null;
-  parentClassificationCode?: string | null;
-  children?: ClassificationListItemContractV2[] | null;
+  namespaceUri?: string | null
+  code?: string | null
+  name?: string | null
+  referenceCode?: string | null
+  parentClassificationCode?: string | null
+  children?: ClassificationListItemContractV2[] | null
 }
 
 export interface ClassificationListItemContractV3 {
-  namespaceUri?: string | null;
-  code?: string | null;
-  name?: string | null;
-  referenceCode?: string | null;
-  parentClassificationCode?: string | null;
-  children?: ClassificationListItemContractV3[] | null;
+  namespaceUri?: string | null
+  code?: string | null
+  name?: string | null
+  referenceCode?: string | null
+  parentClassificationCode?: string | null
+  children?: ClassificationListItemContractV3[] | null
 }
 
 export interface ClassificationPropertyContractV3 {
@@ -216,14 +216,14 @@ export interface ClassificationPropertyContractV3 {
    * Name of the property
    * @minLength 1
    */
-  name: string;
+  name: string
   /**
    * Plain language description of the property.
    * If at Property level no description has been given but a "Definition" is available, then "Definition" is returned as description
    */
-  description?: string | null;
+  description?: string | null
   /** Format for expressing the value of the property */
-  dataType?: string | null;
+  dataType?: string | null
   /**
    * Dimension of the physical quantity in format "L M T I Θ N J", for example "-2 1 0 0 0 0 0".
    * With
@@ -235,144 +235,144 @@ export interface ClassificationPropertyContractV3 {
    *   N   Amount of substance
    *   J   Luminous intensity
    */
-  dimension?: string | null;
+  dimension?: string | null
   /**
    * The Length value of the dimension
    * @format int32
    */
-  dimensionLength?: number | null;
+  dimensionLength?: number | null
   /**
    * The Mass value of the dimension
    * @format int32
    */
-  dimensionMass?: number | null;
+  dimensionMass?: number | null
   /**
    * The Time value of the dimension
    * @format int32
    */
-  dimensionTime?: number | null;
+  dimensionTime?: number | null
   /**
    * The Electric current value of the dimension
    * @format int32
    */
-  dimensionElectricCurrent?: number | null;
+  dimensionElectricCurrent?: number | null
   /**
    * The Thermodynamic temperature value of the dimension
    * @format int32
    */
-  dimensionThermodynamicTemperature?: number | null;
+  dimensionThermodynamicTemperature?: number | null
   /**
    * The Amount of substance value of the dimension
    * @format int32
    */
-  dimensionAmountOfSubstance?: number | null;
+  dimensionAmountOfSubstance?: number | null
   /**
    * The Luminous intensity value of the dimension
    * @format int32
    */
-  dimensionLuminousIntensity?: number | null;
+  dimensionLuminousIntensity?: number | null
   /**
    * List of codes of the properties which are parameters of the function for a dynamic property.
    * Only applicable for dynamic properties (IsDynamic)
    */
-  dynamicParameterPropertyCodes?: string[] | null;
+  dynamicParameterPropertyCodes?: string[] | null
   /** Illustrate possible use or values of the Property */
-  example?: string | null;
+  example?: string | null
   /** True if the value of this property is dependent on other properties (as provided in DynamicParameterPropertyCodes) */
-  isDynamic?: boolean | null;
+  isDynamic?: boolean | null
   /** Indicates if this property is required for the classification */
-  isRequired?: boolean | null;
+  isRequired?: boolean | null
   /** Indicates if the value of the property can be changed by the user */
-  isWritable?: boolean | null;
+  isWritable?: boolean | null
   /**
    * Maximum value of the property, exclusive
    * This value does not need to be the same as the MaxExclusive in the Property contract
    * because this value can be overruled at Classification-Property level to define a more strict value.
    * @format double
    */
-  maxExclusive?: number | null;
+  maxExclusive?: number | null
   /**
    * Maximum value of the property, inclusive
    * This value does not need to be the same as the MaxInclusive in the Property contract
    * because this value can be overruled at Classification-Property level to define a more strict value.
    * @format double
    */
-  maxInclusive?: number | null;
+  maxInclusive?: number | null
   /**
    * Minimum value of the property, exclusive
    * This value does not need to be the same as the MinExclusive in the Property contract
    * because this value can be overruled at Classification-Property level to define a more strict value.
    * @format double
    */
-  minExclusive?: number | null;
+  minExclusive?: number | null
   /**
    * Minimum value of the property, inclusive
    * This value does not need to be the same as the MinInclusive in the Property contract
    * because this value can be overruled at Classification-Property level to define a more strict value.
    * @format double
    */
-  minInclusive?: number | null;
+  minInclusive?: number | null
   /**
    * An XML Schema Regular expression for the property value.
    * See for explanation: https://www.regular-expressions.info/xml.html.
    * This value does not need to be the same as the Pattern in the Property contract
    * because this value can be overruled at Classification-Property level to define a more strict value.
    */
-  pattern?: string | null;
+  pattern?: string | null
   /** The quantity in plain text */
-  physicalQuantity?: string | null;
+  physicalQuantity?: string | null
   /**
    * List of possible values
    * This list does not need to be the same as the list of PossibleValues in the Property contract
    * because this list can be overruled at Classification-Property level to define a more strict list.
    */
-  possibleValues?: ClassificationPropertyValueContractV3[] | null;
+  possibleValues?: ClassificationPropertyValueContractV3[] | null
   /** Predefined value: if the classification can have only one value for this property, this is it */
-  predefinedValue?: string | null;
+  predefinedValue?: string | null
   /** Code of the property, only applicable if property is of the same domain as the classification. */
-  propertyCode?: string | null;
+  propertyCode?: string | null
   /** Name of the Domain this property belongs to */
-  propertyDomainName?: string | null;
+  propertyDomainName?: string | null
   /** Unique identification of the property */
-  propertyNamespaceUri?: string | null;
+  propertyNamespaceUri?: string | null
   /** Name of the Property Set */
-  propertySet?: string | null;
+  propertySet?: string | null
   /** Status of the property: Preview, Active or Inactive */
-  propertyStatus?: string | null;
+  propertyStatus?: string | null
   /** Indicates kind of value: Single, Range (2 values expected), List (multiple values expected), Complex (use in combination with "ConnectedProperties"), ComplexList */
-  propertyValueKind?: string | null;
+  propertyValueKind?: string | null
   /** Symbol of the property */
-  symbol?: string | null;
+  symbol?: string | null
   /** List of units to select from */
-  units?: string[] | null;
+  units?: string[] | null
   /** List of QUDT unit codes to select from */
-  qudtCodes?: string[] | null;
+  qudtCodes?: string[] | null
 }
 
 export interface ClassificationPropertyValueContractV3 {
   /** Globally unique identification of the value (if present) */
-  namespaceUri?: string | null;
+  namespaceUri?: string | null
   /** Identification of the value */
-  code?: string | null;
+  code?: string | null
   /**
    * Possible value of the property
    * @minLength 1
    */
-  value: string;
+  value: string
   /** Description of the value */
-  description?: string | null;
+  description?: string | null
   /**
    * Sort number of value within the list of values for the Property
    * @format int32
    */
-  sortNumber?: number | null;
+  sortNumber?: number | null
 }
 
 export interface ClassificationReferenceContractV3 {
   /** @minLength 1 */
-  namespaceUri: string;
-  name?: string | null;
-  code?: string | null;
+  namespaceUri: string
+  name?: string | null
+  code?: string | null
 }
 
 export interface ClassificationRelationContractV3 {
@@ -380,405 +380,405 @@ export interface ClassificationRelationContractV3 {
    * Can be one of: HasReference, IsEqualTo, IsSynonymOf, IsParentOf, IsChildOf, HasPart
    * @minLength 1
    */
-  relationType: string;
+  relationType: string
   /**
    * Namespace URI of the related classification
    * @minLength 1
    */
-  relatedClassificationUri: string;
+  relatedClassificationUri: string
   /** Name of the related classification */
-  relatedClassificationName?: string | null;
+  relatedClassificationName?: string | null
   /**
    * Optional provision of a fraction of the total amount (e.g. volume or weight) that applies to the classification relations of one relation type
    * @format double
    */
-  fraction?: number | null;
+  fraction?: number | null
 }
 
 export interface ClassificationSearchResponseClassificationContractV1 {
   /** Unique identification of the domain the classification belongs to */
-  domainNamespaceUri?: string | null;
+  domainNamespaceUri?: string | null
   /** Name of the domain the classification belongs to */
-  domainName?: string | null;
-  name?: string | null;
+  domainName?: string | null
+  name?: string | null
   /** Code that can be used for domain specific purposes */
-  referenceCode?: string | null;
+  referenceCode?: string | null
   /** Unique identification of the classification */
-  namespaceUri?: string | null;
+  namespaceUri?: string | null
   /** Type of the classification. */
-  classificationType?: string | null;
-  description?: string | null;
-  parentClassificationName?: string | null;
-  relatedIfcEntityNames?: string[] | null;
+  classificationType?: string | null
+  description?: string | null
+  parentClassificationName?: string | null
+  relatedIfcEntityNames?: string[] | null
 }
 
 export interface ClassificationSearchResponseContractV1 {
   /** The list of Classifications found */
-  classifications?: ClassificationSearchResponseClassificationContractV1[] | null;
+  classifications?: ClassificationSearchResponseClassificationContractV1[] | null
 }
 
 export interface ClassificationSearchResultContractV2 {
   /** Name of the Classification */
-  name?: string | null;
+  name?: string | null
   /** Unique identification of the Classification */
-  namespaceUri?: string | null;
+  namespaceUri?: string | null
   /** Code that can be used for domain specific purposes */
-  referenceCode?: string | null;
+  referenceCode?: string | null
   /** Type of the classification. */
-  classificationType?: string | null;
-  definition?: string | null;
-  synonyms?: string[] | null;
+  classificationType?: string | null
+  definition?: string | null
+  synonyms?: string[] | null
 }
 
 export interface CountryContractV1 {
-  code?: string | null;
-  name?: string | null;
+  code?: string | null
+  name?: string | null
 }
 
 export interface DomainContractV2 {
-  namespaceUri?: string | null;
+  namespaceUri?: string | null
   /** @minLength 1 */
-  name: string;
+  name: string
   /** @minLength 1 */
-  version: string;
+  version: string
   /** @minLength 1 */
-  organizationNameOwner: string;
+  organizationNameOwner: string
   /**
    * The default language for this domain
    * @minLength 1
    */
-  defaultLanguageCode: string;
+  defaultLanguageCode: string
   /** Name or short description of the license under which you can use this data */
-  license?: string | null;
+  license?: string | null
   /** URL where you can find more details about the license */
-  licenseUrl?: string | null;
+  licenseUrl?: string | null
   /** Name or short description of the quality assurance procedure used while creating and maintaining the domain data */
-  qualityAssuranceProcedure?: string | null;
+  qualityAssuranceProcedure?: string | null
   /** URL where you can find more details about the quality assurance procedure */
-  qualityAssuranceProcedureUrl?: string | null;
+  qualityAssuranceProcedureUrl?: string | null
   /** For state indication, like "Preview", "Active", "InActive", "Released */
-  status?: string | null;
+  status?: string | null
   /** Url to site with more info on domain */
-  moreInfoUrl?: string | null;
+  moreInfoUrl?: string | null
   /**
    * Date of the release of this version
    * @format date-time
    */
-  releaseDate?: string | null;
+  releaseDate?: string | null
   /**
    * Date and time the data of the domain has been last updated in bSDD
    * @format date-time
    */
-  lastUpdatedUtc?: string;
+  lastUpdatedUtc?: string
 }
 
 export interface DomainContractV3 {
-  namespaceUri?: string | null;
+  namespaceUri?: string | null
   /** @minLength 1 */
-  name: string;
+  name: string
   /** @minLength 1 */
-  version: string;
+  version: string
   /** @minLength 1 */
-  organizationNameOwner: string;
+  organizationNameOwner: string
   /**
    * The default language for this domain
    * @minLength 1
    */
-  defaultLanguageCode: string;
+  defaultLanguageCode: string
   /** Name or short description of the license under which you can use this data */
-  license?: string | null;
+  license?: string | null
   /** URL where you can find more details about the license */
-  licenseUrl?: string | null;
+  licenseUrl?: string | null
   /** Name or short description of the quality assurance procedure used while creating and maintaining the domain data */
-  qualityAssuranceProcedure?: string | null;
+  qualityAssuranceProcedure?: string | null
   /** URL where you can find more details about the quality assurance procedure */
-  qualityAssuranceProcedureUrl?: string | null;
+  qualityAssuranceProcedureUrl?: string | null
   /** For state indication, like "Preview", "Active", "InActive", "Released */
-  status?: string | null;
+  status?: string | null
   /** Url to site with more info on domain */
-  moreInfoUrl?: string | null;
+  moreInfoUrl?: string | null
   /**
    * Date of the release of this version
    * @format date-time
    */
-  releaseDate?: string | null;
+  releaseDate?: string | null
   /**
    * Date and time the data of the domain has been last updated in bSDD
    * @format date-time
    */
-  lastUpdatedUtc?: string;
+  lastUpdatedUtc?: string
 }
 
 export interface DomainSearchResultContractV1 {
-  name?: string | null;
-  namespaceUri?: string | null;
-  materials?: MaterialSearchResultContractV1[] | null;
+  name?: string | null
+  namespaceUri?: string | null
+  materials?: MaterialSearchResultContractV1[] | null
 }
 
 export interface DomainSearchResultContractV2 {
-  name?: string | null;
-  namespaceUri?: string | null;
-  classifications?: ClassificationSearchResultContractV2[] | null;
+  name?: string | null
+  namespaceUri?: string | null
+  classifications?: ClassificationSearchResultContractV2[] | null
 }
 
 export interface DomainWithClassificationsContractV2 {
-  namespaceUri?: string | null;
+  namespaceUri?: string | null
   /** @minLength 1 */
-  name: string;
+  name: string
   /** @minLength 1 */
-  version: string;
+  version: string
   /** @minLength 1 */
-  organizationNameOwner: string;
+  organizationNameOwner: string
   /**
    * The default language for this domain
    * @minLength 1
    */
-  defaultLanguageCode: string;
+  defaultLanguageCode: string
   /** Name or short description of the license under which you can use this data */
-  license?: string | null;
+  license?: string | null
   /** URL where you can find more details about the license */
-  licenseUrl?: string | null;
+  licenseUrl?: string | null
   /** Name or short description of the quality assurance procedure used while creating and maintaining the domain data */
-  qualityAssuranceProcedure?: string | null;
+  qualityAssuranceProcedure?: string | null
   /** URL where you can find more details about the quality assurance procedure */
-  qualityAssuranceProcedureUrl?: string | null;
+  qualityAssuranceProcedureUrl?: string | null
   /** For state indication, like "Preview", "Active", "InActive", "Released */
-  status?: string | null;
+  status?: string | null
   /** Url to site with more info on domain */
-  moreInfoUrl?: string | null;
+  moreInfoUrl?: string | null
   /**
    * Date of the release of this version
    * @format date-time
    */
-  releaseDate?: string | null;
+  releaseDate?: string | null
   /**
    * Date and time the data of the domain has been last updated in bSDD
    * @format date-time
    */
-  lastUpdatedUtc?: string;
-  classifications?: ClassificationListItemContractV2[] | null;
+  lastUpdatedUtc?: string
+  classifications?: ClassificationListItemContractV2[] | null
 }
 
 export interface DomainWithClassificationsContractV3 {
-  namespaceUri?: string | null;
+  namespaceUri?: string | null
   /** @minLength 1 */
-  name: string;
+  name: string
   /** @minLength 1 */
-  version: string;
+  version: string
   /** @minLength 1 */
-  organizationNameOwner: string;
+  organizationNameOwner: string
   /**
    * The default language for this domain
    * @minLength 1
    */
-  defaultLanguageCode: string;
+  defaultLanguageCode: string
   /** Name or short description of the license under which you can use this data */
-  license?: string | null;
+  license?: string | null
   /** URL where you can find more details about the license */
-  licenseUrl?: string | null;
+  licenseUrl?: string | null
   /** Name or short description of the quality assurance procedure used while creating and maintaining the domain data */
-  qualityAssuranceProcedure?: string | null;
+  qualityAssuranceProcedure?: string | null
   /** URL where you can find more details about the quality assurance procedure */
-  qualityAssuranceProcedureUrl?: string | null;
+  qualityAssuranceProcedureUrl?: string | null
   /** For state indication, like "Preview", "Active", "InActive", "Released */
-  status?: string | null;
+  status?: string | null
   /** Url to site with more info on domain */
-  moreInfoUrl?: string | null;
+  moreInfoUrl?: string | null
   /**
    * Date of the release of this version
    * @format date-time
    */
-  releaseDate?: string | null;
+  releaseDate?: string | null
   /**
    * Date and time the data of the domain has been last updated in bSDD
    * @format date-time
    */
-  lastUpdatedUtc?: string;
-  classifications?: ClassificationListItemContractV3[] | null;
-  materials?: ClassificationListItemContractV3[] | null;
+  lastUpdatedUtc?: string
+  classifications?: ClassificationListItemContractV3[] | null
+  materials?: ClassificationListItemContractV3[] | null
 }
 
 export interface LanguageContractV1 {
   /** @minLength 1 */
-  isoCode: string;
-  name?: string | null;
+  isoCode: string
+  name?: string | null
 }
 
 export interface MaterialClassificationRelationContractV1 {
-  name?: string | null;
-  namespaceUri?: string | null;
+  name?: string | null
+  namespaceUri?: string | null
 }
 
 export interface MaterialContractV1 {
   /** Namespace URI of the domain */
-  domainNamespaceUri?: string | null;
+  domainNamespaceUri?: string | null
   /**
    * Date of activation
    * @format date-time
    */
-  activationDateUtc: string;
+  activationDateUtc: string
   /**
    * Code used originally by the domain
    * @minLength 1
    */
-  code: string;
+  code: string
   /** Language code of the creator */
-  creatorLanguageCode?: string | null;
+  creatorLanguageCode?: string | null
   /** List of countries where used */
-  countriesOfUse?: string[] | null;
+  countriesOfUse?: string[] | null
   /** Country of origin */
-  countryOfOrigin?: string | null;
+  countryOfOrigin?: string | null
   /**
    * Date of deactivation
    * @format date-time
    */
-  deActivationDateUtc?: string | null;
+  deActivationDateUtc?: string | null
   /** Definition */
-  definition?: string | null;
+  definition?: string | null
   /** Explanation of the deprecation */
-  deprecationExplanation?: string | null;
+  deprecationExplanation?: string | null
   /** Reference to a(n official) document */
-  documentReference?: string | null;
+  documentReference?: string | null
   /**
    * Name
    * @minLength 1
    */
-  name: string;
+  name: string
   /**
    * Unique identification
    * @minLength 1
    */
-  namespaceUri: string;
+  namespaceUri: string
   /** List of codes of the replaced items */
-  replacedObjectCodes?: string[] | null;
+  replacedObjectCodes?: string[] | null
   /** List of codes of the replacing items */
-  replacingObjectCodes?: string[] | null;
+  replacingObjectCodes?: string[] | null
   /**
    * Date of the revision
    * @format date-time
    */
-  revisionDateUtc?: string | null;
+  revisionDateUtc?: string | null
   /**
    * Revision number
    * @format int32
    */
-  revisionNumber?: number | null;
+  revisionNumber?: number | null
   /**
    * Status, can be: Preview, Active or Inactive
    * @minLength 1
    */
-  status: string;
+  status: string
   /** List of subdivisions (e.g. states) where used */
-  subdivisionsOfUse?: string[] | null;
+  subdivisionsOfUse?: string[] | null
   /** Alternative unique global identification */
-  uid?: string | null;
+  uid?: string | null
   /**
    * Date of the version
    * @format date-time
    */
-  versionDateUtc: string;
+  versionDateUtc: string
   /**
    * Version number
    * @format int32
    */
-  versionNumber?: number | null;
+  versionNumber?: number | null
   /** URI of a visual representation */
-  visualRepresentationUri?: string | null;
+  visualRepresentationUri?: string | null
   /** List of synonyms for the material */
-  synonyms?: string[] | null;
-  parentMaterialReference?: MaterialReferenceContractV1;
+  synonyms?: string[] | null
+  parentMaterialReference?: MaterialReferenceContractV1
   /** List of the properties of this material */
-  materialProperties?: MaterialPropertyContractV1[] | null;
+  materialProperties?: MaterialPropertyContractV1[] | null
   /** List of relations to classifications, can be reference to materials of other domains */
-  classificationRelations?: MaterialRelationContractV1[] | null;
+  classificationRelations?: MaterialRelationContractV1[] | null
   /** List of child materials (only filled if requested) */
-  childMaterialReferences?: MaterialReferenceContractV1[] | null;
+  childMaterialReferences?: MaterialReferenceContractV1[] | null
 }
 
 export interface MaterialContractV2 {
   /** Namespace URI of the domain */
-  domainNamespaceUri?: string | null;
+  domainNamespaceUri?: string | null
   /**
    * Date of activation
    * @format date-time
    */
-  activationDateUtc: string;
+  activationDateUtc: string
   /**
    * Code used originally by the domain
    * @minLength 1
    */
-  code: string;
+  code: string
   /** Language code of the creator */
-  creatorLanguageCode?: string | null;
+  creatorLanguageCode?: string | null
   /** List of countries where used */
-  countriesOfUse?: string[] | null;
+  countriesOfUse?: string[] | null
   /** Country of origin */
-  countryOfOrigin?: string | null;
+  countryOfOrigin?: string | null
   /**
    * Date of deactivation
    * @format date-time
    */
-  deActivationDateUtc?: string | null;
+  deActivationDateUtc?: string | null
   /** Definition */
-  definition?: string | null;
+  definition?: string | null
   /** Explanation of the deprecation */
-  deprecationExplanation?: string | null;
+  deprecationExplanation?: string | null
   /** Reference to a(n official) document */
-  documentReference?: string | null;
+  documentReference?: string | null
   /**
    * Name
    * @minLength 1
    */
-  name: string;
+  name: string
   /**
    * Unique identification
    * @minLength 1
    */
-  namespaceUri: string;
+  namespaceUri: string
   /** List of codes of the replaced items */
-  replacedObjectCodes?: string[] | null;
+  replacedObjectCodes?: string[] | null
   /** List of codes of the replacing items */
-  replacingObjectCodes?: string[] | null;
+  replacingObjectCodes?: string[] | null
   /**
    * Date of the revision
    * @format date-time
    */
-  revisionDateUtc?: string | null;
+  revisionDateUtc?: string | null
   /**
    * Revision number
    * @format int32
    */
-  revisionNumber?: number | null;
+  revisionNumber?: number | null
   /**
    * Status, can be: Preview, Active or Inactive
    * @minLength 1
    */
-  status: string;
+  status: string
   /** List of subdivisions (e.g. states) where used */
-  subdivisionsOfUse?: string[] | null;
+  subdivisionsOfUse?: string[] | null
   /** Alternative unique global identification */
-  uid?: string | null;
+  uid?: string | null
   /**
    * Date of the version
    * @format date-time
    */
-  versionDateUtc: string;
+  versionDateUtc: string
   /**
    * Version number
    * @format int32
    */
-  versionNumber?: number | null;
+  versionNumber?: number | null
   /** URI of a visual representation */
-  visualRepresentationUri?: string | null;
+  visualRepresentationUri?: string | null
   /** List of synonyms for the material */
-  synonyms?: string[] | null;
-  parentMaterialReference?: MaterialReferenceContractV2;
+  synonyms?: string[] | null
+  parentMaterialReference?: MaterialReferenceContractV2
   /** List of the properties of this material */
-  materialProperties?: MaterialPropertyContractV2[] | null;
+  materialProperties?: MaterialPropertyContractV2[] | null
   /** List of relations to classifications, can be reference to materials of other domains */
-  classificationRelations?: MaterialRelationContractV2[] | null;
+  classificationRelations?: MaterialRelationContractV2[] | null
   /** List of child materials (only filled if requested) */
-  childMaterialReferences?: MaterialReferenceContractV2[] | null;
+  childMaterialReferences?: MaterialReferenceContractV2[] | null
 }
 
 export interface MaterialPropertyContractV1 {
@@ -786,14 +786,14 @@ export interface MaterialPropertyContractV1 {
    * Name of the property
    * @minLength 1
    */
-  name: string;
+  name: string
   /**
    * Plain language description of the property.
    * If at Property level no description has been given but a "Definition" is available, then "Definition" is returned as description
    */
-  description?: string | null;
+  description?: string | null
   /** Format for expressing the value of the property */
-  dataType?: string | null;
+  dataType?: string | null
   /**
    * Dimension of the physical quantity in format "L M T I Θ N J", for example "-2 1 0 0 0 0 0".
    * With
@@ -805,116 +805,116 @@ export interface MaterialPropertyContractV1 {
    *   N   Amount of substance
    *   J   Luminous intensity
    */
-  dimension?: string | null;
+  dimension?: string | null
   /**
    * The Length value of the dimension
    * @format int32
    */
-  dimensionLength?: number | null;
+  dimensionLength?: number | null
   /**
    * The Mass value of the dimension
    * @format int32
    */
-  dimensionMass?: number | null;
+  dimensionMass?: number | null
   /**
    * The Time value of the dimension
    * @format int32
    */
-  dimensionTime?: number | null;
+  dimensionTime?: number | null
   /**
    * The Electric current value of the dimension
    * @format int32
    */
-  dimensionElectricCurrent?: number | null;
+  dimensionElectricCurrent?: number | null
   /**
    * The Thermodynamic temperature value of the dimension
    * @format int32
    */
-  dimensionThermodynamicTemperature?: number | null;
+  dimensionThermodynamicTemperature?: number | null
   /**
    * The Amount of substance value of the dimension
    * @format int32
    */
-  dimensionAmountOfSubstance?: number | null;
+  dimensionAmountOfSubstance?: number | null
   /**
    * The Luminous intensity value of the dimension
    * @format int32
    */
-  dimensionLuminousIntensity?: number | null;
+  dimensionLuminousIntensity?: number | null
   /**
    * List of codes of the properties which are parameters of the function for a dynamic property.
    * Only applicable for dynamic properties (IsDynamic)
    */
-  dynamicParameterPropertyCodes?: string[] | null;
+  dynamicParameterPropertyCodes?: string[] | null
   /** Illustrate possible use or values of the Property */
-  example?: string | null;
+  example?: string | null
   /** True if the value of this property is dependent on other properties (as provided in DynamicParameterPropertyCodes) */
-  isDynamic?: boolean | null;
+  isDynamic?: boolean | null
   /** Indicates if this property is required for the material */
-  isRequired?: boolean | null;
+  isRequired?: boolean | null
   /** Indicates if the value of the property can be changed by the user */
-  isWritable?: boolean | null;
+  isWritable?: boolean | null
   /**
    * Maximum value of the property, exclusive
    * This value does not need to be the same as the MaxExclusive in the Property contract
    * because this value can be overruled at Material-Property level to define a more strict value.
    * @format double
    */
-  maxExclusive?: number | null;
+  maxExclusive?: number | null
   /**
    * Maximum value of the property, inclusive
    * This value does not need to be the same as the MaxInclusive in the Property contract
    * because this value can be overruled at Material-Property level to define a more strict value.
    * @format double
    */
-  maxInclusive?: number | null;
+  maxInclusive?: number | null
   /**
    * Minimum value of the property, exclusive
    * This value does not need to be the same as the MinExclusive in the Property contract
    * because this value can be overruled at Material-Property level to define a more strict value.
    * @format double
    */
-  minExclusive?: number | null;
+  minExclusive?: number | null
   /**
    * Minimum value of the property, inclusive
    * This value does not need to be the same as the MinInclusive in the Property contract
    * because this value can be overruled at Material-Property level to define a more strict value.
    * @format double
    */
-  minInclusive?: number | null;
+  minInclusive?: number | null
   /**
    * An XML Schema Regular expression for the property value.
    * See for explanation: https://www.regular-expressions.info/xml.html.
    * This value does not need to be the same as the Pattern in the Property contract
    * because this value can be overruled at Material-Property level to define a more strict value.
    */
-  pattern?: string | null;
+  pattern?: string | null
   /** The quantity in plain text */
-  physicalQuantity?: string | null;
+  physicalQuantity?: string | null
   /**
    * List of possible values
    * This list does not need to be the same as the list of PossibleValues in the Property contract
    * because this list can be overruled at Material-Property level to define a more strict list.
    */
-  possibleValues?: MaterialPropertyValueContractV1[] | null;
+  possibleValues?: MaterialPropertyValueContractV1[] | null
   /** Predefined value: if the material can have only one value for this property, this is it */
-  predefinedValue?: string | null;
+  predefinedValue?: string | null
   /** Code of the property, only applicable if property is of the same domain as the material. */
-  propertyCode?: string | null;
+  propertyCode?: string | null
   /** Name of the Domain this property belongs to */
-  propertyDomainName?: string | null;
+  propertyDomainName?: string | null
   /** Unique identification of the property */
-  propertyNamespaceUri?: string | null;
+  propertyNamespaceUri?: string | null
   /** Name of the Property Set */
-  propertySet?: string | null;
+  propertySet?: string | null
   /** Status of the property: Preview, Active or Inactive */
-  propertyStatus?: string | null;
+  propertyStatus?: string | null
   /** Indicates kind of value: Single, Range (2 values expected), List (multiple values expected), Complex (use in combination with "ConnectedProperties"), ComplexList */
-  propertyValueKind?: string | null;
+  propertyValueKind?: string | null
   /** Symbol of the property */
-  symbol?: string | null;
+  symbol?: string | null
   /** List of units to select from */
-  units?: string[] | null;
+  units?: string[] | null
 }
 
 export interface MaterialPropertyContractV2 {
@@ -922,14 +922,14 @@ export interface MaterialPropertyContractV2 {
    * Name of the property
    * @minLength 1
    */
-  name: string;
+  name: string
   /**
    * Plain language description of the property.
    * If at Property level no description has been given but a "Definition" is available, then "Definition" is returned as description
    */
-  description?: string | null;
+  description?: string | null
   /** Format for expressing the value of the property */
-  dataType?: string | null;
+  dataType?: string | null
   /**
    * Dimension of the physical quantity in format "L M T I Θ N J", for example "-2 1 0 0 0 0 0".
    * With
@@ -941,170 +941,170 @@ export interface MaterialPropertyContractV2 {
    *   N   Amount of substance
    *   J   Luminous intensity
    */
-  dimension?: string | null;
+  dimension?: string | null
   /**
    * The Length value of the dimension
    * @format int32
    */
-  dimensionLength?: number | null;
+  dimensionLength?: number | null
   /**
    * The Mass value of the dimension
    * @format int32
    */
-  dimensionMass?: number | null;
+  dimensionMass?: number | null
   /**
    * The Time value of the dimension
    * @format int32
    */
-  dimensionTime?: number | null;
+  dimensionTime?: number | null
   /**
    * The Electric current value of the dimension
    * @format int32
    */
-  dimensionElectricCurrent?: number | null;
+  dimensionElectricCurrent?: number | null
   /**
    * The Thermodynamic temperature value of the dimension
    * @format int32
    */
-  dimensionThermodynamicTemperature?: number | null;
+  dimensionThermodynamicTemperature?: number | null
   /**
    * The Amount of substance value of the dimension
    * @format int32
    */
-  dimensionAmountOfSubstance?: number | null;
+  dimensionAmountOfSubstance?: number | null
   /**
    * The Luminous intensity value of the dimension
    * @format int32
    */
-  dimensionLuminousIntensity?: number | null;
+  dimensionLuminousIntensity?: number | null
   /**
    * List of codes of the properties which are parameters of the function for a dynamic property.
    * Only applicable for dynamic properties (IsDynamic)
    */
-  dynamicParameterPropertyCodes?: string[] | null;
+  dynamicParameterPropertyCodes?: string[] | null
   /** Illustrate possible use or values of the Property */
-  example?: string | null;
+  example?: string | null
   /** True if the value of this property is dependent on other properties (as provided in DynamicParameterPropertyCodes) */
-  isDynamic?: boolean | null;
+  isDynamic?: boolean | null
   /** Indicates if this property is required for the material */
-  isRequired?: boolean | null;
+  isRequired?: boolean | null
   /** Indicates if the value of the property can be changed by the user */
-  isWritable?: boolean | null;
+  isWritable?: boolean | null
   /**
    * Maximum value of the property, exclusive
    * This value does not need to be the same as the MaxExclusive in the Property contract
    * because this value can be overruled at Material-Property level to define a more strict value.
    * @format double
    */
-  maxExclusive?: number | null;
+  maxExclusive?: number | null
   /**
    * Maximum value of the property, inclusive
    * This value does not need to be the same as the MaxInclusive in the Property contract
    * because this value can be overruled at Material-Property level to define a more strict value.
    * @format double
    */
-  maxInclusive?: number | null;
+  maxInclusive?: number | null
   /**
    * Minimum value of the property, exclusive
    * This value does not need to be the same as the MinExclusive in the Property contract
    * because this value can be overruled at Material-Property level to define a more strict value.
    * @format double
    */
-  minExclusive?: number | null;
+  minExclusive?: number | null
   /**
    * Minimum value of the property, inclusive
    * This value does not need to be the same as the MinInclusive in the Property contract
    * because this value can be overruled at Material-Property level to define a more strict value.
    * @format double
    */
-  minInclusive?: number | null;
+  minInclusive?: number | null
   /**
    * An XML Schema Regular expression for the property value.
    * See for explanation: https://www.regular-expressions.info/xml.html.
    * This value does not need to be the same as the Pattern in the Property contract
    * because this value can be overruled at Material-Property level to define a more strict value.
    */
-  pattern?: string | null;
+  pattern?: string | null
   /** The quantity in plain text */
-  physicalQuantity?: string | null;
+  physicalQuantity?: string | null
   /**
    * List of allowed values
    * This list does not need to be the same as the list of AllowedValues in the Property contract
    * because this list can be overruled at Material-Property level to define a more strict list.
    */
-  allowedValues?: MaterialPropertyValueContractV2[] | null;
+  allowedValues?: MaterialPropertyValueContractV2[] | null
   /** Predefined value: if the material can have only one value for this property, this is it */
-  predefinedValue?: string | null;
+  predefinedValue?: string | null
   /** Code of the property, only applicable if property is of the same domain as the material. */
-  propertyCode?: string | null;
+  propertyCode?: string | null
   /** Name of the Domain this property belongs to */
-  propertyDomainName?: string | null;
+  propertyDomainName?: string | null
   /** Unique identification of the property */
-  propertyNamespaceUri?: string | null;
+  propertyNamespaceUri?: string | null
   /** Name of the Property Set */
-  propertySet?: string | null;
+  propertySet?: string | null
   /** Status of the property: Preview, Active or Inactive */
-  propertyStatus?: string | null;
+  propertyStatus?: string | null
   /** Indicates kind of value: Single, Range (2 values expected), List (multiple values expected), Complex (use in combination with "ConnectedProperties"), ComplexList */
-  propertyValueKind?: string | null;
+  propertyValueKind?: string | null
   /** Symbol of the property */
-  symbol?: string | null;
+  symbol?: string | null
   /** List of units to select from */
-  units?: string[] | null;
+  units?: string[] | null
   /** List of QUDT unit codes to select from */
-  qudtCodes?: string[] | null;
+  qudtCodes?: string[] | null
 }
 
 export interface MaterialPropertyValueContractV1 {
   /** Globally unique identification of the value (if present) */
-  namespaceUri?: string | null;
+  namespaceUri?: string | null
   /** Identification of the value */
-  code?: string | null;
+  code?: string | null
   /**
    * Possible value of the property
    * @minLength 1
    */
-  value: string;
+  value: string
   /** Description of the value */
-  description?: string | null;
+  description?: string | null
   /**
    * Sort number of value within the list of values for the Property
    * @format int32
    */
-  sortNumber?: number | null;
+  sortNumber?: number | null
 }
 
 export interface MaterialPropertyValueContractV2 {
   /** Globally unique identification of the value (if present) */
-  namespaceUri?: string | null;
+  namespaceUri?: string | null
   /** Identification of the value */
-  code?: string | null;
+  code?: string | null
   /**
    * Allowed value of the property
    * @minLength 1
    */
-  value: string;
+  value: string
   /** Description of the value */
-  description?: string | null;
+  description?: string | null
   /**
    * Sort number of value within the list of values for the Property
    * @format int32
    */
-  sortNumber?: number | null;
+  sortNumber?: number | null
 }
 
 export interface MaterialReferenceContractV1 {
   /** @minLength 1 */
-  namespaceUri: string;
-  name?: string | null;
-  code?: string | null;
+  namespaceUri: string
+  name?: string | null
+  code?: string | null
 }
 
 export interface MaterialReferenceContractV2 {
   /** @minLength 1 */
-  namespaceUri: string;
-  name?: string | null;
-  code?: string | null;
+  namespaceUri: string
+  name?: string | null
+  code?: string | null
 }
 
 export interface MaterialRelationContractV1 {
@@ -1112,14 +1112,14 @@ export interface MaterialRelationContractV1 {
    * Can be one of: HasReference, IsEqualTo, IsSynonymOf, IsParentOf, IsChildOf, HasPart
    * @minLength 1
    */
-  relationType: string;
+  relationType: string
   /**
    * Namespace URI of the related classification
    * @minLength 1
    */
-  relatedClassificationUri: string;
+  relatedClassificationUri: string
   /** Name of the related classification */
-  relatedClassificationName?: string | null;
+  relatedClassificationName?: string | null
 }
 
 export interface MaterialRelationContractV2 {
@@ -1127,115 +1127,115 @@ export interface MaterialRelationContractV2 {
    * Can be one of: HasReference, IsEqualTo, IsSynonymOf, IsParentOf, IsChildOf, HasPart
    * @minLength 1
    */
-  relationType: string;
+  relationType: string
   /**
    * Namespace URI of the related classification
    * @minLength 1
    */
-  relatedClassificationUri: string;
+  relatedClassificationUri: string
   /** Name of the related classification */
-  relatedClassificationName?: string | null;
+  relatedClassificationName?: string | null
 }
 
 export interface MaterialSearchResultContractV1 {
-  name?: string | null;
-  namespaceUri?: string | null;
-  definition?: string | null;
-  synonyms?: string[] | null;
-  relatedClassifications?: MaterialClassificationRelationContractV1[] | null;
+  name?: string | null
+  namespaceUri?: string | null
+  definition?: string | null
+  synonyms?: string[] | null
+  relatedClassifications?: MaterialClassificationRelationContractV1[] | null
 }
 
 export interface ProblemDetails {
-  type?: string | null;
-  title?: string | null;
+  type?: string | null
+  title?: string | null
   /** @format int32 */
-  status?: number | null;
-  detail?: string | null;
-  instance?: string | null;
-  [key: string]: any;
+  status?: number | null
+  detail?: string | null
+  instance?: string | null
+  [key: string]: any
 }
 
 export interface PropertyContractV2 {
   /** Namespace URI of the domain */
-  domainNamespaceUri?: string | null;
+  domainNamespaceUri?: string | null
   /**
    * Date of activation
    * @format date-time
    */
-  activationDateUtc: string;
+  activationDateUtc: string
   /**
    * Code used originally by the domain
    * @minLength 1
    */
-  code: string;
+  code: string
   /** Language code of the creator */
-  creatorLanguageCode?: string | null;
+  creatorLanguageCode?: string | null
   /** List of countries where used */
-  countriesOfUse?: string[] | null;
+  countriesOfUse?: string[] | null
   /** Country of origin */
-  countryOfOrigin?: string | null;
+  countryOfOrigin?: string | null
   /**
    * Date of deactivation
    * @format date-time
    */
-  deActivationDateUtc?: string | null;
+  deActivationDateUtc?: string | null
   /** Definition */
-  definition?: string | null;
+  definition?: string | null
   /** Explanation of the deprecation */
-  deprecationExplanation?: string | null;
+  deprecationExplanation?: string | null
   /** Reference to a(n official) document */
-  documentReference?: string | null;
+  documentReference?: string | null
   /**
    * Name
    * @minLength 1
    */
-  name: string;
+  name: string
   /**
    * Unique identification
    * @minLength 1
    */
-  namespaceUri: string;
+  namespaceUri: string
   /** List of codes of the replaced items */
-  replacedObjectCodes?: string[] | null;
+  replacedObjectCodes?: string[] | null
   /** List of codes of the replacing items */
-  replacingObjectCodes?: string[] | null;
+  replacingObjectCodes?: string[] | null
   /**
    * Date of the revision
    * @format date-time
    */
-  revisionDateUtc?: string | null;
+  revisionDateUtc?: string | null
   /**
    * Revision number
    * @format int32
    */
-  revisionNumber?: number | null;
+  revisionNumber?: number | null
   /**
    * Status, can be: Preview, Active or Inactive
    * @minLength 1
    */
-  status: string;
+  status: string
   /** List of subdivisions (e.g. states) where used */
-  subdivisionsOfUse?: string[] | null;
+  subdivisionsOfUse?: string[] | null
   /** Alternative unique global identification */
-  uid?: string | null;
+  uid?: string | null
   /**
    * Date of the version
    * @format date-time
    */
-  versionDateUtc: string;
+  versionDateUtc: string
   /**
    * Version number
    * @format int32
    */
-  versionNumber?: number | null;
+  versionNumber?: number | null
   /** URI of a visual representation */
-  visualRepresentationUri?: string | null;
+  visualRepresentationUri?: string | null
   /** Plain language description of the property. */
-  description?: string | null;
+  description?: string | null
   /** List of connected property codes */
-  connectedPropertyCodes?: string[] | null;
+  connectedPropertyCodes?: string[] | null
   /** Format for expressing the value of the property: Boolean, Character, Date, Enumeration, Integer, Real, String, Time */
-  dataType?: string | null;
+  dataType?: string | null
   /**
    * Dimension of the physical quantity in format "L M T I Θ N J", for example "-2 1 0 0 0 0 0".
    * With
@@ -1247,175 +1247,175 @@ export interface PropertyContractV2 {
    *   N   Amount of substance
    *   J   Luminous intensity
    */
-  dimension?: string | null;
+  dimension?: string | null
   /**
    * The Length value of the dimension
    * @format int32
    */
-  dimensionLength?: number | null;
+  dimensionLength?: number | null
   /**
    * The Mass value of the dimension
    * @format int32
    */
-  dimensionMass?: number | null;
+  dimensionMass?: number | null
   /**
    * The Time value of the dimension
    * @format int32
    */
-  dimensionTime?: number | null;
+  dimensionTime?: number | null
   /**
    * The Electric current value of the dimension
    * @format int32
    */
-  dimensionElectricCurrent?: number | null;
+  dimensionElectricCurrent?: number | null
   /**
    * The Thermodynamic temperature value of the dimension
    * @format int32
    */
-  dimensionThermodynamicTemperature?: number | null;
+  dimensionThermodynamicTemperature?: number | null
   /**
    * The Amount of substance value of the dimension
    * @format int32
    */
-  dimensionAmountOfSubstance?: number | null;
+  dimensionAmountOfSubstance?: number | null
   /**
    * The Luminous intensity value of the dimension
    * @format int32
    */
-  dimensionLuminousIntensity?: number | null;
+  dimensionLuminousIntensity?: number | null
   /**
    * List of codes of the properties which are parameters of the function for a dynamic property.
    * Only applicable for dynamic properties (IsDynamic)
    */
-  dynamicParameterPropertyCodes?: string[] | null;
+  dynamicParameterPropertyCodes?: string[] | null
   /** Illustrate possible use or values of the Property */
-  example?: string | null;
+  example?: string | null
   /** True if the value of this property is dependent on other properties (as provided in DynamicParameterPropertyCodes) */
-  isDynamic?: boolean | null;
+  isDynamic?: boolean | null
   /**
    * Maximum value of the property, exclusive
    * @format double
    */
-  maxExclusive?: number | null;
+  maxExclusive?: number | null
   /**
    * Maximum value of the property, inclusive
    * @format double
    */
-  maxInclusive?: number | null;
+  maxInclusive?: number | null
   /** Description of the method of measurement */
-  methodOfMeasurement?: string | null;
+  methodOfMeasurement?: string | null
   /**
    * Minimum value of the property, exclusive
    * @format double
    */
-  minExclusive?: number | null;
+  minExclusive?: number | null
   /**
    * Minimum value of the property, inclusive
    * @format double
    */
-  minInclusive?: number | null;
+  minInclusive?: number | null
   /**
    * An XML Schema Regular expression for the property value.
    * See for explanation: https://www.regular-expressions.info/xml.html.
    */
-  pattern?: string | null;
+  pattern?: string | null
   /** The quantity in plain text */
-  physicalQuantity?: string | null;
+  physicalQuantity?: string | null
   /** List of possible values */
-  possibleValues?: PropertyValueContractV2[] | null;
+  possibleValues?: PropertyValueContractV2[] | null
   /** Indicates kind of value: Single, Range (2 values expected), List (multiple values expected), Complex (use in combination with "ConnectedProperties"), ComplexList */
-  propertyValueKind?: string | null;
+  propertyValueKind?: string | null
   /** List of relations with other properties */
-  propertyRelations?: PropertyRelationContractV2[] | null;
+  propertyRelations?: PropertyRelationContractV2[] | null
   /** The text type, e.g. UTF-8 */
-  textFormat?: string | null;
+  textFormat?: string | null
   /** Multiple references to Unit */
-  units?: string[] | null;
+  units?: string[] | null
   /** List of QUDT unit codes (if QUDT code available) */
-  qudtCodes?: string[] | null;
+  qudtCodes?: string[] | null
 }
 
 export interface PropertyContractV3 {
   /** Namespace URI of the domain */
-  domainNamespaceUri?: string | null;
+  domainNamespaceUri?: string | null
   /**
    * Date of activation
    * @format date-time
    */
-  activationDateUtc: string;
+  activationDateUtc: string
   /**
    * Code used originally by the domain
    * @minLength 1
    */
-  code: string;
+  code: string
   /** Language code of the creator */
-  creatorLanguageCode?: string | null;
+  creatorLanguageCode?: string | null
   /** List of countries where used */
-  countriesOfUse?: string[] | null;
+  countriesOfUse?: string[] | null
   /** Country of origin */
-  countryOfOrigin?: string | null;
+  countryOfOrigin?: string | null
   /**
    * Date of deactivation
    * @format date-time
    */
-  deActivationDateUtc?: string | null;
+  deActivationDateUtc?: string | null
   /** Definition */
-  definition?: string | null;
+  definition?: string | null
   /** Explanation of the deprecation */
-  deprecationExplanation?: string | null;
+  deprecationExplanation?: string | null
   /** Reference to a(n official) document */
-  documentReference?: string | null;
+  documentReference?: string | null
   /**
    * Name
    * @minLength 1
    */
-  name: string;
+  name: string
   /**
    * Unique identification
    * @minLength 1
    */
-  namespaceUri: string;
+  namespaceUri: string
   /** List of codes of the replaced items */
-  replacedObjectCodes?: string[] | null;
+  replacedObjectCodes?: string[] | null
   /** List of codes of the replacing items */
-  replacingObjectCodes?: string[] | null;
+  replacingObjectCodes?: string[] | null
   /**
    * Date of the revision
    * @format date-time
    */
-  revisionDateUtc?: string | null;
+  revisionDateUtc?: string | null
   /**
    * Revision number
    * @format int32
    */
-  revisionNumber?: number | null;
+  revisionNumber?: number | null
   /**
    * Status, can be: Preview, Active or Inactive
    * @minLength 1
    */
-  status: string;
+  status: string
   /** List of subdivisions (e.g. states) where used */
-  subdivisionsOfUse?: string[] | null;
+  subdivisionsOfUse?: string[] | null
   /** Alternative unique global identification */
-  uid?: string | null;
+  uid?: string | null
   /**
    * Date of the version
    * @format date-time
    */
-  versionDateUtc: string;
+  versionDateUtc: string
   /**
    * Version number
    * @format int32
    */
-  versionNumber?: number | null;
+  versionNumber?: number | null
   /** URI of a visual representation */
-  visualRepresentationUri?: string | null;
+  visualRepresentationUri?: string | null
   /** Plain language description of the property. */
-  description?: string | null;
+  description?: string | null
   /** List of connected property codes */
-  connectedPropertyCodes?: string[] | null;
+  connectedPropertyCodes?: string[] | null
   /** Format for expressing the value of the property: Boolean, Character, Date, Enumeration, Integer, Real, String, Time */
-  dataType?: string | null;
+  dataType?: string | null
   /**
    * Dimension of the physical quantity in format "L M T I Θ N J", for example "-2 1 0 0 0 0 0".
    * With
@@ -1427,174 +1427,174 @@ export interface PropertyContractV3 {
    *   N   Amount of substance
    *   J   Luminous intensity
    */
-  dimension?: string | null;
+  dimension?: string | null
   /**
    * The Length value of the dimension
    * @format int32
    */
-  dimensionLength?: number | null;
+  dimensionLength?: number | null
   /**
    * The Mass value of the dimension
    * @format int32
    */
-  dimensionMass?: number | null;
+  dimensionMass?: number | null
   /**
    * The Time value of the dimension
    * @format int32
    */
-  dimensionTime?: number | null;
+  dimensionTime?: number | null
   /**
    * The Electric current value of the dimension
    * @format int32
    */
-  dimensionElectricCurrent?: number | null;
+  dimensionElectricCurrent?: number | null
   /**
    * The Thermodynamic temperature value of the dimension
    * @format int32
    */
-  dimensionThermodynamicTemperature?: number | null;
+  dimensionThermodynamicTemperature?: number | null
   /**
    * The Amount of substance value of the dimension
    * @format int32
    */
-  dimensionAmountOfSubstance?: number | null;
+  dimensionAmountOfSubstance?: number | null
   /**
    * The Luminous intensity value of the dimension
    * @format int32
    */
-  dimensionLuminousIntensity?: number | null;
+  dimensionLuminousIntensity?: number | null
   /**
    * List of codes of the properties which are parameters of the function for a dynamic property.
    * Only applicable for dynamic properties (IsDynamic)
    */
-  dynamicParameterPropertyCodes?: string[] | null;
+  dynamicParameterPropertyCodes?: string[] | null
   /** Illustrate possible use or values of the Property */
-  example?: string | null;
+  example?: string | null
   /** True if the value of this property is dependent on other properties (as provided in DynamicParameterPropertyCodes) */
-  isDynamic?: boolean | null;
+  isDynamic?: boolean | null
   /**
    * Maximum value of the property, exclusive
    * @format double
    */
-  maxExclusive?: number | null;
+  maxExclusive?: number | null
   /**
    * Maximum value of the property, inclusive
    * @format double
    */
-  maxInclusive?: number | null;
+  maxInclusive?: number | null
   /** Description of the method of measurement */
-  methodOfMeasurement?: string | null;
+  methodOfMeasurement?: string | null
   /**
    * Minimum value of the property, exclusive
    * @format double
    */
-  minExclusive?: number | null;
+  minExclusive?: number | null
   /**
    * Minimum value of the property, inclusive
    * @format double
    */
-  minInclusive?: number | null;
+  minInclusive?: number | null
   /**
    * An XML Schema Regular expression for the property value.
    * See for explanation: https://www.regular-expressions.info/xml.html.
    */
-  pattern?: string | null;
+  pattern?: string | null
   /** The quantity in plain text */
-  physicalQuantity?: string | null;
+  physicalQuantity?: string | null
   /** List of allowed values */
-  allowedValues?: PropertyValueContractV3[] | null;
+  allowedValues?: PropertyValueContractV3[] | null
   /** Indicates kind of value: Single, Range (2 values expected), List (multiple values expected), Complex (use in combination with "ConnectedProperties"), ComplexList */
-  propertyValueKind?: string | null;
+  propertyValueKind?: string | null
   /** List of relations with other properties */
-  propertyRelations?: PropertyRelationContractV3[] | null;
+  propertyRelations?: PropertyRelationContractV3[] | null
   /** The text type, e.g. UTF-8 */
-  textFormat?: string | null;
+  textFormat?: string | null
   /** Multiple references to Unit */
-  units?: string[] | null;
+  units?: string[] | null
   /** List of QUDT unit codes (if QUDT code available) */
-  qudtCodes?: string[] | null;
+  qudtCodes?: string[] | null
 }
 
 export interface PropertyRelationContractV2 {
   /** The relation with the other property: e.g. HasReference, IsEqualTo */
-  relationType?: string | null;
+  relationType?: string | null
   /** Namespace URI of the related property */
-  relatedPropertyUri?: string | null;
+  relatedPropertyUri?: string | null
   /** Name of the related property */
-  relatedPropertyName?: string | null;
+  relatedPropertyName?: string | null
 }
 
 export interface PropertyRelationContractV3 {
   /** The relation with the other property: e.g. HasReference, IsEqualTo */
-  relationType?: string | null;
+  relationType?: string | null
   /** Namespace URI of the related property */
-  relatedPropertyUri?: string | null;
+  relatedPropertyUri?: string | null
   /** Name of the related property */
-  relatedPropertyName?: string | null;
+  relatedPropertyName?: string | null
 }
 
 export interface PropertyValueContractV1 {
   /** Globally unique identification of the value (if present) */
-  namespaceUri?: string | null;
+  namespaceUri?: string | null
   /** Identification of the value (unique within the property) */
-  code?: string | null;
+  code?: string | null
   /**
    * Allowed value of the property
    * @minLength 1
    */
-  value: string;
+  value: string
   /** Description of the value */
-  description?: string | null;
+  description?: string | null
   /**
    * (Optional) Sort number of value within the list of values for the Property
    * @format int32
    */
-  sortNumber?: number | null;
+  sortNumber?: number | null
 }
 
 export interface PropertyValueContractV2 {
   /** Globally unique identification of the value (if present) */
-  namespaceUri?: string | null;
+  namespaceUri?: string | null
   /** Identification of the value (unique within the property) */
-  code?: string | null;
+  code?: string | null
   /**
    * Possible value of the property
    * @minLength 1
    */
-  value: string;
+  value: string
   /** Description of the value */
-  description?: string | null;
+  description?: string | null
   /**
    * (Optional) Sort number of value within the list of values for the Property
    * @format int32
    */
-  sortNumber?: number | null;
+  sortNumber?: number | null
 }
 
 export interface PropertyValueContractV3 {
   /** Globally unique identification of the value (if present) */
-  namespaceUri?: string | null;
+  namespaceUri?: string | null
   /** Identification of the value (unique within the property) */
-  code?: string | null;
+  code?: string | null
   /**
    * Allowed value of the property
    * @minLength 1
    */
-  value: string;
+  value: string
   /** Description of the value */
-  description?: string | null;
+  description?: string | null
   /**
    * (Optional) Sort number of value within the list of values for the Property
    * @format int32
    */
-  sortNumber?: number | null;
+  sortNumber?: number | null
 }
 
 export interface ReferenceDocumentContractV1 {
-  title?: string | null;
-  name?: string | null;
+  title?: string | null
+  name?: string | null
   /** @format date-time */
-  date?: string;
+  date?: string
 }
 
 export interface SearchResultContractV1 {
@@ -1602,9 +1602,9 @@ export interface SearchResultContractV1 {
    * The total number of Materials matching the search criteria
    * @format int32
    */
-  numberOfMaterialsFound?: number;
+  numberOfMaterialsFound?: number
   /** The list of Domains with found Materials and Material Properties */
-  domains?: DomainSearchResultContractV1[] | null;
+  domains?: DomainSearchResultContractV1[] | null
 }
 
 export interface SearchResultContractV2 {
@@ -1612,108 +1612,108 @@ export interface SearchResultContractV2 {
    * The total number of Classifications matching the search criteria
    * @format int32
    */
-  numberOfClassificationsFound?: number;
+  numberOfClassificationsFound?: number
   /** The list of Domains with found Classification and ClassificationProperties */
-  domains?: DomainSearchResultContractV2[] | null;
+  domains?: DomainSearchResultContractV2[] | null
 }
 
 export interface TextSearchResponseClassificationContractV5 {
   /** Unique identification of the domain the classification belongs to */
-  domainNamespaceUri?: string | null;
+  domainNamespaceUri?: string | null
   /** Name of the domain the classification belongs to */
-  domainName?: string | null;
-  name?: string | null;
+  domainName?: string | null
+  name?: string | null
   /** Code that can be used for domain specific purposes */
-  referenceCode?: string | null;
+  referenceCode?: string | null
   /** Unique identification of the classification */
-  namespaceUri?: string | null;
+  namespaceUri?: string | null
   /** Type of the classification. */
-  classificationType?: string | null;
-  description?: string | null;
-  parentClassificationName?: string | null;
-  relatedIfcEntityNames?: string[] | null;
+  classificationType?: string | null
+  description?: string | null
+  parentClassificationName?: string | null
+  relatedIfcEntityNames?: string[] | null
 }
 
 export interface TextSearchResponseClassificationContractV6 {
   /** Unique identification of the domain the classification belongs to */
-  domainNamespaceUri?: string | null;
+  domainNamespaceUri?: string | null
   /** Name of the domain the classification belongs to */
-  domainName?: string | null;
-  name?: string | null;
+  domainName?: string | null
+  name?: string | null
   /** Code that can be used for domain specific purposes */
-  referenceCode?: string | null;
+  referenceCode?: string | null
   /** Unique identification of the classification */
-  namespaceUri?: string | null;
+  namespaceUri?: string | null
   /** Type of the classification. */
-  classificationType?: string | null;
-  description?: string | null;
-  parentClassificationName?: string | null;
-  relatedIfcEntityNames?: string[] | null;
+  classificationType?: string | null
+  description?: string | null
+  parentClassificationName?: string | null
+  relatedIfcEntityNames?: string[] | null
 }
 
 export interface TextSearchResponseContractV5 {
   /** The list of Classifications found */
-  classifications?: TextSearchResponseClassificationContractV5[] | null;
-  domains?: TextSearchResponseDomainContractV5[] | null;
-  properties?: TextSearchResponsePropertyContractV5[] | null;
+  classifications?: TextSearchResponseClassificationContractV5[] | null
+  domains?: TextSearchResponseDomainContractV5[] | null
+  properties?: TextSearchResponsePropertyContractV5[] | null
 }
 
 export interface TextSearchResponseContractV6 {
   /** The list of Classifications found */
-  classifications?: TextSearchResponseClassificationContractV6[] | null;
+  classifications?: TextSearchResponseClassificationContractV6[] | null
   /** The list of Domains with found results */
-  domains?: TextSearchResponseDomainContractV6[] | null;
+  domains?: TextSearchResponseDomainContractV6[] | null
   /** The list of Materials found */
-  materials?: TextSearchResponseMaterialContractV6[] | null;
+  materials?: TextSearchResponseMaterialContractV6[] | null
   /** List of Properties found */
-  properties?: TextSearchResponsePropertyContractV6[] | null;
+  properties?: TextSearchResponsePropertyContractV6[] | null
 }
 
 export interface TextSearchResponseDomainContractV5 {
-  namespaceUri?: string | null;
-  name?: string | null;
+  namespaceUri?: string | null
+  name?: string | null
 }
 
 export interface TextSearchResponseDomainContractV6 {
-  namespaceUri?: string | null;
-  name?: string | null;
+  namespaceUri?: string | null
+  name?: string | null
 }
 
 export interface TextSearchResponseMaterialContractV6 {
   /** Unique identification of the domain the material belongs to */
-  domainNamespaceUri?: string | null;
+  domainNamespaceUri?: string | null
   /** Name of the domain the material belongs to */
-  domainName?: string | null;
-  name?: string | null;
+  domainName?: string | null
+  name?: string | null
   /** Code that can be used for domain specific purposes */
-  referenceCode?: string | null;
+  referenceCode?: string | null
   /** Unique identification of the material */
-  namespaceUri?: string | null;
-  description?: string | null;
-  parentMaterialName?: string | null;
+  namespaceUri?: string | null
+  description?: string | null
+  parentMaterialName?: string | null
 }
 
 export interface TextSearchResponsePropertyContractV5 {
-  domainNamespaceUri?: string | null;
-  domainName?: string | null;
-  namespaceUri?: string | null;
-  name?: string | null;
-  description?: string | null;
+  domainNamespaceUri?: string | null
+  domainName?: string | null
+  namespaceUri?: string | null
+  name?: string | null
+  description?: string | null
 }
 
 export interface TextSearchResponsePropertyContractV6 {
-  domainNamespaceUri?: string | null;
-  domainName?: string | null;
-  namespaceUri?: string | null;
-  name?: string | null;
-  description?: string | null;
+  domainNamespaceUri?: string | null
+  domainName?: string | null
+  namespaceUri?: string | null
+  name?: string | null
+  description?: string | null
 }
 
 export interface UnitContractV1 {
-  code?: string | null;
-  name?: string | null;
-  symbol?: string | null;
-  qudtUri?: string | null;
+  code?: string | null
+  name?: string | null
+  symbol?: string | null
+  qudtUri?: string | null
 }
 
 export interface UploadImportFileResultV1 {
@@ -1721,141 +1721,141 @@ export interface UploadImportFileResultV1 {
    * Indicates if the file will be imported.
    * Warnings are allowed, import will continue but may lead to undesired values in the database.
    */
-  isOk?: boolean;
+  isOk?: boolean
   /**
    * The list of errors found.
    * It may happen that if you fix one error new errors will be discovered.
    */
-  errors?: UploadImportFileResultItemV1[] | null;
+  errors?: UploadImportFileResultItemV1[] | null
   /**
    * List of warnings.
    * It is best to have no warnings at all to avoid inconsistent or incorrect values in the database
    */
-  warnings?: UploadImportFileResultItemV1[] | null;
+  warnings?: UploadImportFileResultItemV1[] | null
   /** Informational messages */
-  informationalMessages?: UploadImportFileResultItemV1[] | null;
+  informationalMessages?: UploadImportFileResultItemV1[] | null
 }
 
 export interface UploadImportFileResultItemV1 {
   /** The attribute the message applies to */
-  attribute?: string | null;
+  attribute?: string | null
   /** The message */
-  message?: string | null;
+  message?: string | null
 }
 
-export type QueryParamsType = Record<string | number, any>;
-export type ResponseFormat = keyof Omit<Body, "body" | "bodyUsed">;
+export type QueryParamsType = Record<string | number, any>
+export type ResponseFormat = keyof Omit<Body, 'body' | 'bodyUsed'>
 
-export interface FullRequestParams extends Omit<RequestInit, "body"> {
+export interface FullRequestParams extends Omit<RequestInit, 'body'> {
   /** set parameter to `true` for call `securityWorker` for this request */
-  secure?: boolean;
+  secure?: boolean
   /** request path */
-  path: string;
+  path: string
   /** content type of request body */
-  type?: ContentType;
+  type?: ContentType
   /** query params */
-  query?: QueryParamsType;
+  query?: QueryParamsType
   /** format of response (i.e. response.json() -> format: "json") */
-  format?: ResponseFormat;
+  format?: ResponseFormat
   /** request body */
-  body?: unknown;
+  body?: unknown
   /** base url */
-  baseUrl?: string;
+  baseUrl?: string
   /** request cancellation token */
-  cancelToken?: CancelToken;
+  cancelToken?: CancelToken
 }
 
-export type RequestParams = Omit<FullRequestParams, "body" | "method" | "query" | "path">;
+export type RequestParams = Omit<FullRequestParams, 'body' | 'method' | 'query' | 'path'>
 
 export interface ApiConfig<SecurityDataType = unknown> {
-  baseUrl?: string;
-  baseApiParams?: Omit<RequestParams, "baseUrl" | "cancelToken" | "signal">;
-  securityWorker?: (securityData: SecurityDataType | null) => Promise<RequestParams | void> | RequestParams | void;
-  customFetch?: typeof fetch;
+  baseUrl?: string
+  baseApiParams?: Omit<RequestParams, 'baseUrl' | 'cancelToken' | 'signal'>
+  securityWorker?: (securityData: SecurityDataType | null) => Promise<RequestParams | void> | RequestParams | void
+  customFetch?: typeof fetch
 }
 
 export interface HttpResponse<D extends unknown, E extends unknown = unknown> extends Response {
-  data: D;
-  error: E;
+  data: D
+  error: E
 }
 
-type CancelToken = Symbol | string | number;
+type CancelToken = Symbol | string | number
 
 export enum ContentType {
-  Json = "application/json",
-  FormData = "multipart/form-data",
-  UrlEncoded = "application/x-www-form-urlencoded",
-  Text = "text/plain",
+  Json = 'application/json',
+  FormData = 'multipart/form-data',
+  UrlEncoded = 'application/x-www-form-urlencoded',
+  Text = 'text/plain',
 }
 
 export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl: string = "";
-  private securityData: SecurityDataType | null = null;
-  private securityWorker?: ApiConfig<SecurityDataType>["securityWorker"];
-  private abortControllers = new Map<CancelToken, AbortController>();
-  private customFetch = (...fetchParams: Parameters<typeof fetch>) => fetch(...fetchParams);
+  public baseUrl: string = ''
+  private securityData: SecurityDataType | null = null
+  private securityWorker?: ApiConfig<SecurityDataType>['securityWorker']
+  private abortControllers = new Map<CancelToken, AbortController>()
+  private customFetch = (...fetchParams: Parameters<typeof fetch>) => fetch(...fetchParams)
 
   private baseApiParams: RequestParams = {
-    credentials: "same-origin",
+    credentials: 'same-origin',
     headers: {},
-    redirect: "follow",
-    referrerPolicy: "no-referrer",
-  };
+    redirect: 'follow',
+    referrerPolicy: 'no-referrer',
+  }
 
   constructor(apiConfig: ApiConfig<SecurityDataType> = {}) {
-    Object.assign(this, apiConfig);
+    Object.assign(this, apiConfig)
   }
 
   public setSecurityData = (data: SecurityDataType | null) => {
-    this.securityData = data;
-  };
+    this.securityData = data
+  }
 
   protected encodeQueryParam(key: string, value: any) {
-    const encodedKey = encodeURIComponent(key);
-    return `${encodedKey}=${encodeURIComponent(typeof value === "number" ? value : `${value}`)}`;
+    const encodedKey = encodeURIComponent(key)
+    return `${encodedKey}=${encodeURIComponent(typeof value === 'number' ? value : `${value}`)}`
   }
 
   protected addQueryParam(query: QueryParamsType, key: string) {
-    return this.encodeQueryParam(key, query[key]);
+    return this.encodeQueryParam(key, query[key])
   }
 
   protected addArrayQueryParam(query: QueryParamsType, key: string) {
-    const value = query[key];
-    return value.map((v: any) => this.encodeQueryParam(key, v)).join("&");
+    const value = query[key]
+    return value.map((v: any) => this.encodeQueryParam(key, v)).join('&')
   }
 
   protected toQueryString(rawQuery?: QueryParamsType): string {
-    const query = rawQuery || {};
-    const keys = Object.keys(query).filter((key) => "undefined" !== typeof query[key]);
+    const query = rawQuery || {}
+    const keys = Object.keys(query).filter((key) => 'undefined' !== typeof query[key])
     return keys
       .map((key) => (Array.isArray(query[key]) ? this.addArrayQueryParam(query, key) : this.addQueryParam(query, key)))
-      .join("&");
+      .join('&')
   }
 
   protected addQueryParams(rawQuery?: QueryParamsType): string {
-    const queryString = this.toQueryString(rawQuery);
-    return queryString ? `?${queryString}` : "";
+    const queryString = this.toQueryString(rawQuery)
+    return queryString ? `?${queryString}` : ''
   }
 
   private contentFormatters: Record<ContentType, (input: any) => any> = {
     [ContentType.Json]: (input: any) =>
-      input !== null && (typeof input === "object" || typeof input === "string") ? JSON.stringify(input) : input,
-    [ContentType.Text]: (input: any) => (input !== null && typeof input !== "string" ? JSON.stringify(input) : input),
+      input !== null && (typeof input === 'object' || typeof input === 'string') ? JSON.stringify(input) : input,
+    [ContentType.Text]: (input: any) => (input !== null && typeof input !== 'string' ? JSON.stringify(input) : input),
     [ContentType.FormData]: (input: any) =>
       Object.keys(input || {}).reduce((formData, key) => {
-        const property = input[key];
+        const property = input[key]
         formData.append(
           key,
           property instanceof Blob
             ? property
-            : typeof property === "object" && property !== null
+            : typeof property === 'object' && property !== null
             ? JSON.stringify(property)
             : `${property}`,
-        );
-        return formData;
+        )
+        return formData
       }, new FormData()),
     [ContentType.UrlEncoded]: (input: any) => this.toQueryString(input),
-  };
+  }
 
   protected mergeRequestParams(params1: RequestParams, params2?: RequestParams): RequestParams {
     return {
@@ -1867,31 +1867,31 @@ export class HttpClient<SecurityDataType = unknown> {
         ...(params1.headers || {}),
         ...((params2 && params2.headers) || {}),
       },
-    };
+    }
   }
 
   protected createAbortSignal = (cancelToken: CancelToken): AbortSignal | undefined => {
     if (this.abortControllers.has(cancelToken)) {
-      const abortController = this.abortControllers.get(cancelToken);
+      const abortController = this.abortControllers.get(cancelToken)
       if (abortController) {
-        return abortController.signal;
+        return abortController.signal
       }
-      return void 0;
+      return void 0
     }
 
-    const abortController = new AbortController();
-    this.abortControllers.set(cancelToken, abortController);
-    return abortController.signal;
-  };
+    const abortController = new AbortController()
+    this.abortControllers.set(cancelToken, abortController)
+    return abortController.signal
+  }
 
   public abortRequest = (cancelToken: CancelToken) => {
-    const abortController = this.abortControllers.get(cancelToken);
+    const abortController = this.abortControllers.get(cancelToken)
 
     if (abortController) {
-      abortController.abort();
-      this.abortControllers.delete(cancelToken);
+      abortController.abort()
+      this.abortControllers.delete(cancelToken)
     }
-  };
+  }
 
   public request = async <T = any, E = any>({
     body,
@@ -1905,52 +1905,52 @@ export class HttpClient<SecurityDataType = unknown> {
     ...params
   }: FullRequestParams): Promise<HttpResponse<T, E>> => {
     const secureParams =
-      ((typeof secure === "boolean" ? secure : this.baseApiParams.secure) &&
+      ((typeof secure === 'boolean' ? secure : this.baseApiParams.secure) &&
         this.securityWorker &&
         (await this.securityWorker(this.securityData))) ||
-      {};
-    const requestParams = this.mergeRequestParams(params, secureParams);
-    const queryString = query && this.toQueryString(query);
-    const payloadFormatter = this.contentFormatters[type || ContentType.Json];
-    const responseFormat = format || requestParams.format;
+      {}
+    const requestParams = this.mergeRequestParams(params, secureParams)
+    const queryString = query && this.toQueryString(query)
+    const payloadFormatter = this.contentFormatters[type || ContentType.Json]
+    const responseFormat = format || requestParams.format
 
-    return this.customFetch(`${baseUrl || this.baseUrl || ""}${path}${queryString ? `?${queryString}` : ""}`, {
+    return this.customFetch(`${baseUrl || this.baseUrl || ''}${path}${queryString ? `?${queryString}` : ''}`, {
       ...requestParams,
       headers: {
         ...(requestParams.headers || {}),
-        ...(type && type !== ContentType.FormData ? { "Content-Type": type } : {}),
+        ...(type && type !== ContentType.FormData ? { 'Content-Type': type } : {}),
       },
       signal: cancelToken ? this.createAbortSignal(cancelToken) : requestParams.signal,
-      body: typeof body === "undefined" || body === null ? null : payloadFormatter(body),
+      body: typeof body === 'undefined' || body === null ? null : payloadFormatter(body),
     }).then(async (response) => {
-      const r = response as HttpResponse<T, E>;
-      r.data = null as unknown as T;
-      r.error = null as unknown as E;
+      const r = response as HttpResponse<T, E>
+      r.data = null as unknown as T
+      r.error = null as unknown as E
 
       const data = !responseFormat
         ? r
         : await response[responseFormat]()
             .then((data) => {
               if (r.ok) {
-                r.data = data;
+                r.data = data
               } else {
-                r.error = data;
+                r.error = data
               }
-              return r;
+              return r
             })
             .catch((e) => {
-              r.error = e;
-              return r;
-            });
+              r.error = e
+              return r
+            })
 
       if (cancelToken) {
-        this.abortControllers.delete(cancelToken);
+        this.abortControllers.delete(cancelToken)
       }
 
-      if (!response.ok) throw data;
-      return data;
-    });
-  };
+      if (!response.ok) throw data
+      return data
+    })
+  }
 }
 
 /**
@@ -1974,19 +1974,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     classificationV4List: (
       query: {
         /** Namespace URI of the classification, e.g. https://identifier.buildingsmart.org/uri/buildingsmart/ifc-4.3/class/ifcwall */
-        namespaceUri: string;
+        namespaceUri: string
         /** Use this option to include references to child classifications */
-        includeChildClassificationReferences?: boolean;
+        includeChildClassificationReferences?: boolean
         /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the domain */
-        languageCode?: string;
+        languageCode?: string
       },
       params: RequestParams = {},
     ) =>
       this.request<ClassificationContractV4, any>({
         path: `/api/Classification/v4`,
-        method: "GET",
+        method: 'GET',
         query: query,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -2001,19 +2001,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     classificationV3List: (
       query: {
         /** Namespace URI of the classification, e.g. https://identifier.buildingsmart.org/uri/buildingsmart/ifc-4.3/class/ifcwall */
-        namespaceUri: string;
+        namespaceUri: string
         /** Use this option to include references to child classifications */
-        includeChildClassificationReferences?: boolean;
+        includeChildClassificationReferences?: boolean
         /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the domain */
-        languageCode?: string;
+        languageCode?: string
       },
       params: RequestParams = {},
     ) =>
       this.request<ClassificationContractV3, any>({
         path: `/api/Classification/v3`,
-        method: "GET",
+        method: 'GET',
         query: query,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -2028,25 +2028,25 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     classificationSearchOpenV1List: (
       query: {
         /** The text to search for, minimum 3 characters (case and accent insensitive) */
-        SearchText: string;
+        SearchText: string
         /**
          * List of domains to filter on.
          * For a classification to be found it must be part of one of the given domains
          */
-        DomainNamespaceUris?: string[];
+        DomainNamespaceUris?: string[]
         /**
          * List of related IFC entities to filter on.
          * For a classification to be found it must have at least one of the given Related Ifc Entities
          */
-        RelatedIfcEntities?: string[];
+        RelatedIfcEntities?: string[]
       },
       params: RequestParams = {},
     ) =>
       this.request<ClassificationSearchResponseContractV1, any>({
         path: `/api/ClassificationSearchOpen/v1`,
-        method: "GET",
+        method: 'GET',
         query: query,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -2061,8 +2061,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     countryV1List: (params: RequestParams = {}) =>
       this.request<CountryContractV1[], any>({
         path: `/api/Country/v1`,
-        method: "GET",
-        format: "json",
+        method: 'GET',
+        format: 'json',
         ...params,
       }),
 
@@ -2080,15 +2080,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
          * Optional parameter to filter by first part of namespace URI. Use this one to get details of just one domain version
          *             or, if you leave out the version number at the end, get all the versions of a domain.
          */
-        namespaceUri?: string;
+        namespaceUri?: string
       },
       params: RequestParams = {},
     ) =>
       this.request<DomainContractV3[], any>({
         path: `/api/Domain/v3`,
-        method: "GET",
+        method: 'GET',
         query: query,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -2103,19 +2103,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     domainV3ClassificationsList: (
       query: {
         /** Required parameter to select the domain. */
-        namespaceUri: string;
+        namespaceUri: string
         /** Set to true if you want a tree of classifications, set to false to get a flat list of classifications */
-        useNestedClassifications?: boolean;
+        useNestedClassifications?: boolean
         /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the domain */
-        languageCode?: string;
+        languageCode?: string
       },
       params: RequestParams = {},
     ) =>
       this.request<DomainWithClassificationsContractV3, any>({
         path: `/api/Domain/v3/Classifications`,
-        method: "GET",
+        method: 'GET',
         query: query,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -2133,15 +2133,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
          * Optional parameter to filter by first part of namespace URI. Use this one to get details of just one domain version
          *             or, if you leave out the version number at the end, get all the versions of a domain.
          */
-        namespaceUri?: string;
+        namespaceUri?: string
       },
       params: RequestParams = {},
     ) =>
       this.request<DomainContractV2[], any>({
         path: `/api/Domain/v2`,
-        method: "GET",
+        method: 'GET',
         query: query,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -2156,19 +2156,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     domainV2ClassificationsList: (
       query: {
         /** Required parameter to select the domain. */
-        namespaceUri: string;
+        namespaceUri: string
         /** Set to true if you want a tree of classifications, set to false to get a flat list of classifications */
-        useNestedClassifications?: boolean;
+        useNestedClassifications?: boolean
         /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the domain */
-        languageCode?: string;
+        languageCode?: string
       },
       params: RequestParams = {},
     ) =>
       this.request<DomainWithClassificationsContractV2, any>({
         path: `/api/Domain/v2/Classifications`,
-        method: "GET",
+        method: 'GET',
         query: query,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -2183,8 +2183,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     languageV1List: (params: RequestParams = {}) =>
       this.request<LanguageContractV1[], any>({
         path: `/api/Language/v1`,
-        method: "GET",
-        format: "json",
+        method: 'GET',
+        format: 'json',
         ...params,
       }),
 
@@ -2199,19 +2199,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     materialV2List: (
       query: {
         /** Namespace URI of the material */
-        namespaceUri: string;
+        namespaceUri: string
         /** Language Code the result will be returned in. For items the translation is not available, the default language of the domain will be returned */
-        languageCode?: string;
+        languageCode?: string
         /** Use this option to include references to child materials */
-        includeChildMaterialReferences?: boolean;
+        includeChildMaterialReferences?: boolean
       },
       params: RequestParams = {},
     ) =>
       this.request<MaterialContractV2, any>({
         path: `/api/Material/v2`,
-        method: "GET",
+        method: 'GET',
         query: query,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -2226,19 +2226,19 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     materialV1List: (
       query: {
         /** Namespace URI of the material */
-        namespaceUri: string;
+        namespaceUri: string
         /** Language Code the result will be returned in. For items the translation is not available, the default language of the domain will be returned */
-        languageCode?: string;
+        languageCode?: string
         /** Use this option to include references to child materials */
-        includeChildMaterialReferences?: boolean;
+        includeChildMaterialReferences?: boolean
       },
       params: RequestParams = {},
     ) =>
       this.request<MaterialContractV1, any>({
         path: `/api/Material/v1`,
-        method: "GET",
+        method: 'GET',
         query: query,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -2253,24 +2253,24 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     materialSearchOpenPreviewList: (
       query: {
         /** The namespace uri of the Domain to filter on (required) */
-        DomainNamespaceUri: string;
+        DomainNamespaceUri: string
         /** The text to search for materials (case and accent insensitive) */
-        SearchText?: string;
+        SearchText?: string
         /**
          * The ISO language code to search in and to return the text in (case sensitive)
          * If no language code specified or the text is not available in the requested language, the text will be returned in the default language of the Domain.
          * If a language code has been given, the search takes place in texts of that language, otherwise searches will be done in the default language of the Domain.
          * If an invalid or not supported language code is given, a Bad Request will be returned.
          */
-        LanguageCode?: string;
+        LanguageCode?: string
       },
       params: RequestParams = {},
     ) =>
       this.request<SearchResultContractV1, any>({
         path: `/api/Material/SearchOpen/preview`,
-        method: "GET",
+        method: 'GET',
         query: query,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -2285,17 +2285,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     propertyV3List: (
       query: {
         /** Namespace URI of the property, e.g. http://identifier.buildingsmart.org/uri/buildingsmart/ifc-4.3/prop/AirConditioning */
-        namespaceUri: string;
+        namespaceUri: string
         /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the domain */
-        languageCode?: string;
+        languageCode?: string
       },
       params: RequestParams = {},
     ) =>
       this.request<PropertyContractV3, any>({
         path: `/api/Property/v3`,
-        method: "GET",
+        method: 'GET',
         query: query,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -2310,17 +2310,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     propertyV2List: (
       query: {
         /** Namespace URI of the property, e.g. https://identifier.buildingsmart.org/uri/buildingsmart/ifc-4.3/prop/AirConditioning */
-        namespaceUri: string;
+        namespaceUri: string
         /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the domain */
-        languageCode?: string;
+        languageCode?: string
       },
       params: RequestParams = {},
     ) =>
       this.request<PropertyContractV2, any>({
         path: `/api/Property/v2`,
-        method: "GET",
+        method: 'GET',
         query: query,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -2335,17 +2335,17 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     propertyValueV1List: (
       query: {
         /** Namespace URI of the property value */
-        namespaceUri: string;
+        namespaceUri: string
         /** Language Code */
-        languageCode?: string;
+        languageCode?: string
       },
       params: RequestParams = {},
     ) =>
       this.request<PropertyValueContractV1, any>({
         path: `/api/PropertyValue/v1`,
-        method: "GET",
+        method: 'GET',
         query: query,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -2360,8 +2360,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     referenceDocumentV1List: (params: RequestParams = {}) =>
       this.request<ReferenceDocumentContractV1[], any>({
         path: `/api/ReferenceDocument/v1`,
-        method: "GET",
-        format: "json",
+        method: 'GET',
+        format: 'json',
         ...params,
       }),
 
@@ -2379,22 +2379,22 @@ Only format "Sketchup" is supported. You get an export in xsd format with limite
     requestExportFilePreviewCreate: (
       query: {
         /** The namespace uri of the domain to be downloaded */
-        DomainNamespaceUri: string;
+        DomainNamespaceUri: string
         /**
          * Select the Export Format you want the result in.
          * Only support format is Sketchup
          * Field can be left empty
          */
-        ExportFormat?: string;
+        ExportFormat?: string
       },
       params: RequestParams = {},
     ) =>
       this.request<File, ProblemDetails | void>({
         path: `/api/RequestExportFile/preview`,
-        method: "POST",
+        method: 'POST',
         query: query,
         secure: true,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -2411,27 +2411,27 @@ Search the bSDD database, get list of Classifications without details.
     searchListV2List: (
       query: {
         /** The namespace uri of the Domain to filter on (required) */
-        DomainNamespaceUri: string;
+        DomainNamespaceUri: string
         /** The text to search for (case and accent insensitive) */
-        SearchText?: string;
+        SearchText?: string
         /**
          * The ISO language code to search in and to return the text in (case sensitive)
          * If no language code specified or the text is not available in the requested language, the text will be returned in the default language of the Domain.
          * If a language code has been given, the search takes place in texts of that language, otherwise searches will be done in the default language of the Domain.
          * If an invalid or not supported language code is given, a Bad Request will be returned.
          */
-        LanguageCode?: string;
+        LanguageCode?: string
         /** The official IFC entity name to filter on (case sensitive) */
-        RelatedIfcEntity?: string;
+        RelatedIfcEntity?: string
       },
       params: RequestParams = {},
     ) =>
       this.request<SearchResultContractV2, any>({
         path: `/api/SearchList/v2`,
-        method: "GET",
+        method: 'GET',
         query: query,
         secure: true,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -2446,26 +2446,26 @@ Search the bSDD database, get list of Classifications without details.
     searchListOpenV2List: (
       query: {
         /** The namespace uri of the Domain to filter on (required) */
-        DomainNamespaceUri: string;
+        DomainNamespaceUri: string
         /** The text to search for (case and accent insensitive) */
-        SearchText?: string;
+        SearchText?: string
         /**
          * The ISO language code to search in and to return the text in (case sensitive)
          * If no language code specified or the text is not available in the requested language, the text will be returned in the default language of the Domain.
          * If a language code has been given, the search takes place in texts of that language, otherwise searches will be done in the default language of the Domain.
          * If an invalid or not supported language code is given, a Bad Request will be returned.
          */
-        LanguageCode?: string;
+        LanguageCode?: string
         /** The official IFC entity name to filter on (case sensitive) */
-        RelatedIfcEntity?: string;
+        RelatedIfcEntity?: string
       },
       params: RequestParams = {},
     ) =>
       this.request<SearchResultContractV2, any>({
         path: `/api/SearchListOpen/v2`,
-        method: "GET",
+        method: 'GET',
         query: query,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -2480,19 +2480,19 @@ Search the bSDD database, get list of Classifications without details.
     textSearchListOpenV6List: (
       query: {
         /** The text to search for, minimum 3 characters (case and accent insensitive) */
-        SearchText: string;
+        SearchText: string
         /** Type filter: must be "All", "Classifications", "Materials" or "Properties" */
-        TypeFilter?: string;
+        TypeFilter?: string
         /** List of domain to filter on */
-        DomainNamespaceUris?: string[];
+        DomainNamespaceUris?: string[]
       },
       params: RequestParams = {},
     ) =>
       this.request<TextSearchResponseContractV6, any>({
         path: `/api/TextSearchListOpen/v6`,
-        method: "GET",
+        method: 'GET',
         query: query,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -2507,19 +2507,19 @@ Search the bSDD database, get list of Classifications without details.
     textSearchListOpenV5List: (
       query: {
         /** The text to search for, minimum 3 characters (case and accent insensitive) */
-        SearchText: string;
+        SearchText: string
         /** Type filter: must be "All", "Classifications" or "Properties" */
-        TypeFilter?: string;
+        TypeFilter?: string
         /** List of domain to filter on */
-        DomainNamespaceUris?: string[];
+        DomainNamespaceUris?: string[]
       },
       params: RequestParams = {},
     ) =>
       this.request<TextSearchResponseContractV5, any>({
         path: `/api/TextSearchListOpen/v5`,
-        method: "GET",
+        method: 'GET',
         query: query,
-        format: "json",
+        format: 'json',
         ...params,
       }),
 
@@ -2534,8 +2534,8 @@ Search the bSDD database, get list of Classifications without details.
     unitV1List: (params: RequestParams = {}) =>
       this.request<UnitContractV1[], any>({
         path: `/api/Unit/v1`,
-        method: "GET",
-        format: "json",
+        method: 'GET',
+        format: 'json',
         ...params,
       }),
 
@@ -2554,28 +2554,28 @@ Search the bSDD database, get list of Classifications without details.
          * Code of the organization owning the domain.
          * If you do not know the code, contact us (see e-mail address on top of this page)
          */
-        OrganizationCode: string;
+        OrganizationCode: string
         /**
          * The bsdd import file in json format
          * @format binary
          */
-        FormFile: File;
+        FormFile: File
         /**
          * Set to true if you only want to validate the file. Even when there are no validation errors the file wil not be imported.
          * The validation result will not be send via e-mail.
          */
-        ValidateOnly?: boolean;
+        ValidateOnly?: boolean
       },
       params: RequestParams = {},
     ) =>
       this.request<UploadImportFileResultV1, any>({
         path: `/api/UploadImportFile/v1`,
-        method: "POST",
+        method: 'POST',
         body: data,
         secure: true,
         type: ContentType.FormData,
-        format: "json",
+        format: 'json',
         ...params,
       }),
-  };
+  }
 }
