@@ -18,7 +18,7 @@ import BsddSearch from './components/BsddSearch'
 
 // const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
 
-function insertBsddSearch(domElement: HTMLElement, callback: any, config: any) {
+export function insertBsddSearch(domElement: HTMLElement, callback: any, config: any) {
   const root = ReactDOM.createRoot(domElement as HTMLElement)
   root.render(
     <React.StrictMode>
@@ -32,4 +32,4 @@ function insertBsddSearch(domElement: HTMLElement, callback: any, config: any) {
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 // reportWebVitals()
 
-export { BsddSearch, insertBsddSearch }
+export default { BsddSearch }
