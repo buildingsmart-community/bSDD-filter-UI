@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import BsddSearch from 'aaa'
+import BsddSearch from 'react-bsdd-search'
 
 function callback(data) {
   console.log(data)
