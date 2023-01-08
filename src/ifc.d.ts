@@ -114,3 +114,8 @@ interface IfcPropertyEnumeration extends IfcPropertyAbstraction {
   enumerationValues: any[] // LIST [1:?] OF UNIQUE IfcValue
   Unit?: any // IfcUnit
 }
+
+interface IfcValue extends IfcJsonEntity {
+  type: string
+  value?: any
+}

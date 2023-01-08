@@ -1,10 +1,7 @@
 import React, { useEffect, Children } from 'react'
 import { Accordion } from 'react-bootstrap'
-import { Api, ClassificationContractV4, ClassificationPropertyContractV3 } from './BsddApi'
+import { ClassificationContractV4, ClassificationPropertyContractV3 } from './BsddApi'
 import Property from './Property'
-
-const api = new Api()
-api.baseUrl = 'https://test.bsdd.buildingsmart.org'
 
 interface Props {
   classifications: ClassificationContractV4[]
@@ -12,10 +9,88 @@ interface Props {
   setPropertySets: (value: { [id: string]: IfcPropertySet }) => void
   recursiveMode: boolean
 }
+
 function Properties(props: Props) {
   const classifications: ClassificationContractV4[] = props.classifications
   const propertySets: { [id: string]: IfcPropertySet } = props.propertySets
   const setPropertySets: (value: { [id: string]: IfcPropertySet }) => void = props.setPropertySets
+
+  function GetIfcPropertyValue(
+    dataType: string | undefined | null,
+    predefinedValue: string | null | undefined,
+  ): IfcValue {
+    switch (dataType) {
+      case 'Boolean': {
+        const value: IfcValue = {
+          type: 'IfcBoolean',
+        }
+        if (predefinedValue) {
+          if (predefinedValue === 'TRUE') {
+            value.value = true
+          } else if (predefinedValue === 'FALSE') {
+            value.value = false
+          } else {
+            throw 'Invalid Boolean value'
+          }
+        }
+        return value
+      }
+      case 'Character': {
+        const value: IfcValue = {
+          type: 'default',
+        }
+        if (predefinedValue) {
+          value.value = predefinedValue
+        }
+        return value
+      }
+      case 'Integer': {
+        const value: IfcValue = {
+          type: 'IfcInteger',
+        }
+        if (predefinedValue) {
+          value.value = predefinedValue
+        }
+        return value
+      }
+      case 'Real': {
+        const value: IfcValue = {
+          type: 'IfcReal',
+        }
+        if (predefinedValue) {
+          value.value = predefinedValue
+        }
+        return value
+      }
+      case 'String': {
+        const value: IfcValue = {
+          type: 'default',
+        }
+        if (predefinedValue) {
+          value.value = predefinedValue
+        }
+        return value
+      }
+      case 'Time': {
+        const value: IfcValue = {
+          type: 'IfcDate',
+        }
+        if (predefinedValue) {
+          value.value = predefinedValue
+        }
+        return value
+      }
+      default: {
+        const value: IfcValue = {
+          type: 'default',
+        }
+        if (predefinedValue) {
+          value.value = predefinedValue
+        }
+        return value
+      }
+    }
+  }
 
   function GetIfcProperty(
     classificationProperty: ClassificationPropertyContractV3,
@@ -42,6 +117,10 @@ function Properties(props: Props) {
       if (classificationProperty.propertyNamespaceUri) {
         ifcProperty.specification = classificationProperty.propertyNamespaceUri
       }
+      ifcProperty.nominalValue = GetIfcPropertyValue(
+        classificationProperty.dataType,
+        classificationProperty.predefinedValue,
+      )
       return ifcProperty
     }
   }
