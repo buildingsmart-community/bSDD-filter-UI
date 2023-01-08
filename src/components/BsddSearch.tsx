@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Form, Accordion, Row, Col, Card } from 'react-bootstrap'
 import Search from './Search'
 import Classifications from './Classifications'
+import Properties from './Properties'
 import RecursiveMode from './RecursiveMode'
 import SelectDomains from './SelectDomains'
 import Apply from './Apply'
@@ -28,6 +29,7 @@ function BsddSearch(props: Props) {
   const [activeDomains, setActiveDomains] = useState<Option[]>(getDefaultDomains())
   const [domains, setDomains] = useState<{ [id: string]: DomainContractV3 }>({})
   const [classifications, setClassifications] = useState<ClassificationContractV4[]>([])
+  const [propertySets, setPropertySets] = useState<{ [id: string]: IfcPropertySet }>({})
 
   function getDefaultDomains(): Option[] {
     if (props.config && props.config.defaultDomains && props.config.defaultDomains.length) {
@@ -61,7 +63,7 @@ function BsddSearch(props: Props) {
           </Row>
 
           <div className='mb-3 row'>
-            <Accordion defaultActiveKey='0'>
+            <Accordion defaultActiveKey={['0', '1']} alwaysOpen>
               <Accordion.Item eventKey='0'>
                 <Accordion.Header>Classifications</Accordion.Header>
                 <Accordion.Body>
@@ -77,11 +79,12 @@ function BsddSearch(props: Props) {
               <Accordion.Item eventKey='1'>
                 <Accordion.Header>Propertysets</Accordion.Header>
                 <Accordion.Body>
-                  <div
-                    id='propertySetsContent'
-                    className='card-body collapse show'
-                    aria-labelledby='propertySetsHeader'
-                  ></div>
+                  <Properties
+                    classifications={classifications}
+                    propertySets={propertySets}
+                    setPropertySets={setPropertySets}
+                    recursiveMode={recursiveMode}
+                  />
                 </Accordion.Body>
               </Accordion.Item>
             </Accordion>
@@ -91,7 +94,7 @@ function BsddSearch(props: Props) {
               callback={props.callback}
               domains={domains}
               classifications={classifications}
-              setClassifications={setClassifications}
+              propertySets={propertySets}
             />
           </Form.Group>
         </Card.Body>
