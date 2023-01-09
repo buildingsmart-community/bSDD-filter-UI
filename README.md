@@ -1,5 +1,8 @@
 # bSDD Search Component for React
 
+## Live demo
+https://bim-tools.github.io/react-bsdd-search/
+
 ![](https://github.com/BIM-Tools/react-bsdd-search/raw/master/docs/bSDD-search-component.png)
 
 ## Usage
