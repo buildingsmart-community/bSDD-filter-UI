@@ -5,7 +5,7 @@ interface Props {
   callback: (value: any) => void
   domains: { [id: string]: DomainContractV3 }
   classifications: ClassificationContractV4[]
-  setClassifications: (value: ClassificationContractV4[]) => void
+  propertySets: { [id: string]: IfcPropertySet }
 }
 
 function Apply(props: Props) {
@@ -15,6 +15,10 @@ function Apply(props: Props) {
     const ifc: IfcEntity = {}
     if (props.classifications.length) {
       ifc.hasAssociations = props.classifications.map((classification) => getIfcClassificationReference(classification))
+    }
+    const propertySets: IfcPropertySet[] = Object.values(props.propertySets)
+    if (propertySets.length) {
+      ifc.isDefinedBy = propertySets
     }
     return ifc
   }
@@ -36,15 +40,13 @@ function Apply(props: Props) {
   function getIfcClassificationReference(bsdd: ClassificationContractV4): IfcClassificationReference {
     const ifc: IfcClassificationReference = {
       type: 'IfcClassificationReference',
+      name: bsdd.name,
     }
     if (bsdd.namespaceUri) {
       ifc.location = bsdd.namespaceUri
     }
     if (bsdd.code) {
       ifc.identification = bsdd.code
-    }
-    if (bsdd.name) {
-      ifc.name = bsdd.name
     }
     if (bsdd.domainNamespaceUri) {
       const referencedSource = getIfcClassification(bsdd.domainNamespaceUri)

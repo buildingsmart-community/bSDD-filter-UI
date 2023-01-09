@@ -1,6 +1,6 @@
 {
   "name": "react-bsdd-search",
-  "version": "0.1.5",
+  "version": "0.2.1",
   "description": "bSDD Search React Component",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -12,8 +12,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "yarn build:esm && yarn build:cjs",
-    "build:esm": "rollup -c",
-    "build:cjs": "rollup -c --module commonjs --outDir dist/cjs",
+    "build:esm": "webpack",
+    "build:cjs": "tsc --module commonjs --outDir dist/cjs",
     "lint": "eslint \"{**/*,*}.{js,ts,jsx,tsx}\"",
     "prettier": "prettier --write \"{src,tests,example/src}/**/*.{js,ts,jsx,tsx}\"",
     "test": "jest --config jestconfig.json",
@@ -24,7 +24,7 @@
     "react": ">=16"
   },
   "files": [
-    "dist",
+    "/dist/",
     "LICENSE",
     "README.md"
   ],
@@ -64,7 +64,10 @@
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-terser": "^7.0.2",
     "ts-jest": "^28.0.4",
-    "typescript": "^4.9.4"
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.4",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
   },
   "browserslist": {
     "production": [
