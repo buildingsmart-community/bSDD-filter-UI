@@ -1,0 +1,10 @@
+html,
+body {
+  height: 100%;
+}
+#viewer {
+  background: url("../images/viewer.png");
+  background-repeat: no-repeat;
+  background-size: auto;
+  color: white;
+}

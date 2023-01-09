@@ -1,6 +1,6 @@
 {
   "name": "react-bsdd-search",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "bSDD Search React Component",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -24,7 +24,7 @@
     "react": ">=16"
   },
   "files": [
-    "dist",
+    "/dist/",
     "LICENSE",
     "README.md"
   ],
