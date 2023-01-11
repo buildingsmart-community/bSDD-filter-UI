@@ -15,25 +15,28 @@ function Properties(props: Props) {
   const propertySets: { [id: string]: IfcPropertySet } = props.propertySets
   const setPropertySets: (value: { [id: string]: IfcPropertySet }) => void = props.setPropertySets
 
-  function GetIfcPropertyValue(
-    dataType: string | undefined | null,
-    predefinedValue: string | null | undefined,
-  ): IfcValue {
+  function GetIfcPropertyValue(dataType: string | undefined | null, predefinedValue: any): IfcValue {
     switch (dataType) {
       case 'Boolean': {
         const value: IfcValue = {
           type: 'IfcBoolean',
         }
-        if (predefinedValue) {
-          if (predefinedValue === 'TRUE') {
+        switch (predefinedValue) {
+          case true:
+          case 'TRUE': {
             value.value = true
-          } else if (predefinedValue === 'FALSE') {
+            return value
+          }
+          case false:
+          case 'FALSE': {
             value.value = false
-          } else {
-            throw 'Invalid Boolean value'
+            return value
+          }
+          default: {
+            value.value = undefined
+            return value
           }
         }
-        return value
       }
       case 'Character': {
         const value: IfcValue = {

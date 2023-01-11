@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Children } from 'react'
 import { Form } from 'react-bootstrap'
-import IndeterminateCheckbox from './IndeterminateCheckbox'
+import Checkbox from './Checkbox'
 
 interface Props {
   propertySet: IfcPropertySet
@@ -22,16 +22,15 @@ function Property(props: Props) {
       case 'IfcPropertySingleValue': {
         if (ifcProperty.nominalValue.type === 'IfcBoolean') {
           setInput(
-            <IndeterminateCheckbox
-              placeholder={ifcProperty.nominalValue.value}
-              checked={ifcProperty.nominalValue.value}
-              indeterminate={true}
-              onChange={(e: any) => {
+            <Checkbox
+              label='Value'
+              value={ifcProperty.nominalValue.value}
+              setValue={(value: true | false | undefined) => {
                 const propertySets = { ...ifcPropertySets }
                 const propertySet = { ...ifcPropertySet }
                 if (propertySet.name) {
                   const p: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue = { ...ifcProperty }
-                  p.nominalValue.value = e.target.checked
+                  p.nominalValue.value = value
                   const i: number = propertySet.hasProperties.findIndex((element) => element.name === ifcProperty.name)
                   if (i != -1) {
                     propertySet.hasProperties[i] = p
