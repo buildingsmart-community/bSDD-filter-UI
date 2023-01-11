@@ -14,6 +14,7 @@ function Properties(props: Props) {
   const classifications: ClassificationContractV4[] = props.classifications
   const propertySets: { [id: string]: IfcPropertySet } = props.propertySets
   const setPropertySets: (value: { [id: string]: IfcPropertySet }) => void = props.setPropertySets
+  const recursiveMode: boolean = props.recursiveMode
 
   function GetIfcPropertyValue(dataType: string | undefined | null, predefinedValue: any): IfcValue {
     switch (dataType) {
@@ -130,7 +131,8 @@ function Properties(props: Props) {
 
   useEffect(() => {
     const propertySets: { [id: string]: IfcPropertySet } = {}
-    classifications.forEach((classification) => {
+    const propertyClassifications = recursiveMode ? classifications : classifications.slice(0, 1)
+    propertyClassifications.forEach((classification) => {
       if (classification.classificationProperties) {
         classification.classificationProperties.map((classificationProperty) => {
           const propertySetName = classificationProperty.propertySet || classification.name
@@ -152,7 +154,7 @@ function Properties(props: Props) {
     //     return propertySets[propertySetName]
     //   })
     setPropertySets(propertySets)
-  }, [classifications, setPropertySets])
+  }, [classifications, setPropertySets, recursiveMode])
 
   return (
     <div>

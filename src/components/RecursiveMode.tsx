@@ -9,13 +9,13 @@ interface Props {
 function RecursiveMode(props: Props) {
   // const [selectOptions, setSelectOptions] = useState<any[]>([])
 
-  const handleOnChange = () => {
-    props.setRecursiveMode(!props.recursiveMode)
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    props.setRecursiveMode(e.target.checked)
   }
 
   return (
     <OverlayTrigger overlay={<Tooltip>toggle recursive mode</Tooltip>} placement='bottom'>
-      <Form.Check type='switch' id='custom-switch' checked={props.recursiveMode} onChange={() => handleOnChange()} />
+      <Form.Check type='switch' id='custom-switch' checked={props.recursiveMode} onChange={(e) => handleOnChange(e)} />
     </OverlayTrigger>
   )
 }
