@@ -1,4 +1,3 @@
-import React from 'react'
 import { ClassificationContractV4, DomainContractV3 } from './BsddApi'
 
 interface Props {

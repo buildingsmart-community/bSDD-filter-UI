@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Children } from 'react'
+import { useState, useEffect, Children } from 'react'
 import { Form } from 'react-bootstrap'
 import { Api, ClassificationContractV4, DomainContractV3 } from './BsddApi'
 

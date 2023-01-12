@@ -1,4 +1,4 @@
-import React, { useEffect, Children } from 'react'
+import { useEffect, Children } from 'react'
 import { Accordion } from 'react-bootstrap'
 import { ClassificationContractV4, ClassificationPropertyContractV3 } from './BsddApi'
 import Property from './Property'

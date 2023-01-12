@@ -3,8 +3,7 @@
     "lib": ["dom", "esnext"],
     "importHelpers": true,
     "declaration": true,
-    "declarationDir": "types",
-    "emitDeclarationOnly": true,
+    "declarationDir": "./dist/types",
     "sourceMap": true,
     "rootDir": "./src",
     "outDir": "./dist",
@@ -18,9 +17,9 @@
     "noUnusedParameters": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "jsx": "react",
+    "jsx": "react-jsx",
 
-    "target": "es5",
+    "target": "es6",
     "allowSyntheticDefaultImports": true
   },
   "include": ["src"],

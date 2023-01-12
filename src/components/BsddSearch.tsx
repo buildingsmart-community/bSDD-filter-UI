@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Form, Accordion, Row, Col, Card } from 'react-bootstrap'
 import Search from './Search'
 import Classifications from './Classifications'

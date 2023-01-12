@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Select from 'react-select'
 import { Api, DomainContractV3 } from './BsddApi'
 
