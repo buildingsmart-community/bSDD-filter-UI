@@ -14,7 +14,7 @@ function RecursiveMode(props: Props) {
   }
 
   return (
-    <OverlayTrigger overlay={<Tooltip>toggle recursive mode</Tooltip>} placement='bottom'>
+    <OverlayTrigger overlay={<Tooltip>show nested classifications</Tooltip>} placement='bottom'>
       <Form.Check type='switch' id='custom-switch' checked={props.recursiveMode} onChange={(e) => handleOnChange(e)} />
     </OverlayTrigger>
   )
