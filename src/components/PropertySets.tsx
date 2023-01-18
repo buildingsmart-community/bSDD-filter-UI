@@ -10,7 +10,7 @@ interface Props {
   recursiveMode: boolean
 }
 
-function Properties(props: Props) {
+function PropertySets(props: Props) {
   const classifications: ClassificationContractV4[] = props.classifications
   const propertySets: { [id: string]: IfcPropertySet } = props.propertySets
   const setPropertySets: (value: { [id: string]: IfcPropertySet }) => void = props.setPropertySets
@@ -183,4 +183,4 @@ function Properties(props: Props) {
     </div>
   )
 }
-export default Properties
+export default PropertySets

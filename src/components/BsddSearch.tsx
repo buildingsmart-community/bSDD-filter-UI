@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Form, Accordion, Row, Col, Card } from 'react-bootstrap'
 import Search from './Search'
 import Classifications from './Classifications'
-import Properties from './Properties'
+import PropertySets from './PropertySets'
 import RecursiveMode from './RecursiveMode'
 import SelectDomains from './SelectDomains'
 import Apply from './Apply'
@@ -16,14 +16,13 @@ interface Option {
 interface Config {
   defaultDomains: Option[]
 }
+
 interface Props {
   callback: (value: any) => void
   config: Config
 }
 
 function BsddSearch(props: Props) {
-  // const [api, setApi] = useState(0);
-
   const [activeClassificationUri, setActiveClassificationUri] = useState<string>()
   const [recursiveMode, setRecursiveMode] = useState<boolean>(false)
   const [activeDomains, setActiveDomains] = useState<Option[]>(getDefaultDomains())
@@ -79,7 +78,7 @@ function BsddSearch(props: Props) {
               <Accordion.Item eventKey='1'>
                 <Accordion.Header>Propertysets</Accordion.Header>
                 <Accordion.Body>
-                  <Properties
+                  <PropertySets
                     classifications={classifications}
                     propertySets={propertySets}
                     setPropertySets={setPropertySets}
