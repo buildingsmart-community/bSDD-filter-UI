@@ -4,6 +4,10 @@
 
 // function callback(data: any) {
 //   console.log(data)
+//   const viewer = document.getElementById('viewer')
+//   if (viewer) {
+//     viewer.innerHTML = '<pre class="h-100">' + JSON.stringify(data, undefined, 2) + '</pre>'
+//   }
 // }
 
 // const config = {
@@ -15,7 +19,7 @@
 //   ],
 // }
 
-// const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+// const root = ReactDOM.createRoot(document.getElementById('bsdd') as HTMLElement)
 
 // root.render(
 //   <React.StrictMode>
