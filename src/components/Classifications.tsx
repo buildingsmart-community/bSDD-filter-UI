@@ -73,11 +73,10 @@ function Classifications(props: Props) {
   }, [props.activeClassificationUri])
 
   useEffect(() => {
+    setClassificationCount(Object.keys(classificationUris).length)
     if (classificationCount === Object.keys(classificationUris).length) {
       return
     }
-    const c = Object.keys(classificationUris).length
-    setClassificationCount(c)
     Promise.allSettled(Object.values(classificationUris)).then(function (results) {
       const r = results
         .map((result) => {
@@ -88,7 +87,6 @@ function Classifications(props: Props) {
         })
         .filter((x): x is ClassificationContractV4 => x !== null)
 
-      props.setClassifications(r)
       results.map((result) => {
         if (result.status === 'fulfilled') {
           const c = result.value
@@ -110,8 +108,9 @@ function Classifications(props: Props) {
         }
         return 'unknown'
       })
+      props.setClassifications(r)
     })
-  }, [classificationUris, classificationCount, setClassificationCount, getClassification])
+  }, [classificationUris])
 
   return (
     <div>
