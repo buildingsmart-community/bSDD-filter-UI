@@ -20,5 +20,26 @@
         <div class="col-sm overflow-auto" id="viewer">2D view</div>
       </div>
     </div>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="./react-bsdd-search.umd.cjs"></script>
+    <script type="module">
+      function callback(data) {
+        console.log(data);
+        document.getElementById('viewer').innerHTML = '<pre>' + JSON.stringify(data, undefined, 2) + '</pre>';
+      }
+
+      const config = {
+        defaultDomains: [
+          {
+            value: 'https://identifier.buildingsmart.org/uri/digibase/volkerwesselsbv-0.1',
+            label: 'VolkerWessels Bouw & Vastgoed',
+          },
+        ],
+      };
+
+      const root = document.getElementById('bsdd');
+      BsddSearch.insertBsddSearch(root, callback, config);
+    </script>
   </body>
 </html>

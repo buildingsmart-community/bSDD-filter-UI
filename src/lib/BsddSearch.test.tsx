@@ -19,3 +19,12 @@
 //     render(<BsddSearch callback={callback} config={config} />)
 //   })
 // })
+
+// Testcases:
+// - missing config
+// - missing baseUrl
+// - missing defaultDomains
+// - single defaultDomain
+// - multiple defaultDomains
+// - recursive_mode true/false
+export { };

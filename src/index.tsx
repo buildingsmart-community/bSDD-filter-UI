@@ -1,30 +1,12 @@
-// import React from 'react'
-// import ReactDOM from 'react-dom/client'
-// import BsddSearch from './components'
+import './index.css';
 
-// function callback(data: any) {
-//   console.log(data)
-//   const viewer = document.getElementById('viewer')
-//   if (viewer) {
-//     viewer.innerHTML = '<pre class="h-100">' + JSON.stringify(data, undefined, 2) + '</pre>'
-//   }
-// }
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 
-// const config = {
-//   defaultDomains: [
-//     {
-//       value: 'https://identifier.buildingsmart.org/uri/digibase/volkerwesselsbv-0.1',
-//       label: 'VolkerWessels Bouw & Vastgoed',
-//     },
-//   ],
-// }
+import App from './App';
 
-// const root = ReactDOM.createRoot(document.getElementById('bsdd') as HTMLElement)
-
-// root.render(
-//   <React.StrictMode>
-//     <BsddSearch callback={callback} config={config} />
-//   </React.StrictMode>,
-// )
-
-export * from './components'
+ReactDOM.createRoot(document.getElementById('bsdd') as HTMLElement).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+);

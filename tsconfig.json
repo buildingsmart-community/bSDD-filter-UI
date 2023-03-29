@@ -1,27 +1,21 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "esnext"],
-    "importHelpers": true,
-    "declaration": true,
-    "declarationDir": "./dist/types",
-    "sourceMap": true,
-    "rootDir": "./src",
-    "outDir": "./dist",
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": false,
     "skipLibCheck": true,
-    "esModuleInterop": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "jsx": "react-jsx",
-
-    "target": "es6",
-    "allowSyntheticDefaultImports": true
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
   },
-  "include": ["src"],
-  "exclude": ["dist", "node_modules"]
+  "include": ["vite.config.ts", ".eslintrc.cjs", "src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
