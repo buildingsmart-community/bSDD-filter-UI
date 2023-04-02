@@ -1,5 +1,11 @@
 import BsddSearch from './lib';
 
+// MSAL imports
+import { PublicClientApplication } from "@azure/msal-browser";
+import { msalConfig } from './authConfig';
+
+export const msalInstance = new PublicClientApplication(msalConfig);
+
 function callback(data: IfcEntity) {
   console.log(data);
   const viewer = document.getElementById('viewer');
@@ -29,7 +35,7 @@ const config = {
 };
 
 function App() {
-  return <BsddSearch callback={callback} config={config} />;
+  return <BsddSearch callback={callback} config={config} msalInstance={msalInstance} />;
 }
 
 export default App;
