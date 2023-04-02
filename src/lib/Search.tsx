@@ -1,36 +1,58 @@
 import AsyncSelect from 'react-select/async';
 import { Api, RequestParams } from './BsddApi';
 
-const api = new Api();
-api.baseUrl = 'https://test.bsdd.buildingsmart.org';
-
 interface Option {
   label: string;
   value: string;
 }
 
 interface Props {
+  api: Api<unknown>;
   activeDomains: Option[];
   setActiveClassificationUri: (value: string) => void;
   accessToken: string;
 }
 
 //https://medium.com/how-to-react/react-select-dropdown-tutorial-using-react-select-51664ab8b6f3
-function Search(props: Props) {
-  const params: RequestParams = {};
+function Search({ api, activeDomains, setActiveClassificationUri, accessToken }: Props) {
+  const params: RequestParams = {
+    headers: { Accept: 'text/plain' },
+  };
 
-  if (props.accessToken !== '') {
-    params.headers = { Authorization: 'Bearer ' + props.accessToken };
+  if (accessToken !== '') {
+    params.headers = { ...params.headers, Authorization: 'Bearer ' + accessToken };
   }
 
   const loadOptions = (inputValue: string, callback: (options: any[]) => void) => {
-    if (inputValue.length > 2) {
+    if (activeDomains.length === 1 && accessToken) {
       const queryParameters = {
         SearchText: inputValue,
-        TypeFilter: 'Classifications',
-        DomainNamespaceUris: props.activeDomains.map((domain) => domain.value),
+        DomainNamespaceUri: activeDomains[0].value,
+        // LanguageCode: 'NL',
+        // RelatedIfcEntities: 'IfcWall',
       };
-      api.api.textSearchListOpenV5List(queryParameters, params).then((response) => {
+      api.api.searchListV2List(queryParameters, params).then((response) => {
+        const searchResult = response.data;
+        console.log(searchResult);
+        if (searchResult.numberOfClassificationsFound) {
+          const domains = response.data.domains;
+          if (domains && domains[0] && domains[0].classifications) {
+            callback(
+              domains[0].classifications.map((c) => ({
+                value: c.namespaceUri,
+                label: c.name,
+              })),
+            );
+          }
+        }
+      });
+    } else if (inputValue.length > 2) {
+      const queryParameters = {
+        SearchText: inputValue,
+        DomainNamespaceUris: activeDomains.map((domain) => domain.value),
+        // RelatedIfcEntities: 'IfcWall',
+      };
+      api.api.classificationSearchOpenV1List(queryParameters, params).then((response) => {
         if (response.data.classifications) {
           callback(
             response.data.classifications.map((c) => ({
@@ -46,7 +68,7 @@ function Search(props: Props) {
   };
 
   const handleOnChange = (e: any) => {
-    props.setActiveClassificationUri(e.value);
+    setActiveClassificationUri(e.value);
   };
 
   return (
