@@ -1,33 +1,24 @@
 {
   "name": "react-bsdd-search",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "bSDD Search React Component",
-  "main": "./dist/cjs/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "dist/index.d.ts",
+  "main": "src/index.tsx",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/BIM-Tools/react-bsdd-search.git"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "yarn build:esm && yarn build:cjs",
-    "build:esm": "webpack",
-    "build:cjs": "tsc --module commonjs --outDir dist/cjs",
-    "lint": "eslint \"{**/*,*}.{js,ts,jsx,tsx}\"",
-    "prettier": "prettier --write \"{src,tests,example/src}/**/*.{js,ts,jsx,tsx}\"",
-    "test": "jest --config jestconfig.json",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm run prettier && npm run lint"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "peerDependencies": {
-    "react": ">=16"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
-  "files": [
-    "/dist/",
-    "LICENSE",
-    "README.md"
-  ],
   "keywords": [
     "react",
     "typescript",
@@ -36,53 +27,35 @@
   ],
   "author": "Jan Brouwer <jan@brewsky.nl>",
   "license": "MIT",
+  "private": false,
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^24.0.0",
-    "@rollup/plugin-node-resolve": "^15.0.1",
-    "@rollup/plugin-typescript": "^10.0.1",
-    "@testing-library/react": "^13.3.0",
-    "@types/jest": "^28.1.1",
-    "@types/react": "^18.0.26",
-    "@typescript-eslint/eslint-plugin": "^5.27.1",
-    "@typescript-eslint/parser": "^5.27.1",
+    "@popperjs/core": "^2.11.7",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@typescript-eslint/eslint-plugin": "^5.51.0",
+    "@typescript-eslint/parser": "^5.51.0",
+    "@vitejs/plugin-react-swc": "^3.0.0",
     "bootstrap": "^5.2.3",
-    "eslint": "^8.17.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-react": "^7.30.0",
-    "eslint-plugin-react-hooks": "^4.5.0",
-    "jest": "^28.1.1",
-    "jest-canvas-mock": "^2.4.0",
-    "jest-environment-jsdom": "^28.1.1",
-    "prettier": "^2.6.2",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb": "19.0.4",
+    "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "eslint-plugin-simple-import-sort": "^10.0.0",
+    "jsdom": "^21.1.0",
+    "prettier": "^2.8.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-scripts": "^5.0.1",
-    "rollup": "^3.9.1",
-    "rollup-plugin-dts": "^5.1.0",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-terser": "^7.0.2",
-    "ts-jest": "^28.0.4",
-    "ts-loader": "^9.4.2",
-    "typescript": "^4.9.4",
-    "webpack": "^5.75.0",
-    "webpack-cli": "^5.0.1"
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "typescript": "^4.9.3",
+    "vite": "^4.1.0",
+    "vitest": "^0.28.4"
   },
   "dependencies": {
-    "react-bootstrap": "^2.7.0",
+    "react-bootstrap": "^2.7.1",
     "react-select": "^5.7.0"
   }
 }

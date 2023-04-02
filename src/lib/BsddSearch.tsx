@@ -17,9 +17,15 @@ interface Config {
   defaultDomains: Option[]
 }
 
+interface BsddConfig {
+  baseUrl: string;
+  defaultDomains: Option[];
+  defaultSearch: Option;
+}
+
 interface Props {
-  callback: (value: any) => void
-  config: Config
+  callback: (value: IfcEntity) => void;
+  config: BsddConfig;
 }
 
 function BsddSearch(props: Props) {
