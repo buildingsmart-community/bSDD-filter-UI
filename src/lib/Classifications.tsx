@@ -1,6 +1,6 @@
 import { useState, useEffect, Children } from 'react'
 import { Form } from 'react-bootstrap'
-import { Api, ClassificationContractV4, DomainContractV3 } from './BsddApi'
+import { Api, ClassificationContractV4, DomainContractV3, RequestParams } from './BsddApi'
 
 const api = new Api()
 api.baseUrl = 'https://test.bsdd.buildingsmart.org'
@@ -11,6 +11,7 @@ interface Props {
   classifications: ClassificationContractV4[]
   setClassifications: (value: ClassificationContractV4[]) => void
   domains: { [id: string]: DomainContractV3 }
+  accessToken: string;
 }
 
 function Classifications(props: Props) {
@@ -18,6 +19,11 @@ function Classifications(props: Props) {
   const [classificationUris, setClassificationUris] = useState<{
     [id: string]: Promise<ClassificationContractV4 | null>
   }>({})
+  const params: RequestParams = {};
+  
+  if (props.accessToken !== '') {
+    params.headers = { Authorization: 'Bearer ' + props.accessToken };
+  }
 
   function getClassification(classificationUri: string): Promise<ClassificationContractV4 | null> {
     const p: Promise<ClassificationContractV4 | null> = new Promise(function (resolve) {
@@ -29,7 +35,7 @@ function Classifications(props: Props) {
       }
       resolve(
         api.api
-          .classificationV4List(queryParameters)
+          .classificationV4List(queryParameters, params)
           .then((response) => {
             if (response.status !== 200) {
               // reject();

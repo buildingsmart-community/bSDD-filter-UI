@@ -55,6 +55,8 @@
     "vitest": "^0.28.4"
   },
   "dependencies": {
+    "@azure/msal-browser": "^2.34.0",
+    "@azure/msal-react": "^1.5.4",
     "react-bootstrap": "^2.7.1",
     "react-select": "^5.7.0"
   }
