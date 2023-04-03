@@ -2,27 +2,27 @@ import { useState, useEffect } from 'react';
 import Select from 'react-select';
 import { Api, DomainContractV3, RequestParams } from './BsddApi';
 
-const api = new Api();
-api.baseUrl = 'https://test.bsdd.buildingsmart.org';
-
 interface Option {
   label: string;
   value: string;
 }
 
 interface Props {
+  api: Api<unknown>;
   activeDomains: Option[];
   setActiveDomains: (value: Option[]) => void;
   setDomains: (value: { [id: string]: DomainContractV3 }) => void;
   accessToken: string;
 }
 
-export default function SelectDomains(props: Props) {
-  const [selectOptions, setSelectOptions] = useState<any[]>(props.activeDomains);
-  const params: RequestParams = {};
-  
-  if (props.accessToken !== '') {
-    params.headers = { Authorization: 'Bearer ' + props.accessToken };
+export default function SelectDomains({ api, activeDomains, setActiveDomains, setDomains, accessToken }: Props) {
+  const [selectOptions, setSelectOptions] = useState<any[]>(activeDomains);
+  const params: RequestParams = {
+    headers: { Accept: 'text/plain' },
+  };
+
+  if (accessToken !== '') {
+    params.headers = { ...params.headers, Authorization: 'Bearer ' + accessToken };
   }
 
   useEffect(() => {
@@ -34,7 +34,7 @@ export default function SelectDomains(props: Props) {
             label: domain.name,
           })),
         );
-        props.setDomains(
+        setDomains(
           response.data.reduce((accumulator, domain) => {
             if (domain.namespaceUri) {
               return { ...accumulator, [domain.namespaceUri]: domain };
@@ -44,10 +44,10 @@ export default function SelectDomains(props: Props) {
         );
       }
     });
-  }, [setSelectOptions, props.setDomains, props.accessToken]);
+  }, [setSelectOptions, setDomains, accessToken]);
 
   const handleOnChange = (e: any) => {
-    props.setActiveDomains(e.map((option: Option) => option));
+    setActiveDomains(e.map((option: Option) => option));
   };
 
   return (
@@ -59,7 +59,7 @@ export default function SelectDomains(props: Props) {
       classNamePrefix="select"
       placeholder={<div> filter domains...</div>}
       onChange={(e) => handleOnChange(e)}
-      defaultValue={props.activeDomains.map((domain) => domain)}
+      defaultValue={activeDomains.map((domain) => domain)}
     />
   );
 }
