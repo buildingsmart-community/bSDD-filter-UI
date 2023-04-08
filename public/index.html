@@ -20,9 +20,6 @@
         <div class="col-sm overflow-auto" id="viewer">2D view</div>
       </div>
     </div>
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    <script src="./react-bsdd-search.umd.cjs"></script>
     <script type="module">
       function callback(data) {
         console.log(data);
@@ -30,16 +27,25 @@
       }
 
       const config = {
+        baseUrl: 'https://test.bsdd.buildingsmart.org',
         defaultDomains: [
           {
             value: 'https://identifier.buildingsmart.org/uri/digibase/volkerwesselsbv-0.1',
             label: 'VolkerWessels Bouw & Vastgoed',
           },
         ],
+        defaultSearch: {
+          value:
+            'https://identifier.buildingsmart.org/uri/digibase/volkerwesselsbv-0.1/class/vloer_beton_kanaalplaat_geisoleerd',
+          label: 'vloer_beton_kanaalplaat_geisoleerd',
+        },
       };
 
       const root = document.getElementById('bsdd');
       BsddSearch.insertBsddSearch(root, callback, config);
     </script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="./react-bsdd-search.umd.cjs"></script>
   </body>
 </html>

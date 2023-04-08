@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import BsddSearch from './BsddSearch';
+import { PublicClientApplication } from '@azure/msal-browser';
+import { msalConfig } from '../authConfig';
 
-// MSAL imports
-import { PublicClientApplication } from "@azure/msal-browser";
-import { msalConfig } from "../authConfig";
+import BsddSearch from './BsddSearch';
 
 export const msalInstance = new PublicClientApplication(msalConfig);
 

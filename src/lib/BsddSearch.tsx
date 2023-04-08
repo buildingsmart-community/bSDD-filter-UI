@@ -1,27 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Form, Accordion, Row, Col, Card } from 'react-bootstrap';
+import { MsalProvider } from '@azure/msal-react';
+import { PublicClientApplication } from '@azure/msal-browser';
+
 import Search from './Search';
 import Classifications from './Classifications';
 import PropertySets from './PropertySets';
 import RecursiveMode from './RecursiveMode';
 import SelectDomains from './SelectDomains';
 import Apply from './Apply';
-import { Api, ApiConfig, ClassificationContractV4, DomainContractV3 } from './BsddApi';
-import { EventType, PublicClientApplication } from '@azure/msal-browser';
-
-// MSAL imports
-import { MsalProvider, useMsal } from '@azure/msal-react';
-import { b2cPolicies, loginRequest } from '../authConfig';
+import { Api, ClassificationContractV4, DomainContractV3 } from './BsddApi';
 import Authentication from './Authentication';
-// import { msalInstance } from '.';
 
 interface Option {
   label: string;
   value: string;
-}
-
-interface Config {
-  defaultDomains: Option[];
 }
 
 interface BsddConfig {

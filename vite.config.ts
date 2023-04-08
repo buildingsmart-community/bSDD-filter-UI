@@ -7,6 +7,7 @@ import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: '/react-bsdd-search/',
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/lib/index.tsx'),
@@ -34,8 +35,7 @@ export default defineConfig({
     setupFiles: './src/setupTests.ts',
   },
   define: {
-
     // Catch for 'Uncaught ReferenceError: process is not defined'
-    'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`
-  }
+    'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`,
+  },
 });
