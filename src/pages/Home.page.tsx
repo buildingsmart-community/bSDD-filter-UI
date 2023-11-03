@@ -245,6 +245,7 @@ export function HomePage() {
                             {/* Collapse component that shows/hides the items */}
                             <Collapse in={!opened[category]}>
                                 {/* Iterate over items for each category */}
+                                {/*@ts-ignore*/}
                                 {items.map((item) => {
 
                                     return (
@@ -267,8 +268,7 @@ export function HomePage() {
             </Container>
 
             <pre>
-                {/*{JSON.stringify(grouped, null, 2)}*/}
-                {JSON.stringify(data, null, +2)}
+                {JSON.stringify(data, null, 2)}
             </pre>
         </>
     );
