@@ -1,23 +1,25 @@
 import {ColorSchemeToggle} from '../components/ColorSchemeToggle/ColorSchemeToggle';
-import {Card, Checkbox, Collapse, Container, Group, Indicator, Stack} from "@mantine/core";
+import {Button, Card, Collapse, Container, Group, Indicator, Stack} from "@mantine/core";
 import {useEffect, useState} from "react";
+import {IconCheck, IconStereoGlasses} from "@tabler/icons-react";
+import CategoryCollapse from "../components/CategoryCollapse";
 
 type IfcSlabTypeType = 'IfcSlabType';
 type IfcClassificationReferenceType = 'IfcClassificationReference';
 type IfcClassificationType = 'IfcClassification';
 type IfcMaterialType = 'IfcMaterial';
 
-interface IfcSlabType {
+export interface IfcSlabType {
     type: string;
     name: string;
     description: string;
-    PredefinedType: 'FLOOR';
+    predefinedType: 'FLOOR' | 'DOOR';
     hasAssociations?: Association[];
 }
 
-type Association = IfcClassificationReference | IfcMaterial;
+export type Association = IfcClassificationReference | IfcMaterial;
 
-interface IfcClassificationReference {
+export interface IfcClassificationReference {
     type: 'IfcClassificationReference';
     name: string;
     location: string;
@@ -28,6 +30,7 @@ interface IfcClassificationReference {
 interface IfcClassification {
     type: 'IfcClassification';
     name: string;
+    location?: string;
 }
 
 interface IfcMaterial {
@@ -39,7 +42,7 @@ interface IfcMaterial {
 
 // response
 
-interface BuildingClass {
+export interface BuildingClass {
     uri: string;
     code: string;
     name: string;
@@ -47,7 +50,7 @@ interface BuildingClass {
     referenceCode: string;
 }
 
-interface BimBasisObjectsResponse {
+export interface BimBasisObjectsResponse {
     classes: BuildingClass[];
     classesTotalCount: number;
     classesOffset: number;
@@ -67,19 +70,20 @@ interface BimBasisObjectsResponse {
 
 const mockData: IfcSlabType[] = [
     {
-        "type": "IfcSlabType",
-        "name": "Floor:23_FL_AT_breedplaatvloer_260 (C35/45)",
+        "type": "IfcSlab",
+        "name": "Floor: 23_FL_AT_breedplaatvloer_260 (C35/45)",
         "description": "breedplaatvloer",
-        "PredefinedType": "FLOOR",
+        "predefinedType": "FLOOR",
         "hasAssociations": [
             {
                 "type": "IfcClassificationReference",
                 "name": "23.21 vloeren; constructief, vrijdragende vloeren",
-                "location": "https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/23.21",
+                "location": "https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/23.21", // object url (detail)
                 "identification": "23.21",
                 "referencedSource": {
                     "type": "IfcClassification",
-                    "name": "DigiBase Demo NL-SfB tabel 1"
+                    "name": "DigiBase Demo NL-SfB tabel 1",
+                    "location": "https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021" // domain
                 }
             },
             {
@@ -90,22 +94,22 @@ const mockData: IfcSlabType[] = [
         ]
     },
     {
-        "type": "IfcSlabType",
-        "name": "Floor:23_FL_AT_breedplaatvloer_200 (C35/45)",
-        "description": "breedplaatvloer",
-        "PredefinedType": "FLOOR"
+        "type": "IfcSlab",
+        "name": "Floor: 23_FL_AT_breedplaatvloer_200 (C35/45)",
+        "description": "breedplaatvloer 3",
+        "predefinedType": "FLOOR"
     },
     {
-        "type": "IfcSlabType",
-        "name": "Floor:23_FL_AT_breedplaatvloer_200 (C35/45)",
-        "description": "breedplaatvloer - DIT MOET ROOD WORDEN",
-        "PredefinedType": "FLOOR"
+        "type": "IfcSlab",
+        "name": "Floor: 23_FL_AT_breedplaatvloer_200 (C35/45)",
+        "description": "breedplaatvloer",
+        "predefinedType": "FLOOR"
     },
     {
-        "type": "IfcSlabType",
-        "name": "Floor:23_FL_AT_breedplaatvloer_400 (C35/45) (oranje)",
+        "type": "IfcSlab",
+        "name": "Floor: 23_FL_AT_breedplaatvloer_400 (C35/45) (oranje)",
         "description": "breedplaatvloer",
-        "PredefinedType": "FLOOR",
+        "predefinedType": "FLOOR",
         "hasAssociations": [
             {
                 "type": "IfcClassificationReference",
@@ -114,7 +118,8 @@ const mockData: IfcSlabType[] = [
                 "identification": "23.21",
                 "referencedSource": {
                     "type": "IfcClassification",
-                    "name": "DigiBase Demo NL-SfB tabel 1"
+                    "name": "DigiBase Demo NL-SfB tabel 1",
+                    "location": "https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021"
                 }
             },
             {
@@ -123,6 +128,24 @@ const mockData: IfcSlabType[] = [
                 "description": "https://identifier.buildingsmart.org/uri/bimloket/naakt/0.1/class/betongeneriek"
             }
         ]
+    },
+    {
+        "type": "IfcSlab",
+        "name": "Kanaalplaatvloer 200 VBI",
+        "description": "kanaalplaatvloer",
+        "predefinedType": "FLOOR"
+    },
+    {
+        "type": "IfcSlab",
+        "name": "Kanaalplaatvloer 200 VBI",
+        "description": "kanaalplaatvloer",
+        "predefinedType": "FLOOR"
+    },
+    {
+        "type": "IfcDoor",
+        "name": "Kegro Geïsoleerde voordeur 9155N",
+        "description": "buitendeur",
+        "predefinedType": "DOOR"
     }
 ]
 
@@ -144,6 +167,72 @@ function groupBy(array, property) {
     }, {}); // Initial value is an empty object
 }
 
+export function BsddCard(props: { item: IfcSlabType, class: any }) {
+    let color = "orange"
+
+    if (!props.class) color = "red"
+
+    return <Card key={props.item.name} my={"xs"}>
+        <Group>
+            <Indicator color={color} size={18} mx={"xs"}/>
+            <Button color={"blue"} leftSection={<IconStereoGlasses/>}>View</Button>
+            <Button color={"red"} leftSection={<IconCheck/>}>
+                Apply
+            </Button>
+            <div>
+                {props.item.name}
+            </div>
+
+            <pre>
+            {JSON.stringify(props.class, null, 2)}
+            </pre>
+
+            <pre>
+            {JSON.stringify(props.item.hasAssociations, null, 2)}
+            </pre>
+        </Group>
+    </Card>
+}
+
+function CategoryCollap2se(props: { category: string, opened: any, data: BimBasisObjectsResponse, items: any[] }) {
+
+    function determineBsddClass(item: IfcSlabType) {
+        // if none of the descriptions in data is the same as item.description, then color is red
+        // if description is present, orange
+
+        // if ifc type and predefined type are in the found data object, material is the same, nslsfb is the same
+        let found;
+
+        props.data?.classes.filter((dataItem: any) => {
+            if (dataItem.referenceCode === item.description) {
+                found = dataItem
+            }
+        })
+
+
+        if (!found) return false
+
+        // let result = fetch(found.referenceCode.location)
+        //  console.log(result)
+
+        console.log(found, item)
+
+        return found
+    }
+
+    // fetch category uri
+
+    const {opened, category} = props;
+
+    return <Collapse in={!opened[category]}>
+        {/* Iterate over items for each category */}
+        {props.items.map((item) => {
+            return (
+                <BsddCard item={item} class={determineBsddClass(item)} key={item.id}/>
+            );
+        })}
+    </Collapse>
+}
 
 export function HomePage() {
     // State for the fetched data
@@ -206,27 +295,6 @@ export function HomePage() {
     // Assuming you want to group by 'PredefinedType'
     const grouped = groupBy(mockData, 'description');
 
-    function determineColor(item: IfcSlabType) {
-        // if none of the descriptions in data is the same as item.description, then color is red
-        // if description is present, orange
-
-        // if ifc type and predefined type are in the found data object, material is the same, nslsfb is the same
-        let found;
-
-        data?.classes.filter((dataItem: any) => {
-            if (dataItem.referenceCode === item.description) {
-                found=dataItem
-            }
-        })
-
-
-        if (!found) return "red"
-
-        console.log(found, item)
-
-        return "orange"
-
-    }
 
     return (
         <>
@@ -238,30 +306,14 @@ export function HomePage() {
                     {Object.entries(grouped).map(([category, items]) => (
                         <div key={category}>
                             {/* Clickable header to toggle the Collapse component */}
-                            <h2 style={{ cursor: 'pointer' }} onClick={() => handleCollapseToggle(category)}>
+                            <h2 style={{cursor: 'pointer'}} onClick={() => handleCollapseToggle(category)}>
                                 {category} {/* You can add an icon here to indicate open/close state */}
                             </h2>
 
                             {/* Collapse component that shows/hides the items */}
-                            <Collapse in={!opened[category]}>
-                                {/* Iterate over items for each category */}
-                                {/*@ts-ignore*/}
-                                {items.map((item) => {
 
-                                    return (
-                                        <Card key={item.name} my={"xs"}>
-                                            <Group>
-                                                <Indicator color={determineColor(item)} size={18} mx={"xs"}/>
-                                                <Checkbox/>
-                                                <Checkbox/>
-                                                <div>
-                                                    {item.name}
-                                                </div>
-                                            </Group>
-                                        </Card>
-                                    );
-                                })}
-                            </Collapse>
+                            {/* @ts-ignore */}
+                            <CategoryCollapse category={category} items={items} opened={opened} data={data}/>
                         </div>
                     ))}
                 </Stack>
