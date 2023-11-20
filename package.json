@@ -16,7 +16,7 @@
     "url": "git+https://github.com/BIM-Tools/react-bsdd-search.git"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "yarn dev:search",
     "build": "yarn build:search",
     "preview": "yarn preview:search",
     "test": "yarn test:search",
