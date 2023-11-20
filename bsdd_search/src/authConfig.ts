@@ -35,8 +35,8 @@ export const msalConfig = {
     clientId: '0fcd615b-f2b7-4514-9046-7b3e545ba341',
     authority: b2cPolicies.authorities.signUpSignIn.authority,
     knownAuthorities: [b2cPolicies.authorityDomain],
-    redirectUri: '/',
-    postLogoutRedirectUri: '/',
+    redirectUri: '/react-bsdd-search/',
+    postLogoutRedirectUri: '/react-bsdd-search/',
     navigateToLoginRequestUrl: false,
   },
   cache: {

@@ -7,10 +7,13 @@ import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/react-bsdd-search/',
+  root: './bsdd_search',
+  base: './',
   build: {
+    outDir: "../dist/bsdd_search",
+    // assetsDir: '',
     lib: {
-      entry: path.resolve(__dirname, 'src/lib/index.tsx'),
+      entry: 'src/lib/index.tsx',
       name: 'BsddSearch',
       fileName: 'react-bsdd-search',
     },

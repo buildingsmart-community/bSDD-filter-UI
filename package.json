@@ -1,6 +1,6 @@
 {
   "name": "react-bsdd-search",
-  "version": "0.3.7",
+  "version": "0.3.10",
   "description": "bSDD Search React Component",
   "type": "module",
   "main": "./dist/react-bsdd-search.umd.js",
@@ -8,7 +8,7 @@
   "exports": {
     ".": {
       "import": "./dist/react-bsdd-search.js",
-      "require": "./dist/react-bsdd-search.umd.cjs"
+      "require": "./dist/react-bsdd-search.umd.js"
     }
   },
   "repository": {
@@ -17,18 +17,19 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "build": "yarn build:search",
+    "preview": "yarn preview:search",
+    "test": "yarn test:search",
+    "coverage": "vitest run --coverage",
+    "dev:search": "vite --config vite.config.search.ts",
+    "build:search": "tsc && vite build --emptyOutDir --config vite.config.search.ts",
+    "preview:search": "vite preview --config vite.config.search.ts",
+    "test:search": "vitest --config vite.config.search.ts"
   },
   "peerDependencies": {
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   },
-  "files": [
-    "dist"
-  ],
   "keywords": [
     "react",
     "typescript",
