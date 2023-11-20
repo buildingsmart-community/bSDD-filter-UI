@@ -4,17 +4,17 @@ import React, {useEffect, useState} from "react";
 import {IconCheck, IconStereoGlasses} from "@tabler/icons-react";
 // import CategoryCollapse from "../components/CategoryCollapse";
 
-type IfcSlabTypeType = 'IfcSlabType';
+type IfcProductType = 'IfcProduct';
 type IfcClassificationReferenceType = 'IfcClassificationReference';
 type IfcClassificationType = 'IfcClassification';
 type IfcMaterialType = 'IfcMaterial';
 
-export interface IfcSlabType {
-    type: string;
-    name: string;
-    description: string;
-    predefinedType: 'FLOOR' | 'DOOR';
-    hasAssociations?: Association[];
+export interface IfcProduct {
+  type: string;
+  name: string;
+  description: string;
+  predefinedType: string;
+  hasAssociations?: Association[];
 }
 
 export type Association = IfcClassificationReference | IfcMaterial;
@@ -34,11 +34,10 @@ interface IfcClassification {
 }
 
 interface IfcMaterial {
-    type: 'IfcMaterial';
-    name: string;
-    description: string;
+  type: 'IfcMaterial';
+  name: string;
+  description: string;
 }
-
 
 // response
 
@@ -68,7 +67,7 @@ export interface BimBasisObjectsResponse {
     lastUpdatedUtc: string;
 }
 
-const mockData: IfcSlabType[] = [
+const mockData: IfcProduct[] = [
     {
         "type": "IfcSlab",
         "name": "Floor: 23_FL_AT_breedplaatvloer_260 (C35/45)",
@@ -119,7 +118,7 @@ const mockData: IfcSlabType[] = [
                 "referencedSource": {
                     "type": "IfcClassification",
                     "name": "DigiBase Demo NL-SfB tabel 1",
-                    "location": "https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021"
+                    "location": "https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021" "bSDD_digibase_nlsfb_12.2021"
                 }
             },
             {
@@ -150,29 +149,29 @@ const mockData: IfcSlabType[] = [
 ]
 
 function groupBy(array, property) {
-    return array.reduce((acc, item) => {
-        // Get the property value we want to group by
-        const key = item[property];
+  return array.reduce((acc, item) => {
+    // Get the property value we want to group by
+    const key = item[property];
 
-        // If the key doesn't exist yet, create it
-        if (!acc[key]) {
-            acc[key] = [];
-        }
+    // If the key doesn't exist yet, create it
+    if (!acc[key]) {
+      acc[key] = [];
+    }
 
-        // Add the current item to the group
-        acc[key].push(item);
+    // Add the current item to the group
+    acc[key].push(item);
 
-        // Return the updated accumulator
-        return acc;
-    }, {}); // Initial value is an empty object
+    // Return the updated accumulator
+    return acc;
+  }, {}); // Initial value is an empty object
 }
 
-export function BsddCard(props: { item: IfcSlabType, class: any }) {
+export function BsddCard(props: { item: IfcProduct, class: any }) {
     let color = "blue"
 
     if (!props.class) color = "red"
 
-    function determineColor(item: IfcSlabType, found: any) {
+    function determineColor(item: IfcProduct, found: any) {
         const ifcClassificatonReference =  item.hasAssociations?.filter(it => it.type === "IfcClassificationReference")
 
         if (!ifcClassificatonReference) return "orange"
@@ -218,7 +217,7 @@ export function BsddCard(props: { item: IfcSlabType, class: any }) {
 
 // function CategoryCollap2se(props: { category: string, opened: any, data: BimBasisObjectsResponse, items: any[] }) {
 //
-//     function determineBsddClass(item: IfcSlabType) {
+//     function determineBsddClass(item: IfcProduct) {
 //         // if none of the descriptions in data is the same as item.description, then color is red
 //         // if description is present, orange
 //
@@ -260,7 +259,7 @@ interface CategoryCollapseProps {
     category: string;
     opened: Record<string, boolean>;
     bbbr: BimBasisObjectsResponse;
-    items: IfcSlabType[];
+    items: IfcProduct[];
 }
 
 function CategoryCollapse(props: CategoryCollapseProps) {
@@ -354,65 +353,65 @@ function CategoryCollapse(props: CategoryCollapseProps) {
 
 
 export function HomePage() {
-    // State for the fetched data
-    const [data, setData] = useState<BimBasisObjectsResponse>();
-    // State to handle loading status
-    const [isLoading, setIsLoading] = useState(true);
-    // State to handle any errors
-    const [error, setError] = useState(null);
-    const [opened, setOpened] = useState({});
+  // State for the fetched data
+  const [data, setData] = useState<BimBasisObjectsResponse>();
+  // State to handle loading status
+  const [isLoading, setIsLoading] = useState(true);
+  // State to handle any errors
+  const [error, setError] = useState(null);
+  const [opened, setOpened] = useState({});
 
-    const handleCollapseToggle = (category: string) => {
-        setOpened((prevOpened) => ({
-            ...prevOpened,
-            [category]: !prevOpened[category]
-        }));
+  const handleCollapseToggle = (category: string) => {
+    setOpened((prevOpened) => ({
+      ...prevOpened,
+      [category]: !prevOpened[category]
+    }));
+  };
+
+  useEffect(() => {
+    // Function to fetch data
+    const fetchData = async () => {
+      try {
+        // Start by setting loading to true
+        setIsLoading(true);
+
+        // Fetch data from the API
+        const response = await fetch('https://bs-dd-api-prototype.azurewebsites.net/api/Dictionary/v1/Classes?Uri=https%3A%2F%2Fidentifier.buildingsmart.org%2Furi%2Fdigibase%2Fbim-basis-objecten%2F0.1');
+
+        // If the response is not ok, throw an error
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        // Parse the JSON data
+        const result = await response.json();
+
+        // Update state with the fetched data
+        setData(result);
+      } catch (e) {
+        // If an error occurred, set the error state
+        setError(e.message);
+      } finally {
+        // Set loading to false when loading is complete
+        setIsLoading(false);
+      }
     };
 
-    useEffect(() => {
-        // Function to fetch data
-        const fetchData = async () => {
-            try {
-                // Start by setting loading to true
-                setIsLoading(true);
+    // Call the fetchData function
+    fetchData();
+  }, []); // The empty array ensures this effect runs only once after initial render
 
-                // Fetch data from the API
-                const response = await fetch('https://bs-dd-api-prototype.azurewebsites.net/api/Dictionary/v1/Classes?Uri=https%3A%2F%2Fidentifier.buildingsmart.org%2Furi%2Fdigibase%2Fbim-basis-objecten%2F0.1');
+  // If still loading, show a loading message
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
-                // If the response is not ok, throw an error
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                // Parse the JSON data
-                const result = await response.json();
-
-                // Update state with the fetched data
-                setData(result);
-            } catch (e) {
-                // If an error occurred, set the error state
-                setError(e.message);
-            } finally {
-                // Set loading to false when loading is complete
-                setIsLoading(false);
-            }
-        };
-
-        // Call the fetchData function
-        fetchData();
-    }, []); // The empty array ensures this effect runs only once after initial render
-
-    // If still loading, show a loading message
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
-    // If there was an error, show an error message
-    if (error) {
-        return <div>Error: {error}</div>;
-    }
-    // Assuming you want to group by 'PredefinedType'
-    const grouped = groupBy(mockData, 'description');
+  // If there was an error, show an error message
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+  // Assuming you want to group by 'predefinedType'
+  const grouped = groupBy(mockData, 'description');
 
 
     return (
