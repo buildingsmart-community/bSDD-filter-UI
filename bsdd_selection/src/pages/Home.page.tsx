@@ -118,7 +118,7 @@ const mockData: IfcProduct[] = [
                 "referencedSource": {
                     "type": "IfcClassification",
                     "name": "DigiBase Demo NL-SfB tabel 1",
-                    "location": "https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021" "bSDD_digibase_nlsfb_12.2021"
+                    "location": "https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021",
                 }
             },
             {

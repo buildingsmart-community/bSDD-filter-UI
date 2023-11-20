@@ -1,4 +1,5 @@
 import { Button, Group, useMantineColorScheme } from '@mantine/core';
+import React from 'react';
 
 export function ColorSchemeToggle() {
   const { setColorScheme } = useMantineColorScheme();

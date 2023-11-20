@@ -16,15 +16,19 @@
     "url": "git+https://github.com/BIM-Tools/react-bsdd-search.git"
   },
   "scripts": {
-    "dev": "yarn dev:search",
-    "build": "yarn build:search",
-    "preview": "yarn preview:search",
-    "test": "yarn test:search",
+    "dev": "yarn dev:search && yarn dev:selection",
+    "build": "yarn build:search && yarn build:selection",
+    "preview": "yarn preview:search && yarn preview:selection",
+    "test": "yarn test:search && yarn test:selection",
     "coverage": "vitest run --coverage",
     "dev:search": "vite --config vite.config.search.ts",
     "build:search": "tsc && vite build --emptyOutDir --config vite.config.search.ts",
     "preview:search": "vite preview --config vite.config.search.ts",
-    "test:search": "vitest --config vite.config.search.ts"
+    "test:search": "vitest --config vite.config.search.ts",
+    "dev:selection": "vite --config vite.config.selection.ts",
+    "build:selection": "tsc && vite build --emptyOutDir --config vite.config.selection.ts",
+    "preview:selection": "vite preview --config vite.config.selection.ts",
+    "test:selection": "vitest --config vite.config.selection.ts"
   },
   "peerDependencies": {
     "react": "^18.0.0",
@@ -43,6 +47,8 @@
     "@popperjs/core": "^2.11.7",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
     "@typescript-eslint/eslint-plugin": "^5.51.0",
     "@typescript-eslint/parser": "^5.51.0",
     "@vitejs/plugin-react-swc": "^3.0.0",
@@ -50,6 +56,7 @@
     "eslint": "^8.2.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
+    "eslint-config-mantine": "^3.0.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-jsx-a11y": "^6.5.1",
@@ -58,6 +65,9 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "jsdom": "^21.1.0",
+    "postcss": "^8.4.31",
+    "postcss-preset-mantine": "^1.11.0",
+    "postcss-simple-vars": "^7.0.1",
     "prettier": "^2.8.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -69,7 +79,12 @@
   "dependencies": {
     "@azure/msal-browser": "^2.34.0",
     "@azure/msal-react": "^1.5.4",
+    "@mantine/core": "^7.2.2",
+    "@mantine/hooks": "^7.2.2",
+    "@tabler/icons-react": "^2.41.0",
     "react-bootstrap": "^2.7.1",
+    "react-router-dom": "^6.19.0",
     "react-select": "^5.7.0"
-  }
+  },
+  "packageManager": "yarn@4.0.1"
 }
