@@ -411,8 +411,10 @@ export function HomePage() {
 
   // @ts-ignore
   window.updateSelection = (jsonString) => {
+    console.log(jsonString)
     const newState = JSON.parse(jsonString);
-    setState(newState);
+    console.log(newState);
+    setState(newState.ifcData);
   };
 
   // State for the fetched data
