@@ -1,32 +1,42 @@
-import {ActionIcon, Card, Collapse, Container, Group, HoverCard, Indicator, Stack, Text, Tooltip} from "@mantine/core";
-import React, {useEffect, useState} from "react";
-import {IconArrowDown, IconArrowUp, IconCheck, IconInfoCircle, IconSearch} from "@tabler/icons-react";
-import {ColorSchemeToggle} from '../components/ColorSchemeToggle/ColorSchemeToggle';
+import {
+  ActionIcon,
+  Card,
+  Collapse,
+  Container,
+  Group,
+  HoverCard,
+  Indicator,
+  Stack,
+  Text,
+  Tooltip,
+} from '@mantine/core';
+import React, { useEffect, useState } from 'react';
+import { IconArrowDown, IconArrowUp, IconCheck, IconInfoCircle, IconSearch } from '@tabler/icons-react';
+import { ColorSchemeToggle } from '../components/ColorSchemeToggle/ColorSchemeToggle';
 
 type IfcProductType = 'IfcProduct';
 type IfcClassificationReferenceType = 'IfcClassificationReference';
 type IfcClassificationType = 'IfcClassification';
 type IfcMaterialType = 'IfcMaterial';
 
-declare var CefSharp: any;
-declare var bsddBridge: any;
-
+let CefSharp: any;
 
 export interface IfcProduct {
-  type: string;
-  name: string;
-  description: string;
-  predefinedType: string;
+  type: string | null;
+  name: string | null;
+  description: string | null;
+  predefinedType: string | null;
   hasAssociations?: Association[];
+  isDefinedBy?: null;
 }
 
 export type Association = IfcClassificationReference | IfcMaterial;
 
 export interface IfcClassificationReference {
   type: 'IfcClassificationReference';
-  name: string;
-  location: string;
-  identification: string;
+  name: string | null;
+  location: string | null;
+  identification: string | null;
   referencedSource: IfcClassification;
 }
 
@@ -72,96 +82,46 @@ export interface BimBasisObjectsResponse {
 
 const mockData: IfcProduct[] = [
   {
-    "type": "IfcSlab",
-    "name": "Floor: 23_FL_AT_breedplaatvloer_260 (C35/45)",
-    "description": "breedplaatvloer",
-    "predefinedType": "FLOOR",
-    "hasAssociations": [
+    type: 'IfcWall',
+    name: 'wand_gips_metalstud',
+    description: 'wand_gips_metalstud',
+    predefinedType: null,
+    hasAssociations: [
       {
-        "type": "IfcClassificationReference",
-        "name": "23.21 vloeren; constructief, vrijdragende vloeren",
-        "location": "https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/23.21", // object url (detail)
-        "identification": "23.21",
-        "referencedSource": {
-          "type": "IfcClassification",
-          "name": "DigiBase Demo NL-SfB tabel 1",
-          "location": "https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021" // domain
-        }
+        location: 'https://search-test.bsdd.buildingsmart.org/uri/digibase/22.20',
+        identification: '22.20',
+        referencedSource: {
+          type: 'IfcClassification',
+          name: 'DigiBase Demo NL-SfB tabel 1',
+          location: 'https://search-test.bsdd.buildingsmart.org/uri/digibase/bim-basis-objecten',
+        },
+        type: 'IfcClassificationReference',
+        name: 'binnenwanden; constructief, algemeen (verzamelniveau)',
       },
+    ],
+    isDefinedBy: null,
+  },
+  {
+    type: null,
+    name: null,
+    description: null,
+    predefinedType: null,
+    hasAssociations: [
       {
-        "type": "IfcMaterial",
-        "name": "beton generiek",
-        "description": "https://identifier.buildingsmart.org/uri/bimloket/naakt/0.1/class/betongeneriek"
-      }
-    ]
-  },
-  {
-    "type": "IfcSlab",
-    "name": "Floor: 23_FL_AT_breedplaatvloer_200 (C35/45)",
-    "description": "breedplaatvloer 3",
-    "predefinedType": "FLOOR"
-  },
-  {
-    "type": "IfcSlab",
-    "name": "Floor: 23_FL_AT_breedplaatvloer_200 (C35/45)",
-    "description": "",
-    "predefinedType": "FLOOR"
-  },
-  {
-    "type": "IfcSlab",
-    "name": "Floor: 23_FL_AT_breedplaatvloer_200 (C35/45)",
-    "description": "breedplaatvloer",
-    "predefinedType": "FLOOR"
-  },
-  {
-    "type": "IfcSlab",
-    "name": "Floor: 23_FL_AT_breedplaatvloer_200 (C35/45)",
-    "description": "",
-    "predefinedType": "FLOOR"
-  },
-  {
-    "type": "IfcSlab",
-    "name": "Floor: 23_FL_AT_breedplaatvloer_400 (C35/45) (oranje) dfsjaf;j;ajslf;jlfdsaj sdfajklfaljksjlkdf fsdalkfjsadljkfjlk aslkdjfjlkasdfljkadsjlk asfljkflsdjkljkafsd asdflkfsajkl",
-    "description": "breedplaatvloer",
-    "predefinedType": "FLOOR",
-    "hasAssociations": [
-      {
-        "type": "IfcClassificationReference",
-        "name": "23.21 vloeren; constructief, vrijdragende vloeren",
-        "location": "https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/23.21",
-        "identification": "23.21",
-        "referencedSource": {
-          "type": "IfcClassification",
-          "name": "DigiBase Demo NL-SfB tabel 1",
-          "location": "https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021"
-        }
+        location: 'https://search-test.bsdd.buildingsmart.org/uri/digibase/bim-basis-objecten',
+        identification: null,
+        referencedSource: {
+          type: 'IfcClassification',
+          name: 'DigiBase Demo NL-SfB tabel 1',
+          location: 'https://search-test.bsdd.buildingsmart.org/uri/digibase/bim-basis-objecten',
+        },
+        type: 'IfcClassificationReference',
+        name: null,
       },
-      {
-        "type": "IfcMaterial",
-        "name": "beton generiek",
-        "description": "https://identifier.buildingsmart.org/uri/bimloket/naakt/0.1/class/betongeneriek"
-      }
-    ]
+    ],
+    isDefinedBy: null,
   },
-  {
-    "type": "IfcSlab",
-    "name": "Kanaalplaatvloer 200 VBI",
-    "description": "kanaalplaatvloer",
-    "predefinedType": "FLOOR"
-  },
-  {
-    "type": "IfcSlab",
-    "name": "Kanaalplaatvloer 200 VBI",
-    "description": "kanaalplaatvloer",
-    "predefinedType": "FLOOR"
-  },
-  {
-    "type": "IfcDoor",
-    "name": "Kegro Geïsoleerde voordeur 9155N",
-    "description": "buitendeur",
-    "predefinedType": "DOOR"
-  }
-]
+];
 
 function groupBy(array: any[], property: string) {
   const grouped = array.reduce((acc, item) => {
@@ -176,96 +136,98 @@ function groupBy(array: any[], property: string) {
   }, {});
 
   // Sort the keys alphabetically and create a new sorted object
-  return Object.keys(grouped).sort().reduce((acc, key) => {
-    // @ts-ignore
-    acc[key] = grouped[key];
-    return acc;
-  }, {});
+  return Object.keys(grouped)
+    .sort()
+    .reduce((acc, key) => {
+      // @ts-ignore
+      acc[key] = grouped[key];
+      return acc;
+    }, {});
 }
 
+export function BsddCard(props: { item: IfcProduct; class: any }) {
+  let color = 'blue';
 
-export function BsddCard(props: { item: IfcProduct, class: any }) {
-  let color = "blue"
-
-  if (!props.class) color = "red"
+  if (!props.class) color = 'red';
 
   function determineColor(item: IfcProduct, found: any) {
-    const ifcClassificatonReference = item.hasAssociations?.filter(it => it.type === "IfcClassificationReference")
+    const ifcClassificatonReference = item.hasAssociations?.filter((it) => it.type === 'IfcClassificationReference');
 
-    if (!ifcClassificatonReference) return "orange"
+    if (!ifcClassificatonReference) return 'orange';
 
     for (let classRelation in found.classRelations) {
       // @ts-ignore
-      console.log(classRelation.relatedClassUri, ifcClassificatonReference.location, classRelation.relatedClassUri === ifcClassificatonReference.location)
+      console.log(
+        classRelation.relatedClassUri,
+        ifcClassificatonReference.location,
+        classRelation.relatedClassUri === ifcClassificatonReference.location,
+      );
       // @ts-ignore
-      if (classRelation.relatedClassUri === ifcClassificatonReference.location) return "green"
+      if (classRelation.relatedClassUri === ifcClassificatonReference.location) return 'green';
     }
 
-    return "red"
+    return 'red';
   }
 
-  if (props.class) color = determineColor(props.item, props.class)
+  if (props.class) color = determineColor(props.item, props.class);
 
-  function truncateText(text: String, maxLength: number): String {
-    if (text.length <= maxLength) return text
-    return text.substring(0, maxLength) + "..."
+  function truncateText(text: string | null, maxLength: number): string {
+    if (!text) return '';
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength) + '...';
   }
+
   function bsddSearchClick(ifcProduct: IfcProduct) {
     // const ifcObjectTest: string =
     //   "{type: 'IfcSlab', name: 'Floor: 23_FL_AT_breedplaatvloer_200 (C35/45)', description: 'breedplaatvloer',predefinedType:'FLOOR'}";
 
     // @ts-ignore
     bsddBridge.bsddSearch(JSON.stringify(ifcProduct)).then(function (actualResult) {
-      console.log('Sent to Revit');
+      console.log('Sent to Revit', actualResult);
     });
   }
 
-  return <Card key={props.item.name}>
-    <Group align={"flex-start"} justify={"space-between"}>
-      <Group my={"auto"}>
-        <Indicator color={color} size={18} mx={"xs"}/>
-        <Text>
-          <div>{truncateText(props.item.name, 50)}</div>
-        </Text>
+  return (
+    <Card key={props.item.name}>
+      <Group align={'flex-start'} justify={'space-between'}>
+        <Group my={'auto'}>
+          <Indicator color={color} size={18} mx={'xs'} />
+          <Text>
+            <span>{truncateText(props.item.name, 50)}</span>
+          </Text>
+        </Group>
+
+        <Group>
+          <HoverCard>
+            <HoverCard.Target>
+              <Group>
+                <IconInfoCircle />
+              </Group>
+            </HoverCard.Target>
+            <HoverCard.Dropdown>{props.item.name}</HoverCard.Dropdown>
+          </HoverCard>
+          <Tooltip label={'Select all instances'}>
+            <ActionIcon radius={'xl'} onClick={() => bsddSearchClick(props.item)} color={'blue'}>
+              <IconSearch size={18} />
+            </ActionIcon>
+          </Tooltip>
+          <Tooltip label={'Attach to type'}>
+            <ActionIcon radius={'xl'} color={'green'}>
+              <IconCheck size={18} />
+            </ActionIcon>
+          </Tooltip>
+        </Group>
+
+        {/*<pre>*/}
+        {/*{JSON.stringify(props.class, null, 2)}*/}
+        {/*</pre>*/}
+
+        {/*<pre>*/}
+        {/*{JSON.stringify(props.item, null, 2)}*/}
+        {/*</pre>*/}
       </Group>
-
-      <Group>
-
-        <HoverCard>
-          <HoverCard.Target>
-            <Group>
-              <IconInfoCircle/>
-            </Group>
-          </HoverCard.Target>
-          <HoverCard.Dropdown>
-            {props.item.name}
-          </HoverCard.Dropdown>
-
-        </HoverCard>
-        <Tooltip label={"Select all instances"}>
-          <ActionIcon radius={"xl"}
-                      onClick={() => bsddSearchClick(props.item)}
-                      color={"blue"}>
-            <IconSearch size={18}/>
-          </ActionIcon>
-        </Tooltip>
-        <Tooltip label={"Attach to type"}>
-          <ActionIcon radius={"xl"} color={"green"}>
-            <IconCheck size={18}/>
-          </ActionIcon>
-        </Tooltip>
-      </Group>
-
-
-      {/*<pre>*/}
-      {/*{JSON.stringify(props.class, null, 2)}*/}
-      {/*</pre>*/}
-
-      {/*<pre>*/}
-      {/*{JSON.stringify(props.item, null, 2)}*/}
-      {/*</pre>*/}
-    </Group>
-  </Card>
+    </Card>
+  );
 }
 
 // function CategoryCollap2se(props: { category: string, opened: any, data: BimBasisObjectsResponse, items: any[] }) {
@@ -316,11 +278,10 @@ interface CategoryCollapseProps {
 }
 
 function CategoryCollapse(props: CategoryCollapseProps) {
-  const {category, opened, items} = props;
+  const { category, opened, items } = props;
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState<any>();
   const [error, setError] = useState(null);
-
 
   useEffect(() => {
     // Function to fetch data
@@ -329,9 +290,9 @@ function CategoryCollapse(props: CategoryCollapseProps) {
         // Start by setting loading to true
         setIsLoading(true);
 
-        const found = determineBsddClass(category, props.bbbr)
+        const found = determineBsddClass(category, props.bbbr);
 
-        if (found === false) return false
+        if (found === false) return false;
         // console.log(found)
         // @ts-ignore
         const encodedUri = encodeURIComponent(found.uri);
@@ -339,7 +300,6 @@ function CategoryCollapse(props: CategoryCollapseProps) {
 
         // Fetch data from the API
         const response = await fetch(targetUrl);
-
 
         // If the response is not ok, throw an error
         if (!response.ok) {
@@ -384,37 +344,35 @@ function CategoryCollapse(props: CategoryCollapseProps) {
 
     bbbr.classes.filter((dataItem: any) => {
       if (dataItem.code === category) {
-        found = dataItem
+        found = dataItem;
       }
-    })
+    });
 
-    if (!found) return false
+    if (!found) return false;
 
-    return found
+    return found;
   }
 
-
   return (
-      <Collapse in={!opened[category]}>
-        {items.map((item, index) => {
-          return (
-              <BsddCard item={item} class={data} key={index}/>
-          );
-        })}
-      </Collapse>
+    <Collapse in={!opened[category]}>
+      {items.map((item, index) => {
+        return <BsddCard item={item} class={data} key={index} />;
+      })}
+    </Collapse>
   );
 }
-
 
 export function HomePage() {
   const [state, setState] = useState(mockData);
 
   // @ts-ignore
-  window.updateSelection = (jsonString) => {
-    console.log(jsonString)
-    const newState = JSON.parse(jsonString);
-    console.log(newState);
+  window.updateSelection = (newState) => {
+    // console.log('state',state);
+    // console.log('jsonString',jsonString)
+    // const newState = JSON.parse(jsonString);
+    console.log('newState', newState);
     setState(newState.ifcData);
+    console.log('state', state);
   };
 
   // State for the fetched data
@@ -429,22 +387,24 @@ export function HomePage() {
     setOpened((prevOpened) => ({
       ...prevOpened,
       // @ts-ignore
-      [category]: !prevOpened[category]
+      [category]: !prevOpened[category],
     }));
   };
 
-  useEffect(() => {
-    // Set up BsddBridge connection
-    const connectToBsddBridge = async () => {
-      try {
-        await CefSharp.BindObjectAsync('bsddBridge');
-      } catch (e: any) {
-        // If an error occurred, set the error state
-        setError(e.message);
-      }
-    };
-    connectToBsddBridge();
-  }, []);
+  // useEffect(() => {
+  //   // Set up BsddBridge connection
+  //   const connectToBsddBridge = async () => {
+  //     try {
+  //       if (CefSharp) {
+  //         await CefSharp.BindObjectAsync('bsddBridge');
+  //       }
+  //     } catch (e: any) {
+  //       // If an error occurred, set the error state
+  //       setError(e.message);
+  //     }
+  //   };
+  //   connectToBsddBridge();
+  // }, []);
 
   useEffect(() => {
     // Function to fetch data
@@ -454,7 +414,9 @@ export function HomePage() {
         setIsLoading(true);
 
         // Fetch data from the API
-        const response = await fetch('https://bs-dd-api-prototype.azurewebsites.net/api/Dictionary/v1/Classes?Uri=https%3A%2F%2Fidentifier.buildingsmart.org%2Furi%2Fdigibase%2Fbim-basis-objecten%2F0.1');
+        const response = await fetch(
+          'https://bs-dd-api-prototype.azurewebsites.net/api/Dictionary/v1/Classes?Uri=https%3A%2F%2Fidentifier.buildingsmart.org%2Furi%2Fdigibase%2Fbim-basis-objecten%2F0.1',
+        );
 
         // If the response is not ok, throw an error
         if (!response.ok) {
@@ -492,43 +454,37 @@ export function HomePage() {
   // Assuming you want to group by 'PredefinedType'
   const grouped = groupBy(state, 'description');
 
-
   // @ts-ignore
   return (
-      <>
-        <Container size={"40rem"}>
-          <Stack gap={"xs"} pt={"md"}>
-            {/* Iterate over grouped object */}
-            {Object.entries(grouped).map(([category, items]) => (
-                <Stack key={category} gap={"xs"}>
-                  <Group grow justify={"space-between"}>
-                    <Text fw={600} fs={"xl"} style={{cursor: 'pointer'}}
-                          onClick={() => handleCollapseToggle(category)}>
-                      {category.length > 0 ? `Description: ${category}` : 'No description'}
-                    </Text>
+    <>
+      <Container size={'40rem'}>
+        <Stack gap={'xs'} pt={'md'}>
+          {/* Iterate over grouped object */}
+          {Object.entries(grouped).map(([category, items]) => (
+            <Stack key={category} gap={'xs'}>
+              <Group grow justify={'space-between'}>
+                <Text fw={600} fs={'xl'} style={{ cursor: 'pointer' }} onClick={() => handleCollapseToggle(category)}>
+                  {category.length > 0 ? `Description: ${category}` : 'No description'}
+                </Text>
 
-                    {/* show arrow to see if collapsed or not */}
-                    <ActionIcon
-                        variant="outline"
-                        color="gray"
-                        radius="xl"
-                        onClick={() => handleCollapseToggle(category)}>
-                      {/*@ts-ignore*/}
-                      {opened[category] ? <IconArrowDown size={18}/> : <IconArrowUp size={18}/>}
-                    </ActionIcon>
-                  </Group>
-
+                {/* show arrow to see if collapsed or not */}
+                <ActionIcon variant="outline" color="gray" radius="xl" onClick={() => handleCollapseToggle(category)}>
                   {/*@ts-ignore*/}
-                  <CategoryCollapse category={category} items={items} opened={opened} bbbr={data}/>
-                </Stack>
-            ))}
-          </Stack>
-        </Container>
+                  {opened[category] ? <IconArrowDown size={18} /> : <IconArrowUp size={18} />}
+                </ActionIcon>
+              </Group>
 
-        {/*<pre>*/}
-        {/*    {JSON.stringify(data, null, 2)}*/}
-        {/*</pre>*/}
-        <ColorSchemeToggle/>
-      </>
+              {/*@ts-ignore*/}
+              <CategoryCollapse category={category} items={items} opened={opened} bbbr={data} />
+            </Stack>
+          ))}
+        </Stack>
+      </Container>
+
+      {/*<pre>*/}
+      {/*    {JSON.stringify(data, null, 2)}*/}
+      {/*</pre>*/}
+      <ColorSchemeToggle />
+    </>
   );
 }
