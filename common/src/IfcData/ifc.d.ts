@@ -1,22 +1,25 @@
-interface IfcJsonEntity {
+export interface IfcJsonEntity {
   type?: string;
 }
 
-interface IfcEntity extends IfcJsonEntity {
+export interface IfcEntity extends IfcJsonEntity {
   name?: string; // IfcLabel
   description?: string; // IfcText
+  tag?: string; // IfcLabel
+  predefinedType?: string; // Enumeration
   isDefinedBy?: IfcPropertySet[]; // (!) IfcRelDefines: RelatedObjects	 : 	SET [1:?] OF IfcObject;
-  hasAssociations?: IfcClassificationReference[];
+  hasAssociations?: Association[];
 }
 
-interface IfcClassification extends IfcJsonEntity {
+export interface IfcClassification extends IfcJsonEntity {
   type: 'IfcClassification';
-  source?: string; // IfcLabel
+  source?: string; // IfcLabel IFC2x3 place for bSDD uri
+  location?: string; // IfcURIReference IFC4 place for bSDD uri
   edition?: string; // IfcLabel
   editionDate?: string; // IfcDate
   name: string; // IfcLabel
   description?: string; // IfcText
-  specification?: string; // IfcURIReference
+  specification?: string; // IfcURIReference IFC4.3 place for bSDD uri
   referenceTokens?: string[]; // IfcIdentifier
 
   // inverse
@@ -24,16 +27,16 @@ interface IfcClassification extends IfcJsonEntity {
   hasReferences?: any; // SET [0:?] OF IfcClassificationReference FOR ReferencedSource
 }
 
-interface IfcExternalReference extends IfcJsonEntity {
+export interface IfcExternalReference extends IfcJsonEntity {
   type: 'IfcExternalReference';
   location?: string; // IfcURIReference
   identification?: string; // IfcIdentifier
-  name: string; // IfcLabel
+  name?: string; // IfcLabel
 
   // inverse
   externalReferenceForResources?: any; // SET [0:?] OF IfcExternalReferenceRelationship FOR RelatingReference
 }
-interface IfcClassificationReference extends IfcExternalReference {
+export interface IfcClassificationReference extends IfcExternalReference {
   type: 'IfcClassificationReference';
   referencedSource?: IfcClassification; // IfcClassificationReferenceSelect
   description?: string; // IfcText
@@ -44,21 +47,29 @@ interface IfcClassificationReference extends IfcExternalReference {
   hasReferences?: any; // SET [0:?] OF IfcClassificationReference FOR ReferencedSource
 }
 
-interface IfcRoot extends IfcJsonEntity {
+interface IfcMaterial {
+  type: 'IfcMaterial';
+  name?: string; // IfcLabel
+  description?: string; // IfcText
+}
+
+export type Association = IfcClassificationReference | IfcMaterial;
+
+export interface IfcRoot extends IfcJsonEntity {
   type: 'IfcRoot';
   globalId?: string;
   ownerHistory?: any;
   name?: string; // IfcLabel
   description?: string; // IfcText
 }
-interface IfcPropertyAbstraction extends IfcJsonEntity {
+export interface IfcPropertyAbstraction extends IfcJsonEntity {
   type: 'IfcPropertyAbstraction';
 
   // inverse
   HasExternalReferences: any; // SET [0:?] OF IfcExternalReferenceRelationship FOR RelatedResourceObjects
 }
 
-interface IfcProperty extends IfcRoot {
+export interface IfcProperty extends IfcRoot {
   type: 'IfcProperty';
   name: string; // 	IfcIdentifier
   specification?: string; // IfcText
@@ -72,14 +83,14 @@ interface IfcProperty extends IfcRoot {
   hasApprovals?: any; // SET [0:?] OF IfcResourceApprovalRelationship FOR RelatedResourceObjects
 }
 
-interface IfcPropertyDefinition extends IfcRoot {
+export interface IfcPropertyDefinition extends IfcRoot {
   type: 'IfcPropertyDefinition';
 
   // inverse
   hasAssociations?: any; // SET OF IfcRelAssociates FOR RelatedObjects;
 }
 
-interface IfcPropertySetDefinition extends IfcPropertyDefinition {
+export interface IfcPropertySetDefinition extends IfcPropertyDefinition {
   type: 'IfcPropertySetDefinition';
 
   // inverse
@@ -87,7 +98,7 @@ interface IfcPropertySetDefinition extends IfcPropertyDefinition {
   DefinesType?: any; // SET [0:1] OF IfcTypeObject FOR HasPropertySets;
 }
 
-interface IfcPropertySet extends IfcPropertySetDefinition {
+export interface IfcPropertySet extends IfcPropertySetDefinition {
   type: 'IfcPropertySet';
 
   // inverse
@@ -98,44 +109,44 @@ interface IfcPropertySet extends IfcPropertySetDefinition {
   )[]; // SET [1:?] OF IfcProperty;
 }
 
-interface IfcSimpleProperty extends IfcProperty {
+export interface IfcSimpleProperty extends IfcProperty {
   type: 'IfcSimpleProperty';
 }
 
-interface IfcPropertySingleValue extends IfcSimpleProperty {
+export interface IfcPropertySingleValue extends IfcSimpleProperty {
   type: 'IfcPropertySingleValue';
   nominalValue?: any; // IfcValue
   unit?: any; // IfcUnit
 }
 
-interface IfcPropertyEnumeratedValue extends IfcSimpleProperty {
+export interface IfcPropertyEnumeratedValue extends IfcSimpleProperty {
   type: 'IfcPropertyEnumeratedValue';
   enumerationValues?: any; // LIST [1:?] OF IfcValue
   enumerationReference?: any; // IfcPropertyEnumeration
 }
 
-interface IfcPropertyEnumeration extends IfcPropertyAbstraction {
+export interface IfcPropertyEnumeration extends IfcPropertyAbstraction {
   type: 'IfcPropertyEnumeration';
   name: string; // IfcLabel
   enumerationValues: any[]; // LIST [1:?] OF UNIQUE IfcValue
   Unit?: any; // IfcUnit
 }
 
-interface IfcValue extends IfcJsonEntity {
+export interface IfcValue extends IfcJsonEntity {
   type: string;
   value?: any;
 }
 
-interface Option {
+export interface Option {
   label: string;
   value: string;
 }
-interface PropertyCollection {
+export interface PropertyCollection {
   name: string;
   bsddProperty: ClassificationPropertyContractV3;
   value?: any;
 }
-// interface PropertySetCollection {
+// export interface PropertySetCollection {
 //   name: string;
 //   properties: PropertyCollection[];
 // }

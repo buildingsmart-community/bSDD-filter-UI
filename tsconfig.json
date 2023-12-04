@@ -16,6 +16,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["bsdd_search/src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

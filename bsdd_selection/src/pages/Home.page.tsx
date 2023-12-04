@@ -13,44 +13,16 @@ import {
 import React, { useEffect, useState } from 'react';
 import { IconArrowDown, IconArrowUp, IconCheck, IconInfoCircle, IconSearch } from '@tabler/icons-react';
 import { ColorSchemeToggle } from '../components/ColorSchemeToggle/ColorSchemeToggle';
+import { Association, IfcClassificationReference, IfcEntity } from '../../../common/src/IfcData/ifc';
+import { ClassContractV1 } from '../../../common/src/BsddApi/BsddApi';
+import { BsddBridgeData } from '../../../common/src/IfcData/bsddBridgeData';
 
-type IfcProductType = 'IfcProduct';
+type IfcProductType = 'IfcEntity';
 type IfcClassificationReferenceType = 'IfcClassificationReference';
 type IfcClassificationType = 'IfcClassification';
 type IfcMaterialType = 'IfcMaterial';
 
 let CefSharp: any;
-
-export interface IfcProduct {
-  type: string | null;
-  name: string | null;
-  description: string | null;
-  predefinedType: string | null;
-  hasAssociations?: Association[];
-  isDefinedBy?: null;
-}
-
-export type Association = IfcClassificationReference | IfcMaterial;
-
-export interface IfcClassificationReference {
-  type: 'IfcClassificationReference';
-  name: string | null;
-  location: string | null;
-  identification: string | null;
-  referencedSource: IfcClassification;
-}
-
-interface IfcClassification {
-  type: 'IfcClassification';
-  name: string;
-  location?: string;
-}
-
-interface IfcMaterial {
-  type: 'IfcMaterial';
-  name: string;
-  description: string;
-}
 
 // response
 
@@ -80,88 +52,94 @@ export interface BimBasisObjectsResponse {
   lastUpdatedUtc: string;
 }
 
-const mockData: IfcProduct[] = [
-  {
-    type: 'IfcWall',
-    name: 'wand_gips_metalstud',
-    description: 'wand_gips_metalstud',
-    predefinedType: null,
-    hasAssociations: [
-      {
-        location: 'https://search-test.bsdd.buildingsmart.org/uri/digibase/22.20',
-        identification: '22.20',
-        referencedSource: {
-          type: 'IfcClassification',
-          name: 'DigiBase Demo NL-SfB tabel 1',
-          location: 'https://search-test.bsdd.buildingsmart.org/uri/digibase/bim-basis-objecten',
+const mockData: BsddBridgeData = {
+  bsddApiEnvironment: 'test',
+  mainDictionaryUri: 'https://identifier.buildingsmart.org/uri/digibase/bim-basis-objecten',
+  filterDictionaryUris: [
+    'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
+    'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
+  ],
+  ifcData: [
+    {
+      type: 'IfcWall',
+      name: 'wand_gips_metalstud',
+      description: 'wand_gips_metalstud',
+      hasAssociations: [
+        {
+          location: 'https://search-test.bsdd.buildingsmart.org/uri/digibase/22.20',
+          identification: '22.20',
+          referencedSource: {
+            type: 'IfcClassification',
+            name: 'DigiBase Demo NL-SfB tabel 1',
+            location: 'https://search-test.bsdd.buildingsmart.org/uri/digibase/bim-basis-objecten',
+          },
+          type: 'IfcClassificationReference',
+          name: 'binnenwanden; constructief, algemeen (verzamelniveau)',
         },
-        type: 'IfcClassificationReference',
-        name: 'binnenwanden; constructief, algemeen (verzamelniveau)',
-      },
-    ],
-    isDefinedBy: null,
-  },
-  {
-    type: null,
-    name: null,
-    description: null,
-    predefinedType: null,
-    hasAssociations: [
-      {
-        location: 'https://search-test.bsdd.buildingsmart.org/uri/digibase/bim-basis-objecten',
-        identification: null,
-        referencedSource: {
-          type: 'IfcClassification',
-          name: 'DigiBase Demo NL-SfB tabel 1',
+      ],
+    },
+    {
+      hasAssociations: [
+        {
           location: 'https://search-test.bsdd.buildingsmart.org/uri/digibase/bim-basis-objecten',
+          referencedSource: {
+            type: 'IfcClassification',
+            name: 'DigiBase Demo NL-SfB tabel 1',
+            location: 'https://search-test.bsdd.buildingsmart.org/uri/digibase/bim-basis-objecten',
+          },
+          type: 'IfcClassificationReference',
         },
-        type: 'IfcClassificationReference',
-        name: null,
-      },
-    ],
-    isDefinedBy: null,
-  },
-];
+      ],
+    },
+  ],
+};
 
-function groupBy(array: any[], property: string) {
+function groupEntitiesBy(array: IfcEntity[], property: keyof IfcEntity) {
   const grouped = array.reduce((acc, item) => {
     const key = item[property];
 
-    if (!acc[key]) {
-      acc[key] = [];
+    if (key === undefined || typeof key !== 'string') {
+      if (!acc['']) {
+        acc[''] = [];
+      }
+      acc[''].push(item);
+    } else {
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(item);
     }
 
-    acc[key].push(item);
     return acc;
-  }, {});
+  }, {} as Record<string, IfcEntity[]>);
 
   // Sort the keys alphabetically and create a new sorted object
   return Object.keys(grouped)
     .sort()
     .reduce((acc, key) => {
-      // @ts-ignore
       acc[key] = grouped[key];
       return acc;
-    }, {});
+    }, {} as Record<string, IfcEntity[]>);
 }
 
-export function BsddCard(props: { item: IfcProduct; class: any }) {
+export function BsddCard(props: { item: IfcEntity; class: any }) {
   let color = 'blue';
 
   if (!props.class) color = 'red';
 
-  function determineColor(item: IfcProduct, found: any) {
-    const ifcClassificatonReference = item.hasAssociations?.filter((it) => it.type === 'IfcClassificationReference');
+  function determineColor(item: IfcEntity, found: any) {
+    const ifcClassificatonReferences = item.hasAssociations?.filter((it) => it.type === 'IfcClassificationReference');
 
-    if (!ifcClassificatonReference) return 'orange';
+    if (!ifcClassificatonReferences) return 'orange';
+    const ifcClassificatonReference = ifcClassificatonReferences[0] as IfcClassificationReference;
 
     for (let classRelation in found.classRelations) {
       // @ts-ignore
-      console.log(
-        classRelation.relatedClassUri,
-        ifcClassificatonReference.location,
-        classRelation.relatedClassUri === ifcClassificatonReference.location,
-      );
+      // console.log(
+      //   classRelation.relatedClassUri,
+      //   ifcClassificatonReference.location,
+      //   classRelation.relatedClassUri === ifcClassificatonReference.location,
+      // );
       // @ts-ignore
       if (classRelation.relatedClassUri === ifcClassificatonReference.location) return 'green';
     }
@@ -177,14 +155,14 @@ export function BsddCard(props: { item: IfcProduct; class: any }) {
     return text.substring(0, maxLength) + '...';
   }
 
-  function bsddSearchClick(ifcProduct: IfcProduct) {
+  function bsddSearchClick(ifcProduct: IfcEntity) {
     // const ifcObjectTest: string =
     //   "{type: 'IfcSlab', name: 'Floor: 23_FL_AT_breedplaatvloer_200 (C35/45)', description: 'breedplaatvloer',predefinedType:'FLOOR'}";
 
+    const ifcEntityJson = JSON.stringify(ifcProduct);
+
     // @ts-ignore
-    bsddBridge.bsddSearch(JSON.stringify(ifcProduct)).then(function (actualResult) {
-      console.log('Sent to Revit', actualResult);
-    });
+    bsddBridge.bsddSearch(ifcEntityJson);
   }
 
   return (
@@ -193,7 +171,7 @@ export function BsddCard(props: { item: IfcProduct; class: any }) {
         <Group my={'auto'}>
           <Indicator color={color} size={18} mx={'xs'} />
           <Text>
-            <span>{truncateText(props.item.name, 50)}</span>
+            <span>{truncateText(props.item.name || '', 50)}</span>
           </Text>
         </Group>
 
@@ -273,57 +251,58 @@ export function BsddCard(props: { item: IfcProduct; class: any }) {
 interface CategoryCollapseProps {
   category: string;
   opened: Record<string, boolean>;
-  bbbr: BimBasisObjectsResponse;
-  items: IfcProduct[];
+  bbbr: BimBasisObjectsResponse | undefined;
+  items: IfcEntity[];
 }
 
-function CategoryCollapse(props: CategoryCollapseProps) {
-  const { category, opened, items } = props;
+function CategoryCollapse({ category, opened, bbbr, items }: CategoryCollapseProps) {
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<ClassContractV1>();
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Function to fetch data
-    const fetchData = async () => {
-      try {
-        // Start by setting loading to true
-        setIsLoading(true);
+    if (bbbr) {
+      // Function to fetch data
+      const fetchData = async () => {
+        try {
+          // Start by setting loading to true
+          setIsLoading(true);
 
-        const found = determineBsddClass(category, props.bbbr);
+          const found = determineBsddClass(category, bbbr);
 
-        if (found === false) return false;
-        // console.log(found)
-        // @ts-ignore
-        const encodedUri = encodeURIComponent(found.uri);
-        const targetUrl = `https://bs-dd-api-prototype.azurewebsites.net/api/Class/v1?uri=${encodedUri}&includeClassProperties=true&includeChildClassReferences=true&includeClassRelations=true`;
+          if (found === false) return false;
+          // console.log(found)
+          // @ts-ignore
+          const encodedUri = encodeURIComponent(found.uri);
+          const targetUrl = `https://bs-dd-api-prototype.azurewebsites.net/api/Class/v1?uri=${encodedUri}&includeClassProperties=true&includeChildClassReferences=true&includeClassRelations=true`;
 
-        // Fetch data from the API
-        const response = await fetch(targetUrl);
+          // Fetch data from the API
+          const response = await fetch(targetUrl);
 
-        // If the response is not ok, throw an error
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          // If the response is not ok, throw an error
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          // Parse the JSON data
+          const result: ClassContractV1 = await response.json();
+
+          // console.log(result)
+
+          // Update state with the fetched data
+          setData(result);
+        } catch (e: any) {
+          // If an error occurred, set the error state
+          setError(e.message);
+        } finally {
+          // Set loading to false when loading is complete
+          setIsLoading(false);
         }
+      };
 
-        // Parse the JSON data
-        const result = await response.json();
-
-        // console.log(result)
-
-        // Update state with the fetched data
-        setData(result);
-      } catch (e: any) {
-        // If an error occurred, set the error state
-        setError(e.message);
-      } finally {
-        // Set loading to false when loading is complete
-        setIsLoading(false);
-      }
-    };
-
-    // Call the fetchData function
-    fetchData();
+      // Call the fetchData function
+      fetchData();
+    }
   }, []); // The empty array ensures this effect runs only once after initial render
 
   if (isLoading) {
@@ -363,16 +342,19 @@ function CategoryCollapse(props: CategoryCollapseProps) {
 }
 
 export function HomePage() {
-  const [state, setState] = useState(mockData);
+  const [state, setState] = useState<IfcEntity[]>([]);
 
   // @ts-ignore
-  window.updateSelection = (newState) => {
+  window.updateSelection = (bsddBridgeData: BsddBridgeData) => {
     // console.log('state',state);
     // console.log('jsonString',jsonString)
     // const newState = JSON.parse(jsonString);
-    console.log('newState', newState);
-    setState(newState.ifcData);
-    console.log('state', state);
+    console.log('bsddBridgeData', bsddBridgeData);
+    const ifcData = bsddBridgeData.ifcData as IfcEntity[];
+    if (ifcData.length > 0) {
+      setState(ifcData);
+      console.log('state', state);
+    }
   };
 
   // State for the fetched data
@@ -452,7 +434,7 @@ export function HomePage() {
     return <div>Error: {error}</div>;
   }
   // Assuming you want to group by 'PredefinedType'
-  const grouped = groupBy(state, 'description');
+  const grouped = groupEntitiesBy(state, 'description');
 
   // @ts-ignore
   return (
@@ -474,7 +456,6 @@ export function HomePage() {
                 </ActionIcon>
               </Group>
 
-              {/*@ts-ignore*/}
               <CategoryCollapse category={category} items={items} opened={opened} bbbr={data} />
             </Stack>
           ))}
