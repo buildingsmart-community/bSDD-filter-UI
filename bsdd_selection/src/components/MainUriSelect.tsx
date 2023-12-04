@@ -6,12 +6,12 @@ const groceries = [
     'https://identifier.buildingsmart.org/uri/heijmans/bim-basis-objecten'
 ];
 
-export function MainUriSelect() {
+export function MainUriSelect(props: {mainUrl: string, setMainUrl: (val: string) => void}) {
+    const {mainUrl, setMainUrl} = props;
     const combobox = useCombobox({
         onDropdownClose: () => combobox.resetSelectedOption(),
     });
 
-    const [value, setValue] = useState<string | null>(null);
 
     const options = groceries.map((item) => (
         <Combobox.Option value={item} key={item}>
@@ -24,7 +24,7 @@ export function MainUriSelect() {
             store={combobox}
             withinPortal={false}
             onOptionSubmit={(val) => {
-                setValue(val);
+                setMainUrl(val);
                 combobox.closeDropdown();
             }}
         >
@@ -37,7 +37,7 @@ export function MainUriSelect() {
                     onClick={() => combobox.toggleDropdown()}
                     rightSectionPointerEvents="none"
                 >
-                    {value || <Input.Placeholder>Kies hoofddomein</Input.Placeholder>}
+                    {mainUrl || <Input.Placeholder>Kies hoofddomein</Input.Placeholder>}
                 </InputBase>
             </Combobox.Target>
 
