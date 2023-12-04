@@ -29,7 +29,7 @@
     "build:selection": "tsc && vite build --emptyOutDir --config vite.config.selection.ts",
     "preview:selection": "vite preview --config vite.config.selection.ts",
     "test:selection": "vitest --config vite.config.selection.ts",
-    "generate-api": "swagger-typescript-api --path https://api.swaggerhub.com/apis/buildingSMART/Dictionaries/v1/swagger.json --output ./common/src/BsddApi/ --name BsddApi.ts --api-class-name BsddApi"
+    "generate-api": "swagger-typescript-api --path https://api.swaggerhub.com/apis/buildingSMART/Dictionaries/v1/swagger.json --output ./common/src/BsddApi/ --name BsddApiBase.ts --api-class-name BsddApiBase"
   },
   "peerDependencies": {
     "react": "^18.0.0",
