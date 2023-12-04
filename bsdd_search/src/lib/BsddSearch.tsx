@@ -11,6 +11,7 @@ import SelectDomains from './SelectDomains';
 import Apply from './Apply';
 import { Api, ClassificationContractV4, DomainContractV3 } from './BsddApi';
 import Authentication from './Authentication';
+import {IfcEntity, IfcPropertySet} from "../../../common/src/IfcData/ifc";
 
 interface Option {
   label: string;
