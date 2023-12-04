@@ -28,7 +28,8 @@
     "dev:selection": "vite --config vite.config.selection.ts",
     "build:selection": "tsc && vite build --emptyOutDir --config vite.config.selection.ts",
     "preview:selection": "vite preview --config vite.config.selection.ts",
-    "test:selection": "vitest --config vite.config.selection.ts"
+    "test:selection": "vitest --config vite.config.selection.ts",
+    "generate-api": "swagger-typescript-api --path https://api.swaggerhub.com/apis/buildingSMART/Dictionaries/v1/swagger.json --output ./common/src/BsddApi/ --name BsddApi.ts --api-class-name BsddApi"
   },
   "peerDependencies": {
     "react": "^18.0.0",
@@ -71,6 +72,7 @@
     "prettier": "^2.8.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "swagger-typescript-api": "^13.0.3",
     "tslib": "^2.5.0",
     "typescript": "^5.0.4",
     "vite": "^4.1.0",
@@ -82,7 +84,9 @@
     "@mantine/core": "^7.2.2",
     "@mantine/hooks": "^7.2.2",
     "@tabler/icons-react": "^2.41.0",
+    "i18next": "^23.7.6",
     "react-bootstrap": "^2.7.1",
+    "react-i18next": "^13.5.0",
     "react-router-dom": "^6.19.0",
     "react-select": "^5.7.0"
   },
