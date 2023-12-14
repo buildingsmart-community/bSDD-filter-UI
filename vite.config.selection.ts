@@ -18,12 +18,11 @@ export default defineConfig({
       fileName: 'react-bsdd-selection',
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'bootstrap'],
+      external: ['react', 'react-dom'],
       output: {
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
-          bootstrap: 'bootstrap',
         },
       },
     },

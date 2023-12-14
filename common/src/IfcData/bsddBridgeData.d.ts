@@ -4,7 +4,7 @@
 
 export interface BsddBridgeData {
   name?: string;
-  bsddApiEnvironment?: string; // default 'production'
+  bsddApiEnvironment: string = 'production'; // default 'production'
   mainDictionaryUri: string; // Uri
   filterDictionaryUris: string[]; // Uri[]
   ifcData: IfcEntity[];

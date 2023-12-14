@@ -38,6 +38,7 @@ export interface IfcExternalReference extends IfcJsonEntity {
 }
 export interface IfcClassificationReference extends IfcExternalReference {
   type: 'IfcClassificationReference';
+  location?: string; // IfcURIReference
   referencedSource?: IfcClassification; // IfcClassificationReferenceSelect
   description?: string; // IfcText
   sort?: string; // IfcIdentifier
