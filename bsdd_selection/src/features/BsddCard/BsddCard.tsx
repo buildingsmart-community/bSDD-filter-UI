@@ -98,7 +98,7 @@ function BsddCard({ item, bsddClass, addColor }: BsddCardProps) {
             <HoverCard.Dropdown>{item.name}</HoverCard.Dropdown>
           </HoverCard>
           <Tooltip label={'Select all instances'}>
-            <ActionIcon radius={'xl'} onClick={() => bsddSearchClick(item)} color={'red'}>
+            <ActionIcon radius={'xl'} onClick={() => bsddSearchClick(item)} color={'blue'}>
               <IconSearch size={20} />
             </ActionIcon>
           </Tooltip>
