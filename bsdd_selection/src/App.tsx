@@ -2,6 +2,7 @@ import '@mantine/core/styles.css';
 import { MantineProvider } from '@mantine/core';
 import { theme } from '../../common/src/theme/theme';
 import { HomePage } from './pages/Home.page';
+import './i18n';
 
 export default function App() {
   return (
