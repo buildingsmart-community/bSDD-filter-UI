@@ -1,6 +1,7 @@
 import { useState, useEffect, Children } from 'react';
 import { Form } from 'react-bootstrap';
 import Checkbox from './Checkbox';
+import { IfcProperty, IfcPropertyEnumeratedValue, IfcPropertySet, IfcPropertySingleValue } from '../../../common/src/IfcData/ifc';
 
 interface Props {
   propertySet: IfcPropertySet;
@@ -39,7 +40,7 @@ function Property(props: Props) {
                     | IfcPropertySingleValue = { ...ifcProperty };
                   p.nominalValue.value = value;
                   const i: number = propertySet.hasProperties.findIndex(
-                    (element) => element.name === ifcProperty.name,
+                    (element:any) => element.name === ifcProperty.name,
                   );
                   if (i != -1) {
                     propertySet.hasProperties[i] = p;
@@ -65,7 +66,7 @@ function Property(props: Props) {
                     | IfcPropertySingleValue = { ...ifcProperty };
                   p.nominalValue.value = e.target.value;
                   const i: number = propertySet.hasProperties.findIndex(
-                    (element) => element.name === ifcProperty.name,
+                    (element:any) => element.name === ifcProperty.name,
                   );
                   if (i != -1) {
                     propertySet.hasProperties[i] = p;
@@ -82,7 +83,6 @@ function Property(props: Props) {
       case 'IfcPropertyEnumeratedValue': {
         setInput(
           <Form.Select
-            placeholder={ifcProperty.name}
             value={ifcProperty.enumerationValues}
             onChange={(e) => {
               const propertySets = { ...ifcPropertySets };
@@ -94,7 +94,7 @@ function Property(props: Props) {
                   | IfcPropertySingleValue = { ...ifcProperty };
                 p.enumerationValues = [e.target.value];
                 const i: number = propertySet.hasProperties.findIndex(
-                  (element) => element.name === ifcProperty.name,
+                  (element:any) => element.name === ifcProperty.name,
                 );
                 if (i != -1) {
                   propertySet.hasProperties[i] = p;
