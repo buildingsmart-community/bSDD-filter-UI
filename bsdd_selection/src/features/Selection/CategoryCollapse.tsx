@@ -1,14 +1,16 @@
-import { Accordion, ActionIcon, Text, Collapse, Group, HoverCard, Indicator, Tooltip } from '@mantine/core';
+import { Accordion, ActionIcon, Text, Group, Indicator, Tooltip } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { IfcEntity } from '../../../../common/src/IfcData/ifc';
 import { ClassContractV1, ClassListItemContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
 import BsddCard from '../BsddCard/BsddCard';
 import { BsddApi } from '../../../../common/src/BsddApi/BsddApi';
 import { bsddEnvironments } from '../../../../common/src/BsddApi/BsddApiEnvironments';
-import { IconCheck, IconInfoCircle, IconSearch } from '@tabler/icons-react';
+import { IconCheck, IconSearch } from '@tabler/icons-react';
+import { useTranslation } from 'react-i18next';
+import '../../../../common/src/theme/styles.css';
 
 interface CategoryCollapseProps {
-  bsddApiEnvironment: string;
+  bsddEnvironmentName: string;
   category: string;
   opened: Record<string, boolean>;
   bbbr: ClassListItemContractV1[];
@@ -16,10 +18,11 @@ interface CategoryCollapseProps {
   index: string;
 }
 
-function CategoryCollapse({ bsddApiEnvironment, category, opened, bbbr, items, index }: CategoryCollapseProps) {
+function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, index }: CategoryCollapseProps) {
+  const { t } = useTranslation();
   const [bsddClass, setBsddClass] = useState<ClassContractV1>();
-  const bsddEnvironment = bsddEnvironments[bsddApiEnvironment];
-  const [categoryColor, setCategoryColor] = useState<string>();
+  const bsddApiEnvironment = bsddEnvironments[bsddEnvironmentName];
+  const [categoryColor, setCategoryColor] = useState<string>('orange');
   const [colors, setColors] = useState<string[]>([]);
 
   function addColor(color: string) {
@@ -31,7 +34,7 @@ function CategoryCollapse({ bsddApiEnvironment, category, opened, bbbr, items, i
 
     if (found) {
       const classContract = found as ClassContractV1;
-      const api = new BsddApi(bsddEnvironment);
+      const api = new BsddApi(bsddApiEnvironment);
       api.api
         .classV1List({
           uri: classContract.uri,
@@ -70,8 +73,6 @@ function CategoryCollapse({ bsddApiEnvironment, category, opened, bbbr, items, i
   }, [colors, setCategoryColor]);
 
   function determineBsddClass(category: string, bbbr: ClassListItemContractV1[]): ClassListItemContractV1 | false {
-    // console.log('category',category);
-    // console.log('bbbr',bbbr);
     // if none of the descriptions in data is the same as item.description, then color is red
     // if description is present, orange
 
@@ -89,64 +90,38 @@ function CategoryCollapse({ bsddApiEnvironment, category, opened, bbbr, items, i
     return found;
   }
 
-  function truncateText(text: string | null, maxLength: number): string {
-    if (!text) return '';
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
+  function bsddSearchClick() {
+    throw new Error('Function not implemented');
   }
 
-  function bsddSearchClick() {
+  function selectInstances() {
     throw new Error('Function not implemented');
   }
 
   return (
     <Accordion.Item key={category} value={index}>
       <Accordion.Control>
-        <Group align={'flex-start'} justify={'space-between'}>
-          <Group my={'auto'}>
-            <HoverCard>
-              <HoverCard.Target>
-                <Indicator color={categoryColor} size={'20'} mx={'xs'} />
-              </HoverCard.Target>
-              <HoverCard.Dropdown>
-                <Text>
-                  <span>{categoryColor}</span>
-                </Text>
-              </HoverCard.Dropdown>
-            </HoverCard>
-            {/* <Text truncate="end">{props.item.name || ''}</Text> */}
-            <Text>
-              <span>{truncateText(category.length > 0 ? category : 'No description', 40)}</span>
-            </Text>
-          </Group>
-          <Group>
-            <HoverCard>
-              <HoverCard.Target>
-                <Group>
-                  <IconInfoCircle />
-                </Group>
-              </HoverCard.Target>
-              <HoverCard.Dropdown>{category}</HoverCard.Dropdown>
-            </HoverCard>
-            <Tooltip label={'Select all instances'}>
-              <ActionIcon radius={'xl'} onClick={() => bsddSearchClick()} color={'blue'}>
-                <IconSearch size={18} />
-              </ActionIcon>
-            </Tooltip>
-            <Tooltip label={'Attach to type'}>
-              <ActionIcon radius={'xl'} color={'green'}>
-                <IconCheck size={18} />
-              </ActionIcon>
-            </Tooltip>
-          </Group>
+        <Group justify="space-between" className="flexGroup">
+          <Indicator mx="sm" color={categoryColor} size={'1.8em'} />
+          <div className="flexTextContainer">
+            <Text className="truncate">{category.length > 0 ? category : t('No description')}</Text>
+          </div>
+          <Tooltip label={t('Select objects')}>
+            <ActionIcon radius={'xl'} onClick={() => selectInstances()} color={'blue'}>
+              <IconSearch size={20} />
+            </ActionIcon>
+          </Tooltip>
+          <Tooltip label={t('Attach to type')}>
+            <ActionIcon radius={'xl'} onClick={() => bsddSearchClick()} color={'green'}>
+              <IconCheck size={20} />
+            </ActionIcon>
+          </Tooltip>
         </Group>
       </Accordion.Control>
-      <Accordion.Panel>
-        <Collapse in={!opened[category]}>
-          {items.map((item, index) => {
-            return <BsddCard item={item} bsddClass={bsddClass as ClassContractV1} key={index} addColor={addColor} />;
-          })}
-        </Collapse>
+      <Accordion.Panel mt="-xs" pl="xl">
+        {items.map((item, index) => {
+          return <BsddCard item={item} bsddClass={bsddClass as ClassContractV1} key={index} addColor={addColor} />;
+        })}
       </Accordion.Panel>
     </Accordion.Item>
   );

@@ -1,10 +1,12 @@
-import { Accordion, ActionIcon, Group, Indicator, Stack, Tabs, Text } from '@mantine/core';
+import { Accordion, Tabs } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import CategoryCollapse from './CategoryCollapse';
 import { IfcEntity } from '../../../../common/src/IfcData/ifc';
 import { bsddEnvironments } from '../../../../common/src/BsddApi/BsddApiEnvironments';
 import { BsddApi } from '../../../../common/src/BsddApi/BsddApi';
 import { ClassListItemContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
+
+let CefSharp: any;
 
 export interface BuildingClass {
   uri: string;
@@ -68,27 +70,27 @@ interface SelectionProps {
 
 function Selection({ bsddApiEnvironment, mainDictionaryUri, ifcData }: SelectionProps) {
   const [opened, setOpened] = useState({});
-  const bsddEnvironment = bsddEnvironments[bsddApiEnvironment];
   const [classes, setClasses] = useState<ClassListItemContractV1[]>([]);
 
-  // useEffect(() => {
-  //   // Set up BsddBridge connection
-  //   const connectToBsddBridge = async () => {
-  //     try {
-  //       if (CefSharp) {
-  //         await CefSharp.BindObjectAsync('bsddBridge');
-  //       }
-  //     } catch (e: any) {
-  //       // If an error occurred, set the error state
-  //       setError(e.message);
-  //     }
-  //   };
-  //   connectToBsddBridge();
-  // }, []);
+  // Set up BsddBridge connection
+  useEffect(() => {
+    const connectToBsddBridge = async () => {
+      try {
+        if (CefSharp) {
+          await CefSharp.BindObjectAsync('bsddBridge');
+        }
+      } catch (e: any) {
+        // If an error occurred, set the error state
+        // setError(e.message);
+        console.error(e.message);
+      }
+    };
+    connectToBsddBridge();
+  }, []);
 
   useEffect(() => {
     if (!mainDictionaryUri) return;
-    const api = new BsddApi(bsddEnvironment);
+    const api = new BsddApi(bsddEnvironments[bsddApiEnvironment]);
     api.api
       .dictionaryV1ClassesList({ Uri: mainDictionaryUri })
       .then((response) => {
@@ -96,15 +98,14 @@ function Selection({ bsddApiEnvironment, mainDictionaryUri, ifcData }: Selection
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        if (response.data.classes) {
+        if (response.data && response.data.classes) {
           setClasses(response.data.classes);
         }
       })
       .catch((error) => {
         throw new Error(`bSDD API error! status: ${error}`);
       });
-  }, [mainDictionaryUri]);
+  }, [mainDictionaryUri, bsddApiEnvironment]);
 
   const groupedEntities = groupEntitiesBy(ifcData, 'description');
 
@@ -113,7 +114,7 @@ function Selection({ bsddApiEnvironment, mainDictionaryUri, ifcData }: Selection
       <Accordion chevronPosition="left" multiple>
         {Object.entries(groupedEntities).map(([category, items], index) => (
           <CategoryCollapse
-            bsddApiEnvironment={bsddApiEnvironment}
+            bsddEnvironmentName={bsddApiEnvironment}
             category={category}
             items={items}
             opened={opened}

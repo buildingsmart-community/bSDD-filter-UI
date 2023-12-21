@@ -81,6 +81,7 @@
   "dependencies": {
     "@azure/msal-browser": "^2.34.0",
     "@azure/msal-react": "^1.5.4",
+    "@hello-pangea/dnd": "^16.5.0",
     "@mantine/core": "^7.2.2",
     "@mantine/hooks": "^7.2.2",
     "@tabler/icons-react": "^2.41.0",
