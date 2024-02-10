@@ -2,9 +2,12 @@ import { Accordion, Tabs } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import CategoryCollapse from './CategoryCollapse';
 import { IfcEntity } from '../../../../common/src/IfcData/ifc';
-import { bsddEnvironments } from '../../../../common/src/BsddApi/BsddApiEnvironments';
 import { BsddApi } from '../../../../common/src/BsddApi/BsddApi';
 import { ClassListItemContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
+import { useAppSelector } from '../../app/hooks';
+import { RootState } from '../../app/store';
+import { selectBsddApiEnvironmentUri } from '../../../../common/src/settings/settingsSlice';
+import { selectIfcEntities } from '../../../../common/src/IfcData/ifcDataSlice';
 
 let CefSharp: any;
 
@@ -62,13 +65,13 @@ function groupEntitiesBy(array: IfcEntity[], property: keyof IfcEntity) {
     }, {} as Record<string, IfcEntity[]>);
 }
 
-interface SelectionProps {
-  bsddApiEnvironment: string;
-  mainDictionaryUri: string;
-  ifcData: IfcEntity[];
-}
+interface SelectionProps {}
 
-function Selection({ bsddApiEnvironment, mainDictionaryUri, ifcData }: SelectionProps) {
+function Selection({}: SelectionProps) {
+  const mainDictionary = useAppSelector((state: RootState) => state.settings.mainDictionary);
+  const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironmentUri);
+  const ifcEntities = useAppSelector(selectIfcEntities);
+
   const [opened, setOpened] = useState({});
   const [classes, setClasses] = useState<ClassListItemContractV1[]>([]);
 
@@ -89,10 +92,10 @@ function Selection({ bsddApiEnvironment, mainDictionaryUri, ifcData }: Selection
   }, []);
 
   useEffect(() => {
-    if (!mainDictionaryUri) return;
-    const api = new BsddApi(bsddEnvironments[bsddApiEnvironment]);
+    if (!mainDictionary) return;
+    const api = new BsddApi(bsddApiEnvironment);
     api.api
-      .dictionaryV1ClassesList({ Uri: mainDictionaryUri })
+      .dictionaryV1ClassesList({ Uri: mainDictionary.dictionaryUri })
       .then((response) => {
         // If the response is not ok, throw an error
         if (!response.ok) {
@@ -105,9 +108,9 @@ function Selection({ bsddApiEnvironment, mainDictionaryUri, ifcData }: Selection
       .catch((error) => {
         throw new Error(`bSDD API error! status: ${error}`);
       });
-  }, [mainDictionaryUri, bsddApiEnvironment]);
+  }, [mainDictionary, bsddApiEnvironment]);
 
-  const groupedEntities = groupEntitiesBy(ifcData, 'description');
+  const groupedEntities = groupEntitiesBy(ifcEntities, 'description');
 
   return (
     <Tabs.Panel value={'koppelen'}>

@@ -84,12 +84,15 @@
     "@hello-pangea/dnd": "^16.5.0",
     "@mantine/core": "^7.2.2",
     "@mantine/hooks": "^7.2.2",
+    "@reduxjs/toolkit": "^2.1.0",
     "@tabler/icons-react": "^2.41.0",
+    "clsx": "^2.1.0",
     "i18next": "^23.7.6",
     "react-bootstrap": "^2.7.1",
     "react-i18next": "^13.5.0",
     "react-router-dom": "^6.19.0",
-    "react-select": "^5.7.0"
+    "react-select": "^5.7.0",
+    "uuid": "^9.0.1"
   },
   "packageManager": "yarn@4.0.1"
 }

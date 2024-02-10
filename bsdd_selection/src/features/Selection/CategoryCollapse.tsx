@@ -4,10 +4,11 @@ import { IfcEntity } from '../../../../common/src/IfcData/ifc';
 import { ClassContractV1, ClassListItemContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
 import BsddCard from '../BsddCard/BsddCard';
 import { BsddApi } from '../../../../common/src/BsddApi/BsddApi';
-import { bsddEnvironments } from '../../../../common/src/BsddApi/BsddApiEnvironments';
 import { IconCheck, IconSearch } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import '../../../../common/src/theme/styles.css';
+import { selectBsddApiEnvironmentUri } from '../../../../common/src/settings/settingsSlice';
+import {  useAppSelector } from '../../app/hooks';
 
 interface CategoryCollapseProps {
   bsddEnvironmentName: string;
@@ -21,9 +22,9 @@ interface CategoryCollapseProps {
 function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, index }: CategoryCollapseProps) {
   const { t } = useTranslation();
   const [bsddClass, setBsddClass] = useState<ClassContractV1>();
-  const bsddApiEnvironment = bsddEnvironments[bsddEnvironmentName];
   const [categoryColor, setCategoryColor] = useState<string>('orange');
   const [colors, setColors] = useState<string[]>([]);
+  const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironmentUri);
 
   function addColor(color: string) {
     setColors([...colors, color]);

@@ -1,82 +1,123 @@
 import { Container, Tabs } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { BsddBridgeData } from '../../../common/src/IfcData/bsddBridgeData';
 import { mockData } from '../../../common/src/IfcData/mockData';
 import Settings from '../features/Settings/Settings';
-import Selection from '../features/Selection/Selection';
 import { useTranslation } from 'react-i18next';
-import { bsddEnvironments } from '../../../common/src/BsddApi/BsddApiEnvironments';
-import { DictionaryContractV1 } from '../../../common/src/BsddApi/BsddApiBase';
-import { BsddApi } from '../../../common/src/BsddApi/BsddApi';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { setIfcData } from '../../../common/src/IfcData/ifcDataSlice';
+import { selectBsddApiEnvironmentUri, setSettings } from '../../../common/src/settings/settingsSlice';
+import { fetchDictionaries } from '../../../common/src/BsddApi/bsddSlice';
+import Selection from '../features/Selection/Selection';
 
 export function HomePage() {
-  const [bsddBridgeData, setBsddBridgeData] = useState<BsddBridgeData>(mockData);
-  const [bsddApiEnvironment, setBsddApiEnvironment] = useState<string>('production');
-  const [mainDictionary, setMainDictionary] = useState<DictionaryContractV1>();
-  const [bsddDictionaries, setBsddDictionaries] = useState<DictionaryContractV1[]>([]);
-  const [filterDictionaries, setFilterDictionaries] = useState<DictionaryContractV1[]>([]);
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironmentUri);
+
+  useEffect(() => {
+    console.log('bsddApiEnvironment changed');
+    if (bsddApiEnvironment) {
+      dispatch(fetchDictionaries(bsddApiEnvironment));
+    }
+  }, [bsddApiEnvironment, dispatch]);
+
+  useEffect(() => {
+    const { settings, ifcData } = mockData;
+    dispatch(setSettings(settings));
+    dispatch(setIfcData(ifcData));
+  }, [dispatch]);
 
   // @ts-ignore
   window.updateSelection = (inputSelection: BsddBridgeData) => {
-    setBsddBridgeData(inputSelection);
+    const { settings, ifcData } = inputSelection;
+    dispatch(setSettings(settings));
+    dispatch(setIfcData(ifcData));
   };
 
-  // Get the initial settings
-  useEffect(() => {
-    if (bsddBridgeData.bsddApiEnvironment) {
-      setBsddApiEnvironment(bsddBridgeData.bsddApiEnvironment);
-    }
-  }, [bsddBridgeData, setBsddApiEnvironment]);
+  // useEffect(() => {
+  //   const dictionary = bsddBridgeData.mainDictionary;
+  //   if (!dictionary) return;
+  //   const mainDictionaryUri = dictionary?.dictionaryUri;
+  //   const mainDictionaryName = dictionary?.dictionaryName;
+  //   if (!mainDictionaryUri) {
+  //     setMainDictionary(undefined);
+  //     return;
+  //   }
+  //   const mainDictionaryResult = bsddDictionaries.find((item) => item.uri === mainDictionaryUri);
+  //   if (!mainDictionaryResult) {
+  //     setMainDictionary(undefined);
+  //     return;
+  //   }
+  //   if (mainDictionaryResult.name !== mainDictionaryName) {
+  //     setMainDictionary({
+  //       dictionaryUri: mainDictionaryResult.uri,
+  //       dictionaryName: mainDictionaryResult.name,
+  //       parameterName: dictionary.parameterName,
+  //       parameterId: dictionary.parameterId,
+  //       parameterMapping: dictionary.parameterMapping,
+  //     });
+  //   }
+  // }, [bsddBridgeData, bsddDictionaries]);
 
-  // Fetches the list of dictionaries from the bSDD API based on the selected environment.
-  useEffect(() => {
-    if (!bsddApiEnvironment) return;
+  // useEffect(() => {
+  //   const filterDictionariesData = bsddBridgeData.filterDictionaries;
+  //   if (!filterDictionariesData) {
+  //     setFilterDictionaries([]);
+  //     return;
+  //   }
+  //   if (filterDictionariesData.length === 0) {
+  //     return;
+  //   }
 
-    const api = new BsddApi(bsddEnvironments[bsddApiEnvironment]);
-    api.api
-      .dictionaryV1List()
-      .then((response) => {
-        // If the response is not ok, throw an error
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        console.log(response);
-        if (response.data) {
-          if (response.data.dictionaries) {
-            setBsddDictionaries(response.data.dictionaries);
-          }
-        }
-      })
-      .catch((error) => {
-        throw new Error(`bSDD API error! status: ${error}`);
-      });
-  }, [bsddApiEnvironment, setBsddDictionaries]);
+  //   let changed = false;
+  //   const updatedFilterDictionaries: BsddDictionary[] = filterDictionariesData.reduce((acc: BsddDictionary[], dictionary) => {
+  //     const dictionaryUri = dictionary.dictionaryUri;
+  //     const dictionaryName = dictionary.dictionaryName;
+  //     const dictionaryResult = bsddDictionaries.find((item) => item.uri === dictionaryUri);
 
-  // Set the initial bSDD API environment
-  useEffect(() => {
-    if (bsddBridgeData.bsddApiEnvironment) {
-      setBsddApiEnvironment(bsddBridgeData.bsddApiEnvironment);
-    }
-  }, [bsddBridgeData, setBsddApiEnvironment]);
+  //     if (!dictionaryResult) {
+  //       return acc;
+  //     }
 
-  // Set the initial main dictionary
-  useEffect(() => {
-    const mainDictionaryUri = bsddBridgeData.mainDictionaryUri;
-    if (!mainDictionaryUri) return;
-    const mainDictionaryResult = bsddDictionaries.find((item) => item.uri === mainDictionaryUri);
-    if (!mainDictionaryResult) return;
-    setMainDictionary(mainDictionaryResult);
-  }, [bsddBridgeData, bsddDictionaries]);
+  //     if (dictionaryResult.name !== dictionaryName) {
+  //       changed = true;
+  //       acc.push({
+  //         dictionaryUri: dictionaryResult.uri,
+  //         dictionaryName: dictionaryResult.name,
+  //         parameterName: dictionary.parameterName,
+  //         parameterId: dictionary.parameterId,
+  //         parameterMapping: dictionary.parameterMapping,
+  //       });
+  //     } else {
+  //       acc.push(dictionary);
+  //     }
 
-  // Set the initial filter dictionaries
-  useEffect(() => {
-    const filterDictionaryUris = bsddBridgeData.filterDictionaryUris;
-    if (!filterDictionaryUris && filterDictionaries.length == 0) return;
-    const filterDictionariesResult = bsddDictionaries.filter((item) => filterDictionaryUris.includes(item.uri));
-    if (!filterDictionariesResult || filterDictionariesResult.length === 0) return;
-    setFilterDictionaries(bsddDictionaries.filter((item) => filterDictionaryUris.includes(item.uri)));
-  }, [bsddBridgeData, bsddDictionaries]);
+  //     return acc;
+  //   }, []);
+
+  //   if (changed) {
+  //     setFilterDictionaries(updatedFilterDictionaries);
+  //   }
+  // }, [bsddBridgeData, bsddDictionaries]);
+
+  // useEffect(() => {
+  //   const filterDictionaryUris = bsddBridgeData.filterDictionaries.map((item) => item.dictionaryUri);
+  //   if (!filterDictionaryUris && filterDictionaries.length == 0) return;
+  //   const filterDictionariesResult = bsddDictionaries.filter((item) => filterDictionaryUris.includes(item.uri));
+  //   if (!filterDictionariesResult || filterDictionariesResult.length === 0) return;
+  //   setFilterDictionaries(
+  //     bsddDictionaries
+  //       .filter((item) => filterDictionaryUris.includes(item.uri))
+  //       .map((item) => ({
+  //         dictionaryUri: item.uri,
+  //         dictionaryName: item.name,
+  //         parameterName: '',
+  //         parameterId: '',
+  //         parameterMapping: '',
+  //       })),
+  //   );
+  // }, [bsddBridgeData, bsddDictionaries]);
 
   return (
     <>
@@ -87,20 +128,8 @@ export function HomePage() {
             <Tabs.Tab value={'settings'}>{t('Settings')}</Tabs.Tab>
           </Tabs.List>
 
-          <Selection
-            bsddApiEnvironment={bsddApiEnvironment}
-            mainDictionaryUri={bsddBridgeData.mainDictionaryUri}
-            ifcData={bsddBridgeData.ifcData}
-          />
-          <Settings
-            bsddDictionaries={bsddDictionaries}
-            bsddApiEnvironment={bsddApiEnvironment}
-            setBsddApiEnvironment={setBsddApiEnvironment}
-            mainDictionary={mainDictionary}
-            setMainDictionary={setMainDictionary}
-            filterDictionaries={filterDictionaries}
-            setFilterDictionaries={setFilterDictionaries}
-          />
+          <Selection />
+          <Settings />
         </Tabs>
       </Container>
     </>
