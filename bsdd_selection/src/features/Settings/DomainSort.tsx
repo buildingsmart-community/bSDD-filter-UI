@@ -17,10 +17,7 @@ interface DomainSortProps {
 function DomainSort({ id }: DomainSortProps) {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const mainDictionary = useAppSelector((state: RootState) => state.settings.mainDictionary);
   const filterDictionaries = useAppSelector((state: RootState) => state.settings.filterDictionaries);
-
-  const inputs = [...(mainDictionary ? [mainDictionary] : []), ...filterDictionaries];
 
   // Drag and drop update filter dictionaries list
   const onDragEnd = (result: DragUpdate) => {

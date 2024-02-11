@@ -3,7 +3,11 @@ import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { RootState } from '../../app/store';
-import { setFilterDictionaries, setMainDictionary } from '../../../../common/src/settings/settingsSlice';
+import {
+  selectActiveDictionaries,
+  setFilterDictionaries,
+  setMainDictionary,
+} from '../../../../common/src/settings/settingsSlice';
 
 interface ParameterMappingProps {
   id: number;
@@ -15,8 +19,7 @@ function ParameterMapping({ id }: ParameterMappingProps) {
   const { t } = useTranslation();
   const mainDictionary = useAppSelector((state: RootState) => state.settings.mainDictionary);
   const filterDictionaries = useAppSelector((state: RootState) => state.settings.filterDictionaries);
-
-  const inputs = [...(mainDictionary ? [mainDictionary] : []), ...filterDictionaries];
+  const activeDictionaries = useAppSelector(selectActiveDictionaries);
 
   const handleInputChange = (dictionaryUri: string, newParameterMapping: string) => {
     // Find the dictionary in mainDictionary
@@ -48,7 +51,7 @@ function ParameterMapping({ id }: ParameterMappingProps) {
         </Text>
       </Accordion.Control>
       <Accordion.Panel>
-        {inputs.map((input) => (
+        {activeDictionaries.map((input) => (
           <div key={input.dictionaryUri} style={{ marginBottom: '1em' }}>
             <TextInput
               label={input.dictionaryName}

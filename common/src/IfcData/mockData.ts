@@ -36,6 +36,28 @@ export const mockData: BsddBridgeData = {
       hasAssociations: [
         {
           type: 'IfcClassificationReference',
+          name: 'breedplaatvloer',
+          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/breedplaatvloer',
+          identification: 'breedplaatvloer',
+          referencedSource: {
+            type: 'IfcClassification',
+            name: 'Basis bouwproducten',
+            location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
+          },
+        },
+        {
+          type: 'IfcClassificationReference',
+          name: 'Floor',
+          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcSlabFLOOR',
+          identification: 'IfcSlabFLOOR',
+          referencedSource: {
+            type: 'IfcClassification',
+            name: 'IFC',
+            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
+          },
+        },
+        {
+          type: 'IfcClassificationReference',
           name: '23.21 vloeren; constructief, vrijdragende vloeren',
           location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/23.21',
           identification: '23.21',

@@ -1,3 +1,6 @@
+import {IfcEntity} from "./ifc";
+
+
 // bSDD API environments:
 // - test: 'https://test.bsdd.buildingsmart.org'
 // - production: 'https://api.bsdd.buildingsmart.org'

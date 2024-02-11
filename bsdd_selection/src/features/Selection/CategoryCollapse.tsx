@@ -4,11 +4,12 @@ import { IfcEntity } from '../../../../common/src/IfcData/ifc';
 import { ClassContractV1, ClassListItemContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
 import BsddCard from '../BsddCard/BsddCard';
 import { BsddApi } from '../../../../common/src/BsddApi/BsddApi';
-import { IconCheck, IconSearch } from '@tabler/icons-react';
+import { IconPencil } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import '../../../../common/src/theme/styles.css';
 import { selectBsddApiEnvironmentUri } from '../../../../common/src/settings/settingsSlice';
-import {  useAppSelector } from '../../app/hooks';
+import { useAppSelector } from '../../app/hooks';
+import { Color, colorMap } from '../../../../common/src/tools/colors';
 
 interface CategoryCollapseProps {
   bsddEnvironmentName: string;
@@ -22,12 +23,14 @@ interface CategoryCollapseProps {
 function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, index }: CategoryCollapseProps) {
   const { t } = useTranslation();
   const [bsddClass, setBsddClass] = useState<ClassContractV1>();
-  const [categoryColor, setCategoryColor] = useState<string>('orange');
-  const [colors, setColors] = useState<string[]>([]);
+  const [categoryColor, setCategoryColor] = useState<Color>('red');
+  const [colors, setColors] = useState<Color[]>(new Array(items.length).fill('red'));
   const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironmentUri);
 
-  function addColor(color: string) {
-    setColors([...colors, color]);
+  function setColor(index: number, color: Color) {
+    const newColors = [...colors];
+    newColors[index] = color;
+    setColors(newColors);
   }
 
   useEffect(() => {
@@ -62,14 +65,12 @@ function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, 
   }, [category, bbbr]);
 
   useEffect(() => {
-    if (colors.length > 0) {
-      if (colors.includes('red') && colors.includes('green')) {
-        setCategoryColor('orange');
-      } else if (!colors.includes('red')) {
-        setCategoryColor('red');
-      } else if (!colors.includes('green')) {
-        setCategoryColor('green');
-      }
+    if (colors.includes('orange') || (colors.includes('red') && colors.includes('green'))) {
+      setCategoryColor('orange');
+    } else if (colors.every((color) => color === 'red')) {
+      setCategoryColor('red');
+    } else if (colors.every((color) => color === 'green')) {
+      setCategoryColor('green');
     }
   }, [colors, setCategoryColor]);
 
@@ -95,33 +96,32 @@ function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, 
     throw new Error('Function not implemented');
   }
 
-  function selectInstances() {
-    throw new Error('Function not implemented');
-  }
-
   return (
     <Accordion.Item key={category} value={index}>
       <Accordion.Control>
         <Group justify="space-between" className="flexGroup">
-          <Indicator mx="sm" color={categoryColor} size={'1.8em'} />
+          <Indicator mx="sm" color={colorMap[categoryColor]} size={'1.8em'} />
           <div className="flexTextContainer">
             <Text className="truncate">{category.length > 0 ? category : t('No description')}</Text>
           </div>
-          <Tooltip label={t('Select objects')}>
-            <ActionIcon radius={'xl'} onClick={() => selectInstances()} color={'blue'}>
-              <IconSearch size={20} />
-            </ActionIcon>
-          </Tooltip>
           <Tooltip label={t('Attach to type')}>
-            <ActionIcon radius={'xl'} onClick={() => bsddSearchClick()} color={'green'}>
-              <IconCheck size={20} />
+            <ActionIcon radius={'xl'} onClick={() => bsddSearchClick()}>
+              <IconPencil size={20} />
             </ActionIcon>
           </Tooltip>
         </Group>
       </Accordion.Control>
       <Accordion.Panel mt="-xs" pl="xl">
         {items.map((item, index) => {
-          return <BsddCard item={item} bsddClass={bsddClass as ClassContractV1} key={index} addColor={addColor} />;
+          return (
+            <BsddCard
+              item={item}
+              bsddClass={bsddClass as ClassContractV1}
+              key={index}
+              index={index}
+              setColor={setColor}
+            />
+          );
         })}
       </Accordion.Panel>
     </Accordion.Item>

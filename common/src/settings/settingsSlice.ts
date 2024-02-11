@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
 import { BsddDictionary, BsddSettings } from '../IfcData/bsddBridgeData';
 import { RootState } from '../../../bsdd_selection/src/app/store';
 import { bsddEnvironments } from '../BsddApi/BsddApiEnvironments';
@@ -44,6 +44,12 @@ const settingsSlice = createSlice({
 });
 
 export const selectBsddApiEnvironmentUri = (state: RootState) => bsddEnvironments[state.settings.bddApiEnvironment];
+export const selectActiveDictionaries = createSelector(
+  (state: RootState) => state.settings.mainDictionary,
+  (state: RootState) => state.settings.filterDictionaries,
+  (mainDictionary, filterDictionaries) =>
+    mainDictionary ? [mainDictionary, ...filterDictionaries] : filterDictionaries,
+);
 
 export const { setSettings, setBsddApiEnvironment, setMainDictionary, setFilterDictionaries, setLanguage } =
   settingsSlice.actions;

@@ -32,7 +32,7 @@ function Settings({}: SettingsProps) {
 
     // @ts-ignore
     // bsddBridge.saveSettings(settings);
-  }, [bsddApiEnvironment, mainDictionary, filterDictionaries]);
+  }, [bsddApiEnvironment, mainDictionary, filterDictionaries, language]);
 
   return (
     <Tabs.Panel value="settings">

@@ -9,6 +9,9 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   root: './bsdd_selection',
   base: './',
+  server: {
+    port: 3000,
+  },
   build: {
     outDir: "../dist/bsdd_selection",
     // assetsDir: '',

@@ -3,6 +3,7 @@ import BsddSearch from './lib';
 // MSAL imports
 import { PublicClientApplication } from '@azure/msal-browser';
 import { msalConfig } from './authConfig';
+import { IfcEntity } from '../../common/src/IfcData/ifc';
 
 export const msalInstance = new PublicClientApplication(msalConfig);
 
