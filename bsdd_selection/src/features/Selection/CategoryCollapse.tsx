@@ -1,4 +1,4 @@
-import { Accordion, ActionIcon, Text, Group, Indicator, Tooltip } from '@mantine/core';
+import { Accordion, ActionIcon, Text, Group, Indicator, Tooltip, ColorSwatch } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { IfcEntity } from '../../../../common/src/IfcData/ifc';
 import { ClassContractV1, ClassListItemContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
@@ -100,15 +100,12 @@ function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, 
     <Accordion.Item key={category} value={index}>
       <Accordion.Control>
         <Group justify="space-between" className="flexGroup">
-          <Indicator mx="sm" color={colorMap[categoryColor]} size={'1.8em'} />
+          <ColorSwatch   size={'1.5em'} color={colorMap[categoryColor]} >
+            <Text size='xs' c="white">{items.length}</Text>
+          </ColorSwatch>
           <div className="flexTextContainer">
             <Text className="truncate">{category.length > 0 ? category : t('No description')}</Text>
           </div>
-          <Tooltip label={t('Attach to type')}>
-            <ActionIcon radius={'xl'} onClick={() => bsddSearchClick()}>
-              <IconPencil size={20} />
-            </ActionIcon>
-          </Tooltip>
         </Group>
       </Accordion.Control>
       <Accordion.Panel mt="-xs" pl="xl">

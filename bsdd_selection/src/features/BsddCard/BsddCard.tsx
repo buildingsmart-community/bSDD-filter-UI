@@ -1,6 +1,6 @@
-import { ActionIcon, Group, HoverCard, Indicator, Text, Tooltip } from '@mantine/core';
+import { ActionIcon, ColorSwatch, Group, HoverCard, Indicator, Text, Tooltip } from '@mantine/core';
 import { IfcEntity } from '../../../../common/src/IfcData/ifc';
-import { IconPencil } from '@tabler/icons-react';
+import { IconNumber0Small, IconPencil } from '@tabler/icons-react';
 import { ClassContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -69,35 +69,35 @@ function BsddCard({ item: ifcEntity, bsddClass, index, setColor: addColor }: Bsd
   }
 
   return (
-    <HoverCard>
-      <HoverCard.Target>
-        <Group mt="xs" justify="space-between" className="flexGroup">
-          <Indicator color={colorMap[color]} size={'1.8em'} mx={'xs'} />
+    <Group mt="xs" justify="space-between" className="flexGroup">
+      <ColorSwatch size={'1.5em'} color={colorMap[color]}></ColorSwatch>
+      <HoverCard position="bottom-end" shadow="md">
+        <HoverCard.Target>
           <div className="flexTextContainer">
             <Text className="truncate">{ifcEntity.name}</Text>
           </div>
-          <Tooltip label={t('Attach to type')}>
-            <ActionIcon radius={'xl'} onClick={() => bsddSearchClick(ifcEntity)}>
-              <IconPencil size={20} />
-            </ActionIcon>
-          </Tooltip>
-        </Group>
-      </HoverCard.Target>
-      <HoverCard.Dropdown>
-        <Text>Validation per class:</Text>
-        {activeDictionaries.map((dictionary, index) => {
-          const status = activeClassificationStatuses[index];
-          return (
-            <Group key={dictionary.dictionaryUri} mt="xs" justify="space-between" className="flexGroup">
-              <Indicator mx="sm" color={colorMap[activeClassificationColors[index]]} size={'1.8em'} />
-              <div className="flexTextContainer">
-                <Text className="truncate">{dictionary.dictionaryName}</Text>
-              </div>
-            </Group>
-          );
-        })}
-      </HoverCard.Dropdown>
-    </HoverCard>
+        </HoverCard.Target>
+        <HoverCard.Dropdown>
+          <Text>Validation per class:</Text>
+          {activeDictionaries.map((dictionary, index) => {
+            const status = activeClassificationStatuses[index];
+            return (
+              <Group key={dictionary.dictionaryUri} mt="xs" justify="space-between" className="flexGroup">
+                <ColorSwatch size={'1em'} color={colorMap[activeClassificationColors[index]]}></ColorSwatch>
+                <div className="flexTextContainer">
+                  <Text className="truncate">{dictionary.dictionaryName}</Text>
+                </div>
+              </Group>
+            );
+          })}
+        </HoverCard.Dropdown>
+      </HoverCard>
+      <Tooltip label={t('Attach to type')}>
+        <ActionIcon radius={'xl'} onClick={() => bsddSearchClick(ifcEntity)}>
+          <IconPencil size={20} />
+        </ActionIcon>
+      </Tooltip>
+    </Group>
   );
 }
 

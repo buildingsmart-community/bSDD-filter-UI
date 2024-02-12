@@ -114,7 +114,7 @@ function Selection({}: SelectionProps) {
 
   return (
     <Tabs.Panel value={'koppelen'}>
-      <Accordion chevronPosition="left" multiple>
+      <Accordion chevronPosition="left">
         {Object.entries(groupedEntities).map(([category, items], index) => (
           <CategoryCollapse
             bsddEnvironmentName={bsddApiEnvironment}
