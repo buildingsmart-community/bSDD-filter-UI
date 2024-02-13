@@ -23,14 +23,16 @@ interface CategoryCollapseProps {
 function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, index }: CategoryCollapseProps) {
   const { t } = useTranslation();
   const [bsddClass, setBsddClass] = useState<ClassContractV1>();
-  const [categoryColor, setCategoryColor] = useState<Color>('red');
-  const [colors, setColors] = useState<Color[]>(new Array(items.length).fill('red'));
+  const [categoryColor, setCategoryColor] = useState<Color>('grey');
+  const [colors, setColors] = useState<Color[]>(new Array(items.length).fill('grey'));
   const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironmentUri);
 
   function setColor(index: number, color: Color) {
-    const newColors = [...colors];
-    newColors[index] = color;
-    setColors(newColors);
+    setColors((prevColors) => {
+      const newColors = [...prevColors];
+      newColors[index] = color;
+      return newColors;
+    });
   }
 
   useEffect(() => {
@@ -72,7 +74,7 @@ function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, 
     } else if (colors.every((color) => color === 'green')) {
       setCategoryColor('green');
     }
-  }, [colors, setCategoryColor]);
+  }, [colors]);
 
   function determineBsddClass(category: string, bbbr: ClassListItemContractV1[]): ClassListItemContractV1 | false {
     // if none of the descriptions in data is the same as item.description, then color is red
@@ -100,8 +102,10 @@ function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, 
     <Accordion.Item key={category} value={index}>
       <Accordion.Control>
         <Group justify="space-between" className="flexGroup">
-          <ColorSwatch   size={'1.5em'} color={colorMap[categoryColor]} >
-            <Text size='xs' c="white">{items.length}</Text>
+          <ColorSwatch size={'1.5em'} color={colorMap[categoryColor]}>
+            <Text size="xs" c="white">
+              {items.length}
+            </Text>
           </ColorSwatch>
           <div className="flexTextContainer">
             <Text className="truncate">{category.length > 0 ? category : t('No description')}</Text>
@@ -116,7 +120,7 @@ function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, 
               bsddClass={bsddClass as ClassContractV1}
               key={index}
               index={index}
-              setColor={setColor}
+              setCardColor={setColor}
             />
           );
         })}

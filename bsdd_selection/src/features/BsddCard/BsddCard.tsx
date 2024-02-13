@@ -14,7 +14,7 @@ interface BsddCardProps {
   item: IfcEntity;
   bsddClass: ClassContractV1;
   index: number;
-  setColor: (index: number, color: Color) => void;
+  setCardColor: (index: number, color: Color) => void;
 }
 
 /**
@@ -22,31 +22,38 @@ interface BsddCardProps {
  *
  * @param item - The bSDD entity to display.
  * @param bsddClass - The bSDD class associated with the entity.
- * @param setColor - A function to add color to the card.
+ * @param setCardColor - A function to add color to the card.
  * @returns The rendered card component.
  */
-function BsddCard({ item: ifcEntity, bsddClass, index, setColor: addColor }: BsddCardProps) {
+function BsddCard({ item: ifcEntity, bsddClass, index, setCardColor: setCategoryColor }: BsddCardProps) {
   const { t } = useTranslation();
   const activeDictionaries = useAppSelector(selectActiveDictionaries);
-  const [color, setColor] = useState<Color>('red');
+  const [cardColor, setCardColor] = useState<Color>('grey');
   const [activeClassificationStatuses, setActiveClassificationStatuses] = useState<ClassificationStatus[]>([]);
   const [activeClassificationColors, setActiveClassificationColors] = useState<Color[]>([]);
 
+  /**
+   * Updates the color of the card and the outer category.
+   *
+   * @param {Color} color - The new color to be set for the card and the outer category.
+   */
+  function updateColor(color: Color) {
+    setCardColor(color);
+    setCategoryColor(index, color);
+  }
+
   // Set the color of the card based on the status of the active classification statuses
   useEffect(() => {
+    console.log(ifcEntity?.name);
+    console.log('activeClassificationStatuses', activeClassificationStatuses);
     if (activeClassificationStatuses.every((it) => it !== null)) {
-      setColor('green');
+      updateColor('green');
     } else if (activeClassificationStatuses.some((it) => it !== null)) {
-      setColor('orange');
+      updateColor('orange');
     } else {
-      setColor('red');
+      updateColor('red');
     }
   }, [activeClassificationStatuses]);
-
-  // update the color of the outer category based on the color of the inner cards
-  useEffect(() => {
-    addColor(index, color);
-  }, [color]);
 
   // set the colors for every active dictionary when they change based on the status of the active classification statuses
   useEffect(() => {
@@ -70,7 +77,7 @@ function BsddCard({ item: ifcEntity, bsddClass, index, setColor: addColor }: Bsd
 
   return (
     <Group mt="xs" justify="space-between" className="flexGroup">
-      <ColorSwatch size={'1.5em'} color={colorMap[color]}></ColorSwatch>
+      <ColorSwatch size={'1.5em'} color={colorMap[cardColor]}></ColorSwatch>
       <HoverCard position="bottom-end" shadow="md">
         <HoverCard.Target>
           <div className="flexTextContainer">
