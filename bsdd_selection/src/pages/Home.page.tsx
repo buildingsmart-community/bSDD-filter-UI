@@ -1,6 +1,6 @@
 import { Container, Tabs } from '@mantine/core';
 import { useEffect } from 'react';
-import { BsddBridgeData } from '../../../common/src/IfcData/bsddBridgeData';
+import { BsddBridgeData, BsddSettings } from '../../../common/src/IfcData/bsddBridgeData';
 import { mockData } from '../../../common/src/IfcData/mockData';
 import Settings from '../features/Settings/Settings';
 import { useTranslation } from 'react-i18next';
@@ -23,17 +23,38 @@ export function HomePage() {
     }
   }, [bsddApiEnvironment, dispatch]);
 
+  // useEffect(() => {
+  //   const { settings, ifcData } = mockData;
+  //   dispatch(setSettings(settings));
+  //   dispatch(setValidatedIfcData(ifcData));
+  // }, [dispatch]);
+
+
+  // Initial settings load
   useEffect(() => {
-    const { settings, ifcData } = mockData;
-    dispatch(setSettings(settings));
-    dispatch(setValidatedIfcData(ifcData));
-  }, [dispatch]);
+    const loadSettings = async () => {
+      // @ts-ignore
+      if (window?.bsddBridge) {
+        // @ts-ignore
+        const settings = await window.bsddBridge.loadSettings();
+        console.log('settings', settings);
+        dispatch(setSettings(JSON.parse(settings)));
+      }
+    };
+
+    loadSettings();
+  }, []);
 
   // @ts-ignore
-  window.updateSelection = (inputSelection: BsddBridgeData) => {
-    const { settings, ifcData } = inputSelection;
+  window.updateSelection = (ifcEntities: IfcEntity[]) => {
+    console.log('updateSelection', ifcEntities);
+    dispatch(setIfcData(ifcEntities));
+  };
+
+  // @ts-ignore
+  window.updateSettings = (settings: BsddSettings) => {
+    console.log('updateSettings', settings);
     dispatch(setSettings(settings));
-    dispatch(setIfcData(ifcData));
   };
 
   // useEffect(() => {
