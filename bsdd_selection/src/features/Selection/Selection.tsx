@@ -92,7 +92,7 @@ function Selection({}: SelectionProps) {
   }, []);
 
   useEffect(() => {
-    if (!mainDictionary) return;
+    if (!bsddApiEnvironment || !mainDictionary) return;
     const api = new BsddApi(bsddApiEnvironment);
     api.api
       .dictionaryV1ClassesList({ Uri: mainDictionary.dictionaryUri })
@@ -117,6 +117,7 @@ function Selection({}: SelectionProps) {
       <Accordion chevronPosition="left">
         {Object.entries(groupedEntities).map(([category, items], index) => (
           <CategoryCollapse
+            key={category}
             bsddEnvironmentName={bsddApiEnvironment}
             category={category}
             items={items}

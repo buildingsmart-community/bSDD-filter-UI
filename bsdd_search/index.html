@@ -16,7 +16,7 @@
         console.log(ifcProduct);
 
         // @ts-ignore
-        bsddBridge.save(JSON.stringify(ifcProduct)).then(function (actualResult) {
+        window?.bsddBridge?.save(JSON.stringify(ifcProduct)).then(function (actualResult) {
           console.log('Sent to Revit', actualResult);
         });
       }

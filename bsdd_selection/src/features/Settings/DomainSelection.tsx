@@ -39,7 +39,7 @@ function DomainSelection({ id }: DomainSelectionProps) {
 
   // Set bsdd dictionary options for use in select
   useEffect(() => {
-    setBsddDictionaryOptions(bsddDictionaries.map((item) => ({ value: item.uri, label: item.name })));
+    setBsddDictionaryOptions(Object.values(bsddDictionaries).map((item) => ({ value: item.uri, label: item.name })));
   }, [bsddDictionaries, setBsddDictionaryOptions]);
 
   // Set filter dictionary options for use in select
@@ -51,9 +51,9 @@ function DomainSelection({ id }: DomainSelectionProps) {
 
   // Change main dictionary
   const changeMainDictionaryOption = (selectedMainDictionaryUri: string | null) => {
-    console.log(selectedMainDictionaryUri);
-    console.log(bsddDictionaryOptions);
-    const selectedMainDictionary = bsddDictionaries.find((item) => item.uri === selectedMainDictionaryUri);
+    const selectedMainDictionary = Object.values(bsddDictionaries).find(
+      (item) => item.uri === selectedMainDictionaryUri,
+    );
     if (selectedMainDictionary) {
       const oldValues = [];
       if (mainDictionary) {
@@ -65,14 +65,10 @@ function DomainSelection({ id }: DomainSelectionProps) {
 
   // Change filter dictionaries list
   const changeFilterDictionaries = (selectedFilterDictionaryUris: string[]) => {
-    console.log(selectedFilterDictionaryUris);
-    const newFilterDictionaries = bsddDictionaries
+    const newFilterDictionaries = Object.values(bsddDictionaries)
       .filter((item) => selectedFilterDictionaryUris.includes(item.uri))
       .map((item) => convertToBsddDictionary(item, filterDictionaries));
-    console.log(filterDictionaries);
-    console.log(newFilterDictionaries);
     dispatch(setFilterDictionaries(newFilterDictionaries));
-    console.log(filterDictionaries);
   };
 
   return (
@@ -100,7 +96,6 @@ function DomainSelection({ id }: DomainSelectionProps) {
           label={t('Selection filter dictionaries')}
           value={filterDictionaryOptions.map((item) => item.value)}
           onChange={(value) => {
-            console.log(value);
             changeFilterDictionaries(value);
           }}
           placeholder="Select filter dictionaries"

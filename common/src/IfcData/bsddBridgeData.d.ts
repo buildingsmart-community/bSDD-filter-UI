@@ -1,5 +1,4 @@
-import {IfcEntity} from "./ifc";
-
+import { IfcEntity } from './ifc';
 
 // bSDD API environments:
 // - test: 'https://test.bsdd.buildingsmart.org'
@@ -17,14 +16,14 @@ export interface BsddDictionary {
 }
 
 export interface BsddSettings {
-  bsddApiEnvironment: string = 'production'; // default 'production'
+  bsddApiEnvironment: string; // default 'production'
   mainDictionary: BsddDictionary; // Uri
   filterDictionaries: BsddDictionary[]; // Uri[]
   language: string;
 }
 
 export interface BsddBridgeData {
-  name?: string;
+  name?: string | null;
   settings: BsddSettings;
   ifcData: IfcEntity[];
 }

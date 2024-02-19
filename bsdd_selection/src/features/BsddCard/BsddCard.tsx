@@ -44,8 +44,6 @@ function BsddCard({ item: ifcEntity, bsddClass, index, setCardColor: setCategory
 
   // Set the color of the card based on the status of the active classification statuses
   useEffect(() => {
-    console.log(ifcEntity?.name);
-    console.log('activeClassificationStatuses', activeClassificationStatuses);
     if (activeClassificationStatuses.every((it) => it !== null)) {
       updateColor('green');
     } else if (activeClassificationStatuses.some((it) => it !== null)) {
@@ -72,7 +70,7 @@ function BsddCard({ item: ifcEntity, bsddClass, index, setCardColor: setCategory
     const ifcEntityJson = JSON.stringify(ifcProduct);
 
     // @ts-ignore
-    bsddBridge.bsddSearch(ifcEntityJson);
+    window?.bsddBridge?.bsddSearch(ifcEntityJson);
   }
 
   return (

@@ -13,7 +13,7 @@ interface GeneralSettingsProps {
 function GeneralSettings({ id }: GeneralSettingsProps) {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const bsddApiEnvironment = useAppSelector((state: RootState) => state.settings.bddApiEnvironment);
+  const bsddApiEnvironment = useAppSelector((state: RootState) => state.settings.bsddApiEnvironment);
 
   // Change bsdd environment
   const changeBsddApiEnvironment = (environmentName: string | null) => {

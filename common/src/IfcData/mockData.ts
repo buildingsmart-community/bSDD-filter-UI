@@ -7,7 +7,7 @@ export const mockData: BsddBridgeData = {
       dictionaryName: 'Basis bouwproducten',
       parameterName: 'bsdd/digibase/basisbouwproducten',
       parameterId: '14762b7f-3c15-468b-8dad-1f514ff90dc2',
-      parameterMapping: 'description',
+      parameterMapping: 'Description',
     },
     filterDictionaries: [
       {
@@ -22,100 +22,12 @@ export const mockData: BsddBridgeData = {
         dictionaryName: 'DigiBase Demo NL-SfB tabel 1',
         parameterName: 'bsdd/digibase/nlsfb',
         parameterId: 'f0c64040-e2c8-4e91-8753-4ab324599edb ',
-        parameterMapping: 'assemblycode',
+        parameterMapping: 'Assembly Code',
       },
     ],
     language: 'NL',
   },
   ifcData: [
-    {
-      type: 'IfcSlab',
-      name: 'Floor: 23_FL_AT_breedplaatvloer_260 (C35/45)',
-      description: 'breedplaatvloer',
-      predefinedType: 'FLOOR',
-      hasAssociations: [
-        {
-          type: 'IfcClassificationReference',
-          name: '23.21 vloeren; constructief, vrijdragende vloeren',
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/23.21',
-          identification: '23.21',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
-          },
-        },
-        {
-          type: 'IfcClassificationReference',
-          name: 'Floor',
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcSlabFLOOR',
-          identification: 'IfcSlabFLOOR',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'IFC',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-        },
-        {
-          type: 'IfcClassificationReference',
-          name: 'breedplaatvloer',
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/breedplaatvloer',
-          identification: 'breedplaatvloer',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'Basis bouwproducten',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
-          },
-        },
-        {
-          type: 'IfcMaterial',
-          name: 'beton generiek',
-          description: 'https://identifier.buildingsmart.org/uri/bimloket/naakt/0.1/class/betongeneriek',
-        },
-      ],
-    },
-    {
-      type: 'IfcSlab',
-      name: 'Floor: 23_FL_AT_breedplaatvloer_200 (C35/45)',
-      description: 'breedplaatvloer',
-      predefinedType: 'FLOOR',
-    },
-    {
-      type: 'IfcSlab',
-      name: 'Floor: 23_FL_AT_breedplaatvloer_200 (C35/45)',
-      description: 'breedplaatvloer',
-      predefinedType: 'FLOOR',
-    },
-    {
-      type: 'IfcSlab',
-      name: 'Floor: 23_FL_AT_breedplaatvloer_400 (C35/45) (oranje)',
-      description: 'breedplaatvloer',
-      predefinedType: 'FLOOR',
-      hasAssociations: [
-        {
-          type: 'IfcClassificationReference',
-          name: '23.21 vloeren; constructief, vrijdragende vloeren',
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/23.21',
-          identification: '23.21',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
-          },
-        },
-        {
-          type: 'IfcMaterial',
-          name: 'beton generiek',
-          description: 'https://identifier.buildingsmart.org/uri/bimloket/naakt/0.1/class/betongeneriek',
-        },
-      ],
-    },
-    {
-      type: 'IfcSlab',
-      name: 'Kanaalplaatvloer 200 VBI',
-      description: 'kanaalplaatvloer',
-      predefinedType: 'FLOOR',
-    },
     {
       type: 'IfcObject',
       name: 'NLRS_00_SI_nulpunt_vws - nulpunt',
@@ -123,37 +35,34 @@ export const mockData: BsddBridgeData = {
       tag: '307327',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/Projectnulpunt',
-          identification: 'Projectnulpunt',
+          identification: 'Project nulpunt',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'Project nulpunt',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcObject',
           identification: 'IfcObject',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcObject',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/0.0',
           identification: '0.0',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: '',
+          name: '0.0',
         },
       ],
     },
@@ -164,37 +73,24 @@ export const mockData: BsddBridgeData = {
       tag: '798190',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/bakgoot',
           identification: 'bakgoot',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'bakgoot',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcWasteTerminal',
           identification: 'IfcWasteTerminal',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcWasteTerminal',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/',
-          identification: '',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
-          },
-          type: 'IfcClassificationReference',
-          name: '',
         },
       ],
     },
@@ -205,37 +101,34 @@ export const mockData: BsddBridgeData = {
       tag: '798257',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/beugelbakgoot',
-          identification: 'beugelbakgoot',
+          identification: 'beugel bakgoot',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'beugel bakgoot',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcWasteTerminal',
           identification: 'IfcWasteTerminal',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcWasteTerminal',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/52.10',
           identification: '52.10',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'afvoeren; regenwater, algemeen (verzamelniveau)',
+          name: '52.10',
         },
       ],
     },
@@ -246,26 +139,34 @@ export const mockData: BsddBridgeData = {
       tag: '798256',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/bakgoot',
           identification: 'bakgoot',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'bakgoot',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcWasteTerminal',
           identification: 'IfcWasteTerminal',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcWasteTerminal',
+        },
+        {
+          identification: '52.10',
+          referencedSource: {
+            type: 'IfcClassification',
+            editionDate: '0001-01-01T00:00:00',
+            location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
+          },
+          type: 'IfcClassificationReference',
+          name: '52.10',
         },
       ],
     },
@@ -275,35 +176,24 @@ export const mockData: BsddBridgeData = {
       tag: '798259',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/hwabakgoot',
-          identification: 'hwabakgoot',
+          identification: 'hwa bakgoot',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'hwa bakgoot',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'IFC',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/52.10',
           identification: '52.10',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'afvoeren; regenwater, algemeen (verzamelniveau)',
+          name: '52.10',
         },
       ],
     },
@@ -313,35 +203,24 @@ export const mockData: BsddBridgeData = {
       tag: '798258',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/bakgooteindstuk',
-          identification: 'bakgooteindstuk',
+          identification: 'bakgoot eindstuk',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'bakgoot eindstuk',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'IFC',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/52.10',
           identification: '52.10',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'afvoeren; regenwater, algemeen (verzamelniveau)',
+          name: '52.10',
         },
       ],
     },
@@ -352,38 +231,34 @@ export const mockData: BsddBridgeData = {
       tag: '692064',
       hasAssociations: [
         {
-          location:
-            'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/gevelafwerking_baksteen',
           identification: 'gevelafwerking_baksteen',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'gevelafwerking_baksteen',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcWall',
           identification: 'IfcWall',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcWall',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/21.12',
           identification: '21.12',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'buitenwanden; niet constructief, spouwwanden',
+          name: '21.12',
         },
       ],
     },
@@ -394,37 +269,24 @@ export const mockData: BsddBridgeData = {
       tag: '692066',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/betonprefab150mm',
-          identification: 'betonprefab150mm',
+          identification: 'beton prefab 150mm',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'beton prefab 150mm',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcWall',
           identification: 'IfcWall',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcWall',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/',
-          identification: '',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
-          },
-          type: 'IfcClassificationReference',
-          name: '',
         },
       ],
     },
@@ -435,38 +297,24 @@ export const mockData: BsddBridgeData = {
       tag: '692068',
       hasAssociations: [
         {
-          location:
-            'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/isolatieMupanUltraXs138mm',
-          identification: 'isolatieMupanUltraXs138mm',
+          identification: 'isolatie Mupan Ultra Xs 138mm',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'isolatie Mupan Ultra Xs 138mm',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcWall',
           identification: 'IfcWall',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcWall',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/',
-          identification: '',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
-          },
-          type: 'IfcClassificationReference',
-          name: '',
         },
       ],
     },
@@ -477,38 +325,34 @@ export const mockData: BsddBridgeData = {
       tag: '692070',
       hasAssociations: [
         {
-          location:
-            'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/gevel-sparingsmakerspouwwand',
-          identification: 'gevel-sparingsmakerspouwwand',
+          identification: 'gevel-sparingsmaker spouwwand',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'gevel-sparingsmaker spouwwand',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcElementAssembly',
           identification: 'IfcElementAssembly',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcElementAssembly',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/31',
           identification: '31',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'Buitenwandopeningen',
+          name: '31',
         },
       ],
     },
@@ -519,38 +363,34 @@ export const mockData: BsddBridgeData = {
       tag: '693977',
       hasAssociations: [
         {
-          location:
-            'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/gevel-sparingsmakerbladsparing',
-          identification: 'gevel-sparingsmakerbladsparing',
+          identification: 'gevel-sparingsmaker bladsparing',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'gevel-sparingsmaker bladsparing',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcElementAssembly',
           identification: 'IfcElementAssembly',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcElementAssembly',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/31',
           identification: '31',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'Buitenwandopeningen',
+          name: '31',
         },
       ],
     },
@@ -561,38 +401,34 @@ export const mockData: BsddBridgeData = {
       tag: '693976',
       hasAssociations: [
         {
-          location:
-            'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/gevel-sparingsmakerbladsparing',
-          identification: 'gevel-sparingsmakerbladsparing',
+          identification: 'gevel-sparingsmaker bladsparing',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'gevel-sparingsmaker bladsparing',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcElementAssembly',
           identification: 'IfcElementAssembly',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcElementAssembly',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/31',
           identification: '31',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'Buitenwandopeningen',
+          name: '31',
         },
       ],
     },
@@ -603,38 +439,34 @@ export const mockData: BsddBridgeData = {
       tag: '693978',
       hasAssociations: [
         {
-          location:
-            'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/gevel-sparingsmakerbladsparing',
-          identification: 'gevel-sparingsmakerbladsparing',
+          identification: 'gevel-sparingsmaker bladsparing',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'gevel-sparingsmaker bladsparing',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcElementAssembly',
           identification: 'IfcElementAssembly',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcElementAssembly',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/31',
           identification: '31',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'Buitenwandopeningen',
+          name: '31',
         },
       ],
     },
@@ -645,38 +477,24 @@ export const mockData: BsddBridgeData = {
       tag: '693969',
       hasAssociations: [
         {
-          location:
-            'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/gevelsparingsmakeromkaderingbladsparingbuiten',
-          identification: 'gevelsparingsmakeromkaderingbladsparingbuiten',
+          identification: 'gevelsparingsmaker omkadering bladsparing buiten',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'gevelsparingsmaker omkadering bladsparing buiten',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcElementAssembly',
           identification: 'IfcElementAssembly',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcElementAssembly',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/',
-          identification: '',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
-          },
-          type: 'IfcClassificationReference',
-          name: '',
         },
       ],
     },
@@ -686,35 +504,14 @@ export const mockData: BsddBridgeData = {
       tag: '693963',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/ISRleeg',
-          identification: 'ISRleeg',
+          identification: 'ISR leeg',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'ISR leeg',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'IFC',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/',
-          identification: '',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
-          },
-          type: 'IfcClassificationReference',
-          name: '',
         },
       ],
     },
@@ -724,25 +521,14 @@ export const mockData: BsddBridgeData = {
       tag: '694001',
       hasAssociations: [
         {
-          location: 'https://www.volkerwessels.nl',
           identification: '? ',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'BIM Basis Objecten',
-            location: 'https://www.volkerwessels.nl',
+            editionDate: '0001-01-01T00:00:00',
+            location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: '? ',
-        },
-        {
-          location: 'https://search-test.bsdd.buildingsmart.org/uri/digibase/bim-basis-objecten',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
-            location: 'https://search-test.bsdd.buildingsmart.org/uri/digibase/bim-basis-objecten',
-          },
-          type: 'IfcClassificationReference',
-          name: '',
         },
       ],
     },
@@ -752,35 +538,14 @@ export const mockData: BsddBridgeData = {
       tag: '693973',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/?',
-          identification: '?',
+          identification: '? ',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: '? ',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'IFC',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/',
-          identification: '',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
-          },
-          type: 'IfcClassificationReference',
-          name: '',
         },
       ],
     },
@@ -790,35 +555,14 @@ export const mockData: BsddBridgeData = {
       tag: '693982',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/?',
-          identification: '?',
+          identification: '? ',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: '? ',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'IFC',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/',
-          identification: '',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
-          },
-          type: 'IfcClassificationReference',
-          name: '',
         },
       ],
     },
@@ -828,35 +572,14 @@ export const mockData: BsddBridgeData = {
       tag: '693980',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/?',
-          identification: '?',
+          identification: '? ',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: '? ',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'IFC',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/',
-          identification: '',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
-          },
-          type: 'IfcClassificationReference',
-          name: '',
         },
       ],
     },
@@ -866,35 +589,14 @@ export const mockData: BsddBridgeData = {
       tag: '693981',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/?',
-          identification: '?',
+          identification: '? ',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: '? ',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'IFC',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/',
-          identification: '',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
-          },
-          type: 'IfcClassificationReference',
-          name: '',
         },
       ],
     },
@@ -904,35 +606,24 @@ export const mockData: BsddBridgeData = {
       tag: '693960',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/?',
-          identification: '?',
+          identification: '? ',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: '? ',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'IFC',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/31.20',
           identification: '31.20',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'buitenwandopeningen; gevuld met ramen, algemeen (verzamelniveau)',
+          name: '31.20',
         },
       ],
     },
@@ -943,37 +634,34 @@ export const mockData: BsddBridgeData = {
       tag: '692071',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/JA01-00',
           identification: 'JA01-00',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'JA01-00',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcWindow',
           identification: 'IfcWindow',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcWindow',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/31.31',
           identification: '31.31',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'buitenwandopeningen; gevuld met deuren, draaideuren',
+          name: '31.31',
         },
       ],
     },
@@ -982,33 +670,14 @@ export const mockData: BsddBridgeData = {
       tag: '693992',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'Basis bouwproducten',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
-          },
-          type: 'IfcClassificationReference',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'IFC',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/31.25',
           identification: '31.25',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'buitenwandopeningen; gevuld met ramen, combinatieramen',
+          name: '31.25',
         },
       ],
     },
@@ -1018,36 +687,24 @@ export const mockData: BsddBridgeData = {
       tag: '693984',
       hasAssociations: [
         {
-          location:
-            'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/draairichtingraamkozijn',
-          identification: 'draairichtingraamkozijn',
+          identification: 'draairichting raamkozijn',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'draairichting raamkozijn',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'IFC',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/31.20',
           identification: '31.20',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'buitenwandopeningen; gevuld met ramen, algemeen (verzamelniveau)',
+          name: '31.20',
         },
       ],
     },
@@ -1057,35 +714,24 @@ export const mockData: BsddBridgeData = {
       tag: '693989',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/isolerendglas',
-          identification: 'isolerendglas',
+          identification: 'isolerend glas',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'isolerend glas',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'IFC',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/31.20',
           identification: '31.20',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'buitenwandopeningen; gevuld met ramen, algemeen (verzamelniveau)',
+          name: '31.20',
         },
       ],
     },
@@ -1095,36 +741,14 @@ export const mockData: BsddBridgeData = {
       tag: '798289',
       hasAssociations: [
         {
-          location:
-            'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/kanaalplaatvloer200mm',
-          identification: 'kanaalplaatvloer200mm',
+          identification: 'kanaalplaatvloer 200mm',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'kanaalplaatvloer 200mm',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'IFC',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/',
-          identification: '',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
-          },
-          type: 'IfcClassificationReference',
-          name: '',
         },
       ],
     },
@@ -1134,36 +758,14 @@ export const mockData: BsddBridgeData = {
       tag: '798292',
       hasAssociations: [
         {
-          location:
-            'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/dakpannenenpanlatten74mm',
-          identification: 'dakpannenenpanlatten74mm',
+          identification: 'dakpannen en panlatten 74mm',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'dakpannen en panlatten 74mm',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'IFC',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/',
-          identification: '',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
-          },
-          type: 'IfcClassificationReference',
-          name: '',
         },
       ],
     },
@@ -1174,37 +776,24 @@ export const mockData: BsddBridgeData = {
       tag: '798290',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/knieschot',
           identification: 'knieschot',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'knieschot',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcRoof',
           identification: 'IfcRoof',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcRoof',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/',
-          identification: '',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
-          },
-          type: 'IfcClassificationReference',
-          name: '',
         },
       ],
     },
@@ -1215,37 +804,24 @@ export const mockData: BsddBridgeData = {
       tag: '798293',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/muurplaat',
           identification: 'muurplaat',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'muurplaat',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcRoof',
           identification: 'IfcRoof',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcRoof',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/',
-          identification: '',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
-          },
-          type: 'IfcClassificationReference',
-          name: '',
         },
       ],
     },
@@ -1256,75 +832,50 @@ export const mockData: BsddBridgeData = {
       tag: '798254',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/muurplaat',
           identification: 'muurplaat',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'muurplaat',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcRoof',
           identification: 'IfcRoof',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcRoof',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/27.22',
           identification: '27.22',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'daken; constructief, hellende daken',
+          name: '27.22',
         },
       ],
     },
     {
       name: 'NLRS_27_GM_FWB_muurplaat_rond_gen_vws - b=70 / h=140',
-      description: '',
       tag: '798191',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/',
-          identification: '',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'Basis bouwproducten',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
-          },
-          type: 'IfcClassificationReference',
-          name: '',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'IFC',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/27.22',
           identification: '27.22',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'daken; constructief, hellende daken',
+          name: '27.22',
         },
       ],
     },
@@ -1334,77 +885,41 @@ export const mockData: BsddBridgeData = {
       tag: '798287',
       hasAssociations: [
         {
-          location:
-            'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/cementdekvloer70mm',
-          identification: 'cementdekvloer70mm',
+          identification: 'cementdekvloer 70mm',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'cementdekvloer 70mm',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'IFC',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/',
-          identification: '',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
-          },
-          type: 'IfcClassificationReference',
-          name: '',
         },
       ],
     },
     {
       type: 'IfcSlab',
       name: 'Floor - NLRS_23_FL_LB_kanaalplaatvloer_geïsoleerd_320_gen_vws',
-      description: '',
       tag: '1003479',
       hasAssociations: [
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/',
-          identification: '',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'Basis bouwproducten',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
-          },
-          type: 'IfcClassificationReference',
-          name: '',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcSlab',
           identification: 'IfcSlab',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcSlab',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/21.21',
           identification: '21.21',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'buitenwanden; constructief, massieve wanden',
+          name: '21.21',
         },
       ],
     },
@@ -1415,38 +930,24 @@ export const mockData: BsddBridgeData = {
       tag: '798291',
       hasAssociations: [
         {
-          location:
-            'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/dak_hout_scharnierkap',
           identification: 'dak_hout_scharnierkap',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'dak_hout_scharnierkap',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcRoof',
           identification: 'IfcRoof',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcRoof',
-        },
-        {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/',
-          identification: '',
-          referencedSource: {
-            type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
-          },
-          type: 'IfcClassificationReference',
-          name: '',
         },
       ],
     },
@@ -1457,38 +958,34 @@ export const mockData: BsddBridgeData = {
       tag: '1010468',
       hasAssociations: [
         {
-          location:
-            'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/wand_hout_HSB_opbouw_ntb',
           identification: 'wand_hout_HSB_opbouw_ntb',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'wand_hout_HSB_opbouw_ntb',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcWall',
           identification: 'IfcWall',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcWall',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/22.20',
           identification: '22.20',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'binnenwanden; constructief, algemeen (verzamelniveau)',
+          name: '22.20',
         },
       ],
     },
@@ -1499,38 +996,34 @@ export const mockData: BsddBridgeData = {
       tag: '1013164',
       hasAssociations: [
         {
-          location:
-            'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/wand_gips_metalstud',
           identification: 'wand_gips_metalstud',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'wand_gips_metalstud',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcWall',
           identification: 'IfcWall',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcWall',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/22.20',
           identification: '22.20',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'binnenwanden; constructief, algemeen (verzamelniveau)',
+          name: '22.20',
         },
       ],
     },
@@ -1541,38 +1034,34 @@ export const mockData: BsddBridgeData = {
       tag: '1010313',
       hasAssociations: [
         {
-          location:
-            'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/deurkozijn_staal_bovenlicht_deurblad',
           identification: 'deurkozijn_staal_bovenlicht_deurblad',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'Basis bouwproducten',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
           name: 'deurkozijn_staal_bovenlicht_deurblad',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcDoor',
           identification: 'IfcDoor',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'IFC',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
           },
           type: 'IfcClassificationReference',
           name: 'IfcDoor',
         },
         {
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021/class/32.31',
           identification: '32.31',
           referencedSource: {
             type: 'IfcClassification',
-            name: 'DigiBase Demo NL-SfB tabel 1',
+            editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
           },
           type: 'IfcClassificationReference',
-          name: 'binnenwandopeningen; gevuld met deuren, draaideuren',
+          name: '32.31',
         },
       ],
     },

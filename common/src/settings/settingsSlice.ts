@@ -4,14 +4,14 @@ import { RootState } from '../../../bsdd_selection/src/app/store';
 import { bsddEnvironments } from '../BsddApi/BsddApiEnvironments';
 
 interface EntitiesState {
-  bddApiEnvironment: string;
+  bsddApiEnvironment: string | null;
   mainDictionary: BsddDictionary | null;
   filterDictionaries: BsddDictionary[];
   language: string;
 }
 
 const initialState: EntitiesState = {
-  bddApiEnvironment: 'production',
+  bsddApiEnvironment: null,
   mainDictionary: null,
   filterDictionaries: [],
   language: 'EN',
@@ -22,14 +22,13 @@ const settingsSlice = createSlice({
   initialState,
   reducers: {
     setSettings: (state, action: PayloadAction<BsddSettings>) => {
-      state.bddApiEnvironment = action.payload.bsddApiEnvironment;
+      state.bsddApiEnvironment = action.payload.bsddApiEnvironment;
       state.mainDictionary = action.payload.mainDictionary;
       state.filterDictionaries = action.payload.filterDictionaries;
       state.language = action.payload.language;
     },
     setBsddApiEnvironment: (state, action: PayloadAction<string>) => {
-      console.log('setBsddApiEnvironment', action.payload);
-      state.bddApiEnvironment = action.payload;
+      state.bsddApiEnvironment = action.payload;
     },
     setMainDictionary: (state, action: PayloadAction<BsddDictionary>) => {
       state.mainDictionary = action.payload;
@@ -43,7 +42,23 @@ const settingsSlice = createSlice({
   },
 });
 
-export const selectBsddApiEnvironmentUri = (state: RootState) => bsddEnvironments[state.settings.bddApiEnvironment];
+/**
+ * Selects the URI for the bSDD API environment from the Redux state.
+ *
+ * @param state - The Redux state.
+ * @returns The URI for the selected bSDD API environment, or null if no environment is selected.
+ */
+export const selectBsddApiEnvironmentUri = (state: RootState) => {
+  const environment = state.settings.bsddApiEnvironment;
+  return environment !== null ? bsddEnvironments[environment] : null;
+};
+
+/**
+ * Selects the active dictionaries from the Redux state.
+ *
+ * @param state - The root state object.
+ * @returns An array of active dictionaries.
+ */
 export const selectActiveDictionaries = createSelector(
   (state: RootState) => state.settings.mainDictionary,
   (state: RootState) => state.settings.filterDictionaries,

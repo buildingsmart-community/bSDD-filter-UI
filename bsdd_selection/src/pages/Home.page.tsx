@@ -5,9 +5,9 @@ import { mockData } from '../../../common/src/IfcData/mockData';
 import Settings from '../features/Settings/Settings';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { setIfcData } from '../../../common/src/IfcData/ifcDataSlice';
+import { setIfcData, setValidatedIfcData } from '../../../common/src/IfcData/ifcDataSlice';
 import { selectBsddApiEnvironmentUri, setSettings } from '../../../common/src/settings/settingsSlice';
-import { fetchDictionaries } from '../../../common/src/BsddApi/bsddSlice';
+import { fetchDictionaries, updateBsddApi } from '../../../common/src/BsddApi/bsddSlice';
 import Selection from '../features/Selection/Selection';
 
 export function HomePage() {
@@ -18,6 +18,7 @@ export function HomePage() {
   useEffect(() => {
     console.log('bsddApiEnvironment changed');
     if (bsddApiEnvironment) {
+      dispatch(updateBsddApi(bsddApiEnvironment));
       dispatch(fetchDictionaries(bsddApiEnvironment));
     }
   }, [bsddApiEnvironment, dispatch]);
@@ -25,7 +26,7 @@ export function HomePage() {
   useEffect(() => {
     const { settings, ifcData } = mockData;
     dispatch(setSettings(settings));
-    dispatch(setIfcData(ifcData));
+    dispatch(setValidatedIfcData(ifcData));
   }, [dispatch]);
 
   // @ts-ignore

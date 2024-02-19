@@ -12,7 +12,7 @@ import { useAppSelector } from '../../app/hooks';
 import { Color, colorMap } from '../../../../common/src/tools/colors';
 
 interface CategoryCollapseProps {
-  bsddEnvironmentName: string;
+  bsddEnvironmentName: string | null;
   category: string;
   opened: Record<string, boolean>;
   bbbr: ClassListItemContractV1[];
@@ -38,7 +38,7 @@ function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, 
   useEffect(() => {
     const found = determineBsddClass(category, bbbr);
 
-    if (found) {
+    if (bsddApiEnvironment && found) {
       const classContract = found as ClassContractV1;
       const api = new BsddApi(bsddApiEnvironment);
       api.api
@@ -49,7 +49,6 @@ function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, 
           includeClassRelations: true,
         })
         .then((response) => {
-          console.log('response', response);
           // If the response is not ok, throw an error
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

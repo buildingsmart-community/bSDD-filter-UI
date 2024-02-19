@@ -20,7 +20,7 @@ function Settings({}: SettingsProps) {
   const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironmentUri);
 
   useEffect(() => {
-    if (!mainDictionary) return;
+    if (!bsddApiEnvironment || !mainDictionary) return;
     const settings: BsddSettings = {
       bsddApiEnvironment: bsddApiEnvironment,
       mainDictionary: mainDictionary,
@@ -31,7 +31,7 @@ function Settings({}: SettingsProps) {
     console.log('Save settings', settings);
 
     // @ts-ignore
-    // bsddBridge.saveSettings(settings);
+    window?.bsddBridge?.saveSettings(JSON.stringify(settings));
   }, [bsddApiEnvironment, mainDictionary, filterDictionaries, language]);
 
   return (

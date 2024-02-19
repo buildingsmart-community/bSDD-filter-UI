@@ -33,7 +33,6 @@ function Search({ api, activeDomains, setActiveClassificationUri, accessToken }:
       };
       api.api.searchListV2List(queryParameters, params).then((response) => {
         const searchResult = response.data;
-        console.log(searchResult);
         if (searchResult.numberOfClassificationsFound) {
           const domains = response.data.domains;
           if (domains && domains[0] && domains[0].classifications) {
