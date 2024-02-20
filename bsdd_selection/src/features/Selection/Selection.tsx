@@ -5,8 +5,11 @@ import { IfcEntity } from '../../../../common/src/IfcData/ifc';
 import { BsddApi } from '../../../../common/src/BsddApi/BsddApi';
 import { ClassListItemContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
 import { useAppSelector } from '../../app/hooks';
-import { RootState } from '../../app/store';
-import { selectBsddApiEnvironmentUri } from '../../../../common/src/settings/settingsSlice';
+import {
+  selectBsddApiEnvironmentUri,
+  // selectLanguage,
+  selectMainDictionary,
+} from '../../../../common/src/settings/settingsSlice';
 import { selectIfcEntities } from '../../../../common/src/IfcData/ifcDataSlice';
 
 let CefSharp: any;
@@ -68,8 +71,9 @@ function groupEntitiesBy(array: IfcEntity[], property: keyof IfcEntity) {
 interface SelectionProps {}
 
 function Selection({}: SelectionProps) {
-  const mainDictionary = useAppSelector((state: RootState) => state.settings.mainDictionary);
+  const mainDictionary = useAppSelector(selectMainDictionary);
   const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironmentUri);
+  // const languageCode = useAppSelector(selectLanguage);
   const ifcEntities = useAppSelector(selectIfcEntities);
 
   const [opened, setOpened] = useState({});
@@ -95,7 +99,10 @@ function Selection({}: SelectionProps) {
     if (!bsddApiEnvironment || !mainDictionary) return;
     const api = new BsddApi(bsddApiEnvironment);
     api.api
-      .dictionaryV1ClassesList({ Uri: mainDictionary.dictionaryUri })
+      .dictionaryV1ClassesList({
+        Uri: mainDictionary.dictionaryUri,
+        // languageCode: languageCode || undefined
+      })
       .then((response) => {
         // If the response is not ok, throw an error
         if (!response.ok) {

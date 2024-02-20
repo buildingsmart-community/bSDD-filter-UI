@@ -1,6 +1,6 @@
-import { ActionIcon, ColorSwatch, Group, HoverCard, Indicator, Text, Tooltip } from '@mantine/core';
+import { ActionIcon, ColorSwatch, Group, HoverCard, Text, Tooltip } from '@mantine/core';
 import { IfcEntity } from '../../../../common/src/IfcData/ifc';
-import { IconNumber0Small, IconPencil } from '@tabler/icons-react';
+import { IconPencil } from '@tabler/icons-react';
 import { ClassContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

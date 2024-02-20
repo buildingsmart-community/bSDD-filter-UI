@@ -2,7 +2,11 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ClassContractV1, ClassListItemContractV1, DictionaryContractV1 } from './BsddApiBase';
 import { BsddApi } from './BsddApi';
 import { AppDispatch, RootState } from '../../../bsdd_selection/src/app/store';
-import { selectBsddApiEnvironmentUri } from '../settings/settingsSlice';
+import {
+  selectBsddApiEnvironmentUri,
+  // selectLanguage
+} from '../settings/settingsSlice';
+// import { useAppSelector } from '../../../bsdd_selection/src/app/hooks';
 
 const CLASS_ITEM_PAGE_SIZE = 500;
 const DICTIONARIES_PAGE_SIZE = 500;
@@ -84,6 +88,7 @@ const bsddSlice = createSlice({
  */
 export const fetchClass = createAsyncThunk('bsdd/fetchClass', async (uri: string, { getState, dispatch }) => {
   const state = getState() as RootState;
+  // const languageCode = useAppSelector(selectLanguage);
   if (state.bsdd.classes[uri]) {
     return state.bsdd.classes[uri];
   }
@@ -97,6 +102,7 @@ export const fetchClass = createAsyncThunk('bsdd/fetchClass', async (uri: string
     includeClassProperties: true,
     includeChildClassReferences: true,
     includeClassRelations: true,
+    // languageCode: languageCode || undefined,
   });
 
   if (!response.ok) {
@@ -163,13 +169,18 @@ export const fetchDictionaries = createAsyncThunk(
  * @returns The fetched dictionary class data.
  * @throws Error if there is an HTTP error.
  */
-async function fetchDictionaryClassData(api: BsddApi<any>, location: string, offset: number) {
+async function fetchDictionaryClassData(
+  api: BsddApi<any>,
+  location: string,
+  offset: number,
+  // languageCode: string | null,
+) {
   const response = await api.api.dictionaryV1ClassesList({
     Uri: location,
     UseNestedClasses: false,
     Limit: CLASS_ITEM_PAGE_SIZE,
     Offset: offset,
-    languageCode: 'en',
+    // languageCode: languageCode || undefined,
   });
 
   if (!response.ok) {
@@ -190,6 +201,7 @@ export const fetchDictionaryClasses = createAsyncThunk(
   'bsdd/fetchDictionaryClasses',
   async (location: string, { getState, dispatch }) => {
     const state = getState() as RootState;
+    // const languageCode = useAppSelector(selectLanguage);
 
     // If the classes for this location are already in the state, return them
     if (state.bsdd.dictionaryClasses[location]) {
@@ -214,7 +226,7 @@ export const fetchDictionaryClasses = createAsyncThunk(
       let totalCount: number | null | undefined;
 
       while (true) {
-        const data = await fetchDictionaryClassData(api, location, offset);
+        const data = await fetchDictionaryClassData(api, location, offset); //, languageCode);
         const newClasses = data.classes ?? [];
         classes.push(...newClasses);
 
@@ -244,6 +256,7 @@ export const fetchDictionaryClasses = createAsyncThunk(
 );
 
 export const selectDictionaryClasses = (state: RootState, location: string) => state.bsdd.dictionaryClasses[location];
+export const selectBsddDictionaries = (state: RootState) => state.bsdd.dictionaries;
 
 export const { resetState } = bsddSlice.actions;
 

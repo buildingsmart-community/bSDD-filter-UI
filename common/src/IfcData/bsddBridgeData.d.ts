@@ -16,10 +16,10 @@ export interface BsddDictionary {
 }
 
 export interface BsddSettings {
-  bsddApiEnvironment: string; // default 'production'
-  mainDictionary: BsddDictionary; // Uri
+  bsddApiEnvironment: string | null; // default 'production'
+  mainDictionary: BsddDictionary | null; // Uri
   filterDictionaries: BsddDictionary[]; // Uri[]
-  language: string;
+  language: string | null;
 }
 
 export interface BsddBridgeData {

@@ -7,7 +7,7 @@ interface EntitiesState {
   bsddApiEnvironment: string | null;
   mainDictionary: BsddDictionary | null;
   filterDictionaries: BsddDictionary[];
-  language: string;
+  language: string | null;
 }
 
 const initialState: EntitiesState = {
@@ -66,6 +66,12 @@ export const selectActiveDictionaries = createSelector(
     mainDictionary ? [mainDictionary, ...filterDictionaries] : filterDictionaries,
 );
 
+export const selectMainDictionary = (state: RootState) => state.settings.mainDictionary;
+export const selectFilterDictionaries = (state: RootState) => state.settings.filterDictionaries;
+export const selectLanguage = (state: RootState) => state.settings.language;
+export const selectBsddApiEnvironment = (state: RootState) => state.settings.bsddApiEnvironment;
+
 export const { setSettings, setBsddApiEnvironment, setMainDictionary, setFilterDictionaries, setLanguage } =
   settingsSlice.actions;
+
 export const settingsReducer = settingsSlice.reducer;

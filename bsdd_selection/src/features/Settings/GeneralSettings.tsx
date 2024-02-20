@@ -2,23 +2,22 @@ import { Text, Select, Space, Title, Accordion } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 import LanguageSelect from './LanguageSelect';
-import { setBsddApiEnvironment } from '../../../../common/src/settings/settingsSlice';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { RootState } from '../../app/store';
+import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
 
 interface GeneralSettingsProps {
   id: number;
+  settings: BsddSettings | undefined;
+  setSettings: (settings: BsddSettings) => void;
+  setUnsavedChanges: (unsavedChanges: boolean) => void;
 }
 
-function GeneralSettings({ id }: GeneralSettingsProps) {
-  const dispatch = useAppDispatch();
+function GeneralSettings({ id, settings, setSettings, setUnsavedChanges }: GeneralSettingsProps) {
   const { t } = useTranslation();
-  const bsddApiEnvironment = useAppSelector((state: RootState) => state.settings.bsddApiEnvironment);
 
-  // Change bsdd environment
   const changeBsddApiEnvironment = (environmentName: string | null) => {
-    if (!environmentName) return;
-    dispatch(setBsddApiEnvironment(environmentName));
+    if (!environmentName || !settings) return;
+    setSettings({ ...settings, bsddApiEnvironment: environmentName });
+    setUnsavedChanges(true);
   };
 
   return (
@@ -30,11 +29,12 @@ function GeneralSettings({ id }: GeneralSettingsProps) {
         </Text>
       </Accordion.Control>
       <Accordion.Panel>
-        <LanguageSelect /> <Space h="xs" />
+        <LanguageSelect settings={settings} setSettings={setSettings} setUnsavedChanges={setUnsavedChanges} />{' '}
+        <Space h="xs" />
         <Select
           label={t('bSDD environment')}
           data={['production', 'test']}
-          value={bsddApiEnvironment}
+          value={settings?.bsddApiEnvironment}
           placeholder="Select an option"
           onChange={changeBsddApiEnvironment}
         />

@@ -1,45 +1,36 @@
 import { Accordion, Text, TextInput, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { RootState } from '../../app/store';
-import {
-  selectActiveDictionaries,
-  setFilterDictionaries,
-  setMainDictionary,
-} from '../../../../common/src/settings/settingsSlice';
+import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
 
 interface ParameterMappingProps {
   id: number;
+  settings: BsddSettings | undefined;
+  setSettings: (settings: BsddSettings) => void;
+  setUnsavedChanges: (unsavedChanges: boolean) => void;
 }
 
-function ParameterMapping({ id }: ParameterMappingProps) {
-  const dispatch = useAppDispatch();
-
+function ParameterMapping({ id, settings, setSettings, setUnsavedChanges }: ParameterMappingProps) {
   const { t } = useTranslation();
-  const mainDictionary = useAppSelector((state: RootState) => state.settings.mainDictionary);
-  const filterDictionaries = useAppSelector((state: RootState) => state.settings.filterDictionaries);
-  const activeDictionaries = useAppSelector(selectActiveDictionaries);
+  const { mainDictionary, filterDictionaries } = settings || { mainDictionary: null, filterDictionaries: [] };
+  const activeDictionaries = mainDictionary ? [mainDictionary, ...filterDictionaries] : filterDictionaries;
 
   const handleInputChange = (dictionaryUri: string, newParameterMapping: string) => {
-    // Find the dictionary in mainDictionary
-    if (mainDictionary?.dictionaryUri === dictionaryUri) {
-      // Dispatch an action to update it in mainDictionary
-      dispatch(setMainDictionary({ ...mainDictionary, parameterMapping: newParameterMapping }));
-      return;
+    if (!settings) return;
+    let newSettings = { ...settings };
+    if (newSettings.mainDictionary?.dictionaryUri === dictionaryUri) {
+      const mainDictionary = { ...newSettings.mainDictionary, parameterMapping: newParameterMapping };
+      newSettings.mainDictionary = mainDictionary;
+    } else {
+      newSettings.filterDictionaries = newSettings.filterDictionaries.map((dictionary) => {
+        if (dictionary.dictionaryUri === dictionaryUri) {
+          return { ...dictionary, parameterMapping: newParameterMapping };
+        }
+        return dictionary;
+      });
     }
-
-    // Dispatch an action to update it in filterDictionaries
-    dispatch(
-      setFilterDictionaries(
-        filterDictionaries.map((dictionary) => {
-          if (dictionary.dictionaryUri === dictionaryUri) {
-            return { ...dictionary, parameterMapping: newParameterMapping };
-          }
-          return dictionary;
-        }),
-      ),
-    );
+    setSettings(newSettings);
+    setUnsavedChanges(true);
   };
 
   return (

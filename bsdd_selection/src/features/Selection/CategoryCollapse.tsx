@@ -1,13 +1,15 @@
-import { Accordion, ActionIcon, Text, Group, Indicator, Tooltip, ColorSwatch } from '@mantine/core';
+import { Accordion, Text, Group, ColorSwatch } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { IfcEntity } from '../../../../common/src/IfcData/ifc';
 import { ClassContractV1, ClassListItemContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
 import BsddCard from '../BsddCard/BsddCard';
 import { BsddApi } from '../../../../common/src/BsddApi/BsddApi';
-import { IconPencil } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import '../../../../common/src/theme/styles.css';
-import { selectBsddApiEnvironmentUri } from '../../../../common/src/settings/settingsSlice';
+import {
+  selectBsddApiEnvironmentUri,
+  //  selectLanguage
+} from '../../../../common/src/settings/settingsSlice';
 import { useAppSelector } from '../../app/hooks';
 import { Color, colorMap } from '../../../../common/src/tools/colors';
 
@@ -26,6 +28,7 @@ function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, 
   const [categoryColor, setCategoryColor] = useState<Color>('grey');
   const [colors, setColors] = useState<Color[]>(new Array(items.length).fill('grey'));
   const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironmentUri);
+  // const languageCode = useAppSelector(selectLanguage);
 
   function setColor(index: number, color: Color) {
     setColors((prevColors) => {
@@ -47,6 +50,7 @@ function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, 
           includeClassProperties: true,
           includeChildClassReferences: true,
           includeClassRelations: true,
+          // languageCode: languageCode || undefined,
         })
         .then((response) => {
           // If the response is not ok, throw an error

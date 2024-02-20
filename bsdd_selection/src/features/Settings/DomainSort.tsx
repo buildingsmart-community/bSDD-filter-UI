@@ -6,28 +6,29 @@ import cx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
 import classes from './DndListHandle.module.css';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { RootState } from '../../app/store';
-import { setFilterDictionaries } from '../../../../common/src/settings/settingsSlice';
+import { useAppSelector } from '../../app/hooks';
+import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
+import { selectFilterDictionaries } from '../../../../common/src/settings/settingsSlice';
 
 interface DomainSortProps {
   id: number;
+  settings: BsddSettings | undefined;
+  setSettings: (settings: BsddSettings) => void;
+  setUnsavedChanges: (unsavedChanges: boolean) => void;
 }
 
-function DomainSort({ id }: DomainSortProps) {
-  const dispatch = useAppDispatch();
+function DomainSort({ id, settings, setSettings, setUnsavedChanges }: DomainSortProps) {
   const { t } = useTranslation();
-  const filterDictionaries = useAppSelector((state: RootState) => state.settings.filterDictionaries);
+  const filterDictionaries = useAppSelector(selectFilterDictionaries);
 
   // Drag and drop update filter dictionaries list
   const onDragEnd = (result: DragUpdate) => {
-    if (!result.destination) {
-      return;
-    }
+    if (!settings || !result.destination) return;
     const items = Array.from(filterDictionaries);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-    dispatch(setFilterDictionaries(items));
+    setSettings({ ...settings, filterDictionaries: items });
+    setUnsavedChanges(true);
   };
 
   // Drag and drop order filter dictionaries list
