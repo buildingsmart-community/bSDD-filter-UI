@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Form, Accordion, Row, Col, Card } from 'react-bootstrap';
 import { MsalProvider } from '@azure/msal-react';
 import { PublicClientApplication } from '@azure/msal-browser';
@@ -11,7 +11,8 @@ import SelectDomains from './SelectDomains';
 import Apply from './Apply';
 import { Api, ClassificationContractV4, DomainContractV3 } from './BsddApi';
 import Authentication from './Authentication';
-import {IfcEntity, IfcPropertySet} from "../../../common/src/IfcData/ifc";
+import { IfcEntity, IfcPropertySet } from '../../../common/src/IfcData/ifc';
+import { bsddEnvironments } from '../../../common/src/BsddApi/BsddApiEnvironments';
 
 interface Option {
   label: string;
@@ -22,6 +23,7 @@ interface BsddConfig {
   baseUrl?: string;
   defaultDomains: Option[];
   defaultSearch: Option;
+  ifcEntity?: IfcEntity;
 }
 
 interface Props {
@@ -38,14 +40,26 @@ function BsddSearch({ callback, config, msalInstance }: Props) {
   const [classifications, setClassifications] = useState<ClassificationContractV4[]>([]);
   const [propertySets, setPropertySets] = useState<{ [id: string]: IfcPropertySet }>({});
   const [accessToken, setAccessToken] = useState<string>('');
-  const [api, setApi] = useState<Api<unknown>>(
-    new Api({
-      baseUrl: config.baseUrl || 'https://api.bsdd.buildingsmart.org',
+  const [api, setApi] = useState<Api<unknown>>(() => {
+    const baseUrl = config.baseUrl ? bsddEnvironments[config.baseUrl] : 'https://test.bsdd.buildingsmart.org';
+
+    return new Api({
+      baseUrl: bsddEnvironments[baseUrl] || 'https://test.bsdd.buildingsmart.org',
       // baseApiParams
       // securityWorker
       // customFetch
-    }),
-  );
+    });
+  });
+
+  useEffect(() => {
+    const baseUrl = config.baseUrl ? bsddEnvironments[config.baseUrl] : 'https://test.bsdd.buildingsmart.org';
+
+    setApi(
+      new Api({
+        baseUrl: bsddEnvironments[baseUrl] || 'https://test.bsdd.buildingsmart.org',
+      }),
+    );
+  }, [config]);
 
   function getDefaultDomains(): Option[] {
     if (config && config.defaultDomains && config.defaultDomains.length) {
@@ -68,6 +82,7 @@ function BsddSearch({ callback, config, msalInstance }: Props) {
                 <Search
                   api={api}
                   activeDomains={activeDomains}
+                  defaultValue={config?.defaultSearch}
                   setActiveClassificationUri={setActiveClassificationUri}
                   accessToken={accessToken}
                 />
@@ -120,7 +135,8 @@ function BsddSearch({ callback, config, msalInstance }: Props) {
                 callback={callback}
                 domains={domains}
                 classifications={classifications}
-                propertySets={propertySets}
+                propertySetMap={propertySets}
+                ifcEntity={config.ifcEntity}
               />
             </Form.Group>
           </Card.Body>

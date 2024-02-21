@@ -1,11 +1,11 @@
 import { Container, Tabs } from '@mantine/core';
 import { useEffect } from 'react';
-import { BsddBridgeData, BsddSettings } from '../../../common/src/IfcData/bsddBridgeData';
-import { mockData } from '../../../common/src/IfcData/mockData';
+import { BsddSettings } from '../../../common/src/IfcData/bsddBridgeData';
+// import { mockData } from '../../../common/src/IfcData/mockData';
 import Settings from '../features/Settings/Settings';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { setIfcData, setValidatedIfcData } from '../../../common/src/IfcData/ifcDataSlice';
+import { setValidatedIfcData } from '../../../common/src/IfcData/ifcDataSlice';
 import { selectBsddApiEnvironmentUri, setSettings } from '../../../common/src/settings/settingsSlice';
 import { fetchDictionaries, updateBsddApi } from '../../../common/src/BsddApi/bsddSlice';
 import Selection from '../features/Selection/Selection';
@@ -29,7 +29,6 @@ export function HomePage() {
   //   dispatch(setValidatedIfcData(ifcData));
   // }, [dispatch]);
 
-
   // Initial settings load
   useEffect(() => {
     const loadSettings = async () => {
@@ -47,8 +46,7 @@ export function HomePage() {
 
   // @ts-ignore
   window.updateSelection = (ifcEntities: IfcEntity[]) => {
-    console.log('updateSelection', ifcEntities);
-    dispatch(setIfcData(ifcEntities));
+    dispatch(setValidatedIfcData(ifcEntities));
   };
 
   // @ts-ignore

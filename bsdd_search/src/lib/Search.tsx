@@ -1,5 +1,6 @@
 import AsyncSelect from 'react-select/async';
 import { Api, RequestParams } from './BsddApi';
+import { useEffect, useState } from 'react';
 
 interface Option {
   label: string;
@@ -9,12 +10,15 @@ interface Option {
 interface Props {
   api: Api<unknown>;
   activeDomains: Option[];
+  defaultValue: Option | undefined;
   setActiveClassificationUri: (value: string) => void;
   accessToken: string;
 }
 
 //https://medium.com/how-to-react/react-select-dropdown-tutorial-using-react-select-51664ab8b6f3
-function Search({ api, activeDomains, setActiveClassificationUri, accessToken }: Props) {
+function Search({ api, activeDomains, defaultValue: defaultSelection, setActiveClassificationUri, accessToken }: Props) {
+  const [selected, setSelected] = useState<Option | undefined>(defaultSelection);
+
   const params: RequestParams = {
     headers: { Accept: 'text/plain' },
   };
@@ -49,6 +53,7 @@ function Search({ api, activeDomains, setActiveClassificationUri, accessToken }:
       const queryParameters = {
         SearchText: inputValue,
         DomainNamespaceUris: activeDomains.map((domain) => domain.value),
+        // LanguageCode: 'NL',
         // RelatedIfcEntities: 'IfcWall',
       };
       api.api.classificationSearchOpenV1List(queryParameters, params).then((response) => {
@@ -66,17 +71,31 @@ function Search({ api, activeDomains, setActiveClassificationUri, accessToken }:
     }
   };
 
+  useEffect(() => {
+    if (defaultSelection) {
+      setSelected(defaultSelection);
+    }
+  }, [defaultSelection]);
+
+  useEffect(() => {
+    if (selected) {
+      setActiveClassificationUri(selected.value);
+    }
+  }, [selected]);
+
   const handleOnChange = (e: any) => {
     setActiveClassificationUri(e.value);
+    setSelected(e);
   };
 
   return (
     <div>
       <AsyncSelect
         loadOptions={loadOptions}
-        defaultOptions
+        // defaultOptions
         placeholder={<div>bSDD search...</div>}
         onChange={(e) => handleOnChange(e)}
+        value={selected}
       />
     </div>
   );

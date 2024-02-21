@@ -31,39 +31,46 @@ function Classifications({
     params.headers = { ...params.headers, Authorization: 'Bearer ' + accessToken };
   }
 
+  /**
+   * Fetches a classification from the API and updates the state.
+   *
+   * @param {string} classificationUri - The URI of the classification to fetch.
+   * @returns {Promise<ClassificationContractV4 | null>} - A promise that resolves to the fetched classification or null if the fetch fails.
+   */
   function getClassification(classificationUri: string): Promise<ClassificationContractV4 | null> {
-    const p: Promise<ClassificationContractV4 | null> = new Promise(function (resolve) {
-      //, reject) {
+    const classificationPromise: Promise<ClassificationContractV4 | null> = new Promise(function (resolve) {
       const queryParameters = {
         namespaceUri: classificationUri,
         includeChildClassificationReferences: true,
-        // languageCode: 'NL'
       };
       resolve(
         api.api
           .classificationV4List(queryParameters, params)
           .then((response) => {
             if (response.status !== 200) {
-              // reject();
-              console.log('Status error...');
-              console.log(response.status);
+              console.error(`API request failed with status ${response.status}`);
               return null;
             }
             return response.data;
           })
           .catch((err) => {
-            console.log('Catch error...');
-            console.log(err);
+            console.error('Error fetching classification:', err);
             return null;
           }),
       );
     });
     setClassificationUris({
       ...classificationUris,
-      classificationUri: p,
+      classificationUri: classificationPromise,
     });
-    return p;
+    return classificationPromise;
   }
+
+  /**
+   * Retrieves the name of the classification domain for a given classification.
+   * @param classification The classification object.
+   * @returns The name of the classification domain, or 'unknown' if not found.
+   */
   function getClassificationDomainName(classification: ClassificationContractV4): string {
     if (classification && classification.domainNamespaceUri) {
       return domains[classification.domainNamespaceUri].name;

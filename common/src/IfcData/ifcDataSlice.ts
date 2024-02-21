@@ -9,7 +9,7 @@ interface EntitiesState {
 
 /**
  * Sets the validated IFC data by chanking and fixing the associations of each IFC entity.
- * 
+ *
  * @param ifcEntities - The array of IFC entities to be validated.
  * @param dispatch - The Redux dispatch function.
  * @param getState - The Redux getState function.

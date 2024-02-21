@@ -44,7 +44,7 @@ export default function SelectDomains({ api, activeDomains, setActiveDomains, se
         );
       }
     });
-  }, [setSelectOptions, setDomains, accessToken]);
+  }, [api, setSelectOptions, setDomains, accessToken]);
 
   const handleOnChange = (e: any) => {
     setActiveDomains(e.map((option: Option) => option));

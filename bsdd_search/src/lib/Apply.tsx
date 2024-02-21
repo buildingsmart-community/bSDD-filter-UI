@@ -6,22 +6,21 @@ import {
 } from '../../../common/src/IfcData/ifc';
 import { ClassificationContractV4, DomainContractV3 } from './BsddApi';
 
-interface Props {
+interface ApplyProps {
   callback: (value: any) => void;
   domains: { [id: string]: DomainContractV3 };
   classifications: ClassificationContractV4[];
-  propertySets: { [id: string]: IfcPropertySet };
+  propertySetMap: { [id: string]: IfcPropertySet };
+  ifcEntity?: IfcEntity;
 }
 
-function Apply(props: Props) {
+function Apply({ callback, domains, classifications, propertySetMap, ifcEntity }: ApplyProps) {
   function getIfcEntity(): IfcEntity {
-    const ifc: IfcEntity = {};
-    if (props.classifications.length) {
-      ifc.hasAssociations = props.classifications.map((classification) =>
-        getIfcClassificationReference(classification),
-      );
+    const ifc: IfcEntity = ifcEntity || {};
+    if (classifications.length) {
+      ifc.hasAssociations = classifications.map((classification) => getIfcClassificationReference(classification));
     }
-    const propertySets: IfcPropertySet[] = Object.values(props.propertySets);
+    const propertySets: IfcPropertySet[] = Object.values(propertySetMap);
     if (propertySets.length) {
       ifc.isDefinedBy = propertySets;
     }
@@ -29,8 +28,8 @@ function Apply(props: Props) {
   }
 
   function getIfcClassification(domainNamespaceUri: string): IfcClassification | null {
-    if (domainNamespaceUri in props.domains) {
-      const domain: DomainContractV3 = props.domains[domainNamespaceUri];
+    if (domainNamespaceUri in domains) {
+      const domain: DomainContractV3 = domains[domainNamespaceUri];
       if (domain) {
         const ifc: IfcClassification = {
           type: 'IfcClassification',
@@ -63,7 +62,7 @@ function Apply(props: Props) {
   }
 
   const handleOnChange = () => {
-    props.callback(getIfcEntity());
+    callback(getIfcEntity());
   };
 
   return (
