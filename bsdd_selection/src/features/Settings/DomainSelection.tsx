@@ -8,6 +8,7 @@ import { DictionaryContractV1 } from '../../../../common/src/BsddApi/BsddApiBase
 import createUuidFromUri from '../../../../common/src/tools/uuidFromUri';
 import { selectMainDictionary } from '../../../../common/src/settings/settingsSlice';
 import { selectBsddDictionaries } from '../../../../common/src/BsddApi/bsddSlice';
+import { IfcClassification } from '../../../../common/src/IfcData/ifc';
 
 interface DomainSelectionProps {
   id: number;
@@ -18,15 +19,16 @@ interface DomainSelectionProps {
 }
 
 function convertToBsddDictionary(dictionary: DictionaryContractV1, oldValues: BsddDictionary[]): BsddDictionary {
-  const oldValue = oldValues.find((item) => item.dictionaryUri === dictionary.uri);
+  const oldValue = oldValues.find((item) => item.ifcClassification.location === dictionary.uri);
   if (oldValue) {
     return oldValue;
   }
   return {
-    dictionaryUri: dictionary.uri,
-    dictionaryName: dictionary.name,
-    parameterName: `bsdd/${dictionary.organizationCodeOwner}/${dictionary.name}`.replace(/\s/g, '-'),
-    parameterId: createUuidFromUri(dictionary.uri),
+    ifcClassification: {
+      type: 'IfcClassification',
+      location: dictionary.uri,
+      name: dictionary.name,
+    } as IfcClassification,
     parameterMapping: '',
   } as BsddDictionary;
 }
@@ -50,7 +52,10 @@ function DomainSelection({ id, settings, setSettings, setUnsavedChanges, setIsLo
   useEffect(() => {
     if (!settings) return;
     setFilterDictionaryValues(
-      settings.filterDictionaries.map((item) => ({ value: item.dictionaryUri, label: item.dictionaryName })),
+      settings.filterDictionaries.map((item) => ({
+        value: item.ifcClassification.location || '',
+        label: item.ifcClassification.location || '',
+      })),
     );
   }, [settings?.filterDictionaries, setFilterDictionaryValues]);
 
@@ -97,7 +102,7 @@ function DomainSelection({ id, settings, setSettings, setUnsavedChanges, setIsLo
         <Select
           id="mainDictionary"
           label={t('Main dictionary')}
-          value={settings?.mainDictionary?.dictionaryUri}
+          value={settings?.mainDictionary?.ifcClassification.location}
           onChange={changeMainDictionaryOption}
           placeholder="Select main dictionary"
           data={bsddDictionaryOptions}

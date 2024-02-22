@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import Select from 'react-select';
-import { Api, DomainContractV3, RequestParams } from './BsddApi';
+import { DictionaryContractV1, RequestParams } from '../../../common/src/BsddApi/BsddApiBase';
+import { BsddApi } from '../../../common/src/BsddApi/BsddApi';
 
 interface Option {
   label: string;
@@ -8,10 +9,10 @@ interface Option {
 }
 
 interface Props {
-  api: Api<unknown>;
+  api: BsddApi<unknown>;
   activeDomains: Option[];
   setActiveDomains: (value: Option[]) => void;
-  setDomains: (value: { [id: string]: DomainContractV3 }) => void;
+  setDomains: (value: { [id: string]: DictionaryContractV1 }) => void;
   accessToken: string;
 }
 
@@ -26,24 +27,34 @@ export default function SelectDomains({ api, activeDomains, setActiveDomains, se
   }
 
   useEffect(() => {
-    api.api.domainV3List(undefined, params).then((response) => {
-      if (response.data) {
-        setSelectOptions(
-          response.data.map((domain) => ({
-            value: domain.namespaceUri,
-            label: domain.name,
-          })),
-        );
-        setDomains(
-          response.data.reduce((accumulator, domain) => {
-            if (domain.namespaceUri) {
-              return { ...accumulator, [domain.namespaceUri]: domain };
+    const fetchDictionaries = async () => {
+      try {
+        const response: any = await api.api.dictionaryV1List(undefined, params);
+        const dictionaries: DictionaryContractV1[] = response.data.dictionaries;
+        if (dictionaries) {
+          const selectOptions = dictionaries
+            .filter((domain) => domain.uri && domain.name)
+            .map((domain) => ({
+              value: domain.uri,
+              label: domain.name,
+            }));
+
+          const domains = dictionaries.reduce((accumulator, domain) => {
+            if (domain.uri) {
+              return { ...accumulator, [domain.uri]: domain };
             }
-            return { ...accumulator };
-          }, {}),
-        );
+            return accumulator;
+          }, {});
+
+          setSelectOptions(selectOptions);
+          setDomains(domains);
+        }
+      } catch (error) {
+        console.error('Failed to fetch dictionaries:', error);
       }
-    });
+    };
+
+    fetchDictionaries();
   }, [api, setSelectOptions, setDomains, accessToken]);
 
   const handleOnChange = (e: any) => {

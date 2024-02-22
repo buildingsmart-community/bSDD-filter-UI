@@ -14,7 +14,7 @@ export interface IfcEntity extends IfcJsonEntity {
 export interface IfcClassification extends IfcJsonEntity {
   type: 'IfcClassification';
   source?: string; // IfcLabel IFC2x3 place for bSDD uri
-  location?: string; // IfcURIReference IFC4 place for bSDD uri
+  location: string; // IfcURIReference IFC4 place for bSDD uri
   edition?: string; // IfcLabel
   editionDate?: string; // IfcDate
   name?: string; // IfcLabel

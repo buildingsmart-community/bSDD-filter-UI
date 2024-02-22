@@ -38,17 +38,21 @@ function checkIfcClassificationUri(
  * @returns The URI of the classification dictionary if found, otherwise null.
  */
 function getClassUriFromDictionary(ifcEntity: IfcEntity, bsddDictionary: BsddDictionary): ClassificationStatus {
-    const associations = ifcEntity.hasAssociations;
-    if (!associations) {
-      return null;
-    }
-  
-    const foundAssociation = associations.find(association => 
-      isIfcClassificationReference(association) && 
-      checkIfcClassificationUri(bsddDictionary.dictionaryUri, association as IfcClassificationReference)
-    );
-  
-    return foundAssociation ? bsddDictionary.dictionaryUri : null;
+  const associations = ifcEntity.hasAssociations;
+  if (!associations) {
+    return null;
   }
+
+  const foundAssociation = associations.find(
+    (association) =>
+      isIfcClassificationReference(association) &&
+      checkIfcClassificationUri(
+        bsddDictionary.ifcClassification?.location as string,
+        association as IfcClassificationReference,
+      ),
+  );
+
+  return foundAssociation ? (bsddDictionary.ifcClassification?.location as ClassificationStatus) : null;
+}
 
 export default getClassUriFromDictionary;

@@ -9,10 +9,11 @@ import PropertySets from './PropertySets';
 import RecursiveMode from './RecursiveMode';
 import SelectDomains from './SelectDomains';
 import Apply from './Apply';
-import { Api, ClassificationContractV4, DomainContractV3 } from './BsddApi';
 import Authentication from './Authentication';
 import { IfcEntity, IfcPropertySet } from '../../../common/src/IfcData/ifc';
 import { bsddEnvironments } from '../../../common/src/BsddApi/BsddApiEnvironments';
+import { BsddApi } from '../../../common/src/BsddApi/BsddApi';
+import { ClassContractV1, DictionaryContractV1 } from '../../../common/src/BsddApi/BsddApiBase';
 
 interface Option {
   label: string;
@@ -36,29 +37,18 @@ function BsddSearch({ callback, config, msalInstance }: Props) {
   const [activeClassificationUri, setActiveClassificationUri] = useState<string>();
   const [recursiveMode, setRecursiveMode] = useState<boolean>(false);
   const [activeDomains, setActiveDomains] = useState<Option[]>(getDefaultDomains());
-  const [domains, setDomains] = useState<{ [id: string]: DomainContractV3 }>({});
-  const [classifications, setClassifications] = useState<ClassificationContractV4[]>([]);
+  const [domains, setDomains] = useState<{ [id: string]: DictionaryContractV1 }>({});
+  const [classifications, setClassifications] = useState<ClassContractV1[]>([]);
   const [propertySets, setPropertySets] = useState<{ [id: string]: IfcPropertySet }>({});
   const [accessToken, setAccessToken] = useState<string>('');
-  const [api, setApi] = useState<Api<unknown>>(() => {
-    const baseUrl = config.baseUrl ? bsddEnvironments[config.baseUrl] : 'https://test.bsdd.buildingsmart.org';
-
-    return new Api({
-      baseUrl: bsddEnvironments[baseUrl] || 'https://test.bsdd.buildingsmart.org',
-      // baseApiParams
-      // securityWorker
-      // customFetch
-    });
-  });
+  const [api, setApi] = useState<BsddApi<unknown>>(new BsddApi('https://test.bsdd.buildingsmart.org'));
 
   useEffect(() => {
-    const baseUrl = config.baseUrl ? bsddEnvironments[config.baseUrl] : 'https://test.bsdd.buildingsmart.org';
-
-    setApi(
-      new Api({
-        baseUrl: bsddEnvironments[baseUrl] || 'https://test.bsdd.buildingsmart.org',
-      }),
-    );
+    const baseUrl =
+      config.baseUrl && bsddEnvironments[config.baseUrl]
+        ? bsddEnvironments[config.baseUrl]
+        : 'https://test.bsdd.buildingsmart.org';
+    setApi(new BsddApi(baseUrl));
   }, [config]);
 
   function getDefaultDomains(): Option[] {

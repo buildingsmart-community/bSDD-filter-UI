@@ -1,7 +1,7 @@
 import { Container, Tabs } from '@mantine/core';
 import { useEffect } from 'react';
 import { BsddSettings } from '../../../common/src/IfcData/bsddBridgeData';
-// import { mockData } from '../../../common/src/IfcData/mockData';
+import { mockData } from '../../../common/src/IfcData/mockData';
 import Settings from '../features/Settings/Settings';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
@@ -23,11 +23,11 @@ export function HomePage() {
     }
   }, [bsddApiEnvironment, dispatch]);
 
-  // useEffect(() => {
-  //   const { settings, ifcData } = mockData;
-  //   dispatch(setSettings(settings));
-  //   dispatch(setValidatedIfcData(ifcData));
-  // }, [dispatch]);
+  useEffect(() => {
+    const { settings, ifcData } = mockData;
+    dispatch(setSettings(settings));
+    dispatch(setValidatedIfcData(ifcData));
+  }, [dispatch]);
 
   // Initial settings load
   useEffect(() => {

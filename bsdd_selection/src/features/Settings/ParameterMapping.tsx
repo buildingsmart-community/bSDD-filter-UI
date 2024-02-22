@@ -1,7 +1,7 @@
 import { Accordion, Text, TextInput, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
+import { BsddDictionary, BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
 
 interface ParameterMappingProps {
   id: number;
@@ -15,15 +15,18 @@ function ParameterMapping({ id, settings, setSettings, setUnsavedChanges }: Para
   const { mainDictionary, filterDictionaries } = settings || { mainDictionary: null, filterDictionaries: [] };
   const activeDictionaries = mainDictionary ? [mainDictionary, ...filterDictionaries] : filterDictionaries;
 
-  const handleInputChange = (dictionaryUri: string, newParameterMapping: string) => {
+  const handleInputChange = (dictionaryUri: string | undefined, newParameterMapping: string) => {
     if (!settings) return;
     let newSettings = { ...settings };
-    if (newSettings.mainDictionary?.dictionaryUri === dictionaryUri) {
-      const mainDictionary = { ...newSettings.mainDictionary, parameterMapping: newParameterMapping };
+    if (newSettings.mainDictionary?.ifcClassification.location === dictionaryUri) {
+      const mainDictionary: BsddDictionary = {
+        ...(newSettings.mainDictionary as BsddDictionary),
+        parameterMapping: newParameterMapping,
+      };
       newSettings.mainDictionary = mainDictionary;
     } else {
       newSettings.filterDictionaries = newSettings.filterDictionaries.map((dictionary) => {
-        if (dictionary.dictionaryUri === dictionaryUri) {
+        if (dictionary.ifcClassification.location === dictionaryUri) {
           return { ...dictionary, parameterMapping: newParameterMapping };
         }
         return dictionary;
@@ -43,12 +46,12 @@ function ParameterMapping({ id, settings, setSettings, setUnsavedChanges }: Para
       </Accordion.Control>
       <Accordion.Panel>
         {activeDictionaries.map((input) => (
-          <div key={input.dictionaryUri} style={{ marginBottom: '1em' }}>
+          <div key={input.ifcClassification.location} style={{ marginBottom: '1em' }}>
             <TextInput
-              label={input.dictionaryName}
+              label={input.ifcClassification.location}
               placeholder="Enter a revit type parameter"
               value={input.parameterMapping}
-              onChange={(event) => handleInputChange(input.dictionaryUri, event.currentTarget.value)}
+              onChange={(event) => handleInputChange(input.ifcClassification.location, event.currentTarget.value)}
             />{' '}
           </div>
         ))}

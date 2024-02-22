@@ -31,7 +31,7 @@ export const setValidatedIfcData = createAsyncThunk(
                   const { validationState, newReference } = await preprocessIfcClassificationReference(
                     association,
                     dispatch,
-                    getState,
+                    state,
                   );
                   if (validationState === 'invalid') {
                     return null;

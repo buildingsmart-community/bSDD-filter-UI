@@ -1,6 +1,5 @@
 import { useEffect, Children } from 'react';
 import { Accordion } from 'react-bootstrap';
-import { ClassificationContractV4, ClassificationPropertyContractV3 } from './BsddApi';
 import Property from './Property';
 import {
   IfcProperty,
@@ -9,16 +8,17 @@ import {
   IfcPropertySingleValue,
   IfcValue,
 } from '../../../common/src/IfcData/ifc';
+import { ClassContractV1, ClassPropertyContractV1 } from '../../../common/src/BsddApi/BsddApiBase';
 
 interface Props {
-  classifications: ClassificationContractV4[];
+  classifications: ClassContractV1[];
   propertySets: { [id: string]: IfcPropertySet };
   setPropertySets: (value: { [id: string]: IfcPropertySet }) => void;
   recursiveMode: boolean;
 }
 
 function PropertySets(props: Props) {
-  const classifications: ClassificationContractV4[] = props.classifications;
+  const classifications: ClassContractV1[] = props.classifications;
   const propertySets: { [id: string]: IfcPropertySet } = props.propertySets;
   const setPropertySets: (value: { [id: string]: IfcPropertySet }) => void = props.setPropertySets;
   const recursiveMode: boolean = props.recursiveMode;
@@ -104,20 +104,20 @@ function PropertySets(props: Props) {
   }
 
   function GetIfcProperty(
-    classificationProperty: ClassificationPropertyContractV3,
+    classificationProperty: ClassPropertyContractV1,
   ): IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue {
-    if (classificationProperty.possibleValues) {
+    if (classificationProperty.allowedValues) {
       const ifcProperty: IfcPropertyEnumeratedValue = {
         type: 'IfcPropertyEnumeratedValue',
         name: classificationProperty.name,
         enumerationReference: {
           type: 'IfcPropertyEnumeration',
           name: classificationProperty.name,
-          enumerationValues: classificationProperty.possibleValues.map((possibleValue) => possibleValue.value),
+          enumerationValues: classificationProperty.allowedValues.map((allowedValue) => allowedValue.value),
         },
       };
-      if (classificationProperty.propertyNamespaceUri) {
-        ifcProperty.specification = classificationProperty.propertyNamespaceUri;
+      if (classificationProperty.propertyUri) {
+        ifcProperty.specification = classificationProperty.propertyUri;
       }
       return ifcProperty;
     } else {
@@ -125,8 +125,8 @@ function PropertySets(props: Props) {
         type: 'IfcPropertySingleValue',
         name: classificationProperty.name,
       };
-      if (classificationProperty.propertyNamespaceUri) {
-        ifcProperty.specification = classificationProperty.propertyNamespaceUri;
+      if (classificationProperty.propertyUri) {
+        ifcProperty.specification = classificationProperty.propertyUri;
       }
       ifcProperty.nominalValue = GetIfcPropertyValue(
         classificationProperty.dataType,
@@ -140,9 +140,9 @@ function PropertySets(props: Props) {
     const propertySets: { [id: string]: IfcPropertySet } = {};
     const propertyClassifications = recursiveMode ? classifications : classifications.slice(0, 1);
     propertyClassifications.forEach((classification) => {
-      if (classification.classificationProperties) {
-        classification.classificationProperties.map((classificationProperty) => {
-          const propertySetName = classificationProperty.propertySet || classification.name;
+      if (classification.classProperties) {
+        classification.classProperties.map((classProperty: ClassPropertyContractV1) => {
+          const propertySetName = classProperty.propertySet || classification.name;
           if (!(propertySetName in propertySets)) {
             propertySets[propertySetName] = {
               type: 'IfcPropertySet',
@@ -150,7 +150,7 @@ function PropertySets(props: Props) {
               hasProperties: [],
             };
           }
-          propertySets[propertySetName].hasProperties.push(GetIfcProperty(classificationProperty));
+          propertySets[propertySetName].hasProperties.push(GetIfcProperty(classProperty));
         });
       }
     });

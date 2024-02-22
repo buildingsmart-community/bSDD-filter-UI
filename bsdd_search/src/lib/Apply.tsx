@@ -1,15 +1,15 @@
+import { ClassContractV1, DictionaryContractV1 } from '../../../common/src/BsddApi/BsddApiBase';
 import {
   IfcClassification,
   IfcClassificationReference,
   IfcEntity,
   IfcPropertySet,
 } from '../../../common/src/IfcData/ifc';
-import { ClassificationContractV4, DomainContractV3 } from './BsddApi';
 
 interface ApplyProps {
   callback: (value: any) => void;
-  domains: { [id: string]: DomainContractV3 };
-  classifications: ClassificationContractV4[];
+  domains: { [id: string]: DictionaryContractV1 };
+  classifications: ClassContractV1[];
   propertySetMap: { [id: string]: IfcPropertySet };
   ifcEntity?: IfcEntity;
 }
@@ -29,11 +29,12 @@ function Apply({ callback, domains, classifications, propertySetMap, ifcEntity }
 
   function getIfcClassification(domainNamespaceUri: string): IfcClassification | null {
     if (domainNamespaceUri in domains) {
-      const domain: DomainContractV3 = domains[domainNamespaceUri];
-      if (domain) {
+      const dictionary: DictionaryContractV1 = domains[domainNamespaceUri];
+      if (dictionary) {
         const ifc: IfcClassification = {
           type: 'IfcClassification',
-          name: domain.name,
+          location: dictionary.uri,
+          name: dictionary.name,
         };
         return ifc;
       }
@@ -41,19 +42,19 @@ function Apply({ callback, domains, classifications, propertySetMap, ifcEntity }
     return null;
   }
 
-  function getIfcClassificationReference(bsdd: ClassificationContractV4): IfcClassificationReference {
+  function getIfcClassificationReference(bsdd: ClassContractV1): IfcClassificationReference {
     const ifc: IfcClassificationReference = {
       type: 'IfcClassificationReference',
       name: bsdd.name,
     };
-    if (bsdd.namespaceUri) {
-      ifc.location = bsdd.namespaceUri;
+    if (bsdd.uri) {
+      ifc.location = bsdd.uri;
     }
     if (bsdd.code) {
       ifc.identification = bsdd.code;
     }
-    if (bsdd.domainNamespaceUri) {
-      const referencedSource = getIfcClassification(bsdd.domainNamespaceUri);
+    if (bsdd.dictionaryUri) {
+      const referencedSource = getIfcClassification(bsdd.dictionaryUri);
       if (referencedSource) {
         ifc.referencedSource = referencedSource;
       }

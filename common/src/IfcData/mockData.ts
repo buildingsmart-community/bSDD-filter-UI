@@ -3,25 +3,31 @@ export const mockData: BsddBridgeData = {
   settings: {
     bsddApiEnvironment: 'test',
     mainDictionary: {
-      dictionaryUri: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
-      dictionaryName: 'Basis bouwproducten',
-      parameterName: 'bsdd/digibase/basisbouwproducten',
-      parameterId: '14762b7f-3c15-468b-8dad-1f514ff90dc2',
+      ifcClassification: {
+        type: 'IfcClassification',
+        location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
+        editionDate: '0001-01-01T00:00:00',
+        name: 'Basis bouwproducten',
+      },
       parameterMapping: 'Description',
     },
     filterDictionaries: [
       {
-        dictionaryUri: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-        dictionaryName: 'IFC',
-        parameterName: 'bsdd/buildingsmart/ifc',
-        parameterId: '6999e83d-6f2e-4d40-87f9-9dd406d25bcf ',
+        ifcClassification: {
+          type: 'IfcClassification',
+          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
+          editionDate: '0001-01-01T00:00:00',
+          name: 'IFC',
+        },
         parameterMapping: 'IfcExportAs',
       },
       {
-        dictionaryUri: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
-        dictionaryName: 'DigiBase Demo NL-SfB tabel 1',
-        parameterName: 'bsdd/digibase/nlsfb',
-        parameterId: 'f0c64040-e2c8-4e91-8753-4ab324599edb ',
+        ifcClassification: {
+          type: 'IfcClassification',
+          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
+          editionDate: '0001-01-01T00:00:00',
+          name: 'DigiBase Demo NL-SfB tabel 1',
+        },
         parameterMapping: 'Assembly Code',
       },
     ],

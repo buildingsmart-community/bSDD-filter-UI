@@ -1,13 +1,14 @@
 import { useState, useEffect, Children } from 'react';
 import { Form } from 'react-bootstrap';
-import { Api, ClassificationContractV4, DomainContractV3, RequestParams } from './BsddApi';
+import { ClassContractV1, DictionaryContractV1, RequestParams } from '../../../common/src/BsddApi/BsddApiBase';
+import { BsddApi } from '../../../common/src/BsddApi/BsddApi';
 
 interface Props {
-  api: Api<unknown>;
+  api: BsddApi<unknown>;
   activeClassificationUri: string | undefined;
-  classifications: ClassificationContractV4[];
-  setClassifications: (value: ClassificationContractV4[]) => void;
-  domains: { [id: string]: DomainContractV3 };
+  classifications: ClassContractV1[];
+  setClassifications: (value: ClassContractV1[]) => void;
+  domains: { [id: string]: DictionaryContractV1 };
   accessToken: string;
 }
 
@@ -21,7 +22,7 @@ function Classifications({
 }: Props) {
   const [classificationCount, setClassificationCount] = useState<number>(0);
   const [classificationUris, setClassificationUris] = useState<{
-    [id: string]: Promise<ClassificationContractV4 | null>;
+    [id: string]: Promise<ClassContractV1 | null>;
   }>({});
   const params: RequestParams = {
     headers: { Accept: 'text/plain' },
@@ -35,17 +36,17 @@ function Classifications({
    * Fetches a classification from the API and updates the state.
    *
    * @param {string} classificationUri - The URI of the classification to fetch.
-   * @returns {Promise<ClassificationContractV4 | null>} - A promise that resolves to the fetched classification or null if the fetch fails.
+   * @returns {Promise<ClassContractV1 | null>} - A promise that resolves to the fetched classification or null if the fetch fails.
    */
-  function getClassification(classificationUri: string): Promise<ClassificationContractV4 | null> {
-    const classificationPromise: Promise<ClassificationContractV4 | null> = new Promise(function (resolve) {
+  function getClassification(classificationUri: string): Promise<ClassContractV1 | null> {
+    const classificationPromise: Promise<ClassContractV1 | null> = new Promise(function (resolve) {
       const queryParameters = {
-        namespaceUri: classificationUri,
+        uri: classificationUri,
         includeChildClassificationReferences: true,
       };
       resolve(
         api.api
-          .classificationV4List(queryParameters, params)
+          .classV1List(queryParameters, params)
           .then((response) => {
             if (response.status !== 200) {
               console.error(`API request failed with status ${response.status}`);
@@ -71,9 +72,9 @@ function Classifications({
    * @param classification The classification object.
    * @returns The name of the classification domain, or 'unknown' if not found.
    */
-  function getClassificationDomainName(classification: ClassificationContractV4): string {
-    if (classification && classification.domainNamespaceUri) {
-      return domains[classification.domainNamespaceUri].name;
+  function getClassificationDomainName(classification: ClassContractV1): string {
+    if (classification && classification.dictionaryUri && domains[classification.dictionaryUri]) {
+      return domains[classification.dictionaryUri].name;
     }
     return 'unknown';
   }
@@ -82,7 +83,7 @@ function Classifications({
     setClassificationCount(0);
     if (activeClassificationUri) {
       const initialClassificationUris: {
-        [id: string]: Promise<ClassificationContractV4 | null>;
+        [id: string]: Promise<ClassContractV1 | null>;
       } = {};
       if (activeClassificationUri) {
         initialClassificationUris[activeClassificationUri] = getClassification(activeClassificationUri);
@@ -104,21 +105,21 @@ function Classifications({
           }
           return null;
         })
-        .filter((x): x is ClassificationContractV4 => x !== null);
+        .filter((x): x is ClassContractV1 => x !== null);
 
       results.map((result) => {
         if (result.status === 'fulfilled') {
           const c = result.value;
-          if (c && c.classificationRelations) {
+          if (c && c.classRelations) {
             const extendedClassificationUris: {
-              [id: string]: Promise<ClassificationContractV4 | null>;
+              [id: string]: Promise<ClassContractV1 | null>;
             } = {
               ...classificationUris,
             };
-            c.classificationRelations.forEach((classificationRelation) => {
-              if (!(classificationRelation.relatedClassificationUri in Object.keys(classificationUris))) {
-                extendedClassificationUris[classificationRelation.relatedClassificationUri] = getClassification(
-                  classificationRelation.relatedClassificationUri,
+            c.classRelations.forEach((classificationRelation) => {
+              if (!(classificationRelation.relatedClassUri in Object.keys(classificationUris))) {
+                extendedClassificationUris[classificationRelation.relatedClassUri] = getClassification(
+                  classificationRelation.relatedClassUri,
                 );
               }
             });

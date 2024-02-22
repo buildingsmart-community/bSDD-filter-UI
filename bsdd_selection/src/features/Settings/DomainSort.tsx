@@ -33,7 +33,7 @@ function DomainSort({ id, settings, setSettings, setUnsavedChanges }: DomainSort
 
   // Drag and drop order filter dictionaries list
   const items = filterDictionaries.map((item, index) => (
-    <Draggable key={item.dictionaryUri} index={index} draggableId={item.dictionaryUri}>
+    <Draggable key={item.ifcClassification.location} index={index} draggableId={item.ifcClassification.location}>
       {(provided, snapshot) => (
         <div
           className={cx(classes.item, { [classes.itemDragging]: snapshot.isDragging })}
@@ -43,7 +43,7 @@ function DomainSort({ id, settings, setSettings, setUnsavedChanges }: DomainSort
           <div {...provided.dragHandleProps} className={classes.dragHandle}>
             <IconGripVertical style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
           </div>
-          <Text className={classes.uri}>{item.dictionaryName}</Text>
+          <Text className={classes.uri}>{item.ifcClassification.location}</Text>
         </div>
       )}
     </Draggable>

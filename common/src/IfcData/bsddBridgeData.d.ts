@@ -1,4 +1,4 @@
-import { IfcEntity } from './ifc';
+import { IfcClassification, IfcEntity } from './ifc';
 
 // bSDD API environments:
 // - test: 'https://test.bsdd.buildingsmart.org'
@@ -8,10 +8,7 @@ type URI = string;
 type UUID = string;
 
 export interface BsddDictionary {
-  dictionaryUri: URI;
-  dictionaryName: string;
-  parameterName: string;
-  parameterId: UUID;
+  ifcClassification: IfcClassification;
   parameterMapping: string;
 }
 

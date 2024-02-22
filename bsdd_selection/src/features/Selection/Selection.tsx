@@ -100,7 +100,7 @@ function Selection({}: SelectionProps) {
     const api = new BsddApi(bsddApiEnvironment);
     api.api
       .dictionaryV1ClassesList({
-        Uri: mainDictionary.dictionaryUri,
+        Uri: mainDictionary.ifcClassification.location,
         // languageCode: languageCode || undefined
       })
       .then((response) => {

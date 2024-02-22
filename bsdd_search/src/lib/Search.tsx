@@ -1,6 +1,7 @@
 import AsyncSelect from 'react-select/async';
-import { Api, RequestParams } from './BsddApi';
 import { useEffect, useState } from 'react';
+import { BsddApi } from '../../../common/src/BsddApi/BsddApi';
+import { RequestParams } from '../../../common/src/BsddApi/BsddApiBase';
 
 interface Option {
   label: string;
@@ -8,7 +9,7 @@ interface Option {
 }
 
 interface Props {
-  api: Api<unknown>;
+  api: BsddApi<unknown>;
   activeDomains: Option[];
   defaultValue: Option | undefined;
   setActiveClassificationUri: (value: string) => void;
