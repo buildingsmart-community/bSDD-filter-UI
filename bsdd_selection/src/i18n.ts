@@ -44,6 +44,7 @@ i18n.use(initReactI18next).init({
         'Sort filter dictionaries': 'Sort filter dictionaries',
         'Sort filter dictionaries help text':
           'The dictionaries will be shown in this order anywhere in the application.',
+        'Validation per dictionary': 'Validation per dictionary',
       },
     },
     nl: {
@@ -69,6 +70,7 @@ i18n.use(initReactI18next).init({
           'Definieer de Revit type parameter waarin de geselecteerde object typen voor dit domein moeten worden opgeslagen.',
         'Sort filter dictionaries': 'Sorteer filter domeinen',
         'Sort filter dictionaries help text': 'De domeinen worden overal in de app in deze volgorde getoond.',
+        'Validation per dictionary': 'Validatie per domein',
       },
     },
   },

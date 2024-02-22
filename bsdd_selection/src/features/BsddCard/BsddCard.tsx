@@ -83,14 +83,14 @@ function BsddCard({ item: ifcEntity, bsddClass, index, setCardColor: setCategory
           </div>
         </HoverCard.Target>
         <HoverCard.Dropdown>
-          <Text>Validation per class:</Text>
+          <Text>{t('Validation per dictionary')}:</Text>
           {activeDictionaries.map((dictionary, index) => {
             const status = activeClassificationStatuses[index];
             return (
-              <Group key={dictionary.dictionaryUri} mt="xs" justify="space-between" className="flexGroup">
+              <Group key={dictionary.ifcClassification.location} mt="xs" justify="space-between" className="flexGroup">
                 <ColorSwatch size={'1em'} color={colorMap[activeClassificationColors[index]]}></ColorSwatch>
                 <div className="flexTextContainer">
-                  <Text className="truncate">{dictionary.dictionaryName}</Text>
+                  <Text className="truncate">{dictionary.ifcClassification.name}</Text>
                 </div>
               </Group>
             );
