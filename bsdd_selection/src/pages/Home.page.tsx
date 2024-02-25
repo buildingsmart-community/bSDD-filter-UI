@@ -1,33 +1,46 @@
 import { Container, Tabs } from '@mantine/core';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BsddSettings } from '../../../common/src/IfcData/bsddBridgeData';
 import { mockData } from '../../../common/src/IfcData/mockData';
 import Settings from '../features/Settings/Settings';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { setValidatedIfcData } from '../../../common/src/IfcData/ifcDataSlice';
-import { selectBsddApiEnvironmentUri, setSettings } from '../../../common/src/settings/settingsSlice';
-import { fetchDictionaries, updateBsddApi } from '../../../common/src/BsddApi/bsddSlice';
+import { setSettingsWithValidation } from '../../../common/src/settings/settingsSlice';
+import { selectBsddDataLoaded } from '../../../common/src/BsddApi/bsddSlice';
 import Selection from '../features/Selection/Selection';
 
 export function HomePage() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironmentUri);
+  const bsddDataLoaded = useAppSelector(selectBsddDataLoaded);
+  const [pendingSettings, setPendingSettings] = useState<BsddSettings | null>(null);
+
+  const dispatchSettingsWhenLoaded = (settings: BsddSettings) => {
+    setPendingSettings(settings);
+  };
 
   useEffect(() => {
-    console.log('bsddApiEnvironment changed');
-    if (bsddApiEnvironment) {
-      dispatch(updateBsddApi(bsddApiEnvironment));
-      dispatch(fetchDictionaries(bsddApiEnvironment));
+    if (bsddDataLoaded && pendingSettings) {
+      dispatch(setSettingsWithValidation(pendingSettings));
+      setPendingSettings(null);
     }
-  }, [bsddApiEnvironment, dispatch]);
+  }, [bsddDataLoaded, pendingSettings, dispatch]);
 
   useEffect(() => {
     const { settings, ifcData } = mockData;
-    dispatch(setSettings(settings));
     dispatch(setValidatedIfcData(ifcData));
+    dispatchSettingsWhenLoaded(settings);
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!bsddDataLoaded) {
+      return;
+    }
+    console.log('bsddDataLoaded', bsddDataLoaded);
+    const { ifcData } = mockData;
+    dispatch(setValidatedIfcData(ifcData));
+  }, [dispatch, bsddDataLoaded]);
 
   // Initial settings load
   useEffect(() => {
@@ -37,7 +50,7 @@ export function HomePage() {
         // @ts-ignore
         const settings = await window.bsddBridge.loadSettings();
         console.log('settings', settings);
-        dispatch(setSettings(JSON.parse(settings)));
+        dispatchSettingsWhenLoaded(JSON.parse(settings));
       }
     };
 
@@ -52,7 +65,7 @@ export function HomePage() {
   // @ts-ignore
   window.updateSettings = (settings: BsddSettings) => {
     console.log('updateSettings', settings);
-    dispatch(setSettings(settings));
+    setSettingsWithValidation(settings);
   };
 
   // useEffect(() => {

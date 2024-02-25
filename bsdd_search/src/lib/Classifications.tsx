@@ -42,7 +42,7 @@ function Classifications({
     const classificationPromise: Promise<ClassContractV1 | null> = new Promise(function (resolve) {
       const queryParameters = {
         uri: classificationUri,
-        includeChildClassificationReferences: true,
+        includeClassRelations: true,
       };
       resolve(
         api.api

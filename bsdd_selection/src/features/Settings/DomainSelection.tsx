@@ -5,10 +5,9 @@ import { useEffect, useState } from 'react';
 import { useAppSelector } from '../../app/hooks';
 import { BsddDictionary, BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
 import { DictionaryContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
-import createUuidFromUri from '../../../../common/src/tools/uuidFromUri';
 import { selectMainDictionary } from '../../../../common/src/settings/settingsSlice';
 import { selectBsddDictionaries } from '../../../../common/src/BsddApi/bsddSlice';
-import { IfcClassification } from '../../../../common/src/IfcData/ifc';
+import { convertBsddDictionaryToIfcClassification } from '../../../../common/src/IfcData/ifcBsddConverters';
 
 interface DomainSelectionProps {
   id: number;
@@ -24,11 +23,7 @@ function convertToBsddDictionary(dictionary: DictionaryContractV1, oldValues: Bs
     return oldValue;
   }
   return {
-    ifcClassification: {
-      type: 'IfcClassification',
-      location: dictionary.uri,
-      name: dictionary.name,
-    } as IfcClassification,
+    ifcClassification: convertBsddDictionaryToIfcClassification(dictionary),
     parameterMapping: '',
   } as BsddDictionary;
 }

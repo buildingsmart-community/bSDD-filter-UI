@@ -9,11 +9,13 @@ import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   selectBsddApiEnvironment,
+  selectBsddApiEnvironmentUri,
   selectFilterDictionaries,
   selectLanguage,
   selectMainDictionary,
   setSettings,
 } from '../../../../common/src/settings/settingsSlice';
+import { fetchDictionaries, updateBsddApi } from '../../../../common/src/BsddApi/bsddSlice';
 
 interface SettingsProps {}
 
@@ -23,6 +25,7 @@ function Settings({}: SettingsProps) {
   const filterDictionaries = useAppSelector(selectFilterDictionaries);
   const language = useAppSelector(selectLanguage);
   const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironment);
+  const bsddApiEnvironmentUri = useAppSelector(selectBsddApiEnvironmentUri);
 
   const [tempSettings, setTempSettings] = useState<BsddSettings>();
   const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
@@ -31,6 +34,15 @@ function Settings({}: SettingsProps) {
   useEffect(() => {
     console.log('isLoading', isLoading);
   }, [isLoading]);
+
+  // Update the cached dictionary data when the environment changes
+  useEffect(() => {
+    if (!bsddApiEnvironmentUri) {
+      return;
+    }
+    dispatch(updateBsddApi(bsddApiEnvironmentUri));
+    dispatch(fetchDictionaries(bsddApiEnvironmentUri));
+  }, [dispatch, bsddApiEnvironmentUri]);
 
   useEffect(() => {
     setTempSettings({

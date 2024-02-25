@@ -1,7 +1,7 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { Association, IfcEntity } from './ifc';
 import { RootState } from '../../../bsdd_selection/src/app/store';
-import { preprocessIfcClassificationReference } from './ifcValidators';
+import { patchIfcClassificationReference } from './ifcValidators';
 
 interface EntitiesState {
   ifcEntities: IfcEntity[];
@@ -28,15 +28,12 @@ export const setValidatedIfcData = createAsyncThunk(
             await Promise.all(
               hasAssociations.map(async (association) => {
                 if (association.type === 'IfcClassificationReference') {
-                  const { validationState, newReference } = await preprocessIfcClassificationReference(
-                    association,
-                    dispatch,
-                    state,
-                  );
+                  const { validationState, ifcClassificationReference, message } =
+                    await patchIfcClassificationReference(association, dispatch, state);
                   if (validationState === 'invalid') {
                     return null;
                   }
-                  return newReference;
+                  return ifcClassificationReference;
                 }
                 return association;
               }),

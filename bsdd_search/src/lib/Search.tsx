@@ -2,6 +2,8 @@ import AsyncSelect from 'react-select/async';
 import { useEffect, useState } from 'react';
 import { BsddApi } from '../../../common/src/BsddApi/BsddApi';
 import { RequestParams } from '../../../common/src/BsddApi/BsddApiBase';
+import { debounce } from 'lodash';
+
 
 interface Option {
   label: string;
@@ -16,8 +18,69 @@ interface Props {
   accessToken: string;
 }
 
+const searchInSingleDictionary = (
+  api: BsddApi<unknown>,
+  activeDictionaries: Option[],
+  params: RequestParams,
+  inputValue: string,
+  callback: (options: any[]) => void,
+) => {
+  const queryParameters = {
+    SearchText: inputValue,
+    DictionaryUri: activeDictionaries[0].value,
+    // LanguageCode: 'NL',
+    // RelatedIfcEntities: 'IfcWall',
+  };
+  api.api.searchInDictionaryV1List(queryParameters, params).then((response) => {
+    const searchResult = response.data;
+    if (searchResult.count) {
+      const dictionaryClasses = searchResult.dictionary?.classes;
+      if (dictionaryClasses) {
+        callback(
+          dictionaryClasses.map((c) => ({
+            value: c.uri,
+            label: c.name,
+          })),
+        );
+      }
+    }
+  });
+};
+
+const searchInMultipleDictionaries = (
+  api: BsddApi<unknown>,
+  activeDictionaries: Option[],
+  params: RequestParams,
+  inputValue: string,
+  callback: (options: any[]) => void,
+) => {
+  const queryParameters = {
+    SearchText: inputValue,
+    DictionaryUris: [activeDictionaries[0].value],
+    // DictionaryUris: activeDomains.map((domain) => domain.value),
+    // LanguageCode: 'NL',
+    // RelatedIfcEntities: 'IfcWall',
+  };
+  api.api.classSearchV1List(queryParameters, params).then((response) => {
+    if (response.data.classes) {
+      callback(
+        response.data.classes.map((c) => ({
+          value: c.uri,
+          label: c.name,
+        })),
+      );
+    }
+  });
+};
+
 //https://medium.com/how-to-react/react-select-dropdown-tutorial-using-react-select-51664ab8b6f3
-function Search({ api, activeDomains, defaultValue: defaultSelection, setActiveClassificationUri, accessToken }: Props) {
+function Search({
+  api,
+  activeDomains: activeDictionaries,
+  defaultValue: defaultSelection,
+  setActiveClassificationUri,
+  accessToken,
+}: Props) {
   const [selected, setSelected] = useState<Option | undefined>(defaultSelection);
 
   const params: RequestParams = {
@@ -28,49 +91,16 @@ function Search({ api, activeDomains, defaultValue: defaultSelection, setActiveC
     params.headers = { ...params.headers, Authorization: 'Bearer ' + accessToken };
   }
 
-  const loadOptions = (inputValue: string, callback: (options: any[]) => void) => {
-    if (activeDomains.length === 1 && accessToken) {
-      const queryParameters = {
-        SearchText: inputValue,
-        DomainNamespaceUri: activeDomains[0].value,
-        // LanguageCode: 'NL',
-        // RelatedIfcEntities: 'IfcWall',
-      };
-      api.api.searchListV2List(queryParameters, params).then((response) => {
-        const searchResult = response.data;
-        if (searchResult.numberOfClassificationsFound) {
-          const domains = response.data.domains;
-          if (domains && domains[0] && domains[0].classifications) {
-            callback(
-              domains[0].classifications.map((c) => ({
-                value: c.namespaceUri,
-                label: c.name,
-              })),
-            );
-          }
-        }
-      });
-    } else if (inputValue.length > 2) {
-      const queryParameters = {
-        SearchText: inputValue,
-        DomainNamespaceUris: activeDomains.map((domain) => domain.value),
-        // LanguageCode: 'NL',
-        // RelatedIfcEntities: 'IfcWall',
-      };
-      api.api.classificationSearchOpenV1List(queryParameters, params).then((response) => {
-        if (response.data.classifications) {
-          callback(
-            response.data.classifications.map((c) => ({
-              value: c.namespaceUri,
-              label: c.name,
-            })),
-          );
-        }
-      });
+  const loadOptions = debounce((inputValue: string, callback: (options: any[]) => void) => {
+    if (activeDictionaries.length === 1) {
+      searchInSingleDictionary(api, activeDictionaries, params, inputValue, callback);
+    } else if (activeDictionaries.length > 2) {
+      searchInMultipleDictionaries(api, activeDictionaries, params, inputValue, callback);
     } else {
       callback([]);
     }
-  };
+  }, 500);
+
 
   useEffect(() => {
     if (defaultSelection) {

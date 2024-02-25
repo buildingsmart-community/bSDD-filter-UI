@@ -97,10 +97,13 @@ function Selection({}: SelectionProps) {
 
   useEffect(() => {
     if (!bsddApiEnvironment || !mainDictionary) return;
+    const location = mainDictionary?.ifcClassification?.location;
+    if (!location) return;
+
     const api = new BsddApi(bsddApiEnvironment);
     api.api
       .dictionaryV1ClassesList({
-        Uri: mainDictionary.ifcClassification.location,
+        Uri: location,
         // languageCode: languageCode || undefined
       })
       .then((response) => {
@@ -116,7 +119,6 @@ function Selection({}: SelectionProps) {
         throw new Error(`bSDD API error! status: ${error}`);
       });
   }, [mainDictionary, bsddApiEnvironment]);
-
   const groupedEntities = groupEntitiesBy(ifcEntities, 'description');
 
   return (

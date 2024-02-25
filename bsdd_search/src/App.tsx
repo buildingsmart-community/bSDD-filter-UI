@@ -1,36 +1,45 @@
+import { useState, useEffect } from 'react';
 import BsddSearch from './lib';
 
 // MSAL imports
 import { PublicClientApplication } from '@azure/msal-browser';
 import { msalConfig } from './authConfig';
 import { IfcEntity } from '../../common/src/IfcData/ifc';
-
-export const msalInstance = new PublicClientApplication(msalConfig);
+import { mockData } from '../../common/src/IfcData/mockData';
+import { BsddConfig, Option } from './lib/BsddSearch';
 
 function callback(data: IfcEntity) {
   console.log(data);
-  const viewer = document.getElementById('viewer');
-  if (viewer) {
-    viewer.innerHTML = `<pre class="h-100">${JSON.stringify(data, undefined, 2)}</pre>`;
-  }
 }
 
-const config = {
-  baseUrl: 'https://test.bsdd.buildingsmart.org',
+const config: BsddConfig = {
+  baseUrl: mockData.settings.bsddApiEnvironment || 'test',
   defaultDomains: [
-    {
-      value: 'https://identifier.buildingsmart.org/uri/digibase/volkerwesselsbv-0.1',
-      label: 'VolkerWessels Bouw & Vastgoed',
-    },
+    (mockData.settings.mainDictionary
+      ? {
+          value: mockData.settings.mainDictionary.ifcClassification.location,
+          label: mockData.settings.mainDictionary.ifcClassification.name || '',
+        }
+      : {}) as Option,
   ],
   defaultSearch: {
-    value:
-      'https://identifier.buildingsmart.org/uri/digibase/volkerwesselsbv-0.1/class/vloer_beton_kanaalplaat_geisoleerd',
-    label: 'vloer_beton_kanaalplaat_geisoleerd',
+    value: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/breedplaatvloer',
+    label: 'breedplaatvloer',
   },
 };
 
 function App() {
+  const [msalInstance, setMsalInstance] = useState<PublicClientApplication | null>(null);
+
+  useEffect(() => {
+    const instance = new PublicClientApplication(msalConfig);
+    setMsalInstance(instance);
+  }, []);
+
+  if (!msalInstance) {
+    return <div>Loading...</div>;
+  }
+
   return <BsddSearch callback={callback} config={config} msalInstance={msalInstance} />;
 }
 

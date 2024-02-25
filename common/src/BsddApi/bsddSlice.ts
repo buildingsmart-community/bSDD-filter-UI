@@ -1,12 +1,11 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction, ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 import { ClassContractV1, ClassListItemContractV1, DictionaryContractV1 } from './BsddApiBase';
 import { BsddApi } from './BsddApi';
-import { AppDispatch, RootState } from '../../../bsdd_selection/src/app/store';
+import { RootState } from '../../../bsdd_selection/src/app/store';
 import {
   selectBsddApiEnvironmentUri,
   // selectLanguage
 } from '../settings/settingsSlice';
-// import { useAppSelector } from '../../../bsdd_selection/src/app/hooks';
 
 const CLASS_ITEM_PAGE_SIZE = 500;
 const DICTIONARIES_PAGE_SIZE = 500;
@@ -15,6 +14,7 @@ interface BsddState {
   classes: { [key: string]: ClassContractV1 };
   dictionaries: { [key: string]: DictionaryContractV1 };
   dictionaryClasses: { [key: string]: ClassListItemContractV1[] };
+  loaded: boolean;
 }
 
 let bsddApi: BsddApi<any> | null = null;
@@ -25,6 +25,7 @@ const initialState: BsddState = {
   classes: {},
   dictionaries: {},
   dictionaryClasses: {},
+  loaded: false,
 };
 
 /**
@@ -47,7 +48,7 @@ export const selectBsddApi = (state: RootState) => {
  * @param baseUrl The new base URL for the BsddApi.
  */
 export function updateBsddApi(baseUrl: string) {
-  return (dispatch: AppDispatch) => {
+  return (dispatch: ThunkDispatch<unknown, unknown, UnknownAction>) => {
     bsddApi = new BsddApi(baseUrl);
     fetchPromisesCache = {};
     dispatch(resetState());
@@ -68,11 +69,17 @@ const bsddSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchDictionaries.pending, (state) => {
+        state.loaded = false;
+      })
       .addCase(fetchDictionaries.fulfilled, (state, action: PayloadAction<{ [key: string]: DictionaryContractV1 }>) => {
+        console.log('fetch dictionaries fulfilled', action.payload);
         state.dictionaries = action.payload;
+        state.loaded = true;
       })
       .addCase(fetchDictionaryClasses.rejected, (state, action) => {
         console.error('fetch dictionary classes failed', action.error);
+        state.loaded = true;
       });
   },
 });
@@ -125,6 +132,7 @@ export const fetchClass = createAsyncThunk('bsdd/fetchClass', async (uri: string
 export const fetchDictionaries = createAsyncThunk(
   'bsdd/fetchDictionaries',
   async (bsddApiEnvironment: string, thunkAPI) => {
+    console.log('fetchDictionaries', bsddApiEnvironment);
     if (!bsddApiEnvironment) return thunkAPI.rejectWithValue('No bsddApiEnvironment provided');
 
     const api = new BsddApi(bsddApiEnvironment);
@@ -255,8 +263,10 @@ export const fetchDictionaryClasses = createAsyncThunk(
   },
 );
 
+export const selectDictionary = (state: RootState, uri: string) => state.bsdd.dictionaries[uri];
 export const selectDictionaryClasses = (state: RootState, location: string) => state.bsdd.dictionaryClasses[location];
 export const selectBsddDictionaries = (state: RootState) => state.bsdd.dictionaries;
+export const selectBsddDataLoaded = (state: RootState) => state.bsdd.loaded;
 
 export const { resetState } = bsddSlice.actions;
 

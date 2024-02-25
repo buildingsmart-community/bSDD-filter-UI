@@ -15,15 +15,15 @@ import { bsddEnvironments } from '../../../common/src/BsddApi/BsddApiEnvironment
 import { BsddApi } from '../../../common/src/BsddApi/BsddApi';
 import { ClassContractV1, DictionaryContractV1 } from '../../../common/src/BsddApi/BsddApiBase';
 
-interface Option {
+export interface Option {
   label: string;
   value: string;
 }
 
-interface BsddConfig {
+export interface BsddConfig {
   baseUrl?: string;
-  defaultDomains: Option[];
-  defaultSearch: Option;
+  defaultDomains?: Option[];
+  defaultSearch?: Option;
   ifcEntity?: IfcEntity;
 }
 

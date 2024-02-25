@@ -1,4 +1,4 @@
-import { DictionaryContractV1 } from '../BsddApi/BsddApiBase';
+import { DictionaryClassesResponseContractV1, DictionaryContractV1 } from '../BsddApi/BsddApiBase';
 import { IfcClassification } from './ifc';
 
 /**
@@ -6,7 +6,9 @@ import { IfcClassification } from './ifc';
  * @param bsddDictionary The BSDD dictionary to convert.
  * @returns The converted IfcClassification object.
  */
-export function convertBsddDictionaryToIfc(bsddDictionary: DictionaryContractV1): IfcClassification {
+export function convertBsddDictionaryToIfcClassification(
+  bsddDictionary: DictionaryContractV1 | DictionaryClassesResponseContractV1,
+): IfcClassification {
   return {
     type: 'IfcClassification',
     source: bsddDictionary?.organizationCodeOwner,

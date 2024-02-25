@@ -5,6 +5,7 @@ import {
   IfcEntity,
   IfcPropertySet,
 } from '../../../common/src/IfcData/ifc';
+import { convertBsddDictionaryToIfcClassification } from '../../../common/src/IfcData/ifcBsddConverters';
 
 interface ApplyProps {
   callback: (value: any) => void;
@@ -31,12 +32,7 @@ function Apply({ callback, domains, classifications, propertySetMap, ifcEntity }
     if (domainNamespaceUri in domains) {
       const dictionary: DictionaryContractV1 = domains[domainNamespaceUri];
       if (dictionary) {
-        const ifc: IfcClassification = {
-          type: 'IfcClassification',
-          location: dictionary.uri,
-          name: dictionary.name,
-        };
-        return ifc;
+        return convertBsddDictionaryToIfcClassification(dictionary);
       }
     }
     return null;
