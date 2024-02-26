@@ -1,9 +1,10 @@
-import AsyncSelect from 'react-select/async';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, KeyboardEvent, useRef, useCallback } from 'react';
 import { BsddApi } from '../../../common/src/BsddApi/BsddApi';
 import { RequestParams } from '../../../common/src/BsddApi/BsddApiBase';
-import { debounce } from 'lodash';
+import { Autocomplete, Combobox } from '@mantine/core';
+import { useDebouncedValue } from '@mantine/hooks';
 
+const SEARCH_LIMIT = 25;
 
 interface Option {
   label: string;
@@ -28,6 +29,7 @@ const searchInSingleDictionary = (
   const queryParameters = {
     SearchText: inputValue,
     DictionaryUri: activeDictionaries[0].value,
+    Limit: SEARCH_LIMIT,
     // LanguageCode: 'NL',
     // RelatedIfcEntities: 'IfcWall',
   };
@@ -57,6 +59,7 @@ const searchInMultipleDictionaries = (
   const queryParameters = {
     SearchText: inputValue,
     DictionaryUris: [activeDictionaries[0].value],
+    Limit: SEARCH_LIMIT,
     // DictionaryUris: activeDomains.map((domain) => domain.value),
     // LanguageCode: 'NL',
     // RelatedIfcEntities: 'IfcWall',
@@ -73,7 +76,6 @@ const searchInMultipleDictionaries = (
   });
 };
 
-//https://medium.com/how-to-react/react-select-dropdown-tutorial-using-react-select-51664ab8b6f3
 function Search({
   api,
   activeDomains: activeDictionaries,
@@ -82,6 +84,12 @@ function Search({
   accessToken,
 }: Props) {
   const [selected, setSelected] = useState<Option | undefined>(defaultSelection);
+  const [options, setOptions] = useState<Option[]>([]);
+  const [searchValue, setSearchValue] = useState('');
+  const [debouncedSearchValue] = useDebouncedValue(searchValue, 300);
+  const [opened, setOpened] = useState<boolean>(false);
+
+  const inputRef = useRef(null);
 
   const params: RequestParams = {
     headers: { Accept: 'text/plain' },
@@ -91,20 +99,63 @@ function Search({
     params.headers = { ...params.headers, Authorization: 'Bearer ' + accessToken };
   }
 
-  const loadOptions = debounce((inputValue: string, callback: (options: any[]) => void) => {
+  const loadOptions = (inputValue: string) => {
     if (activeDictionaries.length === 1) {
+      const callback = (options: any[]) => setOptions(options);
       searchInSingleDictionary(api, activeDictionaries, params, inputValue, callback);
     } else if (activeDictionaries.length > 2) {
+      const callback = (options: any[]) => setOptions(options);
       searchInMultipleDictionaries(api, activeDictionaries, params, inputValue, callback);
     } else {
-      callback([]);
+      setOptions([]);
     }
-  }, 500);
+  };
 
+  const handleOnChange = useCallback((value: string) => {
+    setSearchValue(value);
+  }, []);
+
+  const handleOptionSubmit = useCallback(
+    (value: string) => {
+      const selectedOption = options.find((option) => option.value === value);
+      if (selectedOption) {
+        setSelected(selectedOption);
+        setOpened(false);
+      }
+    },
+    [options],
+  );
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter' && options[0]) {
+        setSearchValue(options[0].label);
+        handleOptionSubmit(options[0].value);
+        if (inputRef.current) {
+          (inputRef.current as any).blur();
+        }
+      }
+    },
+    [options, handleOptionSubmit, inputRef],
+  );
+
+  useEffect(() => {
+    if (debouncedSearchValue !== '') {
+      loadOptions(debouncedSearchValue);
+    }
+  }, [debouncedSearchValue]);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      (inputRef.current as any).focus();
+    }
+  }, []);
 
   useEffect(() => {
     if (defaultSelection) {
+      setSearchValue(defaultSelection?.label || '');
       setSelected(defaultSelection);
+      setOpened(false);
     }
   }, [defaultSelection]);
 
@@ -114,21 +165,19 @@ function Search({
     }
   }, [selected]);
 
-  const handleOnChange = (e: any) => {
-    setActiveClassificationUri(e.value);
-    setSelected(e);
-  };
-
   return (
-    <div>
-      <AsyncSelect
-        loadOptions={loadOptions}
-        // defaultOptions
-        placeholder={<div>bSDD search...</div>}
-        onChange={(e) => handleOnChange(e)}
-        value={selected}
-      />
-    </div>
+    <Autocomplete
+      data={options}
+      placeholder="bSDD search..."
+      value={searchValue}
+      onChange={handleOnChange}
+      onOptionSubmit={handleOptionSubmit}
+      onKeyDown={handleKeyDown}
+      dropdownOpened={opened}
+      onDropdownOpen={() => setOpened(true)}
+      ref={inputRef}
+      style={{ width: '100%' }}
+    />
   );
 }
 

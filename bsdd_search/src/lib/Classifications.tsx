@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Form } from 'react-bootstrap';
 import { ClassContractV1, DictionaryContractV1, RequestParams } from '../../../common/src/BsddApi/BsddApiBase';
 import { BsddApi } from '../../../common/src/BsddApi/BsddApi';
 import { groupBy } from 'lodash';
+import { Select } from '@mantine/core';
 
 interface ClassificationSelectsProps {
   api: BsddApi<unknown>;
@@ -39,7 +39,7 @@ async function fetchClassification(
   }
 }
 
-function ClassificationSelects({
+function Classifications({
   api,
   activeClassificationUri,
   setClassifications,
@@ -153,12 +153,10 @@ function ClassificationSelects({
           }
         }
       });
-      const newSelectedValues: { [dictionaryUri: string]: string } = {};
+      const newSelectedValues: { [dictionaryUri: string]: string } = { ...selectedValues };
       const newGroupedClassifications = groupBy(classificationResults, 'dictionaryUri');
       Object.entries(newGroupedClassifications).forEach(([dictionaryUri, classificationsInGroup]) => {
-        if (selectedValues[dictionaryUri]) {
-          newSelectedValues[dictionaryUri] = selectedValues[dictionaryUri];
-        } else {
+        if (!classificationsInGroup.some((classification) => classification.uri === newSelectedValues[dictionaryUri])) {
           newSelectedValues[dictionaryUri] = classificationsInGroup[0].uri;
         }
       });
@@ -166,7 +164,7 @@ function ClassificationSelects({
       setClassifications(classificationResults);
       setOriginalClassifications(classificationResults);
     });
-  }, [classificationUris]);
+  }, [classificationUris, classificationCount, selectedValues, api]);
 
   useEffect(() => {
     setClassifications(
@@ -174,16 +172,16 @@ function ClassificationSelects({
         .map((selectedUri) => originalClassifications.find((classification) => classification.uri === selectedUri))
         .filter((classification): classification is ClassContractV1 => classification !== undefined),
     );
-  }, [selectedValues]);
+  }, [selectedValues, originalClassifications]);
 
   const handleOnChange = useCallback(
-    (dictionaryUri: string) => (e: { target: { value: any } }) => {
-      const selectedUri = e.target.value;
+    (dictionaryUri: string) => (selectedUri: string | null) => {
+      if (!selectedUri) return;
       const selectedClassification = originalClassifications.find(
         (classification) => classification.uri === selectedUri,
       );
       if (!selectedClassification) {
-        console.error('Selected classification not found');
+        console.log(`Selected classification '${selectedUri}' not found`);
         return;
       }
 
@@ -194,26 +192,23 @@ function ClassificationSelects({
   );
 
   return (
-    <div>
-      {Object.entries(groupedClassifications).map(([dictionaryUri, classificationsInGroup], groupIndex) => (
-        <Form.Group className="mb-3 row" key={groupIndex}>
-          <Form.Label className="col-sm-5 col-form-label">{domains[dictionaryUri].name}</Form.Label>
-          <div className="col-sm-7">
-            <Form.Select
-              value={selectedValues[dictionaryUri] || ''}
-              disabled={classificationsInGroup.length === 1}
-              onChange={handleOnChange(dictionaryUri)}
-            >
-              {classificationsInGroup.map((classification, index) => (
-                <option key={index} value={classification.uri}>
-                  {classification.name}
-                </option>
-              ))}
-            </Form.Select>
-          </div>
-        </Form.Group>
+    <>
+      {Object.entries(groupedClassifications).map(([dictionaryUri, classificationsInGroup]) => (
+        <Select
+          mb="sm"
+          key={dictionaryUri}
+          label={domains[dictionaryUri] ? domains[dictionaryUri].name : ''}
+          data={classificationsInGroup.map((classification) => ({
+            value: classification.uri,
+            label: classification.name,
+          }))}
+          value={selectedValues[dictionaryUri]}
+          readOnly={classificationsInGroup.length === 1}
+          variant={classificationsInGroup.length === 1 ? 'filled' : 'default'}
+          onChange={(value) => handleOnChange(dictionaryUri)(value)}
+        />
       ))}
-    </div>
+    </>
   );
 }
-export default ClassificationSelects;
+export default Classifications;

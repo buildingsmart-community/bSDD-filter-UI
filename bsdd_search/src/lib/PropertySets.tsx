@@ -1,5 +1,4 @@
 import { useEffect, Children } from 'react';
-import { Accordion } from 'react-bootstrap';
 import Property from './Property';
 import {
   IfcProperty,
@@ -9,6 +8,8 @@ import {
   IfcValue,
 } from '../../../common/src/IfcData/ifc';
 import { ClassContractV1, ClassPropertyContractV1 } from '../../../common/src/BsddApi/BsddApiBase';
+import { useTranslation } from 'react-i18next';
+import { Accordion } from '@mantine/core';
 
 interface Props {
   classifications: ClassContractV1[];
@@ -18,6 +19,7 @@ interface Props {
 }
 
 function PropertySets(props: Props) {
+  const { t } = useTranslation();
   const classifications: ClassContractV1[] = props.classifications;
   const propertySets: { [id: string]: IfcPropertySet } = props.propertySets;
   const setPropertySets: (value: { [id: string]: IfcPropertySet }) => void = props.setPropertySets;
@@ -167,10 +169,10 @@ function PropertySets(props: Props) {
     <div>
       {Children.toArray(
         Object.values(propertySets).map((propertySet, propertySetIndex) => (
-          <Accordion flush>
-            <Accordion.Item eventKey="0" key={propertySetIndex}>
-              <Accordion.Header>{propertySet.name}</Accordion.Header>
-              <Accordion.Body>
+          <Accordion>
+            <Accordion.Item key={propertySetIndex} value={propertySet.name || propertySetIndex.toString()}>
+              <Accordion.Control>{propertySet.name}</Accordion.Control>
+              <Accordion.Panel>
                 {Children.toArray(
                   propertySet.hasProperties.map((property, propertyIndex) => (
                     <Property
@@ -182,7 +184,7 @@ function PropertySets(props: Props) {
                     />
                   )),
                 )}
-              </Accordion.Body>
+              </Accordion.Panel>
             </Accordion.Item>
           </Accordion>
         )),

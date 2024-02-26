@@ -1,3 +1,4 @@
+import { Button } from '@mantine/core';
 import { ClassContractV1, DictionaryContractV1 } from '../../../common/src/BsddApi/BsddApiBase';
 import {
   IfcClassification,
@@ -6,6 +7,7 @@ import {
   IfcPropertySet,
 } from '../../../common/src/IfcData/ifc';
 import { convertBsddDictionaryToIfcClassification } from '../../../common/src/IfcData/ifcBsddConverters';
+import { useTranslation } from 'react-i18next';
 
 interface ApplyProps {
   callback: (value: any) => void;
@@ -16,6 +18,8 @@ interface ApplyProps {
 }
 
 function Apply({ callback, domains, classifications, propertySetMap, ifcEntity }: ApplyProps) {
+  const { t } = useTranslation();
+
   function getIfcEntity(): IfcEntity {
     const ifc: IfcEntity = ifcEntity || {};
     if (classifications.length) {
@@ -63,11 +67,9 @@ function Apply({ callback, domains, classifications, propertySetMap, ifcEntity }
   };
 
   return (
-    <div>
-      <button type="button" className="btn btn-secondary w-100" onClick={() => handleOnChange()}>
-        Apply
-      </button>
-    </div>
+    <Button color="gray" fullWidth onClick={handleOnChange} variant={'filled'}>
+      {t('Save')}
+    </Button>
   );
 }
 

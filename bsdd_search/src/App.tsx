@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import BsddSearch from './lib';
+import '@mantine/core/styles.css';
+import { MantineProvider } from '@mantine/core';
+import { theme } from '../../common/src/theme/theme';
 
 // MSAL imports
 import { PublicClientApplication } from '@azure/msal-browser';
@@ -7,6 +10,7 @@ import { msalConfig } from './authConfig';
 import { IfcEntity } from '../../common/src/IfcData/ifc';
 import { mockData } from '../../common/src/IfcData/mockData';
 import { BsddConfig, Option } from './lib/BsddSearch';
+import '../../common/src/i18n';
 
 function callback(data: IfcEntity) {
   console.log(data);
@@ -40,7 +44,11 @@ function App() {
     return <div>Loading...</div>;
   }
 
-  return <BsddSearch callback={callback} config={config} msalInstance={msalInstance} />;
+  return (
+    <MantineProvider theme={theme}>
+      <BsddSearch callback={callback} config={config} msalInstance={msalInstance} />
+    </MantineProvider>
+  );
 }
 
 export default App;

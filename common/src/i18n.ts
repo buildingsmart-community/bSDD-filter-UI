@@ -45,6 +45,8 @@ i18n.use(initReactI18next).init({
         'Sort filter dictionaries help text':
           'The dictionaries will be shown in this order anywhere in the application.',
         'Validation per dictionary': 'Validation per dictionary',
+        'Classifications': 'Classifications',
+        'Propertysets': 'Property sets',
       },
     },
     nl: {
@@ -71,6 +73,8 @@ i18n.use(initReactI18next).init({
         'Sort filter dictionaries': 'Sorteer filter domeinen',
         'Sort filter dictionaries help text': 'De domeinen worden overal in de app in deze volgorde getoond.',
         'Validation per dictionary': 'Validatie per domein',
+        'Classifications': 'Classificaties',
+        'Propertysets': 'Eigenschapen sets',
       },
     },
   },

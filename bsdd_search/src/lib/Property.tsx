@@ -1,7 +1,12 @@
 import { useState, useEffect, Children } from 'react';
-import { Form } from 'react-bootstrap';
-import Checkbox from './Checkbox';
-import { IfcProperty, IfcPropertyEnumeratedValue, IfcPropertySet, IfcPropertySingleValue } from '../../../common/src/IfcData/ifc';
+import Check from './Checkbox';
+import {
+  IfcProperty,
+  IfcPropertyEnumeratedValue,
+  IfcPropertySet,
+  IfcPropertySingleValue,
+} from '../../../common/src/IfcData/ifc';
+import { Group, Select, TextInput, Text } from '@mantine/core';
 
 interface Props {
   propertySet: IfcPropertySet;
@@ -13,34 +18,27 @@ interface Props {
 
 function Property(props: Props) {
   const [input, setInput] = useState<any>();
-  const ifcProperty:
-    | IfcProperty
-    | IfcPropertyEnumeratedValue
-    | IfcPropertySingleValue = props.property;
+  const ifcProperty: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue = props.property;
   const ifcPropertySet: IfcPropertySet = props.propertySet;
   const ifcPropertySets: { [id: string]: IfcPropertySet } = props.propertySets;
-  const setIfcPropertySets: (value: { [id: string]: IfcPropertySet }) => void =
-    props.setPropertySets;
+  const setIfcPropertySets: (value: { [id: string]: IfcPropertySet }) => void = props.setPropertySets;
 
   useEffect(() => {
     switch (ifcProperty.type) {
       case 'IfcPropertySingleValue': {
         if (ifcProperty.nominalValue.type === 'IfcBoolean') {
           setInput(
-            <Checkbox
+            <Check
               disabled={false}
               value={ifcProperty.nominalValue.value}
               setValue={(value: true | false | undefined) => {
                 const propertySets = { ...ifcPropertySets };
                 const propertySet = { ...ifcPropertySet };
                 if (propertySet.name) {
-                  const p:
-                    | IfcProperty
-                    | IfcPropertyEnumeratedValue
-                    | IfcPropertySingleValue = { ...ifcProperty };
+                  const p: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue = { ...ifcProperty };
                   p.nominalValue.value = value;
                   const i: number = propertySet.hasProperties.findIndex(
-                    (element:any) => element.name === ifcProperty.name,
+                    (element: any) => element.name === ifcProperty.name,
                   );
                   if (i != -1) {
                     propertySet.hasProperties[i] = p;
@@ -53,20 +51,17 @@ function Property(props: Props) {
           );
         } else {
           setInput(
-            <Form.Control
+            <TextInput
               placeholder={ifcProperty.nominalValue.value}
               value={ifcProperty.nominalValue.value}
               onChange={(e) => {
                 const propertySets = { ...ifcPropertySets };
                 const propertySet = { ...ifcPropertySet };
                 if (propertySet.name) {
-                  const p:
-                    | IfcProperty
-                    | IfcPropertyEnumeratedValue
-                    | IfcPropertySingleValue = { ...ifcProperty };
+                  const p: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue = { ...ifcProperty };
                   p.nominalValue.value = e.target.value;
                   const i: number = propertySet.hasProperties.findIndex(
-                    (element:any) => element.name === ifcProperty.name,
+                    (element: any) => element.name === ifcProperty.name,
                   );
                   if (i != -1) {
                     propertySet.hasProperties[i] = p;
@@ -82,19 +77,16 @@ function Property(props: Props) {
       }
       case 'IfcPropertyEnumeratedValue': {
         setInput(
-          <Form.Select
+          <Select
             value={ifcProperty.enumerationValues}
             onChange={(e) => {
               const propertySets = { ...ifcPropertySets };
               const propertySet = { ...ifcPropertySet };
               if (propertySet.name) {
-                const p:
-                  | IfcProperty
-                  | IfcPropertyEnumeratedValue
-                  | IfcPropertySingleValue = { ...ifcProperty };
-                p.enumerationValues = [e.target.value];
+                const p: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue = { ...ifcProperty };
+                p.enumerationValues = [e];
                 const i: number = propertySet.hasProperties.findIndex(
-                  (element:any) => element.name === ifcProperty.name,
+                  (element: any) => element.name === ifcProperty.name,
                 );
                 if (i != -1) {
                   propertySet.hasProperties[i] = p;
@@ -103,43 +95,26 @@ function Property(props: Props) {
                 }
               }
             }}
-          >
-            {Children.toArray(
-              ifcProperty.enumerationReference.enumerationValues.map(
-                (value: any, index: any) => (
-                  <option key={index}>{value}</option>
-                ),
-              ),
-            )}
-          </Form.Select>,
-        );
-        break;
-      }
-      default: {
-        setInput(
-          <Form.Control
-            placeholder={ifcProperty.name}
-            value="{ifcProperty.nominalValue}"
+            data={ifcProperty.enumerationReference.enumerationValues.map((value: any, index: any) => ({
+              value: value,
+              label: value,
+            }))}
           />,
         );
         break;
       }
+      default: {
+        setInput(<TextInput placeholder={ifcProperty.name} value="{ifcProperty.nominalValue}" />);
+        break;
+      }
     }
-  }, [
-    ifcProperty,
-    ifcPropertySet,
-    setInput,
-    ifcPropertySets,
-    setIfcPropertySets,
-  ]);
+  }, [ifcProperty, ifcPropertySet, setInput, ifcPropertySets, setIfcPropertySets]);
 
   return (
-    <Form.Group className="mb-3 row" key={props.propertyIndex}>
-      <Form.Label className="col-sm-5 col-form-label">
-        {ifcProperty.name}
-      </Form.Label>
+    <Group className="mb-3 row" key={props.propertyIndex}>
+      <Text>{ifcProperty.name}</Text>
       <div className="col-sm-7">{input}</div>
-    </Form.Group>
+    </Group>
   );
 }
 export default Property;

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Form } from 'react-bootstrap';
+import { Checkbox } from '@mantine/core';
 
 interface Props {
   value: true | false | undefined;
@@ -7,7 +7,7 @@ interface Props {
   disabled: boolean;
 }
 
-function Checkbox(props: Props) {
+function Check(props: Props) {
   const { value, setValue, disabled } = props;
   const checkboxRef = useRef<HTMLInputElement>(null);
 
@@ -26,14 +26,7 @@ function Checkbox(props: Props) {
     }
   });
 
-  return (
-    <Form.Check
-      ref={checkboxRef}
-      type="checkbox"
-      onChange={(e) => handleOnChange(e)}
-      disabled={disabled}
-    />
-  );
+  return <Checkbox ref={checkboxRef} type="checkbox" onChange={(e) => handleOnChange(e)} disabled={disabled} />;
 }
 
-export default Checkbox;
+export default Check;
