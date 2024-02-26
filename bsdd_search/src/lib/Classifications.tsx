@@ -1,29 +1,61 @@
-import { useState, useEffect, Children } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Form } from 'react-bootstrap';
 import { ClassContractV1, DictionaryContractV1, RequestParams } from '../../../common/src/BsddApi/BsddApiBase';
 import { BsddApi } from '../../../common/src/BsddApi/BsddApi';
+import { groupBy } from 'lodash';
 
-interface Props {
+interface ClassificationSelectsProps {
   api: BsddApi<unknown>;
   activeClassificationUri: string | undefined;
-  classifications: ClassContractV1[];
   setClassifications: (value: ClassContractV1[]) => void;
   domains: { [id: string]: DictionaryContractV1 };
   accessToken: string;
 }
 
-function Classifications({
+const getGroupedClassifications = (classifications: ClassContractV1[]) => groupBy(classifications, 'dictionaryUri');
+
+/**
+ * Fetches a classification from the bSDD API.
+ *
+ * @param api - The instance of the BsddApi.
+ * @param classificationUri - The URI of the classification to fetch.
+ * @param params - The request parameters.
+ * @returns A promise that resolves to the fetched classification or null if an error occurred.
+ */
+async function fetchClassification(
+  api: BsddApi<unknown>,
+  classificationUri: string,
+  params: RequestParams,
+): Promise<ClassContractV1 | null> {
+  try {
+    const response = await api.api.classV1List({ uri: classificationUri, includeClassRelations: true }, params);
+    if (response.status !== 200) {
+      throw new Error(`API request failed with status ${response.status}`);
+    }
+    return response.data;
+  } catch (err) {
+    console.error('Error fetching classification:', err);
+    return null;
+  }
+}
+
+function ClassificationSelects({
   api,
   activeClassificationUri,
-  classifications,
   setClassifications,
   domains,
   accessToken,
-}: Props) {
+}: ClassificationSelectsProps) {
   const [classificationCount, setClassificationCount] = useState<number>(0);
   const [classificationUris, setClassificationUris] = useState<{
     [id: string]: Promise<ClassContractV1 | null>;
   }>({});
+  const [originalClassifications, setOriginalClassifications] = useState<ClassContractV1[]>([]);
+  const [groupedClassifications, setGroupedClassifications] = useState(() =>
+    getGroupedClassifications(originalClassifications),
+  );
+  const [selectedValues, setSelectedValues] = useState<{ [dictionaryUri: string]: string }>({});
+
   const params: RequestParams = {
     headers: { Accept: 'text/plain' },
   };
@@ -67,17 +99,9 @@ function Classifications({
     return classificationPromise;
   }
 
-  /**
-   * Retrieves the name of the classification domain for a given classification.
-   * @param classification The classification object.
-   * @returns The name of the classification domain, or 'unknown' if not found.
-   */
-  function getClassificationDomainName(classification: ClassContractV1): string {
-    if (classification && classification.dictionaryUri && domains[classification.dictionaryUri]) {
-      return domains[classification.dictionaryUri].name;
-    }
-    return 'unknown';
-  }
+  useEffect(() => {
+    setGroupedClassifications(getGroupedClassifications(originalClassifications));
+  }, [originalClassifications]);
 
   useEffect(() => {
     setClassificationCount(0);
@@ -98,7 +122,7 @@ function Classifications({
       return;
     }
     Promise.allSettled(Object.values(classificationUris)).then(function (results) {
-      const r = results
+      const classificationResults = results
         .map((result) => {
           if (result.status === 'fulfilled') {
             return result.value;
@@ -107,7 +131,7 @@ function Classifications({
         })
         .filter((x): x is ClassContractV1 => x !== null);
 
-      results.map((result) => {
+      results.map(async (result) => {
         if (result.status === 'fulfilled') {
           const c = result.value;
           if (c && c.classRelations) {
@@ -118,33 +142,78 @@ function Classifications({
             };
             c.classRelations.forEach((classificationRelation) => {
               if (!(classificationRelation.relatedClassUri in Object.keys(classificationUris))) {
-                extendedClassificationUris[classificationRelation.relatedClassUri] = getClassification(
+                extendedClassificationUris[classificationRelation.relatedClassUri] = fetchClassification(
+                  api,
                   classificationRelation.relatedClassUri,
+                  params,
                 );
               }
             });
             setClassificationUris(extendedClassificationUris);
           }
         }
-        return 'unknown';
       });
-      setClassifications(r);
+      const newSelectedValues: { [dictionaryUri: string]: string } = {};
+      const newGroupedClassifications = groupBy(classificationResults, 'dictionaryUri');
+      Object.entries(newGroupedClassifications).forEach(([dictionaryUri, classificationsInGroup]) => {
+        if (selectedValues[dictionaryUri]) {
+          newSelectedValues[dictionaryUri] = selectedValues[dictionaryUri];
+        } else {
+          newSelectedValues[dictionaryUri] = classificationsInGroup[0].uri;
+        }
+      });
+      setSelectedValues(newSelectedValues);
+      setClassifications(classificationResults);
+      setOriginalClassifications(classificationResults);
     });
   }, [classificationUris]);
 
+  useEffect(() => {
+    setClassifications(
+      Object.values(selectedValues)
+        .map((selectedUri) => originalClassifications.find((classification) => classification.uri === selectedUri))
+        .filter((classification): classification is ClassContractV1 => classification !== undefined),
+    );
+  }, [selectedValues]);
+
+  const handleOnChange = useCallback(
+    (dictionaryUri: string) => (e: { target: { value: any } }) => {
+      const selectedUri = e.target.value;
+      const selectedClassification = originalClassifications.find(
+        (classification) => classification.uri === selectedUri,
+      );
+      if (!selectedClassification) {
+        console.error('Selected classification not found');
+        return;
+      }
+
+      const newSelectedValues = { ...selectedValues, [dictionaryUri]: selectedUri };
+      setSelectedValues(newSelectedValues);
+    },
+    [originalClassifications, selectedValues],
+  );
+
   return (
     <div>
-      {Children.toArray(
-        classifications.map((classification, index) => (
-          <Form.Group className="mb-3 row" key={index}>
-            <Form.Label className="col-sm-5 col-form-label">{getClassificationDomainName(classification)}</Form.Label>
-            <div className="col-sm-7">
-              <Form.Control placeholder={classification.name} disabled />
-            </div>
-          </Form.Group>
-        )),
-      )}
+      {Object.entries(groupedClassifications).map(([dictionaryUri, classificationsInGroup], groupIndex) => (
+        <Form.Group className="mb-3 row" key={groupIndex}>
+          <Form.Label className="col-sm-5 col-form-label">{domains[dictionaryUri].name}</Form.Label>
+          <div className="col-sm-7">
+            <Form.Select
+              value={selectedValues[dictionaryUri] || ''}
+              disabled={classificationsInGroup.length === 1}
+              onChange={handleOnChange(dictionaryUri)}
+            >
+              {classificationsInGroup.map((classification, index) => (
+                <option key={index} value={classification.uri}>
+                  {classification.name}
+                </option>
+              ))}
+            </Form.Select>
+          </div>
+        </Form.Group>
+      ))}
     </div>
   );
 }
-export default Classifications;
+export default ClassificationSelects;
