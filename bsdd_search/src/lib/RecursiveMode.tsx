@@ -1,22 +1,21 @@
-import React from 'react'
-import { Form, OverlayTrigger, Tooltip } from 'react-bootstrap'
+import React from 'react';
+import { Tooltip, Switch } from '@mantine/core';
 
 interface Props {
-  recursiveMode: boolean
-  setRecursiveMode: (value: boolean) => void
+  recursiveMode: boolean;
+  setRecursiveMode: (value: boolean) => void;
 }
 
 function RecursiveMode(props: Props) {
-  // const [selectOptions, setSelectOptions] = useState<any[]>([])
-
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    props.setRecursiveMode(e.target.checked)
-  }
+    props.setRecursiveMode(e.target.checked);
+  };
 
   return (
-    <OverlayTrigger overlay={<Tooltip>show nested classifications</Tooltip>} placement='bottom'>
-      <Form.Check type='switch' id='custom-switch' checked={props.recursiveMode} onChange={(e) => handleOnChange(e)} />
-    </OverlayTrigger>
-  )
+    <Tooltip label="show nested classifications" position="bottom">
+      <Switch checked={props.recursiveMode} onChange={(e) => handleOnChange(e)} />
+    </Tooltip>
+  );
 }
-export default RecursiveMode
+
+export default RecursiveMode;

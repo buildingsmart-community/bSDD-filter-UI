@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Form, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { loginRequest } from '../authConfig';
 import { useMsal } from '@azure/msal-react';
+import { Tooltip, Switch } from '@mantine/core';
 
 interface Props {
   setAccessToken: (value: string) => void;
@@ -10,7 +10,6 @@ interface Props {
 function Authentication({ setAccessToken }: Props) {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const { instance, inProgress, accounts } = useMsal();
-  // const [selectOptions, setSelectOptions] = useState<any[]>([])
 
   useEffect(() => {
     if (accounts[0]) {
@@ -33,9 +32,9 @@ function Authentication({ setAccessToken }: Props) {
   };
 
   return (
-    <OverlayTrigger overlay={<Tooltip>log in on bSDD</Tooltip>} placement="bottom">
-      <Form.Check type="switch" id="custom-switch" checked={authenticated} onChange={(e) => handleOnChange(e)} />
-    </OverlayTrigger>
+    <Tooltip label="log in on bSDD" position="bottom">
+      <Switch checked={authenticated} onChange={(e) => handleOnChange(e)} />
+    </Tooltip>
   );
 }
 export default Authentication;
