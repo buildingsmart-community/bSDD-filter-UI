@@ -38,8 +38,4 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/setupTests.ts',
   },
-  define: {
-    // Catch for 'Uncaught ReferenceError: process is not defined'
-    'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`,
-  },
 });
