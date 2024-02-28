@@ -2,6 +2,7 @@
 /// <reference types="vitest" />
 /// <reference types="vite/client" />
 import react from '@vitejs/plugin-react-swc';
+import path from 'path';
 import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
@@ -15,16 +16,17 @@ export default defineConfig({
     outDir: '../dist/bsdd_search',
     // assetsDir: '',
     lib: {
-      entry: 'src/lib/index.tsx',
+      entry: 'src/main.tsx',
       name: 'BsddSearch',
       fileName: 'react-bsdd-search',
     },
     rollupOptions: {
-      external: ['react', 'react-dom'],
+      external: ['react', 'react-dom', 'bootstrap'],
       output: {
         globals: {
           react: 'React',
           'react-dom': 'ReactDOM',
+          bootstrap: 'bootstrap',
         },
       },
     },
@@ -37,5 +39,9 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/setupTests.ts',
+  },
+  define: {
+    // Catch for 'Uncaught ReferenceError: process is not defined'
+    'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`,
   },
 });

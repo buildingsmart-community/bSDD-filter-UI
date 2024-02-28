@@ -23,6 +23,6 @@ module.exports = {
     'react/react-in-jsx-scope': 0,
     'simple-import-sort/imports': 'error',
     'simple-import-sort/exports': 'error',
+    'no-param-reassign': ['error', { props: false }],
   },
-  'no-param-reassign': ['error', { props: false }],
 };

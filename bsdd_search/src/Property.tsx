@@ -1,14 +1,15 @@
-import { useState, useEffect, Children } from 'react';
-import Check from './Checkbox';
+import { Group, Select, Text, TextInput } from '@mantine/core';
+import { useEffect, useState } from 'react';
+
 import {
   IfcProperty,
   IfcPropertyEnumeratedValue,
   IfcPropertySet,
   IfcPropertySingleValue,
-} from '../../../common/src/IfcData/ifc';
-import { Group, Select, TextInput, Text } from '@mantine/core';
+} from '../../common/src/IfcData/ifc';
+import Check from './Checkbox';
 
-interface Props {
+interface PropertyProps {
   propertySet: IfcPropertySet;
   property: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue;
   propertyIndex: number;
@@ -16,12 +17,12 @@ interface Props {
   setPropertySets: (value: { [id: string]: IfcPropertySet }) => void;
 }
 
-function Property(props: Props) {
+function Property({ propertySet, property, propertyIndex, propertySets, setPropertySets }: PropertyProps) {
   const [input, setInput] = useState<any>();
-  const ifcProperty: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue = props.property;
-  const ifcPropertySet: IfcPropertySet = props.propertySet;
-  const ifcPropertySets: { [id: string]: IfcPropertySet } = props.propertySets;
-  const setIfcPropertySets: (value: { [id: string]: IfcPropertySet }) => void = props.setPropertySets;
+  const ifcProperty: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue = property;
+  const ifcPropertySet: IfcPropertySet = propertySet;
+  const ifcPropertySets: { [id: string]: IfcPropertySet } = propertySets;
+  const setIfcPropertySets: (value: { [id: string]: IfcPropertySet }) => void = setPropertySets;
 
   useEffect(() => {
     switch (ifcProperty.type) {
@@ -32,18 +33,18 @@ function Property(props: Props) {
               disabled={false}
               value={ifcProperty.nominalValue.value}
               setValue={(value: true | false | undefined) => {
-                const propertySets = { ...ifcPropertySets };
-                const propertySet = { ...ifcPropertySet };
-                if (propertySet.name) {
+                const newPropertySets = { ...ifcPropertySets };
+                const newPropertySet = { ...ifcPropertySet };
+                if (newPropertySet.name) {
                   const p: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue = { ...ifcProperty };
                   p.nominalValue.value = value;
-                  const i: number = propertySet.hasProperties.findIndex(
+                  const i: number = newPropertySet.hasProperties.findIndex(
                     (element: any) => element.name === ifcProperty.name,
                   );
                   if (i != -1) {
-                    propertySet.hasProperties[i] = p;
-                    propertySets[propertySet.name] = propertySet;
-                    setIfcPropertySets(propertySets);
+                    newPropertySet.hasProperties[i] = p;
+                    newPropertySets[newPropertySet.name] = newPropertySet;
+                    setIfcPropertySets(newPropertySets);
                   }
                 }
               }}
@@ -55,18 +56,18 @@ function Property(props: Props) {
               placeholder={ifcProperty.nominalValue.value}
               value={ifcProperty.nominalValue.value}
               onChange={(e) => {
-                const propertySets = { ...ifcPropertySets };
-                const propertySet = { ...ifcPropertySet };
-                if (propertySet.name) {
+                const newPropertySets = { ...ifcPropertySets };
+                const newPropertySet = { ...ifcPropertySet };
+                if (newPropertySet.name) {
                   const p: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue = { ...ifcProperty };
                   p.nominalValue.value = e.target.value;
-                  const i: number = propertySet.hasProperties.findIndex(
+                  const i: number = newPropertySet.hasProperties.findIndex(
                     (element: any) => element.name === ifcProperty.name,
                   );
                   if (i != -1) {
-                    propertySet.hasProperties[i] = p;
-                    propertySets[propertySet.name] = propertySet;
-                    setIfcPropertySets(propertySets);
+                    newPropertySet.hasProperties[i] = p;
+                    newPropertySets[newPropertySet.name] = newPropertySet;
+                    setIfcPropertySets(newPropertySets);
                   }
                 }
               }}
@@ -80,23 +81,23 @@ function Property(props: Props) {
           <Select
             value={ifcProperty.enumerationValues}
             onChange={(e) => {
-              const propertySets = { ...ifcPropertySets };
-              const propertySet = { ...ifcPropertySet };
-              if (propertySet.name) {
+              const newPropertySets = { ...ifcPropertySets };
+              const newPropertySet = { ...ifcPropertySet };
+              if (newPropertySet.name) {
                 const p: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue = { ...ifcProperty };
                 p.enumerationValues = [e];
-                const i: number = propertySet.hasProperties.findIndex(
+                const i: number = newPropertySet.hasProperties.findIndex(
                   (element: any) => element.name === ifcProperty.name,
                 );
                 if (i != -1) {
-                  propertySet.hasProperties[i] = p;
-                  propertySets[propertySet.name] = propertySet;
-                  setIfcPropertySets(propertySets);
+                  newPropertySet.hasProperties[i] = p;
+                  newPropertySets[newPropertySet.name] = newPropertySet;
+                  setIfcPropertySets(newPropertySets);
                 }
               }
             }}
             data={ifcProperty.enumerationReference.enumerationValues.map((value: any, index: any) => ({
-              value: value,
+              value,
               label: value,
             }))}
           />,
@@ -111,7 +112,7 @@ function Property(props: Props) {
   }, [ifcProperty, ifcPropertySet, setInput, ifcPropertySets, setIfcPropertySets]);
 
   return (
-    <Group className="mb-3 row" key={props.propertyIndex}>
+    <Group className="mb-3 row" key={propertyIndex}>
       <Text>{ifcProperty.name}</Text>
       <div className="col-sm-7">{input}</div>
     </Group>

@@ -1,19 +1,19 @@
+import { Switch, Tooltip } from '@mantine/core';
 import React from 'react';
-import { Tooltip, Switch } from '@mantine/core';
 
-interface Props {
+interface RecursiveModeProps {
   recursiveMode: boolean;
   setRecursiveMode: (value: boolean) => void;
 }
 
-function RecursiveMode(props: Props) {
+function RecursiveMode({ recursiveMode, setRecursiveMode }: RecursiveModeProps) {
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    props.setRecursiveMode(e.target.checked);
+    setRecursiveMode(e.target.checked);
   };
 
   return (
     <Tooltip label="show nested classifications" position="bottom">
-      <Switch checked={props.recursiveMode} onChange={(e) => handleOnChange(e)} />
+      <Switch checked={recursiveMode} onChange={(e) => handleOnChange(e)} />
     </Tooltip>
   );
 }

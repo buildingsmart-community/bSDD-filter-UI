@@ -1,14 +1,16 @@
+import '../../../../common/src/theme/styles.css';
+
 import { ActionIcon, ColorSwatch, Group, HoverCard, Text, Tooltip } from '@mantine/core';
-import { IfcEntity } from '../../../../common/src/IfcData/ifc';
 import { IconPencil } from '@tabler/icons-react';
-import { ClassContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import '../../../../common/src/theme/styles.css';
-import { useAppSelector } from '../../app/hooks';
+
+import { ClassContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
+import { IfcEntity } from '../../../../common/src/IfcData/ifc';
 import { selectActiveDictionaries } from '../../../../common/src/settings/settingsSlice';
 import getClassUriFromDictionary, { ClassificationStatus } from '../../../../common/src/tools/checkIfcClassification';
 import { Color, colorMap } from '../../../../common/src/tools/colors';
+import { useAppSelector } from '../../app/hooks';
 
 interface BsddCardProps {
   item: IfcEntity;
@@ -32,18 +34,13 @@ function BsddCard({ item: ifcEntity, bsddClass, index, setCardColor: setCategory
   const [activeClassificationStatuses, setActiveClassificationStatuses] = useState<ClassificationStatus[]>([]);
   const [activeClassificationColors, setActiveClassificationColors] = useState<Color[]>([]);
 
-  /**
-   * Updates the color of the card and the outer category.
-   *
-   * @param {Color} color - The new color to be set for the card and the outer category.
-   */
-  function updateColor(color: Color) {
-    setCardColor(color);
-    setCategoryColor(index, color);
-  }
-
   // Set the color of the card based on the status of the active classification statuses
   useEffect(() => {
+    function updateColor(color: Color) {
+      setCardColor(color);
+      setCategoryColor(index, color);
+    }
+
     if (activeClassificationStatuses.every((it) => it !== null)) {
       updateColor('green');
     } else if (activeClassificationStatuses.some((it) => it !== null)) {
@@ -51,7 +48,7 @@ function BsddCard({ item: ifcEntity, bsddClass, index, setCardColor: setCategory
     } else {
       updateColor('red');
     }
-  }, [activeClassificationStatuses]);
+  }, [activeClassificationStatuses, index, setCategoryColor]);
 
   // set the colors for every active dictionary when they change based on the status of the active classification statuses
   useEffect(() => {
@@ -75,7 +72,7 @@ function BsddCard({ item: ifcEntity, bsddClass, index, setCardColor: setCategory
 
   return (
     <Group mt="xs" justify="space-between" className="flexGroup">
-      <ColorSwatch size={'1.5em'} color={colorMap[cardColor]}></ColorSwatch>
+      <ColorSwatch size="1.5em" color={colorMap[cardColor]} />
       <HoverCard position="bottom-end" shadow="md">
         <HoverCard.Target>
           <div className="flexTextContainer">
@@ -84,11 +81,10 @@ function BsddCard({ item: ifcEntity, bsddClass, index, setCardColor: setCategory
         </HoverCard.Target>
         <HoverCard.Dropdown>
           <Text>{t('Validation per dictionary')}:</Text>
-          {activeDictionaries.map((dictionary, index) => {
-            const status = activeClassificationStatuses[index];
+          {activeDictionaries.map((dictionary, dictionaryIndex) => {
             return (
               <Group key={dictionary.ifcClassification.location} mt="xs" justify="space-between" className="flexGroup">
-                <ColorSwatch size={'1em'} color={colorMap[activeClassificationColors[index]]}></ColorSwatch>
+                <ColorSwatch size="1em" color={colorMap[activeClassificationColors[dictionaryIndex]]} />
                 <div className="flexTextContainer">
                   <Text className="truncate">{dictionary.ifcClassification.name}</Text>
                 </div>
@@ -98,7 +94,7 @@ function BsddCard({ item: ifcEntity, bsddClass, index, setCardColor: setCategory
         </HoverCard.Dropdown>
       </HoverCard>
       <Tooltip label={t('Attach to type')}>
-        <ActionIcon radius={'xl'} onClick={() => bsddSearchClick(ifcEntity)}>
+        <ActionIcon radius="xl" onClick={() => bsddSearchClick(ifcEntity)}>
           <IconPencil size={20} />
         </ActionIcon>
       </Tooltip>

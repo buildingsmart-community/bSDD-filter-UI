@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
-import { ClassContractV1, DictionaryContractV1, RequestParams } from '../../../common/src/BsddApi/BsddApiBase';
-import { BsddApi } from '../../../common/src/BsddApi/BsddApi';
-import { groupBy } from 'lodash';
 import { Select } from '@mantine/core';
+import { groupBy } from 'lodash';
+import { useCallback, useEffect, useState } from 'react';
+
+import { BsddApi } from '../../common/src/BsddApi/BsddApi';
+import { ClassContractV1, DictionaryContractV1, RequestParams } from '../../common/src/BsddApi/BsddApiBase';
 
 interface ClassificationSelectsProps {
   api: BsddApi<unknown>;
@@ -56,48 +57,50 @@ function Classifications({
   );
   const [selectedValues, setSelectedValues] = useState<{ [dictionaryUri: string]: string }>({});
 
-  const params: RequestParams = {
-    headers: { Accept: 'text/plain' },
-  };
-
-  if (accessToken !== '') {
-    params.headers = { ...params.headers, Authorization: 'Bearer ' + accessToken };
-  }
-
   /**
    * Fetches a classification from the API and updates the state.
    *
    * @param {string} classificationUri - The URI of the classification to fetch.
    * @returns {Promise<ClassContractV1 | null>} - A promise that resolves to the fetched classification or null if the fetch fails.
    */
-  function getClassification(classificationUri: string): Promise<ClassContractV1 | null> {
-    const classificationPromise: Promise<ClassContractV1 | null> = new Promise(function (resolve) {
-      const queryParameters = {
-        uri: classificationUri,
-        includeClassRelations: true,
+  const getClassification = useCallback(
+    (classificationUri: string): Promise<ClassContractV1 | null> => {
+      const params: RequestParams = {
+        headers: { Accept: 'text/plain' },
       };
-      resolve(
-        api.api
-          .classV1List(queryParameters, params)
-          .then((response) => {
-            if (response.status !== 200) {
-              console.error(`API request failed with status ${response.status}`);
+
+      if (accessToken !== '') {
+        params.headers = { ...params.headers, Authorization: `Bearer ${accessToken}` };
+      }
+      const classificationPromise: Promise<ClassContractV1 | null> = new Promise(function (resolve) {
+        const queryParameters = {
+          uri: classificationUri,
+          includeClassRelations: true,
+        };
+        resolve(
+          api.api
+            .classV1List(queryParameters, params)
+            .then((response) => {
+              if (response.status !== 200) {
+                console.error(`API request failed with status ${response.status}`);
+                return null;
+              }
+              return response.data;
+            })
+            .catch((err) => {
+              console.error('Error fetching classification:', err);
               return null;
-            }
-            return response.data;
-          })
-          .catch((err) => {
-            console.error('Error fetching classification:', err);
-            return null;
-          }),
-      );
-    });
-    setClassificationUris({
-      ...classificationUris,
-      classificationUri: classificationPromise,
-    });
-    return classificationPromise;
-  }
+            }),
+        );
+      });
+      setClassificationUris((prevClassificationUris) => ({
+        ...prevClassificationUris,
+        classificationUri: classificationPromise,
+      }));
+      return classificationPromise;
+    },
+    [accessToken, api.api],
+  );
 
   useEffect(() => {
     setGroupedClassifications(getGroupedClassifications(originalClassifications));
@@ -114,9 +117,16 @@ function Classifications({
       }
       setClassificationUris(initialClassificationUris);
     }
-  }, [activeClassificationUri]);
+  }, [activeClassificationUri, getClassification]);
 
   useEffect(() => {
+    const params: RequestParams = {
+      headers: { Accept: 'text/plain' },
+    };
+
+    if (accessToken !== '') {
+      params.headers = { ...params.headers, Authorization: `Bearer ${accessToken}` };
+    }
     setClassificationCount(Object.keys(classificationUris).length);
     if (classificationCount === Object.keys(classificationUris).length) {
       return;
@@ -164,7 +174,7 @@ function Classifications({
       setClassifications(classificationResults);
       setOriginalClassifications(classificationResults);
     });
-  }, [classificationUris, classificationCount, selectedValues, api]);
+  }, [classificationUris, classificationCount, selectedValues, api, setClassifications, accessToken]);
 
   useEffect(() => {
     setClassifications(
@@ -172,7 +182,7 @@ function Classifications({
         .map((selectedUri) => originalClassifications.find((classification) => classification.uri === selectedUri))
         .filter((classification): classification is ClassContractV1 => classification !== undefined),
     );
-  }, [selectedValues, originalClassifications]);
+  }, [selectedValues, originalClassifications, setClassifications]);
 
   const handleOnChange = useCallback(
     (dictionaryUri: string) => (selectedUri: string | null) => {

@@ -1,8 +1,9 @@
-import { useEffect, useState, KeyboardEvent, useRef, useCallback } from 'react';
-import { BsddApi } from '../../../common/src/BsddApi/BsddApi';
-import { RequestParams } from '../../../common/src/BsddApi/BsddApiBase';
-import { Autocomplete, Combobox } from '@mantine/core';
+import { Autocomplete } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
+import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
+
+import { BsddApi } from '../../common/src/BsddApi/BsddApi';
+import { RequestParams } from '../../common/src/BsddApi/BsddApiBase';
 
 const SEARCH_LIMIT = 25;
 
@@ -84,32 +85,12 @@ function Search({
   accessToken,
 }: Props) {
   const [selected, setSelected] = useState<Option | undefined>(defaultSelection);
-  const [options, setOptions] = useState<Option[]>([]);
+  const [searchOptions, setSearchOptions] = useState<Option[]>([]);
   const [searchValue, setSearchValue] = useState('');
   const [debouncedSearchValue] = useDebouncedValue(searchValue, 300);
   const [opened, setOpened] = useState<boolean>(false);
 
   const inputRef = useRef(null);
-
-  const params: RequestParams = {
-    headers: { Accept: 'text/plain' },
-  };
-
-  if (accessToken !== '') {
-    params.headers = { ...params.headers, Authorization: 'Bearer ' + accessToken };
-  }
-
-  const loadOptions = (inputValue: string) => {
-    if (activeDictionaries.length === 1) {
-      const callback = (options: any[]) => setOptions(options);
-      searchInSingleDictionary(api, activeDictionaries, params, inputValue, callback);
-    } else if (activeDictionaries.length > 2) {
-      const callback = (options: any[]) => setOptions(options);
-      searchInMultipleDictionaries(api, activeDictionaries, params, inputValue, callback);
-    } else {
-      setOptions([]);
-    }
-  };
 
   const handleOnChange = useCallback((value: string) => {
     setSearchValue(value);
@@ -117,33 +98,52 @@ function Search({
 
   const handleOptionSubmit = useCallback(
     (value: string) => {
-      const selectedOption = options.find((option) => option.value === value);
+      const selectedOption = searchOptions.find((option) => option.value === value);
       if (selectedOption) {
         setSelected(selectedOption);
         setOpened(false);
       }
     },
-    [options],
+    [searchOptions],
   );
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'Enter' && options[0]) {
-        setSearchValue(options[0].label);
-        handleOptionSubmit(options[0].value);
+      if (event.key === 'Enter' && searchOptions[0]) {
+        setSearchValue(searchOptions[0].label);
+        handleOptionSubmit(searchOptions[0].value);
         if (inputRef.current) {
           (inputRef.current as any).blur();
         }
       }
     },
-    [options, handleOptionSubmit, inputRef],
+    [searchOptions, handleOptionSubmit, inputRef],
   );
 
   useEffect(() => {
+    setSelected(defaultSelection);
+  }, [defaultSelection]);
+
+  useEffect(() => {
     if (debouncedSearchValue !== '') {
-      loadOptions(debouncedSearchValue);
+      const params: RequestParams = {
+        headers: { Accept: 'text/plain' },
+      };
+
+      if (accessToken !== '') {
+        params.headers = { ...params.headers, Authorization: `Bearer ${accessToken}` };
+      }
+      if (activeDictionaries.length === 1) {
+        const callback = (options: any[]) => setSearchOptions(options);
+        searchInSingleDictionary(api, activeDictionaries, params, debouncedSearchValue, callback);
+      } else if (activeDictionaries.length > 2) {
+        const callback = (options: any[]) => setSearchOptions(options);
+        searchInMultipleDictionaries(api, activeDictionaries, params, debouncedSearchValue, callback);
+      } else {
+        setSearchOptions([]);
+      }
     }
-  }, [debouncedSearchValue]);
+  }, [accessToken, activeDictionaries, api, debouncedSearchValue]);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -152,22 +152,21 @@ function Search({
   }, []);
 
   useEffect(() => {
-    if (defaultSelection) {
-      setSearchValue(defaultSelection?.label || '');
-      setSelected(defaultSelection);
-      setOpened(false);
-    }
+    if (!defaultSelection) return;
+    setSearchValue(defaultSelection?.label || '');
+    setSelected(defaultSelection);
+    setOpened(false);
   }, [defaultSelection]);
 
   useEffect(() => {
     if (selected) {
       setActiveClassificationUri(selected.value);
     }
-  }, [selected]);
+  }, [selected, setActiveClassificationUri]);
 
   return (
     <Autocomplete
-      data={options}
+      data={searchOptions}
       placeholder="bSDD search..."
       value={searchValue}
       onChange={handleOnChange}

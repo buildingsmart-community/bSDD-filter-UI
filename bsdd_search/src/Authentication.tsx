@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { loginRequest } from '../authConfig';
 import { useMsal } from '@azure/msal-react';
-import { Tooltip, Switch } from '@mantine/core';
+import { Switch, Tooltip } from '@mantine/core';
+import React, { useEffect, useState } from 'react';
+
+import { loginRequest } from './authConfig';
 
 interface Props {
   setAccessToken: (value: string) => void;

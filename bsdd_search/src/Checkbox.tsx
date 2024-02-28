@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
 import { Checkbox } from '@mantine/core';
+import React, { useEffect, useRef } from 'react';
 
 interface Props {
   value: true | false | undefined;

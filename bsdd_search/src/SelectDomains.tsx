@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react';
 import Select from 'react-select';
-import { DictionaryContractV1, RequestParams } from '../../../common/src/BsddApi/BsddApiBase';
-import { BsddApi } from '../../../common/src/BsddApi/BsddApi';
+
+import { BsddApi } from '../../common/src/BsddApi/BsddApi';
+import {
+  DictionaryContractV1,
+  DictionaryResponseContractV1,
+  HttpResponse,
+  RequestParams,
+} from '../../common/src/BsddApi/BsddApiBase';
 
 interface Option {
   label: string;
@@ -18,21 +24,25 @@ interface Props {
 
 export default function SelectDomains({ api, activeDomains, setActiveDomains, setDomains, accessToken }: Props) {
   const [selectOptions, setSelectOptions] = useState<any[]>(activeDomains);
-  const params: RequestParams = {
-    headers: { Accept: 'text/plain' },
-  };
-
-  if (accessToken !== '') {
-    params.headers = { ...params.headers, Authorization: 'Bearer ' + accessToken };
-  }
 
   useEffect(() => {
+    const params: RequestParams = {
+      headers: { Accept: 'text/plain' },
+    };
+
+    if (accessToken !== '') {
+      params.headers = { ...params.headers, Authorization: `Bearer ${accessToken}` };
+    }
+
     const fetchDictionaries = async () => {
       try {
-        const response: any = await api.api.dictionaryV1List(undefined, params);
-        const dictionaries: DictionaryContractV1[] = response.data.dictionaries;
+        const response: HttpResponse<DictionaryResponseContractV1, any> = await api.api.dictionaryV1List(
+          undefined,
+          params,
+        );
+        const { dictionaries } = response.data;
         if (dictionaries) {
-          const selectOptions = dictionaries
+          const newSelectOptions = dictionaries
             .filter((domain) => domain.uri && domain.name)
             .map((domain) => ({
               value: domain.uri,
@@ -46,7 +56,7 @@ export default function SelectDomains({ api, activeDomains, setActiveDomains, se
             return accumulator;
           }, {});
 
-          setSelectOptions(selectOptions);
+          setSelectOptions(newSelectOptions);
           setDomains(domains);
         }
       } catch (error) {

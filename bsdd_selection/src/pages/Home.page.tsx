@@ -1,16 +1,17 @@
 import { Container, Tabs } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { BsddSettings } from '../../../common/src/IfcData/bsddBridgeData';
-import { mockData } from '../../../common/src/IfcData/mockData';
-import Settings from '../features/Settings/Settings';
 import { useTranslation } from 'react-i18next';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { setValidatedIfcData } from '../../../common/src/IfcData/ifcDataSlice';
-import { setSettingsWithValidation } from '../../../common/src/settings/settingsSlice';
-import { selectBsddDataLoaded } from '../../../common/src/BsddApi/bsddSlice';
-import Selection from '../features/Selection/Selection';
 
-export function HomePage() {
+import { selectBsddDataLoaded } from '../../../common/src/BsddApi/bsddSlice';
+import { BsddSettings } from '../../../common/src/IfcData/bsddBridgeData';
+import { setValidatedIfcData } from '../../../common/src/IfcData/ifcDataSlice';
+import { mockData } from '../../../common/src/IfcData/mockData';
+import { setSettingsWithValidation } from '../../../common/src/settings/settingsSlice';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import Selection from '../features/Selection/Selection';
+import Settings from '../features/Settings/Settings';
+
+function HomePage() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const bsddDataLoaded = useAppSelector(selectBsddDataLoaded);
@@ -153,18 +154,18 @@ export function HomePage() {
   // }, [bsddBridgeData, bsddDictionaries]);
 
   return (
-    <>
-      <Container size={'40rem'}>
-        <Tabs defaultValue={'koppelen'}>
-          <Tabs.List grow>
-            <Tabs.Tab value={'koppelen'}>{t('Link')}</Tabs.Tab>
-            <Tabs.Tab value={'settings'}>{t('Settings')}</Tabs.Tab>
-          </Tabs.List>
+    <Container size="40rem">
+      <Tabs defaultValue="koppelen">
+        <Tabs.List grow>
+          <Tabs.Tab value="koppelen">{t('Link')}</Tabs.Tab>
+          <Tabs.Tab value="settings">{t('Settings')}</Tabs.Tab>
+        </Tabs.List>
 
-          <Selection />
-          <Settings />
-        </Tabs>
-      </Container>
-    </>
+        <Selection />
+        <Settings />
+      </Tabs>
+    </Container>
   );
 }
+
+export default HomePage;
