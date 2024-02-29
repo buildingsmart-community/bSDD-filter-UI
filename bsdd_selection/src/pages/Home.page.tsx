@@ -34,14 +34,14 @@ function HomePage() {
     dispatchSettingsWhenLoaded(settings);
   }, [dispatch]);
 
-  useEffect(() => {
-    if (!bsddDataLoaded) {
-      return;
-    }
-    console.log('bsddDataLoaded', bsddDataLoaded);
-    const { ifcData } = mockData;
-    dispatch(setValidatedIfcData(ifcData));
-  }, [dispatch, bsddDataLoaded]);
+  // useEffect(() => {
+  //   if (!bsddDataLoaded) {
+  //     return;
+  //   }
+  //   console.log('bsddDataLoaded', bsddDataLoaded);
+  //   const { ifcData } = mockData;
+  //   dispatch(setValidatedIfcData(ifcData));
+  // }, [dispatch, bsddDataLoaded]);
 
   // Initial settings load
   useEffect(() => {
