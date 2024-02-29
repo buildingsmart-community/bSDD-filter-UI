@@ -26,7 +26,14 @@ function Apply({ callback, domains, classifications, propertySetMap, ifcEntity }
     return null;
   }
 
-  function getIfcClassificationReference(bsdd: ClassContractV1): IfcClassificationReference {
+  function getIfcClassificationReference(bsdd: ClassContractV1): IfcClassificationReference | null {
+    if (
+      !bsdd ||
+      !bsdd.dictionaryUri ||
+      bsdd.dictionaryUri.includes('https://identifier.buildingsmart.org/uri/buildingsmart/ifc/')
+    ) {
+      return null;
+    }
     const ifc: IfcClassificationReference = {
       type: 'IfcClassificationReference',
       name: bsdd.name,
@@ -49,7 +56,9 @@ function Apply({ callback, domains, classifications, propertySetMap, ifcEntity }
   function getIfcEntity(): IfcEntity {
     const ifc: IfcEntity = ifcEntity || {};
     if (classifications.length) {
-      ifc.hasAssociations = classifications.map((classification) => getIfcClassificationReference(classification));
+      ifc.hasAssociations = classifications
+        .map((classification) => getIfcClassificationReference(classification))
+        .filter(Boolean) as IfcClassificationReference[];
     }
     const propertySets: IfcPropertySet[] = Object.values(propertySetMap);
     if (propertySets.length) {
