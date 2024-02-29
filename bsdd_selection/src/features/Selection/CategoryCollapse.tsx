@@ -1,28 +1,37 @@
-import { Accordion, Text, Group, ColorSwatch } from '@mantine/core';
-import { useEffect, useState } from 'react';
-import { IfcEntity } from '../../../../common/src/IfcData/ifc';
-import { ClassContractV1, ClassListItemContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
-import BsddCard from '../BsddCard/BsddCard';
-import { BsddApi } from '../../../../common/src/BsddApi/BsddApi';
-import { useTranslation } from 'react-i18next';
 import '../../../../common/src/theme/styles.css';
+
+import { Accordion, ColorSwatch, Group, Text } from '@mantine/core';
+import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { BsddApi } from '../../../../common/src/BsddApi/BsddApi';
+import { ClassContractV1, ClassListItemContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
+import { IfcEntity } from '../../../../common/src/IfcData/ifc';
 import {
   selectBsddApiEnvironmentUri,
   //  selectLanguage
 } from '../../../../common/src/settings/settingsSlice';
-import { useAppSelector } from '../../app/hooks';
 import { Color, colorMap } from '../../../../common/src/tools/colors';
+import { useAppSelector } from '../../app/hooks';
+import BsddCard from '../BsddCard/BsddCard';
 
 interface CategoryCollapseProps {
-  bsddEnvironmentName: string | null;
   category: string;
-  opened: Record<string, boolean>;
   bbbr: ClassListItemContractV1[];
   items: IfcEntity[];
   index: string;
 }
 
-function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, index }: CategoryCollapseProps) {
+// if none of the descriptions in data is the same as item.description, then color is red
+// if description is present, orange
+// if ifc type and predefined type are in the found data object, material is the same, nslsfb is the same
+function determineBsddClass(category: string, bbbr: ClassListItemContractV1[]): ClassListItemContractV1 | false {
+  const found = bbbr.find((dataItem) => dataItem.code === category);
+  if (!found) return false;
+  return found;
+}
+
+function CategoryCollapse({ category, bbbr, items, index }: CategoryCollapseProps) {
   const { t } = useTranslation();
   const [bsddClass, setBsddClass] = useState<ClassContractV1>();
   const [categoryColor, setCategoryColor] = useState<Color>('grey');
@@ -30,13 +39,13 @@ function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, 
   const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironmentUri);
   // const languageCode = useAppSelector(selectLanguage);
 
-  function setColor(index: number, color: Color) {
+  const setColor = useCallback((cardIndex: number, color: Color) => {
     setColors((prevColors) => {
       const newColors = [...prevColors];
-      newColors[index] = color;
+      newColors[cardIndex] = color;
       return newColors;
     });
-  }
+  }, []);
 
   useEffect(() => {
     const found = determineBsddClass(category, bbbr);
@@ -67,7 +76,7 @@ function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, 
           throw new Error(`bSDD API error! status: ${error}`);
         });
     }
-  }, [category, bbbr]);
+  }, [category, bbbr, bsddApiEnvironment]);
 
   useEffect(() => {
     if (colors.includes('orange') || (colors.includes('red') && colors.includes('green'))) {
@@ -79,33 +88,11 @@ function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, 
     }
   }, [colors]);
 
-  function determineBsddClass(category: string, bbbr: ClassListItemContractV1[]): ClassListItemContractV1 | false {
-    // if none of the descriptions in data is the same as item.description, then color is red
-    // if description is present, orange
-
-    // if ifc type and predefined type are in the found data object, material is the same, nslsfb is the same
-    let found;
-
-    bbbr.filter((dataItem: any) => {
-      if (dataItem.code === category) {
-        found = dataItem;
-      }
-    });
-
-    if (!found) return false;
-
-    return found;
-  }
-
-  function bsddSearchClick() {
-    throw new Error('Function not implemented');
-  }
-
   return (
     <Accordion.Item key={category} value={index}>
       <Accordion.Control>
         <Group justify="space-between" className="flexGroup">
-          <ColorSwatch size={'1.5em'} color={colorMap[categoryColor]}>
+          <ColorSwatch size="1.5em" color={colorMap[categoryColor]}>
             <Text size="xs" c="white">
               {items.length}
             </Text>
@@ -116,13 +103,13 @@ function CategoryCollapse({ bsddEnvironmentName, category, opened, bbbr, items, 
         </Group>
       </Accordion.Control>
       <Accordion.Panel mt="-xs" pl="xl">
-        {items.map((item, index) => {
+        {items.map((item, cardIndex) => {
           return (
             <BsddCard
               item={item}
               bsddClass={bsddClass as ClassContractV1}
-              key={index}
-              index={index}
+              key={cardIndex}
+              index={cardIndex}
               setCardColor={setColor}
             />
           );

@@ -1,16 +1,17 @@
 import { Accordion, Tabs } from '@mantine/core';
-import { useEffect, useState } from 'react';
-import CategoryCollapse from './CategoryCollapse';
-import { IfcEntity } from '../../../../common/src/IfcData/ifc';
+import { useEffect, useMemo, useState } from 'react';
+
 import { BsddApi } from '../../../../common/src/BsddApi/BsddApi';
 import { ClassListItemContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
-import { useAppSelector } from '../../app/hooks';
+import { IfcEntity } from '../../../../common/src/IfcData/ifc';
+import { selectIfcEntities } from '../../../../common/src/IfcData/ifcDataSlice';
 import {
   selectBsddApiEnvironmentUri,
   // selectLanguage,
   selectMainDictionary,
 } from '../../../../common/src/settings/settingsSlice';
-import { selectIfcEntities } from '../../../../common/src/IfcData/ifcDataSlice';
+import { useAppSelector } from '../../app/hooks';
+import CategoryCollapse from './CategoryCollapse';
 
 let CefSharp: any;
 
@@ -61,22 +62,18 @@ function groupEntitiesBy(array: IfcEntity[], property: keyof IfcEntity) {
 
   // Sort the keys alphabetically and create a new sorted object
   return Object.keys(grouped)
-    .sort()
+    .sort((a, b) => a.localeCompare(b, undefined, { numeric: false }))
     .reduce((acc, key) => {
       acc[key] = grouped[key];
       return acc;
     }, {} as Record<string, IfcEntity[]>);
 }
-
-interface SelectionProps {}
-
-function Selection({}: SelectionProps) {
+function Selection() {
   const mainDictionary = useAppSelector(selectMainDictionary);
   const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironmentUri);
   // const languageCode = useAppSelector(selectLanguage);
   const ifcEntities = useAppSelector(selectIfcEntities);
-
-  const [opened, setOpened] = useState({});
+  const groupedEntities = useMemo(() => groupEntitiesBy(ifcEntities, 'description'), [ifcEntities]);
   const [classes, setClasses] = useState<ClassListItemContractV1[]>([]);
 
   // Set up BsddBridge connection
@@ -119,18 +116,15 @@ function Selection({}: SelectionProps) {
         throw new Error(`bSDD API error! status: ${error}`);
       });
   }, [mainDictionary, bsddApiEnvironment]);
-  const groupedEntities = groupEntitiesBy(ifcEntities, 'description');
 
   return (
-    <Tabs.Panel value={'koppelen'}>
+    <Tabs.Panel value="link">
       <Accordion chevronPosition="left">
         {Object.entries(groupedEntities).map(([category, items], index) => (
           <CategoryCollapse
             key={category}
-            bsddEnvironmentName={bsddApiEnvironment}
             category={category}
             items={items}
-            opened={opened}
             bbbr={classes}
             index={category || index.toString()}
           />

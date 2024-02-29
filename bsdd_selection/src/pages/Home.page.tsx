@@ -155,9 +155,9 @@ function HomePage() {
 
   return (
     <Container size="40rem">
-      <Tabs defaultValue="koppelen">
+      <Tabs defaultValue="link">
         <Tabs.List grow>
-          <Tabs.Tab value="koppelen">{t('Link')}</Tabs.Tab>
+          <Tabs.Tab value="link">{t('Link')}</Tabs.Tab>
           <Tabs.Tab value="settings">{t('Settings')}</Tabs.Tab>
         </Tabs.List>
 
