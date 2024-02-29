@@ -76,6 +76,7 @@ function Classifications({
         const queryParameters = {
           uri: classificationUri,
           includeClassRelations: true,
+          includeClassProperties: true,
         };
         resolve(
           api.api
