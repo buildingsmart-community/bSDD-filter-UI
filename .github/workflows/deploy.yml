@@ -50,7 +50,7 @@ jobs:
             run: |
               if [ "${{ github.ref }}" = "refs/heads/main" ]; then
                 mkdir dist/main
-                mv -r dist/* dist/main/
+                mv dist/* dist/main/
               else
                 mkdir dist/${{ github.ref_name }}
                 cp -r dist/* dist/${{ github.ref_name }}/
