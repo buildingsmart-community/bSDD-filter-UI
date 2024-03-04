@@ -46,17 +46,19 @@ jobs:
           yarn install
           yarn run build
 
-      - name: Prepare files for deployment
+      - name: Prepare files for deployment (main)
+        if: github.ref == 'refs/heads/main'
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            mkdir -p dist/main
-            mv dist/bsdd_search dist/main/
-            mv dist/bsdd_selection dist/main/
-          else
-            mkdir -p dist/${{ github.ref_name }}
-            cp -r dist/bsdd_search dist/${{ github.ref_name }}/
-            cp -r dist/bsdd_selection dist/${{ github.ref_name }}/
-          fi
+          mkdir -p dist/main
+          mv dist/bsdd_search dist/main/
+          mv dist/bsdd_selection dist/main/
+
+      - name: Prepare files for deployment (release)
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          mkdir -p dist/${{ github.ref_name }}
+          cp -r dist/bsdd_search dist/${{ github.ref_name }}/
+          cp -r dist/bsdd_selection dist/${{ github.ref_name }}/
 
       - name: List files
         run: ls -R dist
@@ -74,4 +76,4 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           branch: gh-pages
-          folder: dist/${{ github.ref_name }}
+          folder: dist
