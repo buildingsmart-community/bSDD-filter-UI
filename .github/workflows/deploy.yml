@@ -50,7 +50,8 @@ jobs:
         run: |
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             mkdir -p dist/main
-            find dist -maxdepth 1 -mindepth 1 -name '[!m]*' -exec mv {} dist/main/ \;
+            mv dist/bsdd_search dist/main/
+            mv dist/bsdd_selection dist/main/
           else
             mkdir -p dist/${{ github.ref_name }}
             cp -r dist/* dist/${{ github.ref_name }}/
