@@ -57,6 +57,9 @@ jobs:
             cp -r dist/* dist/${{ github.ref_name }}/
           fi
 
+      - name: List files
+        run: ls -R dist
+
       - name: Deploy to GitHub Pages (main)
         if: github.ref == 'refs/heads/main'
         uses: JamesIves/github-pages-deploy-action@v4.5.0
