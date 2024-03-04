@@ -1,36 +1,35 @@
-import BsddSearch from './lib';
-
 // MSAL imports
+import '@mantine/core/styles.css';
+import '../../common/src/i18n';
+
 import { PublicClientApplication } from '@azure/msal-browser';
+import { MsalProvider } from '@azure/msal-react';
+import { MantineProvider } from '@mantine/core';
+import { useEffect, useState } from 'react';
+
+import { theme } from '../../common/src/theme/theme';
 import { msalConfig } from './authConfig';
-
-export const msalInstance = new PublicClientApplication(msalConfig);
-
-function callback(data: IfcEntity) {
-  console.log(data);
-  const viewer = document.getElementById('viewer');
-  if (viewer) {
-    viewer.innerHTML = `<pre class="h-100">${JSON.stringify(data, undefined, 2)}</pre>`;
-  }
-}
-
-const config = {
-  baseUrl: 'https://test.bsdd.buildingsmart.org',
-  defaultDomains: [
-    {
-      value: 'https://identifier.buildingsmart.org/uri/digibase/volkerwesselsbv-0.1',
-      label: 'VolkerWessels Bouw & Vastgoed',
-    },
-  ],
-  defaultSearch: {
-    value:
-      'https://identifier.buildingsmart.org/uri/digibase/volkerwesselsbv-0.1/class/vloer_beton_kanaalplaat_geisoleerd',
-    label: 'vloer_beton_kanaalplaat_geisoleerd',
-  },
-};
+import BsddSearch from './BsddSearch';
 
 function App() {
-  return <BsddSearch callback={callback} config={config} msalInstance={msalInstance} />;
+  const [msalInstance, setMsalInstance] = useState<PublicClientApplication | null>(null);
+
+  useEffect(() => {
+    const instance = new PublicClientApplication(msalConfig);
+    setMsalInstance(instance);
+  }, []);
+
+  if (!msalInstance) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <MantineProvider theme={theme}>
+      <MsalProvider instance={msalInstance}>
+        <BsddSearch />
+      </MsalProvider>
+    </MantineProvider>
+  );
 }
 
 export default App;

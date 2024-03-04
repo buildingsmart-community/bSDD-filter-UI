@@ -14,10 +14,10 @@ export interface IfcEntity extends IfcJsonEntity {
 export interface IfcClassification extends IfcJsonEntity {
   type: 'IfcClassification';
   source?: string; // IfcLabel IFC2x3 place for bSDD uri
-  location?: string; // IfcURIReference IFC4 place for bSDD uri
+  location: string; // IfcURIReference IFC4 place for bSDD uri
   edition?: string; // IfcLabel
   editionDate?: string; // IfcDate
-  name: string; // IfcLabel
+  name?: string; // IfcLabel
   description?: string; // IfcText
   specification?: string; // IfcURIReference IFC4.3 place for bSDD uri
   referenceTokens?: string[]; // IfcIdentifier
@@ -103,11 +103,7 @@ export interface IfcPropertySet extends IfcPropertySetDefinition {
   type: 'IfcPropertySet';
 
   // inverse
-  hasProperties: (
-    | IfcProperty
-    | IfcPropertySingleValue
-    | IfcPropertyEnumeratedValue
-  )[]; // SET [1:?] OF IfcProperty;
+  hasProperties: (IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue)[]; // SET [1:?] OF IfcProperty;
 }
 
 export interface IfcSimpleProperty extends IfcProperty {

@@ -9,11 +9,14 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   root: './bsdd_search',
   base: './',
+  server: {
+    port: 3000,
+  },
   build: {
-    outDir: "../dist/bsdd_search",
+    outDir: '../dist/bsdd_search',
     // assetsDir: '',
     lib: {
-      entry: 'src/lib/index.tsx',
+      entry: 'src/main.tsx',
       name: 'BsddSearch',
       fileName: 'react-bsdd-search',
     },

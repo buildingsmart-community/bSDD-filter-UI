@@ -1,108 +1,171 @@
 import { Container, Tabs } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { BsddBridgeData } from '../../../common/src/IfcData/bsddBridgeData';
-import { mockData } from '../../../common/src/IfcData/mockData';
-import Settings from '../features/Settings/Settings';
-import Selection from '../features/Selection/Selection';
 import { useTranslation } from 'react-i18next';
-import { bsddEnvironments } from '../../../common/src/BsddApi/BsddApiEnvironments';
-import { DictionaryContractV1 } from '../../../common/src/BsddApi/BsddApiBase';
-import { BsddApi } from '../../../common/src/BsddApi/BsddApi';
 
-export function HomePage() {
-  const [bsddBridgeData, setBsddBridgeData] = useState<BsddBridgeData>(mockData);
-  const [bsddApiEnvironment, setBsddApiEnvironment] = useState<string>('production');
-  const [mainDictionary, setMainDictionary] = useState<DictionaryContractV1>();
-  const [bsddDictionaries, setBsddDictionaries] = useState<DictionaryContractV1[]>([]);
-  const [filterDictionaries, setFilterDictionaries] = useState<DictionaryContractV1[]>([]);
+import { selectBsddDataLoaded } from '../../../common/src/BsddApi/bsddSlice';
+import { BsddSettings } from '../../../common/src/IfcData/bsddBridgeData';
+import { setValidatedIfcData } from '../../../common/src/IfcData/ifcDataSlice';
+import { mockData } from '../../../common/src/IfcData/mockData';
+import { setSettingsWithValidation } from '../../../common/src/settings/settingsSlice';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import Selection from '../features/Selection/Selection';
+import Settings from '../features/Settings/Settings';
+
+function HomePage() {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const bsddDataLoaded = useAppSelector(selectBsddDataLoaded);
+  const [pendingSettings, setPendingSettings] = useState<BsddSettings | null>(null);
 
-  // @ts-ignore
-  window.updateSelection = (inputSelection: BsddBridgeData) => {
-    setBsddBridgeData(inputSelection);
+  const dispatchSettingsWhenLoaded = (settings: BsddSettings) => {
+    setPendingSettings(settings);
   };
 
-  // Get the initial settings
   useEffect(() => {
-    if (bsddBridgeData.bsddApiEnvironment) {
-      setBsddApiEnvironment(bsddBridgeData.bsddApiEnvironment);
+    if (bsddDataLoaded && pendingSettings) {
+      dispatch(setSettingsWithValidation(pendingSettings));
+      setPendingSettings(null);
     }
-  }, [bsddBridgeData, setBsddApiEnvironment]);
+  }, [bsddDataLoaded, pendingSettings, dispatch]);
 
-  // Fetches the list of dictionaries from the bSDD API based on the selected environment.
   useEffect(() => {
-    if (!bsddApiEnvironment) return;
+    const { settings, ifcData } = mockData;
+    dispatch(setValidatedIfcData(ifcData));
+    dispatchSettingsWhenLoaded(settings);
+  }, [dispatch]);
 
-    const api = new BsddApi(bsddEnvironments[bsddApiEnvironment]);
-    api.api
-      .dictionaryV1List()
-      .then((response) => {
-        // If the response is not ok, throw an error
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        console.log(response);
-        if (response.data) {
-          if (response.data.dictionaries) {
-            setBsddDictionaries(response.data.dictionaries);
-          }
-        }
-      })
-      .catch((error) => {
-        throw new Error(`bSDD API error! status: ${error}`);
-      });
-  }, [bsddApiEnvironment, setBsddDictionaries]);
+  // useEffect(() => {
+  //   if (!bsddDataLoaded) {
+  //     return;
+  //   }
+  //   console.log('bsddDataLoaded', bsddDataLoaded);
+  //   const { ifcData } = mockData;
+  //   dispatch(setValidatedIfcData(ifcData));
+  // }, [dispatch, bsddDataLoaded]);
 
-  // Set the initial bSDD API environment
+  // Initial settings load
   useEffect(() => {
-    if (bsddBridgeData.bsddApiEnvironment) {
-      setBsddApiEnvironment(bsddBridgeData.bsddApiEnvironment);
-    }
-  }, [bsddBridgeData, setBsddApiEnvironment]);
+    const loadSettings = async () => {
+      // @ts-ignore
+      if (window?.bsddBridge) {
+        // @ts-ignore
+        const settings = await window.bsddBridge.loadSettings();
+        console.log('settings', settings);
+        dispatchSettingsWhenLoaded(JSON.parse(settings));
+      }
+    };
 
-  // Set the initial main dictionary
-  useEffect(() => {
-    const mainDictionaryUri = bsddBridgeData.mainDictionaryUri;
-    if (!mainDictionaryUri) return;
-    const mainDictionaryResult = bsddDictionaries.find((item) => item.uri === mainDictionaryUri);
-    if (!mainDictionaryResult) return;
-    setMainDictionary(mainDictionaryResult);
-  }, [bsddBridgeData, bsddDictionaries]);
+    loadSettings();
+  }, []);
 
-  // Set the initial filter dictionaries
-  useEffect(() => {
-    const filterDictionaryUris = bsddBridgeData.filterDictionaryUris;
-    if (!filterDictionaryUris && filterDictionaries.length == 0) return;
-    const filterDictionariesResult = bsddDictionaries.filter((item) => filterDictionaryUris.includes(item.uri));
-    if (!filterDictionariesResult || filterDictionariesResult.length === 0) return;
-    setFilterDictionaries(bsddDictionaries.filter((item) => filterDictionaryUris.includes(item.uri)));
-  }, [bsddBridgeData, bsddDictionaries]);
+  // @ts-ignore
+  window.updateSelection = (ifcEntities: IfcEntity[]) => {
+    dispatch(setValidatedIfcData(ifcEntities));
+  };
+
+  // @ts-ignore
+  window.updateSettings = (settings: BsddSettings) => {
+    console.log('updateSettings', settings);
+    setSettingsWithValidation(settings);
+  };
+
+  // useEffect(() => {
+  //   const dictionary = bsddBridgeData.mainDictionary;
+  //   if (!dictionary) return;
+  //   const mainDictionaryUri = dictionary?.dictionaryUri;
+  //   const mainDictionaryName = dictionary?.dictionaryName;
+  //   if (!mainDictionaryUri) {
+  //     setMainDictionary(undefined);
+  //     return;
+  //   }
+  //   const mainDictionaryResult = bsddDictionaries.find((item) => item.uri === mainDictionaryUri);
+  //   if (!mainDictionaryResult) {
+  //     setMainDictionary(undefined);
+  //     return;
+  //   }
+  //   if (mainDictionaryResult.name !== mainDictionaryName) {
+  //     setMainDictionary({
+  //       dictionaryUri: mainDictionaryResult.uri,
+  //       dictionaryName: mainDictionaryResult.name,
+  //       parameterName: dictionary.parameterName,
+  //       parameterId: dictionary.parameterId,
+  //       parameterMapping: dictionary.parameterMapping,
+  //     });
+  //   }
+  // }, [bsddBridgeData, bsddDictionaries]);
+
+  // useEffect(() => {
+  //   const filterDictionariesData = bsddBridgeData.filterDictionaries;
+  //   if (!filterDictionariesData) {
+  //     setFilterDictionaries([]);
+  //     return;
+  //   }
+  //   if (filterDictionariesData.length === 0) {
+  //     return;
+  //   }
+
+  //   let changed = false;
+  //   const updatedFilterDictionaries: BsddDictionary[] = filterDictionariesData.reduce((acc: BsddDictionary[], dictionary) => {
+  //     const dictionaryUri = dictionary.dictionaryUri;
+  //     const dictionaryName = dictionary.dictionaryName;
+  //     const dictionaryResult = bsddDictionaries.find((item) => item.uri === dictionaryUri);
+
+  //     if (!dictionaryResult) {
+  //       return acc;
+  //     }
+
+  //     if (dictionaryResult.name !== dictionaryName) {
+  //       changed = true;
+  //       acc.push({
+  //         dictionaryUri: dictionaryResult.uri,
+  //         dictionaryName: dictionaryResult.name,
+  //         parameterName: dictionary.parameterName,
+  //         parameterId: dictionary.parameterId,
+  //         parameterMapping: dictionary.parameterMapping,
+  //       });
+  //     } else {
+  //       acc.push(dictionary);
+  //     }
+
+  //     return acc;
+  //   }, []);
+
+  //   if (changed) {
+  //     setFilterDictionaries(updatedFilterDictionaries);
+  //   }
+  // }, [bsddBridgeData, bsddDictionaries]);
+
+  // useEffect(() => {
+  //   const filterDictionaryUris = bsddBridgeData.filterDictionaries.map((item) => item.dictionaryUri);
+  //   if (!filterDictionaryUris && filterDictionaries.length == 0) return;
+  //   const filterDictionariesResult = bsddDictionaries.filter((item) => filterDictionaryUris.includes(item.uri));
+  //   if (!filterDictionariesResult || filterDictionariesResult.length === 0) return;
+  //   setFilterDictionaries(
+  //     bsddDictionaries
+  //       .filter((item) => filterDictionaryUris.includes(item.uri))
+  //       .map((item) => ({
+  //         dictionaryUri: item.uri,
+  //         dictionaryName: item.name,
+  //         parameterName: '',
+  //         parameterId: '',
+  //         parameterMapping: '',
+  //       })),
+  //   );
+  // }, [bsddBridgeData, bsddDictionaries]);
 
   return (
-    <>
-      <Container size={'40rem'}>
-        <Tabs defaultValue={'koppelen'}>
-          <Tabs.List grow>
-            <Tabs.Tab value={'koppelen'}>{t('Link')}</Tabs.Tab>
-            <Tabs.Tab value={'settings'}>{t('Settings')}</Tabs.Tab>
-          </Tabs.List>
+    <Container size="40rem">
+      <Tabs defaultValue="link">
+        <Tabs.List grow>
+          <Tabs.Tab value="link">{t('Link')}</Tabs.Tab>
+          <Tabs.Tab value="settings">{t('Settings')}</Tabs.Tab>
+        </Tabs.List>
 
-          <Selection
-            bsddApiEnvironment={bsddApiEnvironment}
-            mainDictionaryUri={bsddBridgeData.mainDictionaryUri}
-            ifcData={bsddBridgeData.ifcData}
-          />
-          <Settings
-            bsddDictionaries={bsddDictionaries}
-            bsddApiEnvironment={bsddApiEnvironment}
-            setBsddApiEnvironment={setBsddApiEnvironment}
-            mainDictionary={mainDictionary}
-            setMainDictionary={setMainDictionary}
-            filterDictionaries={filterDictionaries}
-            setFilterDictionaries={setFilterDictionaries}
-          />
-        </Tabs>
-      </Container>
-    </>
+        <Selection />
+        <Settings />
+      </Tabs>
+    </Container>
   );
 }
+
+export default HomePage;
