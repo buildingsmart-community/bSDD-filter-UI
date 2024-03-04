@@ -54,7 +54,8 @@ jobs:
             mv dist/bsdd_selection dist/main/
           else
             mkdir -p dist/${{ github.ref_name }}
-            cp -r dist/* dist/${{ github.ref_name }}/
+            cp -r dist/bsdd_search dist/${{ github.ref_name }}/
+            cp -r dist/bsdd_selection dist/${{ github.ref_name }}/
           fi
 
       - name: List files
