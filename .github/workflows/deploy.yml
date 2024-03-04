@@ -46,15 +46,15 @@ jobs:
           yarn install
           yarn run build
 
-          - name: Prepare files for deployment
-            run: |
-              if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-                mkdir dist/main
-                mv dist/* dist/main/
-              else
-                mkdir dist/${{ github.ref_name }}
-                cp -r dist/* dist/${{ github.ref_name }}/
-              fi
+      - name: Prepare files for deployment
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            mkdir dist/main
+            mv dist/* dist/main/
+          else
+            mkdir dist/${{ github.ref_name }}
+            cp -r dist/* dist/${{ github.ref_name }}/
+          fi
 
       - name: Deploy to GitHub Pages (main)
         if: github.ref == 'refs/heads/main'
