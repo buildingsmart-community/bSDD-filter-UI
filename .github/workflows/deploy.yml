@@ -1,0 +1,61 @@
+# Workflow for deploying static content to GitHub Pages
+name: Deploy bSDD-filter-UI to GitHub Pages
+
+on:
+  # The workflow triggers on pushes to the main branch and on creation of any tag
+  push:
+    branches: ["main"]
+    tags: ["*"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Deploy job with two steps: one for main branch, one for release tags
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'https://buildingsmart-community.github.io/bSDD-filter-UI/main/' || 'https://buildingsmart-community.github.io/bSDD-filter-UI/' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install dependencies and build
+        run: |
+          yarn install
+          yarn run build
+
+      - name: Deploy to GitHub Pages (main)
+        if: github.ref == 'refs/heads/main'
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        with:
+          branch: gh-pages-main
+          folder: dist
+
+      - name: Deploy to GitHub Pages (release)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        with:
+          branch: gh-pages
+          folder: dist
