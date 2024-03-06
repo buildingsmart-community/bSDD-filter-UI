@@ -1,11 +1,30 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import type { RootState } from '../../../bsdd_selection/src/app/store';
 import { Association, IfcEntity } from './ifc';
-import { RootState } from '../../../bsdd_selection/src/app/store';
 import { patchIfcClassificationReference } from './ifcValidators';
 
 interface EntitiesState {
   ifcEntities: IfcEntity[];
 }
+
+const initialState: EntitiesState = {
+  ifcEntities: [],
+};
+
+const ifcDataSlice = createSlice({
+  name: 'ifcData',
+  initialState,
+  reducers: {
+    setIfcData: (state, action: PayloadAction<IfcEntity[]>) => {
+      state.ifcEntities = action.payload;
+    },
+  },
+});
+
+export const selectIfcEntities = (state: RootState) => state.ifcData.ifcEntities;
+
+export const { setIfcData } = ifcDataSlice.actions;
 
 /**
  * Sets the validated IFC data by chanking and fixing the associations of each IFC entity.
@@ -48,23 +67,5 @@ export const setValidatedIfcData = createAsyncThunk(
     dispatch(setIfcData(validatedIfcEntities));
   },
 );
-
-const initialState: EntitiesState = {
-  ifcEntities: [],
-};
-
-const ifcDataSlice = createSlice({
-  name: 'ifcData',
-  initialState,
-  reducers: {
-    setIfcData: (state, action: PayloadAction<IfcEntity[]>) => {
-      state.ifcEntities = action.payload;
-    },
-  },
-});
-
-export const selectIfcEntities = (state: RootState) => state.ifcData.ifcEntities;
-
-export const { setIfcData } = ifcDataSlice.actions;
 
 export const ifcDataReducer = ifcDataSlice.reducer;

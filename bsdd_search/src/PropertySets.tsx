@@ -1,4 +1,4 @@
-import { Accordion } from '@mantine/core';
+import { Accordion, Stack } from '@mantine/core';
 import { Children, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -139,29 +139,25 @@ function PropertySets(props: Props) {
   const { recursiveMode } = props;
 
   useEffect(() => {
-    const newPropertySets: { [id: string]: IfcPropertySet } = {};
+    const newPropertySets: Record<string, IfcPropertySet> = {};
     const propertyClassifications = recursiveMode ? classifications : classifications.slice(0, 1);
+
     propertyClassifications.forEach((classification) => {
-      if (classification.classProperties) {
-        classification.classProperties.map((classProperty: ClassPropertyContractV1) => {
-          const propertySetName = classProperty.propertySet || classification.name;
-          if (!(propertySetName in newPropertySets)) {
-            newPropertySets[propertySetName] = {
-              type: 'IfcPropertySet',
-              name: propertySetName,
-              hasProperties: [],
-            };
-          }
-          newPropertySets[propertySetName].hasProperties.push(GetIfcProperty(classProperty));
-        });
-      }
+      classification.classProperties?.forEach((classProperty: ClassPropertyContractV1) => {
+        const propertySetName = classProperty.propertySet || classification.name;
+
+        if (!newPropertySets[propertySetName]) {
+          newPropertySets[propertySetName] = {
+            type: 'IfcPropertySet',
+            name: propertySetName,
+            hasProperties: [],
+          };
+        }
+
+        newPropertySets[propertySetName].hasProperties.push(GetIfcProperty(classProperty));
+      });
     });
-    // // return PropertySets Array ordered alphabetically
-    // return Object.keys(propertySets)
-    //   .sort()
-    //   .map((propertySetName) => {
-    //     return propertySets[propertySetName]
-    //   })
+
     setPropertySets(newPropertySets);
   }, [classifications, setPropertySets, recursiveMode]);
 
@@ -170,20 +166,22 @@ function PropertySets(props: Props) {
       {Children.toArray(
         Object.values(propertySets).map((propertySet, propertySetIndex) => (
           <Accordion>
-            <Accordion.Item key={propertySetIndex} value={propertySet.name || propertySetIndex.toString()}>
+            <Accordion.Item key={propertySet.name} value={propertySet.name || propertySetIndex.toString()}>
               <Accordion.Control>{propertySet.name}</Accordion.Control>
               <Accordion.Panel>
-                {Children.toArray(
-                  propertySet.hasProperties.map((property, propertyIndex) => (
-                    <Property
-                      propertySet={propertySet}
-                      property={property}
-                      propertyIndex={propertyIndex}
-                      propertySets={propertySets}
-                      setPropertySets={setPropertySets}
-                    />
-                  )),
-                )}
+                <Stack>
+                  {Children.toArray(
+                    propertySet.hasProperties.map((property, propertyIndex) => (
+                      <Property
+                        propertySet={propertySet}
+                        property={property}
+                        propertyIndex={propertyIndex}
+                        propertySets={propertySets}
+                        setPropertySets={setPropertySets}
+                      />
+                    )),
+                  )}
+                </Stack>
               </Accordion.Panel>
             </Accordion.Item>
           </Accordion>

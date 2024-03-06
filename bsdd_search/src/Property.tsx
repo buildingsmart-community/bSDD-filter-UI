@@ -1,4 +1,4 @@
-import { Group, Select, Text, TextInput } from '@mantine/core';
+import { Select, TextInput } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
 import {
@@ -30,6 +30,7 @@ function Property({ propertySet, property, propertyIndex, propertySets, setPrope
         if (ifcProperty.nominalValue.type === 'IfcBoolean') {
           setInput(
             <Check
+              label={ifcProperty.name}
               disabled={false}
               value={ifcProperty.nominalValue.value}
               setValue={(value: true | false | undefined) => {
@@ -53,6 +54,7 @@ function Property({ propertySet, property, propertyIndex, propertySets, setPrope
         } else {
           setInput(
             <TextInput
+              label={ifcProperty.name}
               placeholder={ifcProperty.nominalValue.value}
               value={ifcProperty.nominalValue.value}
               onChange={(e) => {
@@ -79,6 +81,7 @@ function Property({ propertySet, property, propertyIndex, propertySets, setPrope
       case 'IfcPropertyEnumeratedValue': {
         setInput(
           <Select
+            label={ifcProperty.name}
             value={ifcProperty.enumerationValues}
             onChange={(e) => {
               const newPropertySets = { ...ifcPropertySets };
@@ -111,11 +114,6 @@ function Property({ propertySet, property, propertyIndex, propertySets, setPrope
     }
   }, [ifcProperty, ifcPropertySet, setInput, ifcPropertySets, setIfcPropertySets]);
 
-  return (
-    <Group className="mb-3 row" key={propertyIndex}>
-      <Text>{ifcProperty.name}</Text>
-      <div className="col-sm-7">{input}</div>
-    </Group>
-  );
+  return input;
 }
 export default Property;

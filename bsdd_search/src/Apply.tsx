@@ -3,7 +3,10 @@ import { useTranslation } from 'react-i18next';
 
 import { ClassContractV1, DictionaryContractV1 } from '../../common/src/BsddApi/BsddApiBase';
 import { IfcClassification, IfcClassificationReference, IfcEntity, IfcPropertySet } from '../../common/src/IfcData/ifc';
-import { convertBsddDictionaryToIfcClassification } from '../../common/src/IfcData/ifcBsddConverters';
+import {
+  convertBsddDictionaryToIfcClassification,
+  getIfcClassAndPredefinedType,
+} from '../../common/src/IfcData/ifcBsddConverters';
 
 interface ApplyProps {
   callback: (value: any) => void;
@@ -26,48 +29,44 @@ function Apply({ callback, domains, classifications, propertySetMap, ifcEntity }
     return null;
   }
 
-  function getIfcClassificationReference(bsdd: ClassContractV1): IfcClassificationReference | null {
-    if (
-      !bsdd ||
-      !bsdd.dictionaryUri ||
-      bsdd.dictionaryUri.includes('https://identifier.buildingsmart.org/uri/buildingsmart/ifc/')
-    ) {
-      return null;
-    }
+  function getIfcClassificationReference(classContract: ClassContractV1): IfcClassificationReference | null {
     const ifc: IfcClassificationReference = {
       type: 'IfcClassificationReference',
-      name: bsdd.name,
+      name: classContract.name,
+      location: classContract.uri || undefined,
+      identification: classContract.code || undefined,
+      referencedSource: classContract.dictionaryUri
+        ? getIfcClassification(classContract.dictionaryUri) || undefined
+        : undefined,
     };
-    if (bsdd.uri) {
-      ifc.location = bsdd.uri;
-    }
-    if (bsdd.code) {
-      ifc.identification = bsdd.code;
-    }
-    if (bsdd.dictionaryUri) {
-      const referencedSource = getIfcClassification(bsdd.dictionaryUri);
-      if (referencedSource) {
-        ifc.referencedSource = referencedSource;
-      }
-    }
+
     return ifc;
   }
 
   function getIfcEntity(): IfcEntity {
-    const ifc: IfcEntity = ifcEntity || {};
-    if (classifications.length) {
-      ifc.hasAssociations = classifications
-        .map((classification) => getIfcClassificationReference(classification))
-        .filter(Boolean) as IfcClassificationReference[];
-    }
-    const propertySets: IfcPropertySet[] = Object.values(propertySetMap);
-    if (propertySets.length) {
-      ifc.isDefinedBy = propertySets;
-    }
+    const ifc: IfcEntity = ifcEntity || { hasAssociations: [], isDefinedBy: [] };
+
+    classifications.forEach((classification) => {
+      if (classification?.dictionaryUri?.includes('https://identifier.buildingsmart.org/uri/buildingsmart/ifc/')) {
+        const { type, predefinedType } = getIfcClassAndPredefinedType(classification.code);
+        ifc.type = type;
+        ifc.predefinedType = predefinedType;
+      } else {
+        const ifcClassificationReference = getIfcClassificationReference(classification);
+        if (ifcClassificationReference) {
+          ifc.hasAssociations = ifc.hasAssociations || [];
+          ifc.hasAssociations.push(ifcClassificationReference);
+        }
+      }
+    });
+
+    ifc.isDefinedBy = Object.values(propertySetMap).length ? Object.values(propertySetMap) : [];
+
     return ifc;
   }
 
   const handleOnChange = () => {
+    console.log(getIfcEntity());
     callback(getIfcEntity());
   };
 

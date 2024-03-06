@@ -1,14 +1,20 @@
-import { RootState } from '../../../bsdd_selection/src/app/store';
-import { fetchDictionaryClasses, selectDictionaryClasses, selectDictionary } from '../BsddApi/bsddSlice';
-import { IfcClassificationReference } from './ifc';
-import { convertBsddDictionaryToIfcClassification } from './ifcBsddConverters';
-import { DictionaryClassesResponseContractV1 } from '../BsddApi/BsddApiBase';
-import { ClassListItemContractV1 } from '../BsddApi/BsddApiBase';
-import { selectActiveDictionaries } from '../settings/settingsSlice';
-import { BsddDictionary } from './bsddBridgeData';
 import { ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 
+import type { RootState } from '../../../bsdd_selection/src/app/store';
+import { ClassListItemContractV1, DictionaryClassesResponseContractV1 } from '../BsddApi/BsddApiBase';
+import { fetchDictionaryClasses, selectDictionary, selectDictionaryClasses } from '../BsddApi/bsddSlice';
+import { selectActiveDictionaries } from '../settings/settingsSlice';
+import { BsddDictionary } from './bsddBridgeData';
+import { IfcClassificationReference } from './ifc';
+import { convertBsddDictionaryToIfcClassification } from './ifcBsddConverters';
+
 type ValidationState = 'valid' | 'invalid' | 'fixed';
+
+type ValidationResult = {
+  ifcClassificationReference: IfcClassificationReference;
+  validationState: ValidationState;
+  message: string | null;
+};
 
 /**
  * Finds the matching dictionary based in the active dictionaries for bsddClass.
@@ -24,15 +30,20 @@ async function findMatchingDictionary(
   dispatch: ThunkDispatch<unknown, unknown, UnknownAction>,
 ): Promise<DictionaryClassesResponseContractV1 | null> {
   try {
-    for (const activeDictionary of activeDictionaries) {
-      const location = activeDictionary.ifcClassification.location;
+    const matchingDictionary = activeDictionaries.find(async (activeDictionary) => {
+      const { location } = activeDictionary.ifcClassification;
       if (location) {
         const result = await dispatch(fetchDictionaryClasses(location));
         const dictionaryClasses = result.payload as DictionaryClassesResponseContractV1;
-        if (dictionaryClasses.classes?.find((dictionaryv1class) => dictionaryv1class.uri === bsddClass?.uri)) {
-          return dictionaryClasses;
-        }
+        return dictionaryClasses.classes?.find((dictionaryv1class) => dictionaryv1class.uri === bsddClass?.uri);
       }
+      return false;
+    });
+
+    if (matchingDictionary) {
+      const { location } = matchingDictionary.ifcClassification;
+      const result = await dispatch(fetchDictionaryClasses(location));
+      return result.payload as DictionaryClassesResponseContractV1;
     }
   } catch (error) {
     console.error('Failed to find matching dictionary', error);
@@ -54,16 +65,15 @@ const fetchClasses = async (
 ): Promise<ClassListItemContractV1[] | null> => {
   if (!referencedSource?.location) return null;
 
-  let classes = selectDictionaryClasses(state, referencedSource.location);
+  const classes = selectDictionaryClasses(state, referencedSource.location);
   if (classes) return classes;
 
   const result = await dispatch(fetchDictionaryClasses(referencedSource.location));
   if (result.payload) {
     return result.payload as ClassListItemContractV1[];
-  } else {
-    console.error('Failed to fetch dictionary classes');
-    return null;
   }
+  console.error('Failed to fetch dictionary classes');
+  return null;
 };
 
 /**
@@ -129,12 +139,13 @@ export const preprocessIfcClassificationReference = async (
   return { validationState, improvedReference };
 };
 
-type ValidationResult = {
-  ifcClassificationReference: IfcClassificationReference;
-  validationState: ValidationState;
-  message: string | null;
-};
-
+/**
+ * Finds a matched class based on the given IfcClassificationReference.
+ *
+ * @param ifcClassificationReference - The IfcClassificationReference to match against.
+ * @param classes - The array of ClassListItemContractV1 objects to search in.
+ * @returns The matched ClassListItemContractV1 object, if found. Otherwise, undefined.
+ */
 function findMatchedClass(
   ifcClassificationReference: IfcClassificationReference,
   classes: ClassListItemContractV1[],
@@ -145,11 +156,24 @@ function findMatchedClass(
   return classes.find((dictionaryClass) => dictionaryClass.name === ifcClassificationReference.name);
 }
 
+/**
+ * Handles an error by logging the error message and returning a ValidationResult object.
+ * @param message - The error message to be logged.
+ * @param ifcClassificationReference - The IfcClassificationReference object associated with the error.
+ * @returns A ValidationResult object with the error details.
+ */
 function handleError(message: string, ifcClassificationReference: IfcClassificationReference): ValidationResult {
   console.error(message);
   return { ifcClassificationReference, validationState: 'invalid', message };
 }
 
+/**
+ * Patches the IfcClassificationReference by setting the location and other properties based on the referenced source.
+ * @param ifcClassificationReference - The IfcClassificationReference object to be patched.
+ * @param dispatch - The dispatch function from the Redux Thunk middleware.
+ * @param state - The RootState object from the Redux store.
+ * @returns A Promise that resolves to a ValidationResult object.
+ */
 export async function patchIfcClassificationReference(
   ifcClassificationReference: IfcClassificationReference,
   dispatch: ThunkDispatch<unknown, unknown, UnknownAction>,
@@ -186,27 +210,49 @@ export async function patchIfcClassificationReference(
 
   const { uri, code, name } = matchedClass;
 
-  ifcClassificationReference = {
+  const newIfcClassificationReference: IfcClassificationReference = {
     ...ifcClassificationReference,
     location: uri ?? undefined,
     identification: code ?? undefined,
     name: name ?? undefined,
   };
 
-  if (!ifcClassificationReference.referencedSource || !ifcClassificationReference.referencedSource.location) {
-    return handleError('referencedSource or its location is missing', ifcClassificationReference);
+  if (!newIfcClassificationReference.referencedSource || !newIfcClassificationReference.referencedSource.location) {
+    return handleError('referencedSource or its location is missing', newIfcClassificationReference);
   }
 
-  const bsddDictionary = selectDictionary(state, ifcClassificationReference.referencedSource.location);
+  const bsddDictionary = selectDictionary(state, newIfcClassificationReference.referencedSource.location);
   if (!bsddDictionary) {
-    return handleError('Failed to find a matching dictionary for the matched class', ifcClassificationReference);
+    return handleError('Failed to find a matching dictionary for the matched class', newIfcClassificationReference);
   }
 
-  ifcClassificationReference.referencedSource = convertBsddDictionaryToIfcClassification(bsddDictionary);
+  newIfcClassificationReference.referencedSource = convertBsddDictionaryToIfcClassification(bsddDictionary);
 
   return {
-    ifcClassificationReference,
+    ifcClassificationReference: newIfcClassificationReference,
     validationState: 'fixed',
     message: null,
+  };
+}
+
+/**
+ * Validates the IFC classification. If valid, returns a new object with parameterMapping and IfcClassification.
+ * If the bsddDictionary or the ifcClassification location is null, returns null.
+ *
+ * @param state - The RootState object.
+ * @param bsddDictionary - The BsddDictionary object to validate.
+ * @returns A new BsddDictionary object or null.
+ */
+export function validateIfcClassification(
+  state: RootState,
+  bsddDictionary: BsddDictionary | null,
+): BsddDictionary | null {
+  if (!bsddDictionary?.ifcClassification.location) return null;
+  const dictionary = selectDictionary(state, bsddDictionary.ifcClassification.location);
+  const ifcClassification = convertBsddDictionaryToIfcClassification(dictionary);
+
+  return {
+    parameterMapping: bsddDictionary.parameterMapping,
+    ifcClassification,
   };
 }

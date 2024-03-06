@@ -1,9 +1,8 @@
-import { PayloadAction, createSelector, createSlice } from '@reduxjs/toolkit';
-import { BsddDictionary, BsddSettings } from '../IfcData/bsddBridgeData';
-import { AppThunk, RootState } from '../../../bsdd_selection/src/app/store';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+import type { RootState } from '../../../bsdd_selection/src/app/store';
 import { bsddEnvironments } from '../BsddApi/BsddApiEnvironments';
-import { selectDictionary } from '../BsddApi/bsddSlice';
-import { convertBsddDictionaryToIfcClassification } from '../IfcData/ifcBsddConverters';
+import { BsddDictionary, BsddSettings } from '../IfcData/bsddBridgeData';
 
 interface EntitiesState {
   bsddApiEnvironment: string | null;
@@ -18,36 +17,6 @@ const initialState: EntitiesState = {
   filterDictionaries: [],
   language: 'EN',
 };
-function validateIfcClassification(state: RootState, bsddDictionary: BsddDictionary | null): BsddDictionary | null {
-  if (!bsddDictionary?.ifcClassification.location) return null;
-  const dictionary = selectDictionary(state, bsddDictionary.ifcClassification.location);
-  const ifcClassification = convertBsddDictionaryToIfcClassification(dictionary);
-
-  return {
-    parameterMapping: bsddDictionary.parameterMapping,
-    ifcClassification,
-  };
-}
-
-export const setSettingsWithValidation =
-  (settings: BsddSettings): AppThunk =>
-  async (dispatch, getState) => {
-    const state = getState();
-    console.log('settings', settings);
-
-    const validatedMainDictionary = validateIfcClassification(state, settings.mainDictionary);
-    const validatedFilterDictionaries = settings.filterDictionaries
-      .map((dictionary) => validateIfcClassification(state, dictionary))
-      .filter((dictionary): dictionary is BsddDictionary => dictionary !== null);
-
-    const updatedSettings = {
-      ...settings,
-      mainDictionary: validatedMainDictionary,
-      filterDictionaries: validatedFilterDictionaries,
-    };
-
-    dispatch(setSettings(updatedSettings));
-  };
 
 const settingsSlice = createSlice({
   name: 'settings',

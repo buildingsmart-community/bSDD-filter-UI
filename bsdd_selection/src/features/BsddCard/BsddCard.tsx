@@ -1,7 +1,7 @@
 import '../../../../common/src/theme/styles.css';
 
 import { ActionIcon, ColorSwatch, Group, HoverCard, Text, Tooltip } from '@mantine/core';
-import { IconPencil } from '@tabler/icons-react';
+import { IconPencil, IconPointer } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -70,6 +70,13 @@ function BsddCard({ item: ifcEntity, bsddClass, index, setCardColor: setCategory
     window?.bsddBridge?.bsddSearch(ifcEntityJson);
   }
 
+  function bsddSelect(ifcProduct: IfcEntity) {
+    const ifcEntityJson = JSON.stringify(ifcProduct);
+
+    // @ts-ignore
+    window?.bsddBridge?.bsddSelect(ifcEntityJson);
+  }
+
   return (
     <Group mt="xs" justify="space-between" className="flexGroup">
       <ColorSwatch size="1.5em" color={colorMap[cardColor]} />
@@ -96,6 +103,11 @@ function BsddCard({ item: ifcEntity, bsddClass, index, setCardColor: setCategory
       <Tooltip label={t('Attach to type')}>
         <ActionIcon radius="xl" onClick={() => bsddSearchClick(ifcEntity)}>
           <IconPencil size={20} />
+        </ActionIcon>
+      </Tooltip>
+      <Tooltip label={t('Select objects')}>
+        <ActionIcon radius="xl" onClick={() => bsddSelect(ifcEntity)}>
+          <IconPointer size={20} />
         </ActionIcon>
       </Tooltip>
     </Group>
