@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice, PayloadAction, ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
-import { ClassContractV1, ClassListItemContractV1, DictionaryContractV1 } from './BsddApiBase';
-import { BsddApi } from './BsddApi';
-import { RootState } from '../../../bsdd_selection/src/app/store';
+
+import type { RootState } from '../../../bsdd_selection/src/app/store';
 import {
   selectBsddApiEnvironmentUri,
   // selectLanguage
 } from '../settings/settingsSlice';
+import { BsddApi } from './BsddApi';
+import { ClassContractV1, ClassListItemContractV1, DictionaryContractV1 } from './BsddApiBase';
 
 const CLASS_ITEM_PAGE_SIZE = 500;
 const DICTIONARIES_PAGE_SIZE = 500;
@@ -44,84 +45,6 @@ export const selectBsddApi = (state: RootState) => {
 };
 
 /**
- * Updates the base URL of the BsddApi and resets the state.
- * @param baseUrl The new base URL for the BsddApi.
- */
-export function updateBsddApi(baseUrl: string) {
-  return (dispatch: ThunkDispatch<unknown, unknown, UnknownAction>) => {
-    bsddApi = new BsddApi(baseUrl);
-    fetchPromisesCache = {};
-    dispatch(resetState());
-  };
-}
-
-const bsddSlice = createSlice({
-  name: 'bsdd',
-  initialState,
-  reducers: {
-    resetState: () => initialState,
-    addClass: (state, action: PayloadAction<{ uri: string; data: ClassContractV1 }>) => {
-      state.classes[action.payload.uri] = action.payload.data;
-    },
-    addDictionaryClasses: (state, action: PayloadAction<{ uri: string; data: ClassListItemContractV1[] }>) => {
-      state.dictionaryClasses[action.payload.uri] = action.payload.data;
-    },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchDictionaries.pending, (state) => {
-        state.loaded = false;
-      })
-      .addCase(fetchDictionaries.fulfilled, (state, action: PayloadAction<{ [key: string]: DictionaryContractV1 }>) => {
-        console.log('fetch dictionaries fulfilled', action.payload);
-        state.dictionaries = action.payload;
-        state.loaded = true;
-      })
-      .addCase(fetchDictionaryClasses.rejected, (state, action) => {
-        console.error('fetch dictionary classes failed', action.error);
-        state.loaded = true;
-      });
-  },
-});
-
-/**
- * Fetches a class from the bsddApi.
- *
- * @param uri - The URI of the class to fetch.
- * @param getState - A function to get the current state.
- * @param dispatch - A function to dispatch actions.
- * @returns A promise that resolves to the fetched class data.
- * @throws Error if the bsddApi is not initialized or if there is an HTTP error.
- */
-export const fetchClass = createAsyncThunk('bsdd/fetchClass', async (uri: string, { getState, dispatch }) => {
-  const state = getState() as RootState;
-  // const languageCode = useAppSelector(selectLanguage);
-  if (state.bsdd.classes[uri]) {
-    return state.bsdd.classes[uri];
-  }
-
-  if (!bsddApi) {
-    throw new Error('BsddApi is not initialized');
-  }
-
-  const response = await bsddApi.api.classV1List({
-    uri,
-    includeClassProperties: true,
-    includeChildClassReferences: true,
-    includeClassRelations: true,
-    // languageCode: languageCode || undefined,
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  const data = response.data;
-  dispatch({ type: 'bsdd/addClass', payload: { uri, data } });
-  return data;
-});
-
-/**
  * Fetches dictionaries from the bSDD API.
  *
  * @param bsddApiEnvironment - The environment for the bSDD API.
@@ -138,7 +61,7 @@ export const fetchDictionaries = createAsyncThunk(
     const api = new BsddApi(bsddApiEnvironment);
     const limit = DICTIONARIES_PAGE_SIZE;
     let offset = 0;
-    let dictionaries: DictionaryContractV1[] = [];
+    const dictionaries: DictionaryContractV1[] = [];
 
     while (true) {
       const response = await api.api.dictionaryV1List({ Limit: limit, Offset: offset });
@@ -167,36 +90,6 @@ export const fetchDictionaries = createAsyncThunk(
     return out;
   },
 );
-
-/**
- * Fetches a specific batch of dictionary class data from the API.
- *
- * @param api - The instance of the BsddApi.
- * @param location - The location of the dictionary.
- * @param offset - The offset for pagination.
- * @returns The fetched dictionary class data.
- * @throws Error if there is an HTTP error.
- */
-async function fetchDictionaryClassData(
-  api: BsddApi<any>,
-  location: string,
-  offset: number,
-  // languageCode: string | null,
-) {
-  const response = await api.api.dictionaryV1ClassesList({
-    Uri: location,
-    UseNestedClasses: false,
-    Limit: CLASS_ITEM_PAGE_SIZE,
-    Offset: offset,
-    // languageCode: languageCode || undefined,
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  return response.data;
-}
 
 /**
  * Fetches classes for a given dictionary uri.
@@ -229,12 +122,12 @@ export const fetchDictionaryClasses = createAsyncThunk(
         throw new Error('BsddApi is not initialized');
       }
 
-      let classes: ClassListItemContractV1[] = [];
+      const classes: ClassListItemContractV1[] = [];
       let offset = 0;
       let totalCount: number | null | undefined;
 
       while (true) {
-        const data = await fetchDictionaryClassData(api, location, offset); //, languageCode);
+        const data = await fetchDictionaryClassData(api, location, offset); // , languageCode);
         const newClasses = data.classes ?? [];
         classes.push(...newClasses);
 
@@ -263,11 +156,118 @@ export const fetchDictionaryClasses = createAsyncThunk(
   },
 );
 
+const bsddSlice = createSlice({
+  name: 'bsdd',
+  initialState,
+  reducers: {
+    resetState: () => initialState,
+    addClass: (state, action: PayloadAction<{ uri: string; data: ClassContractV1 }>) => {
+      state.classes[action.payload.uri] = action.payload.data;
+    },
+    addDictionaryClasses: (state, action: PayloadAction<{ uri: string; data: ClassListItemContractV1[] }>) => {
+      state.dictionaryClasses[action.payload.uri] = action.payload.data;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchDictionaries.pending, (state) => {
+        state.loaded = false;
+      })
+      .addCase(fetchDictionaries.fulfilled, (state, action: PayloadAction<{ [key: string]: DictionaryContractV1 }>) => {
+        console.log('fetch dictionaries fulfilled', action.payload);
+        state.dictionaries = action.payload;
+        state.loaded = true;
+      })
+      .addCase(fetchDictionaryClasses.rejected, (state, action) => {
+        console.error('fetch dictionary classes failed', action.error);
+        state.loaded = true;
+      });
+  },
+});
+/**
+ * Fetches a class from the bsddApi.
+ *
+ * @param uri - The URI of the class to fetch.
+ * @param getState - A function to get the current state.
+ * @param dispatch - A function to dispatch actions.
+ * @returns A promise that resolves to the fetched class data.
+ * @throws Error if the bsddApi is not initialized or if there is an HTTP error.
+ */
+export const fetchClass = createAsyncThunk('bsdd/fetchClass', async (uri: string, { getState, dispatch }) => {
+  const state = getState() as RootState;
+  // const languageCode = useAppSelector(selectLanguage);
+  if (state.bsdd.classes[uri]) {
+    return state.bsdd.classes[uri];
+  }
+
+  if (!bsddApi) {
+    throw new Error('BsddApi is not initialized');
+  }
+
+  const response = await bsddApi.api.classV1List({
+    uri,
+    includeClassProperties: true,
+    includeChildClassReferences: true,
+    includeClassRelations: true,
+    // languageCode: languageCode || undefined,
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const { data } = response;
+  dispatch({ type: 'bsdd/addClass', payload: { uri, data } });
+  return data;
+});
+
+/**
+ * Fetches a specific batch of dictionary class data from the API.
+ *
+ * @param api - The instance of the BsddApi.
+ * @param location - The location of the dictionary.
+ * @param offset - The offset for pagination.
+ * @returns The fetched dictionary class data.
+ * @throws Error if there is an HTTP error.
+ */
+async function fetchDictionaryClassData(
+  api: BsddApi<any>,
+  location: string,
+  offset: number,
+  // languageCode: string | null,
+) {
+  const response = await api.api.dictionaryV1ClassesList({
+    Uri: location,
+    UseNestedClasses: false,
+    Limit: CLASS_ITEM_PAGE_SIZE,
+    Offset: offset,
+    // languageCode: languageCode || undefined,
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.data;
+}
+
 export const selectDictionary = (state: RootState, uri: string) => state.bsdd.dictionaries[uri];
 export const selectDictionaryClasses = (state: RootState, location: string) => state.bsdd.dictionaryClasses[location];
 export const selectBsddDictionaries = (state: RootState) => state.bsdd.dictionaries;
 export const selectBsddDataLoaded = (state: RootState) => state.bsdd.loaded;
 
 export const { resetState } = bsddSlice.actions;
+
+/**
+ * Updates the base URL of the BsddApi and resets the state.
+ * @param baseUrl The new base URL for the BsddApi.
+ */
+export function updateBsddApi(baseUrl: string) {
+  return (dispatch: ThunkDispatch<unknown, unknown, UnknownAction>) => {
+    bsddApi = new BsddApi(baseUrl);
+    fetchPromisesCache = {};
+    dispatch(resetState());
+  };
+}
 
 export const bsddReducer = bsddSlice.reducer;

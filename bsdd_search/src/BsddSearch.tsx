@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { BsddApi } from '../../common/src/BsddApi/BsddApi';
 import { ClassContractV1, DictionaryContractV1, RequestParams } from '../../common/src/BsddApi/BsddApiBase';
 import { bsddEnvironments } from '../../common/src/BsddApi/BsddApiEnvironments';
+import { isProduction } from '../../common/src/env';
 import { IfcEntity, IfcPropertySet } from '../../common/src/IfcData/ifc';
 import Apply from './Apply';
 import Classifications from './Classifications';
@@ -55,6 +56,42 @@ function BsddSearch() {
 
   // Initial config load
   useEffect(() => {
+    if (isProduction) return;
+
+    const loadConfig = async () => {
+      const config: BsddConfig = {
+        baseUrl: 'https://test.bsdd.buildingsmart.org',
+        defaultDomains: [
+          {
+            value: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
+            label: 'Basis bouwproducten',
+          },
+        ],
+        defaultSearch: {
+          value: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0/class/knieschot',
+          label: 'knieschot',
+        },
+      };
+
+      if (config && config.defaultDomains && config.defaultDomains.length) {
+        setActiveDomains(config.defaultDomains);
+      }
+      if (config.baseUrl) {
+        setEnvironment(config.baseUrl);
+      }
+      if (config.defaultSearch) {
+        setDefaultSearch(config.defaultSearch);
+      }
+      if (config.ifcEntity) {
+        setIfcEntity(config.ifcEntity);
+      }
+    };
+
+    loadConfig();
+  }, []);
+
+  // Initial config load
+  useEffect(() => {
     const loadConfig = async () => {
       // @ts-ignore
       if (window?.bsddBridge) {
@@ -82,12 +119,18 @@ function BsddSearch() {
   }, []);
 
   const callback = useCallback((ifcProduct: IfcEntity) => {
+    console.log('ifcProduct', ifcProduct);
     const ifcEntityJson = JSON.stringify(ifcProduct);
 
     // @ts-ignore
     window?.bsddBridge?.save(ifcEntityJson).then((actualResult) => {
       console.log('Sent to Revit', actualResult);
     });
+  }, []);
+
+  const cancel = useCallback(() => {
+    // @ts-ignore
+    window?.bsddBridge?.cancel();
   }, []);
 
   // always set domains to the defaultDomains from the config
@@ -173,7 +216,7 @@ function BsddSearch() {
           propertySetMap={propertySets}
           ifcEntity={ifcEntity}
         />
-        <Button fullWidth variant="light" color="gray">
+        <Button fullWidth variant="light" color="gray" onClick={cancel}>
           {t('Cancel')}
         </Button>
       </Group>

@@ -2,13 +2,14 @@ import { Checkbox } from '@mantine/core';
 import React, { useEffect, useRef } from 'react';
 
 interface Props {
+  label: string;
   value: true | false | undefined;
   setValue: (value: true | false | undefined) => void;
   disabled: boolean;
 }
 
 function Check(props: Props) {
-  const { value, setValue, disabled } = props;
+  const { label, value, setValue, disabled } = props;
   const checkboxRef = useRef<HTMLInputElement>(null);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,7 +27,9 @@ function Check(props: Props) {
     }
   });
 
-  return <Checkbox ref={checkboxRef} type="checkbox" onChange={(e) => handleOnChange(e)} disabled={disabled} />;
+  return (
+    <Checkbox label={label} ref={checkboxRef} type="checkbox" onChange={(e) => handleOnChange(e)} disabled={disabled} />
+  );
 }
 
 export default Check;

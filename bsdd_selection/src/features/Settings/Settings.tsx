@@ -1,12 +1,8 @@
 import { Accordion, Button, Group, Tabs } from '@mantine/core';
-
-import ParameterMapping from './ParameterMapping';
-import DomainSort from './DomainSort';
-import DomainSelection from './DomainSelection';
-import GeneralSettings from './GeneralSettings';
 import { useEffect, useState } from 'react';
+
+import { fetchDictionaries, updateBsddApi } from '../../../../common/src/BsddApi/bsddSlice';
 import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import {
   selectBsddApiEnvironment,
   selectBsddApiEnvironmentUri,
@@ -15,11 +11,13 @@ import {
   selectMainDictionary,
   setSettings,
 } from '../../../../common/src/settings/settingsSlice';
-import { fetchDictionaries, updateBsddApi } from '../../../../common/src/BsddApi/bsddSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import DomainSelection from './DomainSelection';
+import DomainSort from './DomainSort';
+import GeneralSettings from './GeneralSettings';
+import ParameterMapping from './ParameterMapping';
 
-interface SettingsProps {}
-
-function Settings({}: SettingsProps) {
+function Settings() {
   const dispatch = useAppDispatch();
   const mainDictionary = useAppSelector(selectMainDictionary);
   const filterDictionaries = useAppSelector(selectFilterDictionaries);
@@ -46,10 +44,10 @@ function Settings({}: SettingsProps) {
 
   useEffect(() => {
     setTempSettings({
-      bsddApiEnvironment: bsddApiEnvironment,
-      mainDictionary: mainDictionary,
-      filterDictionaries: filterDictionaries,
-      language: language,
+      bsddApiEnvironment,
+      mainDictionary,
+      filterDictionaries,
+      language,
     } as BsddSettings);
   }, [mainDictionary, filterDictionaries, bsddApiEnvironment, language]);
 
@@ -67,10 +65,10 @@ function Settings({}: SettingsProps) {
   useEffect(() => {
     if (!bsddApiEnvironment || !mainDictionary) return;
     const settings: BsddSettings = {
-      bsddApiEnvironment: bsddApiEnvironment,
-      mainDictionary: mainDictionary,
-      filterDictionaries: filterDictionaries,
-      language: language,
+      bsddApiEnvironment,
+      mainDictionary,
+      filterDictionaries,
+      language,
     };
 
     console.log('Save settings', settings);
@@ -80,52 +78,50 @@ function Settings({}: SettingsProps) {
   }, [bsddApiEnvironment, mainDictionary, filterDictionaries, language]);
 
   return (
-    <>
-      <Tabs.Panel value="settings">
-        <Accordion defaultValue={['2']} multiple>
-          <GeneralSettings
-            id={1}
-            settings={tempSettings}
-            setSettings={setTempSettings}
-            setUnsavedChanges={setUnsavedChanges}
-          />
-          <DomainSelection
-            id={2}
-            settings={tempSettings}
-            setSettings={setTempSettings}
-            setUnsavedChanges={setUnsavedChanges}
-            setIsLoading={setIsLoading}
-          />
-          <ParameterMapping
-            id={3}
-            settings={tempSettings}
-            setSettings={setTempSettings}
-            setUnsavedChanges={setUnsavedChanges}
-          />
-          <DomainSort
-            id={4}
-            settings={tempSettings}
-            setSettings={setTempSettings}
-            setUnsavedChanges={setUnsavedChanges}
-          />
-        </Accordion>
-        <Group my="sm" justify="center">
-          <Button
-            fullWidth
-            loading={isLoading}
-            onClick={handleSave}
-            disabled={!unsavedChanges}
-            variant={isLoading ? 'light' : 'filled'}
-            loaderProps={{ type: 'dots' }}
-          >
-            Save
-          </Button>
-          <Button fullWidth variant="light" onClick={handleCancel} disabled={!unsavedChanges}>
-            Cancel
-          </Button>
-        </Group>
-      </Tabs.Panel>
-    </>
+    <Tabs.Panel value="settings">
+      <Accordion defaultValue={['2']} multiple>
+        <GeneralSettings
+          id={1}
+          settings={tempSettings}
+          setSettings={setTempSettings}
+          setUnsavedChanges={setUnsavedChanges}
+        />
+        <DomainSelection
+          id={2}
+          settings={tempSettings}
+          setSettings={setTempSettings}
+          setUnsavedChanges={setUnsavedChanges}
+          setIsLoading={setIsLoading}
+        />
+        <ParameterMapping
+          id={3}
+          settings={tempSettings}
+          setSettings={setTempSettings}
+          setUnsavedChanges={setUnsavedChanges}
+        />
+        <DomainSort
+          id={4}
+          settings={tempSettings}
+          setSettings={setTempSettings}
+          setUnsavedChanges={setUnsavedChanges}
+        />
+      </Accordion>
+      <Group my="sm" justify="center">
+        <Button
+          fullWidth
+          loading={isLoading}
+          onClick={handleSave}
+          disabled={!unsavedChanges}
+          variant={isLoading ? 'light' : 'filled'}
+          loaderProps={{ type: 'dots' }}
+        >
+          Save
+        </Button>
+        <Button fullWidth variant="light" onClick={handleCancel} disabled={!unsavedChanges}>
+          Cancel
+        </Button>
+      </Group>
+    </Tabs.Panel>
   );
 }
 
