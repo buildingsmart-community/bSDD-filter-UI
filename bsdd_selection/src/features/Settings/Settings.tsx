@@ -29,10 +29,6 @@ function Settings() {
   const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    console.log('isLoading', isLoading);
-  }, [isLoading]);
-
   // Update the cached dictionary data when the environment changes
   useEffect(() => {
     if (!bsddApiEnvironmentUri) {

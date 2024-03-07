@@ -55,10 +55,10 @@ function CategoryCollapse({ category, bbbr, items, index }: CategoryCollapseProp
       const api = new BsddApi(bsddApiEnvironment);
       api.api
         .classV1List({
-          uri: classContract.uri,
-          includeClassProperties: true,
-          includeChildClassReferences: true,
-          includeClassRelations: true,
+          Uri: classContract.uri,
+          IncludeClassProperties: true,
+          IncludeChildClassReferences: true,
+          IncludeClassRelations: true,
           // languageCode: languageCode || undefined,
         })
         .then((response) => {
