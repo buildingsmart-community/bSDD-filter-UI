@@ -2,17 +2,17 @@ import { Container, Tabs } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { selectBsddDataLoaded } from '../../../common/src/BsddApi/bsddSlice';
 import { isProduction } from '../../../common/src/env';
 import { BsddDictionary, BsddSettings } from '../../../common/src/IfcData/bsddBridgeData';
-import { setValidatedIfcData } from '../../../common/src/IfcData/ifcDataSlice';
 import { validateIfcClassification } from '../../../common/src/IfcData/ifcValidators';
 import { mockData } from '../../../common/src/IfcData/mockData';
-import { setSettings } from '../../../common/src/settings/settingsSlice';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { AppThunk } from '../app/store';
+import { selectBsddDataLoaded } from '../features/bsdd/bsddSlice';
+import { setValidatedIfcData } from '../features/ifcData/ifcDataSlice';
 import Selection from '../features/Selection/Selection';
 import Settings from '../features/Settings/Settings';
+import { setSettings } from '../features/Settings/settingsSlice';
 
 const setSettingsWithValidation =
   (settings: BsddSettings): AppThunk =>

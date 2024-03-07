@@ -5,10 +5,10 @@ import { IconGripVertical } from '@tabler/icons-react';
 import cx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
-import classes from './DndListHandle.module.css';
-import { useAppSelector } from '../../app/hooks';
 import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
-import { selectFilterDictionaries } from '../../../../common/src/settings/settingsSlice';
+import { useAppSelector } from '../../app/hooks';
+import classes from './DndListHandle.module.css';
+import { selectFilterDictionaries } from './settingsSlice';
 
 interface DomainSortProps {
   id: number;

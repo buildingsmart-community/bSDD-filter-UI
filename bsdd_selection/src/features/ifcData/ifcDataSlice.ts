@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import type { RootState } from '../../../bsdd_selection/src/app/store';
-import { Association, IfcEntity } from './ifc';
-import { patchIfcClassificationReference } from './ifcValidators';
+import { Association, IfcEntity } from '../../../../common/src/IfcData/ifc';
+import { patchIfcClassificationReference } from '../../../../common/src/IfcData/ifcValidators';
+import type { RootState } from '../../app/store';
 
 interface EntitiesState {
   ifcEntities: IfcEntity[];

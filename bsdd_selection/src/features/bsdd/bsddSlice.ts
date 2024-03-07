@@ -1,12 +1,16 @@
 import { createAsyncThunk, createSlice, PayloadAction, ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 
-import type { RootState } from '../../../bsdd_selection/src/app/store';
+import { BsddApi } from '../../../../common/src/BsddApi/BsddApi';
+import {
+  ClassContractV1,
+  ClassListItemContractV1,
+  DictionaryContractV1,
+} from '../../../../common/src/BsddApi/BsddApiBase';
+import type { RootState } from '../../app/store';
 import {
   selectBsddApiEnvironmentUri,
   // selectLanguage
-} from '../settings/settingsSlice';
-import { BsddApi } from './BsddApi';
-import { ClassContractV1, ClassListItemContractV1, DictionaryContractV1 } from './BsddApiBase';
+} from '../Settings/settingsSlice';
 
 const CLASS_ITEM_PAGE_SIZE = 500;
 const DICTIONARIES_PAGE_SIZE = 500;
@@ -52,44 +56,48 @@ export const selectBsddApi = (state: RootState) => {
  * @returns A promise that resolves to an object containing the fetched dictionaries.
  * @throws An error if there is an HTTP error or a bSDD API error.
  */
-export const fetchDictionaries = createAsyncThunk(
-  'bsdd/fetchDictionaries',
-  async (bsddApiEnvironment: string, thunkAPI) => {
-    console.log('fetchDictionaries', bsddApiEnvironment);
-    if (!bsddApiEnvironment) return thunkAPI.rejectWithValue('No bsddApiEnvironment provided');
+export const fetchDictionaries = createAsyncThunk<
+  { [key: string]: DictionaryContractV1 }, // The type of the payload of the fulfilled action
+  string, // The type of the argument of the payload creator
+  { rejectValue: string } // The type of the payload of the rejected action
+>('bsdd/fetchDictionaries', (bsddApiEnvironment: string, thunkAPI) => {
+  console.log('fetchDictionaries', bsddApiEnvironment);
+  if (!bsddApiEnvironment) return thunkAPI.rejectWithValue('No bsddApiEnvironment provided');
 
-    const api = new BsddApi(bsddApiEnvironment);
-    const limit = DICTIONARIES_PAGE_SIZE;
-    let offset = 0;
-    const dictionaries: DictionaryContractV1[] = [];
+  const api = new BsddApi(bsddApiEnvironment);
+  const limit = DICTIONARIES_PAGE_SIZE;
+  let offset = 0;
+  const dictionaries: DictionaryContractV1[] = [];
 
-    while (true) {
-      const response = await api.api.dictionaryV1List({ Limit: limit, Offset: offset });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const { data: { dictionaries: newDictionaries, totalCount } = {} } = response;
-      if (newDictionaries && typeof totalCount !== 'undefined') {
-        dictionaries.push(...newDictionaries);
-        offset += limit;
-        if (dictionaries.length >= totalCount) {
-          break;
+  return new Promise((resolve, reject) => {
+    function fetchNextPage() {
+      api.api.dictionaryV1List({ IncludeTestDictionaries: true, Limit: limit, Offset: offset }).then((response) => {
+        if (!response.ok) {
+          reject(new Error(`HTTP error! status: ${response.status}`));
         }
-      } else {
-        throw new Error(`bSDD API error! status: ${response.status}`);
-      }
+
+        const { data: { dictionaries: newDictionaries, totalCount } = {} } = response;
+        if (newDictionaries && typeof totalCount !== 'undefined') {
+          dictionaries.push(...newDictionaries);
+          offset += limit;
+          if (dictionaries.length >= totalCount) {
+            const out = dictionaries.reduce((acc: { [key: string]: DictionaryContractV1 }, item) => {
+              acc[item.uri] = item;
+              return acc;
+            }, {});
+            resolve(out);
+          } else {
+            fetchNextPage();
+          }
+        } else {
+          reject(new Error(`bSDD API error! status: ${response.status}`));
+        }
+      });
     }
 
-    const out = dictionaries.reduce((acc: { [key: string]: DictionaryContractV1 }, item) => {
-      acc[item.uri] = item;
-      return acc;
-    }, {});
-
-    return out;
-  },
-);
+    fetchNextPage();
+  });
+});
 
 /**
  * Fetches classes for a given dictionary uri.
