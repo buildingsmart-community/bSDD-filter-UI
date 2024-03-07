@@ -12361,8 +12361,7 @@ class Z0 {
  * @baseUrl https://api.bsdd.buildingsmart.org/
  * @contact Support <bsdd_support@buildingsmart.org> (https://github.com/buildingSMART/bSDD)
  *
- * <p>API to access the buildingSMART Data Dictionary.</p><p>For manually uploading import files, please go to <a href="https://manage.bsdd.buildingsmart.org">bSDD Management portal</a>. Version history can be found at <a href="https://github.com/buildingSMART/bSDD/blob/master/API%20version%20history.md">Version history</a>.</p><p>If you have any questions or need further assistance, feel free to send us an e-mail</p> <p>In case you want to try out secured APIs via this swagger portal, you need to enter client ID <span style="white-space: nowrap;">b222e220-1f71-4962-9184-05e0481a390d</span>. If you create your own tool
- *   that needs to access secured APIs, please contact us via e-mail.</p>
+ * <p>API to access the buildingSMART Data Dictionary.</p><p>For manually uploading import files, please go to <a href="https://manage.bsdd.buildingsmart.org">bSDD Management portal</a>. Version history can be found at <a href="https://github.com/buildingSMART/bSDD/blob/master/API%20version%20history.md">Version history</a>.</p><p>Keep an eye on (planned) updates: <a href="https://forums.buildingsmart.org/t/bsdd-tech-updates/4889">bSDD tech updates</a></p><h3>For client developers</h3><p>If you're creating a desktop client that only calls the not secured APIs, you're ready to go.<br/>If you don't use the secured APIs but want to call the other APIs from your website or SPA, then we need the URL of your website to allow CORS.</p><p>If you are going to build a client that is going to use secured APIs, you must request a Client ID. You can do so by sending us an email and give:</p><ul><li>the name of the client application</li><li>type of application:<ul><li>Web application</li><li>Single-page application</li><li>iOS / macOS, Object-C, Swift, Xamarin</li><li>Adroid - Java, Kotlin, Xamarin</li><li>Mobile/desktop</li></ul> <li>which development language are you using? (sometimes the redirectUri to be configured depends on the used library)</li><li>if it is a website or SPA, specify the return url (the login page will redirect to this url after user has logged in)</li></ul>
  */
 class eS extends Z0 {
   constructor() {
@@ -13101,10 +13100,11 @@ Mo("bsdd/fetchClass", async (e, { getState: t, dispatch: n }) => {
   if (!en)
     throw new Error("BsddApi is not initialized");
   const o = await en.api.classV1List({
-    uri: e,
-    includeClassProperties: !0,
-    includeChildClassReferences: !0,
-    includeClassRelations: !0
+    Uri: e,
+    IncludeClassProperties: !0,
+    IncludeChildClassReferences: !0,
+    IncludeClassRelations: !0
+    // IncludeReverseRelations: true,
     // languageCode: languageCode || undefined,
   });
   if (!o.ok)
@@ -13446,10 +13446,10 @@ function kS({ category: e, bbbr: t, items: n, index: r }) {
     if (d && p) {
       const m = p;
       new br(d).api.classV1List({
-        uri: m.uri,
-        includeClassProperties: !0,
-        includeChildClassReferences: !0,
-        includeClassRelations: !0
+        Uri: m.uri,
+        IncludeClassProperties: !0,
+        IncludeChildClassReferences: !0,
+        IncludeClassRelations: !0
         // languageCode: languageCode || undefined,
       }).then((h) => {
         if (!h.ok)
@@ -19820,8 +19820,6 @@ function qD({ id: e, settings: t, setSettings: n, setUnsavedChanges: r }) {
 function KD() {
   const e = Tf(), t = Te(Ta), n = Te(Df), r = Te(X0), o = Te(J0), i = Te(_o), [s, a] = U(), [l, c] = U(!1), [u, d] = U(!0);
   W(() => {
-    console.log("isLoading", u);
-  }, [u]), W(() => {
     i && (e(lS(i)), e(cs(i)));
   }, [e, i]), W(() => {
     a({

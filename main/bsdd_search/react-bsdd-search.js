@@ -18067,8 +18067,7 @@ class Ck {
  * @baseUrl https://api.bsdd.buildingsmart.org/
  * @contact Support <bsdd_support@buildingsmart.org> (https://github.com/buildingSMART/bSDD)
  *
- * <p>API to access the buildingSMART Data Dictionary.</p><p>For manually uploading import files, please go to <a href="https://manage.bsdd.buildingsmart.org">bSDD Management portal</a>. Version history can be found at <a href="https://github.com/buildingSMART/bSDD/blob/master/API%20version%20history.md">Version history</a>.</p><p>If you have any questions or need further assistance, feel free to send us an e-mail</p> <p>In case you want to try out secured APIs via this swagger portal, you need to enter client ID <span style="white-space: nowrap;">b222e220-1f71-4962-9184-05e0481a390d</span>. If you create your own tool
- *   that needs to access secured APIs, please contact us via e-mail.</p>
+ * <p>API to access the buildingSMART Data Dictionary.</p><p>For manually uploading import files, please go to <a href="https://manage.bsdd.buildingsmart.org">bSDD Management portal</a>. Version history can be found at <a href="https://github.com/buildingSMART/bSDD/blob/master/API%20version%20history.md">Version history</a>.</p><p>Keep an eye on (planned) updates: <a href="https://forums.buildingsmart.org/t/bsdd-tech-updates/4889">bSDD tech updates</a></p><h3>For client developers</h3><p>If you're creating a desktop client that only calls the not secured APIs, you're ready to go.<br/>If you don't use the secured APIs but want to call the other APIs from your website or SPA, then we need the URL of your website to allow CORS.</p><p>If you are going to build a client that is going to use secured APIs, you must request a Client ID. You can do so by sending us an email and give:</p><ul><li>the name of the client application</li><li>type of application:<ul><li>Web application</li><li>Single-page application</li><li>iOS / macOS, Object-C, Swift, Xamarin</li><li>Adroid - Java, Kotlin, Xamarin</li><li>Mobile/desktop</li></ul> <li>which development language are you using? (sometimes the redirectUri to be configured depends on the used library)</li><li>if it is a website or SPA, specify the return url (the login page will redirect to this url after user has logged in)</li></ul>
  */
 class Ek extends Ck {
   constructor() {
@@ -22461,7 +22460,7 @@ var im = ds.exports;
 const vp = (r) => im.groupBy(r, "dictionaryUri");
 async function Sk(r, t, e) {
   try {
-    const n = await r.api.classV1List({ uri: t, includeClassRelations: !0 }, e);
+    const n = await r.api.classV1List({ Uri: t, IncludeClassRelations: !0 }, e);
     if (n.status !== 200)
       throw new Error(`API request failed with status ${n.status}`);
     return n.data;
@@ -22486,9 +22485,9 @@ function Tk({
       o !== "" && (I.headers = { ...I.headers, Authorization: `Bearer ${o}` });
       const T = new Promise(function(N) {
         const x = {
-          uri: A,
-          includeClassRelations: !0,
-          includeClassProperties: !0
+          Uri: A,
+          IncludeClassRelations: !0,
+          IncludeClassProperties: !0
         };
         N(
           r.api.classV1List(x, I).then((D) => D.status !== 200 ? (console.error(`API request failed with status ${D.status}`), null) : D.data).catch((D) => (console.error("Error fetching classification:", D), null))
@@ -22902,7 +22901,10 @@ function xk() {
     };
     x !== "" && (fe.headers = { ...fe.headers, Authorization: `Bearer ${x}` }), (async () => {
       try {
-        const pe = await W.api.dictionaryV1List(void 0, fe), { dictionaries: J } = pe.data;
+        const pe = await W.api.dictionaryV1List(
+          { IncludeTestDictionaries: !0, Offset: 0, Limit: 1e3 },
+          fe
+        ), { dictionaries: J } = pe.data;
         if (J) {
           const we = J.reduce((j, Z) => Z.uri ? { ...j, [Z.uri]: Z } : j, {});
           _(we);
