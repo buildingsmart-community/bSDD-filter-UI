@@ -29,7 +29,7 @@ async function fetchClassification(
   params: RequestParams,
 ): Promise<ClassContractV1 | null> {
   try {
-    const response = await api.api.classV1List({ uri: classificationUri, includeClassRelations: true }, params);
+    const response = await api.api.classV1List({ Uri: classificationUri, IncludeClassRelations: true }, params);
     if (response.status !== 200) {
       throw new Error(`API request failed with status ${response.status}`);
     }
@@ -74,9 +74,9 @@ function Classifications({
       }
       const classificationPromise: Promise<ClassContractV1 | null> = new Promise(function (resolve) {
         const queryParameters = {
-          uri: classificationUri,
-          includeClassRelations: true,
-          includeClassProperties: true,
+          Uri: classificationUri,
+          IncludeClassRelations: true,
+          IncludeClassProperties: true,
         };
         resolve(
           api.api

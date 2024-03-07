@@ -144,7 +144,10 @@ function BsddSearch() {
     }
     const fetchDictionaries = async () => {
       try {
-        const response = await api.api.dictionaryV1List(undefined, params);
+        const response = await api.api.dictionaryV1List(
+          { IncludeTestDictionaries: true, Offset: 0, Limit: 1000 },
+          params,
+        );
         const { dictionaries } = response.data;
         if (dictionaries) {
           const newDomains = dictionaries.reduce((accumulator, domain) => {

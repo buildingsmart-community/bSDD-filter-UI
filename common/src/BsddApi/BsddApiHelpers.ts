@@ -2,11 +2,11 @@ import { BsddApi } from './BsddApi';
 import { ClassContractV1, DictionaryContractV1 } from './BsddApiBase';
 import { bsddEnvironments } from './BsddApiEnvironments';
 
-var bsddApiBaseUri = bsddEnvironments['production'];
-var bsddApi = new BsddApi(bsddEnvironments['production']);
+let bsddApiBaseUri = bsddEnvironments.production;
+let bsddApi = new BsddApi(bsddEnvironments.production);
 
-var classCache: { [key: string]: ClassContractV1 } = {};
-var dictionaryCache: { [key: string]: DictionaryContractV1 } = {};
+let classCache: { [key: string]: ClassContractV1 } = {};
+let dictionaryCache: { [key: string]: DictionaryContractV1 } = {};
 
 // Function to get data from API with caching
 export async function getBsddClass(
@@ -25,16 +25,16 @@ export async function getBsddClass(
     return classCache[uri];
   }
   const response = await bsddApi.api.classV1List({
-    uri,
-    includeClassProperties: true,
-    includeChildClassReferences: true,
-    includeClassRelations: true,
+    Uri: uri,
+    IncludeClassProperties: true,
+    IncludeChildClassReferences: true,
+    IncludeClassRelations: true,
     // languageCode: languageCode || undefined,
   });
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
-  const data = response.data;
+  const { data } = response;
   classCache[uri] = data;
   return data;
 }

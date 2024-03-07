@@ -88,7 +88,7 @@ export interface ClassContractV1 {
   visualRepresentationUri?: string | null;
   /** Type of Class */
   classType?: string | null;
-  /** Code that can be used for domain specific purposes */
+  /** Code that can be used for dictionary specific purposes */
   referenceCode?: string | null;
   /** List of synonyms for the class */
   synonyms?: string[] | null;
@@ -97,10 +97,12 @@ export interface ClassContractV1 {
   parentClassReference?: ClassReferenceContractV1;
   /** List of the properties of this class */
   classProperties?: ClassPropertyContractV1[] | null;
-  /** List of relations to other classes, can be reference to classes of other domains */
+  /** List of relations to other classes, can be reference to classes of other dictionaries */
   classRelations?: ClassRelationContractV1[] | null;
   /** List of child classes (only filled if requested) */
   childClassReferences?: ClassReferenceContractV1[] | null;
+  /** List of relations of other classes to this class (only filled if requested) */
+  reverseClassRelations?: ClassReverseRelationContractV1[] | null;
 }
 
 export interface ClassListItemContractV1 {
@@ -125,6 +127,11 @@ export interface ClassPropertyContractV1 {
    * If at Property level no description has been given but a "Definition" is available, then "Definition" is returned as description
    */
   description?: string | null;
+  /**
+   * Definition of the property.
+   * Description is same as definition if at Property level no description has been given.
+   */
+  definition?: string | null;
   /** Format for expressing the value of the property */
   dataType?: string | null;
   /**
@@ -232,10 +239,12 @@ export interface ClassPropertyContractV1 {
   allowedValues?: ClassPropertyValueContractV1[] | null;
   /** Predefined value: if the class can have only one value for this property, this is it */
   predefinedValue?: string | null;
-  /** Code of the property, only applicable if property is of the same domain as the class. */
+  /** Code of the property, only applicable if property is of the same dictionary as the class. */
   propertyCode?: string | null;
-  /** Name of the Domain this property belongs to */
+  /** Name of the Dictionary this property belongs to */
   propertyDictionaryName?: string | null;
+  /** Uri of the Dictionary this property belongs to */
+  propertyDictionaryUri?: string | null;
   /** Unique identification of the property */
   propertyUri?: string | null;
   /** Name of the Property Set */
@@ -297,6 +306,28 @@ export interface ClassRelationContractV1 {
    * @format double
    */
   fraction?: number | null;
+}
+
+export interface ClassReverseRelationContractV1 {
+  /**
+   * Can be one of: HasReference, IsEqualTo, IsSynonymOf, IsParentOf, IsChildOf, HasPart
+   * @minLength 1
+   */
+  relationType: string;
+  /**
+   * URI of the reverse related class
+   * @minLength 1
+   */
+  classUri: string;
+  /** Name of the reverse related class */
+  className?: string | null;
+  /**
+   * Optional provision of a fraction of the total amount (e.g. volume or weight) that applies to the class relations of one relation type
+   * @format double
+   */
+  fraction?: number | null;
+  /** The URI of the dictionary that contains the reverse related class. This URI can be used to retrieve the dictionary */
+  dictionaryUri?: string | null;
 }
 
 export interface ClassSearchResponseClassContractV1 {
@@ -940,7 +971,7 @@ export interface ClassificationSearchResultContractV2 {
   name?: string | null;
   /** Unique identification of the Classification */
   namespaceUri?: string | null;
-  /** Code that can be used for domain specific purposes */
+  /** Code that can be used for dictionary specific purposes */
   referenceCode?: string | null;
   /** Type of the classification. */
   classificationType?: string | null;
@@ -1839,6 +1870,23 @@ export interface ProblemDetails {
   [key: string]: any;
 }
 
+export interface PropertyClassContractV4 {
+  /** Globally unique identification of the class */
+  uri?: string | null;
+  /** Code of the class */
+  code?: string | null;
+  /**
+   * Name of the class
+   * @minLength 1
+   */
+  name: string;
+  /** Definition of the class */
+  definition?: string | null;
+  /** Description of the class */
+  description?: string | null;
+  propertySet?: string | null;
+}
+
 export interface PropertyContractV2 {
   /** Namespace URI of the domain */
   domainNamespaceUri?: string | null;
@@ -2377,6 +2425,8 @@ export interface PropertyContractV4 {
   units?: string[] | null;
   /** List of QUDT unit codes (if QUDT code available) */
   qudtCodes?: string[] | null;
+  /** List of the classes this property is used in (only classes of same dictionary as the property are listed) */
+  propertyClasses?: PropertyClassContractV4[] | null;
 }
 
 export interface PropertyListItemContractV1 {
@@ -2917,8 +2967,7 @@ export class HttpClient<SecurityDataType = unknown> {
  * @baseUrl https://api.bsdd.buildingsmart.org/
  * @contact Support <bsdd_support@buildingsmart.org> (https://github.com/buildingSMART/bSDD)
  *
- * <p>API to access the buildingSMART Data Dictionary.</p><p>For manually uploading import files, please go to <a href="https://manage.bsdd.buildingsmart.org">bSDD Management portal</a>. Version history can be found at <a href="https://github.com/buildingSMART/bSDD/blob/master/API%20version%20history.md">Version history</a>.</p><p>If you have any questions or need further assistance, feel free to send us an e-mail</p> <p>In case you want to try out secured APIs via this swagger portal, you need to enter client ID <span style="white-space: nowrap;">b222e220-1f71-4962-9184-05e0481a390d</span>. If you create your own tool
- *   that needs to access secured APIs, please contact us via e-mail.</p>
+ * <p>API to access the buildingSMART Data Dictionary.</p><p>For manually uploading import files, please go to <a href="https://manage.bsdd.buildingsmart.org">bSDD Management portal</a>. Version history can be found at <a href="https://github.com/buildingSMART/bSDD/blob/master/API%20version%20history.md">Version history</a>.</p><p>Keep an eye on (planned) updates: <a href="https://forums.buildingsmart.org/t/bsdd-tech-updates/4889">bSDD tech updates</a></p><h3>For client developers</h3><p>If you're creating a desktop client that only calls the not secured APIs, you're ready to go.<br/>If you don't use the secured APIs but want to call the other APIs from your website or SPA, then we need the URL of your website to allow CORS.</p><p>If you are going to build a client that is going to use secured APIs, you must request a Client ID. You can do so by sending us an email and give:</p><ul><li>the name of the client application</li><li>type of application:<ul><li>Web application</li><li>Single-page application</li><li>iOS / macOS, Object-C, Swift, Xamarin</li><li>Adroid - Java, Kotlin, Xamarin</li><li>Mobile/desktop</li></ul> <li>which development language are you using? (sometimes the redirectUri to be configured depends on the used library)</li><li>if it is a website or SPA, specify the return url (the login page will redirect to this url after user has logged in)</li></ul>
  */
 export class BsddApiBase<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   api = {
@@ -2938,13 +2987,17 @@ Changes:
     classV1List: (
       query: {
         /** URI of the class, e.g. https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/class/apple */
-        uri: string;
+        Uri: string;
         /** Use this option to include properties of the class. By default it is set to false */
-        includeClassProperties?: boolean;
+        IncludeClassProperties?: boolean;
         /** Use this option to include references to child classes. By default it is set to false */
-        includeChildClassReferences?: boolean;
-        /** Use this option to skip loading relations of the class. By default it is set to false */
-        includeClassRelations?: boolean;
+        IncludeChildClassReferences?: boolean;
+        /** Use this option to include loading relations of the class. By default it is set to false */
+        IncludeClassRelations?: boolean;
+        /** Use this option to include loading reverse relations of the class, i.e. classes having a relation with this class. By default it is set to false */
+        IncludeReverseRelations?: boolean;
+        /** When including reverse relations, you can specify which dictionaries to include. By default all dictionaries are included */
+        ReverseRelationDictionaryUris?: string[];
         /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary */
         languageCode?: string;
       },
@@ -2977,12 +3030,17 @@ Changes:
          */
         Uri?: string;
         /**
+         * Should test dictionaries be included in the result? By default it is set to false.
+         * This option is ignored if you specify a URI.
+         */
+        IncludeTestDictionaries?: boolean;
+        /**
          * Zero-based offset of the first item to be returned. Default is 0.
          * @format int32
          */
         Offset?: number;
         /**
-         * Limit number of items to be returned. If you enter an offset then default limit is 100. If you don't enter offset and limit then maximum number list items returned is 1000.
+         * Limit number of items to be returned. If you enter an offset then default limit is 100. The maximum number of items returned is 1000.
          * @format int32
          */
         Limit?: number;
@@ -3023,7 +3081,7 @@ This one replaces /api/Domain. See https://github.com/buildingSMART/bSDD/blob/ma
          */
         Offset?: number;
         /**
-         * Limit number of items to be returned. If you enter an offset then default limit is 100. If you don't enter offset and limit then maximum number list items returned is 1000.
+         * Limit number of items to be returned. If you enter an offset then default limit is 100. The maximum number of items returned is 1000.
          * @format int32
          */
         Limit?: number;
@@ -3058,7 +3116,7 @@ This one replaces /api/Domain. See https://github.com/buildingSMART/bSDD/blob/ma
          */
         Offset?: number;
         /**
-         * Limit number of items to be returned. If you enter an offset then default limit is 100. If you don't enter offset and limit then maximum number list items returned is 1000.
+         * Limit number of items to be returned. If you enter an offset then default limit is 100. The maximum number of items returned is 1000.
          * @format int32
          */
         Limit?: number;
@@ -3127,6 +3185,11 @@ This API replaces /api/RequestExportFile/preview
          * The validation result will not be send via e-mail.
          */
         ValidateOnly?: boolean;
+        /**
+         * Set to true if you are just testing your file. Data will be stored in the database, you can retrieve it via the API, but you can't set status to Active.
+         * Dictionary will be deleted after 60 days of last upload.
+         */
+        IsTest?: boolean;
       },
       params: RequestParams = {},
     ) =>
@@ -3213,6 +3276,8 @@ This API replaces /api/RequestExportFile/preview
       query: {
         /** URI of the property, e.g. https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/prop/color */
         uri: string;
+        /** Set to true to get list of classes where property is used (only classes of the same dictionary as the property). Maximum number of class properties returned is 2000 */
+        includeClasses?: boolean;
         /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary */
         languageCode?: string;
       },
@@ -3262,7 +3327,7 @@ Pagination options are for Classes and Properties combined. So if result consist
  */
     textSearchV1List: (
       query: {
-        /** The text to search for, minimum 3 characters (case and accent insensitive) */
+        /** The text to search for, minimum 2 characters (case and accent insensitive) */
         SearchText: string;
         /** Type filter: must be "All", "Classes" or "Properties" */
         TypeFilter?: string;
@@ -3274,7 +3339,7 @@ Pagination options are for Classes and Properties combined. So if result consist
          */
         Offset?: number;
         /**
-         * Limit number of items to be returned. If you enter an offset then default limit is 100. If you don't enter offset and limit then maximum number list items returned is 1000.
+         * Limit number of items to be returned. If you enter an offset then default limit is 100. The maximum number of items returned is 1000.
          * @format int32
          */
         Limit?: number;
@@ -3320,7 +3385,7 @@ This API replaces /api/SearchList.
          */
         Offset?: number;
         /**
-         * Limit number of items to be returned. If you enter an offset then default limit is 100. If you don't enter offset and limit then maximum number list items returned is 1000.
+         * Limit number of items to be returned. If you enter an offset then default limit is 100. The maximum number of items returned is 1000.
          * @format int32
          */
         Limit?: number;
@@ -3367,7 +3432,7 @@ Changes with obsolete api/ClassificationSearch:
          */
         Offset?: number;
         /**
-         * Limit number of items to be returned. If you enter an offset then default limit is 100. If you don't enter offset and limit then maximum number list items returned is 1000.
+         * Limit number of items to be returned. If you enter an offset then default limit is 100. The maximum number of items returned is 1000.
          * @format int32
          */
         Limit?: number;
