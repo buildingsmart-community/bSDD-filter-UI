@@ -1,9 +1,13 @@
 import { ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../../../bsdd_selection/src/app/store';
+import {
+  fetchDictionaryClasses,
+  selectDictionary,
+  selectDictionaryClasses,
+} from '../../../bsdd_selection/src/features/bsdd/bsddSlice';
+import { selectActiveDictionaries } from '../../../bsdd_selection/src/features/Settings/settingsSlice';
 import { ClassListItemContractV1, DictionaryClassesResponseContractV1 } from '../BsddApi/BsddApiBase';
-import { fetchDictionaryClasses, selectDictionary, selectDictionaryClasses } from '../BsddApi/bsddSlice';
-import { selectActiveDictionaries } from '../settings/settingsSlice';
 import { BsddDictionary } from './bsddBridgeData';
 import { IfcClassificationReference } from './ifc';
 import { convertBsddDictionaryToIfcClassification } from './ifcBsddConverters';

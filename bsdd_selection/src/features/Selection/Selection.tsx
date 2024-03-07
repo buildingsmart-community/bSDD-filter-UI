@@ -4,13 +4,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { BsddApi } from '../../../../common/src/BsddApi/BsddApi';
 import { ClassListItemContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
 import { IfcEntity } from '../../../../common/src/IfcData/ifc';
-import { selectIfcEntities } from '../../../../common/src/IfcData/ifcDataSlice';
+import { useAppSelector } from '../../app/hooks';
+import { selectIfcEntities } from '../ifcData/ifcDataSlice';
 import {
   selectBsddApiEnvironmentUri,
   // selectLanguage,
   selectMainDictionary,
-} from '../../../../common/src/settings/settingsSlice';
-import { useAppSelector } from '../../app/hooks';
+} from '../Settings/settingsSlice';
 import CategoryCollapse from './CategoryCollapse';
 
 let CefSharp: any;

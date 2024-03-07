@@ -1,8 +1,13 @@
 import { Accordion, Button, Group, Tabs } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
-import { fetchDictionaries, updateBsddApi } from '../../../../common/src/BsddApi/bsddSlice';
 import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { fetchDictionaries, updateBsddApi } from '../bsdd/bsddSlice';
+import DomainSelection from './DomainSelection';
+import DomainSort from './DomainSort';
+import GeneralSettings from './GeneralSettings';
+import ParameterMapping from './ParameterMapping';
 import {
   selectBsddApiEnvironment,
   selectBsddApiEnvironmentUri,
@@ -10,12 +15,7 @@ import {
   selectLanguage,
   selectMainDictionary,
   setSettings,
-} from '../../../../common/src/settings/settingsSlice';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import DomainSelection from './DomainSelection';
-import DomainSort from './DomainSort';
-import GeneralSettings from './GeneralSettings';
-import ParameterMapping from './ParameterMapping';
+} from './settingsSlice';
 
 function Settings() {
   const dispatch = useAppDispatch();

@@ -1,8 +1,8 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import type { RootState } from '../../../bsdd_selection/src/app/store';
-import { bsddEnvironments } from '../BsddApi/BsddApiEnvironments';
-import { BsddDictionary, BsddSettings } from '../IfcData/bsddBridgeData';
+import { bsddEnvironments } from '../../../../common/src/BsddApi/BsddApiEnvironments';
+import { BsddDictionary, BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
+import type { RootState } from '../../app/store';
 
 interface EntitiesState {
   bsddApiEnvironment: string | null;

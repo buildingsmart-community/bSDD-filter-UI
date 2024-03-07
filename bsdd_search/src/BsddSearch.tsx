@@ -33,7 +33,7 @@ function BsddSearch() {
   const [defaultSearch, setDefaultSearch] = useState<Option | undefined>();
   const [ifcEntity, setIfcEntity] = useState<IfcEntity | undefined>();
   const [recursiveMode, setRecursiveMode] = useState<boolean>(false);
-  const [activeDomains, setActiveDomains] = useState<Option[]>([]);
+  const [activeDictionaries, setActiveDictionaries] = useState<Option[]>([]);
   const [domains, setDomains] = useState<{ [id: string]: DictionaryContractV1 }>({});
   const [classifications, setClassifications] = useState<ClassContractV1[]>([]);
   const [propertySets, setPropertySets] = useState<{ [id: string]: IfcPropertySet }>({});
@@ -74,7 +74,7 @@ function BsddSearch() {
       };
 
       if (config && config.defaultDomains && config.defaultDomains.length) {
-        setActiveDomains(config.defaultDomains);
+        setActiveDictionaries(config.defaultDomains);
       }
       if (config.baseUrl) {
         setEnvironment(config.baseUrl);
@@ -101,7 +101,7 @@ function BsddSearch() {
         const parsedConfig = JSON.parse(settings);
         const config: BsddConfig = parsedConfig;
         if (config && config.defaultDomains && config.defaultDomains.length) {
-          setActiveDomains(config.defaultDomains);
+          setActiveDictionaries(config.defaultDomains);
         }
         if (config.baseUrl) {
           setEnvironment(config.baseUrl);
@@ -133,39 +133,42 @@ function BsddSearch() {
     window?.bsddBridge?.cancel();
   }, []);
 
-  // always set domains to the defaultDomains from the config
   useEffect(() => {
-    const params: RequestParams = {
-      headers: { Accept: 'text/plain' },
-    };
-
-    if (accessToken !== '') {
-      params.headers = { ...params.headers, Authorization: `Bearer ${accessToken}` };
-    }
-    const fetchDictionaries = async () => {
+    const fetchDictionary = async (uri: string) => {
       try {
-        const response = await api.api.dictionaryV1List(
-          { IncludeTestDictionaries: true, Offset: 0, Limit: 1000 },
-          params,
-        );
+        const response = await api.api.dictionaryV1List({
+          Uri: uri,
+          IncludeTestDictionaries: true,
+        });
         const { dictionaries } = response.data;
         if (dictionaries) {
-          const newDomains = dictionaries.reduce((accumulator, domain) => {
+          return dictionaries.reduce((accumulator, domain) => {
             if (domain.uri) {
               return { ...accumulator, [domain.uri]: domain };
             }
             return accumulator;
           }, {});
-
-          setDomains(newDomains);
         }
       } catch (error) {
-        console.error('Failed to fetch dictionaries:', error);
+        console.error(`Failed to fetch dictionary ${uri}:`, error);
       }
+      return {};
     };
 
-    fetchDictionaries();
-  }, [api, setDomains, accessToken]);
+    const fetchAllDictionaries = async () => {
+      const allDomains = await Promise.all(
+        activeDictionaries.map((dictionaryOption) => fetchDictionary(dictionaryOption.value)),
+      );
+
+      const newDomains = allDomains.reduce((accumulator, dictionary) => {
+        return { ...accumulator, ...dictionary };
+      }, {});
+
+      setDomains(newDomains);
+    };
+
+    fetchAllDictionaries();
+  }, [api, setDomains, accessToken, activeDictionaries]);
 
   return (
     <Container>
@@ -175,7 +178,7 @@ function BsddSearch() {
       <Group mx="md" mt="lg" mb="sm">
         <Search
           api={api}
-          activeDomains={activeDomains}
+          activeDomains={activeDictionaries}
           defaultValue={defaultSearch}
           setActiveClassificationUri={setActiveClassificationUri}
           accessToken={accessToken}

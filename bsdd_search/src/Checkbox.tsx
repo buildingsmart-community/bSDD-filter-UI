@@ -1,5 +1,5 @@
 import { Checkbox } from '@mantine/core';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface Props {
   label: string;
@@ -10,7 +10,8 @@ interface Props {
 
 function Check(props: Props) {
   const { label, value, setValue, disabled } = props;
-  const checkboxRef = useRef<HTMLInputElement>(null);
+  const [checked, setChecked] = useState<boolean>();
+  const [indeterminate, setIndeterminate] = useState<boolean | undefined>(undefined);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.target.indeterminate = false;
@@ -18,17 +19,27 @@ function Check(props: Props) {
   };
 
   useEffect(() => {
-    if (checkboxRef.current) {
-      if (value === true) {
-        checkboxRef.current.checked = true;
-      } else if (value === undefined) {
-        checkboxRef.current.indeterminate = true;
-      }
+    if (value === true) {
+      setChecked(true);
+      setIndeterminate(false);
+    } else if (value === false) {
+      setChecked(false);
+      setIndeterminate(false);
+    } else if (value === undefined) {
+      setChecked(false);
+      setIndeterminate(true);
     }
-  });
+  }, [value]);
 
   return (
-    <Checkbox label={label} ref={checkboxRef} type="checkbox" onChange={(e) => handleOnChange(e)} disabled={disabled} />
+    <Checkbox
+      label={label}
+      checked={checked}
+      indeterminate={indeterminate}
+      type="checkbox"
+      onChange={(e) => handleOnChange(e)}
+      disabled={disabled}
+    />
   );
 }
 

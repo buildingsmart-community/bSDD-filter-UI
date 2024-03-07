@@ -7,13 +7,13 @@ import { useTranslation } from 'react-i18next';
 import { BsddApi } from '../../../../common/src/BsddApi/BsddApi';
 import { ClassContractV1, ClassListItemContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
 import { IfcEntity } from '../../../../common/src/IfcData/ifc';
-import {
-  selectBsddApiEnvironmentUri,
-  //  selectLanguage
-} from '../../../../common/src/settings/settingsSlice';
 import { Color, colorMap } from '../../../../common/src/tools/colors';
 import { useAppSelector } from '../../app/hooks';
 import BsddCard from '../BsddCard/BsddCard';
+import {
+  selectBsddApiEnvironmentUri,
+  //  selectLanguage
+} from '../Settings/settingsSlice';
 
 interface CategoryCollapseProps {
   category: string;

@@ -7,10 +7,10 @@ import { useTranslation } from 'react-i18next';
 
 import { ClassContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
 import { IfcEntity } from '../../../../common/src/IfcData/ifc';
-import { selectActiveDictionaries } from '../../../../common/src/settings/settingsSlice';
 import getClassUriFromDictionary, { ClassificationStatus } from '../../../../common/src/tools/checkIfcClassification';
 import { Color, colorMap } from '../../../../common/src/tools/colors';
 import { useAppSelector } from '../../app/hooks';
+import { selectActiveDictionaries } from '../Settings/settingsSlice';
 
 interface BsddCardProps {
   item: IfcEntity;
