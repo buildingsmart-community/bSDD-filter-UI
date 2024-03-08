@@ -8,11 +8,14 @@ import {
   getIfcClassAndPredefinedType,
 } from '../../common/src/IfcData/ifcBsddConverters';
 
+type DictionaryMap = { [id: string]: DictionaryContractV1 };
+type PropertySetMap = { [id: string]: IfcPropertySet };
+
 interface ApplyProps {
   callback: (value: any) => void;
-  domains: { [id: string]: DictionaryContractV1 };
+  domains: DictionaryMap;
   classifications: ClassContractV1[];
-  propertySetMap: { [id: string]: IfcPropertySet };
+  propertySetMap: PropertySetMap;
   ifcEntity: IfcEntity | undefined;
 }
 
@@ -43,31 +46,38 @@ function Apply({ callback, domains, classifications, propertySetMap, ifcEntity }
     return ifc;
   }
 
-  function getIfcEntity(): IfcEntity {
-    const ifc: IfcEntity = ifcEntity || { hasAssociations: [], isDefinedBy: [] };
+  function createIfcEntity(
+    ifcEntityInput: IfcEntity | undefined,
+    classificationsInput: ClassContractV1[],
+    propertySetsInput: PropertySetMap,
+  ): IfcEntity {
+    const baseIfc: IfcEntity = ifcEntityInput
+      ? JSON.parse(JSON.stringify(ifcEntityInput))
+      : { hasAssociations: [], isDefinedBy: [] };
 
-    classifications.forEach((classification) => {
+    const updatedIfc = classificationsInput.reduce((ifc, classification) => {
       if (classification?.dictionaryUri?.includes('https://identifier.buildingsmart.org/uri/buildingsmart/ifc/')) {
         const { type, predefinedType } = getIfcClassAndPredefinedType(classification.code);
-        ifc.type = type;
-        ifc.predefinedType = predefinedType;
-      } else {
-        const ifcClassificationReference = getIfcClassificationReference(classification);
-        if (ifcClassificationReference) {
-          ifc.hasAssociations = ifc.hasAssociations || [];
-          ifc.hasAssociations.push(ifcClassificationReference);
-        }
+        return { ...ifc, type, predefinedType };
       }
-    });
+      const ifcClassificationReference = getIfcClassificationReference(classification);
+      if (ifcClassificationReference) {
+        return { ...ifc, hasAssociations: [...(ifc.hasAssociations || []), ifcClassificationReference] };
+      }
 
-    ifc.isDefinedBy = Object.values(propertySetMap).length ? Object.values(propertySetMap) : [];
+      return ifc;
+    }, baseIfc);
 
-    return ifc;
+    return {
+      ...updatedIfc,
+      isDefinedBy: Object.values(propertySetsInput).length ? Object.values(propertySetsInput) : [],
+    };
   }
 
   const handleOnChange = () => {
-    console.log(getIfcEntity());
-    callback(getIfcEntity());
+    const newIfcEntity = createIfcEntity(ifcEntity, classifications, propertySetMap);
+    console.log(newIfcEntity);
+    callback(newIfcEntity);
   };
 
   return (

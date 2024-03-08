@@ -4,6 +4,8 @@ import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 import { BsddApi } from '../../common/src/BsddApi/BsddApi';
 import { RequestParams } from '../../common/src/BsddApi/BsddApiBase';
+import { useAppSelector } from './app/hooks';
+import { selectActiveDictionaries, selectMainDictionary } from './features/settings/settingsSlice';
 
 const SEARCH_LIMIT = 25;
 
@@ -14,10 +16,8 @@ interface Option {
 
 interface Props {
   api: BsddApi<unknown>;
-  activeDomains: Option[];
   defaultValue: Option | undefined;
   setActiveClassificationUri: (value: string) => void;
-  accessToken: string;
 }
 
 const searchInSingleDictionary = (
@@ -77,20 +77,22 @@ const searchInMultipleDictionaries = (
   });
 };
 
-function Search({
-  api,
-  activeDomains: activeDictionaries,
-  defaultValue: defaultSelection,
-  setActiveClassificationUri,
-  accessToken,
-}: Props) {
-  const [selected, setSelected] = useState<Option | undefined>(defaultSelection);
+function Search({ api, defaultValue: defaultSelection, setActiveClassificationUri }: Props) {
   const [searchOptions, setSearchOptions] = useState<Option[]>([]);
-  const [searchValue, setSearchValue] = useState('');
-  const [debouncedSearchValue] = useDebouncedValue(searchValue, 300);
   const [opened, setOpened] = useState<boolean>(false);
+  const [activeDictionaries] = useAppSelector(selectActiveDictionaries);
+  const mainDictionary = useAppSelector(selectMainDictionary);
 
   const inputRef = useRef(null);
+
+  // Use a ref to store the initial value of defaultSelection
+  const initialDefaultSelection = useRef(defaultSelection);
+
+  // Only use initialDefaultSelection.current to set the initial state
+  const [selected, setSelected] = useState<Option | undefined>(initialDefaultSelection.current);
+  const [searchValue, setSearchValue] = useState(initialDefaultSelection.current?.label || '');
+  const [debouncedSearchValue] = useDebouncedValue(searchValue, 300);
+  const [userUpdated, setUserUpdated] = useState(false);
 
   const handleOnChange = useCallback((value: string) => {
     setSearchValue(value);
@@ -102,6 +104,7 @@ function Search({
       if (selectedOption) {
         setSelected(selectedOption);
         setOpened(false);
+        setUserUpdated(true); // The user has manually updated the selection
       }
     },
     [searchOptions],
@@ -120,30 +123,53 @@ function Search({
     [searchOptions, handleOptionSubmit, inputRef],
   );
 
-  useEffect(() => {
-    setSelected(defaultSelection);
-  }, [defaultSelection]);
+  // useEffect(() => {
+  //   setSelected(defaultSelection);
+  // }, [defaultSelection]);
 
   useEffect(() => {
-    if (debouncedSearchValue !== '') {
+    if (defaultSelection && !userUpdated) {
+      setSearchValue(defaultSelection.label);
+      // setSearchOptions([defaultSelection]);
+      setSelected(defaultSelection);
+    }
+  }, [defaultSelection, selected, userUpdated]);
+
+  useEffect(() => {
+    if (debouncedSearchValue !== '' && mainDictionary) {
       const params: RequestParams = {
         headers: { Accept: 'text/plain' },
       };
 
-      if (accessToken !== '') {
-        params.headers = { ...params.headers, Authorization: `Bearer ${accessToken}` };
-      }
-      if (activeDictionaries.length === 1) {
-        const callback = (options: any[]) => setSearchOptions(options);
-        searchInSingleDictionary(api, activeDictionaries, params, debouncedSearchValue, callback);
-      } else if (activeDictionaries.length > 2) {
-        const callback = (options: any[]) => setSearchOptions(options);
-        searchInMultipleDictionaries(api, activeDictionaries, params, debouncedSearchValue, callback);
-      } else {
-        setSearchOptions([]);
-      }
+      const queryParameters = {
+        SearchText: debouncedSearchValue,
+        DictionaryUri: mainDictionary.ifcClassification.location,
+        Limit: SEARCH_LIMIT,
+      };
+
+      api.api.searchInDictionaryV1List(queryParameters, params).then((response) => {
+        const searchResult = response.data;
+        if (searchResult.count) {
+          const dictionaryClasses = searchResult.dictionary?.classes;
+          if (dictionaryClasses) {
+            setSearchOptions(
+              dictionaryClasses
+                .filter((c) => c.uri && c.name)
+                .map(
+                  (c) =>
+                    ({
+                      value: c.uri,
+                      label: c.name,
+                    } as Option),
+                ),
+            );
+          }
+        }
+      });
+    } else {
+      setSearchOptions([]);
     }
-  }, [accessToken, activeDictionaries, api, debouncedSearchValue]);
+  }, [api.api, debouncedSearchValue, mainDictionary]);
 
   useEffect(() => {
     if (inputRef.current) {
@@ -151,12 +177,12 @@ function Search({
     }
   }, []);
 
-  useEffect(() => {
-    if (!defaultSelection) return;
-    setSearchValue(defaultSelection?.label || '');
-    setSelected(defaultSelection);
-    setOpened(false);
-  }, [defaultSelection]);
+  // useEffect(() => {
+  //   if (!defaultSelection) return;
+  //   setSearchValue(defaultSelection?.label || '');
+  //   setSelected(defaultSelection);
+  //   setOpened(false);
+  // }, [defaultSelection]);
 
   useEffect(() => {
     if (selected) {

@@ -10,7 +10,6 @@ interface ClassificationSelectsProps {
   activeClassificationUri: string | undefined;
   setClassifications: (value: ClassContractV1[]) => void;
   domains: { [id: string]: DictionaryContractV1 };
-  accessToken: string;
 }
 
 const getGroupedClassifications = (classifications: ClassContractV1[]) => groupBy(classifications, 'dictionaryUri');
@@ -40,13 +39,7 @@ async function fetchClassification(
   }
 }
 
-function Classifications({
-  api,
-  activeClassificationUri,
-  setClassifications,
-  domains,
-  accessToken,
-}: ClassificationSelectsProps) {
+function Classifications({ api, activeClassificationUri, setClassifications, domains }: ClassificationSelectsProps) {
   const [classificationCount, setClassificationCount] = useState<number>(0);
   const [classificationUris, setClassificationUris] = useState<{
     [id: string]: Promise<ClassContractV1 | null>;
@@ -69,9 +62,6 @@ function Classifications({
         headers: { Accept: 'text/plain' },
       };
 
-      if (accessToken !== '') {
-        params.headers = { ...params.headers, Authorization: `Bearer ${accessToken}` };
-      }
       const classificationPromise: Promise<ClassContractV1 | null> = new Promise(function (resolve) {
         const queryParameters = {
           Uri: classificationUri,
@@ -100,7 +90,7 @@ function Classifications({
       }));
       return classificationPromise;
     },
-    [accessToken, api.api],
+    [api.api],
   );
 
   useEffect(() => {
@@ -125,9 +115,6 @@ function Classifications({
       headers: { Accept: 'text/plain' },
     };
 
-    if (accessToken !== '') {
-      params.headers = { ...params.headers, Authorization: `Bearer ${accessToken}` };
-    }
     setClassificationCount(Object.keys(classificationUris).length);
     if (classificationCount === Object.keys(classificationUris).length) {
       return;
@@ -175,7 +162,7 @@ function Classifications({
       setClassifications(classificationResults);
       setOriginalClassifications(classificationResults);
     });
-  }, [classificationUris, classificationCount, selectedValues, api, setClassifications, accessToken]);
+  }, [classificationUris, classificationCount, selectedValues, api, setClassifications]);
 
   useEffect(() => {
     setClassifications(
