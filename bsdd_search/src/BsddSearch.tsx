@@ -114,10 +114,10 @@ function BsddSearch() {
       // @ts-ignore
       if (window?.bsddBridge) {
         // @ts-ignore
-        const { settings, ifcData } = await window.bsddBridge.loadSettings();
-        const settingsParsed = JSON.parse(settings);
+        const loadedSettings = await window.bsddBridge.loadSettings();
+        const { settings, ifcData } = JSON.parse(loadedSettings);
         dispatch(setIfcData(ifcData));
-        dispatchSettingsWhenLoaded(settingsParsed);
+        dispatchSettingsWhenLoaded(settings);
         if (!ifcData || ifcData.length === 0) return;
 
         setIfcEntity(ifcData[0]);
