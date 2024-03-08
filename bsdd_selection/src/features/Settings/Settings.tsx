@@ -52,7 +52,7 @@ function Settings() {
     dispatch(setSettings(tempSettings));
 
     // @ts-ignore
-    window?.bsddBridge?.saveSettings(JSON.stringify(settings));
+    window?.bsddBridge?.saveSettings(JSON.stringify(tempSettings));
 
     setUnsavedChanges(false);
   };
