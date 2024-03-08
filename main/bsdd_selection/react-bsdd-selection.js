@@ -19832,7 +19832,7 @@ function KD() {
   }, [t, n, o, r]);
   const f = () => {
     var m;
-    s && (e(Rf(s)), (m = window == null ? void 0 : window.bsddBridge) == null || m.saveSettings(JSON.stringify(settings)), c(!1));
+    s && (e(Rf(s)), (m = window == null ? void 0 : window.bsddBridge) == null || m.saveSettings(JSON.stringify(s)), c(!1));
   }, p = () => {
     c(!1);
   };
