@@ -50,6 +50,10 @@ function Settings() {
   const handleSave = () => {
     if (!tempSettings) return;
     dispatch(setSettings(tempSettings));
+
+    // @ts-ignore
+    window?.bsddBridge?.saveSettings(JSON.stringify(settings));
+
     setUnsavedChanges(false);
   };
 
@@ -57,21 +61,6 @@ function Settings() {
     // Reload settings from the store or initial state
     setUnsavedChanges(false);
   };
-
-  useEffect(() => {
-    if (!bsddApiEnvironment || !mainDictionary) return;
-    const settings: BsddSettings = {
-      bsddApiEnvironment,
-      mainDictionary,
-      filterDictionaries,
-      language,
-    };
-
-    console.log('Save settings', settings);
-
-    // @ts-ignore
-    window?.bsddBridge?.saveSettings(JSON.stringify(settings));
-  }, [bsddApiEnvironment, mainDictionary, filterDictionaries, language]);
 
   return (
     <Tabs.Panel value="settings">
