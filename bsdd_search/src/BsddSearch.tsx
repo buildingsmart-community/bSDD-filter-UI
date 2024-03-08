@@ -156,7 +156,7 @@ function BsddSearch() {
   useEffect(() => {
     const fetchAllDictionaries = async () => {
       const allDomains = await Promise.all(
-        activeDictionaries.map((dictionaryOption) => fetchDictionary(api, dictionaryOption.value)),
+        activeDictionaries.map((dictionary) => fetchDictionary(api, dictionary.ifcClassification.location)),
       );
 
       const newDomains = allDomains.reduce((accumulator, dictionary) => {
