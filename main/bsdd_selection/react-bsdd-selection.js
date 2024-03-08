@@ -19831,22 +19831,12 @@ function KD() {
     });
   }, [t, n, o, r]);
   const f = () => {
-    s && (e(Rf(s)), c(!1));
+    var m;
+    s && (e(Rf(s)), (m = window == null ? void 0 : window.bsddBridge) == null || m.saveSettings(JSON.stringify(settings)), c(!1));
   }, p = () => {
     c(!1);
   };
-  return W(() => {
-    var g;
-    if (!o || !t)
-      return;
-    const m = {
-      bsddApiEnvironment: o,
-      mainDictionary: t,
-      filterDictionaries: n,
-      language: r
-    };
-    console.log("Save settings", m), (g = window == null ? void 0 : window.bsddBridge) == null || g.saveSettings(JSON.stringify(m));
-  }, [o, t, n, r]), /* @__PURE__ */ k.jsxs(at.Panel, { value: "settings", children: [
+  return /* @__PURE__ */ k.jsxs(at.Panel, { value: "settings", children: [
     /* @__PURE__ */ k.jsxs(oe, { defaultValue: ["2"], multiple: !0, children: [
       /* @__PURE__ */ k.jsx(
         UD,

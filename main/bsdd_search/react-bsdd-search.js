@@ -676,31 +676,31 @@ class gs extends $s {
         ordinal: !1
       }) : "", ae = t[`defaultValue${F}`] || t[`defaultValue${re}`] || t.defaultValue;
       !this.isValidLookup(g) && q && (R = !0, g = ae), this.isValidLookup(g) || (O = !0, g = s);
-      const oe = (t.missingKeyNoValueFallbackToKey || this.options.missingKeyNoValueFallbackToKey) && O ? void 0 : g, fe = q && ae !== g && this.options.updateMissing;
-      if (O || R || fe) {
-        if (this.logger.log(fe ? "updateKey" : "missingKey", f, u, s, fe ? ae : g), a) {
+      const oe = (t.missingKeyNoValueFallbackToKey || this.options.missingKeyNoValueFallbackToKey) && O ? void 0 : g, pe = q && ae !== g && this.options.updateMissing;
+      if (O || R || pe) {
+        if (this.logger.log(pe ? "updateKey" : "missingKey", f, u, s, pe ? ae : g), a) {
           const ne = this.resolve(s, {
             ...t,
             keySeparator: !1
           });
           ne && ne.res && this.logger.warn("Seems the loaded translations were in flat JSON format instead of nested. Either set keySeparator: false on init or make sure your translations are published in nested format.");
         }
-        let Z = [];
-        const he = this.languageUtils.getFallbackCodes(this.options.fallbackLng, t.lng || this.language);
-        if (this.options.saveMissingTo === "fallback" && he && he[0])
-          for (let ne = 0; ne < he.length; ne++)
-            Z.push(he[ne]);
+        let X = [];
+        const fe = this.languageUtils.getFallbackCodes(this.options.fallbackLng, t.lng || this.language);
+        if (this.options.saveMissingTo === "fallback" && fe && fe[0])
+          for (let ne = 0; ne < fe.length; ne++)
+            X.push(fe[ne]);
         else
-          this.options.saveMissingTo === "all" ? Z = this.languageUtils.toResolveHierarchy(t.lng || this.language) : Z.push(t.lng || this.language);
+          this.options.saveMissingTo === "all" ? X = this.languageUtils.toResolveHierarchy(t.lng || this.language) : X.push(t.lng || this.language);
         const Y = (ne, ee, Pe) => {
           const Qe = q && Pe !== g ? Pe : oe;
-          this.options.missingKeyHandler ? this.options.missingKeyHandler(ne, u, ee, Qe, fe, t) : this.backendConnector && this.backendConnector.saveMissing && this.backendConnector.saveMissing(ne, u, ee, Qe, fe, t), this.emit("missingKey", ne, u, ee, g);
+          this.options.missingKeyHandler ? this.options.missingKeyHandler(ne, u, ee, Qe, pe, t) : this.backendConnector && this.backendConnector.saveMissing && this.backendConnector.saveMissing(ne, u, ee, Qe, pe, t), this.emit("missingKey", ne, u, ee, g);
         };
-        this.options.saveMissing && (this.options.saveMissingPlurals && L ? Z.forEach((ne) => {
+        this.options.saveMissing && (this.options.saveMissingPlurals && L ? X.forEach((ne) => {
           this.pluralResolver.getSuffixes(ne, t).forEach((ee) => {
             Y([ne], s + ee, t[`defaultValue${ee}`] || ae);
           });
-        }) : Y(Z, s, ae));
+        }) : Y(X, s, ae));
       }
       g = this.extendTranslation(g, e, t, p, n), O && g === s && this.options.appendNamespaceToMissingKey && (g = `${u}:${s}`), (O || R) && this.options.parseMissingKeyHandler && (this.options.compatibilityAPI !== "v1" ? g = this.options.parseMissingKeyHandler(this.options.appendNamespaceToMissingKey ? `${u}:${s}` : s, R ? g : void 0) : g = this.options.parseMissingKeyHandler(g));
     }
@@ -2480,10 +2480,10 @@ var Ct;
 (function(r) {
   r.CACHE_KEY_SEPARATOR = "-", r.CLIENT_INFO_SEPARATOR = ".";
 })(Ct || (Ct = {}));
-var pe;
+var he;
 (function(r) {
   r.ID_TOKEN = "IdToken", r.ACCESS_TOKEN = "AccessToken", r.ACCESS_TOKEN_WITH_AUTH_SCHEME = "AccessToken_With_AuthScheme", r.REFRESH_TOKEN = "RefreshToken";
-})(pe || (pe = {}));
+})(he || (he = {}));
 var wn;
 (function(r) {
   r[r.ADFS = 1001] = "ADFS", r[r.MSA = 1002] = "MSA", r[r.MSSTS = 1003] = "MSSTS", r[r.GENERIC = 1004] = "GENERIC", r[r.ACCESS_TOKEN = 2001] = "ACCESS_TOKEN", r[r.REFRESH_TOKEN = 2002] = "REFRESH_TOKEN", r[r.ID_TOKEN = 2003] = "ID_TOKEN", r[r.APP_METADATA = 3001] = "APP_METADATA", r[r.UNDEFINED = 9999] = "UNDEFINED";
@@ -2943,7 +2943,7 @@ var j = {
   }(ue)
 );
 /*! @azure/msal-common v13.3.1 2023-10-27 */
-var X = (
+var Z = (
   /** @class */
   function() {
     function r() {
@@ -3030,7 +3030,7 @@ var Ru = (
     }, r.prototype.logMessage = function(e, t) {
       if (!(t.logLevel > this.level || !this.piiLoggingEnabled && t.containsPii)) {
         var n = (/* @__PURE__ */ new Date()).toUTCString(), o;
-        X.isEmpty(t.correlationId) ? X.isEmpty(this.correlationId) ? o = "[" + n + "]" : o = "[" + n + "] : [" + this.correlationId + "]" : o = "[" + n + "] : [" + t.correlationId + "]";
+        Z.isEmpty(t.correlationId) ? Z.isEmpty(this.correlationId) ? o = "[" + n + "]" : o = "[" + n + "] : [" + this.correlationId + "]" : o = "[" + n + "] : [" + t.correlationId + "]";
         var a = o + " : " + this.packageName + "@" + this.packageVersion + " : " + st[t.logLevel] + " - " + e;
         this.executeCallback(t.logLevel, a, t.containsPii || !1);
       }
@@ -3268,7 +3268,7 @@ var Lt = (
   /** @class */
   function() {
     function r(e) {
-      var t = this, n = e ? X.trimArrayEntries(Gs(e)) : [], o = n ? X.removeEmptyStringsFromArray(n) : [];
+      var t = this, n = e ? Z.trimArrayEntries(Gs(e)) : [], o = n ? Z.removeEmptyStringsFromArray(n) : [];
       this.validateInputScopes(o), this.scopes = /* @__PURE__ */ new Set(), o.forEach(function(a) {
         return t.scopes.add(a);
       });
@@ -3284,7 +3284,7 @@ var Lt = (
         throw et.createEmptyScopesArrayError();
     }, r.prototype.containsScope = function(e) {
       var t = this.printScopesLowerCase().split(" "), n = new r(t);
-      return X.isEmpty(e) ? !1 : n.scopes.has(e.toLowerCase());
+      return Z.isEmpty(e) ? !1 : n.scopes.has(e.toLowerCase());
     }, r.prototype.containsScopeSet = function(e) {
       var t = this;
       return !e || e.scopes.size <= 0 ? !1 : this.scopes.size >= e.scopes.size && e.asArray().every(function(n) {
@@ -3296,7 +3296,7 @@ var Lt = (
         e.containsScope(n) && (t += 1);
       }), this.scopes.size === t;
     }, r.prototype.appendScope = function(e) {
-      X.isEmpty(e) || this.scopes.add(e.trim());
+      Z.isEmpty(e) || this.scopes.add(e.trim());
     }, r.prototype.appendScopes = function(e) {
       var t = this;
       try {
@@ -3307,7 +3307,7 @@ var Lt = (
         throw te.createAppendScopeSetError(n);
       }
     }, r.prototype.removeScope = function(e) {
-      if (X.isEmpty(e))
+      if (Z.isEmpty(e))
         throw te.createRemoveEmptyScopeFromSetError(e);
       this.scopes.delete(e.trim());
     }, r.prototype.removeOIDCScopes = function() {
@@ -3350,7 +3350,7 @@ var Lt = (
 );
 /*! @azure/msal-common v13.3.1 2023-10-27 */
 function ws(r, e) {
-  if (X.isEmpty(r))
+  if (Z.isEmpty(r))
     throw te.createClientInfoEmptyError();
   try {
     var t = e.base64Decode(r);
@@ -3360,7 +3360,7 @@ function ws(r, e) {
   }
 }
 function Vo(r) {
-  if (X.isEmpty(r))
+  if (Z.isEmpty(r))
     throw te.createClientInfoDecodingError("Home account ID was empty.");
   var e = r.split(Ct.CLIENT_INFO_SEPARATOR, 2);
   return {
@@ -3447,7 +3447,7 @@ var At = (
       if (e)
         try {
           var u = ws(e, o);
-          if (!X.isEmpty(u.uid) && !X.isEmpty(u.utid))
+          if (!Z.isEmpty(u.uid) && !Z.isEmpty(u.utid))
             return "" + u.uid + Ct.CLIENT_INFO_SEPARATOR + u.utid;
         } catch {
         }
@@ -3471,12 +3471,12 @@ var on = (
   /** @class */
   function() {
     function r(e, t) {
-      if (X.isEmpty(e))
+      if (Z.isEmpty(e))
         throw te.createTokenNullOrEmptyError(e);
       this.rawToken = e, this.claims = r.extractTokenClaims(e, t);
     }
     return r.extractTokenClaims = function(e, t) {
-      var n = X.decodeAuthToken(e);
+      var n = Z.decodeAuthToken(e);
       try {
         var o = n.JWSPayload, a = t.base64Decode(o);
         return JSON.parse(a);
@@ -3580,17 +3580,17 @@ var er = (
       if (e.split(Ct.CACHE_KEY_SEPARATOR).length < 6)
         return !1;
       var t = e.toLowerCase();
-      if (t.indexOf(pe.ID_TOKEN.toLowerCase()) === -1 && t.indexOf(pe.ACCESS_TOKEN.toLowerCase()) === -1 && t.indexOf(pe.ACCESS_TOKEN_WITH_AUTH_SCHEME.toLowerCase()) === -1 && t.indexOf(pe.REFRESH_TOKEN.toLowerCase()) === -1)
+      if (t.indexOf(he.ID_TOKEN.toLowerCase()) === -1 && t.indexOf(he.ACCESS_TOKEN.toLowerCase()) === -1 && t.indexOf(he.ACCESS_TOKEN_WITH_AUTH_SCHEME.toLowerCase()) === -1 && t.indexOf(he.REFRESH_TOKEN.toLowerCase()) === -1)
         return !1;
-      if (t.indexOf(pe.REFRESH_TOKEN.toLowerCase()) > -1) {
-        var n = "" + pe.REFRESH_TOKEN + Ct.CACHE_KEY_SEPARATOR + this.clientId + Ct.CACHE_KEY_SEPARATOR, o = "" + pe.REFRESH_TOKEN + Ct.CACHE_KEY_SEPARATOR + Hi + Ct.CACHE_KEY_SEPARATOR;
+      if (t.indexOf(he.REFRESH_TOKEN.toLowerCase()) > -1) {
+        var n = "" + he.REFRESH_TOKEN + Ct.CACHE_KEY_SEPARATOR + this.clientId + Ct.CACHE_KEY_SEPARATOR, o = "" + he.REFRESH_TOKEN + Ct.CACHE_KEY_SEPARATOR + Hi + Ct.CACHE_KEY_SEPARATOR;
         if (t.indexOf(n.toLowerCase()) === -1 && t.indexOf(o.toLowerCase()) === -1)
           return !1;
       } else if (t.indexOf(this.clientId.toLowerCase()) === -1)
         return !1;
       return !0;
     }, r.prototype.credentialMatchesFilter = function(e, t) {
-      return !(t.clientId && !this.matchClientId(e, t.clientId) || t.userAssertionHash && !this.matchUserAssertionHash(e, t.userAssertionHash) || typeof t.homeAccountId == "string" && !this.matchHomeAccountId(e, t.homeAccountId) || t.environment && !this.matchEnvironment(e, t.environment) || t.realm && !this.matchRealm(e, t.realm) || t.credentialType && !this.matchCredentialType(e, t.credentialType) || t.familyId && !this.matchFamilyId(e, t.familyId) || t.target && !this.matchTarget(e, t.target) || (t.requestedClaimsHash || e.requestedClaimsHash) && e.requestedClaimsHash !== t.requestedClaimsHash || e.credentialType === pe.ACCESS_TOKEN_WITH_AUTH_SCHEME && (t.tokenType && !this.matchTokenType(e, t.tokenType) || t.tokenType === We.SSH && t.keyId && !this.matchKeyId(e, t.keyId)));
+      return !(t.clientId && !this.matchClientId(e, t.clientId) || t.userAssertionHash && !this.matchUserAssertionHash(e, t.userAssertionHash) || typeof t.homeAccountId == "string" && !this.matchHomeAccountId(e, t.homeAccountId) || t.environment && !this.matchEnvironment(e, t.environment) || t.realm && !this.matchRealm(e, t.realm) || t.credentialType && !this.matchCredentialType(e, t.credentialType) || t.familyId && !this.matchFamilyId(e, t.familyId) || t.target && !this.matchTarget(e, t.target) || (t.requestedClaimsHash || e.requestedClaimsHash) && e.requestedClaimsHash !== t.requestedClaimsHash || e.credentialType === he.ACCESS_TOKEN_WITH_AUTH_SCHEME && (t.tokenType && !this.matchTokenType(e, t.tokenType) || t.tokenType === We.SSH && t.keyId && !this.matchKeyId(e, t.keyId)));
     }, r.prototype.getAppMetadataFilteredBy = function(e) {
       return this.getAppMetadataFilteredByInternal(e.environment, e.clientId);
     }, r.prototype.getAppMetadataFilteredByInternal = function(e, t) {
@@ -3675,7 +3675,7 @@ var er = (
                   2
                   /*return*/
                 ];
-              if (t.credentialType.toLowerCase() !== pe.ACCESS_TOKEN_WITH_AUTH_SCHEME.toLowerCase())
+              if (t.credentialType.toLowerCase() !== he.ACCESS_TOKEN_WITH_AUTH_SCHEME.toLowerCase())
                 return [3, 4];
               if (t.tokenType !== We.POP)
                 return [3, 4];
@@ -3716,7 +3716,7 @@ var er = (
       var o = {
         homeAccountId: e.homeAccountId,
         environment: e.environment,
-        credentialType: pe.ID_TOKEN,
+        credentialType: he.ID_TOKEN,
         clientId: this.clientId,
         realm: e.tenantId
       }, a = this.getIdTokensByFilter(o, t), s = a.length;
@@ -3741,7 +3741,7 @@ var er = (
     }, r.prototype.getAccessToken = function(e, t, n) {
       var o = this;
       this.commonLogger.trace("CacheManager - getAccessToken called");
-      var a = Lt.createSearchScopes(t.scopes), s = t.authenticationScheme || We.BEARER, l = s && s.toLowerCase() !== We.BEARER.toLowerCase() ? pe.ACCESS_TOKEN_WITH_AUTH_SCHEME : pe.ACCESS_TOKEN, u = {
+      var a = Lt.createSearchScopes(t.scopes), s = t.authenticationScheme || We.BEARER, l = s && s.toLowerCase() !== We.BEARER.toLowerCase() ? he.ACCESS_TOKEN_WITH_AUTH_SCHEME : he.ACCESS_TOKEN, u = {
         homeAccountId: e.homeAccountId,
         environment: e.environment,
         credentialType: l,
@@ -3788,7 +3788,7 @@ var er = (
       var a = t ? Hi : void 0, s = {
         homeAccountId: e.homeAccountId,
         environment: e.environment,
-        credentialType: pe.REFRESH_TOKEN,
+        credentialType: he.REFRESH_TOKEN,
         clientId: this.clientId,
         familyId: a
       }, l = n && n.refreshToken || this.getTokenKeys().refreshToken, u = [];
@@ -3840,7 +3840,7 @@ var er = (
     }, r.prototype.matchNativeAccountId = function(e, t) {
       return !!(e.nativeAccountId && t === e.nativeAccountId);
     }, r.prototype.matchTarget = function(e, t) {
-      var n = e.credentialType !== pe.ACCESS_TOKEN && e.credentialType !== pe.ACCESS_TOKEN_WITH_AUTH_SCHEME;
+      var n = e.credentialType !== he.ACCESS_TOKEN && e.credentialType !== he.ACCESS_TOKEN_WITH_AUTH_SCHEME;
       if (n || !e.target)
         return !1;
       var o = Lt.fromString(e.target);
@@ -4118,7 +4118,7 @@ var so = (
     function r() {
     }
     return r.validateRedirectUri = function(e) {
-      if (X.isEmpty(e))
+      if (Z.isEmpty(e))
         throw et.createRedirectUriEmptyError();
     }, r.validatePrompt = function(e) {
       var t = [];
@@ -4133,7 +4133,7 @@ var so = (
         throw et.createInvalidClaimsRequestError();
       }
     }, r.validateCodeChallengeParams = function(e, t) {
-      if (X.isEmpty(e) || X.isEmpty(t))
+      if (Z.isEmpty(e) || Z.isEmpty(t))
         throw et.createInvalidCodeChallengeParamsError();
       this.validateCodeChallengeMethod(t);
     }, r.validateCodeChallengeMethod = function(e) {
@@ -4201,7 +4201,7 @@ var $i = (
     }, r.prototype.addPrompt = function(e) {
       so.validatePrompt(e), this.parameters.set("" + Ie.PROMPT, encodeURIComponent(e));
     }, r.prototype.addState = function(e) {
-      X.isEmpty(e) || this.parameters.set(Ie.STATE, encodeURIComponent(e));
+      Z.isEmpty(e) || this.parameters.set(Ie.STATE, encodeURIComponent(e));
     }, r.prototype.addNonce = function(e) {
       this.parameters.set(Ie.NONCE, encodeURIComponent(e));
     }, r.prototype.addCodeChallengeParams = function(e, t) {
@@ -4220,9 +4220,9 @@ var $i = (
     }, r.prototype.addClientSecret = function(e) {
       this.parameters.set(Ie.CLIENT_SECRET, encodeURIComponent(e));
     }, r.prototype.addClientAssertion = function(e) {
-      X.isEmpty(e) || this.parameters.set(Ie.CLIENT_ASSERTION, encodeURIComponent(e));
+      Z.isEmpty(e) || this.parameters.set(Ie.CLIENT_ASSERTION, encodeURIComponent(e));
     }, r.prototype.addClientAssertionType = function(e) {
-      X.isEmpty(e) || this.parameters.set(Ie.CLIENT_ASSERTION_TYPE, encodeURIComponent(e));
+      Z.isEmpty(e) || this.parameters.set(Ie.CLIENT_ASSERTION_TYPE, encodeURIComponent(e));
     }, r.prototype.addOboAssertion = function(e) {
       this.parameters.set(Ie.OBO_ASSERTION, encodeURIComponent(e));
     }, r.prototype.addRequestTokenUse = function(e) {
@@ -4254,9 +4254,9 @@ var $i = (
     }, r.prototype.addPassword = function(e) {
       this.parameters.set(ys.password, encodeURIComponent(e));
     }, r.prototype.addPopToken = function(e) {
-      X.isEmpty(e) || (this.parameters.set(Ie.TOKEN_TYPE, We.POP), this.parameters.set(Ie.REQ_CNF, encodeURIComponent(e)));
+      Z.isEmpty(e) || (this.parameters.set(Ie.TOKEN_TYPE, We.POP), this.parameters.set(Ie.REQ_CNF, encodeURIComponent(e)));
     }, r.prototype.addSshJwk = function(e) {
-      X.isEmpty(e) || (this.parameters.set(Ie.TOKEN_TYPE, We.SSH), this.parameters.set(Ie.REQ_CNF, encodeURIComponent(e)));
+      Z.isEmpty(e) || (this.parameters.set(Ie.TOKEN_TYPE, We.SSH), this.parameters.set(Ie.REQ_CNF, encodeURIComponent(e)));
     }, r.prototype.addServerTelemetry = function(e) {
       this.parameters.set(Ie.X_CLIENT_CURR_TELEM, e.generateCurrentRequestHeaderValue()), this.parameters.set(Ie.X_CLIENT_LAST_TELEM, e.generateLastRequestHeaderValue());
     }, r.prototype.addThrottling = function() {
@@ -4333,12 +4333,12 @@ var Nu = (
       return r.generateCredentialCacheKey(this.homeAccountId, this.environment, this.credentialType, this.clientId, this.realm, this.target, this.familyId, this.tokenType, this.requestedClaimsHash);
     }, r.prototype.generateType = function() {
       switch (this.credentialType) {
-        case pe.ID_TOKEN:
+        case he.ID_TOKEN:
           return wn.ID_TOKEN;
-        case pe.ACCESS_TOKEN:
-        case pe.ACCESS_TOKEN_WITH_AUTH_SCHEME:
+        case he.ACCESS_TOKEN:
+        case he.ACCESS_TOKEN_WITH_AUTH_SCHEME:
           return wn.ACCESS_TOKEN;
-        case pe.REFRESH_TOKEN:
+        case he.REFRESH_TOKEN:
           return wn.REFRESH_TOKEN;
         default:
           throw te.createUnexpectedCredentialTypeError();
@@ -4356,7 +4356,7 @@ var Nu = (
       var n = [e, t];
       return n.join(Ct.CACHE_KEY_SEPARATOR).toLowerCase();
     }, r.generateCredentialIdForCacheKey = function(e, t, n, o) {
-      var a = e === pe.REFRESH_TOKEN && o || t, s = [
+      var a = e === he.REFRESH_TOKEN && o || t, s = [
         e,
         a,
         n || N.EMPTY_STRING
@@ -4381,9 +4381,9 @@ var uo = (
     }
     return e.createIdTokenEntity = function(t, n, o, a, s) {
       var l = new e();
-      return l.credentialType = pe.ID_TOKEN, l.homeAccountId = t, l.environment = n, l.clientId = a, l.secret = o, l.realm = s, l;
+      return l.credentialType = he.ID_TOKEN, l.homeAccountId = t, l.environment = n, l.clientId = a, l.secret = o, l.realm = s, l;
     }, e.isIdTokenEntity = function(t) {
-      return t ? t.hasOwnProperty("homeAccountId") && t.hasOwnProperty("environment") && t.hasOwnProperty("credentialType") && t.hasOwnProperty("realm") && t.hasOwnProperty("clientId") && t.hasOwnProperty("secret") && t.credentialType === pe.ID_TOKEN : !1;
+      return t ? t.hasOwnProperty("homeAccountId") && t.hasOwnProperty("environment") && t.hasOwnProperty("credentialType") && t.hasOwnProperty("realm") && t.hasOwnProperty("clientId") && t.hasOwnProperty("secret") && t.credentialType === he.ID_TOKEN : !1;
     }, e;
   }(Nu)
 );
@@ -4420,10 +4420,10 @@ var fo = (
     }
     return e.createAccessTokenEntity = function(t, n, o, a, s, l, u, f, h, p, g, v, C, E, _) {
       var A, I, S = new e();
-      S.homeAccountId = t, S.credentialType = pe.ACCESS_TOKEN, S.secret = o;
+      S.homeAccountId = t, S.credentialType = he.ACCESS_TOKEN, S.secret = o;
       var R = kr.nowSeconds();
-      if (S.cachedAt = R.toString(), S.expiresOn = u.toString(), S.extendedExpiresOn = f.toString(), p && (S.refreshOn = p.toString()), S.environment = n, S.clientId = a, S.realm = s, S.target = l, S.userAssertionHash = v, S.tokenType = X.isEmpty(g) ? We.BEARER : g, E && (S.requestedClaims = E, S.requestedClaimsHash = _), ((A = S.tokenType) === null || A === void 0 ? void 0 : A.toLowerCase()) !== We.BEARER.toLowerCase())
-        switch (S.credentialType = pe.ACCESS_TOKEN_WITH_AUTH_SCHEME, S.tokenType) {
+      if (S.cachedAt = R.toString(), S.expiresOn = u.toString(), S.extendedExpiresOn = f.toString(), p && (S.refreshOn = p.toString()), S.environment = n, S.clientId = a, S.realm = s, S.target = l, S.userAssertionHash = v, S.tokenType = Z.isEmpty(g) ? We.BEARER : g, E && (S.requestedClaims = E, S.requestedClaimsHash = _), ((A = S.tokenType) === null || A === void 0 ? void 0 : A.toLowerCase()) !== We.BEARER.toLowerCase())
+        switch (S.credentialType = he.ACCESS_TOKEN_WITH_AUTH_SCHEME, S.tokenType) {
           case We.POP:
             var O = on.extractTokenClaims(o, h);
             if (!(!((I = O == null ? void 0 : O.cnf) === null || I === void 0) && I.kid))
@@ -4435,7 +4435,7 @@ var fo = (
         }
       return S;
     }, e.isAccessTokenEntity = function(t) {
-      return t ? t.hasOwnProperty("homeAccountId") && t.hasOwnProperty("environment") && t.hasOwnProperty("credentialType") && t.hasOwnProperty("realm") && t.hasOwnProperty("clientId") && t.hasOwnProperty("secret") && t.hasOwnProperty("target") && (t.credentialType === pe.ACCESS_TOKEN || t.credentialType === pe.ACCESS_TOKEN_WITH_AUTH_SCHEME) : !1;
+      return t ? t.hasOwnProperty("homeAccountId") && t.hasOwnProperty("environment") && t.hasOwnProperty("credentialType") && t.hasOwnProperty("realm") && t.hasOwnProperty("clientId") && t.hasOwnProperty("secret") && t.hasOwnProperty("target") && (t.credentialType === he.ACCESS_TOKEN || t.credentialType === he.ACCESS_TOKEN_WITH_AUTH_SCHEME) : !1;
     }, e;
   }(Nu)
 );
@@ -4449,9 +4449,9 @@ var jo = (
     }
     return e.createRefreshTokenEntity = function(t, n, o, a, s, l) {
       var u = new e();
-      return u.clientId = a, u.credentialType = pe.REFRESH_TOKEN, u.environment = n, u.homeAccountId = t, u.secret = o, u.userAssertionHash = l, s && (u.familyId = s), u;
+      return u.clientId = a, u.credentialType = he.REFRESH_TOKEN, u.environment = n, u.homeAccountId = t, u.secret = o, u.userAssertionHash = l, s && (u.familyId = s), u;
     }, e.isRefreshTokenEntity = function(t) {
-      return t ? t.hasOwnProperty("homeAccountId") && t.hasOwnProperty("environment") && t.hasOwnProperty("credentialType") && t.hasOwnProperty("clientId") && t.hasOwnProperty("secret") && t.credentialType === pe.REFRESH_TOKEN : !1;
+      return t ? t.hasOwnProperty("homeAccountId") && t.hasOwnProperty("environment") && t.hasOwnProperty("credentialType") && t.hasOwnProperty("clientId") && t.hasOwnProperty("secret") && t.credentialType === he.REFRESH_TOKEN : !1;
     }, e;
   }(Nu)
 );
@@ -4513,7 +4513,7 @@ var bn = (
     }
     return r.setRequestState = function(e, t, n) {
       var o = r.generateLibraryState(e, n);
-      return X.isEmpty(t) ? o : "" + o + N.RESOURCE_DELIM + t;
+      return Z.isEmpty(t) ? o : "" + o + N.RESOURCE_DELIM + t;
     }, r.generateLibraryState = function(e, t) {
       if (!e)
         throw te.createNoCryptoObjectError("generateLibraryState");
@@ -4526,12 +4526,12 @@ var bn = (
     }, r.parseRequestState = function(e, t) {
       if (!e)
         throw te.createNoCryptoObjectError("parseRequestState");
-      if (X.isEmpty(t))
+      if (Z.isEmpty(t))
         throw te.createInvalidStateError(t, "Null, undefined or empty state");
       try {
         var n = t.split(N.RESOURCE_DELIM), o = n[0], a = n.length > 1 ? n.slice(1).join(N.RESOURCE_DELIM) : N.EMPTY_STRING, s = e.base64Decode(o), l = JSON.parse(s);
         return {
-          userRequestState: X.isEmpty(a) ? N.EMPTY_STRING : a,
+          userRequestState: Z.isEmpty(a) ? N.EMPTY_STRING : a,
           libraryState: l
         };
       } catch (u) {
@@ -4545,9 +4545,9 @@ var He = (
   /** @class */
   function() {
     function r(e) {
-      if (this._urlString = e, X.isEmpty(this._urlString))
+      if (this._urlString = e, Z.isEmpty(this._urlString))
         throw et.createUrlEmptyError();
-      X.isEmpty(this.getHash()) && (this._urlString = r.canonicalizeUri(e));
+      Z.isEmpty(this.getHash()) && (this._urlString = r.canonicalizeUri(e));
     }
     return Object.defineProperty(r.prototype, "urlString", {
       get: function() {
@@ -4558,7 +4558,7 @@ var He = (
     }), r.canonicalizeUri = function(e) {
       if (e) {
         var t = e.toLowerCase();
-        return X.endsWith(t, "?") ? t = t.slice(0, -1) : X.endsWith(t, "?/") && (t = t.slice(0, -2)), X.endsWith(t, "/") || (t += "/"), t;
+        return Z.endsWith(t, "?") ? t = t.slice(0, -1) : Z.endsWith(t, "?/") && (t = t.slice(0, -2)), Z.endsWith(t, "/") || (t += "/"), t;
       }
       return e;
     }, r.prototype.validateAsUri = function() {
@@ -4573,7 +4573,7 @@ var He = (
       if (!e.Protocol || e.Protocol.toLowerCase() !== "https:")
         throw et.createInsecureAuthorityUriError(this.urlString);
     }, r.appendQueryString = function(e, t) {
-      return X.isEmpty(t) ? e : e.indexOf("?") < 0 ? e + "?" + t : e + "&" + t;
+      return Z.isEmpty(t) ? e : e.indexOf("?") < 0 ? e + "?" + t : e + "&" + t;
     }, r.removeHashFromUrl = function(e) {
       return r.canonicalizeUri(e.split("#")[0]);
     }, r.prototype.replaceTenantPath = function(e) {
@@ -4593,7 +4593,7 @@ var He = (
       }, o = n.AbsolutePath.split("/");
       return o = o.filter(function(a) {
         return a && a.length > 0;
-      }), n.PathSegments = o, !X.isEmpty(n.QueryString) && n.QueryString.endsWith("/") && (n.QueryString = n.QueryString.substring(0, n.QueryString.length - 1)), n;
+      }), n.PathSegments = o, !Z.isEmpty(n.QueryString) && n.QueryString.endsWith("/") && (n.QueryString = n.QueryString.substring(0, n.QueryString.length - 1)), n;
     }, r.getDomainFromUrl = function(e) {
       var t = RegExp("^([^:/?#]+://)?([^/?#]*)"), n = e.match(t);
       if (!n)
@@ -4614,21 +4614,21 @@ var He = (
     }, r.constructAuthorityUriFromObject = function(e) {
       return new r(e.Protocol + "//" + e.HostNameAndPort + "/" + e.PathSegments.join("/"));
     }, r.getDeserializedHash = function(e) {
-      if (X.isEmpty(e))
+      if (Z.isEmpty(e))
         return {};
-      var t = r.parseHash(e), n = X.queryStringToObject(X.isEmpty(t) ? e : t);
+      var t = r.parseHash(e), n = Z.queryStringToObject(Z.isEmpty(t) ? e : t);
       if (!n)
         throw te.createHashNotDeserializedError(JSON.stringify(n));
       return n;
     }, r.getDeserializedQueryString = function(e) {
-      if (X.isEmpty(e))
+      if (Z.isEmpty(e))
         return {};
-      var t = r.parseQueryString(e), n = X.queryStringToObject(X.isEmpty(t) ? e : t);
+      var t = r.parseQueryString(e), n = Z.queryStringToObject(Z.isEmpty(t) ? e : t);
       if (!n)
         throw te.createHashNotDeserializedError(JSON.stringify(n));
       return n;
     }, r.hashContainsKnownProperties = function(e) {
-      if (X.isEmpty(e) || e.indexOf("=") < 0)
+      if (Z.isEmpty(e) || e.indexOf("=") < 0)
         return !1;
       var t = r.getDeserializedHash(e);
       return !!(t.code || t.error_description || t.error || t.state);
@@ -4802,7 +4802,7 @@ var _s = (
           switch (I.label) {
             case 0:
               if ((h = this.performanceClient) === null || h === void 0 || h.addQueueMeasurement(U.HandleServerTokenResponse, e.correlation_id), e.id_token) {
-                if (p = new on(e.id_token || N.EMPTY_STRING, this.cryptoObj), a && !X.isEmpty(a.nonce) && p.claims.nonce !== a.nonce)
+                if (p = new on(e.id_token || N.EMPTY_STRING, this.cryptoObj), a && !Z.isEmpty(a.nonce) && p.claims.nonce !== a.nonce)
                   throw te.createNonceMismatchError();
                 if (o.maxAge || o.maxAge === 0) {
                   if (g = p.claims.auth_time, !g)
@@ -4835,24 +4835,24 @@ var _s = (
       });
     }, r.prototype.generateCacheRecord = function(e, t, n, o, a, s, l) {
       var u = t.getPreferredCache();
-      if (X.isEmpty(u))
+      if (Z.isEmpty(u))
         throw te.createInvalidCacheEnvironmentError();
       var f, h;
-      !X.isEmpty(e.id_token) && a && (f = uo.createIdTokenEntity(this.homeAccountIdentifier, u, e.id_token || N.EMPTY_STRING, this.clientId, a.claims.tid || N.EMPTY_STRING), h = this.generateAccountEntity(e, a, t, l));
+      !Z.isEmpty(e.id_token) && a && (f = uo.createIdTokenEntity(this.homeAccountIdentifier, u, e.id_token || N.EMPTY_STRING, this.clientId, a.claims.tid || N.EMPTY_STRING), h = this.generateAccountEntity(e, a, t, l));
       var p = null;
-      if (!X.isEmpty(e.access_token)) {
+      if (!Z.isEmpty(e.access_token)) {
         var g = e.scope ? Lt.fromString(e.scope) : new Lt(o.scopes || []), v = (typeof e.expires_in == "string" ? parseInt(e.expires_in, 10) : e.expires_in) || 0, C = (typeof e.ext_expires_in == "string" ? parseInt(e.ext_expires_in, 10) : e.ext_expires_in) || 0, E = (typeof e.refresh_in == "string" ? parseInt(e.refresh_in, 10) : e.refresh_in) || void 0, _ = n + v, A = _ + C, I = E && E > 0 ? n + E : void 0;
         p = fo.createAccessTokenEntity(this.homeAccountIdentifier, u, e.access_token || N.EMPTY_STRING, this.clientId, a ? a.claims.tid || N.EMPTY_STRING : t.tenant, g.printScopes(), _, A, this.cryptoObj, I, e.token_type, s, e.key_id, o.claims, o.requestedClaimsHash);
       }
       var S = null;
-      X.isEmpty(e.refresh_token) || (S = jo.createRefreshTokenEntity(this.homeAccountIdentifier, u, e.refresh_token || N.EMPTY_STRING, this.clientId, e.foci, s));
+      Z.isEmpty(e.refresh_token) || (S = jo.createRefreshTokenEntity(this.homeAccountIdentifier, u, e.refresh_token || N.EMPTY_STRING, this.clientId, e.foci, s));
       var R = null;
-      return X.isEmpty(e.foci) || (R = ou.createAppMetadataEntity(this.clientId, u, e.foci)), new Gi(h, f, p, S, R);
+      return Z.isEmpty(e.foci) || (R = ou.createAppMetadataEntity(this.clientId, u, e.foci)), new Gi(h, f, p, S, R);
     }, r.prototype.generateAccountEntity = function(e, t, n, o) {
       var a = n.authorityType, s = o ? o.cloud_graph_host_name : N.EMPTY_STRING, l = o ? o.msgraph_host : N.EMPTY_STRING;
       if (a === Wt.Adfs)
         return this.logger.verbose("Authority type is ADFS, creating ADFS account"), At.createGenericAccount(this.homeAccountIdentifier, t, n, s, l);
-      if (X.isEmpty(e.client_info) && n.protocolMode === "AAD")
+      if (Z.isEmpty(e.client_info) && n.protocolMode === "AAD")
         throw te.createClientInfoEmptyError();
       return e.client_info ? At.createAccount(e.client_info, this.homeAccountIdentifier, t, n, s, l) : At.createGenericAccount(this.homeAccountIdentifier, t, n, s, l);
     }, r.generateAuthenticationResult = function(e, t, n, o, a, s, l, u, f) {
@@ -5016,7 +5016,7 @@ var zg = (
                   throw et.createMissingSshJwkError();
               v.label = 3;
             case 3:
-              if (f = t.correlationId || this.config.cryptoInterface.createNewGuid(), a.addCorrelationId(f), (!X.isEmptyObj(t.claims) || this.config.authOptions.clientCapabilities && this.config.authOptions.clientCapabilities.length > 0) && a.addClaims(t.claims, this.config.authOptions.clientCapabilities), h = void 0, t.clientInfo)
+              if (f = t.correlationId || this.config.cryptoInterface.createNewGuid(), a.addCorrelationId(f), (!Z.isEmptyObj(t.claims) || this.config.authOptions.clientCapabilities && this.config.authOptions.clientCapabilities.length > 0) && a.addClaims(t.claims, this.config.authOptions.clientCapabilities), h = void 0, t.clientInfo)
                 try {
                   p = ws(t.clientInfo, this.cryptoUtils), h = {
                     credential: "" + p.uid + Ct.CLIENT_INFO_SEPARATOR + p.utid,
@@ -5083,7 +5083,7 @@ var zg = (
                   t.loginHint && (this.logger.verbose("createAuthCodeUrlQueryString: No account, adding login_hint from request"), o.addLoginHint(t.loginHint), o.addCcsUpn(t.loginHint));
               else
                 this.logger.verbose("createAuthCodeUrlQueryString: Prompt is select_account, ignoring account hints");
-              return t.nonce && o.addNonce(t.nonce), t.state && o.addState(t.state), (!X.isEmpty(t.claims) || this.config.authOptions.clientCapabilities && this.config.authOptions.clientCapabilities.length > 0) && o.addClaims(t.claims, this.config.authOptions.clientCapabilities), t.extraQueryParameters && o.addExtraQueryParameters(t.extraQueryParameters), t.nativeBroker ? (o.addNativeBroker(), t.authenticationScheme !== We.POP ? [3, 2] : (h = new ti(this.cryptoUtils), [4, h.generateCnf(t)])) : [3, 2];
+              return t.nonce && o.addNonce(t.nonce), t.state && o.addState(t.state), (!Z.isEmpty(t.claims) || this.config.authOptions.clientCapabilities && this.config.authOptions.clientCapabilities.length > 0) && o.addClaims(t.claims, this.config.authOptions.clientCapabilities), t.extraQueryParameters && o.addExtraQueryParameters(t.extraQueryParameters), t.nativeBroker ? (o.addNativeBroker(), t.authenticationScheme !== We.POP ? [3, 2] : (h = new ti(this.cryptoUtils), [4, h.generateCnf(t)])) : [3, 2];
             case 1:
               p = g.sent(), o.addPopToken(p.reqCnfString), g.label = 2;
             case 2:
@@ -5224,7 +5224,7 @@ var Wg = (
                   }), et.createMissingSshJwkError();
               v.label = 3;
             case 3:
-              if ((!X.isEmptyObj(t.claims) || this.config.authOptions.clientCapabilities && this.config.authOptions.clientCapabilities.length > 0) && u.addClaims(t.claims, this.config.authOptions.clientCapabilities), this.config.systemOptions.preventCorsPreflight && t.ccsCredential)
+              if ((!Z.isEmptyObj(t.claims) || this.config.authOptions.clientCapabilities && this.config.authOptions.clientCapabilities.length > 0) && u.addClaims(t.claims, this.config.authOptions.clientCapabilities), this.config.systemOptions.preventCorsPreflight && t.ccsCredential)
                 switch (t.ccsCredential.type) {
                   case pr.HOME_ACCOUNT_ID:
                     try {
@@ -5286,7 +5286,7 @@ var pI = (
                 throw et.createEmptyTokenRequestError();
               if (t.forceRefresh)
                 throw (n = this.serverTelemetryManager) === null || n === void 0 || n.setCacheOutcome(qn.FORCE_REFRESH), this.logger.info("SilentFlowClient:acquireCachedToken - Skipping cache because forceRefresh is true."), te.createRefreshRequiredError();
-              if (!this.config.cacheOptions.claimsBasedCachingEnabled && !X.isEmptyObj(t.claims))
+              if (!this.config.cacheOptions.claimsBasedCachingEnabled && !Z.isEmptyObj(t.claims))
                 throw (o = this.serverTelemetryManager) === null || o === void 0 || o.setCacheOutcome(qn.CLAIMS_REQUESTED_CACHE_SKIPPED), this.logger.info("SilentFlowClient:acquireCachedToken - Skipping cache because claims-based caching is disabled and claims were requested."), te.createRefreshRequiredError();
               if (!t.account)
                 throw te.createNoAccountInSilentRequestError();
@@ -5862,7 +5862,7 @@ var Ss = (
         });
       });
     }, r.createInstance = function(e, t, n, o, a, s, l) {
-      if (X.isEmpty(e))
+      if (Z.isEmpty(e))
         throw et.createUrlEmptyError();
       return new Yi(e, t, n, o, a, s, l);
     }, r;
@@ -5968,7 +5968,7 @@ var EI = (
       return [Tt.SCHEMA_VERSION, e.cacheHits, n, o, l].join(Tt.CATEGORY_SEPARATOR);
     }, r.prototype.cacheFailedRequest = function(e) {
       var t = this.getLastRequests();
-      t.errors.length >= Tt.MAX_CACHED_ERRORS && (t.failedRequests.shift(), t.failedRequests.shift(), t.errors.shift()), t.failedRequests.push(this.apiId, this.correlationId), X.isEmpty(e.subError) ? X.isEmpty(e.errorCode) ? e && e.toString() ? t.errors.push(e.toString()) : t.errors.push(Tt.UNKNOWN_ERROR) : t.errors.push(e.errorCode) : t.errors.push(e.subError), this.cacheManager.setServerTelemetry(this.telemetryCacheKey, t);
+      t.errors.length >= Tt.MAX_CACHED_ERRORS && (t.failedRequests.shift(), t.failedRequests.shift(), t.errors.shift()), t.failedRequests.push(this.apiId, this.correlationId), Z.isEmpty(e.subError) ? Z.isEmpty(e.errorCode) ? e && e.toString() ? t.errors.push(e.toString()) : t.errors.push(Tt.UNKNOWN_ERROR) : t.errors.push(e.errorCode) : t.errors.push(e.subError), this.cacheManager.setServerTelemetry(this.telemetryCacheKey, t);
     }, r.prototype.incrementCacheHits = function() {
       var e = this.getLastRequests();
       return e.cacheHits += 1, this.cacheManager.setServerTelemetry(this.telemetryCacheKey, e), e.cacheHits;
@@ -6395,7 +6395,7 @@ var V = {
       return new e(V.interactionInProgress.code, V.interactionInProgress.desc);
     }, e.createPopupWindowError = function(t) {
       var n = V.popupWindowError.desc;
-      return n = X.isEmpty(t) ? n : n + " Details: " + t, new e(V.popupWindowError.code, n);
+      return n = Z.isEmpty(t) ? n : n + " Details: " + t, new e(V.popupWindowError.code, n);
     }, e.createEmptyWindowCreatedError = function() {
       return new e(V.emptyWindowError.code, V.emptyWindowError.desc);
     }, e.createUserCancelledError = function() {
@@ -6664,7 +6664,7 @@ var Yg = (
     function r() {
     }
     return r.extractBrowserRequestState = function(e, t) {
-      if (X.isEmpty(t))
+      if (Z.isEmpty(t))
         return null;
       try {
         var n = bn.parseRequestState(e, t);
@@ -6737,30 +6737,30 @@ var cu = (
             var u = t.validateAndParseJson(l);
             if (u && u.hasOwnProperty("credentialType"))
               switch (u.credentialType) {
-                case pe.ID_TOKEN:
+                case he.ID_TOKEN:
                   if (uo.isIdTokenEntity(u)) {
                     t.logger.trace("BrowserCacheManager:createKeyMaps - idToken found, saving key to token key map"), t.logger.tracePii("BrowserCacheManager:createKeyMaps - idToken with key: " + s + " found, saving key to token key map");
                     var f = er.toObject(new uo(), u), h = t.updateCredentialCacheKey(s, f);
-                    t.addTokenKey(h, pe.ID_TOKEN);
+                    t.addTokenKey(h, he.ID_TOKEN);
                     return;
                   } else
                     t.logger.trace("BrowserCacheManager:createKeyMaps - key found matching idToken schema with value containing idToken credentialType field but value failed IdTokenEntity validation, skipping."), t.logger.tracePii("BrowserCacheManager:createKeyMaps - failed idToken validation on key: " + s);
                   break;
-                case pe.ACCESS_TOKEN:
-                case pe.ACCESS_TOKEN_WITH_AUTH_SCHEME:
+                case he.ACCESS_TOKEN:
+                case he.ACCESS_TOKEN_WITH_AUTH_SCHEME:
                   if (fo.isAccessTokenEntity(u)) {
                     t.logger.trace("BrowserCacheManager:createKeyMaps - accessToken found, saving key to token key map"), t.logger.tracePii("BrowserCacheManager:createKeyMaps - accessToken with key: " + s + " found, saving key to token key map");
                     var p = er.toObject(new fo(), u), h = t.updateCredentialCacheKey(s, p);
-                    t.addTokenKey(h, pe.ACCESS_TOKEN);
+                    t.addTokenKey(h, he.ACCESS_TOKEN);
                     return;
                   } else
                     t.logger.trace("BrowserCacheManager:createKeyMaps - key found matching accessToken schema with value containing accessToken credentialType field but value failed AccessTokenEntity validation, skipping."), t.logger.tracePii("BrowserCacheManager:createKeyMaps - failed accessToken validation on key: " + s);
                   break;
-                case pe.REFRESH_TOKEN:
+                case he.REFRESH_TOKEN:
                   if (jo.isRefreshTokenEntity(u)) {
                     t.logger.trace("BrowserCacheManager:createKeyMaps - refreshToken found, saving key to token key map"), t.logger.tracePii("BrowserCacheManager:createKeyMaps - refreshToken with key: " + s + " found, saving key to token key map");
                     var g = er.toObject(new jo(), u), h = t.updateCredentialCacheKey(s, g);
-                    t.addTokenKey(h, pe.REFRESH_TOKEN);
+                    t.addTokenKey(h, he.REFRESH_TOKEN);
                     return;
                   } else
                     t.logger.trace("BrowserCacheManager:createKeyMaps - key found matching refreshToken schema with value containing refreshToken credentialType field but value failed RefreshTokenEntity validation, skipping."), t.logger.tracePii("BrowserCacheManager:createKeyMaps - failed refreshToken validation on key: " + s);
@@ -6820,18 +6820,18 @@ var cu = (
         });
       });
     }, e.prototype.removeIdToken = function(t) {
-      r.prototype.removeIdToken.call(this, t), this.removeTokenKey(t, pe.ID_TOKEN);
+      r.prototype.removeIdToken.call(this, t), this.removeTokenKey(t, he.ID_TOKEN);
     }, e.prototype.removeAccessToken = function(t) {
       return G(this, void 0, void 0, function() {
         return z(this, function(n) {
-          return r.prototype.removeAccessToken.call(this, t), this.removeTokenKey(t, pe.ACCESS_TOKEN), [
+          return r.prototype.removeAccessToken.call(this, t), this.removeTokenKey(t, he.ACCESS_TOKEN), [
             2
             /*return*/
           ];
         });
       });
     }, e.prototype.removeRefreshToken = function(t) {
-      r.prototype.removeRefreshToken.call(this, t), this.removeTokenKey(t, pe.REFRESH_TOKEN);
+      r.prototype.removeRefreshToken.call(this, t), this.removeTokenKey(t, he.REFRESH_TOKEN);
     }, e.prototype.getTokenKeys = function() {
       this.logger.trace("BrowserCacheManager.getTokenKeys called");
       var t = this.getItem(Zr.TOKEN_KEYS + "." + this.clientId);
@@ -6851,13 +6851,13 @@ var cu = (
       this.logger.trace("BrowserCacheManager addTokenKey called");
       var o = this.getTokenKeys();
       switch (n) {
-        case pe.ID_TOKEN:
+        case he.ID_TOKEN:
           o.idToken.indexOf(t) === -1 && (this.logger.info("BrowserCacheManager: addTokenKey - idToken added to map"), o.idToken.push(t));
           break;
-        case pe.ACCESS_TOKEN:
+        case he.ACCESS_TOKEN:
           o.accessToken.indexOf(t) === -1 && (this.logger.info("BrowserCacheManager: addTokenKey - accessToken added to map"), o.accessToken.push(t));
           break;
-        case pe.REFRESH_TOKEN:
+        case he.REFRESH_TOKEN:
           o.refreshToken.indexOf(t) === -1 && (this.logger.info("BrowserCacheManager: addTokenKey - refreshToken added to map"), o.refreshToken.push(t));
           break;
         default:
@@ -6868,17 +6868,17 @@ var cu = (
       this.logger.trace("BrowserCacheManager removeTokenKey called");
       var o = this.getTokenKeys();
       switch (n) {
-        case pe.ID_TOKEN:
+        case he.ID_TOKEN:
           this.logger.infoPii("BrowserCacheManager: removeTokenKey - attempting to remove idToken with key: " + t + " from map");
           var a = o.idToken.indexOf(t);
           a > -1 ? (this.logger.info("BrowserCacheManager: removeTokenKey - idToken removed from map"), o.idToken.splice(a, 1)) : this.logger.info("BrowserCacheManager: removeTokenKey - idToken does not exist in map. Either it was previously removed or it was never added.");
           break;
-        case pe.ACCESS_TOKEN:
+        case he.ACCESS_TOKEN:
           this.logger.infoPii("BrowserCacheManager: removeTokenKey - attempting to remove accessToken with key: " + t + " from map");
           var s = o.accessToken.indexOf(t);
           s > -1 ? (this.logger.info("BrowserCacheManager: removeTokenKey - accessToken removed from map"), o.accessToken.splice(s, 1)) : this.logger.info("BrowserCacheManager: removeTokenKey - accessToken does not exist in map. Either it was previously removed or it was never added.");
           break;
-        case pe.REFRESH_TOKEN:
+        case he.REFRESH_TOKEN:
           this.logger.infoPii("BrowserCacheManager: removeTokenKey - attempting to remove refreshToken with key: " + t + " from map");
           var l = o.refreshToken.indexOf(t);
           l > -1 ? (this.logger.info("BrowserCacheManager: removeTokenKey - refreshToken removed from map"), o.refreshToken.splice(l, 1)) : this.logger.info("BrowserCacheManager: removeTokenKey - refreshToken does not exist in map. Either it was previously removed or it was never added.");
@@ -6890,33 +6890,33 @@ var cu = (
     }, e.prototype.getIdTokenCredential = function(t) {
       var n = this.getItem(t);
       if (!n)
-        return this.logger.trace("BrowserCacheManager.getIdTokenCredential: called, no cache hit"), this.removeTokenKey(t, pe.ID_TOKEN), null;
+        return this.logger.trace("BrowserCacheManager.getIdTokenCredential: called, no cache hit"), this.removeTokenKey(t, he.ID_TOKEN), null;
       var o = this.validateAndParseJson(n);
-      return !o || !uo.isIdTokenEntity(o) ? (this.logger.trace("BrowserCacheManager.getIdTokenCredential: called, no cache hit"), this.removeTokenKey(t, pe.ID_TOKEN), null) : (this.logger.trace("BrowserCacheManager.getIdTokenCredential: cache hit"), er.toObject(new uo(), o));
+      return !o || !uo.isIdTokenEntity(o) ? (this.logger.trace("BrowserCacheManager.getIdTokenCredential: called, no cache hit"), this.removeTokenKey(t, he.ID_TOKEN), null) : (this.logger.trace("BrowserCacheManager.getIdTokenCredential: cache hit"), er.toObject(new uo(), o));
     }, e.prototype.setIdTokenCredential = function(t) {
       this.logger.trace("BrowserCacheManager.setIdTokenCredential called");
       var n = t.generateCredentialKey();
-      this.setItem(n, JSON.stringify(t)), this.addTokenKey(n, pe.ID_TOKEN);
+      this.setItem(n, JSON.stringify(t)), this.addTokenKey(n, he.ID_TOKEN);
     }, e.prototype.getAccessTokenCredential = function(t) {
       var n = this.getItem(t);
       if (!n)
-        return this.logger.trace("BrowserCacheManager.getAccessTokenCredential: called, no cache hit"), this.removeTokenKey(t, pe.ACCESS_TOKEN), null;
+        return this.logger.trace("BrowserCacheManager.getAccessTokenCredential: called, no cache hit"), this.removeTokenKey(t, he.ACCESS_TOKEN), null;
       var o = this.validateAndParseJson(n);
-      return !o || !fo.isAccessTokenEntity(o) ? (this.logger.trace("BrowserCacheManager.getAccessTokenCredential: called, no cache hit"), this.removeTokenKey(t, pe.ACCESS_TOKEN), null) : (this.logger.trace("BrowserCacheManager.getAccessTokenCredential: cache hit"), er.toObject(new fo(), o));
+      return !o || !fo.isAccessTokenEntity(o) ? (this.logger.trace("BrowserCacheManager.getAccessTokenCredential: called, no cache hit"), this.removeTokenKey(t, he.ACCESS_TOKEN), null) : (this.logger.trace("BrowserCacheManager.getAccessTokenCredential: cache hit"), er.toObject(new fo(), o));
     }, e.prototype.setAccessTokenCredential = function(t) {
       this.logger.trace("BrowserCacheManager.setAccessTokenCredential called");
       var n = t.generateCredentialKey();
-      this.setItem(n, JSON.stringify(t)), this.addTokenKey(n, pe.ACCESS_TOKEN);
+      this.setItem(n, JSON.stringify(t)), this.addTokenKey(n, he.ACCESS_TOKEN);
     }, e.prototype.getRefreshTokenCredential = function(t) {
       var n = this.getItem(t);
       if (!n)
-        return this.logger.trace("BrowserCacheManager.getRefreshTokenCredential: called, no cache hit"), this.removeTokenKey(t, pe.REFRESH_TOKEN), null;
+        return this.logger.trace("BrowserCacheManager.getRefreshTokenCredential: called, no cache hit"), this.removeTokenKey(t, he.REFRESH_TOKEN), null;
       var o = this.validateAndParseJson(n);
-      return !o || !jo.isRefreshTokenEntity(o) ? (this.logger.trace("BrowserCacheManager.getRefreshTokenCredential: called, no cache hit"), this.removeTokenKey(t, pe.REFRESH_TOKEN), null) : (this.logger.trace("BrowserCacheManager.getRefreshTokenCredential: cache hit"), er.toObject(new jo(), o));
+      return !o || !jo.isRefreshTokenEntity(o) ? (this.logger.trace("BrowserCacheManager.getRefreshTokenCredential: called, no cache hit"), this.removeTokenKey(t, he.REFRESH_TOKEN), null) : (this.logger.trace("BrowserCacheManager.getRefreshTokenCredential: cache hit"), er.toObject(new jo(), o));
     }, e.prototype.setRefreshTokenCredential = function(t) {
       this.logger.trace("BrowserCacheManager.setRefreshTokenCredential called");
       var n = t.generateCredentialKey();
-      this.setItem(n, JSON.stringify(t)), this.addTokenKey(n, pe.REFRESH_TOKEN);
+      this.setItem(n, JSON.stringify(t)), this.addTokenKey(n, he.REFRESH_TOKEN);
     }, e.prototype.getAppMetadata = function(t) {
       var n = this.getItem(t);
       if (!n)
@@ -7101,7 +7101,7 @@ var cu = (
     }, e.prototype.setCache = function() {
     }, e.prototype.generateCacheKey = function(t) {
       var n = this.validateAndParseJson(t);
-      return n ? JSON.stringify(t) : X.startsWith(t, N.CACHE_PREFIX) || X.startsWith(t, yt.ADAL_ID_TOKEN) ? t : N.CACHE_PREFIX + "." + this.clientId + "." + t;
+      return n ? JSON.stringify(t) : Z.startsWith(t, N.CACHE_PREFIX) || Z.startsWith(t, yt.ADAL_ID_TOKEN) ? t : N.CACHE_PREFIX + "." + this.clientId + "." + t;
     }, e.prototype.generateAuthorityKey = function(t) {
       var n = bn.parseRequestState(this.cryptoImpl, t).libraryState.id;
       return this.generateCacheKey(Be.AUTHORITY + "." + n);
@@ -7130,7 +7130,7 @@ var cu = (
           type: pr.HOME_ACCOUNT_ID
         };
         this.setTemporaryCache(Be.CCS_CREDENTIAL, JSON.stringify(h), !0);
-      } else if (!X.isEmpty(a)) {
+      } else if (!Z.isEmpty(a)) {
         var h = {
           credential: a,
           type: pr.UPN
@@ -7139,7 +7139,7 @@ var cu = (
       }
     }, e.prototype.resetRequestCache = function(t) {
       var n = this;
-      this.logger.trace("BrowserCacheManager.resetRequestCache called"), X.isEmpty(t) || this.getKeys().forEach(function(o) {
+      this.logger.trace("BrowserCacheManager.resetRequestCache called"), Z.isEmpty(t) || this.getKeys().forEach(function(o) {
         o.indexOf(t) !== -1 && n.removeItem(o);
       }), t && (this.removeItem(this.generateStateKey(t)), this.removeItem(this.generateNonceKey(t)), this.removeItem(this.generateAuthorityKey(t))), this.removeItem(this.generateCacheKey(Be.REQUEST_PARAMS)), this.removeItem(this.generateCacheKey(Be.ORIGIN_URI)), this.removeItem(this.generateCacheKey(Be.URL_HASH)), this.removeItem(this.generateCacheKey(Be.CORRELATION_ID)), this.removeItem(this.generateCacheKey(Be.CCS_CREDENTIAL)), this.removeItem(this.generateCacheKey(Be.NATIVE_REQUEST)), this.setInteractionInProgress(!1);
     }, e.prototype.cleanRequestByState = function(t) {
@@ -7171,7 +7171,7 @@ var cu = (
       var a = this.validateAndParseJson(n.base64Decode(o));
       if (!a)
         throw Q.createUnableToParseTokenRequestCacheError();
-      if (this.removeItem(this.generateCacheKey(Be.REQUEST_PARAMS)), X.isEmpty(a.authority)) {
+      if (this.removeItem(this.generateCacheKey(Be.REQUEST_PARAMS)), Z.isEmpty(a.authority)) {
         var s = this.generateAuthorityKey(t), l = this.getTemporaryCache(s);
         if (!l)
           throw Q.createNoCachedAuthorityError();
@@ -7500,7 +7500,7 @@ var Qg = (
                 }
                 this.logger.verbose('Authentication Scheme set to "' + a.authenticationScheme + '" as configured in Auth request');
               }
-              return this.config.cache.claimsBasedCachingEnabled && e.claims && !X.isEmptyObj(e.claims) ? (s = a, [4, this.browserCrypto.hashString(e.claims)]) : [3, 4];
+              return this.config.cache.claimsBasedCachingEnabled && e.claims && !Z.isEmptyObj(e.claims) ? (s = a, [4, this.browserCrypto.hashString(e.claims)]) : [3, 4];
             case 3:
               s.requestedClaimsHash = l.sent(), l.label = 4;
             case 4:
@@ -7709,7 +7709,7 @@ var ci = (
                 interactionType: n
               }, s = bn.setRequestState(this.browserCrypto, t && t.state || N.EMPTY_STRING, a), this.performanceClient.setPreQueueTime(U.InitializeBaseRequest, this.correlationId), u = [{}], [4, this.initializeBaseRequest(t)];
             case 1:
-              return l = ce.apply(void 0, [ce.apply(void 0, u.concat([p.sent()])), { redirectUri: o, state: s, nonce: t.nonce || this.browserCrypto.createNewGuid(), responseMode: ms.FRAGMENT }]), f = t.account || this.browserStorage.getActiveAccount(), f && (this.logger.verbose("Setting validated request account", this.correlationId), this.logger.verbosePii("Setting validated request account: " + f.homeAccountId, this.correlationId), l.account = f), X.isEmpty(l.loginHint) && !f && (h = this.browserStorage.getLegacyLoginHint(), h && (l.loginHint = h)), [2, l];
+              return l = ce.apply(void 0, [ce.apply(void 0, u.concat([p.sent()])), { redirectUri: o, state: s, nonce: t.nonce || this.browserCrypto.createNewGuid(), responseMode: ms.FRAGMENT }]), f = t.account || this.browserStorage.getActiveAccount(), f && (this.logger.verbose("Setting validated request account", this.correlationId), this.logger.verbosePii("Setting validated request account: " + f.homeAccountId, this.correlationId), l.account = f), Z.isEmpty(l.loginHint) && !f && (h = this.browserStorage.getLegacyLoginHint(), h && (l.loginHint = h)), [2, l];
           }
         });
       });
@@ -7727,7 +7727,7 @@ var Ou = (
       return G(this, void 0, void 0, function() {
         var a, s, l;
         return z(this, function(u) {
-          if (this.performanceClient.addQueueMeasurement(U.HandleCodeResponseFromHash, this.authCodeRequest.correlationId), this.logger.verbose("InteractionHandler.handleCodeResponse called"), X.isEmpty(e))
+          if (this.performanceClient.addQueueMeasurement(U.HandleCodeResponseFromHash, this.authCodeRequest.correlationId), this.logger.verbose("InteractionHandler.handleCodeResponse called"), Z.isEmpty(e))
             throw Q.createEmptyHashError(e);
           if (a = this.browserStorage.generateStateKey(t), s = this.browserStorage.getTemporaryCache(a), !s)
             throw te.createStateNotFoundError("Cached State");
@@ -7799,7 +7799,7 @@ var Dp = (
         return z(this, function(s) {
           switch (s.label) {
             case 0:
-              return this.logger.verbose("RedirectHandler.initiateAuthRequest called"), X.isEmpty(t) ? [3, 7] : (n.redirectStartPage && (this.logger.verbose("RedirectHandler.initiateAuthRequest: redirectStartPage set, caching start page"), this.browserStorage.setTemporaryCache(Be.ORIGIN_URI, n.redirectStartPage, !0)), this.browserStorage.setTemporaryCache(Be.CORRELATION_ID, this.authCodeRequest.correlationId, !0), this.browserStorage.cacheCodeRequest(this.authCodeRequest, this.browserCrypto), this.logger.infoPii("RedirectHandler.initiateAuthRequest: Navigate to: " + t), o = {
+              return this.logger.verbose("RedirectHandler.initiateAuthRequest called"), Z.isEmpty(t) ? [3, 7] : (n.redirectStartPage && (this.logger.verbose("RedirectHandler.initiateAuthRequest: redirectStartPage set, caching start page"), this.browserStorage.setTemporaryCache(Be.ORIGIN_URI, n.redirectStartPage, !0)), this.browserStorage.setTemporaryCache(Be.CORRELATION_ID, this.authCodeRequest.correlationId, !0), this.browserStorage.cacheCodeRequest(this.authCodeRequest, this.browserCrypto), this.logger.infoPii("RedirectHandler.initiateAuthRequest: Navigate to: " + t), o = {
                 apiId: Ze.acquireTokenRedirect,
                 timeout: n.redirectTimeout,
                 noHistory: !1
@@ -7841,7 +7841,7 @@ var Dp = (
         return z(this, function(v) {
           switch (v.label) {
             case 0:
-              if (this.logger.verbose("RedirectHandler.handleCodeResponse called"), X.isEmpty(t))
+              if (this.logger.verbose("RedirectHandler.handleCodeResponse called"), Z.isEmpty(t))
                 throw Q.createEmptyHashError(t);
               if (this.browserStorage.setInteractionInProgress(!1), s = this.browserStorage.generateStateKey(n), l = this.browserStorage.getTemporaryCache(s), !l)
                 throw te.createStateNotFoundError("Cached State");
@@ -8725,7 +8725,7 @@ var kI = (
         });
       });
     }, e.prototype.initiateAuthRequest = function(t, n) {
-      if (X.isEmpty(t))
+      if (Z.isEmpty(t))
         throw this.logger.error("Navigate url is empty"), Q.createEmptyNavigationUriError();
       return this.logger.infoPii("Navigate to: " + t), this.openPopup(t, n);
     }, e.prototype.monitorPopupForHash = function(t) {
@@ -8743,7 +8743,7 @@ var kI = (
             f = t.location.href, h = t.location.hash;
           } catch {
           }
-          X.isEmpty(f) || f === "about:blank" || (n.logger.verbose("PopupHandler.monitorPopupForHash - popup window is on same origin as caller"), l++, h ? (n.logger.verbose("PopupHandler.monitorPopupForHash - found hash in url"), clearInterval(u), n.cleanPopup(t), He.hashContainsKnownProperties(h) ? (n.logger.verbose("PopupHandler.monitorPopupForHash - hash contains known properties, returning."), o(h)) : (n.logger.error("PopupHandler.monitorPopupForHash - found hash in url but it does not contain known properties. Check that your router is not changing the hash prematurely."), n.logger.errorPii("PopupHandler.monitorPopupForHash - hash found: " + h), a(Q.createHashDoesNotContainKnownPropertiesError()))) : l > s && (n.logger.error("PopupHandler.monitorPopupForHash - unable to find hash in url, timing out"), clearInterval(u), a(Q.createMonitorPopupTimeoutError())));
+          Z.isEmpty(f) || f === "about:blank" || (n.logger.verbose("PopupHandler.monitorPopupForHash - popup window is on same origin as caller"), l++, h ? (n.logger.verbose("PopupHandler.monitorPopupForHash - found hash in url"), clearInterval(u), n.cleanPopup(t), He.hashContainsKnownProperties(h) ? (n.logger.verbose("PopupHandler.monitorPopupForHash - hash contains known properties, returning."), o(h)) : (n.logger.error("PopupHandler.monitorPopupForHash - found hash in url but it does not contain known properties. Check that your router is not changing the hash prematurely."), n.logger.errorPii("PopupHandler.monitorPopupForHash - hash found: " + h), a(Q.createHashDoesNotContainKnownPropertiesError()))) : l > s && (n.logger.error("PopupHandler.monitorPopupForHash - unable to find hash in url, timing out"), clearInterval(u), a(Q.createMonitorPopupTimeoutError())));
         }, n.config.system.pollIntervalMilliseconds);
       });
     }, e.prototype.waitForLogoutPopup = function(t) {
@@ -8757,7 +8757,7 @@ var kI = (
             s = t.location.href;
           } catch {
           }
-          X.isEmpty(s) || s === "about:blank" || (n.logger.verbose("PopupHandler.waitForLogoutPopup - popup window is on same origin as caller, closing."), clearInterval(a), n.cleanPopup(t), o());
+          Z.isEmpty(s) || s === "about:blank" || (n.logger.verbose("PopupHandler.waitForLogoutPopup - popup window is on same origin as caller, closing."), clearInterval(a), n.cleanPopup(t), o());
         }, n.config.system.pollIntervalMilliseconds);
       });
     }, e.prototype.openPopup = function(t, n) {
@@ -8882,7 +8882,7 @@ var Xg = (
         return z(this, function(n) {
           switch (n.label) {
             case 0:
-              if (this.performanceClient.addQueueMeasurement(U.SilentHandlerInitiateAuthRequest, this.authCodeRequest.correlationId), X.isEmpty(t))
+              if (this.performanceClient.addQueueMeasurement(U.SilentHandlerInitiateAuthRequest, this.authCodeRequest.correlationId), Z.isEmpty(t))
                 throw this.logger.info("Navigate url is empty"), Q.createEmptyNavigationUriError();
               return this.navigateFrameWait ? (this.performanceClient.setPreQueueTime(U.SilentHandlerLoadFrame, this.authCodeRequest.correlationId), [4, this.loadFrame(t)]) : [3, 2];
             case 1:
@@ -8906,7 +8906,7 @@ var Xg = (
             h = p ? p.location.href : N.EMPTY_STRING;
           } catch {
           }
-          if (!X.isEmpty(h)) {
+          if (!Z.isEmpty(h)) {
             var g = p ? p.location.hash : N.EMPTY_STRING;
             if (He.hashContainsKnownProperties(g)) {
               o.removeHiddenIframe(t), clearInterval(f), a(g);
@@ -8953,7 +8953,7 @@ var LI = (
         return z(this, function(u) {
           switch (u.label) {
             case 0:
-              if (this.performanceClient.addQueueMeasurement(U.SilentIframeClientAcquireToken, t.correlationId), this.logger.verbose("acquireTokenByIframe called"), n = this.performanceClient.startMeasurement(U.SilentIframeClientAcquireToken, t.correlationId), X.isEmpty(t.loginHint) && X.isEmpty(t.sid) && (!t.account || X.isEmpty(t.account.username)) && this.logger.warning("No user hint provided. The authorization server may need more information to complete this request."), t.prompt && t.prompt !== Ut.NONE && t.prompt !== Ut.NO_SESSION)
+              if (this.performanceClient.addQueueMeasurement(U.SilentIframeClientAcquireToken, t.correlationId), this.logger.verbose("acquireTokenByIframe called"), n = this.performanceClient.startMeasurement(U.SilentIframeClientAcquireToken, t.correlationId), Z.isEmpty(t.loginHint) && Z.isEmpty(t.sid) && (!t.account || Z.isEmpty(t.account.username)) && this.logger.warning("No user hint provided. The authorization server may need more information to complete this request."), t.prompt && t.prompt !== Ut.NONE && t.prompt !== Ut.NO_SESSION)
                 throw n.endMeasurement({
                   success: !1
                 }), Q.createSilentPromptValueError(t.prompt);
@@ -12394,9 +12394,9 @@ function js(r) {
     td: ae,
     w: le,
     miw: oe,
-    maw: fe,
-    h: Z,
-    mih: he,
+    maw: pe,
+    h: X,
+    mih: fe,
     mah: Y,
     bgsz: ne,
     bgp: ee,
@@ -12444,9 +12444,9 @@ function js(r) {
     td: ae,
     w: le,
     miw: oe,
-    maw: fe,
-    h: Z,
-    mih: he,
+    maw: pe,
+    h: X,
+    mih: fe,
     mah: Y,
     bgsz: ne,
     bgp: ee,
@@ -13718,12 +13718,12 @@ const eg = (r) => ({
     }, v = Wu(o), C = zu(v), E = await s.getDimensions(f), _ = v === "y", A = _ ? "top" : "left", I = _ ? "bottom" : "right", S = _ ? "clientHeight" : "clientWidth", R = a.reference[C] + a.reference[v] - g[v] - a.floating[C], O = g[v] - a.reference[v], L = await (s.getOffsetParent == null ? void 0 : s.getOffsetParent(f));
     let q = L ? L[S] : 0;
     (!q || !await (s.isElement == null ? void 0 : s.isElement(L))) && (q = l.floating[S] || a.floating[C]);
-    const F = R / 2 - O / 2, re = q / 2 - E[C] / 2 - 1, ae = Wr(p[A], re), le = Wr(p[I], re), oe = ae, fe = q - E[C] - le, Z = q / 2 - E[C] / 2 + F, he = gu(oe, Z, fe), Y = !u.arrow && di(o) != null && Z != he && a.reference[C] / 2 - (Z < oe ? ae : le) - E[C] / 2 < 0, ne = Y ? Z < oe ? Z - oe : Z - fe : 0;
+    const F = R / 2 - O / 2, re = q / 2 - E[C] / 2 - 1, ae = Wr(p[A], re), le = Wr(p[I], re), oe = ae, pe = q - E[C] - le, X = q / 2 - E[C] / 2 + F, fe = gu(oe, X, pe), Y = !u.arrow && di(o) != null && X != fe && a.reference[C] / 2 - (X < oe ? ae : le) - E[C] / 2 < 0, ne = Y ? X < oe ? X - oe : X - pe : 0;
     return {
       [v]: g[v] + ne,
       data: {
-        [v]: he,
-        centerOffset: Z - he - ne,
+        [v]: fe,
+        centerOffset: X - fe - ne,
         ...Y && {
           alignmentOffset: ne
         }
@@ -13768,34 +13768,34 @@ const eg = (r) => ({
         overflows: q
       }], !q.every((oe) => oe <= 0)) {
         var re, ae;
-        const oe = (((re = a.flip) == null ? void 0 : re.index) || 0) + 1, fe = O[oe];
-        if (fe)
+        const oe = (((re = a.flip) == null ? void 0 : re.index) || 0) + 1, pe = O[oe];
+        if (pe)
           return {
             data: {
               index: oe,
               overflows: F
             },
             reset: {
-              placement: fe
+              placement: pe
             }
           };
-        let Z = (ae = F.filter((he) => he.overflows[0] <= 0).sort((he, Y) => he.overflows[1] - Y.overflows[1])[0]) == null ? void 0 : ae.placement;
-        if (!Z)
+        let X = (ae = F.filter((fe) => fe.overflows[0] <= 0).sort((fe, Y) => fe.overflows[1] - Y.overflows[1])[0]) == null ? void 0 : ae.placement;
+        if (!X)
           switch (v) {
             case "bestFit": {
               var le;
-              const he = (le = F.map((Y) => [Y.placement, Y.overflows.filter((ne) => ne > 0).reduce((ne, ee) => ne + ee, 0)]).sort((Y, ne) => Y[1] - ne[1])[0]) == null ? void 0 : le[0];
-              he && (Z = he);
+              const fe = (le = F.map((Y) => [Y.placement, Y.overflows.filter((ne) => ne > 0).reduce((ne, ee) => ne + ee, 0)]).sort((Y, ne) => Y[1] - ne[1])[0]) == null ? void 0 : le[0];
+              fe && (X = fe);
               break;
             }
             case "initialPlacement":
-              Z = l;
+              X = l;
               break;
           }
-        if (o !== Z)
+        if (o !== X)
           return {
             reset: {
-              placement: Z
+              placement: X
             }
           };
       }
@@ -13842,16 +13842,16 @@ const ik = function(r) {
           return p.find((_) => u > _.left - v.left && u < _.right + v.right && f > _.top - v.top && f < _.bottom + v.bottom) || g;
         if (p.length >= 2) {
           if (So(t) === "y") {
-            const ae = p[0], le = p[p.length - 1], oe = Vr(t) === "top", fe = ae.top, Z = le.bottom, he = oe ? ae.left : le.left, Y = oe ? ae.right : le.right, ne = Y - he, ee = Z - fe;
+            const ae = p[0], le = p[p.length - 1], oe = Vr(t) === "top", pe = ae.top, X = le.bottom, fe = oe ? ae.left : le.left, Y = oe ? ae.right : le.right, ne = Y - fe, ee = X - pe;
             return {
-              top: fe,
-              bottom: Z,
-              left: he,
+              top: pe,
+              bottom: X,
+              left: fe,
               right: Y,
               width: ne,
               height: ee,
-              x: he,
-              y: fe
+              x: fe,
+              y: pe
             };
           }
           const _ = Vr(t) === "left", A = Dt(...p.map((ae) => ae.right)), I = Wr(...p.map((ae) => ae.left)), S = p.filter((ae) => _ ? ae.left === I : ae.right === A), R = S[0].top, O = S[S.length - 1].bottom, L = I, q = A, F = q - L, re = O - R;
@@ -14627,27 +14627,27 @@ function Nk(r) {
       le();
     }
   }, [R, O, le, re]);
-  const fe = Le.useMemo(() => ({
+  const pe = Le.useMemo(() => ({
     reference: L,
     floating: q,
     setReference: I,
     setFloating: S
-  }), [I, S]), Z = Le.useMemo(() => ({
+  }), [I, S]), X = Le.useMemo(() => ({
     reference: R,
     floating: O
-  }), [R, O]), he = Le.useMemo(() => {
+  }), [R, O]), fe = Le.useMemo(() => {
     const Y = {
       position: t,
       left: 0,
       top: 0
     };
-    if (!Z.floating)
+    if (!X.floating)
       return Y;
-    const ne = og(Z.floating, h.x), ee = og(Z.floating, h.y);
+    const ne = og(X.floating, h.x), ee = og(X.floating, h.y);
     return l ? {
       ...Y,
       transform: "translate(" + ne + "px, " + ee + "px)",
-      ...$m(Z.floating) >= 1.5 && {
+      ...$m(X.floating) >= 1.5 && {
         willChange: "transform"
       }
     } : {
@@ -14655,14 +14655,14 @@ function Nk(r) {
       left: ne,
       top: ee
     };
-  }, [t, l, Z.floating, h.x, h.y]);
+  }, [t, l, X.floating, h.x, h.y]);
   return Le.useMemo(() => ({
     ...h,
     update: le,
-    refs: fe,
-    elements: Z,
-    floatingStyles: he
-  }), [h, le, fe, Z, he]);
+    refs: pe,
+    elements: X,
+    floatingStyles: fe
+  }), [h, le, pe, X, fe]);
 }
 var Gm = typeof document < "u" ? _u : Ce;
 let Bl = !1, Ok = 0;
@@ -15332,9 +15332,9 @@ function Yn(r) {
     onOpen: ae,
     onChange: le,
     zIndex: oe,
-    radius: fe,
-    shadow: Z,
-    id: he,
+    radius: pe,
+    shadow: X,
+    id: fe,
     defaultOpened: Y,
     __staticSelector: ne,
     withRoles: ee,
@@ -15354,7 +15354,7 @@ function Yn(r) {
     rootSelector: "dropdown",
     vars: jr,
     varsResolver: iP
-  }), ir = Ke(null), [cn, ar] = ge(null), [Dr, ln] = ge(null), { dir: Kt } = Bu(), Cr = _o(he), Ye = nP({
+  }), ir = Ke(null), [cn, ar] = ge(null), [Dr, ln] = ge(null), { dir: Kt } = Bu(), Cr = _o(fe), Ye = nP({
     middlewares: h,
     width: f,
     position: zk(Kt, n),
@@ -15411,8 +15411,8 @@ function Yn(r) {
         withinPortal: R,
         portalProps: O,
         zIndex: oe,
-        radius: fe,
-        shadow: Z,
+        radius: pe,
+        shadow: X,
         closeOnEscape: L,
         onClose: Ye.onClose,
         onToggle: Ye.onToggle,
@@ -15883,14 +15883,14 @@ const bP = {
     size: f,
     variant: h,
     __staticSelector: p
-  }, fe = _o(q), Z = typeof L == "boolean" ? L : F, he = (S == null ? void 0 : S.id) || `${fe}-error`, Y = (I == null ? void 0 : I.id) || `${fe}-description`, ne = fe, ee = !!E && typeof E != "boolean", Pe = !!_, Qe = `${ee ? he : ""} ${Pe ? Y : ""}`, ot = Qe.trim().length > 0 ? Qe.trim() : void 0, ut = (A == null ? void 0 : A.id) || `${fe}-label`, jr = C && /* @__PURE__ */ P.createElement(
+  }, pe = _o(q), X = typeof L == "boolean" ? L : F, fe = (S == null ? void 0 : S.id) || `${pe}-error`, Y = (I == null ? void 0 : I.id) || `${pe}-description`, ne = pe, ee = !!E && typeof E != "boolean", Pe = !!_, Qe = `${ee ? fe : ""} ${Pe ? Y : ""}`, ot = Qe.trim().length > 0 ? Qe.trim() : void 0, ut = (A == null ? void 0 : A.id) || `${pe}-label`, jr = C && /* @__PURE__ */ P.createElement(
     tc,
     {
       key: "label",
       labelElement: R,
       id: ut,
       htmlFor: ne,
-      required: Z,
+      required: X,
       ...oe,
       ...A
     },
@@ -15912,7 +15912,7 @@ const bP = {
       ...oe,
       size: (S == null ? void 0 : S.size) || oe.size,
       key: "error",
-      id: (S == null ? void 0 : S.id) || he
+      id: (S == null ? void 0 : S.id) || fe
     },
     E
   ), cn = v.map((ar) => {
@@ -16003,10 +16003,10 @@ const SP = {
     multiline: ae,
     radius: le,
     id: oe,
-    withAria: fe,
-    withErrorStyles: Z,
-    ...he
-  } = t, { styleProps: Y, rest: ne } = js(he), ee = ua(), Pe = { offsetBottom: ee == null ? void 0 : ee.offsetBottom, offsetTop: ee == null ? void 0 : ee.offsetTop }, Qe = lt({
+    withAria: pe,
+    withErrorStyles: X,
+    ...fe
+  } = t, { styleProps: Y, rest: ne } = js(fe), ee = ua(), Pe = { offsetBottom: ee == null ? void 0 : ee.offsetBottom, offsetTop: ee == null ? void 0 : ee.offsetTop }, Qe = lt({
     name: ["Input", f],
     props: h || t,
     classes: xr,
@@ -16019,7 +16019,7 @@ const SP = {
     rootSelector: "wrapper",
     vars: F,
     varsResolver: TP
-  }), ot = fe ? {
+  }), ot = pe ? {
     required: u,
     disabled: C,
     "aria-invalid": !!v,
@@ -16033,7 +16033,7 @@ const SP = {
       ...Y,
       ...g,
       mod: {
-        error: !!v && Z,
+        error: !!v && X,
         pointer: re,
         disabled: C,
         multiline: ae,
@@ -16063,7 +16063,7 @@ const SP = {
         ...ot,
         ref: e,
         required: u,
-        mod: { disabled: C, error: !!v && Z },
+        mod: { disabled: C, error: !!v && X },
         variant: q,
         ...Qe("input")
       }
@@ -16114,7 +16114,7 @@ function IP(r, e, t) {
     variant: F,
     vars: re,
     ...ae
-  } = n, { styleProps: le, rest: oe } = js(ae), fe = {
+  } = n, { styleProps: le, rest: oe } = js(ae), pe = {
     label: o,
     description: a,
     error: s,
@@ -16142,7 +16142,7 @@ function IP(r, e, t) {
     classNames: u,
     styles: f,
     unstyled: p,
-    wrapperProps: { ...fe, ...le },
+    wrapperProps: { ...pe, ...le },
     inputProps: {
       required: l,
       classNames: u,
@@ -16342,10 +16342,10 @@ function Et(r) {
     defaultValue: p,
     finalValue: f ? [] : null,
     onChange: g
-  }), le = (Z) => Array.isArray(re) ? re.includes(Z) : Z === re, oe = (Z) => {
-    const he = Array.isArray(re) ? re.includes(Z) ? re.filter((Y) => Y !== Z) : [...re, Z] : Z === re ? null : Z;
-    ae(he);
-  }, fe = lt({
+  }), le = (X) => Array.isArray(re) ? re.includes(X) : X === re, oe = (X) => {
+    const fe = Array.isArray(re) ? re.includes(X) ? re.filter((Y) => Y !== X) : [...re, X] : X === re ? null : X;
+    ae(fe);
+  }, pe = lt({
     name: "Accordion",
     classes: da,
     props: e,
@@ -16377,12 +16377,12 @@ function Et(r) {
         order: S,
         chevron: R,
         loop: C,
-        getStyles: fe,
+        getStyles: pe,
         variant: O,
         unstyled: s
       }
     },
-    /* @__PURE__ */ P.createElement(ke, { ...fe("root"), id: F, ...q, variant: O, "data-accordion": !0 }, u)
+    /* @__PURE__ */ P.createElement(ke, { ...pe("root"), id: F, ...q, variant: O, "data-accordion": !0 }, u)
   );
 }
 const LP = (r) => r;
@@ -16892,11 +16892,11 @@ function yd({
     ne == null || ne.click();
   }, []), oe = ze((Y) => {
     f.current = Y;
-  }, []), fe = ze(() => {
+  }, []), pe = ze(() => {
     v.current = window.setTimeout(() => p.current.focus(), 0);
-  }, []), Z = ze(() => {
+  }, []), X = ze(() => {
     C.current = window.setTimeout(() => g.current.focus(), 0);
-  }, []), he = ze(() => h.current, []);
+  }, []), fe = ze(() => h.current, []);
   return Ce(
     () => () => {
       window.clearTimeout(v.current), window.clearTimeout(C.current), window.clearTimeout(E.current);
@@ -16908,7 +16908,7 @@ function yd({
     closeDropdown: A,
     toggleDropdown: I,
     selectedOptionIndex: h.current,
-    getSelectedOptionIndex: he,
+    getSelectedOptionIndex: fe,
     selectOption: R,
     selectFirstOption: F,
     selectActiveOption: O,
@@ -16920,9 +16920,9 @@ function yd({
     setListId: oe,
     clickSelectedOption: le,
     searchRef: p,
-    focusSearchInput: fe,
+    focusSearchInput: pe,
     targetRef: g,
-    focusTarget: Z
+    focusTarget: X
   };
 }
 const ZP = {
@@ -17173,7 +17173,7 @@ const cN = {
     iconColor: re,
     onChange: ae,
     ...le
-  } = t, oe = oN(), fe = g || (oe == null ? void 0 : oe.size), Z = q, he = lt({
+  } = t, oe = oN(), pe = g || (oe == null ? void 0 : oe.size), X = q, fe = lt({
     name: "Checkbox",
     props: t,
     classes: pv,
@@ -17193,11 +17193,11 @@ const cN = {
   return /* @__PURE__ */ P.createElement(
     dv,
     {
-      ...he("root"),
+      ...fe("root"),
       __staticSelector: "Checkbox",
       __stylesApiProps: t,
       id: ee,
-      size: fe,
+      size: pe,
       labelPosition: A,
       label: h,
       description: I,
@@ -17212,7 +17212,7 @@ const cN = {
       ...Y,
       ...C
     },
-    /* @__PURE__ */ P.createElement(ke, { ...he("inner"), mod: { "data-label-position": A } }, /* @__PURE__ */ P.createElement(
+    /* @__PURE__ */ P.createElement(ke, { ...fe("inner"), mod: { "data-label-position": A } }, /* @__PURE__ */ P.createElement(
       ke,
       {
         component: "input",
@@ -17221,13 +17221,13 @@ const cN = {
         checked: _,
         disabled: R,
         mod: { error: !!S, indeterminate: L },
-        ...he("input", { focusable: !0, variant: O }),
+        ...fe("input", { focusable: !0, variant: O }),
         onChange: ae,
         ...ne,
         ...Pe,
         type: "checkbox"
       }
-    ), /* @__PURE__ */ P.createElement(Z, { indeterminate: L, ...he("icon") }))
+    ), /* @__PURE__ */ P.createElement(X, { indeterminate: L, ...fe("icon") }))
   );
 });
 rc.classes = { ...pv, ...rN };
@@ -17391,8 +17391,8 @@ const dN = {}, wd = Ue((r, e) => {
     maxDropdownHeight: ae,
     size: le,
     id: oe,
-    ...fe
-  } = t, Z = _o(oe), he = iv(E), Y = sd(he), [ne, ee] = Co({
+    ...pe
+  } = t, X = _o(oe), fe = iv(E), Y = sd(fe), [ne, ee] = Co({
     value: _,
     defaultValue: A,
     finalValue: "",
@@ -17430,7 +17430,7 @@ const dN = {}, wd = Ue((r, e) => {
       Qn,
       {
         ref: e,
-        ...fe,
+        ...pe,
         size: le,
         __staticSelector: "Autocomplete",
         disabled: L,
@@ -17451,13 +17451,13 @@ const dN = {}, wd = Ue((r, e) => {
         classNames: Qe,
         styles: ot,
         unstyled: a,
-        id: Z
+        id: X
       }
     )),
     /* @__PURE__ */ P.createElement(
       yv,
       {
-        data: he,
+        data: fe,
         hidden: O || L,
         filter: q,
         search: ne,
@@ -17466,7 +17466,7 @@ const dN = {}, wd = Ue((r, e) => {
         withScrollArea: re,
         maxDropdownHeight: ae,
         unstyled: a,
-        labelId: `${Z}-label`
+        labelId: `${X}-label`
       }
     )
   );
@@ -17657,9 +17657,9 @@ const vN = {
     maxDropdownHeight: ae,
     size: le,
     searchable: oe,
-    rightSection: fe,
-    checkIconPosition: Z,
-    withCheckIcon: he,
+    rightSection: pe,
+    checkIconPosition: X,
+    withCheckIcon: fe,
     nothingFoundMessage: Y,
     name: ne,
     form: ee,
@@ -17733,7 +17733,7 @@ const vN = {
       {
         id: Cr,
         ref: e,
-        rightSection: fe || bt || /* @__PURE__ */ P.createElement(je.Chevron, { size: le, error: jr, unstyled: a }),
+        rightSection: pe || bt || /* @__PURE__ */ P.createElement(je.Chevron, { size: le, error: jr, unstyled: a }),
         rightSectionPointerEvents: sn || (bt ? "all" : "none"),
         ...Dr,
         size: le,
@@ -17774,8 +17774,8 @@ const vN = {
         maxDropdownHeight: ae,
         filterOptions: oe && (Pt == null ? void 0 : Pt.label) !== Pn,
         value: Ye,
-        checkIconPosition: Z,
-        withCheckIcon: he,
+        checkIconPosition: X,
+        withCheckIcon: fe,
         nothingFoundMessage: Y,
         unstyled: a,
         labelId: `${Cr}-label`
@@ -18801,7 +18801,7 @@ var Ds = { exports: {} };
 Ds.exports;
 (function(r, e) {
   (function() {
-    var t, n = "4.17.21", o = 200, a = "Unsupported core-js use. Try https://npms.io/search?q=ponyfill.", s = "Expected a function", l = "Invalid `variable` option passed into `_.template`", u = "__lodash_hash_undefined__", f = 500, h = "__lodash_placeholder__", p = 1, g = 2, v = 4, C = 1, E = 2, _ = 1, A = 2, I = 4, S = 8, R = 16, O = 32, L = 64, q = 128, F = 256, re = 512, ae = 30, le = "...", oe = 800, fe = 16, Z = 1, he = 2, Y = 3, ne = 1 / 0, ee = 9007199254740991, Pe = 17976931348623157e292, Qe = 0 / 0, ot = 4294967295, ut = ot - 1, jr = ot >>> 1, sn = [
+    var t, n = "4.17.21", o = 200, a = "Unsupported core-js use. Try https://npms.io/search?q=ponyfill.", s = "Expected a function", l = "Invalid `variable` option passed into `_.template`", u = "__lodash_hash_undefined__", f = 500, h = "__lodash_placeholder__", p = 1, g = 2, v = 4, C = 1, E = 2, _ = 1, A = 2, I = 4, S = 8, R = 16, O = 32, L = 64, q = 128, F = 256, re = 512, ae = 30, le = "...", oe = 800, pe = 16, X = 1, fe = 2, Y = 3, ne = 1 / 0, ee = 9007199254740991, Pe = 17976931348623157e292, Qe = 0 / 0, ot = 4294967295, ut = ot - 1, jr = ot >>> 1, sn = [
       ["ary", q],
       ["bind", _],
       ["bindKey", A],
@@ -19454,10 +19454,10 @@ Ds.exports;
             B += c;
             for (var Oe = -1, ye = i[B]; ++Oe < W; ) {
               var xe = K[Oe], Fe = xe.iteratee, dr = xe.type, Gt = Fe(ye);
-              if (dr == he)
+              if (dr == fe)
                 ye = Gt;
               else if (!Gt) {
-                if (dr == Z)
+                if (dr == X)
                   continue e;
                 break e;
               }
@@ -20983,7 +20983,7 @@ Ds.exports;
       function _h(i) {
         var c = 0, d = 0;
         return function() {
-          var m = FC(), y = fe - (m - d);
+          var m = FC(), y = pe - (m - d);
           if (d = m, y > 0) {
             if (++c >= oe)
               return arguments[0];
@@ -22384,7 +22384,7 @@ function print() { __p += __j.call(arguments, '') }
           return this.reverse()[i](d).reverse();
         };
       }), Er(["filter", "map", "takeWhile"], function(i, c) {
-        var d = c + 1, m = d == Z || d == Y;
+        var d = c + 1, m = d == X || d == Y;
         De.prototype[i] = function(y) {
           var b = this.clone();
           return b.__iteratees__.push({
@@ -24509,10 +24509,10 @@ const lO = async (r, e) => {
 };
 function uO() {
   const { t: r } = Iu(), e = kN(), [t, n] = ge(), [o, a] = ge(), [s, l] = ge(), [u, f] = ge(!1), [h, p] = ge([]), [g, v] = ge({}), [C, E] = ge([]), [_, A] = ge({}), [I, S] = ge(new ai("https://test.bsdd.buildingsmart.org")), R = Ls(jv), [O, L] = ge(null), q = Ls(Vv), F = ze((le) => {
-    var fe;
+    var pe;
     const oe = JSON.stringify(le);
-    (fe = window == null ? void 0 : window.bsddBridge) == null || fe.save(oe).then((Z) => {
-      console.log("Sent to Revit", Z);
+    (pe = window == null ? void 0 : window.bsddBridge) == null || pe.save(oe).then((X) => {
+      console.log("Sent to Revit", X);
     });
   }, []), re = ze(() => {
     var le;
@@ -24528,10 +24528,10 @@ function uO() {
   }, [e]), Ce(() => {
     (async () => {
       if (window != null && window.bsddBridge) {
-        const { settings: oe, ifcData: fe } = await window.bsddBridge.loadSettings(), Z = JSON.parse(oe);
-        if (e(zv(fe)), ae(Z), !fe || fe.length === 0)
+        const oe = await window.bsddBridge.loadSettings(), { settings: pe, ifcData: X } = JSON.parse(oe);
+        if (e(zv(X)), ae(pe), !X || X.length === 0)
           return;
-        l(fe[0]);
+        l(X[0]);
       }
     })();
   }, []), Ce(() => {
@@ -24539,26 +24539,26 @@ function uO() {
     if (!s || !R)
       return;
     const le = R.ifcClassification.location;
-    (oe = s.hasAssociations) == null || oe.forEach((fe) => {
-      var Z;
-      if (fe.type === "IfcClassificationReference") {
-        const he = fe;
-        if ((Z = he.referencedSource) != null && Z.location && he.referencedSource.location === le) {
-          if (!he.location)
+    (oe = s.hasAssociations) == null || oe.forEach((pe) => {
+      var X;
+      if (pe.type === "IfcClassificationReference") {
+        const fe = pe;
+        if ((X = fe.referencedSource) != null && X.location && fe.referencedSource.location === le) {
+          if (!fe.location)
             return;
-          n(he.location), a({
-            label: he.name,
-            value: he.location
+          n(fe.location), a({
+            label: fe.name,
+            value: fe.location
           });
         }
       }
     });
   }, [R, s]), Ce(() => {
     (async () => {
-      const fe = (await Promise.all(
-        h.map((Z) => lO(I, Z.value))
-      )).reduce((Z, he) => ({ ...Z, ...he }), {});
-      v(fe);
+      const pe = (await Promise.all(
+        h.map((X) => lO(I, X.value))
+      )).reduce((X, fe) => ({ ...X, ...fe }), {});
+      v(pe);
     })();
   }, [I, h]), /* @__PURE__ */ Re.jsxs(bd, { children: [
     /* @__PURE__ */ Re.jsx(mo, { type: "hidden", name: "ifcType", id: "ifcType", value: "" }),
