@@ -1,9 +1,7 @@
-// MSAL imports
 import '@mantine/core/styles.css';
 import '../../common/src/i18n';
 
 import { PublicClientApplication } from '@azure/msal-browser';
-import { MsalProvider } from '@azure/msal-react';
 import { MantineProvider } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
@@ -25,9 +23,7 @@ function App() {
 
   return (
     <MantineProvider theme={theme}>
-      <MsalProvider instance={msalInstance}>
-        <BsddSearch />
-      </MsalProvider>
+      <BsddSearch />
     </MantineProvider>
   );
 }

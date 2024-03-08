@@ -1,12 +1,14 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 
 import { bsddReducer } from '../features/bsdd/bsddSlice';
-import { ifcEntityReducer } from '../features/ifcEntity/ifcEntitySlice';
+import { ifcDataReducer } from '../features/ifcData/ifcDataSlice';
+import { ifcEntityReducer } from '../features/ifcData/ifcEntitySlice';
 import { settingsReducer } from '../features/settings/settingsSlice';
 
 export const store = configureStore({
   reducer: {
     settings: settingsReducer,
+    ifcData: ifcDataReducer,
     ifcEntity: ifcEntityReducer,
     bsdd: bsddReducer,
   },
