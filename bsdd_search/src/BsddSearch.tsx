@@ -12,7 +12,12 @@ import { useAppDispatch, useAppSelector } from './app/hooks';
 import Apply from './Apply';
 import Classifications from './Classifications';
 import { setIfcData } from './features/ifcData/ifcDataSlice';
-import { selectBsddApiEnvironmentUri, selectMainDictionary, setSettings } from './features/settings/settingsSlice';
+import {
+  selectActiveDictionaries,
+  selectBsddApiEnvironmentUri,
+  selectMainDictionary,
+  setSettings,
+} from './features/settings/settingsSlice';
 import PropertySets from './PropertySets';
 import Search from './Search';
 
@@ -57,7 +62,6 @@ function BsddSearch() {
   const [defaultSearch, setDefaultSearch] = useState<Option | undefined>();
   const [ifcEntity, setIfcEntity] = useState<IfcEntity | undefined>();
   const [recursiveMode, setRecursiveMode] = useState<boolean>(false);
-  const [activeDictionaries, setActiveDictionaries] = useState<Option[]>([]);
   const [domains, setDomains] = useState<{ [id: string]: DictionaryContractV1 }>({});
   const [classifications, setClassifications] = useState<ClassContractV1[]>([]);
   const [propertySets, setPropertySets] = useState<{ [id: string]: IfcPropertySet }>({});
@@ -65,6 +69,7 @@ function BsddSearch() {
   const mainDictionary = useAppSelector(selectMainDictionary);
   const [pendingSettings, setPendingSettings] = useState<BsddSettings | null>(null);
   const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironmentUri);
+  const activeDictionaries = useAppSelector(selectActiveDictionaries);
 
   const callback = useCallback((ifcProduct: IfcEntity) => {
     const ifcEntityJson = JSON.stringify(ifcProduct);
