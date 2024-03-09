@@ -2020,7 +2020,7 @@ function zt(e) {
 }
 Se.use(Tg).init({
   resources: {
-    en: {
+    EN: {
       translation: {
         "No description": "No description",
         Link: "Link",
@@ -2045,7 +2045,7 @@ Se.use(Tg).init({
         Propertysets: "Property sets"
       }
     },
-    nl: {
+    "nl-NL": {
       translation: {
         "No description": "Geen beschrijving",
         Link: "Koppelen",
@@ -2071,8 +2071,8 @@ Se.use(Tg).init({
       }
     }
   },
-  lng: "nl",
-  fallbackLng: "en",
+  lng: "EN",
+  fallbackLng: "nl-NL",
   interpolation: {
     escapeValue: !1
   }
@@ -19739,10 +19739,10 @@ function GD({ id: e, settings: t, setSettings: n, setUnsavedChanges: r }) {
     ] }) }) }) })
   ] }, e);
 }
-const HD = ({ settings: e, setSettings: t, setUnsavedChanges: n }) => {
+function HD({ settings: e, setSettings: t, setUnsavedChanges: n }) {
   const { t: r, i18n: o } = zt(), i = [
-    { value: "en", label: "English" },
-    { value: "nl", label: "Nederlands" }
+    { value: "EN", label: "English" },
+    { value: "nl-NL", label: "Nederlands" }
   ], s = (a) => {
     !a || !e || (o.changeLanguage(a), t({ ...e, language: a }), n(!0));
   };
@@ -19756,7 +19756,7 @@ const HD = ({ settings: e, setSettings: t, setUnsavedChanges: n }) => {
       placeholder: r("Select language")
     }
   );
-};
+}
 function UD({ id: e, settings: t, setSettings: n, setUnsavedChanges: r }) {
   const { t: o } = zt(), i = (s) => {
     !s || !t || (n({ ...t, bsddApiEnvironment: s }), r(!0));
