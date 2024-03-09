@@ -1,5 +1,6 @@
 import { Select } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
+
 import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
 
 interface LanguageSelectProps {
@@ -8,18 +9,18 @@ interface LanguageSelectProps {
   setUnsavedChanges: (unsavedChanges: boolean) => void;
 }
 
-const LanguageSelect = ({ settings, setSettings, setUnsavedChanges }: LanguageSelectProps) => {
+function LanguageSelect({ settings, setSettings, setUnsavedChanges }: LanguageSelectProps) {
   const { t, i18n } = useTranslation();
 
   const languages = [
-    { value: 'en', label: 'English' },
-    { value: 'nl', label: 'Nederlands' },
+    { value: 'EN', label: 'English' },
+    { value: 'nl-NL', label: 'Nederlands' },
   ];
 
   const changeLanguage = (language: string | null) => {
     if (!language || !settings) return;
     i18n.changeLanguage(language);
-    setSettings({ ...settings, language: language });
+    setSettings({ ...settings, language });
     setUnsavedChanges(true);
   };
 
@@ -32,6 +33,6 @@ const LanguageSelect = ({ settings, setSettings, setUnsavedChanges }: LanguageSe
       placeholder={t('Select language')}
     />
   );
-};
+}
 
 export default LanguageSelect;

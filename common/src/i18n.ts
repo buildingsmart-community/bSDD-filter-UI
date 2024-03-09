@@ -20,7 +20,7 @@ import { initReactI18next } from 'react-i18next';
 
 i18n.use(initReactI18next).init({
   resources: {
-    en: {
+    EN: {
       translation: {
         'No description': 'No description',
         Link: 'Link',
@@ -49,7 +49,7 @@ i18n.use(initReactI18next).init({
         Propertysets: 'Property sets',
       },
     },
-    nl: {
+    'nl-NL': {
       translation: {
         'No description': 'Geen beschrijving',
         Link: 'Koppelen',
@@ -78,8 +78,8 @@ i18n.use(initReactI18next).init({
       },
     },
   },
-  lng: 'nl',
-  fallbackLng: 'en',
+  lng: 'EN',
+  fallbackLng: 'nl-NL',
   interpolation: {
     escapeValue: false,
   },
