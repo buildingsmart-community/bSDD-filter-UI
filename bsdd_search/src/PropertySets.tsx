@@ -102,13 +102,24 @@ function GetIfcPropertyValue(dataType: string | undefined | null, predefinedValu
 function GetIfcProperty(
   classificationProperty: ClassPropertyContractV1,
 ): IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue {
+  let { name } = classificationProperty;
+
+  // Workaround bSDD property natural language naming for IFC
+  // If the classification property is an IFC property, use the last part of the URI as the name
+  if (
+    classificationProperty.propertyUri &&
+    classificationProperty.propertyUri.includes('identifier.buildingsmart.org/uri/buildingsmart/ifc/')
+  ) {
+    name = classificationProperty.propertyUri.split('/').pop() || classificationProperty.name;
+  }
+
   if (classificationProperty.allowedValues) {
     const ifcProperty: IfcPropertyEnumeratedValue = {
       type: 'IfcPropertyEnumeratedValue',
-      name: classificationProperty.name,
+      name,
       enumerationReference: {
         type: 'IfcPropertyEnumeration',
-        name: classificationProperty.name,
+        name,
         enumerationValues: classificationProperty.allowedValues.map((allowedValue) => allowedValue.value),
       },
     };
@@ -119,7 +130,7 @@ function GetIfcProperty(
   }
   const ifcProperty: IfcPropertySingleValue = {
     type: 'IfcPropertySingleValue',
-    name: classificationProperty.name,
+    name,
   };
   if (classificationProperty.propertyUri) {
     ifcProperty.specification = classificationProperty.propertyUri;
