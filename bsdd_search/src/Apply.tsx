@@ -52,7 +52,7 @@ function Apply({ callback, domains, classifications, propertySetMap, ifcEntity }
     propertySetsInput: PropertySetMap,
   ): IfcEntity {
     const baseIfc: IfcEntity = ifcEntityInput
-      ? JSON.parse(JSON.stringify(ifcEntityInput))
+      ? { ...JSON.parse(JSON.stringify(ifcEntityInput)), hasAssociations: [] }
       : { hasAssociations: [], isDefinedBy: [] };
 
     const updatedIfc = classificationsInput.reduce((ifc, classification) => {

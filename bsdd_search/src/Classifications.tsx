@@ -4,6 +4,8 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { BsddApi } from '../../common/src/BsddApi/BsddApi';
 import { ClassContractV1, DictionaryContractV1, RequestParams } from '../../common/src/BsddApi/BsddApiBase';
+import { useAppSelector } from './app/hooks';
+import { selectActiveDictionaries, selectActiveDictionaryLocations } from './features/settings/settingsSlice';
 
 interface ClassificationSelectsProps {
   api: BsddApi<unknown>;
@@ -40,6 +42,8 @@ async function fetchClassification(
 }
 
 function Classifications({ api, activeClassificationUri, setClassifications, domains }: ClassificationSelectsProps) {
+  const activeDictionaries = useAppSelector(selectActiveDictionaries);
+  const activeDictionaryLocations = useAppSelector(selectActiveDictionaryLocations);
   const [classificationCount, setClassificationCount] = useState<number>(0);
   const [classificationUris, setClassificationUris] = useState<{
     [id: string]: Promise<ClassContractV1 | null>;
@@ -151,18 +155,41 @@ function Classifications({ api, activeClassificationUri, setClassifications, dom
           }
         }
       });
-      const newSelectedValues: { [dictionaryUri: string]: string } = { ...selectedValues };
-      const newGroupedClassifications = groupBy(classificationResults, 'dictionaryUri');
+
+      // Filter classifications based on active dictionaries
+      const activeClassificationResults = classificationResults.filter(
+        (classification) =>
+          classification.dictionaryUri && activeDictionaryLocations.includes(classification.dictionaryUri),
+      );
+
+      // Filter selectedValues based on active dictionaries
+      const newSelectedValues: { [dictionaryUri: string]: string } = Object.keys(selectedValues)
+        .filter((dictionaryUri) => activeDictionaryLocations.includes(dictionaryUri))
+        .reduce((obj, key) => {
+          obj[key] = selectedValues[key];
+          return obj;
+        }, {} as { [key: string]: string });
+
+      const newGroupedClassifications = groupBy(activeClassificationResults, 'dictionaryUri');
       Object.entries(newGroupedClassifications).forEach(([dictionaryUri, classificationsInGroup]) => {
         if (!classificationsInGroup.some((classification) => classification.uri === newSelectedValues[dictionaryUri])) {
           newSelectedValues[dictionaryUri] = classificationsInGroup[0].uri;
         }
       });
+
       setSelectedValues(newSelectedValues);
-      setClassifications(classificationResults);
-      setOriginalClassifications(classificationResults);
+      setClassifications(activeClassificationResults);
+      setOriginalClassifications(activeClassificationResults);
     });
-  }, [classificationUris, classificationCount, selectedValues, api, setClassifications]);
+  }, [
+    classificationUris,
+    classificationCount,
+    selectedValues,
+    api,
+    setClassifications,
+    activeDictionaries,
+    activeDictionaryLocations,
+  ]);
 
   useEffect(() => {
     setClassifications(

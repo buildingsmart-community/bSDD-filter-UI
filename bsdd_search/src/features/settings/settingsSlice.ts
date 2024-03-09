@@ -43,28 +43,20 @@ const settingsSlice = createSlice({
   },
 });
 
-/**
- * Selects the URI for the bSDD API environment from the Redux state.
- *
- * @param state - The Redux state.
- * @returns The URI for the selected bSDD API environment, or null if no environment is selected.
- */
 export const selectBsddApiEnvironmentUri = (state: RootState) => {
   const environment = state.settings.bsddApiEnvironment;
   return environment !== null ? bsddEnvironments[environment] : null;
 };
 
-/**
- * Selects the active dictionaries from the Redux state.
- *
- * @param state - The root state object.
- * @returns An array of active dictionaries.
- */
 export const selectActiveDictionaries = createSelector(
   (state: RootState) => state.settings.mainDictionary,
   (state: RootState) => state.settings.filterDictionaries,
   (mainDictionary, filterDictionaries) =>
     mainDictionary ? [mainDictionary, ...filterDictionaries] : filterDictionaries,
+);
+
+export const selectActiveDictionaryLocations = createSelector(selectActiveDictionaries, (activeDictionaries) =>
+  activeDictionaries.map((dictionary) => dictionary.ifcClassification.location),
 );
 
 export const selectMainDictionary = (state: RootState) => state.settings.mainDictionary;
