@@ -16,7 +16,7 @@ export interface BsddSettings {
   bsddApiEnvironment: string | null; // default 'production'
   mainDictionary: BsddDictionary | null; // Uri
   filterDictionaries: BsddDictionary[]; // Uri[]
-  language: string | null;
+  language: string;
 }
 
 export interface BsddBridgeData {

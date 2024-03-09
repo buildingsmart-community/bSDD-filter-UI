@@ -1,45 +1,59 @@
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAction, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { bsddEnvironments } from '../../../../common/src/BsddApi/BsddApiEnvironments';
+import i18n from '../../../../common/src/i18n';
 import { BsddDictionary, BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
 import type { RootState } from '../../app/store';
 
-interface EntitiesState {
+interface SettingsState {
   bsddApiEnvironment: string | null;
   mainDictionary: BsddDictionary | null;
   filterDictionaries: BsddDictionary[];
-  language: string | null;
+  language: string;
 }
 
-const initialState: EntitiesState = {
+const initialState: SettingsState = {
   bsddApiEnvironment: 'test',
   mainDictionary: null,
   filterDictionaries: [],
   language: 'EN',
 };
 
+const handleSetLanguage = (state: SettingsState, action: PayloadAction<string>) => {
+  state.language = action.payload;
+  i18n.changeLanguage(action.payload);
+};
+
+export const setSettings = createAction<BsddSettings>('settings/setSettings');
+
 const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    setSettings: (state, action: PayloadAction<BsddSettings>) => {
-      state.bsddApiEnvironment = action.payload.bsddApiEnvironment;
-      state.mainDictionary = action.payload.mainDictionary;
-      state.filterDictionaries = action.payload.filterDictionaries;
-      state.language = action.payload.language;
+    setBsddApiEnvironment: (state, { payload }: PayloadAction<string>) => {
+      state.bsddApiEnvironment = payload;
     },
-    setBsddApiEnvironment: (state, action: PayloadAction<string>) => {
-      state.bsddApiEnvironment = action.payload;
+    setMainDictionary: (state, { payload }: PayloadAction<BsddDictionary>) => {
+      state.mainDictionary = payload;
     },
-    setMainDictionary: (state, action: PayloadAction<BsddDictionary>) => {
-      state.mainDictionary = action.payload;
+    setFilterDictionaries: (state, { payload }: PayloadAction<BsddDictionary[]>) => {
+      state.filterDictionaries = payload;
     },
-    setFilterDictionaries: (state, action: PayloadAction<BsddDictionary[]>) => {
-      state.filterDictionaries = action.payload;
-    },
-    setLanguage: (state, action: PayloadAction<string>) => {
-      state.language = action.payload;
-    },
+    setLanguage: handleSetLanguage,
+  },
+  extraReducers: (builder) => {
+    builder.addCase(
+      setSettings,
+      (
+        state,
+        { payload: { bsddApiEnvironment, mainDictionary, filterDictionaries, language } }: PayloadAction<BsddSettings>,
+      ) => {
+        state.bsddApiEnvironment = bsddApiEnvironment;
+        state.mainDictionary = mainDictionary;
+        state.filterDictionaries = filterDictionaries;
+        handleSetLanguage(state, { payload: language, type: 'setLanguage' });
+      },
+    );
   },
 });
 
@@ -63,8 +77,5 @@ export const selectMainDictionary = (state: RootState) => state.settings.mainDic
 export const selectFilterDictionaries = (state: RootState) => state.settings.filterDictionaries;
 export const selectLanguage = (state: RootState) => state.settings.language;
 export const selectBsddApiEnvironment = (state: RootState) => state.settings.bsddApiEnvironment;
-
-export const { setSettings, setBsddApiEnvironment, setMainDictionary, setFilterDictionaries, setLanguage } =
-  settingsSlice.actions;
 
 export const settingsReducer = settingsSlice.reducer;
