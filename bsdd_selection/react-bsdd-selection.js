@@ -2020,7 +2020,7 @@ function zt(e) {
 }
 Se.use(Tg).init({
   resources: {
-    en: {
+    EN: {
       translation: {
         "No description": "No description",
         Link: "Link",
@@ -2045,7 +2045,7 @@ Se.use(Tg).init({
         Propertysets: "Property sets"
       }
     },
-    nl: {
+    "nl-NL": {
       translation: {
         "No description": "Geen beschrijving",
         Link: "Koppelen",
@@ -2071,8 +2071,8 @@ Se.use(Tg).init({
       }
     }
   },
-  lng: "nl",
-  fallbackLng: "en",
+  lng: "EN",
+  fallbackLng: "nl-NL",
   interpolation: {
     escapeValue: !1
   }
@@ -12214,43 +12214,7 @@ var U0 = Object.assign(xt(`${Na}/remove`), {
 function Le(e) {
   return `Minified Redux Toolkit error #${e}; visit https://redux-toolkit.js.org/Errors?code=${e} for the full message or use the non-minified dev environment for full errors. `;
 }
-const q0 = {
-  test: "https://test.bsdd.buildingsmart.org",
-  production: "https://api.bsdd.buildingsmart.org"
-}, K0 = {
-  bsddApiEnvironment: "test",
-  mainDictionary: null,
-  filterDictionaries: [],
-  language: "EN"
-}, Pf = $a({
-  name: "settings",
-  initialState: K0,
-  reducers: {
-    setSettings: (e, t) => {
-      e.bsddApiEnvironment = t.payload.bsddApiEnvironment, e.mainDictionary = t.payload.mainDictionary, e.filterDictionaries = t.payload.filterDictionaries, e.language = t.payload.language;
-    },
-    setBsddApiEnvironment: (e, t) => {
-      e.bsddApiEnvironment = t.payload;
-    },
-    setMainDictionary: (e, t) => {
-      e.mainDictionary = t.payload;
-    },
-    setFilterDictionaries: (e, t) => {
-      e.filterDictionaries = t.payload;
-    },
-    setLanguage: (e, t) => {
-      e.language = t.payload;
-    }
-  }
-}), _o = (e) => {
-  const t = e.settings.bsddApiEnvironment;
-  return t !== null ? q0[t] : null;
-}, Y0 = vf(
-  (e) => e.settings.mainDictionary,
-  (e) => e.settings.filterDictionaries,
-  (e, t) => e ? [e, ...t] : t
-), Ta = (e) => e.settings.mainDictionary, Df = (e) => e.settings.filterDictionaries, X0 = (e) => e.settings.language, J0 = (e) => e.settings.bsddApiEnvironment, { setSettings: Rf, setBsddApiEnvironment: rR, setMainDictionary: oR, setFilterDictionaries: iR, setLanguage: sR } = Pf.actions, Q0 = Pf.reducer;
-class Z0 {
+class q0 {
   constructor(t = {}) {
     Pe(this, "baseUrl", "https://api.bsdd.buildingsmart.org/");
     Pe(this, "securityData", null);
@@ -12363,7 +12327,7 @@ class Z0 {
  *
  * <p>API to access the buildingSMART Data Dictionary.</p><p>For manually uploading import files, please go to <a href="https://manage.bsdd.buildingsmart.org">bSDD Management portal</a>. Version history can be found at <a href="https://github.com/buildingSMART/bSDD/blob/master/API%20version%20history.md">Version history</a>.</p><p>Keep an eye on (planned) updates: <a href="https://forums.buildingsmart.org/t/bsdd-tech-updates/4889">bSDD tech updates</a></p><h3>For client developers</h3><p>If you're creating a desktop client that only calls the not secured APIs, you're ready to go.<br/>If you don't use the secured APIs but want to call the other APIs from your website or SPA, then we need the URL of your website to allow CORS.</p><p>If you are going to build a client that is going to use secured APIs, you must request a Client ID. You can do so by sending us an email and give:</p><ul><li>the name of the client application</li><li>type of application:<ul><li>Web application</li><li>Single-page application</li><li>iOS / macOS, Object-C, Swift, Xamarin</li><li>Adroid - Java, Kotlin, Xamarin</li><li>Mobile/desktop</li></ul> <li>which development language are you using? (sometimes the redirectUri to be configured depends on the used library)</li><li>if it is a website or SPA, specify the return url (the login page will redirect to this url after user has logged in)</li></ul>
  */
-class eS extends Z0 {
+class K0 extends q0 {
   constructor() {
     super(...arguments);
     Pe(this, "api", {
@@ -13009,12 +12973,47 @@ class eS extends Z0 {
     });
   }
 }
-class br extends eS {
+class br extends K0 {
   constructor(t) {
     super({ baseUrl: t });
   }
 }
-const If = 500, tS = 500;
+const Y0 = {
+  test: "https://test.bsdd.buildingsmart.org",
+  production: "https://api.bsdd.buildingsmart.org"
+}, X0 = {
+  bsddApiEnvironment: "test",
+  mainDictionary: null,
+  filterDictionaries: [],
+  language: "EN"
+}, Pf = $a({
+  name: "settings",
+  initialState: X0,
+  reducers: {
+    setSettings: (e, t) => {
+      e.bsddApiEnvironment = t.payload.bsddApiEnvironment, e.mainDictionary = t.payload.mainDictionary, e.filterDictionaries = t.payload.filterDictionaries, e.language = t.payload.language;
+    },
+    setBsddApiEnvironment: (e, t) => {
+      e.bsddApiEnvironment = t.payload;
+    },
+    setMainDictionary: (e, t) => {
+      e.mainDictionary = t.payload;
+    },
+    setFilterDictionaries: (e, t) => {
+      e.filterDictionaries = t.payload;
+    },
+    setLanguage: (e, t) => {
+      e.language = t.payload;
+    }
+  }
+}), _o = (e) => {
+  const t = e.settings.bsddApiEnvironment;
+  return t !== null ? Y0[t] : null;
+}, J0 = vf(
+  (e) => e.settings.mainDictionary,
+  (e) => e.settings.filterDictionaries,
+  (e, t) => e ? [e, ...t] : t
+), Ta = (e) => e.settings.mainDictionary, Df = (e) => e.settings.filterDictionaries, Q0 = (e) => e.settings.language, Z0 = (e) => e.settings.bsddApiEnvironment, { setSettings: Rf, setBsddApiEnvironment: rR, setMainDictionary: oR, setFilterDictionaries: iR, setLanguage: sR } = Pf.actions, eS = Pf.reducer, If = 500, tS = 500;
 let en = null, kr = {};
 const xc = {
   classes: {},
@@ -13024,28 +13023,30 @@ const xc = {
 }, nS = (e) => {
   const t = _o(e);
   return t && (!en || en.baseUrl !== t) && (en = new br(t)), en;
-}, cs = Mo(
-  "bsdd/fetchDictionaries",
-  async (e, t) => {
-    if (console.log("fetchDictionaries", e), !e)
-      return t.rejectWithValue("No bsddApiEnvironment provided");
-    const n = new br(e), r = tS;
-    let o = 0;
-    const i = [];
-    for (; ; ) {
-      const a = await n.api.dictionaryV1List({ Limit: r, Offset: o });
-      if (!a.ok)
-        throw new Error(`HTTP error! status: ${a.status}`);
-      const { data: { dictionaries: l, totalCount: c } = {} } = a;
-      if (l && typeof c < "u") {
-        if (i.push(...l), o += r, i.length >= c)
-          break;
-      } else
-        throw new Error(`bSDD API error! status: ${a.status}`);
+}, cs = Mo("bsdd/fetchDictionaries", (e, t) => {
+  if (console.log("fetchDictionaries", e), !e)
+    return t.rejectWithValue("No bsddApiEnvironment provided");
+  const n = new br(e), r = tS;
+  let o = 0;
+  const i = [];
+  return new Promise((s, a) => {
+    function l() {
+      n.api.dictionaryV1List({ IncludeTestDictionaries: !0, Limit: r, Offset: o }).then((c) => {
+        c.ok || a(new Error(`HTTP error! status: ${c.status}`));
+        const { data: { dictionaries: u, totalCount: d } = {} } = c;
+        if (u && typeof d < "u")
+          if (i.push(...u), o += r, i.length >= d) {
+            const f = i.reduce((p, m) => (p[m.uri] = m, p), {});
+            s(f);
+          } else
+            l();
+        else
+          a(new Error(`bSDD API error! status: ${c.status}`));
+      });
     }
-    return i.reduce((a, l) => (a[l.uri] = l, a), {});
-  }
-), Af = Mo(
+    l();
+  });
+}), Af = Mo(
   "bsdd/fetchDictionaryClasses",
   async (e, { getState: t, dispatch: n }) => {
     const r = t();
@@ -13200,9 +13201,9 @@ function Cc(e, t) {
     ifcClassification: r
   };
 }
-const pS = {
+const Nf = tg, Te = Hm, pS = {
   ifcEntities: []
-}, Nf = $a({
+}, Tf = $a({
   name: "ifcData",
   initialState: pS,
   reducers: {
@@ -13210,7 +13211,7 @@ const pS = {
       e.ifcEntities = t.payload;
     }
   }
-}), mS = (e) => e.ifcData.ifcEntities, { setIfcData: gS } = Nf.actions, hS = Mo(
+}), mS = (e) => e.ifcData.ifcEntities, { setIfcData: gS } = Tf.actions, hS = Mo(
   "ifcData/setValidated",
   async (e, { dispatch: t, getState: n }) => {
     const r = n(), o = await Promise.all(
@@ -13233,7 +13234,7 @@ const pS = {
     );
     t(gS(o));
   }
-), bS = Nf.reducer, Tf = tg, Te = Hm;
+), bS = Tf.reducer;
 const us = {
   grey: "#B0B0B0",
   // grey for undefined
@@ -13387,7 +13388,7 @@ function LS(e, t) {
   ) ? (o = t.ifcClassification) == null ? void 0 : o.location : null;
 }
 function MS({ item: e, bsddClass: t, index: n, setCardColor: r }) {
-  const { t: o } = zt(), i = Te(Y0), [s, a] = U("grey"), [l, c] = U([]), [u, d] = U([]);
+  const { t: o } = zt(), i = Te(J0), [s, a] = U("grey"), [l, c] = U([]), [u, d] = U([]);
   W(() => {
     function m(g) {
       a(g), r(n, g);
@@ -19738,10 +19739,10 @@ function GD({ id: e, settings: t, setSettings: n, setUnsavedChanges: r }) {
     ] }) }) }) })
   ] }, e);
 }
-const HD = ({ settings: e, setSettings: t, setUnsavedChanges: n }) => {
+function HD({ settings: e, setSettings: t, setUnsavedChanges: n }) {
   const { t: r, i18n: o } = zt(), i = [
-    { value: "en", label: "English" },
-    { value: "nl", label: "Nederlands" }
+    { value: "EN", label: "English" },
+    { value: "nl-NL", label: "Nederlands" }
   ], s = (a) => {
     !a || !e || (o.changeLanguage(a), t({ ...e, language: a }), n(!0));
   };
@@ -19755,7 +19756,7 @@ const HD = ({ settings: e, setSettings: t, setUnsavedChanges: n }) => {
       placeholder: r("Select language")
     }
   );
-};
+}
 function UD({ id: e, settings: t, setSettings: n, setUnsavedChanges: r }) {
   const { t: o } = zt(), i = (s) => {
     !s || !t || (n({ ...t, bsddApiEnvironment: s }), r(!0));
@@ -19818,7 +19819,7 @@ function qD({ id: e, settings: t, setSettings: n, setUnsavedChanges: r }) {
   ] }, e);
 }
 function KD() {
-  const e = Tf(), t = Te(Ta), n = Te(Df), r = Te(X0), o = Te(J0), i = Te(_o), [s, a] = U(), [l, c] = U(!1), [u, d] = U(!0);
+  const e = Nf(), t = Te(Ta), n = Te(Df), r = Te(Q0), o = Te(Z0), i = Te(_o), [s, a] = U(), [l, c] = U(!1), [u, d] = U(!0);
   W(() => {
     i && (e(lS(i)), e(cs(i)));
   }, [e, i]), W(() => {
@@ -19830,22 +19831,12 @@ function KD() {
     });
   }, [t, n, o, r]);
   const f = () => {
-    s && (e(Rf(s)), c(!1));
+    var m;
+    s && (e(Rf(s)), (m = window == null ? void 0 : window.bsddBridge) == null || m.saveSettings(JSON.stringify(s)), c(!1));
   }, p = () => {
     c(!1);
   };
-  return W(() => {
-    var g;
-    if (!o || !t)
-      return;
-    const m = {
-      bsddApiEnvironment: o,
-      mainDictionary: t,
-      filterDictionaries: n,
-      language: r
-    };
-    console.log("Save settings", m), (g = window == null ? void 0 : window.bsddBridge) == null || g.saveSettings(JSON.stringify(m));
-  }, [o, t, n, r]), /* @__PURE__ */ k.jsxs(at.Panel, { value: "settings", children: [
+  return /* @__PURE__ */ k.jsxs(at.Panel, { value: "settings", children: [
     /* @__PURE__ */ k.jsxs(oe, { defaultValue: ["2"], multiple: !0, children: [
       /* @__PURE__ */ k.jsx(
         UD,
@@ -19911,7 +19902,7 @@ const YD = (e) => async (t, n) => {
   t(Rf(s));
 };
 function XD() {
-  const e = Tf(), { t } = zt(), n = Te(sS), [r, o] = U(null), i = (s) => {
+  const e = Nf(), { t } = zt(), n = Te(sS), [r, o] = U(null), i = (s) => {
     o(s);
   };
   return W(() => {
@@ -19942,7 +19933,7 @@ function JD() {
 }
 const QD = C0({
   reducer: {
-    settings: Q0,
+    settings: eS,
     ifcData: bS,
     bsdd: cS
   }
