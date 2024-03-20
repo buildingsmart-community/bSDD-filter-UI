@@ -24334,85 +24334,46 @@ function iO({ propertySet: r, property: e, propertyIndex: t, propertySets: n, se
     }
   }, [l, u, s, f, h]), a;
 }
-function aO(r, e) {
-  switch (r) {
-    case "Boolean": {
-      const t = {
-        type: "IfcBoolean"
-      };
-      switch (e) {
-        case !0:
-        case "TRUE":
-          return t.value = !0, t;
-        case !1:
-        case "FALSE":
-          return t.value = !1, t;
-        default:
-          return t.value = void 0, t;
-      }
-    }
-    case "Character": {
-      const t = {
-        type: "default"
-      };
-      return e && (t.value = e), t;
-    }
-    case "Integer": {
-      const t = {
-        type: "IfcInteger"
-      };
-      return e && (t.value = e), t;
-    }
-    case "Real": {
-      const t = {
-        type: "IfcReal"
-      };
-      return e && (t.value = e), t;
-    }
-    case "String": {
-      const t = {
-        type: "default"
-      };
-      return e && (t.value = e), t;
-    }
-    case "Time": {
-      const t = {
-        type: "IfcDate"
-      };
-      return e && (t.value = e), t;
-    }
-    default: {
-      const t = {
-        type: "default"
-      };
-      return e && (t.value = e), t;
-    }
-  }
-}
-function sO(r) {
-  let { name: e } = r;
-  if (r.propertyUri && r.propertyUri.includes("identifier.buildingsmart.org/uri/buildingsmart/ifc/") && (e = r.propertyUri.split("/").pop() || r.name), r.allowedValues) {
-    const n = {
-      type: "IfcPropertyEnumeratedValue",
-      name: e,
-      enumerationReference: {
-        type: "IfcPropertyEnumeration",
-        name: e,
-        enumerationValues: r.allowedValues.map((o) => o.value)
-      }
-    };
-    return r.propertyUri && (n.specification = r.propertyUri), n;
-  }
-  const t = {
-    type: "IfcPropertySingleValue",
-    name: e
+const aO = {
+  Boolean: "IfcBoolean",
+  Character: "IfcText",
+  Integer: "IfcInteger",
+  Real: "IfcReal",
+  String: "IfcText",
+  Time: "IfcDateTime"
+};
+function sO(r, e) {
+  const t = r && aO[r] || "default";
+  let n;
+  return r === "Boolean" && typeof e == "string" ? n = e.toUpperCase() === "TRUE" : n = e, {
+    type: t,
+    value: n
   };
-  return r.propertyUri && (t.specification = r.propertyUri), t.nominalValue = aO(
-    r.dataType,
-    r.predefinedValue
-  ), t;
 }
 function cO(r) {
+  const { propertyCode: e } = r, t = e || "unknown";
+  if (r.allowedValues) {
+    const o = {
+      type: "IfcPropertyEnumeratedValue",
+      name: t,
+      enumerationReference: {
+        type: "IfcPropertyEnumeration",
+        name: t,
+        enumerationValues: r.allowedValues.map((a) => a.value)
+      }
+    };
+    return r.propertyUri && (o.specification = r.propertyUri), o;
+  }
+  const n = {
+    type: "IfcPropertySingleValue",
+    name: t
+  };
+  return r.propertyUri && (n.specification = r.propertyUri), n.nominalValue = sO(
+    r.dataType,
+    r.predefinedValue
+  ), n;
+}
+function lO(r) {
   Ru();
   const { classifications: e } = r, { propertySets: t } = r, { setPropertySets: n } = r, { recursiveMode: o } = r;
   return ye(() => {
@@ -24420,12 +24381,14 @@ function cO(r) {
     (o ? e : e.slice(0, 1)).forEach((l) => {
       var u;
       (u = l.classProperties) == null || u.forEach((f) => {
+        if (!f)
+          return;
         const h = f.propertySet || l.name;
         a[h] || (a[h] = {
           type: "IfcPropertySet",
           name: h,
           hasProperties: []
-        }), a[h].hasProperties.push(sO(f));
+        }), a[h].hasProperties.push(cO(f));
       });
     }), n(a);
   }, [e, n, o]), /* @__PURE__ */ Re.jsx("div", { children: Ql.toArray(
@@ -24446,8 +24409,8 @@ function cO(r) {
     ] }, a.name) }))
   ) });
 }
-const lO = 25;
-function uO({ api: r, defaultValue: e, setActiveClassificationUri: t }) {
+const uO = 25;
+function dO({ api: r, defaultValue: e, setActiveClassificationUri: t }) {
   var A;
   const [n, o] = pe([]), [a, s] = pe(!1);
   vo(uc);
@@ -24474,7 +24437,7 @@ function uO({ api: r, defaultValue: e, setActiveClassificationUri: t }) {
       }, L = {
         SearchText: C,
         DictionaryUri: l.ifcClassification.location,
-        Limit: lO
+        Limit: uO
       };
       r.api.searchInDictionaryV1List(L, O).then((q) => {
         var Q;
@@ -24513,7 +24476,7 @@ function uO({ api: r, defaultValue: e, setActiveClassificationUri: t }) {
     }
   );
 }
-const dO = async (r, e) => {
+const fO = async (r, e) => {
   try {
     const t = await r.api.dictionaryV1List({
       Uri: e,
@@ -24526,7 +24489,7 @@ const dO = async (r, e) => {
   }
   return {};
 };
-function fO() {
+function hO() {
   const { t: r } = Ru(), e = NN(), [t, n] = pe(), [o, a] = pe(), [s, l] = pe(), [u, f] = pe(!1), [h, p] = pe({}), [m, v] = pe([]), [C, E] = pe({}), [_, R] = pe(new si("https://test.bsdd.buildingsmart.org")), I = vo(Gv), [S, A] = pe(null), O = vo($v), L = vo(uc), q = ze((X) => {
     var ne;
     const le = JSON.stringify(X);
@@ -24575,7 +24538,7 @@ function fO() {
   }, [I, s]), ye(() => {
     (async () => {
       const ne = (await Promise.all(
-        L.map((fe) => dO(_, fe.ifcClassification.location))
+        L.map((fe) => fO(_, fe.ifcClassification.location))
       )).reduce((fe, oe) => ({ ...fe, ...oe }), {});
       p(ne);
     })();
@@ -24583,7 +24546,7 @@ function fO() {
     /* @__PURE__ */ Re.jsx(mo, { type: "hidden", name: "ifcType", id: "ifcType", value: "" }),
     /* @__PURE__ */ Re.jsx(mo, { type: "hidden", name: "name", id: "name", value: "" }),
     /* @__PURE__ */ Re.jsx(mo, { type: "hidden", name: "material", id: "material", value: "" }),
-    /* @__PURE__ */ Re.jsx(xs, { mx: "md", mt: "lg", mb: "sm", children: /* @__PURE__ */ Re.jsx(uO, { api: _, defaultValue: o, setActiveClassificationUri: n }) }),
+    /* @__PURE__ */ Re.jsx(xs, { mx: "md", mt: "lg", mb: "sm", children: /* @__PURE__ */ Re.jsx(dO, { api: _, defaultValue: o, setActiveClassificationUri: n }) }),
     /* @__PURE__ */ Re.jsxs(Et, { defaultValue: ["Classifications"], multiple: !0, children: [
       /* @__PURE__ */ Re.jsxs(Et.Item, { value: "Classifications", children: [
         /* @__PURE__ */ Re.jsx(Et.Control, { children: /* @__PURE__ */ Re.jsx(Ls, { order: 5, children: r("Classifications") }) }),
@@ -24600,7 +24563,7 @@ function fO() {
       /* @__PURE__ */ Re.jsxs(Et.Item, { value: "Propertysets", children: [
         /* @__PURE__ */ Re.jsx(Et.Control, { children: /* @__PURE__ */ Re.jsx(Ls, { order: 5, children: r("Propertysets") }) }),
         /* @__PURE__ */ Re.jsx(Et.Panel, { children: /* @__PURE__ */ Re.jsx(
-          cO,
+          lO,
           {
             classifications: m,
             propertySets: C,
@@ -24625,27 +24588,27 @@ function fO() {
     ] })
   ] });
 }
-function hO() {
+function pO() {
   const [r, e] = pe(null);
   return ye(() => {
     const t = new nA(RN);
     e(t);
-  }, []), r ? /* @__PURE__ */ Re.jsx(Cm, { theme: AN, children: /* @__PURE__ */ Re.jsx(fO, {}) }) : /* @__PURE__ */ Re.jsx("div", { children: "Loading..." });
+  }, []), r ? /* @__PURE__ */ Re.jsx(Cm, { theme: AN, children: /* @__PURE__ */ Re.jsx(hO, {}) }) : /* @__PURE__ */ Re.jsx("div", { children: "Loading..." });
 }
-const Jv = 500, pO = 500;
+const Jv = 500, gO = 500;
 let Zo = null, Yl = {};
 const Ng = {
   classes: {},
   dictionaries: {},
   dictionaryClasses: {},
   loaded: !1
-}, gO = (r) => {
+}, mO = (r) => {
   const e = $v(r);
   return e && (!Zo || Zo.baseUrl !== e) && (Zo = new si(e)), Zo;
 }, Og = Io("bsdd/fetchDictionaries", (r, e) => {
   if (console.log("fetchDictionaries", r), !r)
     return e.rejectWithValue("No bsddApiEnvironment provided");
-  const t = new si(r), n = pO;
+  const t = new si(r), n = gO;
   let o = 0;
   const a = [];
   return new Promise((s, l) => {
@@ -24665,7 +24628,7 @@ const Ng = {
     }
     u();
   });
-}), mO = Io(
+}), vO = Io(
   "bsdd/fetchDictionaryClasses",
   async (r, { getState: e, dispatch: t }) => {
     const n = e();
@@ -24674,13 +24637,13 @@ const Ng = {
     if (Yl[r])
       return await Yl[r];
     const o = (async () => {
-      const s = gO(e());
+      const s = mO(e());
       if (!s)
         throw new Error("BsddApi is not initialized");
       const l = [];
       let u = 0, f;
       for (; ; ) {
-        const h = await vO(s, r, u), p = h.classes ?? [];
+        const h = await yO(s, r, u), p = h.classes ?? [];
         if (l.push(...p), u === 0 && (f = h.classesTotalCount, f == null))
           throw new Error("Total count is null or undefined");
         if (f != null && l.length >= f)
@@ -24708,7 +24671,7 @@ const Ng = {
       e.loaded = !1;
     }).addCase(Og.fulfilled, (e, t) => {
       console.log("fetch dictionaries fulfilled", t.payload), e.dictionaries = t.payload, e.loaded = !0;
-    }).addCase(mO.rejected, (e, t) => {
+    }).addCase(vO.rejected, (e, t) => {
       console.error("fetch dictionary classes failed", t.error), e.loaded = !0;
     });
   }
@@ -24732,7 +24695,7 @@ Io("bsdd/fetchClass", async (r, { getState: e, dispatch: t }) => {
   const { data: a } = o;
   return t({ type: "bsdd/addClass", payload: { uri: r, data: a } }), a;
 });
-async function vO(r, e, t) {
+async function yO(r, e, t) {
   const n = await r.api.dictionaryV1ClassesList({
     Uri: e,
     UseNestedClasses: !1,
@@ -24745,7 +24708,7 @@ async function vO(r, e, t) {
   return n.data;
 }
 Xv.actions;
-const yO = Xv.reducer, CO = {
+const CO = Xv.reducer, wO = {
   name: void 0,
   description: void 0,
   tag: void 0,
@@ -24754,7 +24717,7 @@ const yO = Xv.reducer, CO = {
   hasAssociations: []
 }, Zv = hi({
   name: "ifcEntity",
-  initialState: CO,
+  initialState: wO,
   reducers: {
     setifcEntity: (r, e) => {
       r.name = e.payload.name, r.description = e.payload.description, r.tag = e.payload.tag, r.predefinedType = e.payload.predefinedType, r.isDefinedBy = e.payload.isDefinedBy, r.hasAssociations = e.payload.hasAssociations;
@@ -24780,14 +24743,14 @@ const yO = Xv.reducer, CO = {
   }
 });
 Zv.actions;
-const wO = Zv.reducer, EO = m1({
+const EO = Zv.reducer, bO = m1({
   reducer: {
     settings: $1,
     ifcData: nO,
-    ifcEntity: wO,
-    bsdd: yO
+    ifcEntity: EO,
+    bsdd: CO
   }
 });
 Jl.createRoot(document.getElementById("root")).render(
-  /* @__PURE__ */ Re.jsx(P.StrictMode, { children: /* @__PURE__ */ Re.jsx(h0, { store: EO, children: /* @__PURE__ */ Re.jsx(hO, {}) }) })
+  /* @__PURE__ */ Re.jsx(P.StrictMode, { children: /* @__PURE__ */ Re.jsx(h0, { store: bO, children: /* @__PURE__ */ Re.jsx(pO, {}) }) })
 );
