@@ -2,7 +2,7 @@ import { Accordion, Stack } from '@mantine/core';
 import { Children, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ClassContractV1, ClassPropertyContractV1 } from '../../common/src/BsddApi/BsddApiBase';
+import { ClassContractV1, ClassPropertyContractV1, PropertyContractV4 } from '../../common/src/BsddApi/BsddApiBase';
 import {
   IfcProperty,
   IfcPropertyEnumeratedValue,
@@ -49,16 +49,8 @@ function GetIfcPropertyValue(dataType: string | undefined | null, predefinedValu
 function GetIfcProperty(
   classificationProperty: ClassPropertyContractV1,
 ): IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue {
-  let { name } = classificationProperty;
-
-  // Workaround bSDD property natural language naming for IFC
-  // If the classification property is an IFC property, use the last part of the URI as the name
-  if (
-    classificationProperty.propertyUri &&
-    classificationProperty.propertyUri.includes('identifier.buildingsmart.org/uri/buildingsmart/ifc/')
-  ) {
-    name = classificationProperty.propertyUri.split('/').pop() || classificationProperty.name;
-  }
+  const { propertyCode } = classificationProperty;
+  const name = propertyCode || 'unknown';
 
   if (classificationProperty.allowedValues) {
     const ifcProperty: IfcPropertyEnumeratedValue = {
@@ -102,6 +94,7 @@ function PropertySets(props: Props) {
 
     propertyClassifications.forEach((classification) => {
       classification.classProperties?.forEach((classProperty: ClassPropertyContractV1) => {
+        if (!classProperty) return;
         const propertySetName = classProperty.propertySet || classification.name;
 
         if (!newPropertySets[propertySetName]) {
