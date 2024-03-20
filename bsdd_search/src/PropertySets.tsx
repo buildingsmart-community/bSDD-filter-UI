@@ -12,6 +12,15 @@ import {
 } from '../../common/src/IfcData/ifc';
 import Property from './Property';
 
+const valueTypeMapping: { [key: string]: string } = {
+  Boolean: 'IfcBoolean',
+  Character: 'IfcText',
+  Integer: 'IfcInteger',
+  Real: 'IfcReal',
+  String: 'IfcText',
+  Time: 'IfcDateTime',
+};
+
 interface Props {
   classifications: ClassContractV1[];
   propertySets: { [id: string]: IfcPropertySet };
@@ -19,84 +28,22 @@ interface Props {
   recursiveMode: boolean;
 }
 
-function GetIfcPropertyValue(dataType: string | undefined | null, predefinedValue: any): IfcValue {
-  switch (dataType) {
-    case 'Boolean': {
-      const value: IfcValue = {
-        type: 'IfcBoolean',
-      };
-      switch (predefinedValue) {
-        case true:
-        case 'TRUE': {
-          value.value = true;
-          return value;
-        }
-        case false:
-        case 'FALSE': {
-          value.value = false;
-          return value;
-        }
-        default: {
-          value.value = undefined;
-          return value;
-        }
-      }
-    }
-    case 'Character': {
-      const value: IfcValue = {
-        type: 'default',
-      };
-      if (predefinedValue) {
-        value.value = predefinedValue;
-      }
-      return value;
-    }
-    case 'Integer': {
-      const value: IfcValue = {
-        type: 'IfcInteger',
-      };
-      if (predefinedValue) {
-        value.value = predefinedValue;
-      }
-      return value;
-    }
-    case 'Real': {
-      const value: IfcValue = {
-        type: 'IfcReal',
-      };
-      if (predefinedValue) {
-        value.value = predefinedValue;
-      }
-      return value;
-    }
-    case 'String': {
-      const value: IfcValue = {
-        type: 'default',
-      };
-      if (predefinedValue) {
-        value.value = predefinedValue;
-      }
-      return value;
-    }
-    case 'Time': {
-      const value: IfcValue = {
-        type: 'IfcDate',
-      };
-      if (predefinedValue) {
-        value.value = predefinedValue;
-      }
-      return value;
-    }
-    default: {
-      const value: IfcValue = {
-        type: 'default',
-      };
-      if (predefinedValue) {
-        value.value = predefinedValue;
-      }
-      return value;
-    }
+function GetIfcPropertyValue(dataType: string | undefined | null, predefinedValue?: string | null): IfcValue {
+  const type = dataType ? valueTypeMapping[dataType] || 'default' : 'default';
+
+  let value: any;
+  if (dataType === 'Boolean' && typeof predefinedValue === 'string') {
+    value = predefinedValue.toUpperCase() === 'TRUE';
+  } else {
+    value = predefinedValue;
   }
+
+  const ifcValue: IfcValue = {
+    type,
+    value,
+  };
+
+  return ifcValue;
 }
 
 function GetIfcProperty(
