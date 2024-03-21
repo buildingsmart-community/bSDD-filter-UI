@@ -16,7 +16,7 @@ const initialState: SettingsState = {
   bsddApiEnvironment: 'production',
   mainDictionary: null,
   filterDictionaries: [],
-  language: 'EN',
+  language: 'en-GB',
 };
 
 const handleSetLanguage = (state: SettingsState, action: PayloadAction<string>) => {

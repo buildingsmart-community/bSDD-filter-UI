@@ -20,7 +20,7 @@ import { initReactI18next } from 'react-i18next';
 
 i18n.use(initReactI18next).init({
   resources: {
-    EN: {
+    'en-GB': {
       translation: {
         'No description': 'No description',
         Link: 'Link',
@@ -80,7 +80,7 @@ i18n.use(initReactI18next).init({
       },
     },
   },
-  lng: 'EN',
+  lng: 'en-GB',
   fallbackLng: 'nl-NL',
   interpolation: {
     escapeValue: false,
