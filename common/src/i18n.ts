@@ -47,6 +47,7 @@ i18n.use(initReactI18next).init({
         'Validation per dictionary': 'Validation per dictionary',
         Classifications: 'Classifications',
         Propertysets: 'Property sets',
+        ShowPreview: 'Show preview dictionaries',
       },
     },
     'nl-NL': {
@@ -75,6 +76,7 @@ i18n.use(initReactI18next).init({
         'Validation per dictionary': 'Validatie per domein',
         Classifications: 'Classificaties',
         Propertysets: 'Eigenschappen sets',
+        ShowPreview: 'Toon voorbeeld domeinen',
       },
     },
   },

@@ -48,6 +48,11 @@ export const selectBsddApi = (state: RootState) => {
   return bsddApi;
 };
 
+type FetchDictionaryParameters = {
+  bsddApiEnvironment: string;
+  showPreview: boolean;
+};
+
 /**
  * Fetches dictionaries from the bSDD API.
  *
@@ -57,10 +62,10 @@ export const selectBsddApi = (state: RootState) => {
  * @throws An error if there is an HTTP error or a bSDD API error.
  */
 export const fetchDictionaries = createAsyncThunk<
-  { [key: string]: DictionaryContractV1 }, // The type of the payload of the fulfilled action
-  string, // The type of the argument of the payload creator
-  { rejectValue: string } // The type of the payload of the rejected action
->('bsdd/fetchDictionaries', (bsddApiEnvironment: string, thunkAPI) => {
+  { [key: string]: DictionaryContractV1 },
+  FetchDictionaryParameters,
+  { rejectValue: string }
+>('bsdd/fetchDictionaries', ({ bsddApiEnvironment, showPreview }, thunkAPI) => {
   console.log('fetchDictionaries', bsddApiEnvironment);
   if (!bsddApiEnvironment) return thunkAPI.rejectWithValue('No bsddApiEnvironment provided');
 
@@ -71,28 +76,30 @@ export const fetchDictionaries = createAsyncThunk<
 
   return new Promise((resolve, reject) => {
     function fetchNextPage() {
-      api.api.dictionaryV1List({ IncludeTestDictionaries: true, Limit: limit, Offset: offset }).then((response) => {
-        if (!response.ok) {
-          reject(new Error(`HTTP error! status: ${response.status}`));
-        }
-
-        const { data: { dictionaries: newDictionaries, totalCount } = {} } = response;
-        if (newDictionaries && typeof totalCount !== 'undefined') {
-          dictionaries.push(...newDictionaries);
-          offset += limit;
-          if (dictionaries.length >= totalCount) {
-            const out = dictionaries.reduce((acc: { [key: string]: DictionaryContractV1 }, item) => {
-              acc[item.uri] = item;
-              return acc;
-            }, {});
-            resolve(out);
-          } else {
-            fetchNextPage();
+      api.api
+        .dictionaryV1List({ IncludeTestDictionaries: showPreview, Limit: limit, Offset: offset })
+        .then((response) => {
+          if (!response.ok) {
+            reject(new Error(`HTTP error! status: ${response.status}`));
           }
-        } else {
-          reject(new Error(`bSDD API error! status: ${response.status}`));
-        }
-      });
+
+          const { data: { dictionaries: newDictionaries, totalCount } = {} } = response;
+          if (newDictionaries && typeof totalCount !== 'undefined') {
+            dictionaries.push(...newDictionaries);
+            offset += limit;
+            if (dictionaries.length >= totalCount) {
+              const out = dictionaries.reduce((acc: { [key: string]: DictionaryContractV1 }, item) => {
+                acc[item.uri] = item;
+                return acc;
+              }, {});
+              resolve(out);
+            } else {
+              fetchNextPage();
+            }
+          } else {
+            reject(new Error(`bSDD API error! status: ${response.status}`));
+          }
+        });
     }
 
     fetchNextPage();

@@ -13,7 +13,7 @@ interface SettingsState {
 }
 
 const initialState: SettingsState = {
-  bsddApiEnvironment: 'test',
+  bsddApiEnvironment: 'production',
   mainDictionary: null,
   filterDictionaries: [],
   language: 'EN',
