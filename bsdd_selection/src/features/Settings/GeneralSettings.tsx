@@ -1,24 +1,27 @@
-import { Text, Select, Space, Title, Accordion } from '@mantine/core';
+import { Accordion, Checkbox, Space, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import LanguageSelect from './LanguageSelect';
 import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
+import LanguageSelect from './LanguageSelect';
 
 interface GeneralSettingsProps {
   id: number;
   settings: BsddSettings | undefined;
   setSettings: (settings: BsddSettings) => void;
   setUnsavedChanges: (unsavedChanges: boolean) => void;
+  showPreview: boolean;
+  setShowPreview: (unsavedChanges: boolean) => void;
 }
 
-function GeneralSettings({ id, settings, setSettings, setUnsavedChanges }: GeneralSettingsProps) {
+function GeneralSettings({
+  id,
+  settings,
+  setSettings,
+  setUnsavedChanges,
+  showPreview,
+  setShowPreview,
+}: GeneralSettingsProps) {
   const { t } = useTranslation();
-
-  const changeBsddApiEnvironment = (environmentName: string | null) => {
-    if (!environmentName || !settings) return;
-    setSettings({ ...settings, bsddApiEnvironment: environmentName });
-    setUnsavedChanges(true);
-  };
 
   return (
     <Accordion.Item key={id} value={id.toString()}>
@@ -31,12 +34,14 @@ function GeneralSettings({ id, settings, setSettings, setUnsavedChanges }: Gener
       <Accordion.Panel>
         <LanguageSelect settings={settings} setSettings={setSettings} setUnsavedChanges={setUnsavedChanges} />{' '}
         <Space h="xs" />
-        <Select
-          label={t('bSDD environment')}
-          data={['production', 'test']}
-          value={settings?.bsddApiEnvironment}
-          placeholder="Select an option"
-          onChange={changeBsddApiEnvironment}
+        <Checkbox
+          label={t('ShowPreview')}
+          checked={showPreview}
+          type="checkbox"
+          onChange={(e) => {
+            setShowPreview(e.currentTarget.checked);
+            setUnsavedChanges(true);
+          }}
         />
       </Accordion.Panel>
     </Accordion.Item>

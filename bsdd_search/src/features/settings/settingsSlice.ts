@@ -13,10 +13,10 @@ interface SettingsState {
 }
 
 const initialState: SettingsState = {
-  bsddApiEnvironment: 'test',
+  bsddApiEnvironment: 'production',
   mainDictionary: null,
   filterDictionaries: [],
-  language: 'EN',
+  language: 'en-GB',
 };
 
 const handleSetLanguage = (state: SettingsState, action: PayloadAction<string>) => {

@@ -12,10 +12,10 @@ interface EntitiesState {
 }
 
 const initialState: EntitiesState = {
-  bsddApiEnvironment: 'test',
+  bsddApiEnvironment: 'production',
   mainDictionary: null,
   filterDictionaries: [],
-  language: 'EN',
+  language: 'en-GB',
 };
 
 const settingsSlice = createSlice({

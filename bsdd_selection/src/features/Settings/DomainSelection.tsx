@@ -52,13 +52,13 @@ function DomainSelection({ id, settings, setSettings, setUnsavedChanges, setIsLo
         label: item.ifcClassification.location || '',
       })),
     );
-  }, [settings?.filterDictionaries, setFilterDictionaryValues]);
+  }, [settings, setFilterDictionaryValues]);
 
   // Set filter dictionary options for use in select
   useEffect(() => {
-    if (bsddDictionaryOptions.length == 0 || !mainDictionary) return;
+    if (bsddDictionaryOptions.length === 0 || !mainDictionary) return;
     setIsLoading(false);
-  }, [bsddDictionaryOptions, mainDictionary]);
+  }, [bsddDictionaryOptions, mainDictionary, setIsLoading]);
 
   // Change main dictionary
   const changeMainDictionaryOption = (selectedMainDictionaryUri: string | null) => {

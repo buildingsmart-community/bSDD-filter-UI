@@ -13,7 +13,7 @@ function LanguageSelect({ settings, setSettings, setUnsavedChanges }: LanguageSe
   const { t, i18n } = useTranslation();
 
   const languages = [
-    { value: 'EN', label: 'English' },
+    { value: 'en-GB', label: 'English' },
     { value: 'nl-NL', label: 'Nederlands' },
   ];
 

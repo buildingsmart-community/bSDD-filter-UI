@@ -1,4 +1,5 @@
 import { BsddBridgeData } from './bsddBridgeData';
+
 export const mockData: BsddBridgeData = {
   settings: {
     bsddApiEnvironment: 'test',
@@ -31,7 +32,7 @@ export const mockData: BsddBridgeData = {
         parameterMapping: 'Assembly Code',
       },
     ],
-    language: 'NL',
+    language: 'en-GB',
   },
   ifcData: [
     {
