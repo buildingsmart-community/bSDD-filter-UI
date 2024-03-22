@@ -1,9 +1,10 @@
+import { defaultEnvironment } from '../env';
 import { BsddApi } from './BsddApi';
 import { ClassContractV1, DictionaryContractV1 } from './BsddApiBase';
 import { bsddEnvironments } from './BsddApiEnvironments';
 
-let bsddApiBaseUri = bsddEnvironments.production;
-let bsddApi = new BsddApi(bsddEnvironments.production);
+let bsddApiBaseUri: string = bsddEnvironments[defaultEnvironment];
+let bsddApi: BsddApi<unknown> = new BsddApi(bsddApiBaseUri);
 
 let classCache: { [key: string]: ClassContractV1 } = {};
 let dictionaryCache: { [key: string]: DictionaryContractV1 } = {};

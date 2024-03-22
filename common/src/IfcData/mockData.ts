@@ -33,6 +33,7 @@ export const mockData: BsddBridgeData = {
       },
     ],
     language: 'en-GB',
+    includeTestDictionaries: true,
   },
   ifcData: [
     {

@@ -50,7 +50,7 @@ export const selectBsddApi = (state: RootState) => {
 
 type FetchDictionaryParameters = {
   bsddApiEnvironment: string;
-  showPreview: boolean;
+  includeTestDictionaries: boolean;
 };
 
 /**
@@ -65,7 +65,7 @@ export const fetchDictionaries = createAsyncThunk<
   { [key: string]: DictionaryContractV1 },
   FetchDictionaryParameters,
   { rejectValue: string }
->('bsdd/fetchDictionaries', ({ bsddApiEnvironment, showPreview }, thunkAPI) => {
+>('bsdd/fetchDictionaries', ({ bsddApiEnvironment, includeTestDictionaries }, thunkAPI) => {
   console.log('fetchDictionaries', bsddApiEnvironment);
   if (!bsddApiEnvironment) return thunkAPI.rejectWithValue('No bsddApiEnvironment provided');
 
@@ -77,7 +77,7 @@ export const fetchDictionaries = createAsyncThunk<
   return new Promise((resolve, reject) => {
     function fetchNextPage() {
       api.api
-        .dictionaryV1List({ IncludeTestDictionaries: showPreview, Limit: limit, Offset: offset })
+        .dictionaryV1List({ IncludeTestDictionaries: includeTestDictionaries, Limit: limit, Offset: offset })
         .then((response) => {
           if (!response.ok) {
             reject(new Error(`HTTP error! status: ${response.status}`));

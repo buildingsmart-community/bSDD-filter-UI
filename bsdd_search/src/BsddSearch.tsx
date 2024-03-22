@@ -3,8 +3,9 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { BsddApi } from '../../common/src/BsddApi/BsddApi';
-import { ClassContractV1, DictionaryContractV1, RequestParams } from '../../common/src/BsddApi/BsddApiBase';
-import { isProduction } from '../../common/src/env';
+import { ClassContractV1, DictionaryContractV1 } from '../../common/src/BsddApi/BsddApiBase';
+import { bsddEnvironments } from '../../common/src/BsddApi/BsddApiEnvironments';
+import { defaultEnvironment, isProduction } from '../../common/src/env';
 import { BsddSettings } from '../../common/src/IfcData/bsddBridgeData';
 import { IfcEntity, IfcPropertySet } from '../../common/src/IfcData/ifc';
 import { mockData } from '../../common/src/IfcData/mockData';
@@ -65,7 +66,7 @@ function BsddSearch() {
   const [domains, setDomains] = useState<{ [id: string]: DictionaryContractV1 }>({});
   const [classifications, setClassifications] = useState<ClassContractV1[]>([]);
   const [propertySets, setPropertySets] = useState<{ [id: string]: IfcPropertySet }>({});
-  const [api, setApi] = useState<BsddApi<unknown>>(new BsddApi('https://api.bsdd.buildingsmart.org'));
+  const [api, setApi] = useState<BsddApi<unknown>>(new BsddApi(bsddEnvironments[defaultEnvironment]));
   const mainDictionary = useAppSelector(selectMainDictionary);
   const [pendingSettings, setPendingSettings] = useState<BsddSettings | null>(null);
   const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironmentUri);
