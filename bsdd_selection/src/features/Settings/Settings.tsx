@@ -3,15 +3,14 @@ import { useEffect, useState } from 'react';
 
 import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { fetchDictionaries, updateBsddApi } from '../bsdd/bsddSlice';
 import DomainSelection from './DomainSelection';
 import DomainSort from './DomainSort';
 import GeneralSettings from './GeneralSettings';
 import ParameterMapping from './ParameterMapping';
 import {
   selectBsddApiEnvironment,
-  selectBsddApiEnvironmentUri,
   selectFilterDictionaries,
+  selectIncludeTestDictionaries,
   selectLanguage,
   selectMainDictionary,
   setSettings,
@@ -23,37 +22,25 @@ function Settings() {
   const filterDictionaries = useAppSelector(selectFilterDictionaries);
   const language = useAppSelector(selectLanguage);
   const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironment);
-  const bsddApiEnvironmentUri = useAppSelector(selectBsddApiEnvironmentUri);
+  const includeTestDictionaries = useAppSelector(selectIncludeTestDictionaries);
 
   const [tempSettings, setTempSettings] = useState<BsddSettings>();
   const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [showPreview, setShowPreview] = useState<boolean>(false);
-  const [unsavedShowPreview, unsavedSetShowPreview] = useState<boolean>(false);
-
-  // Update the cached dictionary data when the environment changes
-  useEffect(() => {
-    if (!bsddApiEnvironmentUri) {
-      return;
-    }
-    dispatch(updateBsddApi(bsddApiEnvironmentUri));
-    dispatch(fetchDictionaries({ bsddApiEnvironment: bsddApiEnvironmentUri, showPreview }));
-  }, [dispatch, bsddApiEnvironmentUri, showPreview]);
 
   useEffect(() => {
     setTempSettings({
       bsddApiEnvironment,
-      showPreview: unsavedShowPreview,
       mainDictionary,
       filterDictionaries,
       language,
+      includeTestDictionaries,
     } as BsddSettings);
-  }, [mainDictionary, filterDictionaries, bsddApiEnvironment, unsavedShowPreview, language]);
+  }, [mainDictionary, filterDictionaries, bsddApiEnvironment, language, includeTestDictionaries]);
 
   const handleSave = () => {
     if (!tempSettings) return;
     dispatch(setSettings(tempSettings));
-    setShowPreview(unsavedShowPreview);
 
     // @ts-ignore
     window?.bsddBridge?.saveSettings(JSON.stringify(tempSettings));
@@ -74,8 +61,6 @@ function Settings() {
           settings={tempSettings}
           setSettings={setTempSettings}
           setUnsavedChanges={setUnsavedChanges}
-          showPreview={unsavedShowPreview}
-          setShowPreview={unsavedSetShowPreview}
         />
         <DomainSelection
           id={2}

@@ -1,27 +1,38 @@
 import { Accordion, Checkbox, Space, Text, Title } from '@mantine/core';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { fetchDictionaries, updateBsddApi } from '../bsdd/bsddSlice';
 import LanguageSelect from './LanguageSelect';
+import { selectBsddApiEnvironmentUri } from './settingsSlice';
 
 interface GeneralSettingsProps {
   id: number;
   settings: BsddSettings | undefined;
   setSettings: (settings: BsddSettings) => void;
   setUnsavedChanges: (unsavedChanges: boolean) => void;
-  showPreview: boolean;
-  setShowPreview: (unsavedChanges: boolean) => void;
 }
 
-function GeneralSettings({
-  id,
-  settings,
-  setSettings,
-  setUnsavedChanges,
-  showPreview,
-  setShowPreview,
-}: GeneralSettingsProps) {
+function GeneralSettings({ id, settings, setSettings, setUnsavedChanges }: GeneralSettingsProps) {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const bsddApiEnvironmentUri = useAppSelector(selectBsddApiEnvironmentUri);
+
+  // Update the cached dictionary data when the dictionary list parameters change
+  useEffect(() => {
+    if (!bsddApiEnvironmentUri) {
+      return;
+    }
+    dispatch(updateBsddApi(bsddApiEnvironmentUri));
+    dispatch(
+      fetchDictionaries({
+        bsddApiEnvironment: bsddApiEnvironmentUri,
+        includeTestDictionaries: settings?.includeTestDictionaries || false,
+      }),
+    );
+  }, [dispatch, bsddApiEnvironmentUri, settings?.includeTestDictionaries]);
 
   return (
     <Accordion.Item key={id} value={id.toString()}>
@@ -36,10 +47,14 @@ function GeneralSettings({
         <Space h="xs" />
         <Checkbox
           label={t('ShowPreview')}
-          checked={showPreview}
+          checked={settings?.includeTestDictionaries || false}
           type="checkbox"
           onChange={(e) => {
-            setShowPreview(e.currentTarget.checked);
+            const includeTestDictionaries = e.currentTarget.checked;
+            if (bsddApiEnvironmentUri) {
+              dispatch(fetchDictionaries({ bsddApiEnvironment: bsddApiEnvironmentUri, includeTestDictionaries }));
+            }
+            setSettings({ ...settings, includeTestDictionaries } as BsddSettings);
             setUnsavedChanges(true);
           }}
         />

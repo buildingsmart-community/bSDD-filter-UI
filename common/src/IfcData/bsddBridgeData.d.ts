@@ -17,6 +17,7 @@ export interface BsddSettings {
   mainDictionary: BsddDictionary | null; // Uri
   filterDictionaries: BsddDictionary[]; // Uri[]
   language: string;
+  includeTestDictionaries: boolean;
 }
 
 export interface BsddBridgeData {
