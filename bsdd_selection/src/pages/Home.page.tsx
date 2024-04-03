@@ -28,7 +28,6 @@ const setSettingsWithValidation =
       mainDictionary: validatedMainDictionary,
       filterDictionaries: validatedFilterDictionaries,
     };
-
     dispatch(setSettings(updatedSettings));
   };
 
@@ -45,7 +44,7 @@ function HomePage() {
   useEffect(() => {
     if (bsddDataLoaded && pendingSettings) {
       dispatch(setSettingsWithValidation(pendingSettings));
-      setPendingSettings(null);
+      // setPendingSettings(null);
     }
   }, [bsddDataLoaded, pendingSettings, dispatch]);
 
@@ -73,8 +72,8 @@ function HomePage() {
       if (window?.bsddBridge) {
         // @ts-ignore
         const settings = await window.bsddBridge.loadSettings();
-        const settingsParsed = JSON.parse(settings);
-        console.log('initial loadSettings', settingsParsed);
+        const settingsParsed = JSON.parse(settings) as BsddSettings;
+        console.log('initial loadSettings selection', settingsParsed);
         dispatchSettingsWhenLoaded(settingsParsed);
       }
     };

@@ -7,49 +7,33 @@ import DomainSelection from './DomainSelection';
 import DomainSort from './DomainSort';
 import GeneralSettings from './GeneralSettings';
 import ParameterMapping from './ParameterMapping';
-import {
-  selectBsddApiEnvironment,
-  selectFilterDictionaries,
-  selectIncludeTestDictionaries,
-  selectLanguage,
-  selectMainDictionary,
-  setSettings,
-} from './settingsSlice';
+import { setSettings } from './settingsSlice';
 
 function Settings() {
   const dispatch = useAppDispatch();
-  const mainDictionary = useAppSelector(selectMainDictionary);
-  const filterDictionaries = useAppSelector(selectFilterDictionaries);
-  const language = useAppSelector(selectLanguage);
-  const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironment);
-  const includeTestDictionaries = useAppSelector(selectIncludeTestDictionaries);
+  const globalSettings = useAppSelector((state) => state.settings);
 
-  const [tempSettings, setTempSettings] = useState<BsddSettings>();
+  const [localSettings, setLocalSettings] = useState<BsddSettings>();
   const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    setTempSettings({
-      bsddApiEnvironment,
-      mainDictionary,
-      filterDictionaries,
-      language,
-      includeTestDictionaries,
-    } as BsddSettings);
-  }, [mainDictionary, filterDictionaries, bsddApiEnvironment, language, includeTestDictionaries]);
+    setLocalSettings(globalSettings);
+  }, [globalSettings]);
 
   const handleSave = () => {
-    if (!tempSettings) return;
-    dispatch(setSettings(tempSettings));
+    console.log('Saving', localSettings);
+    if (!localSettings) return;
+    dispatch(setSettings(localSettings));
 
     // @ts-ignore
-    window?.bsddBridge?.saveSettings(JSON.stringify(tempSettings));
+    window?.bsddBridge?.saveSettings(JSON.stringify(localSettings));
 
     setUnsavedChanges(false);
   };
 
   const handleCancel = () => {
-    // Reload settings from the store or initial state
+    setLocalSettings(globalSettings);
     setUnsavedChanges(false);
   };
 
@@ -58,27 +42,27 @@ function Settings() {
       <Accordion defaultValue={['2']} multiple>
         <GeneralSettings
           id={1}
-          settings={tempSettings}
-          setSettings={setTempSettings}
+          localSettings={localSettings}
+          setLocalSettings={setLocalSettings}
           setUnsavedChanges={setUnsavedChanges}
         />
         <DomainSelection
           id={2}
-          settings={tempSettings}
-          setSettings={setTempSettings}
+          localSettings={localSettings}
+          setLocalSettings={setLocalSettings}
           setUnsavedChanges={setUnsavedChanges}
           setIsLoading={setIsLoading}
         />
         <ParameterMapping
           id={3}
-          settings={tempSettings}
-          setSettings={setTempSettings}
+          localSettings={localSettings}
+          setLocalSettings={setLocalSettings}
           setUnsavedChanges={setUnsavedChanges}
         />
         <DomainSort
           id={4}
-          settings={tempSettings}
-          setSettings={setTempSettings}
+          localSettings={localSettings}
+          setLocalSettings={setLocalSettings}
           setUnsavedChanges={setUnsavedChanges}
         />
       </Accordion>

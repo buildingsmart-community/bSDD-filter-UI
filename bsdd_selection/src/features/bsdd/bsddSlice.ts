@@ -48,7 +48,7 @@ export const selectBsddApi = (state: RootState) => {
   return bsddApi;
 };
 
-type FetchDictionaryParameters = {
+export type FetchDictionaryParameters = {
   bsddApiEnvironment: string;
   includeTestDictionaries: boolean;
 };
@@ -107,6 +107,36 @@ export const fetchDictionaries = createAsyncThunk<
 });
 
 /**
+ * Fetches a specific batch of dictionary class data from the API.
+ *
+ * @param api - The instance of the BsddApi.
+ * @param location - The location of the dictionary.
+ * @param offset - The offset for pagination.
+ * @returns The fetched dictionary class data.
+ * @throws Error if there is an HTTP error.
+ */
+async function fetchDictionaryClassData(
+  api: BsddApi<any>,
+  location: string,
+  offset: number,
+  // languageCode: string | null,
+) {
+  const response = await api.api.dictionaryV1ClassesList({
+    Uri: location,
+    UseNestedClasses: false,
+    Limit: CLASS_ITEM_PAGE_SIZE,
+    Offset: offset,
+    // languageCode: languageCode || undefined,
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.data;
+}
+
+/**
  * Fetches classes for a given dictionary uri.
  *
  * @param location - The dictionary uri for which to fetch the dictionary classes.
@@ -139,35 +169,33 @@ export const fetchDictionaryClasses = createAsyncThunk(
 
       const classes: ClassListItemContractV1[] = [];
       let offset = 0;
-      let totalCount: number | null | undefined;
 
-      while (true) {
-        const data = await fetchDictionaryClassData(api, location, offset); // , languageCode);
-        const newClasses = data.classes ?? [];
-        classes.push(...newClasses);
-
-        // Update total count after the first fetch
-        if (offset === 0) {
-          totalCount = data.classesTotalCount;
-          if (totalCount === null || totalCount === undefined) {
-            throw new Error('Total count is null or undefined');
-          }
-        }
-
-        if (totalCount !== null && totalCount !== undefined && classes.length >= totalCount) {
-          break;
-        }
-
-        offset += CLASS_ITEM_PAGE_SIZE;
+      // Fetch the initial data
+      const initialData = await fetchDictionaryClassData(api, location, offset);
+      const totalCount = initialData.classesTotalCount;
+      if (totalCount === null || totalCount === undefined) {
+        throw new Error('Total count is null or undefined');
       }
+      classes.push(...(initialData.classes ?? []));
+
+      // Fetch the remaining data in parallel
+      const fetchPromises = [];
+      for (offset = CLASS_ITEM_PAGE_SIZE; offset < totalCount; offset += CLASS_ITEM_PAGE_SIZE) {
+        fetchPromises.push(
+          fetchDictionaryClassData(api, location, offset).then((data) => {
+            classes.push(...(data.classes ?? []));
+          }),
+        );
+      }
+
+      await Promise.all(fetchPromises);
 
       dispatch({ type: 'bsdd/addDictionaryClasses', payload: { uri: location, classes } });
       return classes;
     })();
 
     fetchPromisesCache[location] = fetchPromise;
-    const classes = await fetchPromise;
-    return classes;
+    return fetchPromise;
   },
 );
 
@@ -236,36 +264,6 @@ export const fetchClass = createAsyncThunk('bsdd/fetchClass', async (uri: string
   dispatch({ type: 'bsdd/addClass', payload: { uri, data } });
   return data;
 });
-
-/**
- * Fetches a specific batch of dictionary class data from the API.
- *
- * @param api - The instance of the BsddApi.
- * @param location - The location of the dictionary.
- * @param offset - The offset for pagination.
- * @returns The fetched dictionary class data.
- * @throws Error if there is an HTTP error.
- */
-async function fetchDictionaryClassData(
-  api: BsddApi<any>,
-  location: string,
-  offset: number,
-  // languageCode: string | null,
-) {
-  const response = await api.api.dictionaryV1ClassesList({
-    Uri: location,
-    UseNestedClasses: false,
-    Limit: CLASS_ITEM_PAGE_SIZE,
-    Offset: offset,
-    // languageCode: languageCode || undefined,
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  return response.data;
-}
 
 export const selectDictionary = (state: RootState, uri: string) => state.bsdd.dictionaries[uri];
 export const selectDictionaryClasses = (state: RootState, location: string) => state.bsdd.dictionaryClasses[location];
