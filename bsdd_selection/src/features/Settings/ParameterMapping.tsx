@@ -1,29 +1,44 @@
 import { Accordion, Text, TextInput, Title } from '@mantine/core';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { BsddDictionary, BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
 
 interface ParameterMappingProps {
   id: number;
-  settings: BsddSettings | undefined;
-  setSettings: (settings: BsddSettings) => void;
+  localSettings: BsddSettings | undefined;
+  setLocalSettings: (settings: BsddSettings) => void;
   setUnsavedChanges: (unsavedChanges: boolean) => void;
 }
 
-function ParameterMapping({ id, settings, setSettings, setUnsavedChanges }: ParameterMappingProps) {
+function ParameterMapping({
+  id,
+  localSettings: settings,
+  setLocalSettings: setSettings,
+  setUnsavedChanges,
+}: ParameterMappingProps) {
   const { t } = useTranslation();
   const { mainDictionary, filterDictionaries } = settings || { mainDictionary: null, filterDictionaries: [] };
-  const activeDictionaries = mainDictionary ? [mainDictionary, ...filterDictionaries] : filterDictionaries;
+
+  const [activeDictionaries, setActiveDictionaries] = useState<BsddDictionary[]>([]);
+
+  useEffect(() => {
+    const dictionaries = mainDictionary ? [mainDictionary, ...filterDictionaries] : filterDictionaries;
+    const dictionaryMap = new Map(dictionaries.map((item) => [item.ifcClassification.location, item]));
+    const uniqueDictionaries = Array.from(dictionaryMap.values());
+
+    setActiveDictionaries(uniqueDictionaries);
+  }, [mainDictionary, filterDictionaries]);
 
   const handleInputChange = (dictionaryUri: string | undefined, newParameterMapping: string) => {
     if (!settings) return;
-    let newSettings = { ...settings };
+    const newSettings = { ...settings };
     if (newSettings.mainDictionary?.ifcClassification.location === dictionaryUri) {
-      const mainDictionary: BsddDictionary = {
+      const newMainDictionary: BsddDictionary = {
         ...(newSettings.mainDictionary as BsddDictionary),
         parameterMapping: newParameterMapping,
       };
-      newSettings.mainDictionary = mainDictionary;
+      newSettings.mainDictionary = newMainDictionary;
     } else {
       newSettings.filterDictionaries = newSettings.filterDictionaries.map((dictionary) => {
         if (dictionary.ifcClassification.location === dictionaryUri) {

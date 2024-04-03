@@ -6,7 +6,7 @@ import { BsddApi } from '../../common/src/BsddApi/BsddApi';
 import { ClassContractV1, DictionaryContractV1 } from '../../common/src/BsddApi/BsddApiBase';
 import { bsddEnvironments } from '../../common/src/BsddApi/BsddApiEnvironments';
 import { defaultEnvironment, isProduction } from '../../common/src/env';
-import { BsddSettings } from '../../common/src/IfcData/bsddBridgeData';
+import { BsddBridgeData, BsddSettings } from '../../common/src/IfcData/bsddBridgeData';
 import { IfcEntity, IfcPropertySet } from '../../common/src/IfcData/ifc';
 import { mockData } from '../../common/src/IfcData/mockData';
 import { useAppDispatch, useAppSelector } from './app/hooks';
@@ -121,7 +121,7 @@ function BsddSearch() {
       if (window?.bsddBridge) {
         // @ts-ignore
         const loadedSettings = await window.bsddBridge.loadSettings();
-        const { settings, ifcData } = JSON.parse(loadedSettings);
+        const { settings, ifcData } = JSON.parse(loadedSettings) as BsddBridgeData;
         dispatch(setIfcData(ifcData));
         dispatchSettingsWhenLoaded(settings);
         if (!ifcData || ifcData.length === 0) return;

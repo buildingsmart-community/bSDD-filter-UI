@@ -203,7 +203,7 @@ export async function patchIfcClassificationReference(
   const matchedClass = findMatchedClass(ifcClassificationReference, classes);
   if (!matchedClass) {
     return handleError(
-      'Failed to find a match for the IfcClassificationReference name or code in the classes',
+      'Failed to find a match for the IfcClassificationReference code or name in the classes',
       ifcClassificationReference,
     );
   }

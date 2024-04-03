@@ -6,28 +6,25 @@ import cx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
 import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
-import { useAppSelector } from '../../app/hooks';
 import classes from './DndListHandle.module.css';
-import { selectFilterDictionaries } from './settingsSlice';
 
 interface DomainSortProps {
   id: number;
-  settings: BsddSettings | undefined;
-  setSettings: (settings: BsddSettings) => void;
+  localSettings: BsddSettings | undefined;
+  setLocalSettings: (settings: BsddSettings) => void;
   setUnsavedChanges: (unsavedChanges: boolean) => void;
 }
 
-function DomainSort({ id, settings, setSettings, setUnsavedChanges }: DomainSortProps) {
+function DomainSort({ id, localSettings, setLocalSettings, setUnsavedChanges }: DomainSortProps) {
   const { t } = useTranslation();
-  const filterDictionaries = useAppSelector(selectFilterDictionaries);
-
+  const filterDictionaries = localSettings ? localSettings.filterDictionaries : [];
   // Drag and drop update filter dictionaries list
   const onDragEnd = (result: DragUpdate) => {
-    if (!settings || !result.destination) return;
+    if (!localSettings || !result.destination) return;
     const items = Array.from(filterDictionaries);
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-    setSettings({ ...settings, filterDictionaries: items });
+    setLocalSettings({ ...localSettings, filterDictionaries: items });
     setUnsavedChanges(true);
   };
 

@@ -1,5 +1,5 @@
 import { Accordion, ComboboxItem, MultiSelect, Select, Space, Text, Title } from '@mantine/core';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DictionaryContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
@@ -7,135 +7,180 @@ import { BsddDictionary, BsddSettings } from '../../../../common/src/IfcData/bsd
 import { convertBsddDictionaryToIfcClassification } from '../../../../common/src/IfcData/ifcBsddConverters';
 import { useAppSelector } from '../../app/hooks';
 import { selectBsddDictionaries } from '../bsdd/bsddSlice';
-import { selectMainDictionary } from './settingsSlice';
 
 interface DomainSelectionProps {
   id: number;
-  settings: BsddSettings | undefined;
-  setSettings: (settings: BsddSettings) => void;
+  localSettings: BsddSettings | undefined;
+  setLocalSettings: (settings: BsddSettings) => void;
   setUnsavedChanges: (unsavedChanges: boolean) => void;
   setIsLoading: (isLoading: boolean) => void;
 }
 
-function convertToBsddDictionary(dictionary: DictionaryContractV1, oldValues: BsddDictionary[]): BsddDictionary {
-  const oldValue = oldValues.find((item) => item.ifcClassification.location === dictionary.uri);
-  if (oldValue) {
-    return oldValue;
-  }
+/**
+ * Finds a dictionary in the given array of dictionaries based on the provided URI.
+ *
+ * @param dictionaries - The array of dictionaries to search.
+ * @param uri - The URI of the dictionary to find.
+ * @returns The dictionary object if found, or undefined if not found.
+ */
+function findDictionaryByUri(dictionaries: DictionaryContractV1[], uri: string | null) {
+  return Object.values(dictionaries).find((item) => item.uri === uri);
+}
+
+/**
+ * Converts a dictionary object to a BsddDictionary object.
+ * If the dictionary is null, returns null.
+ * If the dictionary is not found in the previousSelections array, creates a new BsddDictionary object.
+ *
+ * @param {DictionaryContractV1 | null} dictionary - The dictionary object to convert.
+ * @param {BsddDictionary[]} previousSelections - The array of previously selected dictionaries.
+ * @returns {BsddDictionary | null} The converted BsddDictionary object or null if the dictionary is null.
+ */
+function convertToBsddDictionary(
+  dictionary: DictionaryContractV1 | null,
+  previousSelections: BsddDictionary[],
+): BsddDictionary | null {
+  if (!dictionary) return null;
+
+  const previousSelection = previousSelections.find((item) => item.ifcClassification.location === dictionary.uri);
+
+  // If the dictionary was previously selected, return it as is to preserve its parameterMapping
+  if (previousSelection) return previousSelection;
+
   return {
     ifcClassification: convertBsddDictionaryToIfcClassification(dictionary),
     parameterMapping: '',
-  } as BsddDictionary;
+  };
 }
 
-function DomainSelection({ id, settings, setSettings, setUnsavedChanges, setIsLoading }: DomainSelectionProps) {
+/**
+ * Updates the local settings with new values and sets unsaved changes flag.
+ *
+ * @param localSettings - The current local settings.
+ * @param setLocalSettings - The function to update the local settings.
+ * @param setUnsavedChanges - The function to set the unsaved changes flag.
+ * @param newMainDictionary - The new main dictionary value.
+ * @param newFilterDictionaries - The new filter dictionaries array.
+ */
+function updateLocalSettings(
+  localSettings: BsddSettings | undefined,
+  setLocalSettings: (settings: BsddSettings) => void,
+  setUnsavedChanges: (unsavedChanges: boolean) => void,
+  newMainDictionary: BsddDictionary | null | undefined,
+  newFilterDictionaries: BsddDictionary[],
+) {
+  if (localSettings) {
+    setLocalSettings({
+      ...localSettings,
+      mainDictionary: newMainDictionary || null,
+      filterDictionaries: newFilterDictionaries,
+    });
+    setUnsavedChanges(true);
+  }
+}
+
+function DomainSelection({
+  id,
+  localSettings,
+  setLocalSettings,
+  setUnsavedChanges,
+  setIsLoading,
+}: DomainSelectionProps) {
   const { t } = useTranslation();
   const bsddDictionaries = useAppSelector(selectBsddDictionaries);
-  const mainDictionary = useAppSelector(selectMainDictionary);
 
-  const [bsddDictionaryOptions, setBsddDictionaryOptions] = useState<ComboboxItem[]>([]);
+  const bsddDictionaryOptions = Object.values(bsddDictionaries).map((item) => ({
+    value: item.uri,
+    label: `${item.name} (${item.version})`,
+  }));
 
-  const [mainDictionaryValue, setMainDictionaryValue] = useState<string | null>();
-  const [filterDictionaryValues, setFilterDictionaryValues] = useState<ComboboxItem[]>([]);
+  const localMainDictionaryValue = localSettings?.mainDictionary?.ifcClassification.location || null;
 
-  // Set bsdd dictionary options for use in select
-  useEffect(() => {
-    setBsddDictionaryOptions(
-      Object.values(bsddDictionaries).map((item) => ({ value: item.uri, label: `${item.name} (${item.version})` })),
+  const localFilterDictionaryValues = useMemo(() => {
+    return (
+      localSettings?.filterDictionaries.map(
+        (item) =>
+          ({
+            value: item.ifcClassification.location || '',
+            label: item.ifcClassification.location || '',
+          } as ComboboxItem),
+      ) || []
     );
-  }, [bsddDictionaries, setBsddDictionaryOptions]);
+  }, [localSettings]);
 
-  useEffect(() => {
-    const newMainDictionaryValue = settings?.mainDictionary?.ifcClassification.location;
-    if (newMainDictionaryValue !== mainDictionaryValue) {
-      setMainDictionaryValue(newMainDictionaryValue);
-    }
-  }, [mainDictionaryValue, settings?.mainDictionary]);
-
-  // Set filter dictionary options for use in select
-  useEffect(() => {
-    if (!settings) return;
-    setFilterDictionaryValues(
-      settings.filterDictionaries.map((item) => ({
-        value: item.ifcClassification.location || '',
-        label: item.ifcClassification.location || '',
-      })),
-    );
-  }, [settings, setFilterDictionaryValues]);
-
-  // Set filter dictionary options for use in select
-  useEffect(() => {
-    if (bsddDictionaryOptions.length === 0 || !mainDictionary) return;
-    setIsLoading(false);
-  }, [bsddDictionaryOptions, mainDictionary, setIsLoading]);
-
-  // Change main dictionary
   const changeMainDictionaryOption = useCallback(
     (selectedMainDictionaryUri: string | null) => {
-      setMainDictionaryValue(selectedMainDictionaryUri);
-      if (selectedMainDictionaryUri === null) {
-        // Clear the selected main dictionary
-        if (settings) {
-          setSettings({ ...settings, mainDictionary: null });
-          setUnsavedChanges(true);
-        }
-        return;
-      }
+      console.log('changeMainDictionaryOption', selectedMainDictionaryUri);
+      const selectedMainDictionary =
+        findDictionaryByUri(Object.values(bsddDictionaries), selectedMainDictionaryUri) || null;
 
-      const selectedMainDictionary = Object.values(bsddDictionaries).find(
-        (item) => item.uri === selectedMainDictionaryUri,
+      if (!localSettings) return;
+
+      const oldValues = localSettings.mainDictionary ? [localSettings.mainDictionary] : [];
+      const newMainDictionary = convertToBsddDictionary(selectedMainDictionary, oldValues);
+
+      const newFilterDictionaries = localSettings.filterDictionaries.filter(
+        (dictionary) => dictionary.ifcClassification.location !== selectedMainDictionaryUri,
       );
 
-      if (!selectedMainDictionary || !settings) return;
-
-      const oldValues = [];
-      if (settings.mainDictionary) {
-        oldValues.push(settings.mainDictionary);
-      }
-
-      setSettings({ ...settings, mainDictionary: convertToBsddDictionary(selectedMainDictionary, oldValues) });
-      setUnsavedChanges(true);
+      updateLocalSettings(localSettings, setLocalSettings, setUnsavedChanges, newMainDictionary, newFilterDictionaries);
     },
-    [bsddDictionaries, settings, setSettings, setUnsavedChanges],
+    [bsddDictionaries, localSettings, setLocalSettings, setUnsavedChanges],
   );
 
-  // Change filter dictionaries list
   const changeFilterDictionaries = useCallback(
     (selectedFilterDictionaryUris: string[]) => {
-      if (settings) {
-        const newFilterDictionaries = Object.values(bsddDictionaries)
-          .filter((item) => selectedFilterDictionaryUris.includes(item.uri))
-          .map((item) => convertToBsddDictionary(item, settings.filterDictionaries));
-        setSettings({ ...settings, filterDictionaries: newFilterDictionaries });
-        setUnsavedChanges(true);
-      }
+      const newFilterDictionaries: BsddDictionary[] = Object.values(bsddDictionaries)
+        .filter((item) => selectedFilterDictionaryUris.includes(item.uri))
+        .map((item) => convertToBsddDictionary(item, localSettings?.filterDictionaries || []))
+        .filter((item) => item !== null) as BsddDictionary[];
+
+      const newMainDictionary =
+        localMainDictionaryValue && selectedFilterDictionaryUris.includes(localMainDictionaryValue)
+          ? null
+          : localSettings?.mainDictionary;
+
+      updateLocalSettings(localSettings, setLocalSettings, setUnsavedChanges, newMainDictionary, newFilterDictionaries);
     },
-    [bsddDictionaries, settings, setSettings, setUnsavedChanges],
+    [bsddDictionaries, localSettings, setLocalSettings, setUnsavedChanges, localMainDictionaryValue],
   );
 
-  // Check if the selected main dictionaries are still in bsddDictionaryOptions after changing search options
+  // remove any selected values that are not in the bsddDictionaryOptions
   useEffect(() => {
-    if (!settings) {
-      changeMainDictionaryOption(null);
-      changeFilterDictionaries([]);
-    }
+    if (!localSettings) return;
 
-    if (
-      settings?.mainDictionary &&
-      !bsddDictionaryOptions.find((option) => option.value === settings.mainDictionary?.ifcClassification.location)
-    ) {
-      changeMainDictionaryOption(null);
-    }
-
-    const newFilterDictionaryValues =
-      settings?.filterDictionaries.map((dictionary) => dictionary.ifcClassification.location) || [];
-    const invalidFilterDictionaries = newFilterDictionaryValues.filter(
-      (value) => !bsddDictionaryOptions.find((option) => option.value === value),
+    const mainDictionaryInOptions = bsddDictionaryOptions.find((option) => option.value === localMainDictionaryValue);
+    const filterDictionariesInOptions = localFilterDictionaryValues.every((value) =>
+      bsddDictionaryOptions.some((option) => option.value === value.value),
     );
-    if (invalidFilterDictionaries.length > 0) {
-      changeFilterDictionaries(newFilterDictionaryValues.filter((value) => !invalidFilterDictionaries.includes(value)));
+
+    if (!mainDictionaryInOptions || !filterDictionariesInOptions) {
+      const newMainDictionary = mainDictionaryInOptions ? localSettings.mainDictionary : null;
+      const newFilterDictionaries = localSettings.filterDictionaries.filter((dictionary) =>
+        bsddDictionaryOptions.find((option) => option.value === dictionary.ifcClassification.location),
+      );
+
+      setLocalSettings({
+        ...localSettings,
+        mainDictionary: newMainDictionary,
+        filterDictionaries: newFilterDictionaries,
+      });
+      setUnsavedChanges(true);
     }
-  }, [bsddDictionaryOptions, settings, changeMainDictionaryOption, changeFilterDictionaries]);
+  }, [
+    bsddDictionaryOptions,
+    localSettings,
+    localMainDictionaryValue,
+    localFilterDictionaryValues,
+    setLocalSettings,
+    setUnsavedChanges,
+  ]);
+
+  // Set filter dictionary options for use in select
+  useEffect(() => {
+    if (bsddDictionaryOptions.length === 0) return;
+    setIsLoading(false);
+  }, [bsddDictionaryOptions, setIsLoading]);
 
   return (
     <Accordion.Item key={id} value={id.toString()}>
@@ -147,10 +192,10 @@ function DomainSelection({ id, settings, setSettings, setUnsavedChanges, setIsLo
       </Accordion.Control>
       <Accordion.Panel>
         <Select
-          key={mainDictionaryValue || 'mainDictionary-select'} // workaround for select not updating when value is changed to null
+          key={localMainDictionaryValue || 'mainDictionary-select'} // workaround for select not updating when value is changed to null
           id="mainDictionary"
           label={t('Main dictionary')}
-          value={mainDictionaryValue}
+          value={localMainDictionaryValue}
           onChange={changeMainDictionaryOption}
           placeholder="Select main dictionary"
           data={bsddDictionaryOptions}
@@ -162,7 +207,7 @@ function DomainSelection({ id, settings, setSettings, setUnsavedChanges, setIsLo
           key="filterDictionaries-select"
           id="filterDictionaries"
           label={t('Selection filter dictionaries')}
-          value={filterDictionaryValues.map((item) => item.value)}
+          value={localFilterDictionaryValues.map((item) => item.value)}
           onChange={(value) => {
             changeFilterDictionaries(value);
           }}
