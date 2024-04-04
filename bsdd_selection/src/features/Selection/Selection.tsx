@@ -1,16 +1,9 @@
 import { Accordion, Tabs } from '@mantine/core';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 
-import { BsddApi } from '../../../../common/src/BsddApi/BsddApi';
-import { ClassListItemContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
 import { IfcEntity } from '../../../../common/src/IfcData/ifc';
 import { useAppSelector } from '../../app/hooks';
 import { selectIfcEntities } from '../ifcData/ifcDataSlice';
-import {
-  selectBsddApiEnvironmentUri,
-  // selectLanguage,
-  selectMainDictionary,
-} from '../Settings/settingsSlice';
 import CategoryCollapse from './CategoryCollapse';
 
 let CefSharp: any;
@@ -69,12 +62,8 @@ function groupEntitiesBy(array: IfcEntity[], property: keyof IfcEntity) {
     }, {} as Record<string, IfcEntity[]>);
 }
 function Selection() {
-  const mainDictionary = useAppSelector(selectMainDictionary);
-  const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironmentUri);
-  // const languageCode = useAppSelector(selectLanguage);
   const ifcEntities = useAppSelector(selectIfcEntities);
   const groupedEntities = useMemo(() => groupEntitiesBy(ifcEntities, 'description'), [ifcEntities]);
-  const [classes, setClasses] = useState<ClassListItemContractV1[]>([]);
 
   // Set up BsddBridge connection
   useEffect(() => {
@@ -92,42 +81,11 @@ function Selection() {
     connectToBsddBridge();
   }, []);
 
-  useEffect(() => {
-    if (!bsddApiEnvironment || !mainDictionary) return;
-    const location = mainDictionary?.ifcClassification?.location;
-    if (!location) return;
-
-    const api = new BsddApi(bsddApiEnvironment);
-    api.api
-      .dictionaryV1ClassesList({
-        Uri: location,
-        // languageCode: languageCode || undefined
-      })
-      .then((response) => {
-        // If the response is not ok, throw an error
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        if (response.data && response.data.classes) {
-          setClasses(response.data.classes);
-        }
-      })
-      .catch((error) => {
-        throw new Error(`bSDD API error! status: ${error}`);
-      });
-  }, [mainDictionary, bsddApiEnvironment]);
-
   return (
     <Tabs.Panel value="link">
       <Accordion chevronPosition="left">
         {Object.entries(groupedEntities).map(([category, items], index) => (
-          <CategoryCollapse
-            key={category}
-            category={category}
-            items={items}
-            bbbr={classes}
-            index={category || index.toString()}
-          />
+          <CategoryCollapse key={category} category={category} items={items} index={category || index.toString()} />
         ))}
       </Accordion>
     </Tabs.Panel>

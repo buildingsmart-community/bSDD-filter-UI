@@ -35,18 +35,18 @@ function HomePage() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const bsddDataLoaded = useAppSelector(selectBsddDataLoaded);
-  const [pendingSettings, setPendingSettings] = useState<BsddSettings | null>(null);
+  const [pendingInitialSettings, setPendingInitialSettings] = useState<BsddSettings | null>(null);
 
   const dispatchSettingsWhenLoaded = (settings: BsddSettings) => {
-    setPendingSettings(settings);
+    setPendingInitialSettings(settings);
   };
 
   useEffect(() => {
-    if (bsddDataLoaded && pendingSettings) {
-      dispatch(setSettingsWithValidation(pendingSettings));
-      // setPendingSettings(null);
+    if (bsddDataLoaded && pendingInitialSettings) {
+      dispatch(setSettingsWithValidation(pendingInitialSettings));
+      setPendingInitialSettings(null);
     }
-  }, [bsddDataLoaded, pendingSettings, dispatch]);
+  }, [bsddDataLoaded, pendingInitialSettings, dispatch]);
 
   useEffect(() => {
     if (isProduction) return;
