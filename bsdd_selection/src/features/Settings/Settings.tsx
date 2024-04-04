@@ -71,7 +71,7 @@ function Settings() {
           fullWidth
           loading={isLoading}
           onClick={handleSave}
-          disabled={!unsavedChanges}
+          disabled={!unsavedChanges || !localSettings?.mainDictionary?.ifcClassification?.location}
           variant={isLoading ? 'light' : 'filled'}
           loaderProps={{ type: 'dots' }}
         >

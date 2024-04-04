@@ -60,16 +60,21 @@ function ParameterMapping({
         </Text>
       </Accordion.Control>
       <Accordion.Panel>
-        {activeDictionaries.map((input) => (
-          <div key={input.ifcClassification.location} style={{ marginBottom: '1em' }}>
-            <TextInput
-              label={input.ifcClassification.location}
-              placeholder="Enter a revit type parameter"
-              value={input.parameterMapping}
-              onChange={(event) => handleInputChange(input.ifcClassification.location, event.currentTarget.value)}
-            />{' '}
-          </div>
-        ))}
+        {activeDictionaries.map((dictionary, dictionaryIndex) => {
+          const dictionaryKey = dictionary.ifcClassification.location || dictionaryIndex;
+          return (
+            <div key={dictionaryKey} style={{ marginBottom: '1em' }}>
+              <TextInput
+                label={dictionary.ifcClassification.location}
+                placeholder="Enter a revit type parameter"
+                value={dictionary.parameterMapping}
+                onChange={(event) =>
+                  handleInputChange(dictionary.ifcClassification.location, event.currentTarget.value)
+                }
+              />{' '}
+            </div>
+          );
+        })}
       </Accordion.Panel>
     </Accordion.Item>
   );

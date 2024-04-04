@@ -145,37 +145,6 @@ function DomainSelection({
     [bsddDictionaries, localSettings, setLocalSettings, setUnsavedChanges, localMainDictionaryValue],
   );
 
-  // remove any selected values that are not in the bsddDictionaryOptions
-  useEffect(() => {
-    if (!localSettings) return;
-
-    const mainDictionaryInOptions = bsddDictionaryOptions.find((option) => option.value === localMainDictionaryValue);
-    const filterDictionariesInOptions = localFilterDictionaryValues.every((value) =>
-      bsddDictionaryOptions.some((option) => option.value === value.value),
-    );
-
-    if (!mainDictionaryInOptions || !filterDictionariesInOptions) {
-      const newMainDictionary = mainDictionaryInOptions ? localSettings.mainDictionary : null;
-      const newFilterDictionaries = localSettings.filterDictionaries.filter((dictionary) =>
-        bsddDictionaryOptions.find((option) => option.value === dictionary.ifcClassification.location),
-      );
-
-      setLocalSettings({
-        ...localSettings,
-        mainDictionary: newMainDictionary,
-        filterDictionaries: newFilterDictionaries,
-      });
-      setUnsavedChanges(true);
-    }
-  }, [
-    bsddDictionaryOptions,
-    localSettings,
-    localMainDictionaryValue,
-    localFilterDictionaryValues,
-    setLocalSettings,
-    setUnsavedChanges,
-  ]);
-
   // Set filter dictionary options for use in select
   useEffect(() => {
     if (bsddDictionaryOptions.length === 0) return;

@@ -6,7 +6,7 @@ import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { fetchDictionaries, FetchDictionaryParameters, updateBsddApi } from '../bsdd/bsddSlice';
 import LanguageSelect from './LanguageSelect';
-import { selectBsddApiEnvironmentUri } from './settingsSlice';
+import { selectBsddApiEnvironmentUri, selectIncludeTestDictionaries } from './settingsSlice';
 
 interface GeneralSettingsProps {
   id: number;
@@ -19,7 +19,7 @@ function GeneralSettings({ id, localSettings, setLocalSettings, setUnsavedChange
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const bsddApiEnvironmentUri = useAppSelector(selectBsddApiEnvironmentUri);
-  const includeTestDictionaries = localSettings ? localSettings.includeTestDictionaries : false;
+  const includeTestDictionaries = useAppSelector(selectIncludeTestDictionaries);
 
   const prevFetchDictionariesParamsRef = useRef<FetchDictionaryParameters>();
 
@@ -65,7 +65,7 @@ function GeneralSettings({ id, localSettings, setLocalSettings, setUnsavedChange
         <Space h="xs" />
         <Checkbox
           label={t('ShowPreview')}
-          checked={includeTestDictionaries}
+          checked={localSettings ? localSettings.includeTestDictionaries : false}
           type="checkbox"
           onChange={(e) => {
             if (!localSettings) return;

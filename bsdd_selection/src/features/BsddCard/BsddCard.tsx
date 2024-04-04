@@ -5,16 +5,14 @@ import { IconPencil, IconPointer } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ClassContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
 import { IfcEntity } from '../../../../common/src/IfcData/ifc';
 import getClassUriFromDictionary, { ClassificationStatus } from '../../../../common/src/tools/checkIfcClassification';
 import { Color, colorMap } from '../../../../common/src/tools/colors';
 import { useAppSelector } from '../../app/hooks';
-import { selectActiveDictionaries } from '../Settings/settingsSlice';
+import { selectActiveDictionaries, selectMainDictionary } from '../Settings/settingsSlice';
 
 interface BsddCardProps {
   item: IfcEntity;
-  bsddClass: ClassContractV1;
   index: number;
   setCardColor: (index: number, color: Color) => void;
 }
@@ -27,9 +25,10 @@ interface BsddCardProps {
  * @param setCardColor - A function to add color to the card.
  * @returns The rendered card component.
  */
-function BsddCard({ item: ifcEntity, bsddClass, index, setCardColor: setCategoryColor }: BsddCardProps) {
+function BsddCard({ item: ifcEntity, index, setCardColor: setCategoryColor }: BsddCardProps) {
   const { t } = useTranslation();
   const activeDictionaries = useAppSelector(selectActiveDictionaries);
+  const mainDictionary = useAppSelector(selectMainDictionary);
   const [cardColor, setCardColor] = useState<Color>('grey');
   const [activeClassificationStatuses, setActiveClassificationStatuses] = useState<ClassificationStatus[]>([]);
   const [activeClassificationColors, setActiveClassificationColors] = useState<Color[]>([]);
@@ -64,6 +63,8 @@ function BsddCard({ item: ifcEntity, bsddClass, index, setCardColor: setCategory
   }, [ifcEntity, activeDictionaries]);
 
   function bsddSearchClick(ifcProduct: IfcEntity) {
+    console.log('Open bsddSearch', ifcProduct);
+
     const ifcEntityJson = JSON.stringify(ifcProduct);
 
     // @ts-ignore
@@ -89,8 +90,9 @@ function BsddCard({ item: ifcEntity, bsddClass, index, setCardColor: setCategory
         <HoverCard.Dropdown>
           <Text>{t('Validation per dictionary')}:</Text>
           {activeDictionaries.map((dictionary, dictionaryIndex) => {
+            const dictionaryKey = dictionary.ifcClassification.location || dictionaryIndex;
             return (
-              <Group key={dictionary.ifcClassification.location} mt="xs" justify="space-between" className="flexGroup">
+              <Group key={dictionaryKey} mt="xs" justify="space-between" className="flexGroup">
                 <ColorSwatch size="1em" color={colorMap[activeClassificationColors[dictionaryIndex]]} />
                 <div className="flexTextContainer">
                   <Text className="truncate">{dictionary.ifcClassification.name}</Text>
@@ -101,7 +103,11 @@ function BsddCard({ item: ifcEntity, bsddClass, index, setCardColor: setCategory
         </HoverCard.Dropdown>
       </HoverCard>
       <Tooltip label={t('Attach to type')}>
-        <ActionIcon radius="xl" onClick={() => bsddSearchClick(ifcEntity)}>
+        <ActionIcon
+          radius="xl"
+          onClick={() => bsddSearchClick(ifcEntity)}
+          disabled={!mainDictionary?.ifcClassification?.location}
+        >
           <IconPencil size={20} />
         </ActionIcon>
       </Tooltip>
