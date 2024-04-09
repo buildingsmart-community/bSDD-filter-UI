@@ -10,6 +10,24 @@ Subprojects:
 This project is initiated by Dutch contractors VolkerWessels and Heijmans. By starting this opensource development we believe we can help the industry structuring data. Proper usage of the buildingSMART Data Dictionary helps in getting consistent information in objects. Good information is the basis for further automation. 
 The idea of our development is that we inspire our industry to include bSDD in their processes and softwareproducts natively.
 
+# API
+## Selection Component API
+Functions called from UI
+* window.bsddBridge.loadSettings
+* window.bsddBridge.bsddSearch
+* window.bsddBridge.bsddSelect
+* window.bsddBridge.saveSettings
+ 
+Functions provided by UI:
+* window.updateSelection
+* window.updateSettings
+
+## Search Component API
+Functions called from UI
+* window.bsddBridge.save
+* window.bsddBridge.cancel
+* window.bsddBridge.loadSettings 
+
 # bSDD Search Component for React
 
 ## Live demo
@@ -69,3 +87,4 @@ root.render(
   </React.StrictMode>,
 )
 ```
+

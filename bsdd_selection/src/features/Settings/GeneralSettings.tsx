@@ -10,7 +10,7 @@ import { selectBsddApiEnvironmentUri, selectIncludeTestDictionaries } from './se
 
 interface GeneralSettingsProps {
   id: number;
-  localSettings: BsddSettings | undefined;
+  localSettings: BsddSettings;
   setLocalSettings: (settings: BsddSettings) => void;
   setUnsavedChanges: (unsavedChanges: boolean) => void;
 }

@@ -9,6 +9,7 @@ import type { RootState } from '../../app/store';
 const initialState: BsddSettings = {
   bsddApiEnvironment: defaultEnvironment,
   mainDictionary: null,
+  ifcDictionary: null,
   filterDictionaries: [],
   language: 'en-GB',
   includeTestDictionaries: false,
@@ -31,6 +32,9 @@ const settingsSlice = createSlice({
     setMainDictionary: (state, { payload }: PayloadAction<BsddDictionary>) => {
       state.mainDictionary = payload;
     },
+    setIfcDictionary: (state, { payload }: PayloadAction<BsddDictionary>) => {
+      state.mainDictionary = payload;
+    },
     setFilterDictionaries: (state, { payload }: PayloadAction<BsddDictionary[]>) => {
       state.filterDictionaries = payload;
     },
@@ -45,7 +49,14 @@ const settingsSlice = createSlice({
       (
         state,
         {
-          payload: { bsddApiEnvironment, mainDictionary, filterDictionaries, language, includeTestDictionaries },
+          payload: {
+            bsddApiEnvironment,
+            mainDictionary,
+            ifcDictionary,
+            filterDictionaries,
+            language,
+            includeTestDictionaries,
+          },
         }: PayloadAction<BsddSettings>,
       ) => {
         if (JSON.stringify(state.bsddApiEnvironment) !== JSON.stringify(bsddApiEnvironment)) {
@@ -53,6 +64,9 @@ const settingsSlice = createSlice({
         }
         if (JSON.stringify(state.mainDictionary) !== JSON.stringify(mainDictionary)) {
           state.mainDictionary = mainDictionary;
+        }
+        if (JSON.stringify(state.ifcDictionary) !== JSON.stringify(ifcDictionary)) {
+          state.ifcDictionary = ifcDictionary;
         }
         if (JSON.stringify(state.filterDictionaries) !== JSON.stringify(filterDictionaries)) {
           state.filterDictionaries = filterDictionaries;
@@ -87,9 +101,13 @@ export const selectBsddApiEnvironmentUri = (state: RootState) => {
  */
 export const selectActiveDictionaries = createSelector(
   (state: RootState) => state.settings.mainDictionary,
+  (state: RootState) => state.settings.ifcDictionary,
   (state: RootState) => state.settings.filterDictionaries,
-  (mainDictionary, filterDictionaries) =>
-    mainDictionary ? [mainDictionary, ...filterDictionaries] : filterDictionaries,
+  (mainDictionary, ifcDictionary, filterDictionaries) => {
+    const dictionaries = [mainDictionary, ifcDictionary, ...filterDictionaries].filter(Boolean) as BsddDictionary[];
+    const dictionaryMap = new Map(dictionaries.map((item) => [item.ifcClassification.location, item]));
+    return Array.from(dictionaryMap.values());
+  },
 );
 
 export const selectActiveDictionaryLocations = createSelector(selectActiveDictionaries, (activeDictionaries) =>

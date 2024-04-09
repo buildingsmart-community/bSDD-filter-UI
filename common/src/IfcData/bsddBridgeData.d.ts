@@ -15,6 +15,7 @@ export interface BsddDictionary {
 export interface BsddSettings {
   bsddApiEnvironment: string | null; // default 'production'
   mainDictionary: BsddDictionary | null; // Uri
+  ifcDictionary: BsddDictionary | null; // Uri
   filterDictionaries: BsddDictionary[]; // Uri[]
   language: string;
   includeTestDictionaries: boolean;

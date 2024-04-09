@@ -6,23 +6,16 @@ import i18n from '../../../../common/src/i18n';
 import { BsddDictionary, BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
 import type { RootState } from '../../app/store';
 
-interface SettingsState {
-  bsddApiEnvironment: string | null;
-  mainDictionary: BsddDictionary | null;
-  filterDictionaries: BsddDictionary[];
-  language: string;
-  includeTestDictionaries: boolean;
-}
-
-const initialState: SettingsState = {
+const initialState: BsddSettings = {
   bsddApiEnvironment: defaultEnvironment,
   mainDictionary: null,
+  ifcDictionary: null,
   filterDictionaries: [],
   language: 'en-GB',
   includeTestDictionaries: false,
 };
 
-const handleSetLanguage = (state: SettingsState, action: PayloadAction<string>) => {
+const handleSetLanguage = (state: BsddSettings, action: PayloadAction<string>) => {
   state.language = action.payload;
   i18n.changeLanguage(action.payload);
 };
@@ -39,6 +32,9 @@ const settingsSlice = createSlice({
     setMainDictionary: (state, { payload }: PayloadAction<BsddDictionary>) => {
       state.mainDictionary = payload;
     },
+    setIfcDictionary: (state, { payload }: PayloadAction<BsddDictionary>) => {
+      state.mainDictionary = payload;
+    },
     setFilterDictionaries: (state, { payload }: PayloadAction<BsddDictionary[]>) => {
       state.filterDictionaries = payload;
     },
@@ -53,14 +49,34 @@ const settingsSlice = createSlice({
       (
         state,
         {
-          payload: { bsddApiEnvironment, mainDictionary, filterDictionaries, language, includeTestDictionaries },
+          payload: {
+            bsddApiEnvironment,
+            mainDictionary,
+            ifcDictionary,
+            filterDictionaries,
+            language,
+            includeTestDictionaries,
+          },
         }: PayloadAction<BsddSettings>,
       ) => {
-        state.bsddApiEnvironment = bsddApiEnvironment;
-        state.mainDictionary = mainDictionary;
-        state.filterDictionaries = filterDictionaries;
-        handleSetLanguage(state, { payload: language, type: 'setLanguage' });
-        state.includeTestDictionaries = includeTestDictionaries;
+        if (JSON.stringify(state.bsddApiEnvironment) !== JSON.stringify(bsddApiEnvironment)) {
+          state.bsddApiEnvironment = bsddApiEnvironment;
+        }
+        if (JSON.stringify(state.mainDictionary) !== JSON.stringify(mainDictionary)) {
+          state.mainDictionary = mainDictionary;
+        }
+        if (JSON.stringify(state.ifcDictionary) !== JSON.stringify(ifcDictionary)) {
+          state.ifcDictionary = ifcDictionary;
+        }
+        if (JSON.stringify(state.filterDictionaries) !== JSON.stringify(filterDictionaries)) {
+          state.filterDictionaries = filterDictionaries;
+        }
+        if (JSON.stringify(state.language) !== JSON.stringify(language)) {
+          handleSetLanguage(state, { payload: language, type: 'setLanguage' });
+        }
+        if (JSON.stringify(state.includeTestDictionaries) !== JSON.stringify(includeTestDictionaries)) {
+          state.includeTestDictionaries = includeTestDictionaries;
+        }
       },
     );
   },
@@ -94,10 +110,19 @@ export const selectActiveDictionaryLocations = createSelector(selectActiveDictio
   activeDictionaries.map((dictionary) => dictionary.ifcClassification.location),
 );
 
+export const selectBsddApiEnvironment = (state: RootState) => state.settings.bsddApiEnvironment;
 export const selectMainDictionary = (state: RootState) => state.settings.mainDictionary;
 export const selectFilterDictionaries = (state: RootState) => state.settings.filterDictionaries;
 export const selectLanguage = (state: RootState) => state.settings.language;
-export const selectBsddApiEnvironment = (state: RootState) => state.settings.bsddApiEnvironment;
 export const selectIncludeTestDictionaries = (state: RootState) => state.settings.includeTestDictionaries;
+export const selectSettings = (state: RootState) => state.settings;
+
+export const {
+  setBsddApiEnvironment,
+  setMainDictionary,
+  setFilterDictionaries,
+  setLanguage,
+  setIncludeTestDictionaries,
+} = settingsSlice.actions;
 
 export const settingsReducer = settingsSlice.reducer;

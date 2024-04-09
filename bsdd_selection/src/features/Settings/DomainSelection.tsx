@@ -1,4 +1,5 @@
 import { Accordion, ComboboxItem, MultiSelect, Select, Space, Text, Title } from '@mantine/core';
+import { createSelector } from '@reduxjs/toolkit';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -10,11 +11,14 @@ import { selectBsddDictionaries } from '../bsdd/bsddSlice';
 
 interface DomainSelectionProps {
   id: number;
-  localSettings: BsddSettings | undefined;
+  localSettings: BsddSettings;
   setLocalSettings: (settings: BsddSettings) => void;
   setUnsavedChanges: (unsavedChanges: boolean) => void;
   setIsLoading: (isLoading: boolean) => void;
 }
+
+const IFC_DICTIONARY_URL = 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/';
+const DEFAULT_IFC_PARAMETER = 'Export Type to IFC As';
 
 /**
  * Finds a dictionary in the given array of dictionaries based on the provided URI.
@@ -39,6 +43,7 @@ function findDictionaryByUri(dictionaries: DictionaryContractV1[], uri: string |
 function convertToBsddDictionary(
   dictionary: DictionaryContractV1 | null,
   previousSelections: BsddDictionary[],
+  parameterMapping = '',
 ): BsddDictionary | null {
   if (!dictionary) return null;
 
@@ -49,35 +54,24 @@ function convertToBsddDictionary(
 
   return {
     ifcClassification: convertBsddDictionaryToIfcClassification(dictionary),
-    parameterMapping: '',
+    parameterMapping,
   };
 }
 
-/**
- * Updates the local settings with new values and sets unsaved changes flag.
- *
- * @param localSettings - The current local settings.
- * @param setLocalSettings - The function to update the local settings.
- * @param setUnsavedChanges - The function to set the unsaved changes flag.
- * @param newMainDictionary - The new main dictionary value.
- * @param newFilterDictionaries - The new filter dictionaries array.
- */
-function updateLocalSettings(
-  localSettings: BsddSettings | undefined,
-  setLocalSettings: (settings: BsddSettings) => void,
-  setUnsavedChanges: (unsavedChanges: boolean) => void,
-  newMainDictionary: BsddDictionary | null | undefined,
-  newFilterDictionaries: BsddDictionary[],
-) {
-  if (localSettings) {
-    setLocalSettings({
-      ...localSettings,
-      mainDictionary: newMainDictionary || null,
-      filterDictionaries: newFilterDictionaries,
-    });
-    setUnsavedChanges(true);
-  }
-}
+const selectBsddDictionaryOptions = createSelector(selectBsddDictionaries, (bsddDictionaries) =>
+  Object.values(bsddDictionaries).map((item) => ({
+    value: item.uri,
+    label: `${item.name} (${item.version})`,
+  })),
+);
+
+const selectIfcDictionaryOptions = createSelector(selectBsddDictionaryOptions, (bsddDictionaryOptions) =>
+  bsddDictionaryOptions.filter((option) => option.value.startsWith(IFC_DICTIONARY_URL)),
+);
+
+const selectFilterDictionaryOptions = createSelector(selectBsddDictionaryOptions, (bsddDictionaryOptions) =>
+  bsddDictionaryOptions.filter((option) => !option.value.startsWith(IFC_DICTIONARY_URL)),
+);
 
 function DomainSelection({
   id,
@@ -88,13 +82,33 @@ function DomainSelection({
 }: DomainSelectionProps) {
   const { t } = useTranslation();
   const bsddDictionaries = useAppSelector(selectBsddDictionaries);
+  const bsddDictionaryOptions = useAppSelector(selectBsddDictionaryOptions);
+  const bsddIfcDictionaryOptions = useAppSelector(selectIfcDictionaryOptions);
+  const bsddFilterDictionaryOptions = useAppSelector(selectFilterDictionaryOptions);
 
-  const bsddDictionaryOptions = Object.values(bsddDictionaries).map((item) => ({
-    value: item.uri,
-    label: `${item.name} (${item.version})`,
-  }));
+  const localMainDictionaryValues = useMemo(() => {
+    const item = localSettings?.mainDictionary;
+    return item
+      ? [
+          {
+            value: item.ifcClassification?.location || '',
+            label: item.ifcClassification?.location || '',
+          } as ComboboxItem,
+        ]
+      : [];
+  }, [localSettings]);
 
-  const localMainDictionaryValue = localSettings?.mainDictionary?.ifcClassification.location || null;
+  const localIfcDictionaryValues = useMemo(() => {
+    const item = localSettings?.ifcDictionary;
+    return item
+      ? [
+          {
+            value: item.ifcClassification?.location || '',
+            label: item.ifcClassification?.location || '',
+          } as ComboboxItem,
+        ]
+      : [];
+  }, [localSettings]);
 
   const localFilterDictionaryValues = useMemo(() => {
     return (
@@ -109,21 +123,51 @@ function DomainSelection({
   }, [localSettings]);
 
   const changeMainDictionaryOption = useCallback(
-    (selectedMainDictionaryUri: string | null) => {
-      console.log('changeMainDictionaryOption', selectedMainDictionaryUri);
+    (selectedMainDictionaryUris: string[]) => {
+      const selectedMainDictionaryUri = selectedMainDictionaryUris[0];
       const selectedMainDictionary =
         findDictionaryByUri(Object.values(bsddDictionaries), selectedMainDictionaryUri) || null;
 
-      if (!localSettings) return;
-
-      const oldValues = localSettings.mainDictionary ? [localSettings.mainDictionary] : [];
-      const newMainDictionary = convertToBsddDictionary(selectedMainDictionary, oldValues);
-
+      const newMainDictionary = convertToBsddDictionary(
+        selectedMainDictionary,
+        localSettings.mainDictionary ? [localSettings.mainDictionary] : [],
+      );
       const newFilterDictionaries = localSettings.filterDictionaries.filter(
         (dictionary) => dictionary.ifcClassification.location !== selectedMainDictionaryUri,
       );
 
-      updateLocalSettings(localSettings, setLocalSettings, setUnsavedChanges, newMainDictionary, newFilterDictionaries);
+      setLocalSettings({
+        ...localSettings,
+        mainDictionary: newMainDictionary || null,
+        filterDictionaries: newFilterDictionaries,
+      } as BsddSettings);
+      setUnsavedChanges(true);
+    },
+    [bsddDictionaries, localSettings, setLocalSettings, setUnsavedChanges],
+  );
+
+  const changeIfcDictionaryOption = useCallback(
+    (selectedIfcDictionaryUris: string[]) => {
+      const selectedIfcDictionaryUri = selectedIfcDictionaryUris[0];
+      const selectedIfcDictionary =
+        findDictionaryByUri(Object.values(bsddDictionaries), selectedIfcDictionaryUri) || null;
+
+      const parameterMapping: string = localSettings.ifcDictionary?.parameterMapping || DEFAULT_IFC_PARAMETER;
+      const newIfcDictionary = convertToBsddDictionary(
+        selectedIfcDictionary,
+        localSettings.ifcDictionary ? [localSettings.ifcDictionary] : [],
+        parameterMapping,
+      );
+      const newFilterDictionaries = localSettings.filterDictionaries.filter(
+        (dictionary) => dictionary.ifcClassification.location !== selectedIfcDictionaryUri,
+      );
+
+      setLocalSettings({
+        ...localSettings,
+        ifcDictionary: newIfcDictionary || null,
+        filterDictionaries: newFilterDictionaries,
+      } as BsddSettings);
+      setUnsavedChanges(true);
     },
     [bsddDictionaries, localSettings, setLocalSettings, setUnsavedChanges],
   );
@@ -133,16 +177,35 @@ function DomainSelection({
       const newFilterDictionaries: BsddDictionary[] = Object.values(bsddDictionaries)
         .filter((item) => selectedFilterDictionaryUris.includes(item.uri))
         .map((item) => convertToBsddDictionary(item, localSettings?.filterDictionaries || []))
-        .filter((item) => item !== null) as BsddDictionary[];
+        .filter(
+          (item) =>
+            item !== null &&
+            item.ifcClassification.location !== localSettings?.mainDictionary?.ifcClassification.location &&
+            item.ifcClassification.location !== localSettings?.ifcDictionary?.ifcClassification.location,
+        ) as BsddDictionary[];
 
-      const newMainDictionary =
-        localMainDictionaryValue && selectedFilterDictionaryUris.includes(localMainDictionaryValue)
-          ? null
-          : localSettings?.mainDictionary;
+      const getNewDictionary = (dictionaryValues: ComboboxItem[], dictionary: BsddDictionary | null | undefined) =>
+        dictionaryValues && selectedFilterDictionaryUris.includes(dictionaryValues[0]?.value) ? null : dictionary;
 
-      updateLocalSettings(localSettings, setLocalSettings, setUnsavedChanges, newMainDictionary, newFilterDictionaries);
+      const newMainDictionary = getNewDictionary(localMainDictionaryValues, localSettings?.mainDictionary);
+      const newIfcDictionary = getNewDictionary(localIfcDictionaryValues, localSettings?.ifcDictionary);
+
+      setLocalSettings({
+        ...localSettings,
+        mainDictionary: newMainDictionary || null,
+        ifcDictionary: newIfcDictionary || null,
+        filterDictionaries: newFilterDictionaries,
+      } as BsddSettings);
+      setUnsavedChanges(true);
     },
-    [bsddDictionaries, localSettings, setLocalSettings, setUnsavedChanges, localMainDictionaryValue],
+    [
+      bsddDictionaries,
+      localMainDictionaryValues,
+      localSettings,
+      localIfcDictionaryValues,
+      setLocalSettings,
+      setUnsavedChanges,
+    ],
   );
 
   // Set filter dictionary options for use in select
@@ -160,14 +223,28 @@ function DomainSelection({
         </Text>
       </Accordion.Control>
       <Accordion.Panel>
-        <Select
-          key={localMainDictionaryValue || 'mainDictionary-select'} // workaround for select not updating when value is changed to null
+        <MultiSelect
+          key="mainDictionary-select"
           id="mainDictionary"
           label={t('Main dictionary')}
-          value={localMainDictionaryValue}
+          value={localMainDictionaryValues.map((item) => item.value)}
           onChange={changeMainDictionaryOption}
           placeholder="Select main dictionary"
-          data={bsddDictionaryOptions}
+          data={bsddFilterDictionaryOptions}
+          maxValues={1}
+          searchable
+          clearable
+        />
+        <Space h="xs" />
+        <MultiSelect
+          key="ifcDictionary-select"
+          id="ifcDictionary"
+          label={t('Selection IFC dictionary')}
+          value={localIfcDictionaryValues.map((item) => item.value)}
+          onChange={changeIfcDictionaryOption}
+          placeholder="Select filter dictionaries"
+          data={bsddIfcDictionaryOptions}
+          maxValues={1}
           searchable
           clearable
         />
@@ -177,14 +254,11 @@ function DomainSelection({
           id="filterDictionaries"
           label={t('Selection filter dictionaries')}
           value={localFilterDictionaryValues.map((item) => item.value)}
-          onChange={(value) => {
-            changeFilterDictionaries(value);
-          }}
+          onChange={changeFilterDictionaries}
           placeholder="Select filter dictionaries"
-          data={bsddDictionaryOptions}
+          data={bsddFilterDictionaryOptions}
           searchable
           clearable
-          hidePickedOptions
         />
       </Accordion.Panel>
     </Accordion.Item>
