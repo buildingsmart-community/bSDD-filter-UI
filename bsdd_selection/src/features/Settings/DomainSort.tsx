@@ -10,7 +10,7 @@ import classes from './DndListHandle.module.css';
 
 interface DomainSortProps {
   id: number;
-  localSettings: BsddSettings | undefined;
+  localSettings: BsddSettings;
   setLocalSettings: (settings: BsddSettings) => void;
   setUnsavedChanges: (unsavedChanges: boolean) => void;
 }

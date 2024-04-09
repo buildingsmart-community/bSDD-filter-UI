@@ -13,7 +13,7 @@ function Settings() {
   const dispatch = useAppDispatch();
   const globalSettings = useAppSelector((state) => state.settings);
 
-  const [localSettings, setLocalSettings] = useState<BsddSettings>();
+  const [localSettings, setLocalSettings] = useState<BsddSettings>(globalSettings);
   const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 

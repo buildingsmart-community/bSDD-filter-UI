@@ -6,22 +6,25 @@ export const mockData: BsddBridgeData = {
     mainDictionary: {
       ifcClassification: {
         type: 'IfcClassification',
-        location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
+        source: 'digibase',
+        edition: '0.8.0',
         editionDate: '0001-01-01T00:00:00',
         name: 'Basis bouwproducten',
+        description: '',
+        location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
       },
       parameterMapping: 'Description',
     },
-    filterDictionaries: [
-      {
-        ifcClassification: {
-          type: 'IfcClassification',
-          location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          editionDate: '0001-01-01T00:00:00',
-          name: 'IFC',
-        },
-        parameterMapping: 'IfcExportAs',
+    ifcDictionary: {
+      ifcClassification: {
+        type: 'IfcClassification',
+        location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
+        editionDate: '0001-01-01T00:00:00',
+        name: 'IFC',
       },
+      parameterMapping: 'IfcExportAs',
+    },
+    filterDictionaries: [
       {
         ifcClassification: {
           type: 'IfcClassification',
@@ -53,16 +56,6 @@ export const mockData: BsddBridgeData = {
           name: 'Project nulpunt',
         },
         {
-          identification: 'IfcObject',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcObject',
-        },
-        {
           identification: '0.0',
           referencedSource: {
             type: 'IfcClassification',
@@ -90,16 +83,6 @@ export const mockData: BsddBridgeData = {
           type: 'IfcClassificationReference',
           name: 'bakgoot',
         },
-        {
-          identification: 'IfcWasteTerminal',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcWasteTerminal',
-        },
       ],
     },
     {
@@ -117,16 +100,6 @@ export const mockData: BsddBridgeData = {
           },
           type: 'IfcClassificationReference',
           name: 'beugel bakgoot',
-        },
-        {
-          identification: 'IfcWasteTerminal',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcWasteTerminal',
         },
         {
           identification: '52.10',
@@ -155,16 +128,6 @@ export const mockData: BsddBridgeData = {
           },
           type: 'IfcClassificationReference',
           name: 'bakgoot',
-        },
-        {
-          identification: 'IfcWasteTerminal',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcWasteTerminal',
         },
         {
           identification: '52.10',
@@ -249,16 +212,6 @@ export const mockData: BsddBridgeData = {
           name: 'gevelafwerking_baksteen',
         },
         {
-          identification: 'IfcWall',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcWall',
-        },
-        {
           identification: '21.12',
           referencedSource: {
             type: 'IfcClassification',
@@ -286,16 +239,6 @@ export const mockData: BsddBridgeData = {
           type: 'IfcClassificationReference',
           name: 'beton prefab 150mm',
         },
-        {
-          identification: 'IfcWall',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcWall',
-        },
       ],
     },
     {
@@ -314,16 +257,6 @@ export const mockData: BsddBridgeData = {
           type: 'IfcClassificationReference',
           name: 'isolatie Mupan Ultra Xs 138mm',
         },
-        {
-          identification: 'IfcWall',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcWall',
-        },
       ],
     },
     {
@@ -341,16 +274,6 @@ export const mockData: BsddBridgeData = {
           },
           type: 'IfcClassificationReference',
           name: 'gevel-sparingsmaker spouwwand',
-        },
-        {
-          identification: 'IfcElementAssembly',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcElementAssembly',
         },
         {
           identification: '31',
@@ -381,16 +304,6 @@ export const mockData: BsddBridgeData = {
           name: 'gevel-sparingsmaker bladsparing',
         },
         {
-          identification: 'IfcElementAssembly',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcElementAssembly',
-        },
-        {
           identification: '31',
           referencedSource: {
             type: 'IfcClassification',
@@ -417,16 +330,6 @@ export const mockData: BsddBridgeData = {
           },
           type: 'IfcClassificationReference',
           name: 'gevel-sparingsmaker bladsparing',
-        },
-        {
-          identification: 'IfcElementAssembly',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcElementAssembly',
         },
         {
           identification: '31',
@@ -457,16 +360,6 @@ export const mockData: BsddBridgeData = {
           name: 'gevel-sparingsmaker bladsparing',
         },
         {
-          identification: 'IfcElementAssembly',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcElementAssembly',
-        },
-        {
           identification: '31',
           referencedSource: {
             type: 'IfcClassification',
@@ -493,16 +386,6 @@ export const mockData: BsddBridgeData = {
           },
           type: 'IfcClassificationReference',
           name: 'gevelsparingsmaker omkadering bladsparing buiten',
-        },
-        {
-          identification: 'IfcElementAssembly',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcElementAssembly',
         },
       ],
     },
@@ -652,16 +535,6 @@ export const mockData: BsddBridgeData = {
           name: 'JA01-00',
         },
         {
-          identification: 'IfcWindow',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcWindow',
-        },
-        {
           identification: '31.31',
           referencedSource: {
             type: 'IfcClassification',
@@ -793,16 +666,6 @@ export const mockData: BsddBridgeData = {
           type: 'IfcClassificationReference',
           name: 'knieschot',
         },
-        {
-          identification: 'IfcRoof',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcRoof',
-        },
       ],
     },
     {
@@ -821,16 +684,6 @@ export const mockData: BsddBridgeData = {
           type: 'IfcClassificationReference',
           name: 'muurplaat',
         },
-        {
-          identification: 'IfcRoof',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcRoof',
-        },
       ],
     },
     {
@@ -848,16 +701,6 @@ export const mockData: BsddBridgeData = {
           },
           type: 'IfcClassificationReference',
           name: 'muurplaat',
-        },
-        {
-          identification: 'IfcRoof',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcRoof',
         },
         {
           identification: '27.22',
@@ -910,16 +753,6 @@ export const mockData: BsddBridgeData = {
       tag: '1003479',
       hasAssociations: [
         {
-          identification: 'IfcSlab',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcSlab',
-        },
-        {
           identification: '21.21',
           referencedSource: {
             type: 'IfcClassification',
@@ -947,16 +780,6 @@ export const mockData: BsddBridgeData = {
           type: 'IfcClassificationReference',
           name: 'dak_hout_scharnierkap',
         },
-        {
-          identification: 'IfcRoof',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcRoof',
-        },
       ],
     },
     {
@@ -974,16 +797,6 @@ export const mockData: BsddBridgeData = {
           },
           type: 'IfcClassificationReference',
           name: 'wand_hout_HSB_opbouw_ntb',
-        },
-        {
-          identification: 'IfcWall',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcWall',
         },
         {
           identification: '22.20',
@@ -1014,16 +827,6 @@ export const mockData: BsddBridgeData = {
           name: 'wand_gips_metalstud',
         },
         {
-          identification: 'IfcWall',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcWall',
-        },
-        {
           identification: '22.20',
           referencedSource: {
             type: 'IfcClassification',
@@ -1050,16 +853,6 @@ export const mockData: BsddBridgeData = {
           },
           type: 'IfcClassificationReference',
           name: 'deurkozijn_staal_bovenlicht_deurblad',
-        },
-        {
-          identification: 'IfcDoor',
-          referencedSource: {
-            type: 'IfcClassification',
-            editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3',
-          },
-          type: 'IfcClassificationReference',
-          name: 'IfcDoor',
         },
         {
           identification: '32.31',

@@ -6,7 +6,7 @@ import { BsddDictionary, BsddSettings } from '../../../../common/src/IfcData/bsd
 
 interface ParameterMappingProps {
   id: number;
-  localSettings: BsddSettings | undefined;
+  localSettings: BsddSettings;
   setLocalSettings: (settings: BsddSettings) => void;
   setUnsavedChanges: (unsavedChanges: boolean) => void;
 }
@@ -18,16 +18,16 @@ function ParameterMapping({
   setUnsavedChanges,
 }: ParameterMappingProps) {
   const { t } = useTranslation();
-  const { mainDictionary, filterDictionaries } = settings || { mainDictionary: null, filterDictionaries: [] };
+  const { mainDictionary, filterDictionaries } = settings;
 
-  const [activeDictionaries, setActiveDictionaries] = useState<BsddDictionary[]>([]);
+  const [mappableDictionaries, setMappableDictionaries] = useState<BsddDictionary[]>([]);
 
   useEffect(() => {
-    const dictionaries = mainDictionary ? [mainDictionary, ...filterDictionaries] : filterDictionaries;
+    const dictionaries = [mainDictionary, ...filterDictionaries].filter(Boolean) as BsddDictionary[];
     const dictionaryMap = new Map(dictionaries.map((item) => [item.ifcClassification.location, item]));
     const uniqueDictionaries = Array.from(dictionaryMap.values());
 
-    setActiveDictionaries(uniqueDictionaries);
+    setMappableDictionaries(uniqueDictionaries);
   }, [mainDictionary, filterDictionaries]);
 
   const handleInputChange = (dictionaryUri: string | undefined, newParameterMapping: string) => {
@@ -60,7 +60,7 @@ function ParameterMapping({
         </Text>
       </Accordion.Control>
       <Accordion.Panel>
-        {activeDictionaries.map((dictionary, dictionaryIndex) => {
+        {mappableDictionaries.map((dictionary, dictionaryIndex) => {
           const dictionaryKey = dictionary.ifcClassification.location || dictionaryIndex;
           return (
             <div key={dictionaryKey} style={{ marginBottom: '1em' }}>
