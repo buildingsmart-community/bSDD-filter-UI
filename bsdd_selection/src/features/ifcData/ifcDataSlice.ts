@@ -74,7 +74,6 @@ function bsddIfcClassification(
 ): IfcClassificationReference {
   return {
     type: 'IfcClassificationReference',
-    name: 'IFC',
     identification: ifcEntityToBsddClass(ifcEntity.type, ifcEntity.predefinedType),
     referencedSource,
   };
