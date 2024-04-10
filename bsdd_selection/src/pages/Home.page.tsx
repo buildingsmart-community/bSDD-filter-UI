@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { isProduction } from '../../../common/src/env';
 import { BsddBridgeData, BsddDictionary, BsddSettings } from '../../../common/src/IfcData/bsddBridgeData';
+import { IfcEntity } from '../../../common/src/IfcData/ifc';
 import { validateIfcClassification } from '../../../common/src/IfcData/ifcValidators';
 import { mockData } from '../../../common/src/IfcData/mockData';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
@@ -37,12 +38,9 @@ function HomePage() {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const bsddDataLoaded = useAppSelector(selectBsddDataLoaded);
-  const [pendingBridgeData, setPendingBridgeData] = useState<BsddBridgeData | null>(null);
+  const [pendingSettings, setPendingSettings] = useState<BsddSettings | null>(null);
+  const [ifcData, setIfcData] = useState<IfcEntity[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-
-  const dispatchDataWhenLoaded = (bsddBridgeData: BsddBridgeData) => {
-    setPendingBridgeData(bsddBridgeData);
-  };
 
   // Set up BsddBridge connection
   useEffect(() => {
@@ -59,19 +57,26 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (bsddDataLoaded && pendingBridgeData) {
-      dispatch(setSettingsWithValidation(pendingBridgeData.settings));
-      dispatch(setValidatedIfcData(pendingBridgeData.ifcData));
-      setPendingBridgeData(null);
+    if (bsddDataLoaded && pendingSettings) {
+      dispatch(setSettingsWithValidation(pendingSettings));
+      setPendingSettings(null);
       setLoading(false);
     }
-  }, [bsddDataLoaded, pendingBridgeData, dispatch]);
+  }, [bsddDataLoaded, pendingSettings, dispatch]);
+
+  useEffect(() => {
+    if (!loading && ifcData) {
+      dispatch(setValidatedIfcData(ifcData));
+      setIfcData(null);
+    }
+  }, [loading, ifcData, dispatch]);
 
   // Load mock data in development
   useEffect(() => {
     if (isProduction) return;
 
-    dispatchDataWhenLoaded(mockData);
+    setPendingSettings(mockData.settings);
+    setIfcData(mockData.ifcData);
   }, [dispatch]);
 
   // Initial settings load
@@ -83,7 +88,7 @@ function HomePage() {
         const settings = await window.bsddBridge.loadSettings();
         const settingsParsed = JSON.parse(settings) as BsddSettings;
         console.log('initial loadSettings selection', settingsParsed);
-        dispatchDataWhenLoaded(settingsParsed);
+        setPendingSettings(settingsParsed);
       }
     };
 
@@ -94,13 +99,13 @@ function HomePage() {
   // @ts-ignore
   window.updateSelection = (ifcEntities: IfcEntity[]) => {
     console.log('updateSelection', ifcEntities);
-    dispatch(setValidatedIfcData(ifcEntities));
+    setIfcData(ifcEntities);
   };
 
   // @ts-ignore
   window.updateSettings = (settings: BsddSettings) => {
     console.log('updateSettings', settings);
-    dispatchDataWhenLoaded(settings);
+    setPendingSettings(settings);
   };
 
   return (
