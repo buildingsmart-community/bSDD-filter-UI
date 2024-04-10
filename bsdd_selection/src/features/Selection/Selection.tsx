@@ -1,37 +1,14 @@
-import { Accordion, Tabs } from '@mantine/core';
-import { useEffect, useMemo } from 'react';
+import { Accordion, Alert, Box, LoadingOverlay, Space, Tabs } from '@mantine/core';
+import { IconInfoCircle } from '@tabler/icons-react';
+import { useMemo } from 'react';
 
 import { IfcEntity } from '../../../../common/src/IfcData/ifc';
 import { useAppSelector } from '../../app/hooks';
 import { selectIfcEntities } from '../ifcData/ifcDataSlice';
 import CategoryCollapse from './CategoryCollapse';
 
-let CefSharp: any;
-
-export interface BuildingClass {
-  uri: string;
-  code: string;
-  name: string;
-  classType: string;
-  referenceCode: string;
-}
-
-export interface BimBasisObjectsResponse {
-  classes: BuildingClass[];
-  classesTotalCount: number;
-  classesOffset: number;
-  classesCount: number;
-  uri: string;
-  name: string;
-  version: string;
-  organizationCodeOwner: string;
-  organizationNameOwner: string;
-  defaultLanguageCode: string;
-  license: string;
-  qualityAssuranceProcedure: string;
-  status: string;
-  releaseDate: string;
-  lastUpdatedUtc: string;
+interface SelectionProps {
+  loading: boolean;
 }
 
 function groupEntitiesBy(array: IfcEntity[], property: keyof IfcEntity) {
@@ -61,33 +38,41 @@ function groupEntitiesBy(array: IfcEntity[], property: keyof IfcEntity) {
       return acc;
     }, {} as Record<string, IfcEntity[]>);
 }
-function Selection() {
-  const ifcEntities = useAppSelector(selectIfcEntities);
-  const groupedEntities = useMemo(() => groupEntitiesBy(ifcEntities, 'description'), [ifcEntities]);
 
-  // Set up BsddBridge connection
-  useEffect(() => {
-    const connectToBsddBridge = async () => {
-      try {
-        if (CefSharp) {
-          await CefSharp.BindObjectAsync('bsddBridge');
-        }
-      } catch (e: any) {
-        // If an error occurred, set the error state
-        // setError(e.message);
-        console.error(e.message);
-      }
-    };
-    connectToBsddBridge();
-  }, []);
+function Selection({ loading }: SelectionProps) {
+  const ifcEntities = useAppSelector(selectIfcEntities);
+
+  const categoryCollapseList = useMemo(() => {
+    if (!ifcEntities) return [];
+    const list = Object.entries(groupEntitiesBy(ifcEntities, 'description')).map(([category, items], index) => (
+      <CategoryCollapse key={category} category={category} items={items} index={category || index.toString()} />
+    ));
+    return list;
+  }, [ifcEntities]);
+
+  const icon = <IconInfoCircle />;
 
   return (
     <Tabs.Panel value="link">
-      <Accordion chevronPosition="left">
-        {Object.entries(groupedEntities).map(([category, items], index) => (
-          <CategoryCollapse key={category} category={category} items={items} index={category || index.toString()} />
-        ))}
-      </Accordion>
+      <Box pos="relative" style={{ height: '100vh' }}>
+        <LoadingOverlay visible={loading || !ifcEntities} />
+        {ifcEntities && categoryCollapseList.length === 0 ? (
+          <Alert title="No entities selected..." icon={icon} mt="xl">
+            Select entities by using the buttons at the top of the panel.
+            <Space h="md" />
+            Need help?{' '}
+            <a
+              href="https://github.com/buildingsmart-community/bSDD-Revit-plugin/wiki"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Check out our documentation
+            </a>
+          </Alert>
+        ) : (
+          <Accordion chevronPosition="left">{categoryCollapseList}</Accordion>
+        )}
+      </Box>
     </Tabs.Panel>
   );
 }
