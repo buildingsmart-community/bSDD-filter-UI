@@ -88,7 +88,6 @@ async function processAssociations(
   const processedAssociations = await Promise.all(
     associations.map(async (association) => {
       if (association.type === 'IfcClassificationReference') {
-        console.log('Processing IfcClassificationReference', association);
         const { ifcClassificationReference, validationState, message } = await patchIfcClassificationReference(
           association,
           dispatch,
