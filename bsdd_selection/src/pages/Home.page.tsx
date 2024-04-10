@@ -49,8 +49,8 @@ function HomePage() {
         if (CefSharp) {
           await CefSharp.BindObjectAsync('bsddBridge');
         }
-      } catch (e: any) {
-        console.error(e.message);
+      } catch (error) {
+        console.error('Error connecting to bsddBridge:', error);
       }
     };
     connectToBsddBridge();
@@ -70,29 +70,33 @@ function HomePage() {
       setIfcData(null);
     }
   }, [loading, ifcData, dispatch]);
-
-  // Load mock data in development
+  console.log('isProduction', isProduction);
+  // Initial ifcData load, load mock data in development
   useEffect(() => {
-    if (isProduction) return;
+    if (isProduction) {
+      setIfcData([]);
+    } else {
+      setIfcData(mockData.ifcData);
+    }
+  }, []);
 
-    setPendingSettings(mockData.settings);
-    setIfcData(mockData.ifcData);
-  }, [dispatch]);
-
-  // Initial settings load
+  // Initial settings load, load mock data in development
   useEffect(() => {
     const loadSettings = async () => {
       // @ts-ignore
-      if (window?.bsddBridge) {
-        // @ts-ignore
-        const settings = await window.bsddBridge.loadSettings();
+      const settings = await window?.bsddBridge?.loadSettings();
+      if (settings) {
         const settingsParsed = JSON.parse(settings) as BsddSettings;
         console.log('initial loadSettings selection', settingsParsed);
         setPendingSettings(settingsParsed);
       }
     };
 
-    loadSettings();
+    if (isProduction) {
+      loadSettings();
+    } else {
+      setPendingSettings(mockData.settings);
+    }
   }, []);
 
   // Bridge API functions
