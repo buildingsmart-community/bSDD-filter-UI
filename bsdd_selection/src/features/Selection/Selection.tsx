@@ -1,6 +1,7 @@
 import { Accordion, Alert, Box, LoadingOverlay, Space, Tabs } from '@mantine/core';
 import { IconInfoCircle } from '@tabler/icons-react';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { IfcEntity } from '../../../../common/src/IfcData/ifc';
 import { useAppSelector } from '../../app/hooks';
@@ -40,6 +41,7 @@ function groupEntitiesBy(array: IfcEntity[], property: keyof IfcEntity) {
 }
 
 function Selection({ loading }: SelectionProps) {
+  const { t } = useTranslation();
   const ifcEntities = useAppSelector(selectIfcEntities);
 
   const categoryCollapseList = useMemo(() => {
@@ -58,15 +60,15 @@ function Selection({ loading }: SelectionProps) {
         <LoadingOverlay visible={loading || !ifcEntities} />
         {ifcEntities && categoryCollapseList.length === 0 ? (
           <Alert title="No entities selected..." icon={icon} mt="xl">
-            Select entities by using the buttons at the top of the panel.
+            {t('entitySelectionInstruction')}
             <Space h="md" />
-            Need help?{' '}
+            {t('needHelp')}{' '}
             <a
               href="https://github.com/buildingsmart-community/bSDD-Revit-plugin/wiki"
               target="_blank"
               rel="noreferrer"
             >
-              Check out our documentation
+              {t('checkDocumentation')}
             </a>
           </Alert>
         ) : (

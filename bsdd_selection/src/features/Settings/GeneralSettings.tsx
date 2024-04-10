@@ -55,9 +55,9 @@ function GeneralSettings({ id, localSettings, setLocalSettings, setUnsavedChange
   return (
     <Accordion.Item key={id} value={id.toString()}>
       <Accordion.Control>
-        <Title order={5}>{t('General settings')}</Title>
+        <Title order={5}>{t('generalSettingsLabel')}</Title>
         <Text size="xs" c="dimmed">
-          {t('General settings help text')}
+          {t('generalSettingsInstruction')}
         </Text>
       </Accordion.Control>
       <Accordion.Panel>

@@ -26,11 +26,11 @@ function LanguageSelect({ settings, setSettings, setUnsavedChanges }: LanguageSe
 
   return (
     <Select
-      label={t('Language')}
+      label={t('language')}
       data={languages}
       value={i18n.language}
       onChange={changeLanguage}
-      placeholder={t('Select language')}
+      placeholder={t('selectLanguageInstruction')}
     />
   );
 }

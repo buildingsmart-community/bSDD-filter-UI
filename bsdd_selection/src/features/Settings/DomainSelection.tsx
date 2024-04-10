@@ -217,16 +217,16 @@ function DomainSelection({
   return (
     <Accordion.Item key={id} value={id.toString()}>
       <Accordion.Control>
-        <Title order={5}>{t('Dictionary selection')}</Title>
+        <Title order={5}>{t('dictionarySelectionLabel')}</Title>
         <Text size="xs" c="dimmed">
-          {t('Dictionary selection help text')}
+          {t('dictionarySelectionInstruction')}
         </Text>
       </Accordion.Control>
       <Accordion.Panel>
         <MultiSelect
           key="mainDictionary-select"
           id="mainDictionary"
-          label={t('Main dictionary')}
+          label={t('selectMainDictionary')}
           value={localMainDictionaryValues.map((item) => item.value)}
           onChange={changeMainDictionaryOption}
           placeholder="Select main dictionary"
@@ -252,7 +252,7 @@ function DomainSelection({
         <MultiSelect
           key="filterDictionaries-select"
           id="filterDictionaries"
-          label={t('Selection filter dictionaries')}
+          label={t('selectFilterDictionaries')}
           value={localFilterDictionaryValues.map((item) => item.value)}
           onChange={changeFilterDictionaries}
           placeholder="Select filter dictionaries"

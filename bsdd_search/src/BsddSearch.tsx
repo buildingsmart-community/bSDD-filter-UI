@@ -183,7 +183,7 @@ function BsddSearch() {
       <Accordion defaultValue={['Classifications']} multiple>
         <Accordion.Item key="Classifications" value="Classifications">
           <Accordion.Control>
-            <Title order={5}>{t('Classifications')}</Title>
+            <Title order={5}>{t('classificationsLabel')}</Title>
           </Accordion.Control>
           <Accordion.Panel>
             <Classifications
@@ -196,7 +196,7 @@ function BsddSearch() {
         </Accordion.Item>
         <Accordion.Item key="Propertysets" value="Propertysets">
           <Accordion.Control>
-            <Title order={5}>{t('Propertysets')}</Title>
+            <Title order={5}>{t('propertysetsLabel')}</Title>
           </Accordion.Control>
           <Accordion.Panel>
             <PropertySets
