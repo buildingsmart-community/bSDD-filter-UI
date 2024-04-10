@@ -10,11 +10,11 @@ import { patchIfcClassificationReference } from '../../../../common/src/IfcData/
 import type { RootState } from '../../app/store';
 
 interface EntitiesState {
-  ifcEntities: IfcEntity[];
+  ifcEntities: IfcEntity[] | null;
 }
 
 const initialState: EntitiesState = {
-  ifcEntities: [],
+  ifcEntities: null,
 };
 
 const ifcDataSlice = createSlice({
@@ -74,10 +74,35 @@ function bsddIfcClassification(
 ): IfcClassificationReference {
   return {
     type: 'IfcClassificationReference',
-    name: 'IFC',
     identification: ifcEntityToBsddClass(ifcEntity.type, ifcEntity.predefinedType),
     referencedSource,
   };
+}
+
+// Helper function to process associations
+async function processAssociations(
+  associations: Association[],
+  dispatch: any,
+  state: RootState,
+): Promise<Association[]> {
+  const processedAssociations = await Promise.all(
+    associations.map(async (association) => {
+      if (association.type === 'IfcClassificationReference') {
+        console.log('Processing IfcClassificationReference', association);
+        const { ifcClassificationReference, validationState, message } = await patchIfcClassificationReference(
+          association,
+          dispatch,
+          state,
+        );
+        if (validationState === 'invalid') {
+          return null;
+        }
+        return ifcClassificationReference;
+      }
+      return association;
+    }),
+  );
+  return processedAssociations.filter((association) => association !== null) as Association[];
 }
 
 /**
@@ -104,24 +129,8 @@ export const setValidatedIfcData = createAsyncThunk(
           bsddIfcClassification(ifcEntity, state.settings.ifcDictionary?.ifcClassification),
         ];
 
-        const processedAssociations = (
-          await Promise.all(
-            associations.map(async (association) => {
-              if (association.type === 'IfcClassificationReference') {
-                const { validationState, ifcClassificationReference, message } = await patchIfcClassificationReference(
-                  association,
-                  dispatch,
-                  state,
-                );
-                if (validationState === 'invalid') {
-                  return null;
-                }
-                return ifcClassificationReference;
-              }
-              return association;
-            }),
-          )
-        ).filter((association) => association !== null) as Association[];
+        const processedAssociations = await processAssociations(associations, dispatch, state);
+
         return { ...ifcEntity, hasAssociations: processedAssociations };
       }),
     );

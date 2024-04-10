@@ -22,7 +22,7 @@ export const mockData: BsddBridgeData = {
         editionDate: '0001-01-01T00:00:00',
         name: 'IFC',
       },
-      parameterMapping: 'IfcExportAs',
+      parameterMapping: 'Export Type to IFC As',
     },
     filterDictionaries: [
       {

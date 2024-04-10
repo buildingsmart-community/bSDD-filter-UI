@@ -101,9 +101,13 @@ export const selectBsddApiEnvironmentUri = (state: RootState) => {
  */
 export const selectActiveDictionaries = createSelector(
   (state: RootState) => state.settings.mainDictionary,
+  (state: RootState) => state.settings.ifcDictionary,
   (state: RootState) => state.settings.filterDictionaries,
-  (mainDictionary, filterDictionaries) =>
-    mainDictionary ? [mainDictionary, ...filterDictionaries] : filterDictionaries,
+  (mainDictionary, ifcDictionary, filterDictionaries) => {
+    const dictionaries = [mainDictionary, ifcDictionary, ...filterDictionaries].filter(Boolean) as BsddDictionary[];
+    const dictionaryMap = new Map(dictionaries.map((item) => [item.ifcClassification.location, item]));
+    return Array.from(dictionaryMap.values());
+  },
 );
 
 export const selectActiveDictionaryLocations = createSelector(selectActiveDictionaries, (activeDictionaries) =>

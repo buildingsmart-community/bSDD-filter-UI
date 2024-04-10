@@ -142,8 +142,9 @@ function BsddSearch() {
         const classificationReference = association;
         if (classificationReference.referencedSource?.location) {
           if (classificationReference.referencedSource.location === newActiveClassificationUri) {
-            if (!classificationReference.location) return;
-            setActiveClassificationUri(classificationReference.location);
+            if (classificationReference.location) {
+              setActiveClassificationUri(classificationReference.location);
+            }
             setDefaultSearch({
               label: classificationReference.name,
               value: classificationReference.location,
