@@ -49,9 +49,9 @@ function DomainSort({ id, localSettings, setLocalSettings, setUnsavedChanges }: 
   return (
     <Accordion.Item key={id} value={id.toString()}>
       <Accordion.Control>
-        <Title order={5}>{t('Sort filter dictionaries')}</Title>
+        <Title order={5}>{t('sortFilterDictionariesLabel')}</Title>
         <Text size="xs" c="dimmed">
-          {t('Sort filter dictionaries help text')}
+          {t('sortFilterDictionariesInstruction')}
         </Text>
       </Accordion.Control>
       <Accordion.Panel>

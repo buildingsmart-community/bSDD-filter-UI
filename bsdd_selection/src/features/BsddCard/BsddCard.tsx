@@ -88,7 +88,7 @@ function BsddCard({ item: ifcEntity, index, setCardColor: setCategoryColor }: Bs
           </div>
         </HoverCard.Target>
         <HoverCard.Dropdown>
-          <Text>{t('Validation per dictionary')}:</Text>
+          <Text>{t('dictionaryValidationSummaryLabel')}:</Text>
           {activeDictionaries.map((dictionary, dictionaryIndex) => {
             const dictionaryKey = dictionary.ifcClassification.location || dictionaryIndex;
             return (
@@ -102,7 +102,7 @@ function BsddCard({ item: ifcEntity, index, setCardColor: setCategoryColor }: Bs
           })}
         </HoverCard.Dropdown>
       </HoverCard>
-      <Tooltip label={t('Attach to type')}>
+      <Tooltip label={t('attachToType')}>
         <ActionIcon
           radius="xl"
           onClick={() => bsddSearchClick(ifcEntity)}
@@ -111,7 +111,7 @@ function BsddCard({ item: ifcEntity, index, setCardColor: setCategoryColor }: Bs
           <IconPencil size={20} />
         </ActionIcon>
       </Tooltip>
-      <Tooltip label={t('Select objects')}>
+      <Tooltip label={t('selectObjects')}>
         <ActionIcon radius="xl" onClick={() => bsddSelect(ifcEntity)}>
           <IconPointer size={20} />
         </ActionIcon>

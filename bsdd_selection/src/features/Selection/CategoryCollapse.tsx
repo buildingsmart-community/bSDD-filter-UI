@@ -47,7 +47,7 @@ function CategoryCollapse({ category, items, index }: CategoryCollapseProps) {
             </Text>
           </ColorSwatch>
           <div className="flexTextContainer">
-            <Text className="truncate">{category.length > 0 ? category : t('No description')}</Text>
+            <Text className="truncate">{category.length > 0 ? category : t('noDescription')}</Text>
           </div>
         </Group>
       </Accordion.Control>

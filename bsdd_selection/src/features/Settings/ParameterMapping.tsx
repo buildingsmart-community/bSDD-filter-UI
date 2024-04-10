@@ -54,9 +54,9 @@ function ParameterMapping({
   return (
     <Accordion.Item key={id} value={id.toString()}>
       <Accordion.Control>
-        <Title order={5}>{t('Parameter mapping')}</Title>
+        <Title order={5}>{t('parameterMappingLabel')}</Title>
         <Text size="xs" c="dimmed">
-          {t('Parameter mapping help text')}
+          {t('parameterMappingInstruction')}
         </Text>
       </Accordion.Control>
       <Accordion.Panel>

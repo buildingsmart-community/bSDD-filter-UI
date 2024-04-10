@@ -70,7 +70,7 @@ function HomePage() {
       setIfcData(null);
     }
   }, [loading, ifcData, dispatch]);
-  console.log('isProduction', isProduction);
+
   // Initial ifcData load, load mock data in development
   useEffect(() => {
     if (isProduction) {
@@ -116,8 +116,8 @@ function HomePage() {
     <Container size="40rem">
       <Tabs defaultValue="link">
         <Tabs.List grow>
-          <Tabs.Tab value="link">{t('Link')}</Tabs.Tab>
-          <Tabs.Tab value="settings">{t('Settings')}</Tabs.Tab>
+          <Tabs.Tab value="link">{t('linkTabTitle')}</Tabs.Tab>
+          <Tabs.Tab value="settings">{t('settingsTabTitle')}</Tabs.Tab>
         </Tabs.List>
         <Selection loading={loading} />
         <Settings />
