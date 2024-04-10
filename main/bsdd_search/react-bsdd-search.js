@@ -23895,8 +23895,12 @@ const G1 = {
   return e !== null ? Ad[e] : null;
 }, uc = pa(
   (r) => r.settings.mainDictionary,
+  (r) => r.settings.ifcDictionary,
   (r) => r.settings.filterDictionaries,
-  (r, e) => r ? [r, ...e] : e
+  (r, e, t) => {
+    const n = [r, e, ...t].filter(Boolean), o = new Map(n.map((a) => [a.ifcClassification.location, a]));
+    return Array.from(o.values());
+  }
 ), z1 = pa(
   uc,
   (r) => r.map((e) => e.ifcClassification.location)
@@ -24579,14 +24583,10 @@ function vO() {
       var fe;
       if (ne.type === "IfcClassificationReference") {
         const oe = ne;
-        if ((fe = oe.referencedSource) != null && fe.location && oe.referencedSource.location === X) {
-          if (!oe.location)
-            return;
-          n(oe.location), a({
-            label: oe.name,
-            value: oe.location
-          });
-        }
+        (fe = oe.referencedSource) != null && fe.location && oe.referencedSource.location === X && (oe.location && n(oe.location), a({
+          label: oe.name,
+          value: oe.location
+        }));
       }
     });
   }, [I, s]), ye(() => {
