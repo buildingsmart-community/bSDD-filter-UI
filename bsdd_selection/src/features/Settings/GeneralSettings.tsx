@@ -24,15 +24,13 @@ function GeneralSettings({ id, localSettings, setLocalSettings, setUnsavedChange
   const prevFetchDictionariesParamsRef = useRef<FetchDictionaryParameters>();
 
   useEffect(() => {
-    if (!bsddApiEnvironmentUri) {
-      return;
-    }
+    if (!bsddApiEnvironmentUri) return;
     dispatch(updateBsddApi(bsddApiEnvironmentUri));
   }, [dispatch, bsddApiEnvironmentUri]);
 
   // Update dictionary selection list when parameters change
   useEffect(() => {
-    if (!bsddApiEnvironmentUri) return;
+    if (!bsddApiEnvironmentUri || includeTestDictionaries === null) return;
 
     const params = {
       bsddApiEnvironment: bsddApiEnvironmentUri,
@@ -65,7 +63,10 @@ function GeneralSettings({ id, localSettings, setLocalSettings, setUnsavedChange
         <Space h="xs" />
         <Checkbox
           label={t('ShowPreview')}
-          checked={localSettings ? localSettings.includeTestDictionaries : false}
+          checked={
+            localSettings && localSettings.includeTestDictionaries ? localSettings.includeTestDictionaries : false
+          }
+          indeterminate={!localSettings || localSettings.includeTestDictionaries === null}
           type="checkbox"
           onChange={(e) => {
             if (!localSettings) return;
