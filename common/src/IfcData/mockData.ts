@@ -36,7 +36,7 @@ export const mockData: BsddBridgeData = {
       },
     ],
     language: 'en-GB',
-    includeTestDictionaries: true,
+    includeTestDictionaries: false,
   },
   ifcData: [
     {
@@ -56,7 +56,7 @@ export const mockData: BsddBridgeData = {
           name: 'Project nulpunt',
         },
         {
-          identification: '0.0',
+          identification: '0-.0',
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',

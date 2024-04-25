@@ -1,4 +1,4 @@
-import { Accordion, ComboboxItem, MultiSelect, Select, Space, Text, Title } from '@mantine/core';
+import { Accordion, ComboboxItem, MultiSelect, Space, Text, Title } from '@mantine/core';
 import { createSelector } from '@reduxjs/toolkit';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -59,11 +59,25 @@ function convertToBsddDictionary(
 }
 
 const selectBsddDictionaryOptions = createSelector(selectBsddDictionaries, (bsddDictionaries) =>
-  Object.values(bsddDictionaries).map((item) => ({
-    value: item.uri,
-    label: `${item.name} (${item.version})`,
-  })),
+  Object.values(bsddDictionaries).map(
+    (item) =>
+      ({
+        value: item.uri,
+        label: `${item.name} (${item.version})`,
+      } as ComboboxItem),
+  ),
 );
+
+const getComboboxItem = (item: any): ComboboxItem[] => {
+  return item && item.ifcClassification && item.ifcClassification.location
+    ? [
+        {
+          value: item.ifcClassification.location,
+          label: item.ifcClassification.name || '',
+        },
+      ]
+    : [];
+};
 
 const selectIfcDictionaryOptions = createSelector(selectBsddDictionaryOptions, (bsddDictionaryOptions) =>
   bsddDictionaryOptions.filter((option) => option.value.startsWith(IFC_DICTIONARY_URL)),
@@ -87,40 +101,21 @@ function DomainSelection({
   const bsddFilterDictionaryOptions = useAppSelector(selectFilterDictionaryOptions);
 
   const localMainDictionaryValues = useMemo(() => {
-    const item = localSettings?.mainDictionary;
-    return item
-      ? [
-          {
-            value: item.ifcClassification?.location || '',
-            label: item.ifcClassification?.location || '',
-          } as ComboboxItem,
-        ]
-      : [];
-  }, [localSettings]);
+    return getComboboxItem(localSettings?.mainDictionary);
+  }, [localSettings?.mainDictionary]);
 
   const localIfcDictionaryValues = useMemo(() => {
-    const item = localSettings?.ifcDictionary;
-    return item
-      ? [
-          {
-            value: item.ifcClassification?.location || '',
-            label: item.ifcClassification?.location || '',
-          } as ComboboxItem,
-        ]
-      : [];
-  }, [localSettings]);
+    return getComboboxItem(localSettings?.ifcDictionary);
+  }, [localSettings?.ifcDictionary]);
 
   const localFilterDictionaryValues = useMemo(() => {
     return (
-      localSettings?.filterDictionaries.map(
-        (item) =>
-          ({
-            value: item.ifcClassification.location || '',
-            label: item.ifcClassification.location || '',
-          } as ComboboxItem),
-      ) || []
+      localSettings?.filterDictionaries
+        .filter((item) => item.ifcClassification && item.ifcClassification.location)
+        .map(getComboboxItem)
+        .flat() || []
     );
-  }, [localSettings]);
+  }, [localSettings?.filterDictionaries]);
 
   const changeMainDictionaryOption = useCallback(
     (selectedMainDictionaryUris: string[]) => {

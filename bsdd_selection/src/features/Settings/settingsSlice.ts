@@ -1,18 +1,17 @@
 import { createAction, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { bsddEnvironments } from '../../../../common/src/BsddApi/BsddApiEnvironments';
-import { defaultEnvironment } from '../../../../common/src/env';
 import i18n from '../../../../common/src/i18n';
 import { BsddDictionary, BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
 import type { RootState } from '../../app/store';
 
 const initialState: BsddSettings = {
-  bsddApiEnvironment: defaultEnvironment,
+  bsddApiEnvironment: null,
   mainDictionary: null,
   ifcDictionary: null,
   filterDictionaries: [],
   language: 'en-GB',
-  includeTestDictionaries: false,
+  includeTestDictionaries: null,
 };
 
 const handleSetLanguage = (state: BsddSettings, action: PayloadAction<string>) => {

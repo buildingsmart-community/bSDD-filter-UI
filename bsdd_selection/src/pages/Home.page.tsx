@@ -1,9 +1,9 @@
-import { Container, LoadingOverlay, Tabs } from '@mantine/core';
+import { Container, Tabs } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { isProduction } from '../../../common/src/env';
-import { BsddBridgeData, BsddDictionary, BsddSettings } from '../../../common/src/IfcData/bsddBridgeData';
+import { BsddDictionary, BsddSettings } from '../../../common/src/IfcData/bsddBridgeData';
 import { IfcEntity } from '../../../common/src/IfcData/ifc';
 import { validateIfcClassification } from '../../../common/src/IfcData/ifcValidators';
 import { mockData } from '../../../common/src/IfcData/mockData';
@@ -13,7 +13,12 @@ import { selectBsddDataLoaded } from '../features/bsdd/bsddSlice';
 import { setValidatedIfcData } from '../features/ifcData/ifcDataSlice';
 import Selection from '../features/Selection/Selection';
 import Settings from '../features/Settings/Settings';
-import { setSettings } from '../features/Settings/settingsSlice';
+import {
+  setBsddApiEnvironment,
+  setIncludeTestDictionaries,
+  setLanguage,
+  setSettings,
+} from '../features/Settings/settingsSlice';
 
 let CefSharp: any;
 
@@ -56,11 +61,25 @@ function HomePage() {
     connectToBsddBridge();
   }, []);
 
+  // Set basic settings to be able to load bSDD dictionaries
+  // when dictionary list is loaded, validate and set all settings
   useEffect(() => {
-    if (bsddDataLoaded && pendingSettings) {
-      dispatch(setSettingsWithValidation(pendingSettings));
-      setPendingSettings(null);
-      setLoading(false);
+    if (pendingSettings) {
+      if (bsddDataLoaded) {
+        dispatch(setSettingsWithValidation(pendingSettings));
+        setPendingSettings(null);
+        setLoading(false);
+      } else {
+        if (pendingSettings?.bsddApiEnvironment) {
+          dispatch(setBsddApiEnvironment(pendingSettings.bsddApiEnvironment));
+        }
+        if (pendingSettings?.includeTestDictionaries !== null) {
+          dispatch(setIncludeTestDictionaries(pendingSettings.includeTestDictionaries));
+        }
+        if (pendingSettings?.language) {
+          dispatch(setLanguage(pendingSettings.language));
+        }
+      }
     }
   }, [bsddDataLoaded, pendingSettings, dispatch]);
 
@@ -76,6 +95,7 @@ function HomePage() {
     if (isProduction) {
       setIfcData([]);
     } else {
+      console.log('initial loadIfcData selection', mockData.ifcData);
       setIfcData(mockData.ifcData);
     }
   }, []);
@@ -95,6 +115,7 @@ function HomePage() {
     if (isProduction) {
       loadSettings();
     } else {
+      console.log('initial loadSettings selection', mockData.settings);
       setPendingSettings(mockData.settings);
     }
   }, []);
