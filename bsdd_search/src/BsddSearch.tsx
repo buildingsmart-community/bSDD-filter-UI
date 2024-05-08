@@ -217,7 +217,7 @@ function BsddSearch() {
           ifcEntity={ifcEntity}
         />
         <Button fullWidth variant="light" color="gray" onClick={cancel}>
-          {t('Cancel')}
+          {t('cancel')}
         </Button>
       </Group>
     </Container>

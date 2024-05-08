@@ -6,6 +6,7 @@ import {
   IfcPropertyEnumeratedValue,
   IfcPropertySet,
   IfcPropertySingleValue,
+  IfcValue,
 } from '../../common/src/IfcData/ifc';
 import Check from './Checkbox';
 
@@ -42,7 +43,7 @@ function Property({ propertySet, property, propertyIndex, propertySets, setPrope
                   const i: number = newPropertySet.hasProperties.findIndex(
                     (element: any) => element.name === ifcProperty.name,
                   );
-                  if (i != -1) {
+                  if (i !== -1) {
                     newPropertySet.hasProperties[i] = p;
                     newPropertySets[newPropertySet.name] = newPropertySet;
                     setIfcPropertySets(newPropertySets);
@@ -79,29 +80,34 @@ function Property({ propertySet, property, propertyIndex, propertySets, setPrope
         break;
       }
       case 'IfcPropertyEnumeratedValue': {
+        const val = ifcProperty.enumerationValues?.[0]?.value;
+        const enumerationValues = ifcProperty.enumerationReference?.enumerationValues || [];
         setInput(
           <Select
             label={ifcProperty.name}
-            value={ifcProperty.enumerationValues}
+            value={val}
             onChange={(e) => {
+              const foundValue = enumerationValues.find((element) => element.value === e);
+              const selectedValues: IfcValue[] = foundValue ? [foundValue] : [];
               const newPropertySets = { ...ifcPropertySets };
               const newPropertySet = { ...ifcPropertySet };
               if (newPropertySet.name) {
-                const p: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue = { ...ifcProperty };
-                p.enumerationValues = [e];
+                const newProperty: IfcPropertyEnumeratedValue = { ...ifcProperty };
+                newProperty.enumerationValues = selectedValues;
                 const i: number = newPropertySet.hasProperties.findIndex(
-                  (element: any) => element.name === ifcProperty.name,
+                  (prop: IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue) =>
+                    prop.name === ifcProperty.name,
                 );
-                if (i != -1) {
-                  newPropertySet.hasProperties[i] = p;
+                if (i !== -1) {
+                  newPropertySet.hasProperties[i] = newProperty;
                   newPropertySets[newPropertySet.name] = newPropertySet;
                   setIfcPropertySets(newPropertySets);
                 }
               }
             }}
-            data={ifcProperty.enumerationReference.enumerationValues.map((value: any, index: any) => ({
-              value,
-              label: value,
+            data={enumerationValues.map((ifcValue: IfcValue) => ({
+              value: ifcValue.value,
+              label: ifcValue.value,
             }))}
           />,
         );

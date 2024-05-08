@@ -82,7 +82,7 @@ function Apply({ callback, domains, classifications, propertySetMap, ifcEntity }
 
   return (
     <Button color="gray" fullWidth onClick={handleOnChange} variant="filled">
-      {t('Save')}
+      {t('apply')}
     </Button>
   );
 }

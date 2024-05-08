@@ -66,6 +66,32 @@ export const mockData: BsddBridgeData = {
           name: '0.0',
         },
       ],
+      isDefinedBy: [
+        {
+          type: 'IfcPropertySet',
+          name: 'CPset_Sample_Door_Manufacturer',
+          hasProperties: [
+            {
+              type: 'IfcPropertyEnumeratedValue',
+              name: 'brandwerendheid',
+              enumerationValues: [
+                {
+                  type: 'IfcText',
+                  value: '30 min',
+                },
+              ],
+            },
+            {
+              type: 'IfcPropertySingleValue',
+              name: 'kozijnmerk',
+              nominalValue: {
+                type: 'IfcLabel',
+                value: 'A',
+              },
+            },
+          ],
+        },
+      ],
     },
     {
       type: 'IfcWasteTerminal',
