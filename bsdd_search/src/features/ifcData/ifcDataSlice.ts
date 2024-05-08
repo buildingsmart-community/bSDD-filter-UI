@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { Association, IfcEntity } from '../../../../common/src/IfcData/ifc';
 import { patchIfcClassificationReference } from '../../../../common/src/IfcData/ifcValidators';
@@ -21,8 +21,6 @@ const ifcDataSlice = createSlice({
     },
   },
 });
-
-export const selectIfcEntities = (state: RootState) => state.ifcData.ifcEntities;
 
 export const { setIfcData } = ifcDataSlice.actions;
 
@@ -67,5 +65,9 @@ export const setValidatedIfcData = createAsyncThunk(
     dispatch(setIfcData(validatedIfcEntities));
   },
 );
+
+export const selectIfcEntities = (state: RootState) => state.ifcData.ifcEntities;
+
+export const selectIfcEntity = createSelector(selectIfcEntities, (ifcEntities) => ifcEntities[0]);
 
 export const ifcDataReducer = ifcDataSlice.reducer;

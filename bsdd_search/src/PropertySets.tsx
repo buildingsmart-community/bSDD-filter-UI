@@ -1,15 +1,19 @@
 import { Accordion, Stack } from '@mantine/core';
+import { use } from 'i18next';
 import { Children, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ClassContractV1, ClassPropertyContractV1, PropertyContractV4 } from '../../common/src/BsddApi/BsddApiBase';
 import {
+  IfcEntity,
   IfcProperty,
   IfcPropertyEnumeratedValue,
   IfcPropertySet,
   IfcPropertySingleValue,
   IfcValue,
 } from '../../common/src/IfcData/ifc';
+import { useAppSelector } from './app/hooks';
+import { selectIfcEntity } from './features/ifcData/ifcDataSlice';
 import Property from './Property';
 
 const valueTypeMapping: { [key: string]: string } = {
@@ -28,6 +32,12 @@ interface Props {
   recursiveMode: boolean;
 }
 
+/**
+ * Retrieves the IfcValue based on the provided data type and predefined value.
+ * @param dataType - The data type of the property value.
+ * @param predefinedValue - The predefined value of the property.
+ * @returns The IfcValue object containing the type and value.
+ */
 function GetIfcPropertyValue(dataType: string | undefined | null, predefinedValue?: string | null): IfcValue {
   const type = dataType ? valueTypeMapping[dataType] || 'default' : 'default';
 
@@ -46,39 +56,176 @@ function GetIfcPropertyValue(dataType: string | undefined | null, predefinedValu
   return ifcValue;
 }
 
+/**
+ * Retrieves the nominal value from a specific property in a property set of an IfcEntity.
+ *
+ * @param dataType - The data type of the property value.
+ * @param ifcEntity - The IfcEntity object.
+ * @param propertySetName - The name of the property set.
+ * @param name - The name of the property.
+ * @returns The nominal value of the property, or a default value if not found.
+ */
+function getNominalValueFromProperty(
+  dataType: string | null | undefined,
+  ifcEntity: IfcEntity,
+  propertySetName: string,
+  name: string,
+): IfcValue {
+  if (ifcEntity && ifcEntity.isDefinedBy) {
+    const propertySet = ifcEntity.isDefinedBy.find((set: IfcPropertySet) => set.name === propertySetName);
+    if (propertySet) {
+      const property = propertySet.hasProperties.find(
+        (prop: IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue) => prop.name === name,
+      );
+      if (property && 'nominalValue' in property) {
+        return GetIfcPropertyValue(dataType, property.nominalValue.value);
+      }
+    }
+  }
+  return GetIfcPropertyValue(dataType);
+}
+
+/**
+ * Retrieves the set enumeration values that are valid from a specific property in a property set of an IfcEntity.
+ *
+ * @param dataType - The data type of the property.
+ * @param ifcEntity - The IfcEntity object.
+ * @param propertySetName - The name of the property set.
+ * @param name - The name of the property.
+ * @param allowedEnumerationValues - The array of allowed enumeration values.
+ * @returns An array of IfcValue objects representing the allowed enumeration values.
+ */
+function getEnumerationValuesFromProperty(
+  dataType: string | null | undefined,
+  ifcEntity: IfcEntity,
+  propertySetName: string,
+  name: string,
+  allowedEnumerationValues: IfcValue[],
+): IfcValue[] {
+  if (ifcEntity && ifcEntity.isDefinedBy) {
+    const propertySet = ifcEntity.isDefinedBy.find((set: IfcPropertySet) => set.name === propertySetName);
+    if (propertySet) {
+      const property = propertySet.hasProperties.find(
+        (prop: IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue) => prop.name === name,
+      ) as IfcPropertyEnumeratedValue;
+
+      // Also check dataType?
+      if (property && property.enumerationValues) {
+        return allowedEnumerationValues.filter((allowedValue) =>
+          property.enumerationValues
+            ? property.enumerationValues.some((value) => value.value === allowedValue.value)
+            : false,
+        );
+      }
+    }
+  }
+
+  return [];
+}
+
+/**
+ * Creates an instance of IfcPropertyEnumeratedValue based on the selected bSDD class property and selected IfcEntity.
+ *
+ * @param {ClassPropertyContractV1} classificationProperty - The classification property.
+ * @param {string} name - The name of the property.
+ * @param {string} propertySetName - The name of the property set.
+ * @param {IfcEntity} ifcEntity - The selected IfcEntity object.
+ * @returns {IfcPropertyEnumeratedValue} - The created IfcPropertyEnumeratedValue object.
+ */
+function createIfcPropertyEnumeratedValue(
+  classificationProperty: ClassPropertyContractV1,
+  name: string,
+  propertySetName: string,
+  ifcEntity: IfcEntity,
+): IfcPropertyEnumeratedValue {
+  const allowedEnumerationValues: IfcValue[] =
+    classificationProperty.allowedValues?.map((allowedValue) =>
+      GetIfcPropertyValue(classificationProperty.dataType, allowedValue.value),
+    ) || [];
+  const ifcProperty: IfcPropertyEnumeratedValue = {
+    type: 'IfcPropertyEnumeratedValue',
+    name,
+    enumerationReference: {
+      type: 'IfcPropertyEnumeration',
+      name,
+      enumerationValues: allowedEnumerationValues,
+    },
+  };
+
+  if (classificationProperty.propertyUri) {
+    ifcProperty.specification = classificationProperty.propertyUri;
+  }
+
+  const enumerationValues = classificationProperty.predefinedValue
+    ? [GetIfcPropertyValue(classificationProperty.dataType, classificationProperty.predefinedValue)]
+    : getEnumerationValuesFromProperty(
+        classificationProperty.dataType,
+        ifcEntity,
+        propertySetName,
+        name,
+        allowedEnumerationValues,
+      );
+
+  if (enumerationValues.length > 0) {
+    ifcProperty.enumerationValues = enumerationValues;
+  }
+  return ifcProperty;
+}
+
+/**
+ * Creates an instance of IfcPropertySingleValue based on the selected bSDD class property and selected IfcEntity.
+ *
+ * @param {ClassPropertyContractV1} classificationProperty - The classification property.
+ * @param {string} name - The name of the property.
+ * @param {string} propertySetName - The name of the property set.
+ * @param {IfcEntity} ifcEntity - The IfcEntity object.
+ * @returns {IfcPropertySingleValue} The created IfcPropertySingleValue object.
+ */
+function createIfcPropertySingleValue(
+  classificationProperty: ClassPropertyContractV1,
+  name: string,
+  propertySetName: string,
+  ifcEntity: IfcEntity,
+): IfcPropertySingleValue {
+  const ifcProperty: IfcPropertySingleValue = {
+    type: 'IfcPropertySingleValue',
+    name,
+  };
+
+  if (classificationProperty.propertyUri) {
+    ifcProperty.specification = classificationProperty.propertyUri;
+  }
+
+  const nominalValue = classificationProperty.predefinedValue
+    ? GetIfcPropertyValue(classificationProperty.dataType, classificationProperty.predefinedValue)
+    : getNominalValueFromProperty(classificationProperty.dataType, ifcEntity, propertySetName, name);
+
+  if (nominalValue !== null) {
+    ifcProperty.nominalValue = nominalValue;
+  }
+  return ifcProperty;
+}
+
+/**
+ * Retrieves the appropriate IFC property based on the classification property, property set name, and IFC entity.
+ * @param classificationProperty - The classification property.
+ * @param propertySetName - The name of the property set.
+ * @param ifcEntity - The IFC entity.
+ * @returns The IFC property, IFC single value property, or IFC enumerated value property.
+ */
 function GetIfcProperty(
   classificationProperty: ClassPropertyContractV1,
+  propertySetName: string,
+  ifcEntity: IfcEntity,
 ): IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue {
   const { propertyCode } = classificationProperty;
   const name = propertyCode || 'unknown';
 
   if (classificationProperty.allowedValues) {
-    const ifcProperty: IfcPropertyEnumeratedValue = {
-      type: 'IfcPropertyEnumeratedValue',
-      name,
-      enumerationReference: {
-        type: 'IfcPropertyEnumeration',
-        name,
-        enumerationValues: classificationProperty.allowedValues.map((allowedValue) => allowedValue.value),
-      },
-    };
-    if (classificationProperty.propertyUri) {
-      ifcProperty.specification = classificationProperty.propertyUri;
-    }
-    return ifcProperty;
+    return createIfcPropertyEnumeratedValue(classificationProperty, name, propertySetName, ifcEntity);
   }
-  const ifcProperty: IfcPropertySingleValue = {
-    type: 'IfcPropertySingleValue',
-    name,
-  };
-  if (classificationProperty.propertyUri) {
-    ifcProperty.specification = classificationProperty.propertyUri;
-  }
-  ifcProperty.nominalValue = GetIfcPropertyValue(
-    classificationProperty.dataType,
-    classificationProperty.predefinedValue,
-  );
-  return ifcProperty;
+
+  return createIfcPropertySingleValue(classificationProperty, name, propertySetName, ifcEntity);
 }
 
 function PropertySets(props: Props) {
@@ -87,6 +234,8 @@ function PropertySets(props: Props) {
   const { propertySets } = props;
   const { setPropertySets } = props;
   const { recursiveMode } = props;
+
+  const ifcEntity = useAppSelector(selectIfcEntity);
 
   useEffect(() => {
     const newPropertySets: Record<string, IfcPropertySet> = {};
@@ -105,12 +254,12 @@ function PropertySets(props: Props) {
           };
         }
 
-        newPropertySets[propertySetName].hasProperties.push(GetIfcProperty(classProperty));
+        newPropertySets[propertySetName].hasProperties.push(GetIfcProperty(classProperty, propertySetName, ifcEntity));
       });
     });
 
     setPropertySets(newPropertySets);
-  }, [classifications, setPropertySets, recursiveMode]);
+  }, [classifications, setPropertySets, recursiveMode, ifcEntity]);
 
   return (
     <div>

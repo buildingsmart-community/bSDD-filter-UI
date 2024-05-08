@@ -67,7 +67,7 @@ export interface IfcPropertyAbstraction extends IfcJsonEntity {
   type: 'IfcPropertyAbstraction';
 
   // inverse
-  HasExternalReferences: any; // SET [0:?] OF IfcExternalReferenceRelationship FOR RelatedResourceObjects
+  // HasExternalReferences: any; // SET [0:?] OF IfcExternalReferenceRelationship FOR RelatedResourceObjects
 }
 
 export interface IfcProperty extends IfcRoot {
@@ -118,14 +118,14 @@ export interface IfcPropertySingleValue extends IfcSimpleProperty {
 
 export interface IfcPropertyEnumeratedValue extends IfcSimpleProperty {
   type: 'IfcPropertyEnumeratedValue';
-  enumerationValues?: any; // LIST [1:?] OF IfcValue
-  enumerationReference?: any; // IfcPropertyEnumeration
+  enumerationValues?: IfcValue[]; // LIST [1:?] OF IfcValue
+  enumerationReference?: IfcPropertyEnumeration; // IfcPropertyEnumeration
 }
 
 export interface IfcPropertyEnumeration extends IfcPropertyAbstraction {
   type: 'IfcPropertyEnumeration';
   name: string; // IfcLabel
-  enumerationValues: any[]; // LIST [1:?] OF UNIQUE IfcValue
+  enumerationValues: IfcValue[]; // LIST [1:?] OF UNIQUE IfcValue
   Unit?: any; // IfcUnit
 }
 
