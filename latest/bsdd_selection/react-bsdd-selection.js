@@ -2022,6 +2022,8 @@ be.use(Zg).init({
   resources: {
     "en-GB": {
       translation: {
+        apply: "Assign",
+        cancel: "Cancel",
         noDescription: "No description",
         linkTabTitle: "Link",
         settingsTabTitle: "Settings",
@@ -2050,6 +2052,8 @@ be.use(Zg).init({
     },
     "nl-NL": {
       translation: {
+        apply: "Toewijzen",
+        cancel: "Annuleren",
         noDescription: "Geen beschrijving",
         linkTabTitle: "Koppelen",
         settingsTabTitle: "Instellingen",
