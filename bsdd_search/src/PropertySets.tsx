@@ -57,6 +57,30 @@ function GetIfcPropertyValue(dataType: string | undefined | null, predefinedValu
 }
 
 /**
+ * Retrieves a specific property from a property set of an IfcEntity.
+ *
+ * @param ifcEntity - The IfcEntity object.
+ * @param propertySetName - The name of the property set.
+ * @param name - The name of the property to retrieve.
+ * @returns The property object if found, otherwise undefined.
+ */
+function getPropertyFromSet(
+  ifcEntity: IfcEntity,
+  propertySetName: string,
+  name: string,
+): IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue | undefined {
+  if (ifcEntity && ifcEntity.isDefinedBy) {
+    const propertySet = ifcEntity.isDefinedBy.find((set: IfcPropertySet) => set.name === propertySetName);
+    if (propertySet) {
+      return propertySet.hasProperties.find(
+        (prop: IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue) => prop.name === name,
+      );
+    }
+  }
+  return undefined;
+}
+
+/**
  * Retrieves the nominal value from a specific property in a property set of an IfcEntity.
  *
  * @param dataType - The data type of the property value.
@@ -71,16 +95,9 @@ function getNominalValueFromProperty(
   propertySetName: string,
   name: string,
 ): IfcValue {
-  if (ifcEntity && ifcEntity.isDefinedBy) {
-    const propertySet = ifcEntity.isDefinedBy.find((set: IfcPropertySet) => set.name === propertySetName);
-    if (propertySet) {
-      const property = propertySet.hasProperties.find(
-        (prop: IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue) => prop.name === name,
-      );
-      if (property && 'nominalValue' in property) {
-        return GetIfcPropertyValue(dataType, property.nominalValue.value);
-      }
-    }
+  const property = getPropertyFromSet(ifcEntity, propertySetName, name);
+  if (property && 'nominalValue' in property) {
+    return GetIfcPropertyValue(dataType, property.nominalValue.value);
   }
   return GetIfcPropertyValue(dataType);
 }
@@ -102,27 +119,29 @@ function getEnumerationValuesFromProperty(
   name: string,
   allowedEnumerationValues: IfcValue[],
 ): IfcValue[] {
-  if (ifcEntity && ifcEntity.isDefinedBy) {
-    const propertySet = ifcEntity.isDefinedBy.find((set: IfcPropertySet) => set.name === propertySetName);
-    if (propertySet) {
-      const property = propertySet.hasProperties.find(
-        (prop: IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue) => prop.name === name,
-      ) as IfcPropertyEnumeratedValue;
+  const property = getPropertyFromSet(ifcEntity, propertySetName, name);
 
-      // Also check dataType?
-      if (property && property.enumerationValues) {
-        return allowedEnumerationValues.filter((allowedValue) =>
-          property.enumerationValues
-            ? property.enumerationValues.some((value) => value.value === allowedValue.value)
-            : false,
-        );
-      }
+  if (property) {
+    // Also check dataType?
+    if (property.type === 'IfcPropertyEnumeratedValue') {
+      return allowedEnumerationValues.filter((allowedValue) =>
+        property.enumerationValues
+          ? property.enumerationValues.some((value) => value.value === allowedValue.value)
+          : false,
+      );
+    }
+
+    // Add IfcPropertySingleValue fallback for software that does not support IfcPropertyEnumeratedValue
+    if ('nominalValue' in property && property.nominalValue) {
+      const foundValue = allowedEnumerationValues.find(
+        (allowedValue) => allowedValue.value === property.nominalValue.value,
+      );
+      return foundValue ? [foundValue] : [];
     }
   }
 
   return [];
 }
-
 /**
  * Creates an instance of IfcPropertyEnumeratedValue based on the selected bSDD class property and selected IfcEntity.
  *

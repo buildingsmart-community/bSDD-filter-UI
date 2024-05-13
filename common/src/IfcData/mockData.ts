@@ -1,5 +1,6 @@
 import { BsddBridgeData } from './bsddBridgeData';
 
+// eslint-disable-next-line import/prefer-default-export
 export const mockData: BsddBridgeData = {
   settings: {
     bsddApiEnvironment: 'test',
@@ -7,11 +8,11 @@ export const mockData: BsddBridgeData = {
       ifcClassification: {
         type: 'IfcClassification',
         source: 'digibase',
-        edition: '0.8.0',
+        edition: '0.1',
         editionDate: '0001-01-01T00:00:00',
-        name: 'Basis bouwproducten',
+        name: 'VolkerWessels Bouw & vastgoed',
         description: '',
-        location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
+        location: 'https://identifier.buildingsmart.org/uri/digibase/volkerwesselsbv/0.1',
       },
       parameterMapping: 'Description',
     },
@@ -87,6 +88,14 @@ export const mockData: BsddBridgeData = {
               nominalValue: {
                 type: 'IfcLabel',
                 value: 'A',
+              },
+            },
+            {
+              type: 'IfcPropertySingleValue',
+              name: 'rookklasse',
+              nominalValue: {
+                type: 'IfcLabel',
+                value: 'S200',
               },
             },
           ],
