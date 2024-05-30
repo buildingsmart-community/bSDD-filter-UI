@@ -5,9 +5,7 @@ import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { BsddApi } from '../../common/src/BsddApi/BsddApi';
 import { RequestParams } from '../../common/src/BsddApi/BsddApiBase';
 import { useAppSelector } from './app/hooks';
-import { selectActiveDictionaries, selectMainDictionary } from './features/settings/settingsSlice';
-
-const SEARCH_LIMIT = 25;
+import { selectMainDictionary } from './features/settings/settingsSlice';
 
 interface Option {
   label: string;
@@ -20,67 +18,8 @@ interface Props {
   setActiveClassificationUri: (value: string) => void;
 }
 
-const searchInSingleDictionary = (
-  api: BsddApi<unknown>,
-  activeDictionaries: Option[],
-  params: RequestParams,
-  inputValue: string,
-  callback: (options: any[]) => void,
-) => {
-  const queryParameters = {
-    SearchText: inputValue,
-    DictionaryUri: activeDictionaries[0].value,
-    Limit: SEARCH_LIMIT,
-    // LanguageCode: 'NL',
-    // RelatedIfcEntities: 'IfcWall',
-  };
-  api.api.searchInDictionaryV1List(queryParameters, params).then((response) => {
-    const searchResult = response.data;
-    if (searchResult.count) {
-      const dictionaryClasses = searchResult.dictionary?.classes;
-      if (dictionaryClasses) {
-        callback(
-          dictionaryClasses.map((c) => ({
-            value: c.uri,
-            label: c.name,
-          })),
-        );
-      }
-    }
-  });
-};
-
-const searchInMultipleDictionaries = (
-  api: BsddApi<unknown>,
-  activeDictionaries: Option[],
-  params: RequestParams,
-  inputValue: string,
-  callback: (options: any[]) => void,
-) => {
-  const queryParameters = {
-    SearchText: inputValue,
-    DictionaryUris: [activeDictionaries[0].value],
-    Limit: SEARCH_LIMIT,
-    // DictionaryUris: activeDomains.map((domain) => domain.value),
-    // LanguageCode: 'NL',
-    // RelatedIfcEntities: 'IfcWall',
-  };
-  api.api.classSearchV1List(queryParameters, params).then((response) => {
-    if (response.data.classes) {
-      callback(
-        response.data.classes.map((c) => ({
-          value: c.uri,
-          label: c.name,
-        })),
-      );
-    }
-  });
-};
-
 function Search({ api, defaultValue: defaultSelection, setActiveClassificationUri }: Props) {
   const [searchOptions, setSearchOptions] = useState<Option[]>([]);
-  const [opened, setOpened] = useState<boolean>(false);
-  const [activeDictionaries] = useAppSelector(selectActiveDictionaries);
   const mainDictionary = useAppSelector(selectMainDictionary);
 
   const inputRef = useRef(null);
@@ -103,7 +42,6 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
       const selectedOption = searchOptions.find((option) => option.value === value);
       if (selectedOption) {
         setSelected(selectedOption);
-        setOpened(false);
         setUserUpdated(true); // The user has manually updated the selection
       }
     },
@@ -123,10 +61,6 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
     [searchOptions, handleOptionSubmit, inputRef],
   );
 
-  // useEffect(() => {
-  //   setSelected(defaultSelection);
-  // }, [defaultSelection]);
-
   useEffect(() => {
     if (defaultSelection && !userUpdated) {
       setSearchValue(defaultSelection.label);
@@ -136,7 +70,7 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
   }, [defaultSelection, selected, userUpdated]);
 
   useEffect(() => {
-    if (debouncedSearchValue !== '' && mainDictionary) {
+    if (mainDictionary) {
       const params: RequestParams = {
         headers: { Accept: 'text/plain' },
       };
@@ -144,7 +78,6 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
       const queryParameters = {
         SearchText: debouncedSearchValue,
         DictionaryUri: mainDictionary.ifcClassification.location,
-        Limit: SEARCH_LIMIT,
       };
 
       api.api.searchInDictionaryV1List(queryParameters, params).then((response) => {
@@ -177,13 +110,6 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (!defaultSelection) return;
-  //   setSearchValue(defaultSelection?.label || '');
-  //   setSelected(defaultSelection);
-  //   setOpened(false);
-  // }, [defaultSelection]);
-
   useEffect(() => {
     if (selected) {
       setActiveClassificationUri(selected.value);
@@ -198,8 +124,6 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
       onChange={handleOnChange}
       onOptionSubmit={handleOptionSubmit}
       onKeyDown={handleKeyDown}
-      dropdownOpened={opened}
-      onDropdownOpen={() => setOpened(true)}
       ref={inputRef}
       style={{ width: '100%' }}
     />

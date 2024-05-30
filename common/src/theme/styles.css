@@ -1,3 +1,6 @@
+[data-mantine-color-scheme='light'] .checkBox {
+  --_checkbox-bd-color: var(--checkbox-color);
+}
 .truncate {
   white-space: nowrap;
   overflow: hidden;
