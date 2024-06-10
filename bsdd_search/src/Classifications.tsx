@@ -4,7 +4,9 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { BsddApi } from '../../common/src/BsddApi/BsddApi';
 import { ClassContractV1, DictionaryContractV1, RequestParams } from '../../common/src/BsddApi/BsddApiBase';
+import { IfcClassificationReference, IfcEntity } from '../../common/src/IfcData/ifc';
 import { useAppSelector } from './app/hooks';
+import { selectIfcEntity } from './features/ifcData/ifcDataSlice';
 import { selectActiveDictionaries, selectActiveDictionaryLocations } from './features/settings/settingsSlice';
 
 interface ClassificationSelectsProps {
@@ -41,9 +43,36 @@ async function fetchClassification(
   }
 }
 
+/**
+ * Retrieves the selected classification reference for the given IFC entity and dictionary URI.
+ * @param dictionaryUri - The URI of the dictionary.
+ * @param ifcEntity - The IFC entity to search for the classification reference.
+ * @returns The selected IfcClassificationReference, or undefined if not found.
+ */
+function getSelectedClassification(
+  dictionaryUri: string,
+  ifcEntity: IfcEntity | undefined,
+): IfcClassificationReference | undefined {
+  if (!ifcEntity) return undefined;
+
+  const foundAssociation = ifcEntity.hasAssociations?.find((association) => {
+    if (association.type === 'IfcClassificationReference') {
+      const classificationReference = association;
+      return (
+        classificationReference.referencedSource?.location &&
+        classificationReference.referencedSource.location === dictionaryUri
+      );
+    }
+    return false;
+  });
+
+  return foundAssociation as IfcClassificationReference | undefined;
+}
+
 function Classifications({ api, activeClassificationUri, setClassifications, domains }: ClassificationSelectsProps) {
   const activeDictionaries = useAppSelector(selectActiveDictionaries);
   const activeDictionaryLocations = useAppSelector(selectActiveDictionaryLocations);
+  const ifcEntity = useAppSelector(selectIfcEntity);
   const [classificationCount, setClassificationCount] = useState<number>(0);
   const [classificationUris, setClassificationUris] = useState<{
     [id: string]: Promise<ClassContractV1 | null>;
@@ -198,6 +227,18 @@ function Classifications({ api, activeClassificationUri, setClassifications, dom
         .filter((classification): classification is ClassContractV1 => classification !== undefined),
     );
   }, [selectedValues, originalClassifications, setClassifications]);
+
+  // Update selected classification values with values incoming from selection
+  useEffect(() => {
+    const newSelectedValues: { [dictionaryUri: string]: string } = {};
+    activeDictionaryLocations.forEach((dictionaryUri: string) => {
+      const selectedClassification = getSelectedClassification(dictionaryUri, ifcEntity);
+      if (selectedClassification) {
+        newSelectedValues[dictionaryUri] = selectedClassification.location || '';
+      }
+    });
+    setSelectedValues(newSelectedValues);
+  }, [activeDictionaryLocations, ifcEntity]);
 
   const handleOnChange = useCallback(
     (dictionaryUri: string) => (selectedUri: string | null) => {
