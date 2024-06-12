@@ -24556,8 +24556,8 @@ function ia(r, e) {
 }
 function hy(r, e, t) {
   if (r && r.isDefinedBy) {
-    const n = r.isDefinedBy.find((o) => o.name === e);
-    if (n)
+    let n = r.isDefinedBy.find((o) => o.name === e);
+    if (n || (n = r.isDefinedBy.find((o) => o.name === "")), n)
       return n.hasProperties.find(
         (o) => o.name === t
       );
