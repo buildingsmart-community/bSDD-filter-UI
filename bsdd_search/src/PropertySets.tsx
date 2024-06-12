@@ -70,7 +70,11 @@ function getPropertyFromSet(
   name: string,
 ): IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue | undefined {
   if (ifcEntity && ifcEntity.isDefinedBy) {
-    const propertySet = ifcEntity.isDefinedBy.find((set: IfcPropertySet) => set.name === propertySetName);
+    let propertySet = ifcEntity.isDefinedBy.find((set: IfcPropertySet) => set.name === propertySetName);
+    if (!propertySet) {
+      propertySet = ifcEntity.isDefinedBy.find((set: IfcPropertySet) => set.name === '');
+    }
+
     if (propertySet) {
       return propertySet.hasProperties.find(
         (prop: IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue) => prop.name === name,
