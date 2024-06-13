@@ -43,9 +43,13 @@ function GetIfcPropertyValue(dataType: string | undefined | null, predefinedValu
 
   let value: any;
   if (dataType === 'Boolean' && typeof predefinedValue === 'string') {
-    value = predefinedValue.toUpperCase() === 'TRUE';
+    if (predefinedValue.toUpperCase() === 'TRUE') {
+      value = true;
+    } else if (predefinedValue.toUpperCase() === 'FALSE') {
+      value = false;
+    }
   } else {
-    value = predefinedValue;
+    value = undefined;
   }
 
   const ifcValue: IfcValue = {
