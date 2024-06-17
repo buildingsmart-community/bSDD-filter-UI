@@ -47,9 +47,11 @@ function GetIfcPropertyValue(dataType: string | undefined | null, predefinedValu
       value = true;
     } else if (predefinedValue.toUpperCase() === 'FALSE') {
       value = false;
+    } else {
+      value = undefined;
     }
   } else {
-    value = undefined;
+    value = predefinedValue;
   }
 
   const ifcValue: IfcValue = {
@@ -74,10 +76,10 @@ function getPropertyFromSet(
   name: string,
 ): IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue | undefined {
   if (ifcEntity && ifcEntity.isDefinedBy) {
-    let propertySet = ifcEntity.isDefinedBy.find((set: IfcPropertySet) => set.name === propertySetName);
-    if (!propertySet) {
-      propertySet = ifcEntity.isDefinedBy.find((set: IfcPropertySet) => set.name === '');
-    }
+    const propertySet = ifcEntity.isDefinedBy.find((set: IfcPropertySet) => set.name === propertySetName);
+    // if (!propertySet) {
+    //   propertySet = ifcEntity.isDefinedBy.find((set: IfcPropertySet) => set.name === '');
+    // }
 
     if (propertySet) {
       return propertySet.hasProperties.find(
@@ -128,6 +130,8 @@ function getEnumerationValuesFromProperty(
   allowedEnumerationValues: IfcValue[],
 ): IfcValue[] {
   const property = getPropertyFromSet(ifcEntity, propertySetName, name);
+  console.log('getEnumerationValuesFromProperty', property);
+  console.log('allowedEnumerationValues', allowedEnumerationValues);
 
   if (property) {
     // Also check dataType?
@@ -165,10 +169,12 @@ function createIfcPropertyEnumeratedValue(
   propertySetName: string,
   ifcEntity: IfcEntity,
 ): IfcPropertyEnumeratedValue {
+  console.log('createIfcPropertyEnumeratedValue!!!', classificationProperty.allowedValues);
   const allowedEnumerationValues: IfcValue[] =
     classificationProperty.allowedValues?.map((allowedValue) =>
       GetIfcPropertyValue(classificationProperty.dataType, allowedValue.value),
     ) || [];
+  console.log('allowedEnumerationValues!!!', allowedEnumerationValues);
   const ifcProperty: IfcPropertyEnumeratedValue = {
     type: 'IfcPropertyEnumeratedValue',
     name,
@@ -261,16 +267,21 @@ function PropertySets(props: Props) {
   const { propertySets } = props;
   const { setPropertySets } = props;
   const { recursiveMode } = props;
+  console.log('PropertySets', props);
 
   const ifcEntity = useAppSelector(selectIfcEntity);
+  console.log('ifcEntity', ifcEntity);
+  console.log('classifications', classifications);
 
   useEffect(() => {
     const newPropertySets: Record<string, IfcPropertySet> = {};
     const propertyClassifications = recursiveMode ? classifications : classifications.slice(0, 1);
+    console.log('propertyClassifications', propertyClassifications);
 
     propertyClassifications.forEach((classification) => {
       classification.classProperties?.forEach((classProperty: ClassPropertyContractV1) => {
         if (!classProperty) return;
+        console.log('classProperty', classProperty);
         const propertySetName = classProperty.propertySet || classification.name;
 
         if (!newPropertySets[propertySetName]) {
