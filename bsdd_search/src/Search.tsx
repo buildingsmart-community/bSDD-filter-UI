@@ -80,25 +80,34 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
         DictionaryUri: mainDictionary.ifcClassification.location,
       };
 
-      api.api.searchInDictionaryV1List(queryParameters, params).then((response) => {
-        const searchResult = response.data;
-        if (searchResult.count) {
-          const dictionaryClasses = searchResult.dictionary?.classes;
-          if (dictionaryClasses) {
-            setSearchOptions(
-              dictionaryClasses
-                .filter((c) => c.uri && c.name)
-                .map(
-                  (c) =>
-                    ({
-                      value: c.uri,
-                      label: c.name,
-                    } as Option),
-                ),
-            );
+      api.api
+        .searchInDictionaryV1List(queryParameters, params)
+        .then((response) => {
+          const searchResult = response.data;
+          if (searchResult) {
+            if (searchResult.count) {
+              const dictionaryClasses = searchResult.dictionary?.classes;
+              if (dictionaryClasses) {
+                setSearchOptions(
+                  dictionaryClasses
+                    .filter((c) => c.uri && c.name)
+                    .map(
+                      (c) =>
+                        ({
+                          value: c.uri,
+                          label: c.name,
+                        } as Option),
+                    ),
+                );
+              }
+            }
+          } else {
+            console.error('API response data is null', response);
           }
-        }
-      });
+        })
+        .catch((error) => {
+          console.error('API request failed', error);
+        });
     } else {
       setSearchOptions([]);
     }
