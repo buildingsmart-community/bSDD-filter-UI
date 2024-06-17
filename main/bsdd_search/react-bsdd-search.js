@@ -24549,7 +24549,7 @@ const KO = {
 function ia(r, e) {
   const t = r && KO[r] || "default";
   let n;
-  return r === "Boolean" && typeof e == "string" ? n = e.toUpperCase() === "TRUE" : n = e, {
+  return r === "Boolean" && typeof e == "string" ? e.toUpperCase() === "TRUE" ? n = !0 : e.toUpperCase() === "FALSE" ? n = !1 : n = void 0 : n = e, {
     type: t,
     value: n
   };
@@ -24684,17 +24684,22 @@ function jO({ api: r, defaultValue: e, setActiveClassificationUri: t }) {
       r.api.searchInDictionaryV1List(I, S).then((O) => {
         var q;
         const L = O.data;
-        if (L.count) {
-          const U = (q = L.dictionary) == null ? void 0 : q.classes;
-          U && o(
-            U.filter((Y) => Y.uri && Y.name).map(
-              (Y) => ({
-                value: Y.uri,
-                label: Y.name
-              })
-            )
-          );
-        }
+        if (L) {
+          if (L.count) {
+            const U = (q = L.dictionary) == null ? void 0 : q.classes;
+            U && o(
+              U.filter((Y) => Y.uri && Y.name).map(
+                (Y) => ({
+                  value: Y.uri,
+                  label: Y.name
+                })
+              )
+            );
+          }
+        } else
+          console.error("API response data is null", O);
+      }).catch((O) => {
+        console.error("API request failed", O);
       });
     } else
       o([]);
