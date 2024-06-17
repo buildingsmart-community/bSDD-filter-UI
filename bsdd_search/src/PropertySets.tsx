@@ -47,9 +47,11 @@ function GetIfcPropertyValue(dataType: string | undefined | null, predefinedValu
       value = true;
     } else if (predefinedValue.toUpperCase() === 'FALSE') {
       value = false;
+    } else {
+      value = undefined;
     }
   } else {
-    value = undefined;
+    value = predefinedValue;
   }
 
   const ifcValue: IfcValue = {
