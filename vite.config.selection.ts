@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
     root: './bsdd_selection',
     base: './',
     server: {
-      port: 3000,
+      port: 3001,
     },
     build: {
       outDir: '../dist/bsdd_selection',
