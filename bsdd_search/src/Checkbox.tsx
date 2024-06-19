@@ -10,7 +10,7 @@ interface Props {
 
 function Check(props: Props) {
   const { label, value, setValue, disabled } = props;
-  const [checked, setChecked] = useState<boolean>();
+  const [checked, setChecked] = useState<boolean>(false);
   const [indeterminate, setIndeterminate] = useState<boolean | undefined>(undefined);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,16 +19,8 @@ function Check(props: Props) {
   };
 
   useEffect(() => {
-    if (value === true) {
-      setChecked(true);
-      setIndeterminate(false);
-    } else if (value === false) {
-      setChecked(false);
-      setIndeterminate(false);
-    } else if (value === undefined) {
-      setChecked(false);
-      setIndeterminate(true);
-    }
+    setChecked(value === true);
+    setIndeterminate(value === undefined);
   }, [value]);
 
   return (
