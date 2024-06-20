@@ -10,8 +10,8 @@ interface Props {
 
 function Check(props: Props) {
   const { label, value, setValue, disabled } = props;
-  const [checked, setChecked] = useState<boolean>();
-  const [indeterminate, setIndeterminate] = useState<boolean | undefined>(undefined);
+  const [checked, setChecked] = useState<boolean>(false);
+  const [indeterminate, setIndeterminate] = useState<boolean>(true);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.target.indeterminate = false;
