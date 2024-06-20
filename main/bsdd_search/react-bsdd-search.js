@@ -24437,7 +24437,7 @@ function FO({ api: r, activeClassificationUri: e, setClassifications: t, domains
   )) });
 }
 function HO(r) {
-  const { label: e, value: t, setValue: n, disabled: o } = r, [a, s] = ge(), [l, u] = ge(void 0), f = (h) => {
+  const { label: e, value: t, setValue: n, disabled: o } = r, [a, s] = ge(!1), [l, u] = ge(!0), f = (h) => {
     h.target.indeterminate = !1, n(h.target.checked);
   };
   return me(() => {
