@@ -230,14 +230,16 @@ function Classifications({ api, activeClassificationUri, setClassifications, dom
 
   // Update selected classification values with values incoming from selection
   useEffect(() => {
-    const newSelectedValues: { [dictionaryUri: string]: string } = {};
-    activeDictionaryLocations.forEach((dictionaryUri: string) => {
-      const selectedClassification = getSelectedClassification(dictionaryUri, ifcEntity);
-      if (selectedClassification) {
-        newSelectedValues[dictionaryUri] = selectedClassification.location || '';
-      }
+    setSelectedValues((currentSelectedValues) => {
+      const newSelectedValues = activeDictionaryLocations.reduce((acc, dictionaryUri) => {
+        const prevSelectedValue = currentSelectedValues[dictionaryUri];
+        const selectedClassification =
+          prevSelectedValue || getSelectedClassification(dictionaryUri, ifcEntity)?.location || '';
+        return { ...acc, [dictionaryUri]: selectedClassification };
+      }, {});
+
+      return newSelectedValues;
     });
-    setSelectedValues(newSelectedValues);
   }, [activeDictionaryLocations, ifcEntity]);
 
   const handleOnChange = useCallback(
@@ -251,10 +253,12 @@ function Classifications({ api, activeClassificationUri, setClassifications, dom
         return;
       }
 
-      const newSelectedValues = { ...selectedValues, [dictionaryUri]: selectedUri };
-      setSelectedValues(newSelectedValues);
+      setSelectedValues((prevSelectedValues) => ({
+        ...prevSelectedValues,
+        [dictionaryUri]: selectedUri,
+      }));
     },
-    [originalClassifications, selectedValues],
+    [originalClassifications],
   );
 
   return (
