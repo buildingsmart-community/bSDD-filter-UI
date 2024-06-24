@@ -63,9 +63,13 @@ function BsddCard({ item: ifcEntity, index, setCardColor: setCategoryColor }: Bs
   }, [ifcEntity, activeDictionaries]);
 
   function bsddSearchClick(ifcProduct: IfcEntity) {
-    console.log('Open bsddSearch', ifcProduct);
+    const modifiedIfcProduct = { ...ifcProduct };
+    if (modifiedIfcProduct.predefinedType === null) {
+      modifiedIfcProduct.predefinedType = '';
+    }
+    console.log('Open bsddSearch', modifiedIfcProduct);
 
-    const ifcEntityJson = JSON.stringify(ifcProduct);
+    const ifcEntityJson = JSON.stringify(modifiedIfcProduct);
 
     // @ts-ignore
     window?.bsddBridge?.bsddSearch(ifcEntityJson);
