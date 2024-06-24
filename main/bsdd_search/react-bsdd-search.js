@@ -24748,7 +24748,7 @@ function QO() {
     I(Q);
   };
   return me(() => {
-    S && (e(ly(S)), I(null));
+    S && (console.log("settings updated: ", S), e(ly(S)), I(null));
   }, [S, e]), me(() => {
     O && R(new ci(O));
   }, [O]), me(() => {
