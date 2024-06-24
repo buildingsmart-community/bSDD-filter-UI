@@ -24325,15 +24325,13 @@ function UO(r, e) {
   }) : void 0;
 }
 const FO = (r) => {
-  const e = r.charAt(r.length - 1) === r.charAt(r.length - 1).toUpperCase();
-  let t = r;
-  if (e) {
-    const n = [...r].reverse().findIndex((o) => o !== o.toUpperCase());
-    n > 0 && (t = `${r.slice(0, r.length - n - 1)}.${r.slice(
-      r.length - n - 1
-    )}`);
-  }
-  return t;
+  for (let e = r.length - 2; e >= 0; e -= 1)
+    if (r[e] === r[e].toLowerCase() && r[e + 1] === r[e + 1].toUpperCase()) {
+      if (r[r.length - 1] === r[r.length - 1].toUpperCase())
+        return `${r.slice(0, e + 1)}.${r.slice(e + 1)}`;
+      break;
+    }
+  return r;
 }, HO = (r, e) => r.map((t) => {
   let n = t.name;
   if (e === "https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3") {
