@@ -2038,7 +2038,9 @@ bt.use(hI).init({
         ShowPreview: "Show preview dictionaries",
         entitySelectionInstruction: "Select entities by using the dropdown at the top of the panel.",
         needHelp: "Need help?",
-        checkDocumentation: "Check out our documentation"
+        checkDocumentation: "Check out our documentation",
+        appInfoLabel: "App info",
+        appInfoInstruction: "Information about this plugin"
       }
     },
     "nl-NL": {
@@ -2068,7 +2070,9 @@ bt.use(hI).init({
         ShowPreview: "Toon voorbeeld domeinen",
         entitySelectionInstruction: "Selecteer objecten in de dropdown bovenaan in het paneel.",
         needHelp: "Hulp nodig?",
-        checkDocumentation: "Bekijk onze documentatie"
+        checkDocumentation: "Bekijk onze documentatie",
+        appInfoLabel: "App info",
+        appInfoInstruction: "Informatie over deze plugin"
       }
     }
   },
