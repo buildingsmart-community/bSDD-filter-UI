@@ -92,6 +92,7 @@ function BsddSearch() {
 
   useEffect(() => {
     if (pendingSettings) {
+      console.log('settings updated: ', pendingSettings);
       dispatch(setSettings(pendingSettings));
       setPendingSettings(null);
     }
