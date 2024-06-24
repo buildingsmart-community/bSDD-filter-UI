@@ -76,19 +76,15 @@ function getSelectedClassification(
  * @returns The formatted IFC class code.
  */
 const formatIfcClassCode = (code: string): string => {
-  const isLastCharUpperCase = code.charAt(code.length - 1) === code.charAt(code.length - 1).toUpperCase();
-  let formattedCode = code;
-
-  if (isLastCharUpperCase) {
-    const firstNonCapIndex = [...code].reverse().findIndex((char) => char !== char.toUpperCase());
-    if (firstNonCapIndex > 0) {
-      formattedCode = `${code.slice(0, code.length - firstNonCapIndex - 1)}.${code.slice(
-        code.length - firstNonCapIndex - 1,
-      )}`;
+  for (let i = code.length - 2; i >= 0; i -= 1) {
+    if (code[i] === code[i].toLowerCase() && code[i + 1] === code[i + 1].toUpperCase()) {
+      if (code[code.length - 1] === code[code.length - 1].toUpperCase()) {
+        return `${code.slice(0, i + 1)}.${code.slice(i + 1)}`;
+      }
+      break;
     }
   }
-
-  return formattedCode;
+  return code;
 };
 
 /**
