@@ -69,6 +69,48 @@ function getSelectedClassification(
   return foundAssociation as IfcClassificationReference | undefined;
 }
 
+/**
+ * Formats the IFC class code by adding a dot separator before the last uppercase character
+ * to split the IFC entity from PredefinedType.
+ * @param code - The IFC class code to be formatted.
+ * @returns The formatted IFC class code.
+ */
+const formatIfcClassCode = (code: string): string => {
+  const isLastCharUpperCase = code.charAt(code.length - 1) === code.charAt(code.length - 1).toUpperCase();
+  let formattedCode = code;
+
+  if (isLastCharUpperCase) {
+    const firstNonCapIndex = [...code].reverse().findIndex((char) => char !== char.toUpperCase());
+    if (firstNonCapIndex > 0) {
+      formattedCode = `${code.slice(0, code.length - firstNonCapIndex - 1)}.${code.slice(
+        code.length - firstNonCapIndex - 1,
+      )}`;
+    }
+  }
+
+  return formattedCode;
+};
+
+/**
+ * Builds Mantine select options for the classifications in a bSDD Dictionary.
+ * @param classificationsInGroup - The array of possible classes for the Dictionary.
+ * @param dictionaryUri - The URI of the dictionary.
+ * @returns An array of select options for the classifications.
+ */
+const buildClassSelectOptions = (classificationsInGroup: ClassContractV1[], dictionaryUri: string) => {
+  return classificationsInGroup.map((classification) => {
+    let label = classification.name;
+    if (dictionaryUri === 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3') {
+      const formattedCode = formatIfcClassCode(classification.code);
+      label = `${classification.name} (${formattedCode})`;
+    }
+    return {
+      value: classification.uri,
+      label,
+    };
+  });
+};
+
 function Classifications({ api, activeClassificationUri, setClassifications, domains }: ClassificationSelectsProps) {
   const activeDictionaries = useAppSelector(selectActiveDictionaries);
   const activeDictionaryLocations = useAppSelector(selectActiveDictionaryLocations);
@@ -268,10 +310,7 @@ function Classifications({ api, activeClassificationUri, setClassifications, dom
           mb="sm"
           key={dictionaryUri}
           label={domains[dictionaryUri] ? domains[dictionaryUri].name : ''}
-          data={classificationsInGroup.map((classification) => ({
-            value: classification.uri,
-            label: classification.name,
-          }))}
+          data={buildClassSelectOptions(classificationsInGroup, dictionaryUri)}
           value={selectedValues[dictionaryUri]}
           readOnly={classificationsInGroup.length === 1}
           variant={classificationsInGroup.length === 1 ? 'filled' : 'default'}
