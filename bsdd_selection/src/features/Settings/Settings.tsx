@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 
 import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import AppInfo from './AppInfo';
 import DomainSelection from './DomainSelection';
 import DomainSort from './DomainSort';
 import GeneralSettings from './GeneralSettings';
@@ -40,6 +41,7 @@ function Settings() {
   return (
     <Tabs.Panel value="settings">
       <Accordion defaultValue={['2']} multiple>
+        <AppInfo id={0} />
         <GeneralSettings
           id={1}
           localSettings={localSettings}

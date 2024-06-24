@@ -50,6 +50,8 @@ i18n.use(initReactI18next).init({
         entitySelectionInstruction: 'Select entities by using the dropdown at the top of the panel.',
         needHelp: 'Need help?',
         checkDocumentation: 'Check out our documentation',
+        appInfoLabel: 'App info',
+        appInfoInstruction: 'Information about this plugin',
       },
     },
     'nl-NL': {
@@ -82,6 +84,8 @@ i18n.use(initReactI18next).init({
         entitySelectionInstruction: 'Selecteer objecten in de dropdown bovenaan in het paneel.',
         needHelp: 'Hulp nodig?',
         checkDocumentation: 'Bekijk onze documentatie',
+        appInfoLabel: 'App info',
+        appInfoInstruction: 'Informatie over deze plugin',
       },
     },
   },
