@@ -24324,7 +24324,28 @@ function UO(r, e) {
     return !1;
   }) : void 0;
 }
-function FO({ api: r, activeClassificationUri: e, setClassifications: t, domains: n }) {
+const FO = (r) => {
+  const e = r.charAt(r.length - 1) === r.charAt(r.length - 1).toUpperCase();
+  let t = r;
+  if (e) {
+    const n = [...r].reverse().findIndex((o) => o !== o.toUpperCase());
+    n > 0 && (t = `${r.slice(0, r.length - n - 1)}.${r.slice(
+      r.length - n - 1
+    )}`);
+  }
+  return t;
+}, HO = (r, e) => r.map((t) => {
+  let n = t.name;
+  if (e === "https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3") {
+    const o = FO(t.code);
+    n = `${t.name} (${o})`;
+  }
+  return {
+    value: t.uri,
+    label: n
+  };
+});
+function BO({ api: r, activeClassificationUri: e, setClassifications: t, domains: n }) {
   const o = $n(Ld), a = $n(xO), s = $n(cy), [l, u] = ge(0), [f, h] = ge({}), [p, m] = ge([]), [v, C] = ge(
     () => Bg(p)
   ), [E, _] = ge({}), R = ze(
@@ -24426,10 +24447,7 @@ function FO({ api: r, activeClassificationUri: e, setClassifications: t, domains
     {
       mb: "sm",
       label: n[S] ? n[S].name : "",
-      data: I.map((O) => ({
-        value: O.uri,
-        label: O.name
-      })),
+      data: HO(I, S),
       value: E[S],
       readOnly: I.length === 1,
       variant: I.length === 1 ? "filled" : "default",
@@ -24438,7 +24456,7 @@ function FO({ api: r, activeClassificationUri: e, setClassifications: t, domains
     S
   )) });
 }
-function HO(r) {
+function KO(r) {
   const { label: e, value: t, setValue: n, disabled: o } = r, [a, s] = ge(!1), [l, u] = ge(!0), f = (h) => {
     h.target.indeterminate = !1, n(h.target.checked);
   };
@@ -24456,7 +24474,7 @@ function HO(r) {
     }
   );
 }
-function BO({ propertySet: r, property: e, propertyIndex: t, propertySets: n, setPropertySets: o }) {
+function qO({ propertySet: r, property: e, propertyIndex: t, propertySets: n, setPropertySets: o }) {
   const [a, s] = ge(), l = e, u = r, f = n, h = o;
   return me(() => {
     var p, m, v;
@@ -24464,7 +24482,7 @@ function BO({ propertySet: r, property: e, propertyIndex: t, propertySets: n, se
       case "IfcPropertySingleValue": {
         l.nominalValue.type === "IfcBoolean" ? s(
           /* @__PURE__ */ Te.jsx(
-            HO,
+            KO,
             {
               label: l.name,
               disabled: !1,
@@ -24540,7 +24558,7 @@ function BO({ propertySet: r, property: e, propertyIndex: t, propertySets: n, se
     }
   }, [l, u, s, f, h]), a;
 }
-const KO = {
+const $O = {
   Boolean: "IfcBoolean",
   Character: "IfcText",
   Integer: "IfcInteger",
@@ -24549,7 +24567,7 @@ const KO = {
   Time: "IfcDateTime"
 };
 function ia(r, e) {
-  const t = r && KO[r] || "default";
+  const t = r && $O[r] || "default";
   let n;
   return r === "Boolean" && typeof e == "string" ? e.toUpperCase() === "TRUE" ? n = !0 : e.toUpperCase() === "FALSE" ? n = !1 : n = void 0 : n = e, {
     type: t,
@@ -24565,11 +24583,11 @@ function hy(r, e, t) {
       );
   }
 }
-function qO(r, e, t, n) {
+function GO(r, e, t, n) {
   const o = hy(e, t, n);
   return o && "nominalValue" in o ? ia(r, o.nominalValue.value) : ia(r);
 }
-function $O(r, e, t, n, o) {
+function zO(r, e, t, n, o) {
   const a = hy(e, t, n);
   if (a) {
     if (a.type === "IfcPropertyEnumeratedValue")
@@ -24585,7 +24603,7 @@ function $O(r, e, t, n, o) {
   }
   return [];
 }
-function GO(r, e, t, n) {
+function VO(r, e, t, n) {
   var l;
   const o = ((l = r.allowedValues) == null ? void 0 : l.map(
     (u) => ia(r.dataType, u.value)
@@ -24599,7 +24617,7 @@ function GO(r, e, t, n) {
     }
   };
   r.propertyUri && (a.specification = r.propertyUri);
-  const s = r.predefinedValue ? [ia(r.dataType, r.predefinedValue)] : $O(
+  const s = r.predefinedValue ? [ia(r.dataType, r.predefinedValue)] : zO(
     r.dataType,
     n,
     t,
@@ -24608,20 +24626,20 @@ function GO(r, e, t, n) {
   );
   return s.length > 0 && (a.enumerationValues = s), a;
 }
-function zO(r, e, t, n) {
+function WO(r, e, t, n) {
   const o = {
     type: "IfcPropertySingleValue",
     name: e
   };
   r.propertyUri && (o.specification = r.propertyUri);
-  const a = r.predefinedValue ? ia(r.dataType, r.predefinedValue) : qO(r.dataType, n, t, e);
+  const a = r.predefinedValue ? ia(r.dataType, r.predefinedValue) : GO(r.dataType, n, t, e);
   return a !== null && (o.nominalValue = a), o;
 }
-function VO(r, e, t) {
+function jO(r, e, t) {
   const { propertyCode: n } = r, o = n || "unknown";
-  return r.allowedValues ? GO(r, o, e, t) : zO(r, o, e, t);
+  return r.allowedValues ? VO(r, o, e, t) : WO(r, o, e, t);
 }
-function WO(r) {
+function YO(r) {
   Nu();
   const { classifications: e } = r, { propertySets: t } = r, { setPropertySets: n } = r, { recursiveMode: o } = r, a = $n(cy);
   return me(() => {
@@ -24636,7 +24654,7 @@ function WO(r) {
           type: "IfcPropertySet",
           name: p,
           hasProperties: []
-        }), s[p].hasProperties.push(VO(h, p, a));
+        }), s[p].hasProperties.push(jO(h, p, a));
       });
     }), n(s);
   }, [e, n, o, a]), /* @__PURE__ */ Te.jsx("div", { children: Xl.toArray(
@@ -24644,7 +24662,7 @@ function WO(r) {
       /* @__PURE__ */ Te.jsx(Et.Control, { children: s.name }),
       /* @__PURE__ */ Te.jsx(Et.Panel, { children: /* @__PURE__ */ Te.jsx(Rd, { children: Xl.toArray(
         s.hasProperties.map((u, f) => /* @__PURE__ */ Te.jsx(
-          BO,
+          qO,
           {
             propertySet: s,
             property: u,
@@ -24657,7 +24675,7 @@ function WO(r) {
     ] }, s.name) }))
   ) });
 }
-function jO({ api: r, defaultValue: e, setActiveClassificationUri: t }) {
+function QO({ api: r, defaultValue: e, setActiveClassificationUri: t }) {
   var A;
   const [n, o] = ge([]), a = $n(fy), s = Ke(null), l = Ke(e), [u, f] = ge(l.current), [h, p] = ge(((A = l.current) == null ? void 0 : A.label) || ""), [m] = KA(h, 300), [v, C] = ge(!1), E = ze((S) => {
     p(S);
@@ -24723,7 +24741,7 @@ function jO({ api: r, defaultValue: e, setActiveClassificationUri: t }) {
     }
   );
 }
-const YO = async (r, e) => {
+const JO = async (r, e) => {
   try {
     const t = await r.api.dictionaryV1List({
       Uri: e,
@@ -24736,7 +24754,7 @@ const YO = async (r, e) => {
   }
   return {};
 };
-function QO() {
+function XO() {
   const { t: r } = Nu(), e = u1(), [t, n] = ge(), [o, a] = ge(), [s, l] = ge(), [u, f] = ge(!1), [h, p] = ge({}), [m, v] = ge([]), [C, E] = ge({}), [_, R] = ge(new ci(kd[l1])), A = $n(fy), [S, I] = ge(null), O = $n(dy), L = $n(Ld), q = ze((Q) => {
     var ee;
     const de = JSON.stringify(Q);
@@ -24781,7 +24799,7 @@ function QO() {
   }, [A, s]), me(() => {
     (async () => {
       const ee = (await Promise.all(
-        L.map((fe) => YO(_, fe.ifcClassification.location))
+        L.map((fe) => JO(_, fe.ifcClassification.location))
       )).reduce((fe, oe) => ({ ...fe, ...oe }), {});
       p(ee);
     })();
@@ -24789,12 +24807,12 @@ function QO() {
     /* @__PURE__ */ Te.jsx(yo, { type: "hidden", name: "ifcType", id: "ifcType", value: "" }),
     /* @__PURE__ */ Te.jsx(yo, { type: "hidden", name: "name", id: "name", value: "" }),
     /* @__PURE__ */ Te.jsx(yo, { type: "hidden", name: "material", id: "material", value: "" }),
-    /* @__PURE__ */ Te.jsx(Fs, { mx: "md", mt: "lg", mb: "sm", children: /* @__PURE__ */ Te.jsx(jO, { api: _, defaultValue: o, setActiveClassificationUri: n }) }),
+    /* @__PURE__ */ Te.jsx(Fs, { mx: "md", mt: "lg", mb: "sm", children: /* @__PURE__ */ Te.jsx(QO, { api: _, defaultValue: o, setActiveClassificationUri: n }) }),
     /* @__PURE__ */ Te.jsxs(Et, { defaultValue: ["Classifications"], multiple: !0, children: [
       /* @__PURE__ */ Te.jsxs(Et.Item, { value: "Classifications", children: [
         /* @__PURE__ */ Te.jsx(Et.Control, { children: /* @__PURE__ */ Te.jsx(Hs, { order: 5, children: r("classificationsLabel") }) }),
         /* @__PURE__ */ Te.jsx(Et.Panel, { children: /* @__PURE__ */ Te.jsx(
-          FO,
+          BO,
           {
             api: _,
             activeClassificationUri: t,
@@ -24806,7 +24824,7 @@ function QO() {
       /* @__PURE__ */ Te.jsxs(Et.Item, { value: "Propertysets", children: [
         /* @__PURE__ */ Te.jsx(Et.Control, { children: /* @__PURE__ */ Te.jsx(Hs, { order: 5, children: r("propertysetsLabel") }) }),
         /* @__PURE__ */ Te.jsx(Et.Panel, { children: /* @__PURE__ */ Te.jsx(
-          WO,
+          YO,
           {
             classifications: m,
             propertySets: C,
@@ -24831,27 +24849,27 @@ function QO() {
     ] })
   ] });
 }
-function JO() {
+function ZO() {
   const [r, e] = ge(null);
   return me(() => {
     const t = new EA(a1);
     e(t);
-  }, []), r ? /* @__PURE__ */ Te.jsx(km, { theme: i1, children: /* @__PURE__ */ Te.jsx(QO, {}) }) : /* @__PURE__ */ Te.jsx("div", { children: "Loading..." });
+  }, []), r ? /* @__PURE__ */ Te.jsx(km, { theme: i1, children: /* @__PURE__ */ Te.jsx(XO, {}) }) : /* @__PURE__ */ Te.jsx("div", { children: "Loading..." });
 }
-const py = 500, XO = 500;
+const py = 500, eM = 500;
 let ei = null, Jl = {};
 const Kg = {
   classes: {},
   dictionaries: {},
   dictionaryClasses: {},
   loaded: !1
-}, ZO = (r) => {
+}, tM = (r) => {
   const e = dy(r);
   return e && (!ei || ei.baseUrl !== e) && (ei = new ci(e)), ei;
 }, qg = Ao("bsdd/fetchDictionaries", (r, e) => {
   if (console.log("fetchDictionaries", r), !r)
     return e.rejectWithValue("No bsddApiEnvironment provided");
-  const t = new ci(r), n = XO;
+  const t = new ci(r), n = eM;
   let o = 0;
   const a = [];
   return new Promise((s, l) => {
@@ -24871,7 +24889,7 @@ const Kg = {
     }
     u();
   });
-}), eM = Ao(
+}), rM = Ao(
   "bsdd/fetchDictionaryClasses",
   async (r, { getState: e, dispatch: t }) => {
     const n = e();
@@ -24880,13 +24898,13 @@ const Kg = {
     if (Jl[r])
       return await Jl[r];
     const o = (async () => {
-      const s = ZO(e());
+      const s = tM(e());
       if (!s)
         throw new Error("BsddApi is not initialized");
       const l = [];
       let u = 0, f;
       for (; ; ) {
-        const h = await tM(s, r, u), p = h.classes ?? [];
+        const h = await nM(s, r, u), p = h.classes ?? [];
         if (l.push(...p), u === 0 && (f = h.classesTotalCount, f == null))
           throw new Error("Total count is null or undefined");
         if (f != null && l.length >= f)
@@ -24914,7 +24932,7 @@ const Kg = {
       e.loaded = !1;
     }).addCase(qg.fulfilled, (e, t) => {
       console.log("fetch dictionaries fulfilled", t.payload), e.dictionaries = t.payload, e.loaded = !0;
-    }).addCase(eM.rejected, (e, t) => {
+    }).addCase(rM.rejected, (e, t) => {
       console.error("fetch dictionary classes failed", t.error), e.loaded = !0;
     });
   }
@@ -24938,7 +24956,7 @@ Ao("bsdd/fetchClass", async (r, { getState: e, dispatch: t }) => {
   const { data: a } = o;
   return t({ type: "bsdd/addClass", payload: { uri: r, data: a } }), a;
 });
-async function tM(r, e, t) {
+async function nM(r, e, t) {
   const n = await r.api.dictionaryV1ClassesList({
     Uri: e,
     UseNestedClasses: !1,
@@ -24951,7 +24969,7 @@ async function tM(r, e, t) {
   return n.data;
 }
 gy.actions;
-const rM = gy.reducer, nM = {
+const oM = gy.reducer, iM = {
   name: void 0,
   description: void 0,
   tag: void 0,
@@ -24960,7 +24978,7 @@ const rM = gy.reducer, nM = {
   hasAssociations: []
 }, my = gi({
   name: "ifcEntity",
-  initialState: nM,
+  initialState: iM,
   reducers: {
     setifcEntity: (r, e) => {
       r.name = e.payload.name, r.description = e.payload.description, r.tag = e.payload.tag, r.predefinedType = e.payload.predefinedType, r.isDefinedBy = e.payload.isDefinedBy, r.hasAssociations = e.payload.hasAssociations;
@@ -24986,14 +25004,14 @@ const rM = gy.reducer, nM = {
   }
 });
 my.actions;
-const oM = my.reducer, iM = Y1({
+const aM = my.reducer, sM = Y1({
   reducer: {
     settings: LO,
     ifcData: OO,
-    ifcEntity: oM,
-    bsdd: rM
+    ifcEntity: aM,
+    bsdd: oM
   }
 });
 Zl.createRoot(document.getElementById("root")).render(
-  /* @__PURE__ */ Te.jsx(P.StrictMode, { children: /* @__PURE__ */ Te.jsx(N0, { store: iM, children: /* @__PURE__ */ Te.jsx(JO, {}) }) })
+  /* @__PURE__ */ Te.jsx(P.StrictMode, { children: /* @__PURE__ */ Te.jsx(N0, { store: sM, children: /* @__PURE__ */ Te.jsx(ZO, {}) }) })
 );
