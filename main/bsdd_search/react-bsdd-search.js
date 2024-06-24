@@ -676,9 +676,9 @@ class ws extends js {
       m = m.join(R), m && (m = this.extendTranslation(m, e, t, n));
     else {
       let I = !1, O = !1;
-      const L = t.count !== void 0 && typeof t.count != "string", q = ws.hasDefaultValue(t), U = L ? this.pluralResolver.getSuffix(f, t.count, t) : "", Y = t.ordinal && L ? this.pluralResolver.getSuffix(f, t.count, {
+      const L = t.count !== void 0 && typeof t.count != "string", q = ws.hasDefaultValue(t), U = L ? this.pluralResolver.getSuffix(f, t.count, t) : "", W = t.ordinal && L ? this.pluralResolver.getSuffix(f, t.count, {
         ordinal: !1
-      }) : "", Q = t[`defaultValue${U}`] || t[`defaultValue${Y}`] || t.defaultValue;
+      }) : "", Q = t[`defaultValue${U}`] || t[`defaultValue${W}`] || t.defaultValue;
       !this.isValidLookup(m) && q && (I = !0, m = Q), this.isValidLookup(m) || (O = !0, m = s);
       const ee = (t.missingKeyNoValueFallbackToKey || this.options.missingKeyNoValueFallbackToKey) && O ? void 0 : m, fe = q && Q !== m && this.options.updateMissing;
       if (O || I || fe) {
@@ -2652,7 +2652,7 @@ var Ss = {
   }
 };
 /*! @azure/msal-common v13.3.1 2023-10-27 */
-var j = {
+var Y = {
   clientInfoDecodingError: {
     code: "client_info_decoding_error",
     desc: "The client info could not be parsed/decoded correctly. Please review the trace to determine the root cause."
@@ -2862,97 +2862,97 @@ var j = {
       return o.name = "ClientAuthError", Object.setPrototypeOf(o, e.prototype), o;
     }
     return e.createClientInfoDecodingError = function(t) {
-      return new e(j.clientInfoDecodingError.code, j.clientInfoDecodingError.desc + " Failed with error: " + t);
+      return new e(Y.clientInfoDecodingError.code, Y.clientInfoDecodingError.desc + " Failed with error: " + t);
     }, e.createClientInfoEmptyError = function() {
-      return new e(j.clientInfoEmptyError.code, "" + j.clientInfoEmptyError.desc);
+      return new e(Y.clientInfoEmptyError.code, "" + Y.clientInfoEmptyError.desc);
     }, e.createTokenParsingError = function(t) {
-      return new e(j.tokenParsingError.code, j.tokenParsingError.desc + " Failed with error: " + t);
+      return new e(Y.tokenParsingError.code, Y.tokenParsingError.desc + " Failed with error: " + t);
     }, e.createTokenNullOrEmptyError = function(t) {
-      return new e(j.nullOrEmptyToken.code, j.nullOrEmptyToken.desc + " Raw Token Value: " + t);
+      return new e(Y.nullOrEmptyToken.code, Y.nullOrEmptyToken.desc + " Raw Token Value: " + t);
     }, e.createEndpointDiscoveryIncompleteError = function(t) {
-      return new e(j.endpointResolutionError.code, j.endpointResolutionError.desc + " Detail: " + t);
+      return new e(Y.endpointResolutionError.code, Y.endpointResolutionError.desc + " Detail: " + t);
     }, e.createNetworkError = function(t, n) {
-      return new e(j.networkError.code, j.networkError.desc + " | Fetch client threw: " + n + " | Attempted to reach: " + t.split("?")[0]);
+      return new e(Y.networkError.code, Y.networkError.desc + " | Fetch client threw: " + n + " | Attempted to reach: " + t.split("?")[0]);
     }, e.createUnableToGetOpenidConfigError = function(t) {
-      return new e(j.unableToGetOpenidConfigError.code, j.unableToGetOpenidConfigError.desc + " Attempted to retrieve endpoints from: " + t);
+      return new e(Y.unableToGetOpenidConfigError.code, Y.unableToGetOpenidConfigError.desc + " Attempted to retrieve endpoints from: " + t);
     }, e.createHashNotDeserializedError = function(t) {
-      return new e(j.hashNotDeserialized.code, j.hashNotDeserialized.desc + " Given Object: " + t);
+      return new e(Y.hashNotDeserialized.code, Y.hashNotDeserialized.desc + " Given Object: " + t);
     }, e.createInvalidStateError = function(t, n) {
-      return new e(j.invalidStateError.code, j.invalidStateError.desc + " Invalid State: " + t + ", Root Err: " + n);
+      return new e(Y.invalidStateError.code, Y.invalidStateError.desc + " Invalid State: " + t + ", Root Err: " + n);
     }, e.createStateMismatchError = function() {
-      return new e(j.stateMismatchError.code, j.stateMismatchError.desc);
+      return new e(Y.stateMismatchError.code, Y.stateMismatchError.desc);
     }, e.createStateNotFoundError = function(t) {
-      return new e(j.stateNotFoundError.code, j.stateNotFoundError.desc + ":  " + t);
+      return new e(Y.stateNotFoundError.code, Y.stateNotFoundError.desc + ":  " + t);
     }, e.createNonceMismatchError = function() {
-      return new e(j.nonceMismatchError.code, j.nonceMismatchError.desc);
+      return new e(Y.nonceMismatchError.code, Y.nonceMismatchError.desc);
     }, e.createAuthTimeNotFoundError = function() {
-      return new e(j.authTimeNotFoundError.code, j.authTimeNotFoundError.desc);
+      return new e(Y.authTimeNotFoundError.code, Y.authTimeNotFoundError.desc);
     }, e.createMaxAgeTranspiredError = function() {
-      return new e(j.maxAgeTranspiredError.code, j.maxAgeTranspiredError.desc);
+      return new e(Y.maxAgeTranspiredError.code, Y.maxAgeTranspiredError.desc);
     }, e.createNonceNotFoundError = function(t) {
-      return new e(j.nonceNotFoundError.code, j.nonceNotFoundError.desc + ":  " + t);
+      return new e(Y.nonceNotFoundError.code, Y.nonceNotFoundError.desc + ":  " + t);
     }, e.createMultipleMatchingTokensInCacheError = function() {
-      return new e(j.multipleMatchingTokens.code, j.multipleMatchingTokens.desc + ".");
+      return new e(Y.multipleMatchingTokens.code, Y.multipleMatchingTokens.desc + ".");
     }, e.createMultipleMatchingAccountsInCacheError = function() {
-      return new e(j.multipleMatchingAccounts.code, j.multipleMatchingAccounts.desc);
+      return new e(Y.multipleMatchingAccounts.code, Y.multipleMatchingAccounts.desc);
     }, e.createMultipleMatchingAppMetadataInCacheError = function() {
-      return new e(j.multipleMatchingAppMetadata.code, j.multipleMatchingAppMetadata.desc);
+      return new e(Y.multipleMatchingAppMetadata.code, Y.multipleMatchingAppMetadata.desc);
     }, e.createTokenRequestCannotBeMadeError = function() {
-      return new e(j.tokenRequestCannotBeMade.code, j.tokenRequestCannotBeMade.desc);
+      return new e(Y.tokenRequestCannotBeMade.code, Y.tokenRequestCannotBeMade.desc);
     }, e.createAppendEmptyScopeToSetError = function(t) {
-      return new e(j.appendEmptyScopeError.code, j.appendEmptyScopeError.desc + " Given Scope: " + t);
+      return new e(Y.appendEmptyScopeError.code, Y.appendEmptyScopeError.desc + " Given Scope: " + t);
     }, e.createRemoveEmptyScopeFromSetError = function(t) {
-      return new e(j.removeEmptyScopeError.code, j.removeEmptyScopeError.desc + " Given Scope: " + t);
+      return new e(Y.removeEmptyScopeError.code, Y.removeEmptyScopeError.desc + " Given Scope: " + t);
     }, e.createAppendScopeSetError = function(t) {
-      return new e(j.appendScopeSetError.code, j.appendScopeSetError.desc + " Detail Error: " + t);
+      return new e(Y.appendScopeSetError.code, Y.appendScopeSetError.desc + " Detail Error: " + t);
     }, e.createEmptyInputScopeSetError = function() {
-      return new e(j.emptyInputScopeSetError.code, "" + j.emptyInputScopeSetError.desc);
+      return new e(Y.emptyInputScopeSetError.code, "" + Y.emptyInputScopeSetError.desc);
     }, e.createDeviceCodeCancelledError = function() {
-      return new e(j.DeviceCodePollingCancelled.code, "" + j.DeviceCodePollingCancelled.desc);
+      return new e(Y.DeviceCodePollingCancelled.code, "" + Y.DeviceCodePollingCancelled.desc);
     }, e.createDeviceCodeExpiredError = function() {
-      return new e(j.DeviceCodeExpired.code, "" + j.DeviceCodeExpired.desc);
+      return new e(Y.DeviceCodeExpired.code, "" + Y.DeviceCodeExpired.desc);
     }, e.createDeviceCodeUnknownError = function() {
-      return new e(j.DeviceCodeUnknownError.code, "" + j.DeviceCodeUnknownError.desc);
+      return new e(Y.DeviceCodeUnknownError.code, "" + Y.DeviceCodeUnknownError.desc);
     }, e.createNoAccountInSilentRequestError = function() {
-      return new e(j.NoAccountInSilentRequest.code, "" + j.NoAccountInSilentRequest.desc);
+      return new e(Y.NoAccountInSilentRequest.code, "" + Y.NoAccountInSilentRequest.desc);
     }, e.createNullOrUndefinedCacheRecord = function() {
-      return new e(j.invalidCacheRecord.code, j.invalidCacheRecord.desc);
+      return new e(Y.invalidCacheRecord.code, Y.invalidCacheRecord.desc);
     }, e.createInvalidCacheEnvironmentError = function() {
-      return new e(j.invalidCacheEnvironment.code, j.invalidCacheEnvironment.desc);
+      return new e(Y.invalidCacheEnvironment.code, Y.invalidCacheEnvironment.desc);
     }, e.createNoAccountFoundError = function() {
-      return new e(j.noAccountFound.code, j.noAccountFound.desc);
+      return new e(Y.noAccountFound.code, Y.noAccountFound.desc);
     }, e.createCachePluginError = function() {
-      return new e(j.CachePluginError.code, "" + j.CachePluginError.desc);
+      return new e(Y.CachePluginError.code, "" + Y.CachePluginError.desc);
     }, e.createNoCryptoObjectError = function(t) {
-      return new e(j.noCryptoObj.code, "" + j.noCryptoObj.desc + t);
+      return new e(Y.noCryptoObj.code, "" + Y.noCryptoObj.desc + t);
     }, e.createInvalidCacheTypeError = function() {
-      return new e(j.invalidCacheType.code, "" + j.invalidCacheType.desc);
+      return new e(Y.invalidCacheType.code, "" + Y.invalidCacheType.desc);
     }, e.createUnexpectedAccountTypeError = function() {
-      return new e(j.unexpectedAccountType.code, "" + j.unexpectedAccountType.desc);
+      return new e(Y.unexpectedAccountType.code, "" + Y.unexpectedAccountType.desc);
     }, e.createUnexpectedCredentialTypeError = function() {
-      return new e(j.unexpectedCredentialType.code, "" + j.unexpectedCredentialType.desc);
+      return new e(Y.unexpectedCredentialType.code, "" + Y.unexpectedCredentialType.desc);
     }, e.createInvalidAssertionError = function() {
-      return new e(j.invalidAssertion.code, "" + j.invalidAssertion.desc);
+      return new e(Y.invalidAssertion.code, "" + Y.invalidAssertion.desc);
     }, e.createInvalidCredentialError = function() {
-      return new e(j.invalidClientCredential.code, "" + j.invalidClientCredential.desc);
+      return new e(Y.invalidClientCredential.code, "" + Y.invalidClientCredential.desc);
     }, e.createRefreshRequiredError = function() {
-      return new e(j.tokenRefreshRequired.code, j.tokenRefreshRequired.desc);
+      return new e(Y.tokenRefreshRequired.code, Y.tokenRefreshRequired.desc);
     }, e.createUserTimeoutReachedError = function() {
-      return new e(j.userTimeoutReached.code, j.userTimeoutReached.desc);
+      return new e(Y.userTimeoutReached.code, Y.userTimeoutReached.desc);
     }, e.createTokenClaimsRequiredError = function() {
-      return new e(j.tokenClaimsRequired.code, j.tokenClaimsRequired.desc);
+      return new e(Y.tokenClaimsRequired.code, Y.tokenClaimsRequired.desc);
     }, e.createNoAuthCodeInServerResponseError = function() {
-      return new e(j.noAuthorizationCodeFromServer.code, j.noAuthorizationCodeFromServer.desc);
+      return new e(Y.noAuthorizationCodeFromServer.code, Y.noAuthorizationCodeFromServer.desc);
     }, e.createBindingKeyNotRemovedError = function() {
-      return new e(j.bindingKeyNotRemovedError.code, j.bindingKeyNotRemovedError.desc);
+      return new e(Y.bindingKeyNotRemovedError.code, Y.bindingKeyNotRemovedError.desc);
     }, e.createLogoutNotSupportedError = function() {
-      return new e(j.logoutNotSupported.code, j.logoutNotSupported.desc);
+      return new e(Y.logoutNotSupported.code, Y.logoutNotSupported.desc);
     }, e.createKeyIdMissingError = function() {
-      return new e(j.keyIdMissing.code, j.keyIdMissing.desc);
+      return new e(Y.keyIdMissing.code, Y.keyIdMissing.desc);
     }, e.createNoNetworkConnectivityError = function() {
-      return new e(j.noNetworkConnectivity.code, j.noNetworkConnectivity.desc);
+      return new e(Y.noNetworkConnectivity.code, Y.noNetworkConnectivity.desc);
     }, e.createUserCanceledError = function() {
-      return new e(j.userCanceledError.code, j.userCanceledError.desc);
+      return new e(Y.userCanceledError.code, Y.userCanceledError.desc);
     }, e;
   }(le)
 );
@@ -5278,7 +5278,7 @@ var xI = (
             case 1:
               return [2, a.sent()];
             case 2:
-              if (n = a.sent(), n instanceof ne && n.errorCode === j.tokenRefreshRequired.code)
+              if (n = a.sent(), n instanceof ne && n.errorCode === Y.tokenRefreshRequired.code)
                 return o = new om(this.config, this.performanceClient), [2, o.acquireTokenByRefreshToken(t)];
               throw n;
             case 3:
@@ -6198,7 +6198,7 @@ var Fp = (
   }(am)
 );
 /*! @azure/msal-browser v2.38.3 2023-10-27 */
-var W = {
+var j = {
   pkceNotGenerated: {
     code: "pkce_not_created",
     desc: "The PKCE code challenge and verifier could not be generated."
@@ -6388,96 +6388,96 @@ var W = {
       return Object.setPrototypeOf(o, e.prototype), o.name = "BrowserAuthError", o;
     }
     return e.createPkceNotGeneratedError = function(t) {
-      return new e(W.pkceNotGenerated.code, W.pkceNotGenerated.desc + " Detail:" + t);
+      return new e(j.pkceNotGenerated.code, j.pkceNotGenerated.desc + " Detail:" + t);
     }, e.createCryptoNotAvailableError = function(t) {
-      return new e(W.cryptoDoesNotExist.code, W.cryptoDoesNotExist.desc + " Detail:" + t);
+      return new e(j.cryptoDoesNotExist.code, j.cryptoDoesNotExist.desc + " Detail:" + t);
     }, e.createHttpMethodNotImplementedError = function(t) {
-      return new e(W.httpMethodNotImplementedError.code, W.httpMethodNotImplementedError.desc + " Given Method: " + t);
+      return new e(j.httpMethodNotImplementedError.code, j.httpMethodNotImplementedError.desc + " Given Method: " + t);
     }, e.createEmptyNavigationUriError = function() {
-      return new e(W.emptyNavigateUriError.code, W.emptyNavigateUriError.desc);
+      return new e(j.emptyNavigateUriError.code, j.emptyNavigateUriError.desc);
     }, e.createEmptyHashError = function(t) {
-      return new e(W.hashEmptyError.code, W.hashEmptyError.desc + " Given Url: " + t);
+      return new e(j.hashEmptyError.code, j.hashEmptyError.desc + " Given Url: " + t);
     }, e.createHashDoesNotContainStateError = function() {
-      return new e(W.hashDoesNotContainStateError.code, W.hashDoesNotContainStateError.desc);
+      return new e(j.hashDoesNotContainStateError.code, j.hashDoesNotContainStateError.desc);
     }, e.createHashDoesNotContainKnownPropertiesError = function() {
-      return new e(W.hashDoesNotContainKnownPropertiesError.code, W.hashDoesNotContainKnownPropertiesError.desc);
+      return new e(j.hashDoesNotContainKnownPropertiesError.code, j.hashDoesNotContainKnownPropertiesError.desc);
     }, e.createUnableToParseStateError = function() {
-      return new e(W.unableToParseStateError.code, W.unableToParseStateError.desc);
+      return new e(j.unableToParseStateError.code, j.unableToParseStateError.desc);
     }, e.createStateInteractionTypeMismatchError = function() {
-      return new e(W.stateInteractionTypeMismatchError.code, W.stateInteractionTypeMismatchError.desc);
+      return new e(j.stateInteractionTypeMismatchError.code, j.stateInteractionTypeMismatchError.desc);
     }, e.createInteractionInProgressError = function() {
-      return new e(W.interactionInProgress.code, W.interactionInProgress.desc);
+      return new e(j.interactionInProgress.code, j.interactionInProgress.desc);
     }, e.createPopupWindowError = function(t) {
-      var n = W.popupWindowError.desc;
-      return n = te.isEmpty(t) ? n : n + " Details: " + t, new e(W.popupWindowError.code, n);
+      var n = j.popupWindowError.desc;
+      return n = te.isEmpty(t) ? n : n + " Details: " + t, new e(j.popupWindowError.code, n);
     }, e.createEmptyWindowCreatedError = function() {
-      return new e(W.emptyWindowError.code, W.emptyWindowError.desc);
+      return new e(j.emptyWindowError.code, j.emptyWindowError.desc);
     }, e.createUserCancelledError = function() {
-      return new e(W.userCancelledError.code, W.userCancelledError.desc);
+      return new e(j.userCancelledError.code, j.userCancelledError.desc);
     }, e.createMonitorPopupTimeoutError = function() {
-      return new e(W.monitorPopupTimeoutError.code, W.monitorPopupTimeoutError.desc);
+      return new e(j.monitorPopupTimeoutError.code, j.monitorPopupTimeoutError.desc);
     }, e.createMonitorIframeTimeoutError = function() {
-      return new e(W.monitorIframeTimeoutError.code, W.monitorIframeTimeoutError.desc);
+      return new e(j.monitorIframeTimeoutError.code, j.monitorIframeTimeoutError.desc);
     }, e.createRedirectInIframeError = function(t) {
-      return new e(W.redirectInIframeError.code, W.redirectInIframeError.desc + " (window.parent !== window) => " + t);
+      return new e(j.redirectInIframeError.code, j.redirectInIframeError.desc + " (window.parent !== window) => " + t);
     }, e.createBlockReloadInHiddenIframeError = function() {
-      return new e(W.blockTokenRequestsInHiddenIframeError.code, W.blockTokenRequestsInHiddenIframeError.desc);
+      return new e(j.blockTokenRequestsInHiddenIframeError.code, j.blockTokenRequestsInHiddenIframeError.desc);
     }, e.createBlockAcquireTokenInPopupsError = function() {
-      return new e(W.blockAcquireTokenInPopupsError.code, W.blockAcquireTokenInPopupsError.desc);
+      return new e(j.blockAcquireTokenInPopupsError.code, j.blockAcquireTokenInPopupsError.desc);
     }, e.createIframeClosedPrematurelyError = function() {
-      return new e(W.iframeClosedPrematurelyError.code, W.iframeClosedPrematurelyError.desc);
+      return new e(j.iframeClosedPrematurelyError.code, j.iframeClosedPrematurelyError.desc);
     }, e.createSilentLogoutUnsupportedError = function() {
-      return new e(W.silentLogoutUnsupportedError.code, W.silentLogoutUnsupportedError.desc);
+      return new e(j.silentLogoutUnsupportedError.code, j.silentLogoutUnsupportedError.desc);
     }, e.createNoAccountError = function() {
-      return new e(W.noAccountError.code, W.noAccountError.desc);
+      return new e(j.noAccountError.code, j.noAccountError.desc);
     }, e.createSilentPromptValueError = function(t) {
-      return new e(W.silentPromptValueError.code, W.silentPromptValueError.desc + " Given value: " + t);
+      return new e(j.silentPromptValueError.code, j.silentPromptValueError.desc + " Given value: " + t);
     }, e.createUnableToParseTokenRequestCacheError = function() {
-      return new e(W.unableToParseTokenRequestCacheError.code, W.unableToParseTokenRequestCacheError.desc);
+      return new e(j.unableToParseTokenRequestCacheError.code, j.unableToParseTokenRequestCacheError.desc);
     }, e.createNoTokenRequestCacheError = function() {
-      return new e(W.noTokenRequestCacheError.code, W.noTokenRequestCacheError.desc);
+      return new e(j.noTokenRequestCacheError.code, j.noTokenRequestCacheError.desc);
     }, e.createAuthRequestNotSetError = function() {
-      return new e(W.authRequestNotSet.code, W.authRequestNotSet.desc);
+      return new e(j.authRequestNotSet.code, j.authRequestNotSet.desc);
     }, e.createNoCachedAuthorityError = function() {
-      return new e(W.noCachedAuthorityError.code, W.noCachedAuthorityError.desc);
+      return new e(j.noCachedAuthorityError.code, j.noCachedAuthorityError.desc);
     }, e.createInvalidCacheTypeError = function() {
-      return new e(W.invalidCacheType.code, "" + W.invalidCacheType.desc);
+      return new e(j.invalidCacheType.code, "" + j.invalidCacheType.desc);
     }, e.createNonBrowserEnvironmentError = function() {
-      return new e(W.notInBrowserEnvironment.code, W.notInBrowserEnvironment.desc);
+      return new e(j.notInBrowserEnvironment.code, j.notInBrowserEnvironment.desc);
     }, e.createDatabaseNotOpenError = function() {
-      return new e(W.databaseNotOpen.code, W.databaseNotOpen.desc);
+      return new e(j.databaseNotOpen.code, j.databaseNotOpen.desc);
     }, e.createNoNetworkConnectivityError = function() {
-      return new e(W.noNetworkConnectivity.code, W.noNetworkConnectivity.desc);
+      return new e(j.noNetworkConnectivity.code, j.noNetworkConnectivity.desc);
     }, e.createPostRequestFailedError = function(t, n) {
-      return new e(W.postRequestFailed.code, W.postRequestFailed.desc + " | Network client threw: " + t + " | Attempted to reach: " + n.split("?")[0]);
+      return new e(j.postRequestFailed.code, j.postRequestFailed.desc + " | Network client threw: " + t + " | Attempted to reach: " + n.split("?")[0]);
     }, e.createGetRequestFailedError = function(t, n) {
-      return new e(W.getRequestFailed.code, W.getRequestFailed.desc + " | Network client threw: " + t + " | Attempted to reach: " + n.split("?")[0]);
+      return new e(j.getRequestFailed.code, j.getRequestFailed.desc + " | Network client threw: " + t + " | Attempted to reach: " + n.split("?")[0]);
     }, e.createFailedToParseNetworkResponseError = function(t) {
-      return new e(W.failedToParseNetworkResponse.code, W.failedToParseNetworkResponse.desc + " | Attempted to reach: " + t.split("?")[0]);
+      return new e(j.failedToParseNetworkResponse.code, j.failedToParseNetworkResponse.desc + " | Attempted to reach: " + t.split("?")[0]);
     }, e.createUnableToLoadTokenError = function(t) {
-      return new e(W.unableToLoadTokenError.code, W.unableToLoadTokenError.desc + " | " + t);
+      return new e(j.unableToLoadTokenError.code, j.unableToLoadTokenError.desc + " | " + t);
     }, e.createSigningKeyNotFoundInStorageError = function(t) {
-      return new e(W.signingKeyNotFoundInStorage.code, W.signingKeyNotFoundInStorage.desc + " | No match found for KeyId: " + t);
+      return new e(j.signingKeyNotFoundInStorage.code, j.signingKeyNotFoundInStorage.desc + " | No match found for KeyId: " + t);
     }, e.createAuthCodeRequiredError = function() {
-      return new e(W.authCodeRequired.code, W.authCodeRequired.desc);
+      return new e(j.authCodeRequired.code, j.authCodeRequired.desc);
     }, e.createAuthCodeOrNativeAccountIdRequiredError = function() {
-      return new e(W.authCodeOrNativeAccountRequired.code, W.authCodeOrNativeAccountRequired.desc);
+      return new e(j.authCodeOrNativeAccountRequired.code, j.authCodeOrNativeAccountRequired.desc);
     }, e.createSpaCodeAndNativeAccountIdPresentError = function() {
-      return new e(W.spaCodeAndNativeAccountPresent.code, W.spaCodeAndNativeAccountPresent.desc);
+      return new e(j.spaCodeAndNativeAccountPresent.code, j.spaCodeAndNativeAccountPresent.desc);
     }, e.createDatabaseUnavailableError = function() {
-      return new e(W.databaseUnavailable.code, W.databaseUnavailable.desc);
+      return new e(j.databaseUnavailable.code, j.databaseUnavailable.desc);
     }, e.createUnableToAcquireTokenFromNativePlatformError = function() {
-      return new e(W.unableToAcquireTokenFromNativePlatform.code, W.unableToAcquireTokenFromNativePlatform.desc);
+      return new e(j.unableToAcquireTokenFromNativePlatform.code, j.unableToAcquireTokenFromNativePlatform.desc);
     }, e.createNativeHandshakeTimeoutError = function() {
-      return new e(W.nativeHandshakeTimeout.code, W.nativeHandshakeTimeout.desc);
+      return new e(j.nativeHandshakeTimeout.code, j.nativeHandshakeTimeout.desc);
     }, e.createNativeExtensionNotInstalledError = function() {
-      return new e(W.nativeExtensionNotInstalled.code, W.nativeExtensionNotInstalled.desc);
+      return new e(j.nativeExtensionNotInstalled.code, j.nativeExtensionNotInstalled.desc);
     }, e.createNativeConnectionNotEstablishedError = function() {
-      return new e(W.nativeConnectionNotEstablished.code, W.nativeConnectionNotEstablished.desc);
+      return new e(j.nativeConnectionNotEstablished.code, j.nativeConnectionNotEstablished.desc);
     }, e.createNativeBrokerCalledBeforeInitialize = function() {
-      return new e(W.nativeBrokerCalledBeforeInitialize.code, W.nativeBrokerCalledBeforeInitialize.desc);
+      return new e(j.nativeBrokerCalledBeforeInitialize.code, j.nativeBrokerCalledBeforeInitialize.desc);
     }, e.createNativePromptParameterNotSupportedError = function() {
-      return new e(W.nativePromptNotSupported.code, W.nativePromptNotSupported.desc);
+      return new e(j.nativePromptNotSupported.code, j.nativePromptNotSupported.desc);
     }, e;
   }(le)
 );
@@ -7748,7 +7748,7 @@ var Uu = (
           try {
             l = this.authModule.handleFragmentResponse(e, s);
           } catch (f) {
-            throw f instanceof Co && f.subError === W.userCancelledError.code ? X.createUserCancelledError() : f;
+            throw f instanceof Co && f.subError === j.userCancelledError.code ? X.createUserCancelledError() : f;
           }
           return this.performanceClient.setPreQueueTime(F.HandleCodeResponseFromServer, this.authCodeRequest.correlationId), [2, this.handleCodeResponseFromServer(l, t, n, o)];
         });
@@ -7862,7 +7862,7 @@ var $p = (
               try {
                 u = this.authModule.handleFragmentResponse(t, l);
               } catch (C) {
-                throw C instanceof Co && C.subError === W.userCancelledError.code ? X.createUserCancelledError() : C;
+                throw C instanceof Co && C.subError === j.userCancelledError.code ? X.createUserCancelledError() : C;
               }
               return f = this.browserStorage.generateNonceKey(l), h = this.browserStorage.getTemporaryCache(f), this.authCodeRequest.code = u.code, u.cloud_instance_host_name ? [4, this.updateTokenEndpointAuthority(u.cloud_instance_host_name, o, a)] : [3, 2];
             case 1:
@@ -7961,7 +7961,7 @@ var lm = (
                 fromCache: !0
               }), [2, s];
             case 4:
-              throw l = u.sent(), l instanceof X && l.errorCode === W.signingKeyNotFoundInStorage.code && this.logger.verbose("Signing keypair for bound access token not found. Refreshing bound access token and generating a new crypto keypair."), n.endMeasurement({
+              throw l = u.sent(), l instanceof X && l.errorCode === j.signingKeyNotFoundInStorage.code && this.logger.verbose("Signing keypair for bound access token not found. Refreshing bound access token and generating a new crypto keypair."), n.endMeasurement({
                 errorCode: l instanceof le && l.errorCode || void 0,
                 subErrorCode: l instanceof le && l.subError || void 0,
                 success: !1
@@ -9732,7 +9732,7 @@ var zp = (
       this.inMemoryCache = new du(), this.indexedDBCache = new hA(), this.logger = e, this.storeName = t;
     }
     return r.prototype.handleDatabaseAccessError = function(e) {
-      if (e instanceof X && e.errorCode === W.databaseUnavailable.code)
+      if (e instanceof X && e.errorCode === j.databaseUnavailable.code)
         this.logger.error("Could not access persistent storage. This may be caused by browser privacy features which block persistent storage in third-party contexts.");
       else
         throw e;
@@ -12404,7 +12404,7 @@ function Zs(r) {
     ta: L,
     lh: q,
     fs: U,
-    tt: Y,
+    tt: W,
     td: Q,
     w: de,
     miw: ee,
@@ -12454,7 +12454,7 @@ function Zs(r) {
     ta: L,
     lh: q,
     fs: U,
-    tt: Y,
+    tt: W,
     td: Q,
     w: de,
     miw: ee,
@@ -12867,7 +12867,7 @@ const tk = P.forwardRef((r, e) => {
   scrollHideDelay: 1e3,
   type: "hover"
 }, Um = lt((r, e) => {
-  const t = Ce("ScrollAreaRoot", nk, r), { type: n, scrollHideDelay: o, scrollbars: a, ...s } = t, [l, u] = ge(null), [f, h] = ge(null), [p, m] = ge(null), [v, C] = ge(null), [E, _] = ge(null), [R, A] = ge(0), [S, I] = ge(0), [O, L] = ge(!1), [q, U] = ge(!1), Y = Or(e, (Q) => u(Q));
+  const t = Ce("ScrollAreaRoot", nk, r), { type: n, scrollHideDelay: o, scrollbars: a, ...s } = t, [l, u] = ge(null), [f, h] = ge(null), [p, m] = ge(null), [v, C] = ge(null), [E, _] = ge(null), [R, A] = ge(0), [S, I] = ge(0), [O, L] = ge(!1), [q, U] = ge(!1), W = Or(e, (Q) => u(Q));
   return /* @__PURE__ */ P.createElement(
     ek,
     {
@@ -12895,7 +12895,7 @@ const tk = P.forwardRef((r, e) => {
       ke,
       {
         ...s,
-        ref: Y,
+        ref: W,
         __vars: {
           "--sa-corner-width": a !== "xy" ? "0px" : `${R}px`,
           "--sa-corner-height": a !== "xy" ? "0px" : `${S}px`
@@ -12959,14 +12959,14 @@ const [ak, Km] = di(
     ...p
   } = r, m = Mr(), [v, C] = P.useState(null), E = Or(e, (U) => C(U)), _ = P.useRef(null), R = P.useRef(""), { viewport: A } = m, S = t.content - t.viewport, I = fo(f), O = fo(l), L = Js(h, 10), q = (U) => {
     if (_.current) {
-      const Y = U.clientX - _.current.left, Q = U.clientY - _.current.top;
-      u({ x: Y, y: Q });
+      const W = U.clientX - _.current.left, Q = U.clientY - _.current.top;
+      u({ x: W, y: Q });
     }
   };
   return me(() => {
-    const U = (Y) => {
-      const Q = Y.target;
-      (v == null ? void 0 : v.contains(Q)) && I(Y, S);
+    const U = (W) => {
+      const Q = W.target;
+      (v == null ? void 0 : v.contains(Q)) && I(W, S);
     };
     return document.addEventListener("wheel", U, { passive: !1 }), () => document.removeEventListener("wheel", U, { passive: !1 });
   }, [A, v, S, I]), me(O, [t, O]), ii(v, L), ii(m.content, L), /* @__PURE__ */ P.createElement(
@@ -12992,8 +12992,8 @@ const [ak, Km] = di(
         }),
         onPointerMove: vo(r.onPointerMove, q),
         onPointerUp: vo(r.onPointerUp, (U) => {
-          const Y = U.target;
-          Y.hasPointerCapture(U.pointerId) && Y.releasePointerCapture(U.pointerId), document.body.style.webkitUserSelect = R.current, _.current = null;
+          const W = U.target;
+          W.hasPointerCapture(U.pointerId) && W.releasePointerCapture(U.pointerId), document.body.style.webkitUserSelect = R.current, _.current = null;
         })
       }
     )
@@ -13732,7 +13732,7 @@ const sg = (r) => ({
     }, v = Ju(o), C = Qu(v), E = await s.getDimensions(f), _ = v === "y", R = _ ? "top" : "left", A = _ ? "bottom" : "right", S = _ ? "clientHeight" : "clientWidth", I = a.reference[C] + a.reference[v] - m[v] - a.floating[C], O = m[v] - a.reference[v], L = await (s.getOffsetParent == null ? void 0 : s.getOffsetParent(f));
     let q = L ? L[S] : 0;
     (!q || !await (s.isElement == null ? void 0 : s.isElement(L))) && (q = l.floating[S] || a.floating[C]);
-    const U = I / 2 - O / 2, Y = q / 2 - E[C] / 2 - 1, Q = Wr(p[R], Y), de = Wr(p[A], Y), ee = Q, fe = q - E[C] - de, oe = q / 2 - E[C] / 2 + U, we = Cu(ee, oe, fe), J = !u.arrow && hi(o) != null && oe != we && a.reference[C] / 2 - (oe < ee ? Q : de) - E[C] / 2 < 0, ie = J ? oe < ee ? oe - ee : oe - fe : 0;
+    const U = I / 2 - O / 2, W = q / 2 - E[C] / 2 - 1, Q = Wr(p[R], W), de = Wr(p[A], W), ee = Q, fe = q - E[C] - de, oe = q / 2 - E[C] / 2 + U, we = Cu(ee, oe, fe), J = !u.arrow && hi(o) != null && oe != we && a.reference[C] / 2 - (oe < ee ? Q : de) - E[C] / 2 < 0, ie = J ? oe < ee ? oe - ee : oe - fe : 0;
     return {
       [v]: m[v] + ie,
       data: {
@@ -13781,8 +13781,8 @@ const sg = (r) => ({
         placement: o,
         overflows: q
       }], !q.every((ee) => ee <= 0)) {
-        var Y, Q;
-        const ee = (((Y = a.flip) == null ? void 0 : Y.index) || 0) + 1, fe = O[ee];
+        var W, Q;
+        const ee = (((W = a.flip) == null ? void 0 : W.index) || 0) + 1, fe = O[ee];
         if (fe)
           return {
             data: {
@@ -13868,14 +13868,14 @@ const Tk = function(r) {
               y: fe
             };
           }
-          const _ = jr(t) === "left", R = Ut(...p.map((Q) => Q.right)), A = Wr(...p.map((Q) => Q.left)), S = p.filter((Q) => _ ? Q.left === A : Q.right === R), I = S[0].top, O = S[S.length - 1].bottom, L = A, q = R, U = q - L, Y = O - I;
+          const _ = jr(t) === "left", R = Ut(...p.map((Q) => Q.right)), A = Wr(...p.map((Q) => Q.left)), S = p.filter((Q) => _ ? Q.left === A : Q.right === R), I = S[0].top, O = S[S.length - 1].bottom, L = A, q = R, U = q - L, W = O - I;
           return {
             top: I,
             bottom: O,
             left: L,
             right: q,
             width: U,
-            height: Y,
+            height: W,
             x: L,
             y: I
           };
@@ -14071,8 +14071,8 @@ const Ak = function(r) {
         S = h || A ? Wr(_, L) : L;
       }
       if (A && !h) {
-        const L = Ut(u.left, 0), q = Ut(u.right, 0), U = Ut(u.top, 0), Y = Ut(u.bottom, 0);
-        p ? I = m - 2 * (L !== 0 || q !== 0 ? L + q : Ut(u.left, u.right)) : S = v - 2 * (U !== 0 || Y !== 0 ? U + Y : Ut(u.top, u.bottom));
+        const L = Ut(u.left, 0), q = Ut(u.right, 0), U = Ut(u.top, 0), W = Ut(u.bottom, 0);
+        p ? I = m - 2 * (L !== 0 || q !== 0 ? L + q : Ut(u.left, u.right)) : S = v - 2 * (U !== 0 || W !== 0 ? U + W : Ut(u.top, u.bottom));
       }
       await s({
         ...e,
@@ -14607,7 +14607,7 @@ function Jk(r) {
     J != L.current && (L.current = J, E(J));
   }, [E]), S = Le.useCallback((J) => {
     J !== q.current && (q.current = J, R(J));
-  }, [R]), I = a || C, O = s || _, L = Le.useRef(null), q = Le.useRef(null), U = Le.useRef(h), Y = fg(u), Q = fg(o), de = Le.useCallback(() => {
+  }, [R]), I = a || C, O = s || _, L = Le.useRef(null), q = Le.useRef(null), U = Le.useRef(h), W = fg(u), Q = fg(o), de = Le.useCallback(() => {
     if (!L.current || !q.current)
       return;
     const J = {
@@ -14636,11 +14636,11 @@ function Jk(r) {
     ee.current = !1;
   }), []), gs(() => {
     if (I && (L.current = I), O && (q.current = O), I && O) {
-      if (Y.current)
-        return Y.current(I, O, de);
+      if (W.current)
+        return W.current(I, O, de);
       de();
     }
-  }, [I, O, de, Y]);
+  }, [I, O, de, W]);
   const fe = Le.useMemo(() => ({
     reference: L,
     floating: q,
@@ -15342,7 +15342,7 @@ function Qn(r) {
     closeOnEscape: L,
     clickOutsideEvents: q,
     trapFocus: U,
-    onClose: Y,
+    onClose: W,
     onOpen: Q,
     onChange: de,
     zIndex: ee,
@@ -15381,7 +15381,7 @@ function Qn(r) {
     defaultOpened: J,
     onChange: de,
     onOpen: Q,
-    onClose: Y
+    onClose: W
   });
   UA(() => S && Ye.onClose(), q, [
     ln,
@@ -15880,11 +15880,11 @@ const qP = {
     withAsterisk: L,
     id: q,
     required: U,
-    __stylesApiProps: Y,
+    __stylesApiProps: W,
     ...Q
   } = t, de = ut({
     name: ["InputWrapper", p],
-    props: Y || t,
+    props: W || t,
     classes: xr,
     className: o,
     style: a,
@@ -16013,7 +16013,7 @@ const GP = {
     leftSectionPointerEvents: L,
     variant: q,
     vars: U,
-    pointer: Y,
+    pointer: W,
     multiline: Q,
     radius: de,
     id: ee,
@@ -16048,7 +16048,7 @@ const GP = {
       ...m,
       mod: {
         error: !!v && oe,
-        pointer: Y,
+        pointer: W,
         disabled: C,
         multiline: Q,
         "data-with-right-section": !!A,
@@ -16126,7 +16126,7 @@ function VP(r, e, t) {
     inputWrapperOrder: L,
     withAsterisk: q,
     variant: U,
-    vars: Y,
+    vars: W,
     ...Q
   } = n, { styleProps: de, rest: ee } = Zs(Q), fe = {
     label: o,
@@ -16351,13 +16351,13 @@ function Et(r) {
     variant: O,
     radius: L,
     ...q
-  } = e, U = To(v), [Y, Q] = Eo({
+  } = e, U = To(v), [W, Q] = Eo({
     value: h,
     defaultValue: p,
     finalValue: f ? [] : null,
     onChange: m
-  }), de = (oe) => Array.isArray(Y) ? Y.includes(oe) : oe === Y, ee = (oe) => {
-    const we = Array.isArray(Y) ? Y.includes(oe) ? Y.filter((J) => J !== oe) : [...Y, oe] : oe === Y ? null : oe;
+  }), de = (oe) => Array.isArray(W) ? W.includes(oe) : oe === W, ee = (oe) => {
+    const we = Array.isArray(W) ? W.includes(oe) ? W.filter((J) => J !== oe) : [...W, oe] : oe === W ? null : oe;
     Q(we);
   }, fe = ut({
     name: "Accordion",
@@ -16888,7 +16888,7 @@ function _d({
       )
     ),
     [I]
-  ), Y = ze((J = "selected") => {
+  ), W = ze((J = "selected") => {
     E.current = window.setTimeout(() => {
       const ie = document.querySelectorAll(
         `#${f.current} [data-combobox-option]`
@@ -16929,7 +16929,7 @@ function _d({
     selectNextOption: L,
     selectPreviousOption: q,
     resetSelectedOption: Q,
-    updateSelectedOptionIndex: Y,
+    updateSelectedOptionIndex: W,
     listId: f.current,
     setListId: ee,
     clickSelectedOption: de,
@@ -17184,7 +17184,7 @@ const RN = {
     indeterminate: L,
     icon: q,
     rootRef: U,
-    iconColor: Y,
+    iconColor: W,
     onChange: Q,
     ...de
   } = t, ee = SN(), fe = m || (ee == null ? void 0 : ee.size), oe = q, we = ut({
@@ -17401,7 +17401,7 @@ const NN = {}, Td = Ue((r, e) => {
     disabled: L,
     filter: q,
     limit: U,
-    withScrollArea: Y,
+    withScrollArea: W,
     maxDropdownHeight: Q,
     size: de,
     id: ee,
@@ -17477,7 +17477,7 @@ const NN = {}, Td = Ue((r, e) => {
         search: ie,
         limit: U,
         hiddenWhenEmpty: !0,
-        withScrollArea: Y,
+        withScrollArea: W,
         maxDropdownHeight: Q,
         unstyled: a,
         labelId: `${oe}-label`
@@ -17667,7 +17667,7 @@ const UN = {
     disabled: L,
     filter: q,
     limit: U,
-    withScrollArea: Y,
+    withScrollArea: W,
     maxDropdownHeight: Q,
     size: de,
     searchable: ee,
@@ -17784,7 +17784,7 @@ const UN = {
         search: Pn,
         limit: U,
         hiddenWhenEmpty: !ee || !J,
-        withScrollArea: Y,
+        withScrollArea: W,
         maxDropdownHeight: Q,
         filterOptions: ee && (Nt == null ? void 0 : Nt.label) !== Pn,
         value: Ye,
@@ -18934,13 +18934,13 @@ var Ks = { exports: {} };
 Ks.exports;
 (function(r, e) {
   (function() {
-    var t, n = "4.17.21", o = 200, a = "Unsupported core-js use. Try https://npms.io/search?q=ponyfill.", s = "Expected a function", l = "Invalid `variable` option passed into `_.template`", u = "__lodash_hash_undefined__", f = 500, h = "__lodash_placeholder__", p = 1, m = 2, v = 4, C = 1, E = 2, _ = 1, R = 2, A = 4, S = 8, I = 16, O = 32, L = 64, q = 128, U = 256, Y = 512, Q = 30, de = "...", ee = 800, fe = 16, oe = 1, we = 2, J = 3, ie = 1 / 0, re = 9007199254740991, Pe = 17976931348623157e292, Qe = 0 / 0, ot = 4294967295, dt = ot - 1, Yr = ot >>> 1, cn = [
+    var t, n = "4.17.21", o = 200, a = "Unsupported core-js use. Try https://npms.io/search?q=ponyfill.", s = "Expected a function", l = "Invalid `variable` option passed into `_.template`", u = "__lodash_hash_undefined__", f = 500, h = "__lodash_placeholder__", p = 1, m = 2, v = 4, C = 1, E = 2, _ = 1, R = 2, A = 4, S = 8, I = 16, O = 32, L = 64, q = 128, U = 256, W = 512, Q = 30, de = "...", ee = 800, fe = 16, oe = 1, we = 2, J = 3, ie = 1 / 0, re = 9007199254740991, Pe = 17976931348623157e292, Qe = 0 / 0, ot = 4294967295, dt = ot - 1, Yr = ot >>> 1, cn = [
       ["ary", q],
       ["bind", _],
       ["bindKey", R],
       ["curry", S],
       ["curryRight", I],
-      ["flip", Y],
+      ["flip", W],
       ["partial", O],
       ["partialRight", L],
       ["rearg", U]
@@ -20589,7 +20589,7 @@ Ks.exports;
         });
       }
       function za(i, c, d, g, y, b, T, k, x, B) {
-        var K = c & q, V = c & _, Z = c & R, ue = c & (S | I), ve = c & Y, Oe = Z ? t : ki(i);
+        var K = c & q, V = c & _, Z = c & R, ue = c & (S | I), ve = c & W, Oe = Z ? t : ki(i);
         function ye() {
           for (var xe = arguments.length, Fe = D(xe), dr = xe; dr--; )
             Fe[dr] = arguments[dr];
@@ -21699,7 +21699,7 @@ Ks.exports;
         return Lf(i, Ar(c) || 0, d);
       });
       function b_(i) {
-        return pn(i, Y);
+        return pn(i, W);
       }
       function ts(i, c) {
         if (typeof i != "function" || c != null && typeof c != "function")
@@ -23646,9 +23646,9 @@ var tO = ["name", "message", "stack", "code"], Yl = class {
                 name: "ConditionError",
                 message: "Aborted due to condition callback returning false."
               };
-            const q = new Promise((U, Y) => {
+            const q = new Promise((U, W) => {
               C = () => {
-                Y({
+                W({
                   name: "AbortError",
                   message: E || "Aborted"
                 });
@@ -23667,8 +23667,8 @@ var tO = ["name", "message", "stack", "code"], Yl = class {
               requestId: m,
               signal: v.signal,
               abort: _,
-              rejectWithValue: (U, Y) => new Yl(U, Y),
-              fulfillWithValue: (U, Y) => new xg(U, Y)
+              rejectWithValue: (U, W) => new Yl(U, W),
+              fulfillWithValue: (U, W) => new xg(U, W)
             })).then((U) => {
               if (U instanceof Yl)
                 throw U;
@@ -23797,10 +23797,10 @@ function sO({
         });
         return Mg(U, q, {
           insert: () => {
-            const Y = {};
+            const W = {};
             for (const [Q, de] of Object.entries(o.selectors ?? {}))
-              Y[Q] = cO(de, q, _, I);
-            return Y;
+              W[Q] = cO(de, q, _, I);
+            return W;
           }
         });
       }
@@ -24360,10 +24360,10 @@ function FO({ api: r, activeClassificationUri: e, setClassifications: t, domains
       headers: { Accept: "text/plain" }
     };
     u(Object.keys(f).length), l !== Object.keys(f).length && Promise.allSettled(Object.values(f)).then(function(I) {
-      const O = I.map((Y) => Y.status === "fulfilled" ? Y.value : null).filter((Y) => Y !== null);
-      I.map(async (Y) => {
-        if (Y.status === "fulfilled") {
-          const Q = Y.value;
+      const O = I.map((W) => W.status === "fulfilled" ? W.value : null).filter((W) => W !== null);
+      I.map(async (W) => {
+        if (W.status === "fulfilled") {
+          const Q = W.value;
           if (Q && Q.classRelations) {
             const de = {
               ...f
@@ -24379,10 +24379,10 @@ function FO({ api: r, activeClassificationUri: e, setClassifications: t, domains
         }
       });
       const L = O.filter(
-        (Y) => Y.dictionaryUri && a.includes(Y.dictionaryUri)
-      ), q = Object.keys(E).filter((Y) => a.includes(Y)).reduce((Y, Q) => (Y[Q] = E[Q], Y), {}), U = Kv.groupBy(L, "dictionaryUri");
-      Object.entries(U).forEach(([Y, Q]) => {
-        Q.some((de) => de.uri === q[Y]) || (q[Y] = Q[0].uri);
+        (W) => W.dictionaryUri && a.includes(W.dictionaryUri)
+      ), q = Object.keys(E).filter((W) => a.includes(W)).reduce((W, Q) => (W[Q] = E[Q], W), {}), U = Kv.groupBy(L, "dictionaryUri");
+      Object.entries(U).forEach(([W, Q]) => {
+        Q.some((de) => de.uri === q[W]) || (q[W] = Q[0].uri);
       }), _(q), t(L), m(L);
     });
   }, [
@@ -24398,26 +24398,28 @@ function FO({ api: r, activeClassificationUri: e, setClassifications: t, domains
       Object.values(E).map((S) => p.find((I) => I.uri === S)).filter((S) => S !== void 0)
     );
   }, [E, p, t]), me(() => {
-    const S = {};
-    a.forEach((I) => {
-      const O = UO(I, s);
-      O && (S[I] = O.location || "");
-    }), _(S);
+    _((S) => a.reduce((O, L) => {
+      var W;
+      const U = S[L] || ((W = UO(L, s)) == null ? void 0 : W.location) || "";
+      return { ...O, [L]: U };
+    }, {}));
   }, [a, s]);
   const A = ze(
     (S) => (I) => {
       if (!I)
         return;
       if (!p.find(
-        (q) => q.uri === I
+        (L) => L.uri === I
       )) {
         console.log(`Selected classification '${I}' not found`);
         return;
       }
-      const L = { ...E, [S]: I };
-      _(L);
+      _((L) => ({
+        ...L,
+        [S]: I
+      }));
     },
-    [p, E]
+    [p]
   );
   return /* @__PURE__ */ Te.jsx(Te.Fragment, { children: Object.entries(v).map(([S, I]) => /* @__PURE__ */ Te.jsx(
     cc,
@@ -24688,10 +24690,10 @@ function jO({ api: r, defaultValue: e, setActiveClassificationUri: t }) {
           if (L.count) {
             const U = (q = L.dictionary) == null ? void 0 : q.classes;
             U && o(
-              U.filter((Y) => Y.uri && Y.name).map(
-                (Y) => ({
-                  value: Y.uri,
-                  label: Y.name
+              U.filter((W) => W.uri && W.name).map(
+                (W) => ({
+                  value: W.uri,
+                  label: W.name
                 })
               )
             );
@@ -24744,7 +24746,7 @@ function QO() {
   }, []), U = ze(() => {
     var Q;
     (Q = window == null ? void 0 : window.bsddBridge) == null || Q.cancel();
-  }, []), Y = (Q) => {
+  }, []), W = (Q) => {
     I(Q);
   };
   return me(() => {
@@ -24756,7 +24758,7 @@ function QO() {
     (async () => {
       if (window != null && window.bsddBridge) {
         const de = await window.bsddBridge.loadSettings(), { settings: ee, ifcData: fe } = JSON.parse(de);
-        if (e(sy(fe)), Y(ee), !fe || fe.length === 0)
+        if (e(sy(fe)), W(ee), !fe || fe.length === 0)
           return;
         l(fe[0]);
       }
