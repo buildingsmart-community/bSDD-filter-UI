@@ -29,9 +29,9 @@ export const mockData: BsddBridgeData = {
       {
         ifcClassification: {
           type: 'IfcClassification',
-          location: 'https://identifier.buildingsmart.org/uri/digibase/nlsfb/12.2021',
+          location: 'https://identifier.buildingsmart.org/uri/nlsfb/nlsfb2005/2.2',
           editionDate: '0001-01-01T00:00:00',
-          name: 'DigiBase Demo NL-SfB tabel 1',
+          name: 'NL-SfB 2005',
         },
         parameterMapping: 'Assembly Code',
       },

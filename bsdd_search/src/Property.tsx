@@ -7,7 +7,7 @@ import {
   IfcPropertySet,
   IfcPropertySingleValue,
   IfcValue,
-} from '../../common/src/IfcData/ifc';
+} from '../../common/src/ifc/ifc';
 import Check from './Checkbox';
 
 interface PropertyProps {

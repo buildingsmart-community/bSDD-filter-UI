@@ -2,29 +2,30 @@ import { Button } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 import { ClassContractV1, DictionaryContractV1 } from '../../common/src/BsddApi/BsddApiBase';
-import { IfcClassification, IfcClassificationReference, IfcEntity, IfcPropertySet } from '../../common/src/IfcData/ifc';
+import { IfcClassification, IfcClassificationReference, IfcEntity, IfcPropertySet } from '../../common/src/ifc/ifc';
 import {
   convertBsddDictionaryToIfcClassification,
   getIfcClassAndPredefinedType,
-} from '../../common/src/IfcData/ifcBsddConverters';
+} from '../../common/src/ifc/ifcBsddConverters';
+import { useAppSelector } from './app/hooks';
+import { selectBsddDictionaries } from './features/bsdd/bsddSlice';
 
-type DictionaryMap = { [id: string]: DictionaryContractV1 };
 type PropertySetMap = { [id: string]: IfcPropertySet };
 
 interface ApplyProps {
   callback: (value: any) => void;
-  domains: DictionaryMap;
   classifications: ClassContractV1[];
   propertySetMap: PropertySetMap;
   ifcEntity: IfcEntity | undefined;
 }
 
-function Apply({ callback, domains, classifications, propertySetMap, ifcEntity }: ApplyProps) {
+function Apply({ callback, classifications, propertySetMap, ifcEntity }: ApplyProps) {
   const { t } = useTranslation();
+  const dictionaries = useAppSelector(selectBsddDictionaries);
 
   function getIfcClassification(domainNamespaceUri: string): IfcClassification | null {
-    if (domainNamespaceUri in domains) {
-      const dictionary: DictionaryContractV1 = domains[domainNamespaceUri];
+    if (domainNamespaceUri in dictionaries) {
+      const dictionary: DictionaryContractV1 = dictionaries[domainNamespaceUri];
       if (dictionary) {
         return convertBsddDictionaryToIfcClassification(dictionary);
       }

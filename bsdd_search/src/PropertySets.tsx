@@ -3,7 +3,7 @@ import { use } from 'i18next';
 import { Children, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ClassContractV1, ClassPropertyContractV1, PropertyContractV4 } from '../../common/src/BsddApi/BsddApiBase';
+import { ClassContractV1, ClassPropertyContractV1 } from '../../common/src/BsddApi/BsddApiBase';
 import {
   IfcEntity,
   IfcProperty,
@@ -11,9 +11,9 @@ import {
   IfcPropertySet,
   IfcPropertySingleValue,
   IfcValue,
-} from '../../common/src/IfcData/ifc';
+} from '../../common/src/ifc/ifc';
 import { useAppSelector } from './app/hooks';
-import { selectIfcEntity } from './features/ifcData/ifcDataSlice';
+import { selectIfcEntity } from './features/ifc/ifcDataSlice';
 import Property from './Property';
 
 const valueTypeMapping: { [key: string]: string } = {

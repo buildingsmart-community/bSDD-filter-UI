@@ -6,16 +6,18 @@ import { BsddApi } from '../../common/src/BsddApi/BsddApi';
 import { ClassContractV1, DictionaryContractV1 } from '../../common/src/BsddApi/BsddApiBase';
 import { bsddEnvironments } from '../../common/src/BsddApi/BsddApiEnvironments';
 import { defaultEnvironment, isProduction } from '../../common/src/env';
-import { BsddBridgeData, BsddSettings } from '../../common/src/IfcData/bsddBridgeData';
-import { IfcEntity, IfcPropertySet } from '../../common/src/IfcData/ifc';
-import { mockData } from '../../common/src/IfcData/mockData';
+import { BsddBridgeData, BsddSettings } from '../../common/src/ifc/bsddBridgeData';
+import { IfcEntity, IfcPropertySet } from '../../common/src/ifc/ifc';
+import { mockData } from '../../common/src/ifc/mockData';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import Apply from './Apply';
 import Classifications from './Classifications';
-import { setIfcData } from './features/ifcData/ifcDataSlice';
+import { fetchAndStoreDictionaryClasses, fetchDictionaries, updateDictionaries } from './features/bsdd/bsddSlice';
+import { setIfcData } from './features/ifc/ifcDataSlice';
 import {
-  selectActiveDictionaries,
+  selectActiveDictionaryLocations,
   selectBsddApiEnvironmentUri,
+  selectIncludeTestDictionaries,
   selectMainDictionary,
   setSettings,
 } from './features/settings/settingsSlice';
@@ -34,27 +36,6 @@ export interface BsddConfig {
   ifcEntity?: IfcEntity;
 }
 
-const fetchDictionary = async (api: BsddApi<unknown>, uri: string) => {
-  try {
-    const response = await api.api.dictionaryV1List({
-      Uri: uri,
-      IncludeTestDictionaries: true,
-    });
-    const { dictionaries } = response.data;
-    if (dictionaries) {
-      return dictionaries.reduce((accumulator: any, domain: { uri: string }) => {
-        if (domain.uri) {
-          return { ...accumulator, [domain.uri]: domain };
-        }
-        return accumulator;
-      }, {});
-    }
-  } catch (error) {
-    console.error(`Failed to fetch dictionary ${uri}:`, error);
-  }
-  return {};
-};
-
 function BsddSearch() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -63,14 +44,15 @@ function BsddSearch() {
   const [defaultSearch, setDefaultSearch] = useState<Option | undefined>();
   const [ifcEntity, setIfcEntity] = useState<IfcEntity | undefined>();
   const [recursiveMode, setRecursiveMode] = useState<boolean>(false);
-  const [domains, setDomains] = useState<{ [id: string]: DictionaryContractV1 }>({});
   const [classifications, setClassifications] = useState<ClassContractV1[]>([]);
   const [propertySets, setPropertySets] = useState<{ [id: string]: IfcPropertySet }>({});
   const [api, setApi] = useState<BsddApi<unknown>>(new BsddApi(bsddEnvironments[defaultEnvironment]));
   const mainDictionary = useAppSelector(selectMainDictionary);
   const [pendingSettings, setPendingSettings] = useState<BsddSettings | null>(null);
   const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironmentUri);
-  const activeDictionaries = useAppSelector(selectActiveDictionaries);
+  const bsddApiEnvironmentUri = useAppSelector(selectBsddApiEnvironmentUri);
+  const includeTestDictionaries = useAppSelector(selectIncludeTestDictionaries);
+  const activeDictionaryLocations = useAppSelector(selectActiveDictionaryLocations);
 
   const callback = useCallback((ifcProduct: IfcEntity) => {
     const ifcEntityJson = JSON.stringify(ifcProduct);
@@ -157,20 +139,18 @@ function BsddSearch() {
   }, [mainDictionary, ifcEntity]);
 
   useEffect(() => {
-    const fetchAllDictionaries = async () => {
-      const allDomains = await Promise.all(
-        activeDictionaries.map((dictionary) => fetchDictionary(api, dictionary.ifcClassification.location)),
-      );
+    if (bsddApiEnvironment !== null && includeTestDictionaries !== null) {
+      const params = {
+        bsddApiEnvironment,
+        includeTestDictionaries,
+        dictionaryUris: activeDictionaryLocations,
+      };
 
-      const newDomains = allDomains.reduce((accumulator, dictionary) => {
-        return { ...accumulator, ...dictionary };
-      }, {});
-
-      setDomains(newDomains);
-    };
-
-    fetchAllDictionaries();
-  }, [api, activeDictionaries]);
+      dispatch(updateDictionaries(activeDictionaryLocations));
+      dispatch(fetchDictionaries(params));
+      dispatch(fetchAndStoreDictionaryClasses(params));
+    }
+  }, [bsddApiEnvironment, bsddApiEnvironmentUri, includeTestDictionaries, dispatch, activeDictionaryLocations]);
 
   return (
     <Container>
@@ -191,7 +171,6 @@ function BsddSearch() {
               api={api}
               activeClassificationUri={activeClassificationUri}
               setClassifications={setClassifications}
-              domains={domains}
             />
           </Accordion.Panel>
         </Accordion.Item>
@@ -212,7 +191,6 @@ function BsddSearch() {
       <Group my="sm" justify="center">
         <Apply
           callback={callback}
-          domains={domains}
           classifications={classifications}
           propertySetMap={propertySets}
           ifcEntity={ifcEntity}

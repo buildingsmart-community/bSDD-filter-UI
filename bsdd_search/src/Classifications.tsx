@@ -3,17 +3,17 @@ import { groupBy } from 'lodash';
 import { useCallback, useEffect, useState } from 'react';
 
 import { BsddApi } from '../../common/src/BsddApi/BsddApi';
-import { ClassContractV1, DictionaryContractV1, RequestParams } from '../../common/src/BsddApi/BsddApiBase';
-import { IfcClassificationReference, IfcEntity } from '../../common/src/IfcData/ifc';
+import { ClassContractV1, ClassListItemContractV1, RequestParams } from '../../common/src/BsddApi/BsddApiBase';
+import { IfcClassificationReference, IfcEntity } from '../../common/src/ifc/ifc';
 import { useAppSelector } from './app/hooks';
-import { selectIfcEntity } from './features/ifcData/ifcDataSlice';
+import { selectBsddDictionaries, selectdictionaryClasses } from './features/bsdd/bsddSlice';
+import { selectIfcEntity } from './features/ifc/ifcDataSlice';
 import { selectActiveDictionaries, selectActiveDictionaryLocations } from './features/settings/settingsSlice';
 
 interface ClassificationSelectsProps {
   api: BsddApi<unknown>;
   activeClassificationUri: string | undefined;
   setClassifications: (value: ClassContractV1[]) => void;
-  domains: { [id: string]: DictionaryContractV1 };
 }
 
 const getGroupedClassifications = (classifications: ClassContractV1[]) => groupBy(classifications, 'dictionaryUri');
@@ -87,30 +87,52 @@ const formatIfcClassCode = (code: string): string => {
   return code;
 };
 
+const formatLabel = (name: string, uri: string, code: string | null | undefined, showCode: boolean): string => {
+  if (!showCode) return name || '';
+
+  const isIfcUri = uri === 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3';
+  const formattedCode = isIfcUri && code ? ` (${formatIfcClassCode(code)})` : '';
+  return `${name}${formattedCode}`;
+};
+
+const buildOptionsFromClasses = (
+  classes: ClassContractV1[] | ClassListItemContractV1[],
+  dictionaryUri: string,
+  showCode: boolean,
+) => {
+  return classes.map((classification) => {
+    return {
+      value: classification.uri ?? '',
+      label: formatLabel(classification.name ?? '', dictionaryUri, classification.code, showCode),
+    };
+  });
+};
+
 /**
  * Builds Mantine select options for the classifications in a bSDD Dictionary.
  * @param classificationsInGroup - The array of possible classes for the Dictionary.
  * @param dictionaryUri - The URI of the dictionary.
  * @returns An array of select options for the classifications.
  */
-const buildClassSelectOptions = (classificationsInGroup: ClassContractV1[], dictionaryUri: string) => {
-  return classificationsInGroup.map((classification) => {
-    let label = classification.name;
-    if (dictionaryUri === 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3') {
-      const formattedCode = formatIfcClassCode(classification.code);
-      label = `${classification.name} (${formattedCode})`;
-    }
-    return {
-      value: classification.uri,
-      label,
-    };
+const buildClassSelectOptions = (
+  groupedClassifications: { [key: string]: ClassContractV1[] },
+  activeDictionaryLocations: { [key: string]: ClassListItemContractV1[] },
+) => {
+  const options: { [key: string]: { value: string; label: string }[] } = {};
+  Object.entries(activeDictionaryLocations).forEach(([dictionaryUri, dictionaryClasses]) => {
+    options[dictionaryUri] = groupedClassifications[dictionaryUri]
+      ? buildOptionsFromClasses(groupedClassifications[dictionaryUri], dictionaryUri, true)
+      : buildOptionsFromClasses(dictionaryClasses, dictionaryUri, false);
   });
+  return options;
 };
 
-function Classifications({ api, activeClassificationUri, setClassifications, domains }: ClassificationSelectsProps) {
+function Classifications({ api, activeClassificationUri, setClassifications }: ClassificationSelectsProps) {
   const activeDictionaries = useAppSelector(selectActiveDictionaries);
   const activeDictionaryLocations = useAppSelector(selectActiveDictionaryLocations);
+  const activeDictionaryClasses = useAppSelector(selectdictionaryClasses);
   const ifcEntity = useAppSelector(selectIfcEntity);
+  const dictionaries = useAppSelector(selectBsddDictionaries);
   const [classificationCount, setClassificationCount] = useState<number>(0);
   const [classificationUris, setClassificationUris] = useState<{
     [id: string]: Promise<ClassContractV1 | null>;
@@ -179,7 +201,7 @@ function Classifications({ api, activeClassificationUri, setClassifications, dom
       }
       setClassificationUris(initialClassificationUris);
     }
-  }, [activeClassificationUri, getClassification]);
+  }, [activeClassificationUri, getClassification, activeDictionaries]);
 
   useEffect(() => {
     const params: RequestParams = {
@@ -299,17 +321,18 @@ function Classifications({ api, activeClassificationUri, setClassifications, dom
     [originalClassifications],
   );
 
+  const options = buildClassSelectOptions(groupedClassifications, activeDictionaryClasses);
   return (
     <>
-      {Object.entries(groupedClassifications).map(([dictionaryUri, classificationsInGroup]) => (
+      {Object.entries(options).map(([dictionaryUri, classOptions]) => (
         <Select
           mb="sm"
           key={dictionaryUri}
-          label={domains[dictionaryUri] ? domains[dictionaryUri].name : ''}
-          data={buildClassSelectOptions(classificationsInGroup, dictionaryUri)}
+          label={dictionaries[dictionaryUri] ? dictionaries[dictionaryUri].name : ''}
+          data={classOptions}
           value={selectedValues[dictionaryUri]}
-          readOnly={classificationsInGroup.length === 1}
-          variant={classificationsInGroup.length === 1 ? 'filled' : 'default'}
+          readOnly={classOptions.length === 1}
+          variant={classOptions.length === 1 ? 'filled' : 'default'}
           onChange={(value) => handleOnChange(dictionaryUri)(value)}
         />
       ))}

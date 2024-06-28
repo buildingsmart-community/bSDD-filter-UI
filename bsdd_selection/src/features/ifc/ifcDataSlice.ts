@@ -1,12 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import {
-  Association,
-  IfcClassification,
-  IfcClassificationReference,
-  IfcEntity,
-} from '../../../../common/src/IfcData/ifc';
-import { patchIfcClassificationReference } from '../../../../common/src/IfcData/ifcValidators';
+import { Association, IfcClassification, IfcClassificationReference, IfcEntity } from '../../../../common/src/ifc/ifc';
+import { patchIfcClassificationReference } from '../../../../common/src/ifc/ifcValidators';
 import type { RootState } from '../../app/store';
 
 interface EntitiesState {

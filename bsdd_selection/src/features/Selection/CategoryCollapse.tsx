@@ -4,7 +4,7 @@ import { Accordion, ColorSwatch, Group, Text } from '@mantine/core';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { IfcEntity } from '../../../../common/src/IfcData/ifc';
+import { IfcEntity } from '../../../../common/src/ifc/ifc';
 import { Color, colorMap } from '../../../../common/src/tools/colors';
 import BsddCard from '../BsddCard/BsddCard';
 

@@ -3,9 +3,9 @@ import { IconInfoCircle } from '@tabler/icons-react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { IfcEntity } from '../../../../common/src/IfcData/ifc';
+import { IfcEntity } from '../../../../common/src/ifc/ifc';
 import { useAppSelector } from '../../app/hooks';
-import { selectIfcEntities } from '../ifcData/ifcDataSlice';
+import { selectIfcEntities } from '../ifc/ifcDataSlice';
 import CategoryCollapse from './CategoryCollapse';
 
 interface SelectionProps {
