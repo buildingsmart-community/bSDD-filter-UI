@@ -10,7 +10,7 @@ import type { RootState } from '../../app/store';
 import {
   selectBsddApiEnvironmentUri,
   // selectLanguage
-} from '../Settings/settingsSlice';
+} from '../settings/settingsSlice';
 
 const CLASS_ITEM_PAGE_SIZE = 500;
 const DICTIONARIES_PAGE_SIZE = 500;

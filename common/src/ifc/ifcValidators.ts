@@ -6,7 +6,7 @@ import {
   selectDictionary,
   selectDictionaryClasses,
 } from '../../../bsdd_selection/src/features/bsdd/bsddSlice';
-import { selectActiveDictionaries } from '../../../bsdd_selection/src/features/Settings/settingsSlice';
+import { selectActiveDictionaries } from '../../../bsdd_selection/src/features/settings/settingsSlice';
 import { ClassListItemContractV1, DictionaryClassesResponseContractV1 } from '../BsddApi/BsddApiBase';
 import { BsddDictionary } from './bsddBridgeData';
 import { IfcClassificationReference } from './ifc';

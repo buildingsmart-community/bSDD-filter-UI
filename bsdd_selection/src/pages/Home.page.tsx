@@ -11,14 +11,14 @@ import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { AppThunk } from '../app/store';
 import { selectBsddDataLoaded } from '../features/bsdd/bsddSlice';
 import { setValidatedIfcData } from '../features/ifc/ifcDataSlice';
-import Selection from '../features/selection/Selection';
-import Settings from '../features/Settings/Settings';
+import Selection from '../features/Selection/Selection';
+import Settings from '../features/settings/Settings';
 import {
   setBsddApiEnvironment,
   setIncludeTestDictionaries,
   setLanguage,
   setSettings,
-} from '../features/Settings/settingsSlice';
+} from '../features/settings/settingsSlice';
 
 let CefSharp: any;
 

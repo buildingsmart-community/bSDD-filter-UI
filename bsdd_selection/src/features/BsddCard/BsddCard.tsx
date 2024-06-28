@@ -9,7 +9,7 @@ import { IfcEntity } from '../../../../common/src/ifc/ifc';
 import getClassUriFromDictionary, { ClassificationStatus } from '../../../../common/src/tools/checkIfcClassification';
 import { Color, colorMap } from '../../../../common/src/tools/colors';
 import { useAppSelector } from '../../app/hooks';
-import { selectActiveDictionaries, selectMainDictionary } from '../Settings/settingsSlice';
+import { selectActiveDictionaries, selectMainDictionary } from '../settings/settingsSlice';
 
 interface BsddCardProps {
   item: IfcEntity;
