@@ -1,7 +1,7 @@
 import { Accordion, Button, Group, Tabs } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
-import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
+import { BsddSettings } from '../../../../common/src/ifc/bsddBridgeData';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import AppInfo from './AppInfo';
 import DomainSelection from './DomainSelection';

@@ -6,14 +6,14 @@ import { BsddApi } from '../../common/src/BsddApi/BsddApi';
 import { ClassContractV1, DictionaryContractV1 } from '../../common/src/BsddApi/BsddApiBase';
 import { bsddEnvironments } from '../../common/src/BsddApi/BsddApiEnvironments';
 import { defaultEnvironment, isProduction } from '../../common/src/env';
-import { BsddBridgeData, BsddSettings } from '../../common/src/IfcData/bsddBridgeData';
-import { IfcEntity, IfcPropertySet } from '../../common/src/IfcData/ifc';
-import { mockData } from '../../common/src/IfcData/mockData';
+import { BsddBridgeData, BsddSettings } from '../../common/src/ifc/bsddBridgeData';
+import { IfcEntity, IfcPropertySet } from '../../common/src/ifc/ifc';
+import { mockData } from '../../common/src/ifc/mockData';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import Apply from './Apply';
 import Classifications from './Classifications';
 import { fetchAndStoreDictionaryClasses, fetchDictionaries, updateDictionaries } from './features/bsdd/bsddSlice';
-import { setIfcData } from './features/IfcData/ifcDataSlice';
+import { setIfcData } from './features/ifc/ifcDataSlice';
 import {
   selectActiveDictionaryLocations,
   selectBsddApiEnvironmentUri,

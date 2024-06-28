@@ -4,8 +4,8 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DictionaryContractV1 } from '../../../../common/src/BsddApi/BsddApiBase';
-import { BsddDictionary, BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
-import { convertBsddDictionaryToIfcClassification } from '../../../../common/src/IfcData/ifcBsddConverters';
+import { BsddDictionary, BsddSettings } from '../../../../common/src/ifc/bsddBridgeData';
+import { convertBsddDictionaryToIfcClassification } from '../../../../common/src/ifc/ifcBsddConverters';
 import { useAppSelector } from '../../app/hooks';
 import { selectBsddDictionaries } from '../bsdd/bsddSlice';
 

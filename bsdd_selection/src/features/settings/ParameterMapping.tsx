@@ -2,7 +2,7 @@ import { Accordion, Text, TextInput, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { BsddDictionary, BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
+import { BsddDictionary, BsddSettings } from '../../../../common/src/ifc/bsddBridgeData';
 
 interface ParameterMappingProps {
   id: number;

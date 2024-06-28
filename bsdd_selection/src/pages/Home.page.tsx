@@ -3,15 +3,15 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { isProduction } from '../../../common/src/env';
-import { BsddDictionary, BsddSettings } from '../../../common/src/IfcData/bsddBridgeData';
-import { IfcEntity } from '../../../common/src/IfcData/ifc';
-import { validateIfcClassification } from '../../../common/src/IfcData/ifcValidators';
-import { mockData } from '../../../common/src/IfcData/mockData';
+import { BsddDictionary, BsddSettings } from '../../../common/src/ifc/bsddBridgeData';
+import { IfcEntity } from '../../../common/src/ifc/ifc';
+import { validateIfcClassification } from '../../../common/src/ifc/ifcValidators';
+import { mockData } from '../../../common/src/ifc/mockData';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { AppThunk } from '../app/store';
 import { selectBsddDataLoaded } from '../features/bsdd/bsddSlice';
-import { setValidatedIfcData } from '../features/IfcData/ifcDataSlice';
-import Selection from '../features/Selection/Selection';
+import { setValidatedIfcData } from '../features/ifc/ifcDataSlice';
+import Selection from '../features/selection/Selection';
 import Settings from '../features/Settings/Settings';
 import {
   setBsddApiEnvironment,

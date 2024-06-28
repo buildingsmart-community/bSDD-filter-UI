@@ -5,7 +5,7 @@ import { IconPencil, IconPointer } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { IfcEntity } from '../../../../common/src/IfcData/ifc';
+import { IfcEntity } from '../../../../common/src/ifc/ifc';
 import getClassUriFromDictionary, { ClassificationStatus } from '../../../../common/src/tools/checkIfcClassification';
 import { Color, colorMap } from '../../../../common/src/tools/colors';
 import { useAppSelector } from '../../app/hooks';

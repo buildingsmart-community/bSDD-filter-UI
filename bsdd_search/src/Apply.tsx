@@ -2,11 +2,11 @@ import { Button } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
 import { ClassContractV1, DictionaryContractV1 } from '../../common/src/BsddApi/BsddApiBase';
-import { IfcClassification, IfcClassificationReference, IfcEntity, IfcPropertySet } from '../../common/src/IfcData/ifc';
+import { IfcClassification, IfcClassificationReference, IfcEntity, IfcPropertySet } from '../../common/src/ifc/ifc';
 import {
   convertBsddDictionaryToIfcClassification,
   getIfcClassAndPredefinedType,
-} from '../../common/src/IfcData/ifcBsddConverters';
+} from '../../common/src/ifc/ifcBsddConverters';
 import { useAppSelector } from './app/hooks';
 import { selectBsddDictionaries } from './features/bsdd/bsddSlice';
 

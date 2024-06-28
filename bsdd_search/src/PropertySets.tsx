@@ -11,9 +11,9 @@ import {
   IfcPropertySet,
   IfcPropertySingleValue,
   IfcValue,
-} from '../../common/src/IfcData/ifc';
+} from '../../common/src/ifc/ifc';
 import { useAppSelector } from './app/hooks';
-import { selectIfcEntity } from './features/IfcData/ifcDataSlice';
+import { selectIfcEntity } from './features/ifc/ifcDataSlice';
 import Property from './Property';
 
 const valueTypeMapping: { [key: string]: string } = {

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Association, IfcEntity, IfcPropertySet } from '../../../../common/src/IfcData/ifc';
+import { Association, IfcEntity, IfcPropertySet } from '../../../../common/src/ifc/ifc';
 import type { RootState } from '../../app/store';
 
 interface EntitiesState {

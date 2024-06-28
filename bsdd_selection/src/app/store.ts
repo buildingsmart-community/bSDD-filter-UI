@@ -1,7 +1,7 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 
 import { bsddReducer } from '../features/bsdd/bsddSlice';
-import { ifcDataReducer } from '../features/IfcData/ifcDataSlice';
+import { ifcDataReducer } from '../features/ifc/ifcDataSlice';
 import { settingsReducer } from '../features/Settings/settingsSlice';
 
 export const store = configureStore({

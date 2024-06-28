@@ -2,7 +2,7 @@ import { Accordion, Checkbox, Space, Text, Title } from '@mantine/core';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
+import { BsddSettings } from '../../../../common/src/ifc/bsddBridgeData';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { fetchDictionaries, FetchDictionaryParameters, updateBsddApi } from '../bsdd/bsddSlice';
 import LanguageSelect from './LanguageSelect';

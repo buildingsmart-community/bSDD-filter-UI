@@ -5,7 +5,7 @@ import { IconGripVertical } from '@tabler/icons-react';
 import cx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
-import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
+import { BsddSettings } from '../../../../common/src/ifc/bsddBridgeData';
 import classes from './DndListHandle.module.css';
 
 interface DomainSortProps {

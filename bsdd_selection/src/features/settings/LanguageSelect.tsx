@@ -1,7 +1,7 @@
 import { Select } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
+import { BsddSettings } from '../../../../common/src/ifc/bsddBridgeData';
 
 interface LanguageSelectProps {
   settings: BsddSettings | undefined;

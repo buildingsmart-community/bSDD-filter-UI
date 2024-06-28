@@ -4,10 +4,10 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { BsddApi } from '../../common/src/BsddApi/BsddApi';
 import { ClassContractV1, ClassListItemContractV1, RequestParams } from '../../common/src/BsddApi/BsddApiBase';
-import { IfcClassificationReference, IfcEntity } from '../../common/src/IfcData/ifc';
+import { IfcClassificationReference, IfcEntity } from '../../common/src/ifc/ifc';
 import { useAppSelector } from './app/hooks';
 import { selectBsddDictionaries, selectdictionaryClasses } from './features/bsdd/bsddSlice';
-import { selectIfcEntity } from './features/IfcData/ifcDataSlice';
+import { selectIfcEntity } from './features/ifc/ifcDataSlice';
 import { selectActiveDictionaries, selectActiveDictionaryLocations } from './features/settings/settingsSlice';
 
 interface ClassificationSelectsProps {

@@ -2,7 +2,7 @@ import { createAction, createSelector, createSlice, PayloadAction } from '@redux
 
 import { bsddEnvironments } from '../../../../common/src/BsddApi/BsddApiEnvironments';
 import i18n from '../../../../common/src/i18n';
-import { BsddDictionary, BsddSettings } from '../../../../common/src/IfcData/bsddBridgeData';
+import { BsddDictionary, BsddSettings } from '../../../../common/src/ifc/bsddBridgeData';
 import type { RootState } from '../../app/store';
 
 const initialState: BsddSettings = {
