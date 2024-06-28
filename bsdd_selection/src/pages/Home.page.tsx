@@ -10,7 +10,7 @@ import { mockData } from '../../../common/src/IfcData/mockData';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { AppThunk } from '../app/store';
 import { selectBsddDataLoaded } from '../features/bsdd/bsddSlice';
-import { setValidatedIfcData } from '../features/ifcData/ifcDataSlice';
+import { setValidatedIfcData } from '../features/IfcData/ifcDataSlice';
 import Selection from '../features/Selection/Selection';
 import Settings from '../features/Settings/Settings';
 import {

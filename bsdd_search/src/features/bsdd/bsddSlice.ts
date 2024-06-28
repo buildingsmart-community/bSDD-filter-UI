@@ -7,7 +7,10 @@ import {
   DictionaryContractV1,
 } from '../../../../common/src/BsddApi/BsddApiBase';
 import type { RootState } from '../../app/store';
-import { selectBsddApiEnvironmentUri } from '../settings/settingsSlice';
+import {
+  selectBsddApiEnvironmentUri,
+  // selectLanguage
+} from '../settings/settingsSlice';
 
 const CLASS_ITEM_PAGE_SIZE = 500;
 const DICTIONARIES_PAGE_SIZE = 500;
@@ -45,6 +48,11 @@ export const selectBsddApi = (state: RootState) => {
   return bsddApi;
 };
 
+export type FetchAllDictionaryParameters = {
+  bsddApiEnvironment: string;
+  includeTestDictionaries: boolean;
+};
+
 /**
  * Fetches dictionaries from the bSDD API.
  *
@@ -53,12 +61,11 @@ export const selectBsddApi = (state: RootState) => {
  * @returns A promise that resolves to an object containing the fetched dictionaries.
  * @throws An error if there is an HTTP error or a bSDD API error.
  */
-export const fetchDictionaries = createAsyncThunk<
-  { [key: string]: DictionaryContractV1 }, // The type of the payload of the fulfilled action
-  string, // The type of the argument of the payload creator
-  { rejectValue: string } // The type of the payload of the rejected action
->('bsdd/fetchDictionaries', (bsddApiEnvironment: string, thunkAPI) => {
-  console.log('fetchDictionaries', bsddApiEnvironment);
+export const fetchAllDictionaries = createAsyncThunk<
+  { [key: string]: DictionaryContractV1 },
+  FetchAllDictionaryParameters,
+  { rejectValue: string }
+>('bsdd/fetchDictionaries', ({ bsddApiEnvironment, includeTestDictionaries }, thunkAPI) => {
   if (!bsddApiEnvironment) return thunkAPI.rejectWithValue('No bsddApiEnvironment provided');
 
   const api = new BsddApi(bsddApiEnvironment);
@@ -68,96 +75,188 @@ export const fetchDictionaries = createAsyncThunk<
 
   return new Promise((resolve, reject) => {
     function fetchNextPage() {
-      api.api.dictionaryV1List({ IncludeTestDictionaries: true, Limit: limit, Offset: offset }).then((response) => {
-        if (!response.ok) {
-          reject(new Error(`HTTP error! status: ${response.status}`));
-        }
-
-        const { data: { dictionaries: newDictionaries, totalCount } = {} } = response;
-        if (newDictionaries && typeof totalCount !== 'undefined') {
-          dictionaries.push(...newDictionaries);
-          offset += limit;
-          if (dictionaries.length >= totalCount) {
-            const out = dictionaries.reduce((acc: { [key: string]: DictionaryContractV1 }, item) => {
-              acc[item.uri] = item;
-              return acc;
-            }, {});
-            resolve(out);
-          } else {
-            fetchNextPage();
+      api.api
+        .dictionaryV1List({ IncludeTestDictionaries: includeTestDictionaries, Limit: limit, Offset: offset })
+        .then((response) => {
+          if (!response.ok) {
+            reject(new Error(`HTTP error! status: ${response.status}`));
           }
-        } else {
-          reject(new Error(`bSDD API error! status: ${response.status}`));
-        }
-      });
+
+          const { data: { dictionaries: newDictionaries, totalCount } = {} } = response;
+          if (newDictionaries && typeof totalCount !== 'undefined') {
+            dictionaries.push(...newDictionaries);
+            offset += limit;
+            if (dictionaries.length >= totalCount) {
+              const out = dictionaries.reduce((acc: { [key: string]: DictionaryContractV1 }, item) => {
+                acc[item.uri] = item;
+                return acc;
+              }, {});
+              resolve(out);
+            } else {
+              fetchNextPage();
+            }
+          } else {
+            reject(new Error(`bSDD API error! status: ${response.status}`));
+          }
+        });
     }
 
     fetchNextPage();
   });
 });
 
+export type FetchDictionaryParameters = {
+  bsddApiEnvironment: string;
+  includeTestDictionaries: boolean;
+  dictionaryUris?: string[];
+};
+
+export const fetchDictionaries = createAsyncThunk<
+  { [key: string]: DictionaryContractV1 },
+  FetchDictionaryParameters, // Assuming this type now includes dictionaryUris: string[]
+  { rejectValue: string }
+>('bsdd/fetchDictionaries', async ({ bsddApiEnvironment, dictionaryUris }, thunkAPI) => {
+  if (!bsddApiEnvironment || !dictionaryUris || dictionaryUris.length === 0) {
+    return thunkAPI.rejectWithValue('Invalid parameters');
+  }
+
+  const api = new BsddApi(bsddApiEnvironment);
+  const dictionaries: { [key: string]: DictionaryContractV1 } = {};
+
+  await Promise.all(
+    dictionaryUris.map(async (uri) => {
+      try {
+        const response = await api.api.dictionaryV1List({ Uri: uri });
+        if (response.ok && response.data) {
+          // Assuming response.data is an array of dictionaries
+          response.data.dictionaries?.forEach((dictionary: DictionaryContractV1) => {
+            dictionaries[dictionary.uri] = dictionary;
+          });
+        } else {
+          console.error(`Failed to fetch dictionaries for URI: ${uri}`);
+        }
+      } catch (error) {
+        console.error(`Error fetching dictionaries for URI: ${uri}`, error);
+      }
+    }),
+  );
+
+  return dictionaries;
+});
+
 /**
- * Fetches classes for a given dictionary uri.
+ * Fetches a specific batch of dictionary class data from the API.
  *
- * @param location - The dictionary uri for which to fetch the dictionary classes.
- * @param options - Additional options for the async thunk.
- * @returns A promise that resolves to an array of fetched dictionary classes.
+ * @param api - The instance of the BsddApi.
+ * @param location - The location of the dictionary.
+ * @param offset - The offset for pagination.
+ * @returns The fetched dictionary class data.
+ * @throws Error if there is an HTTP error.
  */
+async function fetchDictionaryClassData(
+  api: BsddApi<any>,
+  location: string,
+  offset: number,
+  // languageCode: string | null,
+) {
+  const response = await api.api.dictionaryV1ClassesList({
+    Uri: location,
+    UseNestedClasses: false,
+    Limit: CLASS_ITEM_PAGE_SIZE,
+    Offset: offset,
+    // languageCode: languageCode || undefined,
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return response.data;
+}
+
+const fetchAllDictionaryClasses = async (api: BsddApi<any>, location: string) => {
+  const classes = [];
+  let offset = 0;
+
+  const initialData = await fetchDictionaryClassData(api, location, offset);
+  const totalCount = initialData.classesTotalCount;
+  if (totalCount === null || totalCount === undefined) {
+    throw new Error('Total count is null or undefined');
+  }
+  classes.push(...(initialData.classes ?? []));
+
+  const fetchPromises = [];
+  for (offset = CLASS_ITEM_PAGE_SIZE; offset < totalCount; offset += CLASS_ITEM_PAGE_SIZE) {
+    fetchPromises.push(fetchDictionaryClassData(api, location, offset));
+  }
+
+  const results = await Promise.all(fetchPromises);
+  results.forEach((data) => {
+    classes.push(...(data.classes ?? []));
+  });
+
+  return classes;
+};
+
 export const fetchDictionaryClasses = createAsyncThunk(
   'bsdd/fetchDictionaryClasses',
   async (location: string, { getState, dispatch }) => {
     const state = getState() as RootState;
-    // const languageCode = useAppSelector(selectLanguage);
 
-    // If the classes for this location are already in the state, return them
     if (state.bsdd.dictionaryClasses[location]) {
       return state.bsdd.dictionaryClasses[location];
     }
 
-    // If a fetch for this location is already ongoing, wait for it to complete and return the result
     if (fetchPromisesCache[location]) {
-      const classes = await fetchPromisesCache[location];
-      return classes;
+      return fetchPromisesCache[location];
     }
 
-    // Start a new fetch
-    const fetchPromise = (async () => {
-      const api = selectBsddApi(getState() as RootState);
-      if (!api) {
-        throw new Error('BsddApi is not initialized');
-      }
+    const api = selectBsddApi(state);
+    if (!api) {
+      throw new Error('BsddApi is not initialized');
+    }
 
-      const classes: ClassListItemContractV1[] = [];
-      let offset = 0;
-      let totalCount: number | null | undefined;
-
-      while (true) {
-        const data = await fetchDictionaryClassData(api, location, offset); // , languageCode);
-        const newClasses = data.classes ?? [];
-        classes.push(...newClasses);
-
-        // Update total count after the first fetch
-        if (offset === 0) {
-          totalCount = data.classesTotalCount;
-          if (totalCount === null || totalCount === undefined) {
-            throw new Error('Total count is null or undefined');
-          }
-        }
-
-        if (totalCount !== null && totalCount !== undefined && classes.length >= totalCount) {
-          break;
-        }
-
-        offset += CLASS_ITEM_PAGE_SIZE;
-      }
-
-      dispatch({ type: 'bsdd/addDictionaryClasses', payload: { uri: location, classes } });
-      return classes;
-    })();
+    const fetchPromise = fetchAllDictionaryClasses(api, location)
+      .then((classes) => {
+        dispatch({ type: 'bsdd/addDictionaryClasses', payload: { uri: location, data: classes } });
+        return classes;
+      })
+      .finally(() => {
+        delete fetchPromisesCache[location];
+      });
 
     fetchPromisesCache[location] = fetchPromise;
-    const classes = await fetchPromise;
-    return classes;
+    return fetchPromise;
+  },
+);
+
+export type FetchAndStoreAllDictionaryClassesParameters = {
+  dictionaryUris?: string[];
+};
+
+export const fetchAndStoreDictionaryClasses = createAsyncThunk(
+  'bsdd/fetchAndStoreAllDictionaryClasses',
+  async (params: FetchAndStoreAllDictionaryClassesParameters, { dispatch, rejectWithValue }) => {
+    const { dictionaryUris } = params;
+    if (!dictionaryUris || dictionaryUris.length === 0) {
+      return rejectWithValue('No dictionary URIs provided');
+    }
+
+    try {
+      await Promise.all(dictionaryUris.map((uri) => dispatch(fetchDictionaryClasses(uri))));
+      return 'Successfully fetched and stored all dictionary classes';
+    } catch (error) {
+      return rejectWithValue('Failed to fetch dictionary classes');
+    }
+  },
+);
+
+export const updateDictionaries = createAsyncThunk(
+  'bsdd/updateDictionaries',
+  async (activeDictionaryLocations: string[], { getState }) => {
+    // This is where you could fetch or update data if needed.
+    // For now, we just return the active dictionary locations.
+    return activeDictionaryLocations;
   },
 );
 
@@ -170,25 +269,49 @@ const bsddSlice = createSlice({
       state.classes[action.payload.uri] = action.payload.data;
     },
     addDictionaryClasses: (state, action: PayloadAction<{ uri: string; data: ClassListItemContractV1[] }>) => {
-      state.dictionaryClasses[action.payload.uri] = action.payload.data;
+      // Check if there are already classes for the URI and append the new data if so
+      if (state.dictionaryClasses[action.payload.uri]) {
+        state.dictionaryClasses[action.payload.uri] = [
+          ...state.dictionaryClasses[action.payload.uri],
+          ...action.payload.data,
+        ];
+      } else {
+        // If no classes for the URI, set it to the new data
+        state.dictionaryClasses[action.payload.uri] = action.payload.data;
+      }
+    },
+    addDictionary: (state, action: PayloadAction<DictionaryContractV1>) => {
+      state.dictionaries[action.payload.uri] = action.payload;
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchDictionaries.pending, (state) => {
+      .addCase(fetchAllDictionaries.pending, (state) => {
         state.loaded = false;
       })
-      .addCase(fetchDictionaries.fulfilled, (state, action: PayloadAction<{ [key: string]: DictionaryContractV1 }>) => {
-        console.log('fetch dictionaries fulfilled', action.payload);
-        state.dictionaries = action.payload;
-        state.loaded = true;
-      })
+      .addCase(
+        fetchAllDictionaries.fulfilled,
+        (state, action: PayloadAction<{ [key: string]: DictionaryContractV1 }>) => {
+          state.dictionaries = action.payload;
+          state.loaded = true;
+        },
+      )
       .addCase(fetchDictionaryClasses.rejected, (state, action) => {
         console.error('fetch dictionary classes failed', action.error);
         state.loaded = true;
+      })
+      .addCase(updateDictionaries.fulfilled, (state: BsddState, action) => {
+        const activeLocations = action.payload;
+        state.dictionaries = Object.keys(state.dictionaries)
+          .filter((uri) => activeLocations.includes(uri))
+          .reduce((acc: { [uri: string]: DictionaryContractV1 }, uri) => {
+            acc[uri] = state.dictionaries[uri];
+            return acc;
+          }, {});
       });
   },
 });
+
 /**
  * Fetches a class from the bsddApi.
  *
@@ -227,40 +350,11 @@ export const fetchClass = createAsyncThunk('bsdd/fetchClass', async (uri: string
   return data;
 });
 
-/**
- * Fetches a specific batch of dictionary class data from the API.
- *
- * @param api - The instance of the BsddApi.
- * @param location - The location of the dictionary.
- * @param offset - The offset for pagination.
- * @returns The fetched dictionary class data.
- * @throws Error if there is an HTTP error.
- */
-async function fetchDictionaryClassData(
-  api: BsddApi<any>,
-  location: string,
-  offset: number,
-  // languageCode: string | null,
-) {
-  const response = await api.api.dictionaryV1ClassesList({
-    Uri: location,
-    UseNestedClasses: false,
-    Limit: CLASS_ITEM_PAGE_SIZE,
-    Offset: offset,
-    // languageCode: languageCode || undefined,
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  return response.data;
-}
-
 export const selectDictionary = (state: RootState, uri: string) => state.bsdd.dictionaries[uri];
 export const selectDictionaryClasses = (state: RootState, location: string) => state.bsdd.dictionaryClasses[location];
 export const selectBsddDictionaries = (state: RootState) => state.bsdd.dictionaries;
 export const selectBsddDataLoaded = (state: RootState) => state.bsdd.loaded;
+export const selectdictionaryClasses = (state: RootState) => state.bsdd.dictionaryClasses;
 
 export const { resetState } = bsddSlice.actions;
 

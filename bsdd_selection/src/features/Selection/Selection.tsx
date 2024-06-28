@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { IfcEntity } from '../../../../common/src/IfcData/ifc';
 import { useAppSelector } from '../../app/hooks';
-import { selectIfcEntities } from '../ifcData/ifcDataSlice';
+import { selectIfcEntities } from '../IfcData/ifcDataSlice';
 import CategoryCollapse from './CategoryCollapse';
 
 interface SelectionProps {
