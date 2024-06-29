@@ -31,14 +31,13 @@ type ValidationResult = {
 async function findMatchingDictionary(
   activeDictionaries: BsddDictionary[],
   bsddClass: ClassListItemContractV1,
-  languageCode: string,
   dispatch: ThunkDispatch<unknown, unknown, UnknownAction>,
 ): Promise<DictionaryClassesResponseContractV1 | null> {
   try {
     const matchingDictionary = activeDictionaries.find(async (activeDictionary) => {
       const { location } = activeDictionary.ifcClassification;
       if (location) {
-        const result = await dispatch(fetchDictionaryClasses({ location, languageCode }));
+        const result = await dispatch(fetchDictionaryClasses(location));
         const dictionaryClasses = result.payload as DictionaryClassesResponseContractV1;
         return dictionaryClasses.classes?.find((dictionaryv1class) => dictionaryv1class.uri === bsddClass?.uri);
       }
@@ -47,7 +46,7 @@ async function findMatchingDictionary(
 
     if (matchingDictionary) {
       const { location } = matchingDictionary.ifcClassification;
-      const result = await dispatch(fetchDictionaryClasses({ location, languageCode }));
+      const result = await dispatch(fetchDictionaryClasses(location));
       return result.payload as DictionaryClassesResponseContractV1;
     }
   } catch (error) {
@@ -68,13 +67,12 @@ const fetchClasses = async (
   state: RootState,
   dispatch: ThunkDispatch<unknown, unknown, UnknownAction>,
 ): Promise<ClassListItemContractV1[] | null> => {
-  const languageCode = state.settings.language;
   if (!referencedSource?.location) return null;
 
   const classes = selectDictionaryClasses(state, referencedSource.location);
   if (classes) return classes;
 
-  const result = await dispatch(fetchDictionaryClasses({ location: referencedSource.location, languageCode }));
+  const result = await dispatch(fetchDictionaryClasses(referencedSource.location));
   if (result.payload) {
     return result.payload as ClassListItemContractV1[];
   }
@@ -113,7 +111,6 @@ export const preprocessIfcClassificationReference = async (
   dispatch: ThunkDispatch<unknown, unknown, UnknownAction>,
   state: RootState,
 ) => {
-  const languageCode = state.settings.language;
   let improvedReference: IfcClassificationReference = ifcReference;
   let validationState: ValidationState = 'invalid';
   let dictionaryWithClasses: DictionaryClassesResponseContractV1 | null = null;
@@ -134,7 +131,7 @@ export const preprocessIfcClassificationReference = async (
       improvedReference = { ...improvedReference, ...nonNullBsddClass };
 
       if (!dictionaryWithClasses) {
-        dictionaryWithClasses = await findMatchingDictionary(activeDictionaries, bsddClass, languageCode, dispatch);
+        dictionaryWithClasses = await findMatchingDictionary(activeDictionaries, bsddClass, dispatch);
       }
 
       if (dictionaryWithClasses) {
