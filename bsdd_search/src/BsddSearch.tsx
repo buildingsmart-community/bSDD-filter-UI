@@ -18,6 +18,7 @@ import {
   selectActiveDictionaryUris,
   selectBsddApiEnvironmentUri,
   selectIncludeTestDictionaries,
+  selectLanguage,
   selectMainDictionary,
   setSettings,
 } from './features/settings/settingsSlice';
@@ -48,6 +49,8 @@ function BsddSearch() {
   const [propertySets, setPropertySets] = useState<{ [id: string]: IfcPropertySet }>({});
   const [api, setApi] = useState<BsddApi<unknown>>(new BsddApi(bsddEnvironments[defaultEnvironment]));
   const mainDictionary = useAppSelector(selectMainDictionary);
+  const languageCode = useAppSelector(selectLanguage);
+
   const [pendingSettings, setPendingSettings] = useState<BsddSettings | null>(null);
   const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironmentUri);
   const bsddApiEnvironmentUri = useAppSelector(selectBsddApiEnvironmentUri);
@@ -143,6 +146,7 @@ function BsddSearch() {
       const params = {
         bsddApiEnvironment,
         includeTestDictionaries,
+        languageCode,
         dictionaryUris: activeDictionaryLocations,
       };
 
@@ -150,7 +154,14 @@ function BsddSearch() {
       dispatch(fetchDictionaries(params));
       dispatch(fetchAndStoreDictionaryClasses(params));
     }
-  }, [bsddApiEnvironment, bsddApiEnvironmentUri, includeTestDictionaries, dispatch, activeDictionaryLocations]);
+  }, [
+    bsddApiEnvironment,
+    bsddApiEnvironmentUri,
+    includeTestDictionaries,
+    dispatch,
+    activeDictionaryLocations,
+    languageCode,
+  ]);
 
   return (
     <Container>

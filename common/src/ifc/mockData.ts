@@ -36,7 +36,7 @@ export const mockData: BsddBridgeData = {
         parameterMapping: 'Assembly Code',
       },
     ],
-    language: 'en-GB',
+    language: 'nl-NL',
     includeTestDictionaries: false,
   },
   ifcData: [

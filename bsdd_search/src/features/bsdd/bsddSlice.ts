@@ -6,11 +6,9 @@ import {
   ClassListItemContractV1,
   DictionaryContractV1,
 } from '../../../../common/src/BsddApi/BsddApiBase';
+import { useAppSelector } from '../../app/hooks';
 import type { RootState } from '../../app/store';
-import {
-  selectBsddApiEnvironmentUri,
-  // selectLanguage
-} from '../settings/settingsSlice';
+import { selectBsddApiEnvironmentUri, selectLanguage } from '../settings/settingsSlice';
 
 const CLASS_ITEM_PAGE_SIZE = 500;
 const DICTIONARIES_PAGE_SIZE = 500;
@@ -157,15 +155,16 @@ async function fetchDictionaryClassData(
   api: BsddApi<any>,
   location: string,
   offset: number,
-  // languageCode: string | null,
+  languageCode: string | null,
 ) {
+  console.log('languageCode', languageCode);
   const response = await api.api.dictionaryV1ClassesList({
     Uri: location,
     UseNestedClasses: false,
     ClassType: 'Class',
     Offset: offset,
     Limit: CLASS_ITEM_PAGE_SIZE,
-    // languageCode: languageCode || undefined,
+    languageCode: languageCode || undefined,
   });
 
   if (!response.ok) {
@@ -175,11 +174,11 @@ async function fetchDictionaryClassData(
   return response.data;
 }
 
-const fetchAllDictionaryClasses = async (api: BsddApi<any>, location: string) => {
+const fetchAllDictionaryClasses = async (api: BsddApi<any>, location: string, languageCode: string) => {
   const classes = [];
   let offset = 0;
 
-  const initialData = await fetchDictionaryClassData(api, location, offset);
+  const initialData = await fetchDictionaryClassData(api, location, offset, languageCode);
   const totalCount = initialData.classesTotalCount;
   if (totalCount === null || totalCount === undefined) {
     throw new Error('Total count is null or undefined');
@@ -188,7 +187,7 @@ const fetchAllDictionaryClasses = async (api: BsddApi<any>, location: string) =>
 
   const fetchPromises = [];
   for (offset = CLASS_ITEM_PAGE_SIZE; offset < totalCount; offset += CLASS_ITEM_PAGE_SIZE) {
-    fetchPromises.push(fetchDictionaryClassData(api, location, offset));
+    fetchPromises.push(fetchDictionaryClassData(api, location, offset, languageCode));
   }
 
   const results = await Promise.all(fetchPromises);
@@ -201,7 +200,7 @@ const fetchAllDictionaryClasses = async (api: BsddApi<any>, location: string) =>
 
 export const fetchDictionaryClasses = createAsyncThunk(
   'bsdd/fetchDictionaryClasses',
-  async (location: string, { getState, dispatch }) => {
+  async ({ location, languageCode }: { location: string; languageCode: string }, { getState, dispatch }) => {
     const state = getState() as RootState;
 
     if (state.bsdd.dictionaryClasses[location]) {
@@ -217,7 +216,7 @@ export const fetchDictionaryClasses = createAsyncThunk(
       throw new Error('BsddApi is not initialized');
     }
 
-    const fetchPromise = fetchAllDictionaryClasses(api, location)
+    const fetchPromise = fetchAllDictionaryClasses(api, location, languageCode)
       .then((classes) => {
         dispatch({ type: 'bsdd/addDictionaryClasses', payload: { uri: location, data: classes } });
         return classes;
@@ -233,18 +232,19 @@ export const fetchDictionaryClasses = createAsyncThunk(
 
 export type FetchAndStoreAllDictionaryClassesParameters = {
   dictionaryUris?: string[];
+  languageCode: string;
 };
 
 export const fetchAndStoreDictionaryClasses = createAsyncThunk(
   'bsdd/fetchAndStoreAllDictionaryClasses',
   async (params: FetchAndStoreAllDictionaryClassesParameters, { dispatch, rejectWithValue }) => {
-    const { dictionaryUris } = params;
+    const { dictionaryUris, languageCode } = params;
     if (!dictionaryUris || dictionaryUris.length === 0) {
       return rejectWithValue('No dictionary URIs provided');
     }
 
     try {
-      await Promise.all(dictionaryUris.map((uri) => dispatch(fetchDictionaryClasses(uri))));
+      await Promise.all(dictionaryUris.map((uri) => dispatch(fetchDictionaryClasses({ location: uri, languageCode }))));
       return 'Successfully fetched and stored all dictionary classes';
     } catch (error) {
       return rejectWithValue('Failed to fetch dictionary classes');
@@ -254,11 +254,7 @@ export const fetchAndStoreDictionaryClasses = createAsyncThunk(
 
 export const updateDictionaries = createAsyncThunk(
   'bsdd/updateDictionaries',
-  async (activeDictionaryLocations: string[], { getState }) => {
-    // This is where you could fetch or update data if needed.
-    // For now, we just return the active dictionary locations.
-    return activeDictionaryLocations;
-  },
+  async (activeDictionaryLocations: string[]) => activeDictionaryLocations,
 );
 
 const bsddSlice = createSlice({
@@ -324,7 +320,7 @@ const bsddSlice = createSlice({
  */
 export const fetchClass = createAsyncThunk('bsdd/fetchClass', async (uri: string, { getState, dispatch }) => {
   const state = getState() as RootState;
-  // const languageCode = useAppSelector(selectLanguage);
+  const languageCode = useAppSelector(selectLanguage);
   if (state.bsdd.classes[uri]) {
     return state.bsdd.classes[uri];
   }
@@ -339,7 +335,7 @@ export const fetchClass = createAsyncThunk('bsdd/fetchClass', async (uri: string
     IncludeChildClassReferences: true,
     IncludeClassRelations: true,
     // IncludeReverseRelations: true,
-    // languageCode: languageCode || undefined,
+    languageCode: languageCode || undefined,
   });
 
   if (!response.ok) {
