@@ -8,7 +8,11 @@ import { IfcClassificationReference, IfcEntity } from '../../common/src/ifc/ifc'
 import { useAppSelector } from './app/hooks';
 import { selectBsddDictionaries, selectdictionaryClasses } from './features/bsdd/bsddSlice';
 import { selectIfcEntity } from './features/ifc/ifcDataSlice';
-import { selectActiveDictionaries, selectActiveDictionaryLocations } from './features/settings/settingsSlice';
+import {
+  selectActiveDictionaries,
+  selectActiveDictionaryUris,
+  selectMainDictionaryUri,
+} from './features/settings/settingsSlice';
 
 interface ClassificationSelectsProps {
   api: BsddApi<unknown>;
@@ -87,23 +91,25 @@ const formatIfcClassCode = (code: string): string => {
   return code;
 };
 
-const formatLabel = (name: string, uri: string, code: string | null | undefined, showCode: boolean): string => {
-  if (!showCode) return name || '';
+const formatLabel = (name: string, uri: string, code: string | null | undefined): string => {
+  let formattedCode = '';
+  if (code && name.toLowerCase() !== code.toLowerCase()) {
+    const isIfcUri = uri === 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3';
+    if (isIfcUri) {
+      formattedCode = ` (${formatIfcClassCode(code)})`;
+    } else {
+      formattedCode = ` (${code})`;
+    }
+  }
 
-  const isIfcUri = uri === 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3';
-  const formattedCode = isIfcUri && code ? ` (${formatIfcClassCode(code)})` : '';
   return `${name}${formattedCode}`;
 };
 
-const buildOptionsFromClasses = (
-  classes: ClassContractV1[] | ClassListItemContractV1[],
-  dictionaryUri: string,
-  showCode: boolean,
-) => {
+const buildOptionsFromClasses = (classes: ClassContractV1[] | ClassListItemContractV1[], dictionaryUri: string) => {
   return classes.map((classification) => {
     return {
       value: classification.uri ?? '',
-      label: formatLabel(classification.name ?? '', dictionaryUri, classification.code, showCode),
+      label: formatLabel(classification.name ?? '', dictionaryUri, classification.code),
     };
   });
 };
@@ -120,19 +126,21 @@ const buildClassSelectOptions = (
 ) => {
   const options: { [key: string]: { value: string; label: string }[] } = {};
   Object.entries(activeDictionaryLocations).forEach(([dictionaryUri, dictionaryClasses]) => {
-    options[dictionaryUri] = groupedClassifications[dictionaryUri]
-      ? buildOptionsFromClasses(groupedClassifications[dictionaryUri], dictionaryUri, true)
-      : buildOptionsFromClasses(dictionaryClasses, dictionaryUri, false);
+    options[dictionaryUri] = buildOptionsFromClasses(
+      groupedClassifications[dictionaryUri] || dictionaryClasses,
+      dictionaryUri,
+    );
   });
   return options;
 };
 
 function Classifications({ api, activeClassificationUri, setClassifications }: ClassificationSelectsProps) {
   const activeDictionaries = useAppSelector(selectActiveDictionaries);
-  const activeDictionaryLocations = useAppSelector(selectActiveDictionaryLocations);
+  const activeDictionaryLocations = useAppSelector(selectActiveDictionaryUris);
   const activeDictionaryClasses = useAppSelector(selectdictionaryClasses);
   const ifcEntity = useAppSelector(selectIfcEntity);
   const dictionaries = useAppSelector(selectBsddDictionaries);
+  const mainDictionaryUri = useAppSelector(selectMainDictionaryUri);
   const [classificationCount, setClassificationCount] = useState<number>(0);
   const [classificationUris, setClassificationUris] = useState<{
     [id: string]: Promise<ClassContractV1 | null>;
@@ -332,8 +340,10 @@ function Classifications({ api, activeClassificationUri, setClassifications }: C
           data={classOptions}
           value={selectedValues[dictionaryUri]}
           readOnly={classOptions.length === 1}
+          disabled={dictionaryUri === mainDictionaryUri}
           variant={classOptions.length === 1 ? 'filled' : 'default'}
           onChange={(value) => handleOnChange(dictionaryUri)(value)}
+          clearable
         />
       ))}
     </>

@@ -109,16 +109,20 @@ export const selectActiveDictionaries = createSelector(
   },
 );
 
-export const selectActiveDictionaryLocations = createSelector(selectActiveDictionaries, (activeDictionaries) =>
-  activeDictionaries.map((dictionary) => dictionary.ifcClassification.location),
-);
-
 export const selectBsddApiEnvironment = (state: RootState) => state.settings.bsddApiEnvironment;
 export const selectMainDictionary = (state: RootState) => state.settings.mainDictionary;
 export const selectFilterDictionaries = (state: RootState) => state.settings.filterDictionaries;
 export const selectLanguage = (state: RootState) => state.settings.language;
 export const selectIncludeTestDictionaries = (state: RootState) => state.settings.includeTestDictionaries;
 export const selectSettings = (state: RootState) => state.settings;
+
+export const selectActiveDictionaryUris = createSelector(selectActiveDictionaries, (activeDictionaries) =>
+  activeDictionaries.map((dictionary) => dictionary.ifcClassification.location),
+);
+
+export const selectMainDictionaryUri = createSelector(selectMainDictionary, (mainDictionary) =>
+  mainDictionary ? mainDictionary.ifcClassification.location : null,
+);
 
 export const {
   setBsddApiEnvironment,

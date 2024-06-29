@@ -162,8 +162,9 @@ async function fetchDictionaryClassData(
   const response = await api.api.dictionaryV1ClassesList({
     Uri: location,
     UseNestedClasses: false,
-    Limit: CLASS_ITEM_PAGE_SIZE,
+    ClassType: 'Class',
     Offset: offset,
+    Limit: CLASS_ITEM_PAGE_SIZE,
     // languageCode: languageCode || undefined,
   });
 

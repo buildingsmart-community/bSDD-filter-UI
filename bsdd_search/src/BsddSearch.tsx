@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { BsddApi } from '../../common/src/BsddApi/BsddApi';
-import { ClassContractV1, DictionaryContractV1 } from '../../common/src/BsddApi/BsddApiBase';
+import { ClassContractV1 } from '../../common/src/BsddApi/BsddApiBase';
 import { bsddEnvironments } from '../../common/src/BsddApi/BsddApiEnvironments';
 import { defaultEnvironment, isProduction } from '../../common/src/env';
 import { BsddBridgeData, BsddSettings } from '../../common/src/ifc/bsddBridgeData';
@@ -15,7 +15,7 @@ import Classifications from './Classifications';
 import { fetchAndStoreDictionaryClasses, fetchDictionaries, updateDictionaries } from './features/bsdd/bsddSlice';
 import { setIfcData } from './features/ifc/ifcDataSlice';
 import {
-  selectActiveDictionaryLocations,
+  selectActiveDictionaryUris,
   selectBsddApiEnvironmentUri,
   selectIncludeTestDictionaries,
   selectMainDictionary,
@@ -52,7 +52,7 @@ function BsddSearch() {
   const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironmentUri);
   const bsddApiEnvironmentUri = useAppSelector(selectBsddApiEnvironmentUri);
   const includeTestDictionaries = useAppSelector(selectIncludeTestDictionaries);
-  const activeDictionaryLocations = useAppSelector(selectActiveDictionaryLocations);
+  const activeDictionaryLocations = useAppSelector(selectActiveDictionaryUris);
 
   const callback = useCallback((ifcProduct: IfcEntity) => {
     const ifcEntityJson = JSON.stringify(ifcProduct);
