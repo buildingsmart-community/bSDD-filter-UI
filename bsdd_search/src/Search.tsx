@@ -1,6 +1,7 @@
 import { Autocomplete } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { BsddApi } from '../../common/src/BsddApi/BsddApi';
 import { RequestParams } from '../../common/src/BsddApi/BsddApiBase';
@@ -19,6 +20,7 @@ interface Props {
 }
 
 function Search({ api, defaultValue: defaultSelection, setActiveClassificationUri }: Props) {
+  const { t } = useTranslation();
   const [searchOptions, setSearchOptions] = useState<Option[]>([]);
   const mainDictionary = useAppSelector(selectMainDictionary);
 
@@ -127,6 +129,7 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
 
   return (
     <Autocomplete
+      label={`${t('searchMainDictionaryLabel')} ${mainDictionary ? mainDictionary.ifcClassification.name : ''}`}
       data={searchOptions}
       placeholder="bSDD search..."
       value={searchValue}

@@ -1,4 +1,4 @@
-import { Accordion, Button, Container, Group, TextInput, Title } from '@mantine/core';
+import { Accordion, Alert, Button, Container, Group, Space, TextInput, Title } from '@mantine/core';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -172,44 +172,57 @@ function BsddSearch() {
         <Search api={api} defaultValue={defaultSearch} setActiveClassificationUri={setActiveClassificationUri} />
       </Group>
 
-      <Accordion defaultValue={['Classifications']} multiple>
-        <Accordion.Item key="Classifications" value="Classifications">
-          <Accordion.Control>
-            <Title order={5}>{t('classificationsLabel')}</Title>
-          </Accordion.Control>
-          <Accordion.Panel>
-            <Classifications
-              api={api}
-              activeClassificationUri={activeClassificationUri}
-              setClassifications={setClassifications}
-            />
-          </Accordion.Panel>
-        </Accordion.Item>
-        <Accordion.Item key="Propertysets" value="Propertysets">
-          <Accordion.Control>
-            <Title order={5}>{t('propertysetsLabel')}</Title>
-          </Accordion.Control>
-          <Accordion.Panel>
-            <PropertySets
+      {activeClassificationUri ? (
+        <>
+          <Accordion defaultValue={['Classifications']} multiple>
+            <Accordion.Item key="Classifications" value="Classifications">
+              <Accordion.Control>
+                <Title order={5}>{t('classificationsLabel')}</Title>
+              </Accordion.Control>
+              <Accordion.Panel>
+                <Classifications
+                  api={api}
+                  activeClassificationUri={activeClassificationUri}
+                  setClassifications={setClassifications}
+                />
+              </Accordion.Panel>
+            </Accordion.Item>
+            <Accordion.Item key="Propertysets" value="Propertysets">
+              <Accordion.Control>
+                <Title order={5}>{t('propertysetsLabel')}</Title>
+              </Accordion.Control>
+              <Accordion.Panel>
+                <PropertySets
+                  classifications={classifications}
+                  propertySets={propertySets}
+                  setPropertySets={setPropertySets}
+                  recursiveMode={recursiveMode}
+                />
+              </Accordion.Panel>
+            </Accordion.Item>
+          </Accordion>
+          <Group my="sm" justify="center">
+            <Apply
+              callback={callback}
               classifications={classifications}
-              propertySets={propertySets}
-              setPropertySets={setPropertySets}
-              recursiveMode={recursiveMode}
+              propertySetMap={propertySets}
+              ifcEntity={ifcEntity}
             />
-          </Accordion.Panel>
-        </Accordion.Item>
-      </Accordion>
-      <Group my="sm" justify="center">
-        <Apply
-          callback={callback}
-          classifications={classifications}
-          propertySetMap={propertySets}
-          ifcEntity={ifcEntity}
-        />
-        <Button fullWidth variant="light" color="gray" onClick={cancel}>
-          {t('cancel')}
-        </Button>
-      </Group>
+            <Button fullWidth variant="light" color="gray" onClick={cancel}>
+              {t('cancel')}
+            </Button>
+          </Group>
+        </>
+      ) : (
+        <Alert mx="md" title={t('noClassificationSelected')} mt="xl">
+          {t('classSearchInstruction')}
+          <Space h="md" />
+          {t('needHelp')}{' '}
+          <a href="https://github.com/buildingsmart-community/bSDD-Revit-plugin/wiki" target="_blank" rel="noreferrer">
+            {t('checkDocumentation')}
+          </a>
+        </Alert>
+      )}
     </Container>
   );
 }
