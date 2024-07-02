@@ -24302,7 +24302,15 @@ const PO = {
     }
   }
 }), { setIfcData: NO } = uy.actions, OO = (r) => r.ifcData.ifcEntities, dy = pa(OO, (r) => r[0]), MO = uy.reducer, Fg = (r) => ly.groupBy(r, "dictionaryUri");
-async function xO(r, e, t) {
+function xO(r, e) {
+  return {
+    uri: e.uri,
+    name: e.name,
+    code: e.code,
+    dictionaryUri: r
+  };
+}
+async function LO(r, e, t) {
   try {
     const n = await r.api.classV1List({ Uri: e, IncludeClassRelations: !0 }, t);
     if (n.status !== 200)
@@ -24312,7 +24320,7 @@ async function xO(r, e, t) {
     return console.error("Error fetching classification:", n), null;
   }
 }
-function LO(r, e) {
+function DO(r, e) {
   var n;
   return e ? (n = e.hasAssociations) == null ? void 0 : n.find((o) => {
     var a;
@@ -24323,7 +24331,7 @@ function LO(r, e) {
     return !1;
   }) : void 0;
 }
-const DO = (r) => {
+const UO = (r) => {
   for (let e = r.length - 2; e >= 0; e -= 1)
     if (r[e] === r[e].toLowerCase() && r[e + 1] === r[e + 1].toUpperCase()) {
       if (r[r.length - 1] === r[r.length - 1].toUpperCase())
@@ -24331,22 +24339,22 @@ const DO = (r) => {
       break;
     }
   return r;
-}, UO = (r, e, t) => {
+}, FO = (r, e, t) => {
   let n = "";
-  return t && r.toLowerCase() !== t.toLowerCase() && (e === "https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3" ? n = ` (${DO(t)})` : n = ` (${t})`), `${r}${n}`;
-}, FO = (r, e) => r.map((t) => ({
+  return t && r.toLowerCase() !== t.toLowerCase() && (e === "https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3" ? n = ` (${UO(t)})` : n = ` (${t})`), `${r}${n}`;
+}, HO = (r, e) => r.map((t) => ({
   value: t.uri ?? "",
-  label: UO(t.name ?? "", e, t.code)
-})), HO = (r, e) => {
+  label: FO(t.name ?? "", e, t.code)
+})), BO = (r, e) => {
   const t = {};
   return Object.entries(e).forEach(([n, o]) => {
-    t[n] = FO(
+    t[n] = HO(
       r[n] || o,
       n
     );
   }), t;
 };
-function BO({
+function KO({
   api: r,
   activeClassificationUri: e,
   classifications: t,
@@ -24397,7 +24405,7 @@ function BO({
               ...v
             };
             X.classRelations.forEach((Y) => {
-              Y.relatedClassUri in Object.keys(v) || (he[Y.relatedClassUri] = xO(
+              Y.relatedClassUri in Object.keys(v) || (he[Y.relatedClassUri] = LO(
                 r,
                 Y.relatedClassUri,
                 F
@@ -24419,7 +24427,7 @@ function BO({
   }, [I, A]), ve(() => {
     R((F) => a.reduce((Q, J) => {
       var re;
-      const ee = F[J] || ((re = LO(J, l)) == null ? void 0 : re.location) || "";
+      const ee = F[J] || ((re = DO(J, l)) == null ? void 0 : re.location) || "";
       return { ...Q, [J]: ee };
     }, {}));
   }, [a, l]), ve(() => {
@@ -24429,7 +24437,7 @@ function BO({
         return;
       const oe = J.find((ee) => ee.uri === Q);
       if (oe)
-        return oe;
+        return xO(D, oe);
     }).filter((D) => D !== void 0);
     n(F);
   }, [A, f, n]);
@@ -24452,7 +24460,7 @@ function BO({
       }));
     },
     [f]
-  ), L = HO(E, s);
+  ), L = BO(E, s);
   return /* @__PURE__ */ we.jsx(we.Fragment, { children: Object.entries(L).map(([F, D]) => /* @__PURE__ */ we.jsx(
     cc,
     {
@@ -24469,7 +24477,7 @@ function BO({
     F
   )) });
 }
-function KO(r) {
+function qO(r) {
   const { label: e, value: t, setValue: n, disabled: o } = r, [a, s] = Ee(!1), [l, u] = Ee(!0), f = (h) => {
     h.target.indeterminate = !1, n(h.target.checked);
   };
@@ -24487,7 +24495,7 @@ function KO(r) {
     }
   );
 }
-function qO({ propertySet: r, property: e, propertyIndex: t, propertySets: n, setPropertySets: o }) {
+function $O({ propertySet: r, property: e, propertyIndex: t, propertySets: n, setPropertySets: o }) {
   const [a, s] = Ee(), l = e, u = r, f = n, h = o;
   return ve(() => {
     var p, m, v;
@@ -24495,7 +24503,7 @@ function qO({ propertySet: r, property: e, propertyIndex: t, propertySets: n, se
       case "IfcPropertySingleValue": {
         l.nominalValue.type === "IfcBoolean" ? s(
           /* @__PURE__ */ we.jsx(
-            KO,
+            qO,
             {
               label: l.name,
               disabled: !1,
@@ -24571,7 +24579,7 @@ function qO({ propertySet: r, property: e, propertyIndex: t, propertySets: n, se
     }
   }, [l, u, s, f, h]), a;
 }
-const $O = {
+const GO = {
   Boolean: "IfcBoolean",
   Character: "IfcText",
   Integer: "IfcInteger",
@@ -24580,7 +24588,7 @@ const $O = {
   Time: "IfcDateTime"
 };
 function ta(r, e) {
-  const t = r && $O[r] || "default";
+  const t = r && GO[r] || "default";
   let n;
   return r === "Boolean" && typeof e == "string" ? e.toUpperCase() === "TRUE" ? n = !0 : e.toUpperCase() === "FALSE" ? n = !1 : n = void 0 : n = e, {
     type: t,
@@ -24596,11 +24604,11 @@ function fy(r, e, t) {
       );
   }
 }
-function GO(r, e, t, n) {
+function zO(r, e, t, n) {
   const o = fy(e, t, n);
   return o && "nominalValue" in o ? ta(r, o.nominalValue.value) : ta(r);
 }
-function zO(r, e, t, n, o) {
+function VO(r, e, t, n, o) {
   const a = fy(e, t, n);
   if (a) {
     if (a.type === "IfcPropertyEnumeratedValue")
@@ -24616,7 +24624,7 @@ function zO(r, e, t, n, o) {
   }
   return [];
 }
-function VO(r, e, t, n) {
+function WO(r, e, t, n) {
   var l;
   const o = ((l = r.allowedValues) == null ? void 0 : l.map(
     (u) => ta(r.dataType, u.value)
@@ -24630,7 +24638,7 @@ function VO(r, e, t, n) {
     }
   };
   r.propertyUri && (a.specification = r.propertyUri);
-  const s = r.predefinedValue ? [ta(r.dataType, r.predefinedValue)] : zO(
+  const s = r.predefinedValue ? [ta(r.dataType, r.predefinedValue)] : VO(
     r.dataType,
     n,
     t,
@@ -24639,20 +24647,20 @@ function VO(r, e, t, n) {
   );
   return s.length > 0 && (a.enumerationValues = s), a;
 }
-function WO(r, e, t, n) {
+function jO(r, e, t, n) {
   const o = {
     type: "IfcPropertySingleValue",
     name: e
   };
   r.propertyUri && (o.specification = r.propertyUri);
-  const a = r.predefinedValue ? ta(r.dataType, r.predefinedValue) : GO(r.dataType, n, t, e);
+  const a = r.predefinedValue ? ta(r.dataType, r.predefinedValue) : zO(r.dataType, n, t, e);
   return a !== null && (o.nominalValue = a), o;
 }
-function jO(r, e, t) {
+function YO(r, e, t) {
   const { propertyCode: n } = r, o = n || "unknown";
-  return r.allowedValues ? VO(r, o, e, t) : WO(r, o, e, t);
+  return r.allowedValues ? WO(r, o, e, t) : jO(r, o, e, t);
 }
-function YO(r) {
+function QO(r) {
   Ws();
   const { classifications: e } = r, { propertySets: t } = r, { setPropertySets: n } = r, { recursiveMode: o } = r, a = At(dy);
   return ve(() => {
@@ -24667,7 +24675,7 @@ function YO(r) {
           type: "IfcPropertySet",
           name: p,
           hasProperties: []
-        }), s[p].hasProperties.push(jO(h, p, a));
+        }), s[p].hasProperties.push(YO(h, p, a));
       });
     }), n(s);
   }, [e, n, o, a]), /* @__PURE__ */ we.jsx("div", { children: Jl.toArray(
@@ -24675,7 +24683,7 @@ function YO(r) {
       /* @__PURE__ */ we.jsx(Et.Control, { children: s.name }),
       /* @__PURE__ */ we.jsx(Et.Panel, { children: /* @__PURE__ */ we.jsx(Ad, { children: Jl.toArray(
         s.hasProperties.map((u, f) => /* @__PURE__ */ we.jsx(
-          qO,
+          $O,
           {
             propertySet: s,
             property: u,
@@ -24688,7 +24696,7 @@ function YO(r) {
     ] }, s.name) }))
   ) });
 }
-function QO({ api: r, defaultValue: e, setActiveClassificationUri: t }) {
+function JO({ api: r, defaultValue: e, setActiveClassificationUri: t }) {
   var S;
   const { t: n } = Ws(), [o, a] = Ee([]), s = At(Md), l = Ke(null), u = Ke(e), [f, h] = Ee(u.current), [p, m] = Ee(((S = u.current) == null ? void 0 : S.label) || ""), [v] = FA(p, 300), [C, E] = Ee(!1), _ = $e((I) => {
     m(I);
@@ -24755,7 +24763,7 @@ function QO({ api: r, defaultValue: e, setActiveClassificationUri: t }) {
     }
   );
 }
-function JO() {
+function XO() {
   const { t: r } = Ws(), e = u1(), [t, n] = Ee(), [o, a] = Ee(), [s, l] = Ee(), [u, f] = Ee(!1), [h, p] = Ee([]), [m, v] = Ee({}), [C, E] = Ee(new Ji(Fv[l1])), _ = At(Md), A = At(ny), [R, S] = Ee(null), I = At(Iu), O = At(Iu), L = At(wO), F = At(oy), D = $e((oe) => {
     var re;
     const ee = JSON.stringify(oe);
@@ -24818,13 +24826,13 @@ function JO() {
     /* @__PURE__ */ we.jsx(Co, { type: "hidden", name: "ifcType", id: "ifcType", value: "" }),
     /* @__PURE__ */ we.jsx(Co, { type: "hidden", name: "name", id: "name", value: "" }),
     /* @__PURE__ */ we.jsx(Co, { type: "hidden", name: "material", id: "material", value: "" }),
-    /* @__PURE__ */ we.jsx(Ds, { mx: "md", mt: "lg", mb: "sm", children: /* @__PURE__ */ we.jsx(QO, { api: C, defaultValue: o, setActiveClassificationUri: n }) }),
+    /* @__PURE__ */ we.jsx(Ds, { mx: "md", mt: "lg", mb: "sm", children: /* @__PURE__ */ we.jsx(JO, { api: C, defaultValue: o, setActiveClassificationUri: n }) }),
     t ? /* @__PURE__ */ we.jsxs(we.Fragment, { children: [
       /* @__PURE__ */ we.jsxs(Et, { defaultValue: ["Classifications"], multiple: !0, children: [
         /* @__PURE__ */ we.jsxs(Et.Item, { value: "Classifications", children: [
           /* @__PURE__ */ we.jsx(Et.Control, { children: /* @__PURE__ */ we.jsx(Us, { order: 5, children: r("classificationsLabel") }) }),
           /* @__PURE__ */ we.jsx(Et.Panel, { children: /* @__PURE__ */ we.jsx(
-            BO,
+            KO,
             {
               api: C,
               activeClassificationUri: t,
@@ -24836,7 +24844,7 @@ function JO() {
         /* @__PURE__ */ we.jsxs(Et.Item, { value: "Propertysets", children: [
           /* @__PURE__ */ we.jsx(Et.Control, { children: /* @__PURE__ */ we.jsx(Us, { order: 5, children: r("propertysetsLabel") }) }),
           /* @__PURE__ */ we.jsx(Et.Panel, { children: /* @__PURE__ */ we.jsx(
-            YO,
+            QO,
             {
               classifications: h,
               propertySets: m,
@@ -24867,14 +24875,14 @@ function JO() {
     ] })
   ] });
 }
-function XO() {
+function ZO() {
   const [r, e] = Ee(null);
   return ve(() => {
     const t = new yA(a1);
     e(t);
-  }, []), r ? /* @__PURE__ */ we.jsx(Tm, { theme: i1, children: /* @__PURE__ */ we.jsx(JO, {}) }) : /* @__PURE__ */ we.jsx("div", { children: "Loading..." });
+  }, []), r ? /* @__PURE__ */ we.jsx(Tm, { theme: i1, children: /* @__PURE__ */ we.jsx(XO, {}) }) : /* @__PURE__ */ we.jsx("div", { children: "Loading..." });
 }
-const ZO = {
+const eM = {
   name: void 0,
   description: void 0,
   tag: void 0,
@@ -24883,7 +24891,7 @@ const ZO = {
   hasAssociations: []
 }, hy = hc({
   name: "ifcEntity",
-  initialState: ZO,
+  initialState: eM,
   reducers: {
     setifcEntity: (r, e) => {
       r.name = e.payload.name, r.description = e.payload.description, r.tag = e.payload.tag, r.predefinedType = e.payload.predefinedType, r.isDefinedBy = e.payload.isDefinedBy, r.hasAssociations = e.payload.hasAssociations;
@@ -24909,14 +24917,14 @@ const ZO = {
   }
 });
 hy.actions;
-const eM = hy.reducer, tM = Y1({
+const tM = hy.reducer, rM = Y1({
   reducer: {
     settings: bO,
     ifcData: MO,
-    ifcEntity: eM,
+    ifcEntity: tM,
     bsdd: RO
   }
 });
 Xl.createRoot(document.getElementById("root")).render(
-  /* @__PURE__ */ we.jsx(k.StrictMode, { children: /* @__PURE__ */ we.jsx(R0, { store: tM, children: /* @__PURE__ */ we.jsx(XO, {}) }) })
+  /* @__PURE__ */ we.jsx(k.StrictMode, { children: /* @__PURE__ */ we.jsx(R0, { store: rM, children: /* @__PURE__ */ we.jsx(ZO, {}) }) })
 );
