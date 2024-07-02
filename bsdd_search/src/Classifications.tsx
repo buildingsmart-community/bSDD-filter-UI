@@ -17,6 +17,7 @@ import {
 interface ClassificationSelectsProps {
   api: BsddApi<unknown>;
   activeClassificationUri: string | undefined;
+  classifications: ClassContractV1[];
   setClassifications: (value: ClassContractV1[]) => void;
 }
 
@@ -134,20 +135,25 @@ const buildClassSelectOptions = (
   return options;
 };
 
-function Classifications({ api, activeClassificationUri, setClassifications }: ClassificationSelectsProps) {
+function Classifications({
+  api,
+  activeClassificationUri,
+  classifications,
+  setClassifications,
+}: ClassificationSelectsProps) {
   const activeDictionaries = useAppSelector(selectActiveDictionaries);
   const activeDictionaryLocations = useAppSelector(selectActiveDictionaryUris);
   const activeDictionaryClasses = useAppSelector(selectdictionaryClasses);
   const ifcEntity = useAppSelector(selectIfcEntity);
   const dictionaries = useAppSelector(selectBsddDictionaries);
+  const dictionaryClasses = useAppSelector(selectdictionaryClasses);
   const mainDictionaryUri = useAppSelector(selectMainDictionaryUri);
   const [classificationCount, setClassificationCount] = useState<number>(0);
   const [classificationUris, setClassificationUris] = useState<{
     [id: string]: Promise<ClassContractV1 | null>;
   }>({});
-  const [originalClassifications, setOriginalClassifications] = useState<ClassContractV1[]>([]);
   const [groupedClassifications, setGroupedClassifications] = useState(() =>
-    getGroupedClassifications(originalClassifications),
+    getGroupedClassifications(classifications),
   );
   const [selectedValues, setSelectedValues] = useState<{ [dictionaryUri: string]: string }>({});
 
@@ -195,8 +201,8 @@ function Classifications({ api, activeClassificationUri, setClassifications }: C
   );
 
   useEffect(() => {
-    setGroupedClassifications(getGroupedClassifications(originalClassifications));
-  }, [originalClassifications]);
+    setGroupedClassifications(getGroupedClassifications(classifications));
+  }, [classifications]);
 
   useEffect(() => {
     setClassificationCount(0);
@@ -211,7 +217,7 @@ function Classifications({ api, activeClassificationUri, setClassifications }: C
     }
   }, [activeClassificationUri, getClassification, activeDictionaries]);
 
-  useEffect(() => {
+  const fetchClassifications = useCallback(() => {
     const params: RequestParams = {
       headers: { Accept: 'text/plain' },
     };
@@ -273,28 +279,14 @@ function Classifications({ api, activeClassificationUri, setClassifications }: C
           newSelectedValues[dictionaryUri] = classificationsInGroup[0].uri;
         }
       });
-
       setSelectedValues(newSelectedValues);
       setClassifications(activeClassificationResults);
-      setOriginalClassifications(activeClassificationResults);
     });
-  }, [
-    classificationUris,
-    classificationCount,
-    selectedValues,
-    api,
-    setClassifications,
-    activeDictionaries,
-    activeDictionaryLocations,
-  ]);
+  }, [classificationUris, classificationCount, selectedValues, api, setClassifications, activeDictionaryLocations]);
 
   useEffect(() => {
-    setClassifications(
-      Object.values(selectedValues)
-        .map((selectedUri) => originalClassifications.find((classification) => classification.uri === selectedUri))
-        .filter((classification): classification is ClassContractV1 => classification !== undefined),
-    );
-  }, [selectedValues, originalClassifications, setClassifications]);
+    fetchClassifications();
+  }, [fetchClassifications, selectedValues]);
 
   // Update selected classification values with values incoming from selection
   useEffect(() => {
@@ -310,14 +302,30 @@ function Classifications({ api, activeClassificationUri, setClassifications }: C
     });
   }, [activeDictionaryLocations, ifcEntity]);
 
+  useEffect(() => {
+    const newClassifications = Object.entries(selectedValues)
+      .map(([dictionaryUri, classUri]) => {
+        const dictionary = dictionaryClasses[dictionaryUri];
+        if (!dictionary) return undefined; // Explicitly return undefined
+        const selectedClassification = dictionary.find((classification) => classification.uri === classUri);
+        if (!selectedClassification) return undefined; // Explicitly return undefined
+        return selectedClassification as ClassContractV1;
+      })
+      .filter((classification): classification is ClassContractV1 => classification !== undefined);
+    setClassifications(newClassifications);
+  }, [selectedValues, dictionaryClasses, setClassifications]);
+
   const handleOnChange = useCallback(
     (dictionaryUri: string) => (selectedUri: string | null) => {
       if (!selectedUri) return;
-      const selectedClassification = originalClassifications.find(
-        (classification) => classification.uri === selectedUri,
-      );
+      const dictionary = dictionaryClasses[dictionaryUri];
+      if (!dictionary) {
+        console.error(`Selected dictionary '${dictionaryUri}' not found`);
+        return;
+      }
+      const selectedClassification = dictionary.find((classification) => classification.uri === selectedUri);
       if (!selectedClassification) {
-        console.log(`Selected classification '${selectedUri}' not found`);
+        console.error(`Selected classification '${selectedUri}' not found`);
         return;
       }
 
@@ -326,7 +334,7 @@ function Classifications({ api, activeClassificationUri, setClassifications }: C
         [dictionaryUri]: selectedUri,
       }));
     },
-    [originalClassifications],
+    [dictionaryClasses],
   );
 
   const options = buildClassSelectOptions(groupedClassifications, activeDictionaryClasses);

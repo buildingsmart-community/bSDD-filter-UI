@@ -183,6 +183,7 @@ function BsddSearch() {
                 <Classifications
                   api={api}
                   activeClassificationUri={activeClassificationUri}
+                  classifications={classifications}
                   setClassifications={setClassifications}
                 />
               </Accordion.Panel>
