@@ -1,5 +1,5 @@
 import { ClassContractV1, DictionaryClassesResponseContractV1, DictionaryContractV1 } from '../BsddApi/BsddApiBase';
-import { IfcClassification, IfcEntity } from './ifc';
+import { IfcClassification, IfcClassificationReference } from './ifc';
 
 /**
  * Converts a BSDD dictionary to an IfcClassification object.
@@ -18,6 +18,22 @@ export function convertBsddDictionaryToIfcClassification(
     location: bsddDictionary?.uri,
     // specification: bsddDictionary?.uri,
   };
+}
+
+/**
+ * Converts an IfcClassificationReference to a ClassContractV1 object.
+ * @param ifcClassificationReference - The IfcClassificationReference to convert.
+ * @returns The converted ClassContractV1 object.
+ */
+export function convertIfcClassificationReferenceToBsddClass(
+  ifcClassificationReference: IfcClassificationReference,
+): ClassContractV1 {
+  return {
+    name: ifcClassificationReference.name as string,
+    code: ifcClassificationReference.name as string,
+    uri: ifcClassificationReference.location as string,
+    dictionaryUri: ifcClassificationReference.referencedSource?.location as string,
+  } as ClassContractV1;
 }
 
 export function getIfcClassAndPredefinedType(relatedIfcEntityName: string | null | undefined): {

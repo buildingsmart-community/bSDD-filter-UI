@@ -5,12 +5,14 @@ import { useCallback, useEffect, useState } from 'react';
 import { BsddApi } from '../../common/src/BsddApi/BsddApi';
 import { ClassContractV1, ClassListItemContractV1, RequestParams } from '../../common/src/BsddApi/BsddApiBase';
 import { IfcClassificationReference, IfcEntity } from '../../common/src/ifc/ifc';
+import { convertIfcClassificationReferenceToBsddClass } from '../../common/src/ifc/ifcBsddConverters';
 import { useAppSelector } from './app/hooks';
 import { selectBsddDictionaries, selectdictionaryClasses } from './features/bsdd/bsddSlice';
 import { selectIfcEntity } from './features/ifc/ifcDataSlice';
 import {
   selectActiveDictionaries,
   selectActiveDictionaryUris,
+  selectLanguage,
   selectMainDictionaryUri,
 } from './features/settings/settingsSlice';
 
@@ -19,6 +21,10 @@ interface ClassificationSelectsProps {
   activeClassificationUri: string | undefined;
   classifications: ClassContractV1[];
   setClassifications: (value: ClassContractV1[]) => void;
+}
+
+interface ClassificationMap {
+  [dictionaryUri: string]: ClassContractV1[];
 }
 
 const getGroupedClassifications = (classifications: ClassContractV1[]) => groupBy(classifications, 'dictionaryUri');
@@ -164,10 +170,12 @@ function Classifications({
   const dictionaries = useAppSelector(selectBsddDictionaries);
   const dictionaryClasses = useAppSelector(selectdictionaryClasses);
   const mainDictionaryUri = useAppSelector(selectMainDictionaryUri);
+  const languageCode = useAppSelector(selectLanguage);
   const [classificationCount, setClassificationCount] = useState<number>(0);
   const [classificationUris, setClassificationUris] = useState<{
     [id: string]: Promise<ClassContractV1 | null>;
   }>({});
+  const [savedClassifications, setSavedClassifications] = useState<ClassificationMap>({});
   const [groupedClassifications, setGroupedClassifications] = useState(() =>
     getGroupedClassifications(classifications),
   );
@@ -190,6 +198,7 @@ function Classifications({
           Uri: classificationUri,
           IncludeClassRelations: true,
           IncludeClassProperties: true,
+          languageCode,
         };
         resolve(
           api.api
@@ -213,12 +222,36 @@ function Classifications({
       }));
       return classificationPromise;
     },
-    [api.api],
+    [api.api, languageCode],
   );
 
   useEffect(() => {
+    const updateSavedClassifications = () => {
+      const updatedClassifications = activeDictionaryLocations.reduce((acc: ClassificationMap, dictionaryUri) => {
+        const matchingReferences =
+          ifcEntity.hasAssociations?.filter((reference) => {
+            if (reference.type !== 'IfcClassificationReference') return false;
+            return reference?.referencedSource?.location === dictionaryUri;
+          }) || [];
+
+        const bsddClasses = matchingReferences.map((reference) =>
+          convertIfcClassificationReferenceToBsddClass(reference as IfcClassificationReference),
+        );
+
+        acc[dictionaryUri] = bsddClasses;
+
+        return acc;
+      }, {} as ClassificationMap); // Explicitly type the initial value as ClassificationMap
+
+      setSavedClassifications(updatedClassifications);
+    };
+
+    updateSavedClassifications();
+  }, [activeDictionaryLocations, ifcEntity]);
+
+  useEffect(() => {
     setGroupedClassifications(getGroupedClassifications(classifications));
-  }, [classifications]);
+  }, [classifications, savedClassifications]);
 
   useEffect(() => {
     setClassificationCount(0);
@@ -356,18 +389,20 @@ function Classifications({
   const options = buildClassSelectOptions(groupedClassifications, activeDictionaryClasses);
   return (
     <>
-      {Object.entries(options).map(([dictionaryUri, classOptions]) => (
+      {activeDictionaryLocations.map((dictionaryUri) => (
         <Select
           mb="sm"
           key={dictionaryUri}
           label={dictionaries[dictionaryUri] ? dictionaries[dictionaryUri].name : ''}
-          data={classOptions}
+          data={options[dictionaryUri]}
           value={selectedValues[dictionaryUri]}
-          readOnly={classOptions.length === 1}
-          disabled={dictionaryUri === mainDictionaryUri}
-          variant={classOptions.length === 1 ? 'filled' : 'default'}
+          disabled={
+            dictionaryUri === mainDictionaryUri || getSelectedClassification(dictionaryUri, ifcEntity) !== undefined
+          }
           onChange={(value) => handleOnChange(dictionaryUri)(value)}
-          clearable
+          clearable={
+            dictionaryUri !== mainDictionaryUri || getSelectedClassification(dictionaryUri, ifcEntity) === undefined
+          }
         />
       ))}
     </>
