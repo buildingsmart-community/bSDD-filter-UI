@@ -24,6 +24,22 @@ interface ClassificationSelectsProps {
 const getGroupedClassifications = (classifications: ClassContractV1[]) => groupBy(classifications, 'dictionaryUri');
 
 /**
+ * Converts a bSDD ClassListItemContractV1 object to a ClassContractV1 object.
+ *
+ * @param dictionaryUri - The URI of the dictionary.
+ * @param classListItem - The ClassListItemContractV1 object to convert.
+ * @returns The converted ClassContractV1 object.
+ */
+function ClassListItemToClass(dictionaryUri: string, classListItem: ClassListItemContractV1): ClassContractV1 {
+  return {
+    uri: classListItem.uri as string,
+    name: classListItem.name as string,
+    code: classListItem.code as string,
+    dictionaryUri,
+  } as ClassContractV1;
+}
+
+/**
  * Fetches a classification from the bSDD API.
  *
  * @param api - The instance of the BsddApi.
@@ -306,10 +322,10 @@ function Classifications({
     const newClassifications = Object.entries(selectedValues)
       .map(([dictionaryUri, classUri]) => {
         const dictionary = dictionaryClasses[dictionaryUri];
-        if (!dictionary) return undefined; // Explicitly return undefined
+        if (!dictionary) return undefined;
         const selectedClassification = dictionary.find((classification) => classification.uri === classUri);
-        if (!selectedClassification) return undefined; // Explicitly return undefined
-        return selectedClassification as ClassContractV1;
+        if (!selectedClassification) return undefined;
+        return ClassListItemToClass(dictionaryUri, selectedClassification);
       })
       .filter((classification): classification is ClassContractV1 => classification !== undefined);
     setClassifications(newClassifications);
