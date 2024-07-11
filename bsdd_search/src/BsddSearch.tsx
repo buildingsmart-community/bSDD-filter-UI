@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { BsddApi } from '../../common/src/BsddApi/BsddApi';
-import { ClassContractV1 } from '../../common/src/BsddApi/BsddApiBase';
+import { ClassContractV1, RequestParams } from '../../common/src/BsddApi/BsddApiBase';
 import { bsddEnvironments } from '../../common/src/BsddApi/BsddApiEnvironments';
 import { defaultEnvironment, isProduction } from '../../common/src/env';
 import { BsddBridgeData, BsddSettings } from '../../common/src/ifc/bsddBridgeData';
@@ -12,9 +12,17 @@ import { mockData } from '../../common/src/ifc/mockData';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import Apply from './Apply';
 import Classifications from './Classifications';
-import { fetchAndStoreDictionaryClasses, fetchDictionaries, updateDictionaries } from './features/bsdd/bsddSlice';
-import { setIfcData } from './features/ifc/ifcDataSlice';
 import {
+  fetchAndStoreDictionaryClasses,
+  fetchDictionaries,
+  selectMainDictionaryClassification,
+  setMainDictionaryClassification,
+  updateDictionaries,
+} from './features/bsdd/bsddSlice';
+import { setIfcData } from './features/ifc/ifcDataSlice';
+import { setIfcEntity } from './features/ifc/ifcEntitySlice';
+import {
+  selectActiveDictionariesMap,
   selectActiveDictionaryUris,
   selectBsddApiEnvironmentUri,
   selectIncludeTestDictionaries,
@@ -37,16 +45,18 @@ export interface BsddConfig {
   ifcEntity?: IfcEntity;
 }
 
+const minHeight = 60.7969;
+let startY = 0;
+let startHeight = 0;
+
 function BsddSearch() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const [activeClassificationUri, setActiveClassificationUri] = useState<string>();
   const [defaultSearch, setDefaultSearch] = useState<Option | undefined>();
-  const [ifcEntity, setIfcEntity] = useState<IfcEntity | undefined>();
   const [recursiveMode, setRecursiveMode] = useState<boolean>(false);
-  const [classifications, setClassifications] = useState<ClassContractV1[]>([]);
-  const [propertySets, setPropertySets] = useState<{ [id: string]: IfcPropertySet }>({});
+  const [propertySets, setPropertySets] = useState<Record<string, IfcPropertySet>>({});
   const [api, setApi] = useState<BsddApi<unknown>>(new BsddApi(bsddEnvironments[defaultEnvironment]));
   const mainDictionary = useAppSelector(selectMainDictionary);
   const languageCode = useAppSelector(selectLanguage);
@@ -56,6 +66,13 @@ function BsddSearch() {
   const bsddApiEnvironmentUri = useAppSelector(selectBsddApiEnvironmentUri);
   const includeTestDictionaries = useAppSelector(selectIncludeTestDictionaries);
   const activeDictionaryLocations = useAppSelector(selectActiveDictionaryUris);
+  const activeDictionariesMap = useAppSelector(selectActiveDictionariesMap);
+  const ifcEntity = useAppSelector((state) => state.ifcEntity);
+
+  const [height, setHeight] = useState(minHeight); // Initial height
+  const [panelHeight, setPanelHeight] = useState('auto'); // Initial height of the Accordion Panel
+
+  const mainDictionaryClassification = useAppSelector(selectMainDictionaryClassification);
 
   const callback = useCallback((ifcProduct: IfcEntity) => {
     const ifcEntityJson = JSON.stringify(ifcProduct);
@@ -98,7 +115,7 @@ function BsddSearch() {
 
     const newIfcEntity = ifcData[0];
 
-    setIfcEntity(newIfcEntity);
+    dispatch(setIfcEntity(newIfcEntity));
   }, [dispatch]);
 
   useEffect(() => {
@@ -112,7 +129,7 @@ function BsddSearch() {
         dispatchSettingsWhenLoaded(settings);
         if (!ifcData || ifcData.length === 0) return;
 
-        setIfcEntity(ifcData[0]);
+        dispatch(setIfcEntity(ifcData[0]));
       }
     };
 
@@ -163,8 +180,77 @@ function BsddSearch() {
     languageCode,
   ]);
 
+  /**
+   * Fetches a classification from the API and updates the state.
+   *
+   * @param {string} classificationUri - The URI of the classification to fetch.
+   * @returns {Promise<ClassContractV1 | null>} - A promise that resolves to the fetched classification or null if the fetch fails.
+   */
+  const fetchMainDictionaryClassification = useCallback(
+    (classificationUri: string) => {
+      const params: RequestParams = {
+        headers: { Accept: 'text/plain' },
+      };
+
+      const classificationPromise: Promise<ClassContractV1 | null> = new Promise(function (resolve) {
+        const queryParameters = {
+          Uri: classificationUri,
+          IncludeClassRelations: true,
+          IncludeClassProperties: true,
+          languageCode,
+        };
+        resolve(
+          api.api
+            .classV1List(queryParameters, params)
+            .then((response) => {
+              if (response.status !== 200) {
+                console.error(`API request failed with status ${response.status}`);
+                return null;
+              }
+              return response.data;
+            })
+            .catch((err) => {
+              console.error('Error fetching classification:', err);
+              return null;
+            }),
+        );
+      });
+      classificationPromise.then((classification) => {
+        dispatch(setMainDictionaryClassification(classification));
+      });
+    },
+    [api.api, dispatch, languageCode],
+  );
+
+  useEffect(() => {
+    if (activeClassificationUri) {
+      fetchMainDictionaryClassification(activeClassificationUri);
+    }
+  }, [activeClassificationUri, fetchMainDictionaryClassification]);
+
+  useEffect(() => {
+    setPanelHeight(`${height * activeDictionaryLocations.length + 48}px`);
+  }, [activeDictionaryLocations.length, height]);
+
+  const handleMouseMove = (e: { clientY: number }) => {
+    const newHeight = startHeight + (e.clientY - startY) / activeDictionaryLocations.length;
+    setHeight(newHeight > minHeight ? newHeight : minHeight);
+  };
+
+  const handleMouseUp = () => {
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleMouseDown = (e: { clientY: number }) => {
+    startY = e.clientY;
+    startHeight = height;
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
+
   return (
-    <Container>
+    <Container style={{ height: '100vh' }}>
       <TextInput type="hidden" name="ifcType" id="ifcType" value="" />
       <TextInput type="hidden" name="name" id="name" value="" />
       <TextInput type="hidden" name="material" id="material" value="" />
@@ -179,12 +265,12 @@ function BsddSearch() {
               <Accordion.Control>
                 <Title order={5}>{t('classificationsLabel')}</Title>
               </Accordion.Control>
-              <Accordion.Panel>
+              <Accordion.Panel style={{ height: panelHeight }}>
                 <Classifications
-                  api={api}
-                  activeClassificationUri={activeClassificationUri}
-                  classifications={classifications}
-                  setClassifications={setClassifications}
+                  height={height}
+                  mainDictionaryClassification={mainDictionaryClassification}
+                  activeDictionariesMap={activeDictionariesMap}
+                  handleMouseDown={handleMouseDown}
                 />
               </Accordion.Panel>
             </Accordion.Item>
@@ -194,7 +280,7 @@ function BsddSearch() {
               </Accordion.Control>
               <Accordion.Panel>
                 <PropertySets
-                  classifications={classifications}
+                  mainDictionaryClassification={mainDictionaryClassification}
                   propertySets={propertySets}
                   setPropertySets={setPropertySets}
                   recursiveMode={recursiveMode}
@@ -203,12 +289,7 @@ function BsddSearch() {
             </Accordion.Item>
           </Accordion>
           <Group my="sm" justify="center">
-            <Apply
-              callback={callback}
-              classifications={classifications}
-              propertySetMap={propertySets}
-              ifcEntity={ifcEntity}
-            />
+            <Apply callback={callback} ifcEntity={ifcEntity} />
             <Button fullWidth variant="light" color="gray" onClick={cancel}>
               {t('cancel')}
             </Button>

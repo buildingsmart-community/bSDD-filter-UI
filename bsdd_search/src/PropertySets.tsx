@@ -1,6 +1,5 @@
 import { Accordion, Stack } from '@mantine/core';
-import { use } from 'i18next';
-import { Children, useEffect } from 'react';
+import { Children, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ClassContractV1, ClassPropertyContractV1 } from '../../common/src/BsddApi/BsddApiBase';
@@ -25,8 +24,8 @@ const valueTypeMapping: { [key: string]: string } = {
   Time: 'IfcDateTime',
 };
 
-interface Props {
-  classifications: ClassContractV1[];
+interface PropertySetsProps {
+  mainDictionaryClassification: ClassContractV1 | null;
   propertySets: { [id: string]: IfcPropertySet };
   setPropertySets: (value: { [id: string]: IfcPropertySet }) => void;
   recursiveMode: boolean;
@@ -176,7 +175,7 @@ function createIfcPropertyEnumeratedValue(
     name,
     enumerationReference: {
       type: 'IfcPropertyEnumeration',
-      name,
+      name, // TODO get the right property enum name
       enumerationValues: allowedEnumerationValues,
     },
   };
@@ -250,25 +249,31 @@ function GetIfcProperty(
   const { propertyCode } = classificationProperty;
   const name = propertyCode || 'unknown';
 
-  if (classificationProperty.allowedValues) {
-    return createIfcPropertyEnumeratedValue(classificationProperty, name, propertySetName, ifcEntity);
-  }
+  const property = classificationProperty.allowedValues
+    ? createIfcPropertyEnumeratedValue(classificationProperty, name, propertySetName, ifcEntity)
+    : createIfcPropertySingleValue(classificationProperty, name, propertySetName, ifcEntity);
 
-  return createIfcPropertySingleValue(classificationProperty, name, propertySetName, ifcEntity);
+  property.specification = classificationProperty.propertyUri || undefined;
+
+  return property;
 }
 
-function PropertySets(props: Props) {
+function PropertySets({
+  mainDictionaryClassification,
+  propertySets,
+  setPropertySets,
+  recursiveMode,
+}: PropertySetsProps) {
   const { t } = useTranslation();
-  const { classifications } = props;
-  const { propertySets } = props;
-  const { setPropertySets } = props;
-  const { recursiveMode } = props;
 
   const ifcEntity = useAppSelector(selectIfcEntity);
+  const [propertyNaturalLanguageNamesMap, setPropertyNaturalLanguageNamesMap] = useState<Record<string, string>>({});
 
   useEffect(() => {
+    if (!mainDictionaryClassification) return;
     const newPropertySets: Record<string, IfcPropertySet> = {};
-    const propertyClassifications = recursiveMode ? classifications : classifications.slice(0, 1);
+    const newPropertyNaturalLanguageNames: Record<string, string> = {};
+    const propertyClassifications = [mainDictionaryClassification]; // recursiveMode ? classifications : classifications.slice(0, 1);
 
     propertyClassifications.forEach((classification) => {
       classification.classProperties?.forEach((classProperty: ClassPropertyContractV1) => {
@@ -284,27 +289,31 @@ function PropertySets(props: Props) {
         }
 
         newPropertySets[propertySetName].hasProperties.push(GetIfcProperty(classProperty, propertySetName, ifcEntity));
+        if (classProperty.propertyCode) {
+          newPropertyNaturalLanguageNames[classProperty.propertyCode] = classProperty.name;
+        }
       });
     });
 
     setPropertySets(newPropertySets);
-  }, [classifications, setPropertySets, recursiveMode, ifcEntity]);
+    setPropertyNaturalLanguageNamesMap(newPropertyNaturalLanguageNames);
+  }, [mainDictionaryClassification, setPropertySets, recursiveMode, ifcEntity]);
 
   return (
     <div>
       {Children.toArray(
         Object.values(propertySets).map((propertySet, propertySetIndex) => (
           <Accordion>
-            <Accordion.Item key={propertySet.name} value={propertySet.name || propertySetIndex.toString()}>
+            <Accordion.Item key={propertySet.name} value={propertySet.name || 'Unknown'}>
               <Accordion.Control>{propertySet.name}</Accordion.Control>
               <Accordion.Panel>
                 <Stack>
                   {Children.toArray(
-                    propertySet.hasProperties.map((property, propertyIndex) => (
+                    propertySet.hasProperties.map((property) => (
                       <Property
                         propertySet={propertySet}
                         property={property}
-                        propertyIndex={propertyIndex}
+                        property_natural_language_name={propertyNaturalLanguageNamesMap[property.name] || ''}
                         propertySets={propertySets}
                         setPropertySets={setPropertySets}
                       />

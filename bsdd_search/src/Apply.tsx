@@ -1,5 +1,6 @@
 import { Button } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
 import { ClassContractV1, DictionaryContractV1 } from '../../common/src/BsddApi/BsddApiBase';
 import { IfcClassification, IfcClassificationReference, IfcEntity, IfcPropertySet } from '../../common/src/ifc/ifc';
@@ -9,19 +10,18 @@ import {
 } from '../../common/src/ifc/ifcBsddConverters';
 import { useAppSelector } from './app/hooks';
 import { selectBsddDictionaries } from './features/bsdd/bsddSlice';
-
-type PropertySetMap = { [id: string]: IfcPropertySet };
+import { selectHasAssociations, selectIsDefinedBy } from './features/ifc/ifcEntitySlice';
 
 interface ApplyProps {
   callback: (value: any) => void;
-  classifications: ClassContractV1[];
-  propertySetMap: PropertySetMap;
   ifcEntity: IfcEntity | undefined;
 }
 
-function Apply({ callback, classifications, propertySetMap, ifcEntity }: ApplyProps) {
+function Apply({ callback, ifcEntity }: ApplyProps) {
   const { t } = useTranslation();
   const dictionaries = useAppSelector(selectBsddDictionaries);
+  const isDefinedBy = useSelector(selectIsDefinedBy);
+  const hasAssociations = useSelector(selectHasAssociations);
 
   function getIfcClassification(domainNamespaceUri: string): IfcClassification | null {
     if (domainNamespaceUri in dictionaries) {
@@ -47,37 +47,33 @@ function Apply({ callback, classifications, propertySetMap, ifcEntity }: ApplyPr
     return ifc;
   }
 
-  function createIfcEntity(
-    ifcEntityInput: IfcEntity | undefined,
-    classificationsInput: ClassContractV1[],
-    propertySetsInput: PropertySetMap,
-  ): IfcEntity {
+  function createIfcEntity(ifcEntityInput: IfcEntity | undefined): IfcEntity {
     const baseIfc: IfcEntity = ifcEntityInput
-      ? { ...JSON.parse(JSON.stringify(ifcEntityInput)), hasAssociations: [] }
+      ? { ...JSON.parse(JSON.stringify(ifcEntityInput)) }
       : { hasAssociations: [], isDefinedBy: [] };
 
-    const updatedIfc = classificationsInput.reduce((ifc, classification) => {
-      if (classification?.dictionaryUri?.includes('https://identifier.buildingsmart.org/uri/buildingsmart/ifc/')) {
-        const { type, predefinedType } = getIfcClassAndPredefinedType(classification.code);
-        return { ...ifc, type, predefinedType };
-      }
-      const ifcClassificationReference = getIfcClassificationReference(classification);
-      if (ifcClassificationReference) {
-        return { ...ifc, hasAssociations: [...(ifc.hasAssociations || []), ifcClassificationReference] };
-      }
+    baseIfc.isDefinedBy = isDefinedBy?.filter((propertySet: IfcPropertySet) => propertySet.name !== 'Attributes');
 
-      return ifc;
-    }, baseIfc);
+    baseIfc.hasAssociations = [];
 
-    return {
-      ...updatedIfc,
-      isDefinedBy: Object.values(propertySetsInput).length ? Object.values(propertySetsInput) : [],
-    };
+    hasAssociations?.forEach((association) => {
+      if (
+        association.type === 'IfcClassificationReference' &&
+        association?.referencedSource?.location?.includes('https://identifier.buildingsmart.org/uri/buildingsmart/ifc/')
+      ) {
+        const { type, predefinedType } = getIfcClassAndPredefinedType(association.identification);
+        baseIfc.type = type;
+        baseIfc.predefinedType = predefinedType;
+      } else {
+        baseIfc.hasAssociations?.push(association);
+      }
+    });
+
+    return baseIfc;
   }
 
   const handleOnChange = () => {
-    const newIfcEntity = createIfcEntity(ifcEntity, classifications, propertySetMap);
-    console.log(newIfcEntity);
+    const newIfcEntity = createIfcEntity(ifcEntity);
     callback(newIfcEntity);
   };
 

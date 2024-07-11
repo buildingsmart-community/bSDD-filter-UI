@@ -1,11 +1,12 @@
-import { Autocomplete } from '@mantine/core';
+import { Autocomplete, CloseButton } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { BsddApi } from '../../common/src/BsddApi/BsddApi';
 import { RequestParams } from '../../common/src/BsddApi/BsddApiBase';
-import { useAppSelector } from './app/hooks';
+import { useAppDispatch, useAppSelector } from './app/hooks';
+import { fetchRelatedClasses } from './features/bsdd/bsddSlice';
 import { selectMainDictionary } from './features/settings/settingsSlice';
 
 interface Option {
@@ -20,11 +21,12 @@ interface Props {
 }
 
 function Search({ api, defaultValue: defaultSelection, setActiveClassificationUri }: Props) {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const [searchOptions, setSearchOptions] = useState<Option[]>([]);
   const mainDictionary = useAppSelector(selectMainDictionary);
 
-  const inputRef = useRef(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Use a ref to store the initial value of defaultSelection
   const initialDefaultSelection = useRef(defaultSelection);
@@ -44,7 +46,7 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
       const selectedOption = searchOptions.find((option) => option.value === value);
       if (selectedOption) {
         setSelected(selectedOption);
-        setUserUpdated(true); // The user has manually updated the selection
+        setUserUpdated(true);
       }
     },
     [searchOptions],
@@ -73,6 +75,7 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
 
   useEffect(() => {
     if (mainDictionary) {
+      dispatch(fetchRelatedClasses([]));
       const params: RequestParams = {
         headers: { Accept: 'text/plain' },
       };
@@ -113,11 +116,11 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
     } else {
       setSearchOptions([]);
     }
-  }, [api.api, debouncedSearchValue, mainDictionary]);
+  }, [api.api, debouncedSearchValue, dispatch, mainDictionary]);
 
   useEffect(() => {
     if (inputRef.current) {
-      (inputRef.current as any).focus();
+      inputRef.current.focus();
     }
   }, []);
 
@@ -126,6 +129,13 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
       setActiveClassificationUri(selected.value);
     }
   }, [selected, setActiveClassificationUri]);
+
+  const handleClear = () => {
+    handleOnChange('');
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
 
   return (
     <Autocomplete
@@ -138,6 +148,18 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
       onKeyDown={handleKeyDown}
       ref={inputRef}
       style={{ width: '100%' }}
+      rightSection={
+        <CloseButton
+          size="sm"
+          onMouseDown={(event) => {
+            event.preventDefault();
+          }}
+          onClick={() => {
+            handleClear();
+          }}
+          aria-label="Clear value"
+        />
+      }
     />
   );
 }

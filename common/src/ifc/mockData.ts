@@ -7,12 +7,12 @@ export const mockData: BsddBridgeData = {
     mainDictionary: {
       ifcClassification: {
         type: 'IfcClassification',
-        source: 'digibase',
+        source: 'VolkerWessels BVGO',
         edition: '0.1',
         editionDate: '0001-01-01T00:00:00',
-        name: 'VolkerWessels Bouw & vastgoed',
+        name: 'Basis bouwproducten O&E',
         description: '',
-        location: 'https://identifier.buildingsmart.org/uri/digibase/volkerwesselsbv/0.1',
+        location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
       },
       parameterMapping: 'Description',
     },
@@ -51,7 +51,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/digibase/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'Project nulpunt',

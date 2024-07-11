@@ -109,6 +109,13 @@ export const selectActiveDictionaries = createSelector(
   },
 );
 
+export const selectActiveDictionariesMap = createSelector(selectActiveDictionaries, (activeDictionaries) => {
+  const dictionaryMap = new Map(
+    activeDictionaries.map((dictionary) => [dictionary.ifcClassification.location, dictionary.ifcClassification]),
+  );
+  return dictionaryMap;
+});
+
 export const selectBsddApiEnvironment = (state: RootState) => state.settings.bsddApiEnvironment;
 export const selectMainDictionary = (state: RootState) => state.settings.mainDictionary;
 export const selectFilterDictionaries = (state: RootState) => state.settings.filterDictionaries;

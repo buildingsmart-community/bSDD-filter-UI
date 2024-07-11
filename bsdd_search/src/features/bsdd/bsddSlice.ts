@@ -1,4 +1,11 @@
-import { createAsyncThunk, createSlice, PayloadAction, ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+  PayloadAction,
+  ThunkDispatch,
+  UnknownAction,
+} from '@reduxjs/toolkit';
 
 import { BsddApi } from '../../../../common/src/BsddApi/BsddApi';
 import {
@@ -6,18 +13,19 @@ import {
   ClassListItemContractV1,
   DictionaryContractV1,
 } from '../../../../common/src/BsddApi/BsddApiBase';
-import { useAppSelector } from '../../app/hooks';
 import type { RootState } from '../../app/store';
-import { selectBsddApiEnvironmentUri, selectLanguage } from '../settings/settingsSlice';
+import { selectBsddApiEnvironmentUri } from '../settings/settingsSlice';
 
 const CLASS_ITEM_PAGE_SIZE = 500;
 const DICTIONARIES_PAGE_SIZE = 500;
 
 interface BsddState {
+  mainDictionaryClassification: ClassContractV1 | null;
   classes: { [key: string]: ClassContractV1 };
   dictionaries: { [key: string]: DictionaryContractV1 };
   dictionaryClasses: { [key: string]: ClassListItemContractV1[] };
   loaded: boolean;
+  groupedClassRelations: { [key: string]: ClassContractV1[] };
 }
 
 let bsddApi: BsddApi<any> | null = null;
@@ -25,10 +33,12 @@ let bsddApi: BsddApi<any> | null = null;
 let fetchPromisesCache: Partial<Record<string, Promise<ClassListItemContractV1[]>>> = {};
 
 const initialState: BsddState = {
+  mainDictionaryClassification: null,
   classes: {},
   dictionaries: {},
   dictionaryClasses: {},
   loaded: false,
+  groupedClassRelations: {},
 };
 
 /**
@@ -262,18 +272,24 @@ const bsddSlice = createSlice({
   initialState,
   reducers: {
     resetState: () => initialState,
-    addClass: (state, action: PayloadAction<{ uri: string; data: ClassContractV1 }>) => {
-      state.classes[action.payload.uri] = action.payload.data;
+    setMainDictionaryClassification: (state, action: PayloadAction<ClassContractV1 | null>) => {
+      state.mainDictionaryClassification = action.payload;
     },
+    setClasses: (state, action: PayloadAction<{ [key: string]: ClassContractV1 }>) => {
+      console.log('setClasses', action.payload);
+      state.classes = action.payload;
+    },
+    // addClass: (state, action: PayloadAction<{ uri: string; data: ClassContractV1 }>) => {
+    //   console.log('addClass', action.payload);
+    //   state.classes[action.payload.uri] = action.payload.data;
+    // },
     addDictionaryClasses: (state, action: PayloadAction<{ uri: string; data: ClassListItemContractV1[] }>) => {
-      // Check if there are already classes for the URI and append the new data if so
       if (state.dictionaryClasses[action.payload.uri]) {
         state.dictionaryClasses[action.payload.uri] = [
           ...state.dictionaryClasses[action.payload.uri],
           ...action.payload.data,
         ];
       } else {
-        // If no classes for the URI, set it to the new data
         state.dictionaryClasses[action.payload.uri] = action.payload.data;
       }
     },
@@ -309,51 +325,72 @@ const bsddSlice = createSlice({
   },
 });
 
-/**
- * Fetches a class from the bsddApi.
- *
- * @param uri - The URI of the class to fetch.
- * @param getState - A function to get the current state.
- * @param dispatch - A function to dispatch actions.
- * @returns A promise that resolves to the fetched class data.
- * @throws Error if the bsddApi is not initialized or if there is an HTTP error.
- */
-export const fetchClass = createAsyncThunk('bsdd/fetchClass', async (uri: string, { getState, dispatch }) => {
-  const state = getState() as RootState;
-  const languageCode = useAppSelector(selectLanguage);
-  if (state.bsdd.classes[uri]) {
-    return state.bsdd.classes[uri];
-  }
+export const fetchRelatedClasses = createAsyncThunk(
+  'bsdd/fetchRelatedClasses',
+  async (relatedClassUris: string[], { getState, dispatch }) => {
+    const state = getState() as RootState;
 
-  if (!bsddApi) {
-    throw new Error('BsddApi is not initialized');
-  }
+    if (!bsddApi) {
+      throw new Error('BsddApi is not initialized');
+    }
 
-  const response = await bsddApi.api.classV1List({
-    Uri: uri,
-    IncludeClassProperties: true,
-    IncludeChildClassReferences: true,
-    IncludeClassRelations: true,
-    // IncludeReverseRelations: true,
-    languageCode: languageCode || undefined,
-  });
+    const classesAccumulator: { [key: string]: ClassContractV1 } = {};
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+    const fetchClass = async (relatedClassUri: string) => {
+      if (bsddApi && bsddApi.api) {
+        const response = await bsddApi.api.classV1List({
+          Uri: relatedClassUri,
+          IncludeClassProperties: true,
+          IncludeChildClassReferences: true,
+          IncludeClassRelations: true,
+          languageCode: state.settings.language || undefined,
+        });
 
-  const { data } = response;
-  dispatch({ type: 'bsdd/addClass', payload: { uri, data } });
-  return data;
-});
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
+        const { data } = response;
+        classesAccumulator[relatedClassUri] = data;
+      } else {
+        throw new Error('bsddApi or bsddApi.api is not initialized');
+      }
+    };
+
+    const classFetchPromises = relatedClassUris.map(fetchClass);
+    await Promise.all(classFetchPromises);
+
+    dispatch({ type: 'bsdd/setClasses', payload: classesAccumulator });
+  },
+);
+
+export const selectMainDictionaryClassification = (state: RootState) => state.bsdd.mainDictionaryClassification;
 export const selectDictionary = (state: RootState, uri: string) => state.bsdd.dictionaries[uri];
 export const selectDictionaryClasses = (state: RootState, location: string) => state.bsdd.dictionaryClasses[location];
 export const selectBsddDictionaries = (state: RootState) => state.bsdd.dictionaries;
 export const selectBsddDataLoaded = (state: RootState) => state.bsdd.loaded;
 export const selectdictionaryClasses = (state: RootState) => state.bsdd.dictionaryClasses;
+export const selectGroupedClassRelations = (state: RootState) => state.bsdd.groupedClassRelations;
+export const selectClasses = (state: RootState) => state.bsdd.classes;
 
-export const { resetState } = bsddSlice.actions;
+export const selectGroupedClasses = createSelector([selectClasses], (classes) => {
+  type GroupedClasses = { [key: string]: ClassContractV1[] };
+  const classesArray = Object.values(classes);
+  const grouped = classesArray.reduce<GroupedClasses>((acc, currentClass) => {
+    const { dictionaryUri } = currentClass;
+    if (dictionaryUri) {
+      if (!acc[dictionaryUri]) {
+        acc[dictionaryUri] = [];
+      }
+      acc[dictionaryUri].push(currentClass);
+    }
+    return acc;
+  }, {});
+
+  return grouped;
+});
+
+export const { resetState, setMainDictionaryClassification, addDictionaryClasses, addDictionary } = bsddSlice.actions;
 
 /**
  * Updates the base URL of the BsddApi and resets the state.

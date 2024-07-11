@@ -9,6 +9,13 @@ let bsddApi: BsddApi<unknown> = new BsddApi(bsddApiBaseUri);
 let classCache: { [key: string]: ClassContractV1 } = {};
 let dictionaryCache: { [key: string]: DictionaryContractV1 } = {};
 
+export interface DictionaryClassificationsMap {
+  [dictionaryUri: string]: ClassContractV1[];
+}
+export interface DictionaryClassificationMap {
+  [dictionaryUri: string]: ClassContractV1;
+}
+
 // Function to get data from API with caching
 export async function getBsddClass(
   bsddEnvironmentUri: string,
