@@ -45,6 +45,8 @@ export interface BsddConfig {
   ifcEntity?: IfcEntity;
 }
 
+export type PropertySetMap = Record<string, IfcPropertySet>;
+
 const minHeight = 60.7969;
 let startY = 0;
 let startHeight = 0;
@@ -56,7 +58,7 @@ function BsddSearch() {
   const [activeClassificationUri, setActiveClassificationUri] = useState<string>();
   const [defaultSearch, setDefaultSearch] = useState<Option | undefined>();
   const [recursiveMode, setRecursiveMode] = useState<boolean>(false);
-  const [propertySets, setPropertySets] = useState<Record<string, IfcPropertySet>>({});
+  const [propertySets, setPropertySets] = useState<PropertySetMap>({});
   const [api, setApi] = useState<BsddApi<unknown>>(new BsddApi(bsddEnvironments[defaultEnvironment]));
   const mainDictionary = useAppSelector(selectMainDictionary);
   const languageCode = useAppSelector(selectLanguage);

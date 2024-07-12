@@ -74,6 +74,7 @@ function Apply({ callback, ifcEntity }: ApplyProps) {
 
   const handleOnChange = () => {
     const newIfcEntity = createIfcEntity(ifcEntity);
+    console.log(newIfcEntity);
     callback(newIfcEntity);
   };
 

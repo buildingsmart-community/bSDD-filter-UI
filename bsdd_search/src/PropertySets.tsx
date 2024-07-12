@@ -1,4 +1,5 @@
 import { Accordion, Stack } from '@mantine/core';
+import { use } from 'i18next';
 import { Children, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -11,8 +12,10 @@ import {
   IfcPropertySingleValue,
   IfcValue,
 } from '../../common/src/ifc/ifc';
-import { useAppSelector } from './app/hooks';
+import { useAppDispatch, useAppSelector } from './app/hooks';
+import type { PropertySetMap } from './BsddSearch';
 import { selectIfcEntity } from './features/ifc/ifcDataSlice';
+import { setIsDefinedBy } from './features/ifc/ifcEntitySlice';
 import Property from './Property';
 
 const valueTypeMapping: { [key: string]: string } = {
@@ -26,8 +29,8 @@ const valueTypeMapping: { [key: string]: string } = {
 
 interface PropertySetsProps {
   mainDictionaryClassification: ClassContractV1 | null;
-  propertySets: { [id: string]: IfcPropertySet };
-  setPropertySets: (value: { [id: string]: IfcPropertySet }) => void;
+  propertySets: PropertySetMap;
+  setPropertySets: (value: PropertySetMap) => void;
   recursiveMode: boolean;
 }
 
@@ -264,6 +267,7 @@ function PropertySets({
   setPropertySets,
   recursiveMode,
 }: PropertySetsProps) {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
   const ifcEntity = useAppSelector(selectIfcEntity);
@@ -271,7 +275,12 @@ function PropertySets({
 
   useEffect(() => {
     if (!mainDictionaryClassification) return;
-    const newPropertySets: Record<string, IfcPropertySet> = {};
+    dispatch(setIsDefinedBy(Object.values(propertySets)));
+  }, [propertySets, dispatch, mainDictionaryClassification]);
+
+  useEffect(() => {
+    if (!mainDictionaryClassification) return;
+    const newPropertySets: PropertySetMap = {};
     const newPropertyNaturalLanguageNames: Record<string, string> = {};
     const propertyClassifications = [mainDictionaryClassification]; // recursiveMode ? classifications : classifications.slice(0, 1);
 
@@ -295,8 +304,13 @@ function PropertySets({
       });
     });
 
-    setPropertySets(newPropertySets);
+    if (JSON.stringify(propertySets) !== JSON.stringify(newPropertySets)) {
+      setPropertySets(newPropertySets);
+    }
+
     setPropertyNaturalLanguageNamesMap(newPropertyNaturalLanguageNames);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mainDictionaryClassification, setPropertySets, recursiveMode, ifcEntity]);
 
   return (
