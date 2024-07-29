@@ -181,6 +181,7 @@ function createIfcPropertyEnumeratedValue(
       name, // TODO get the right property enum name
       enumerationValues: allowedEnumerationValues,
     },
+    enumerationValues: allowedEnumerationValues,
   };
 
   if (classificationProperty.propertyUri) {

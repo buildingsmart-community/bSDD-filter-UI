@@ -102,13 +102,14 @@ function Property({
         break;
       }
       case 'IfcPropertyEnumeratedValue': {
-        const val = property.enumerationValues?.[0]?.value;
+        const value = property.enumerationValues?.[0]?.value;
         const enumerationValues = property.enumerationReference?.enumerationValues || [];
         setInput(
           <Select
             label={property_natural_language_name}
             description={property.name.length > 0 ? `(${property.name})` : ''}
-            value={val}
+            value={value}
+            disabled={property.enumerationValues?.length === 1}
             onChange={(e) => {
               const foundValue = enumerationValues.find((element) => element.value === e);
               const selectedValues: IfcValue[] = foundValue ? [foundValue] : [];
