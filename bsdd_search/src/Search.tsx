@@ -71,7 +71,7 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
       // setSearchOptions([defaultSelection]);
       setSelected(defaultSelection);
     }
-  }, [defaultSelection, selected, userUpdated]);
+  }, [defaultSelection, userUpdated]);
 
   useEffect(() => {
     if (mainDictionary) {

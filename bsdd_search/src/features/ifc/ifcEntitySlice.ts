@@ -1,9 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Association, IfcEntity, IfcPropertySet } from '../../../../common/src/ifc/ifc';
+import { Association, IfcClassificationReference, IfcEntity, IfcPropertySet } from '../../../../common/src/ifc/ifc';
 import type { RootState } from '../../app/store';
 
 interface EntitiesState {
+  type?: string;
   name?: string;
   description?: string;
   objectType?: string;
@@ -14,6 +15,7 @@ interface EntitiesState {
 }
 
 const initialState: EntitiesState = {
+  type: undefined,
   name: undefined,
   description: undefined,
   objectType: undefined,
@@ -28,6 +30,7 @@ const ifcEntitySlice = createSlice({
   initialState,
   reducers: {
     setIfcEntity: (state, action: PayloadAction<IfcEntity>) => {
+      state.type = action.payload.type;
       state.name = action.payload.name;
       state.description = action.payload.description;
       state.objectType = action.payload.objectType;
@@ -35,6 +38,9 @@ const ifcEntitySlice = createSlice({
       state.predefinedType = action.payload.predefinedType;
       state.isDefinedBy = action.payload.isDefinedBy;
       state.hasAssociations = action.payload.hasAssociations;
+    },
+    setType: (state, action: PayloadAction<string>) => {
+      state.type = action.payload;
     },
     setName: (state, action: PayloadAction<string>) => {
       state.name = action.payload;
@@ -70,7 +76,12 @@ const ifcEntitySlice = createSlice({
       }
     },
     setHasAssociations: (state, action: PayloadAction<Association[]>) => {
-      state.hasAssociations = action.payload;
+      const currentAssociationsJSON = JSON.stringify(state.hasAssociations);
+      const newAssociationsJSON = JSON.stringify(action.payload);
+
+      if (currentAssociationsJSON !== newAssociationsJSON) {
+        state.hasAssociations = action.payload;
+      }
     },
   },
 });
@@ -82,6 +93,30 @@ export const selectTag = (state: RootState) => state.ifcEntity.tag;
 export const selectPredefinedType = (state: RootState) => state.ifcEntity.predefinedType;
 export const selectIsDefinedBy = (state: RootState) => state.ifcEntity.isDefinedBy;
 export const selectHasAssociations = (state: RootState) => state.ifcEntity.hasAssociations;
+
+export const selectHasAssociationsMap = createSelector(
+  selectHasAssociations,
+  (hasAssociations): { [key: string]: IfcClassificationReference[] } => {
+    type GroupedReferences = { [key: string]: IfcClassificationReference[] };
+
+    const classificationReferences = hasAssociations?.filter(
+      (association) => association && association.type === 'IfcClassificationReference',
+    ) as IfcClassificationReference[];
+
+    const groupedReferences = classificationReferences.reduce<GroupedReferences>((acc, classificationReference) => {
+      const location = classificationReference?.referencedSource?.location;
+      if (location) {
+        if (!acc[location]) {
+          acc[location] = [];
+        }
+        acc[location].push(classificationReference);
+      }
+      return acc;
+    }, {});
+
+    return groupedReferences;
+  },
+);
 
 export const { setIfcEntity, setName, setDescription, setTag, setPredefinedType, setIsDefinedBy, setHasAssociations } =
   ifcEntitySlice.actions;

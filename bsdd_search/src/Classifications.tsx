@@ -5,20 +5,20 @@ import { useSelector } from 'react-redux';
 
 import { ClassContractV1 } from '../../common/src/BsddApi/BsddApiBase';
 import { IfcClassification, IfcClassificationReference } from '../../common/src/ifc/ifc';
-import { useAppDispatch } from './app/hooks';
+import { useAppDispatch, useAppSelector } from './app/hooks';
 import {
   fetchDictionaryClasses,
   fetchRelatedClasses,
   selectBsddDictionaries,
   selectGroupedClasses,
 } from './features/bsdd/bsddSlice';
-import { setHasAssociations } from './features/ifc/ifcEntitySlice';
+import { selectHasAssociationsMap, setHasAssociations } from './features/ifc/ifcEntitySlice';
+import { selectActiveDictionariesMap } from './features/settings/settingsSlice';
 import Slicer from './Slicer';
 
 interface ClassificationsProps {
   height: number;
   mainDictionaryClassification: ClassContractV1 | null;
-  activeDictionariesMap: Map<string, IfcClassification>;
   handleMouseDown: MouseEventHandler<HTMLDivElement>;
 }
 
@@ -28,18 +28,15 @@ interface Option {
   uri: string;
 }
 
-function Classifications({
-  height,
-  mainDictionaryClassification,
-  activeDictionariesMap,
-  handleMouseDown,
-}: ClassificationsProps) {
+function Classifications({ height, mainDictionaryClassification, handleMouseDown }: ClassificationsProps) {
   const dispatch = useAppDispatch();
   const [optionsMap, setOptionsMap] = useState<Map<string, Option[]>>(new Map());
 
   const [selectedIfcClassificationReferences, setSelectedIfcClassificationReferences] = useState<
     Map<string, Option | null>
   >(new Map());
+  const activeDictionariesMap = useAppSelector(selectActiveDictionariesMap);
+  const hasAssociations = useAppSelector(selectHasAssociationsMap);
   const dictionaries = useSelector(selectBsddDictionaries);
   const groupedClassRelations = useSelector(selectGroupedClasses);
 
@@ -85,10 +82,30 @@ function Classifications({
       const resolvedOptionsMap = await Promise.all(optionsMapPromises);
       const newOptionsMap = new Map(resolvedOptionsMap);
       setOptionsMap(newOptionsMap);
+
+      const newSelectedIfcClassificationReferences = new Map<string, Option | null>();
+
+      newOptionsMap.forEach((options, dictionaryUri) => {
+        if (options.length === 1) {
+          newSelectedIfcClassificationReferences.set(dictionaryUri, options[0]);
+        } else if (dictionaryUri in hasAssociations) {
+          const dictionaryAssociations = hasAssociations[dictionaryUri];
+          if (dictionaryAssociations.length === 1) {
+            const dictionaryAssociation = dictionaryAssociations[0];
+            const dictionaryOption: Option = {
+              label: dictionaryAssociation.name || '',
+              value: dictionaryAssociation.identification || '',
+              uri: dictionaryUri,
+            };
+            newSelectedIfcClassificationReferences.set(dictionaryUri, dictionaryOption);
+          }
+        }
+      });
+      setSelectedIfcClassificationReferences(newSelectedIfcClassificationReferences);
     };
 
     updateOptionsMap();
-  }, [activeDictionariesMap, groupedClassRelations, dispatch]);
+  }, [activeDictionariesMap, groupedClassRelations, dispatch, hasAssociations]);
 
   useEffect(() => {
     const fetchClasses = () => {

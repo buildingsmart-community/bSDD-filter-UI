@@ -340,9 +340,9 @@ export const fetchRelatedClasses = createAsyncThunk(
       if (bsddApi && bsddApi.api) {
         const response = await bsddApi.api.classV1List({
           Uri: relatedClassUri,
-          IncludeClassProperties: true,
-          IncludeChildClassReferences: true,
-          IncludeClassRelations: true,
+          // IncludeClassProperties: true,
+          // IncludeChildClassReferences: false,
+          // IncludeClassRelations: true,
           languageCode: state.settings.language || undefined,
         });
 

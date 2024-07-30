@@ -248,9 +248,9 @@ export const fetchClass = createAsyncThunk('bsdd/fetchClass', async (uri: string
 
   const response = await bsddApi.api.classV1List({
     Uri: uri,
-    IncludeClassProperties: true,
-    IncludeChildClassReferences: true,
-    IncludeClassRelations: true,
+    // IncludeClassProperties: true,
+    // IncludeChildClassReferences: false,
+    // IncludeClassRelations: true,
     // IncludeReverseRelations: true,
     // languageCode: languageCode || undefined,
   });

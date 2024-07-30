@@ -22,7 +22,6 @@ import {
 import { setIfcData } from './features/ifc/ifcDataSlice';
 import { setIfcEntity } from './features/ifc/ifcEntitySlice';
 import {
-  selectActiveDictionariesMap,
   selectActiveDictionaryUris,
   selectBsddApiEnvironmentUri,
   selectIncludeTestDictionaries,
@@ -68,7 +67,6 @@ function BsddSearch() {
   const bsddApiEnvironmentUri = useAppSelector(selectBsddApiEnvironmentUri);
   const includeTestDictionaries = useAppSelector(selectIncludeTestDictionaries);
   const activeDictionaryLocations = useAppSelector(selectActiveDictionaryUris);
-  const activeDictionariesMap = useAppSelector(selectActiveDictionariesMap);
   const ifcEntity = useAppSelector((state) => state.ifcEntity);
 
   const [height, setHeight] = useState(minHeight); // Initial height
@@ -252,7 +250,7 @@ function BsddSearch() {
   };
 
   return (
-    <Container style={{ height: '100vh' }}>
+    <Container>
       <TextInput type="hidden" name="ifcType" id="ifcType" value="" />
       <TextInput type="hidden" name="name" id="name" value="" />
       <TextInput type="hidden" name="material" id="material" value="" />
@@ -271,7 +269,6 @@ function BsddSearch() {
                 <Classifications
                   height={height}
                   mainDictionaryClassification={mainDictionaryClassification}
-                  activeDictionariesMap={activeDictionariesMap}
                   handleMouseDown={handleMouseDown}
                 />
               </Accordion.Panel>
