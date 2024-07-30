@@ -14832,10 +14832,10 @@ as("bsdd/fetchClass", async (e, { getState: t, dispatch: n }) => {
   if (!fn)
     throw new Error("BsddApi is not initialized");
   const o = await fn.api.classV1List({
-    Uri: e,
-    IncludeClassProperties: !0,
-    IncludeChildClassReferences: !0,
-    IncludeClassRelations: !0
+    Uri: e
+    // IncludeClassProperties: true,
+    // IncludeChildClassReferences: false,
+    // IncludeClassRelations: true,
     // IncludeReverseRelations: true,
     // languageCode: languageCode || undefined,
   });
