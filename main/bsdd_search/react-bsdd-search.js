@@ -21740,14 +21740,18 @@ const pw = async (r, e, t) => {
       r.predefinedType = e.payload;
     },
     setIsDefinedBy: (r, e) => {
-      var n, o, i;
+      var n, o, i, s, a, c;
       r.isDefinedBy = e.payload;
-      const t = e.payload.find((s) => s.name === "Attributes");
+      const t = e.payload.find((l) => l.name === "Attributes");
       if (t) {
-        const s = t.hasProperties.find(
-          (a) => a.name === "ObjectType"
+        const l = t.hasProperties.find(
+          (h) => h.name === "ObjectType"
         );
-        s && (s.type === "IfcPropertySingleValue" ? r.objectType = (n = s.nominalValue) == null ? void 0 : n.value : s.type === "IfcPropertyEnumeratedValue" && (r.objectType = (i = (o = s.enumerationValues) == null ? void 0 : o[0]) == null ? void 0 : i.value));
+        l && (l.type === "IfcPropertySingleValue" ? r.objectType = (n = l.nominalValue) == null ? void 0 : n.value : l.type === "IfcPropertyEnumeratedValue" && (r.objectType = (i = (o = l.enumerationValues) == null ? void 0 : o[0]) == null ? void 0 : i.value));
+        const u = t.hasProperties.find(
+          (h) => h.name === "PredefinedType"
+        );
+        u && (u.type === "IfcPropertySingleValue" ? r.predefinedType = (s = u.nominalValue) == null ? void 0 : s.value : u.type === "IfcPropertyEnumeratedValue" && (r.predefinedType = (c = (a = u.enumerationValues) == null ? void 0 : a[0]) == null ? void 0 : c.value));
       }
     },
     setHasAssociations: (r, e) => {
@@ -21775,7 +21779,7 @@ function Rw({ callback: r, ifcEntity: e }) {
       var u, h, d;
       if (l.type === "IfcClassificationReference" && ((h = (u = l == null ? void 0 : l.referencedSource) == null ? void 0 : u.location) != null && h.includes("https://identifier.buildingsmart.org/uri/buildingsmart/ifc/"))) {
         const { type: f, predefinedType: p } = XC(l.identification);
-        c.type = f, c.predefinedType = p;
+        f && (c.type = f), p && (c.predefinedType = p), c.predefinedType || (c.predefinedType = "NOTDEFINED");
       } else
         (d = c.hasAssociations) == null || d.push(l);
     }), c;
