@@ -62,8 +62,16 @@ function Apply({ callback, ifcEntity }: ApplyProps) {
         association?.referencedSource?.location?.includes('https://identifier.buildingsmart.org/uri/buildingsmart/ifc/')
       ) {
         const { type, predefinedType } = getIfcClassAndPredefinedType(association.identification);
-        baseIfc.type = type;
-        baseIfc.predefinedType = predefinedType;
+        if (type) {
+          baseIfc.type = type;
+        }
+
+        if (predefinedType) {
+          baseIfc.predefinedType = predefinedType;
+        }
+        if (!baseIfc.predefinedType) {
+          baseIfc.predefinedType = 'NOTDEFINED';
+        }
       } else {
         baseIfc.hasAssociations?.push(association);
       }

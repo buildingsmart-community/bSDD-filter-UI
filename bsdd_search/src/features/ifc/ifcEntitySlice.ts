@@ -60,10 +60,10 @@ const ifcEntitySlice = createSlice({
     setIsDefinedBy: (state, action: PayloadAction<IfcPropertySet[]>) => {
       state.isDefinedBy = action.payload;
 
-      // Find 'ObjectType' within isDefinedBy and set state.objectType
-      const objectTypePropertySet = action.payload.find((propertySet) => propertySet.name === 'Attributes');
-      if (objectTypePropertySet) {
-        const objectTypeProperty = objectTypePropertySet.hasProperties.find(
+      // Find 'Attributes' within isDefinedBy and set state.objectType and state.predefinedType
+      const attributesPropertySet = action.payload.find((propertySet) => propertySet.name === 'Attributes');
+      if (attributesPropertySet) {
+        const objectTypeProperty = attributesPropertySet.hasProperties.find(
           (property) => property.name === 'ObjectType',
         );
         if (objectTypeProperty) {
@@ -71,6 +71,17 @@ const ifcEntitySlice = createSlice({
             state.objectType = objectTypeProperty.nominalValue?.value;
           } else if (objectTypeProperty.type === 'IfcPropertyEnumeratedValue') {
             state.objectType = objectTypeProperty.enumerationValues?.[0]?.value;
+          }
+        }
+
+        const predefinedTypeProperty = attributesPropertySet.hasProperties.find(
+          (property) => property.name === 'PredefinedType',
+        );
+        if (predefinedTypeProperty) {
+          if (predefinedTypeProperty.type === 'IfcPropertySingleValue') {
+            state.predefinedType = predefinedTypeProperty.nominalValue?.value;
+          } else if (predefinedTypeProperty.type === 'IfcPropertyEnumeratedValue') {
+            state.predefinedType = predefinedTypeProperty.enumerationValues?.[0]?.value;
           }
         }
       }
