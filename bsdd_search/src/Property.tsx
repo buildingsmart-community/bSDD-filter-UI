@@ -109,7 +109,7 @@ function Property({
             label={property_natural_language_name}
             description={property.name.length > 0 ? `(${property.name})` : ''}
             value={value}
-            disabled={property.enumerationValues?.length === 1}
+            disabled={property.enumerationReference?.enumerationValues?.length === 1}
             onChange={(e) => {
               const foundValue = enumerationValues.find((element) => element.value === e);
               const selectedValues: IfcValue[] = foundValue ? [foundValue] : [];
