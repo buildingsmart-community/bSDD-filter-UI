@@ -24,8 +24,9 @@ function checkIfcClassificationUri(
   classificationReference: IfcClassificationReference,
 ): boolean {
   const classification: IfcClassification | undefined = classificationReference.referencedSource;
-  if (classification && classification.location) {
-    return classification.location === classificationUri;
+  const classificationLocation = classification?.location;
+  if (classificationLocation) {
+    return classificationLocation === classificationUri;
   }
   return false;
 }

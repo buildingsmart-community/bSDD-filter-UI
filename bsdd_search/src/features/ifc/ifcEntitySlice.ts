@@ -25,6 +25,68 @@ const initialState: EntitiesState = {
   hasAssociations: [],
 };
 
+function updateObjectTypeAndPredefinedType(
+  state: EntitiesState,
+  objectType: string | undefined,
+  predefinedType: string | undefined,
+) {
+  // IFC Rule: If objectType is set and not empty, PredefinedType must be 'USERDEFINED', unless predefinedType is set and to something other than 'NOTDEFINED'.
+  // Reference: https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/lexical/IfcObject.htm
+  if (!objectType) {
+    state.objectType = '';
+    if (!predefinedType || predefinedType === 'USERDEFINED') {
+      state.predefinedType = 'NOTDEFINED';
+    } else {
+      state.predefinedType = predefinedType;
+    }
+  } else if (!predefinedType || predefinedType === 'NOTDEFINED') {
+    state.predefinedType = 'USERDEFINED';
+  } else {
+    state.predefinedType = predefinedType;
+  }
+}
+
+function updateIsDefinedBy(state: EntitiesState, isDefinedBy: IfcPropertySet[] | undefined) {
+  state.isDefinedBy = isDefinedBy || [];
+
+  if (!isDefinedBy) {
+    return;
+  }
+
+  // Find 'Attributes' within isDefinedBy and set state.objectType and state.predefinedType
+  const attributesPropertySet = isDefinedBy.find((propertySet) => propertySet.name === 'Attributes');
+  if (attributesPropertySet) {
+    const objectTypeProperty = attributesPropertySet.hasProperties.find((property) => property.name === 'ObjectType');
+    if (objectTypeProperty) {
+      if (objectTypeProperty.type === 'IfcPropertySingleValue') {
+        state.objectType = objectTypeProperty.nominalValue?.value;
+      } else if (objectTypeProperty.type === 'IfcPropertyEnumeratedValue') {
+        state.objectType = objectTypeProperty.enumerationValues?.[0]?.value;
+      }
+    }
+
+    const predefinedTypeProperty = attributesPropertySet.hasProperties.find(
+      (property) => property.name === 'PredefinedType',
+    );
+    if (predefinedTypeProperty) {
+      if (predefinedTypeProperty.type === 'IfcPropertySingleValue') {
+        state.predefinedType = predefinedTypeProperty.nominalValue?.value;
+      } else if (predefinedTypeProperty.type === 'IfcPropertyEnumeratedValue') {
+        state.predefinedType = predefinedTypeProperty.enumerationValues?.[0]?.value;
+      }
+    }
+  }
+}
+
+function updateHasAssociations(state: EntitiesState, hasAssociations: Association[] | undefined) {
+  const currentAssociationsJSON = JSON.stringify(state.hasAssociations);
+  const newAssociationsJSON = JSON.stringify(hasAssociations);
+
+  if (currentAssociationsJSON !== newAssociationsJSON) {
+    state.hasAssociations = hasAssociations;
+  }
+}
+
 const ifcEntitySlice = createSlice({
   name: 'ifcEntity',
   initialState,
@@ -33,11 +95,10 @@ const ifcEntitySlice = createSlice({
       state.type = action.payload.type;
       state.name = action.payload.name;
       state.description = action.payload.description;
-      state.objectType = action.payload.objectType;
+      updateObjectTypeAndPredefinedType(state, action.payload.objectType, action.payload.predefinedType);
       state.tag = action.payload.tag;
-      state.predefinedType = action.payload.predefinedType;
-      state.isDefinedBy = action.payload.isDefinedBy;
-      state.hasAssociations = action.payload.hasAssociations;
+      updateIsDefinedBy(state, action.payload.isDefinedBy);
+      updateHasAssociations(state, action.payload.hasAssociations);
     },
     setType: (state, action: PayloadAction<string>) => {
       state.type = action.payload;
@@ -49,50 +110,20 @@ const ifcEntitySlice = createSlice({
       state.description = action.payload;
     },
     setObjectType: (state, action: PayloadAction<string>) => {
-      state.objectType = action.payload;
+      updateObjectTypeAndPredefinedType(state, action.payload, state.predefinedType);
     },
     setTag: (state, action: PayloadAction<string>) => {
       state.tag = action.payload;
     },
     setPredefinedType: (state, action: PayloadAction<string>) => {
       state.predefinedType = action.payload;
+      updateObjectTypeAndPredefinedType(state, state.objectType, action.payload);
     },
     setIsDefinedBy: (state, action: PayloadAction<IfcPropertySet[]>) => {
-      state.isDefinedBy = action.payload;
-
-      // Find 'Attributes' within isDefinedBy and set state.objectType and state.predefinedType
-      const attributesPropertySet = action.payload.find((propertySet) => propertySet.name === 'Attributes');
-      if (attributesPropertySet) {
-        const objectTypeProperty = attributesPropertySet.hasProperties.find(
-          (property) => property.name === 'ObjectType',
-        );
-        if (objectTypeProperty) {
-          if (objectTypeProperty.type === 'IfcPropertySingleValue') {
-            state.objectType = objectTypeProperty.nominalValue?.value;
-          } else if (objectTypeProperty.type === 'IfcPropertyEnumeratedValue') {
-            state.objectType = objectTypeProperty.enumerationValues?.[0]?.value;
-          }
-        }
-
-        const predefinedTypeProperty = attributesPropertySet.hasProperties.find(
-          (property) => property.name === 'PredefinedType',
-        );
-        if (predefinedTypeProperty) {
-          if (predefinedTypeProperty.type === 'IfcPropertySingleValue') {
-            state.predefinedType = predefinedTypeProperty.nominalValue?.value;
-          } else if (predefinedTypeProperty.type === 'IfcPropertyEnumeratedValue') {
-            state.predefinedType = predefinedTypeProperty.enumerationValues?.[0]?.value;
-          }
-        }
-      }
+      updateIsDefinedBy(state, action.payload);
     },
     setHasAssociations: (state, action: PayloadAction<Association[]>) => {
-      const currentAssociationsJSON = JSON.stringify(state.hasAssociations);
-      const newAssociationsJSON = JSON.stringify(action.payload);
-
-      if (currentAssociationsJSON !== newAssociationsJSON) {
-        state.hasAssociations = action.payload;
-      }
+      updateHasAssociations(state, action.payload);
     },
   },
 });
