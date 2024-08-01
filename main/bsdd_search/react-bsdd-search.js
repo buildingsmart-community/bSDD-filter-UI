@@ -22300,7 +22300,7 @@ function Qw({
             {
               propertySet: u,
               property: h,
-              property_natural_language_name: c[d],
+              property_natural_language_name: d,
               propertySets: e,
               setPropertySets: t
             }
