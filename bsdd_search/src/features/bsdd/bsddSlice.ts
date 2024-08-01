@@ -321,7 +321,6 @@ const bsddSlice = createSlice({
       state.mainDictionaryClassification = action.payload;
     },
     setClasses: (state, action: PayloadAction<{ [key: string]: ClassContractV1 }>) => {
-      console.log('setClasses', action.payload);
       state.classes = action.payload;
     },
     // addClass: (state, action: PayloadAction<{ uri: string; data: ClassContractV1 }>) => {

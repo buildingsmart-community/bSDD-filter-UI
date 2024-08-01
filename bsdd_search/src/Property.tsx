@@ -8,26 +8,46 @@ import {
   IfcPropertySingleValue,
   IfcValue,
 } from '../../common/src/ifc/ifc';
-import { useAppDispatch } from './app/hooks';
+import { useAppDispatch, useAppSelector } from './app/hooks';
 import Check from './Checkbox';
-import { setIsDefinedBy } from './features/ifc/ifcEntitySlice';
+import { selectIsDefinedBy, setIsDefinedBy } from './features/ifc/ifcEntitySlice';
 
 interface PropertyProps {
   propertySet: IfcPropertySet;
   property: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue;
   property_natural_language_name: string;
-  propertySets: { [id: string]: IfcPropertySet } | undefined;
-  setPropertySets: (value: { [id: string]: IfcPropertySet }) => void;
 }
 
-function Property({
-  propertySet,
-  property,
-  property_natural_language_name,
-  propertySets,
-  setPropertySets,
-}: PropertyProps) {
+const updatePropertySets = (
+  propertySets: IfcPropertySet[],
+  propertySetName: string,
+  propertyName: string,
+  newValue: any,
+): IfcPropertySet[] => {
+  return propertySets.map((propertySet) => {
+    if (propertySet.name === propertySetName) {
+      const updatedProperties = propertySet.hasProperties.map((property) => {
+        if (property.name === propertyName) {
+          return {
+            ...property,
+            ...newValue,
+          };
+        }
+        return property;
+      });
+
+      return {
+        ...propertySet,
+        hasProperties: updatedProperties,
+      };
+    }
+    return propertySet;
+  });
+};
+
+function Property({ propertySet, property, property_natural_language_name }: PropertyProps) {
   const dispatch = useAppDispatch();
+  const propertySets = useAppSelector(selectIsDefinedBy);
   const [input, setInput] = useState<any>();
 
   useEffect(() => {
@@ -41,25 +61,18 @@ function Property({
               disabled={false}
               value={property.nominalValue.value}
               setValue={(value: true | false | undefined) => {
-                const newPropertySets = { ...propertySets };
-                const newPropertySet = { ...propertySet };
-                if (newPropertySet.name) {
-                  const p: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue = { ...property };
-                  const newNominalValue = { ...p.nominalValue, value };
-                  p.nominalValue = newNominalValue;
-                  const i: number = newPropertySet.hasProperties.findIndex(
-                    (element: any) => element.name === property.name,
-                  );
-                  if (i !== -1) {
-                    const newHasProperties = [...newPropertySet.hasProperties];
-                    newHasProperties[i] = p;
-                    newPropertySet.hasProperties = newHasProperties;
-                    newPropertySets[newPropertySet.name] = newPropertySet;
+                if (propertySets && propertySet.name) {
+                  const newValue = {
+                    nominalValue: { ...property.nominalValue, value },
+                  };
 
-                    if (JSON.stringify(propertySets) !== JSON.stringify(newPropertySets)) {
-                      setPropertySets(newPropertySets);
-                    }
-                  }
+                  const updatedPropertySets = updatePropertySets(
+                    propertySets,
+                    propertySet.name,
+                    property.name,
+                    newValue,
+                  );
+                  dispatch(setIsDefinedBy(Object.values(updatedPropertySets)));
                 }
               }}
             />,
@@ -72,28 +85,12 @@ function Property({
               placeholder={property.nominalValue.value}
               value={property.nominalValue.value || ''}
               onChange={(e) => {
-                // Deep clone the objects to ensure immutability
-                const newPropertySets = JSON.parse(JSON.stringify(propertySets));
-                const newPropertySet = newPropertySets[propertySet.name as string];
-
-                if (newPropertySet && newPropertySet.name) {
-                  const propertyIndex = newPropertySet.hasProperties.findIndex(
-                    (element: any) => element.name === property.name,
-                  );
-
-                  if (propertyIndex !== -1) {
-                    newPropertySet.hasProperties[propertyIndex] = {
-                      ...newPropertySet.hasProperties[propertyIndex],
-                      nominalValue: {
-                        ...newPropertySet.hasProperties[propertyIndex].nominalValue,
-                        value: e.target.value,
-                      },
-                    };
-
-                    if (JSON.stringify(propertySets) !== JSON.stringify(newPropertySets)) {
-                      setPropertySets(newPropertySets);
-                    }
-                  }
+                if (propertySets && propertySet.name) {
+                  const newValue = {
+                    nominalValue: { ...property.nominalValue, value: e.target.value },
+                  };
+                  const newPropertySets = updatePropertySets(propertySets, propertySet.name, property.name, newValue);
+                  dispatch(setIsDefinedBy(Object.values(newPropertySets)));
                 }
               }}
             />,
@@ -111,28 +108,14 @@ function Property({
             value={value}
             disabled={property.enumerationReference?.enumerationValues?.length === 1}
             onChange={(e) => {
-              const foundValue = enumerationValues.find((element) => element.value === e);
-              const selectedValues: IfcValue[] = foundValue ? [foundValue] : [];
-              const newPropertySets = { ...propertySets };
-              const newPropertySet = { ...propertySet };
-              if (newPropertySet.name) {
-                const newProperty: IfcPropertyEnumeratedValue = { ...property };
-                newProperty.enumerationValues = selectedValues;
-                const i: number = newPropertySet.hasProperties.findIndex(
-                  (prop: IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue) =>
-                    prop.name === property.name,
-                );
-                if (i !== -1) {
-                  const updatedProperties = newPropertySet.hasProperties.map((prop, index) =>
-                    index === i ? newProperty : prop,
-                  );
-                  newPropertySet.hasProperties = updatedProperties;
-                  newPropertySets[newPropertySet.name] = newPropertySet;
+              if (propertySets && propertySet.name) {
+                const foundValue = enumerationValues.find((element) => element.value === e);
+                const newValue = {
+                  enumerationValues: foundValue ? [foundValue] : [],
+                };
+                const newPropertySets = updatePropertySets(propertySets, propertySet.name, property.name, newValue);
 
-                  if (JSON.stringify(propertySets) !== JSON.stringify(newPropertySets)) {
-                    setPropertySets(newPropertySets);
-                  }
-                }
+                dispatch(setIsDefinedBy(Object.values(newPropertySets)));
               }
             }}
             data={enumerationValues.map((ifcValue: IfcValue) => ({
@@ -148,7 +131,7 @@ function Property({
         break;
       }
     }
-  }, [property, propertySet, setInput, propertySets, setPropertySets, property_natural_language_name, dispatch]);
+  }, [property, propertySet, setInput, property_natural_language_name, dispatch, propertySets]);
 
   return input;
 }

@@ -58,7 +58,6 @@ function BsddSearch() {
   const [activeClassificationUri, setActiveClassificationUri] = useState<string>();
   const [defaultSearch, setDefaultSearch] = useState<Option | undefined>();
   const [recursiveMode, setRecursiveMode] = useState<boolean>(false);
-  const [propertySets, setPropertySets] = useState<PropertySetMap>({});
   const [api, setApi] = useState<BsddApi<unknown>>(new BsddApi(bsddEnvironments[defaultEnvironment]));
   const mainDictionary = useAppSelector(selectMainDictionary);
   const languageCode = useAppSelector(selectLanguage);
@@ -285,8 +284,6 @@ function BsddSearch() {
               <Accordion.Panel>
                 <PropertySets
                   mainDictionaryClassification={mainDictionaryClassification}
-                  propertySets={propertySets}
-                  setPropertySets={setPropertySets}
                   recursiveMode={recursiveMode}
                 />
               </Accordion.Panel>
