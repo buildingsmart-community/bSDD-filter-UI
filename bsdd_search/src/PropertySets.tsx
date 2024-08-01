@@ -350,7 +350,7 @@ function PropertySets({
                         <Property
                           propertySet={propertySet}
                           property={property}
-                          property_natural_language_name={propertyNaturalLanguageNamesMap[specification]}
+                          property_natural_language_name={specification}
                           propertySets={propertySets}
                           setPropertySets={setPropertySets}
                         />
