@@ -92,12 +92,16 @@ function Classifications({ height, mainDictionaryClassification, handleMouseDown
           const dictionaryAssociations = hasAssociations[dictionaryUri];
           if (dictionaryAssociations.length === 1) {
             const dictionaryAssociation = dictionaryAssociations[0];
-            const dictionaryOption: Option = {
-              label: dictionaryAssociation.name || '',
-              value: dictionaryAssociation.identification || '',
-              uri: dictionaryUri,
-            };
-            newSelectedIfcClassificationReferences.set(dictionaryUri, dictionaryOption);
+            const isValidOption = options.some((option) => option.value === dictionaryAssociation.identification);
+
+            if (isValidOption) {
+              const dictionaryOption: Option = {
+                label: dictionaryAssociation.name || '',
+                value: dictionaryAssociation.identification || '',
+                uri: dictionaryUri,
+              };
+              newSelectedIfcClassificationReferences.set(dictionaryUri, dictionaryOption);
+            }
           }
         }
       });
