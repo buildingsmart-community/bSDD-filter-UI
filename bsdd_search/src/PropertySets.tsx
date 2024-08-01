@@ -342,15 +342,20 @@ function PropertySets({
               <Accordion.Panel>
                 <Stack>
                   {Children.toArray(
-                    propertySet.hasProperties.map((property) => (
-                      <Property
-                        propertySet={propertySet}
-                        property={property}
-                        property_natural_language_name={propertyNaturalLanguageNamesMap[property.specification]}
-                        propertySets={propertySets}
-                        setPropertySets={setPropertySets}
-                      />
-                    )),
+                    propertySet.hasProperties.map((property) => {
+                      const specification = property.specification
+                        ? propertyNaturalLanguageNamesMap[property.specification]
+                        : '';
+                      return (
+                        <Property
+                          propertySet={propertySet}
+                          property={property}
+                          property_natural_language_name={propertyNaturalLanguageNamesMap[specification]}
+                          propertySets={propertySets}
+                          setPropertySets={setPropertySets}
+                        />
+                      );
+                    }),
                   )}
                 </Stack>
               </Accordion.Panel>
