@@ -14935,7 +14935,7 @@ function JC(e) {
   return e.endsWith("Type") ? e.slice(0, -4) : e;
 }
 function QC(e, t) {
-  return (e ?? "") + (t ?? "");
+  return (e ?? "") + ((t !== "NOTDEFINED" && t !== "USERDEFINED" ? t : "") ?? "");
 }
 function ZC(e, t) {
   return {
@@ -14990,8 +14990,8 @@ function r1(e) {
   return t === "IfcClassificationReference";
 }
 function o1(e, t) {
-  const n = t.referencedSource;
-  return n && n.location ? n.location === e : !1;
+  const n = t.referencedSource, r = n == null ? void 0 : n.location;
+  return r ? r === e : !1;
 }
 function s1(e, t) {
   var o;
