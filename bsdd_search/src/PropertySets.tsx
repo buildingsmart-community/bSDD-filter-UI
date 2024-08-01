@@ -222,11 +222,8 @@ function createIfcPropertySingleValue(
   const ifcProperty: IfcPropertySingleValue = {
     type: 'IfcPropertySingleValue',
     name,
+    specification: classificationProperty.propertyUri || '',
   };
-
-  if (classificationProperty.propertyUri) {
-    ifcProperty.specification = classificationProperty.propertyUri;
-  }
 
   const nominalValue = classificationProperty.predefinedValue
     ? GetIfcPropertyValue(classificationProperty.dataType, classificationProperty.predefinedValue)
@@ -257,7 +254,7 @@ function GetIfcProperty(
     ? createIfcPropertyEnumeratedValue(classificationProperty, name, propertySetName, ifcEntity)
     : createIfcPropertySingleValue(classificationProperty, name, propertySetName, ifcEntity);
 
-  property.specification = classificationProperty.propertyUri || undefined;
+  property.specification = classificationProperty.propertyUri || '';
 
   return property;
 }
@@ -283,7 +280,6 @@ function PropertySets({
   useEffect(() => {
     if (!mainDictionaryClassification) return;
     const newPropertySets: PropertySetMap = {};
-    const newPropertyNaturalLanguageNames: Record<string, string> = {};
     const propertyClassifications = [mainDictionaryClassification]; // recursiveMode ? classifications : classifications.slice(0, 1);
 
     propertyClassifications.forEach((classification) => {
@@ -300,6 +296,22 @@ function PropertySets({
         }
 
         newPropertySets[propertySetName].hasProperties.push(GetIfcProperty(classProperty, propertySetName, ifcEntity));
+      });
+    });
+
+    if (JSON.stringify(propertySets) !== JSON.stringify(newPropertySets)) {
+      setPropertySets(newPropertySets);
+    }
+  }, [ifcEntity, mainDictionaryClassification, propertySets, setPropertySets]);
+
+  useEffect(() => {
+    if (!mainDictionaryClassification) return;
+    const newPropertyNaturalLanguageNames: Record<string, string> = {};
+    const propertyClassifications = [mainDictionaryClassification]; // recursiveMode ? classifications : classifications.slice(0, 1);
+
+    propertyClassifications.forEach((classification) => {
+      classification.classProperties?.forEach((classProperty: ClassPropertyContractV1) => {
+        if (!classProperty) return;
 
         if (classProperty.propertyUri) {
           if (
@@ -309,24 +321,16 @@ function PropertySets({
             propertyNamesByLanguage[languageCode][classProperty.propertyUri]
           ) {
             newPropertyNaturalLanguageNames[classProperty.propertyUri] =
-              propertyNamesByLanguage[languageCode][classProperty.propertyUri];
-          } else if (classProperty.propertyCode) {
-            newPropertyNaturalLanguageNames[classProperty.propertyCode] = classProperty.name;
+              propertyNamesByLanguage[languageCode][classProperty.propertyUri] || '';
+          } else {
+            newPropertyNaturalLanguageNames[classProperty.propertyUri] = classProperty.name;
           }
-        } else if (classProperty.propertyCode) {
-          newPropertyNaturalLanguageNames[classProperty.propertyCode] = classProperty.name;
         }
       });
     });
 
-    if (JSON.stringify(propertySets) !== JSON.stringify(newPropertySets)) {
-      setPropertySets(newPropertySets);
-    }
-
     setPropertyNaturalLanguageNamesMap(newPropertyNaturalLanguageNames);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mainDictionaryClassification, setPropertySets, recursiveMode, ifcEntity]);
+  }, [mainDictionaryClassification, recursiveMode, ifcEntity, propertyNamesByLanguage, languageCode]);
 
   return (
     <div>
@@ -342,7 +346,7 @@ function PropertySets({
                       <Property
                         propertySet={propertySet}
                         property={property}
-                        property_natural_language_name={propertyNaturalLanguageNamesMap[property.name] || ''}
+                        property_natural_language_name={propertyNaturalLanguageNamesMap[property.specification]}
                         propertySets={propertySets}
                         setPropertySets={setPropertySets}
                       />

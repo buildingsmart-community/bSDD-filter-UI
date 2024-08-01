@@ -74,7 +74,7 @@ export interface IfcPropertyAbstraction extends IfcJsonEntity {
 export interface IfcProperty extends IfcRoot {
   type: 'IfcProperty';
   name: string; // 	IfcIdentifier
-  specification?: string; // IfcText
+  specification: string; // IfcText
 
   // inverse
   partOfPset?: any; // SET [0:?] OF IfcPropertySet FOR HasProperties
