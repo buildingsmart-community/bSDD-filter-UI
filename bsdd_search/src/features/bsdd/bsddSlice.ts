@@ -11,6 +11,7 @@ import { BsddApi } from '../../../../common/src/BsddApi/BsddApi';
 import {
   ClassContractV1,
   ClassListItemContractV1,
+  ClassPropertyContractV1,
   DictionaryContractV1,
 } from '../../../../common/src/BsddApi/BsddApiBase';
 import type { RootState } from '../../app/store';
@@ -22,6 +23,7 @@ const DICTIONARIES_PAGE_SIZE = 500;
 interface BsddState {
   mainDictionaryClassification: ClassContractV1 | null;
   classes: { [key: string]: ClassContractV1 };
+  propertyNamesByLanguage: { [languageCode: string]: { [propertyUri: string]: string } };
   dictionaries: { [key: string]: DictionaryContractV1 };
   dictionaryClasses: { [key: string]: ClassListItemContractV1[] };
   loaded: boolean;
@@ -35,6 +37,7 @@ let fetchPromisesCache: Partial<Record<string, Promise<ClassListItemContractV1[]
 const initialState: BsddState = {
   mainDictionaryClassification: null,
   classes: {},
+  propertyNamesByLanguage: {},
   dictionaries: {},
   dictionaryClasses: {},
   loaded: false,
@@ -267,6 +270,48 @@ export const updateDictionaries = createAsyncThunk(
   async (activeDictionaryLocations: string[]) => activeDictionaryLocations,
 );
 
+// Workaround for bSDD not supporting translated property names on the class endpoint
+export const updatePropertyNaturalLanguageNames = createAsyncThunk(
+  'bsdd/updatePropertyNaturalLanguageNames',
+  async ({ classProperties, languageCode }: { classProperties: ClassPropertyContractV1[]; languageCode: string }) => {
+    if (!bsddApi) {
+      throw new Error('BsddApi is not initialized');
+    }
+
+    const propertyNames: { [propertyUri: string]: string } = {};
+
+    const fetchPropertyDetails = async (property: ClassPropertyContractV1) => {
+      if (bsddApi?.api && property.propertyUri) {
+        try {
+          const response = await bsddApi.api.propertyV4List({
+            uri: property.propertyUri,
+            languageCode,
+            includeClasses: false,
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const { data } = response;
+
+          // Use the translated name if available, otherwise use the class property name
+          propertyNames[property.propertyUri] = data.name || property.name;
+        } catch (error) {
+          console.error('Error fetching property details:', error);
+          // Use the class property name as a fallback in case of an error
+          propertyNames[property.propertyUri] = property.name;
+        }
+      }
+    };
+
+    const propertyFetchPromises = classProperties.map(fetchPropertyDetails);
+    await Promise.all(propertyFetchPromises);
+
+    return { languageCode, propertyNames };
+  },
+);
+
 const bsddSlice = createSlice({
   name: 'bsdd',
   initialState,
@@ -299,6 +344,13 @@ const bsddSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(
+        updatePropertyNaturalLanguageNames.fulfilled,
+        (state, action: PayloadAction<{ languageCode: string; propertyNames: { [propertyUri: string]: string } }>) => {
+          const { languageCode, propertyNames } = action.payload;
+          state.propertyNamesByLanguage[languageCode] = propertyNames;
+        },
+      )
       .addCase(fetchAllDictionaries.pending, (state) => {
         state.loaded = false;
       })
@@ -372,6 +424,7 @@ export const selectBsddDataLoaded = (state: RootState) => state.bsdd.loaded;
 export const selectdictionaryClasses = (state: RootState) => state.bsdd.dictionaryClasses;
 export const selectGroupedClassRelations = (state: RootState) => state.bsdd.groupedClassRelations;
 export const selectClasses = (state: RootState) => state.bsdd.classes;
+export const selectPropertyNamesByLanguage = (state: RootState) => state.bsdd.propertyNamesByLanguage;
 
 export const selectGroupedClasses = createSelector([selectClasses], (classes) => {
   type GroupedClasses = { [key: string]: ClassContractV1[] };

@@ -18,6 +18,7 @@ import {
   selectMainDictionaryClassification,
   setMainDictionaryClassification,
   updateDictionaries,
+  updatePropertyNaturalLanguageNames,
 } from './features/bsdd/bsddSlice';
 import { setIfcData } from './features/ifc/ifcDataSlice';
 import { setIfcEntity } from './features/ifc/ifcEntitySlice';
@@ -191,7 +192,6 @@ function BsddSearch() {
       const params: RequestParams = {
         headers: { Accept: 'text/plain' },
       };
-
       const classificationPromise: Promise<ClassContractV1 | null> = new Promise(function (resolve) {
         const queryParameters = {
           Uri: classificationUri,
@@ -217,6 +217,11 @@ function BsddSearch() {
       });
       classificationPromise.then((classification) => {
         dispatch(setMainDictionaryClassification(classification));
+
+        const classProperties = classification?.classProperties;
+        if (classProperties && classProperties?.length > 0) {
+          dispatch(updatePropertyNaturalLanguageNames({ classProperties, languageCode }));
+        }
       });
     },
     [api.api, dispatch, languageCode],

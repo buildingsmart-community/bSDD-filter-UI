@@ -1,7 +1,5 @@
 import { Accordion, Stack } from '@mantine/core';
-import { use } from 'i18next';
 import { Children, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { ClassContractV1, ClassPropertyContractV1 } from '../../common/src/BsddApi/BsddApiBase';
 import {
@@ -14,8 +12,10 @@ import {
 } from '../../common/src/ifc/ifc';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import type { PropertySetMap } from './BsddSearch';
+import { selectPropertyNamesByLanguage } from './features/bsdd/bsddSlice';
 import { selectIfcEntity } from './features/ifc/ifcDataSlice';
 import { setIsDefinedBy } from './features/ifc/ifcEntitySlice';
+import { selectLanguage } from './features/settings/settingsSlice';
 import Property from './Property';
 
 const valueTypeMapping: { [key: string]: string } = {
@@ -269,9 +269,10 @@ function PropertySets({
   recursiveMode,
 }: PropertySetsProps) {
   const dispatch = useAppDispatch();
-  const { t } = useTranslation();
 
   const ifcEntity = useAppSelector(selectIfcEntity);
+  const propertyNamesByLanguage = useAppSelector(selectPropertyNamesByLanguage);
+  const languageCode = useAppSelector(selectLanguage);
   const [propertyNaturalLanguageNamesMap, setPropertyNaturalLanguageNamesMap] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -299,7 +300,20 @@ function PropertySets({
         }
 
         newPropertySets[propertySetName].hasProperties.push(GetIfcProperty(classProperty, propertySetName, ifcEntity));
-        if (classProperty.propertyCode) {
+
+        if (classProperty.propertyUri) {
+          if (
+            languageCode &&
+            propertyNamesByLanguage &&
+            propertyNamesByLanguage[languageCode] &&
+            propertyNamesByLanguage[languageCode][classProperty.propertyUri]
+          ) {
+            newPropertyNaturalLanguageNames[classProperty.propertyUri] =
+              propertyNamesByLanguage[languageCode][classProperty.propertyUri];
+          } else if (classProperty.propertyCode) {
+            newPropertyNaturalLanguageNames[classProperty.propertyCode] = classProperty.name;
+          }
+        } else if (classProperty.propertyCode) {
           newPropertyNaturalLanguageNames[classProperty.propertyCode] = classProperty.name;
         }
       });
@@ -317,7 +331,7 @@ function PropertySets({
   return (
     <div>
       {Children.toArray(
-        Object.values(propertySets).map((propertySet, propertySetIndex) => (
+        Object.values(propertySets).map((propertySet) => (
           <Accordion>
             <Accordion.Item key={propertySet.name} value={propertySet.name || 'Unknown'}>
               <Accordion.Control>{propertySet.name}</Accordion.Control>

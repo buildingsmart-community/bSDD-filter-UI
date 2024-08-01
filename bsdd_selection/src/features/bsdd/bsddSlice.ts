@@ -226,6 +226,7 @@ const bsddSlice = createSlice({
       });
   },
 });
+
 /**
  * Fetches a class from the bsddApi.
  *
