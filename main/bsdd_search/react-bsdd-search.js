@@ -63,20 +63,20 @@ bl.useSyncExternalStoreWithSelector = function(r, e, t, n, o) {
         if (l = !0, u = f, f = n(f), o !== void 0 && s.hasValue) {
           var p = s.value;
           if (o(p, f))
-            return d = p;
+            return h = p;
         }
-        return d = f;
+        return h = f;
       }
-      if (p = d, dh(u, f))
+      if (p = h, dh(u, f))
         return p;
       var g = n(f);
-      return o !== void 0 && o(p, g) ? p : (u = f, d = g);
+      return o !== void 0 && o(p, g) ? p : (u = f, h = g);
     }
-    var l = !1, u, d, h = t === void 0 ? null : t;
+    var l = !1, u, h, d = t === void 0 ? null : t;
     return [function() {
       return c(e());
-    }, h === null ? void 0 : function() {
-      return c(h());
+    }, d === null ? void 0 : function() {
+      return c(d());
     }];
   }, [e, t, n, o]);
   var a = hh(r, i[0], i[1]);
@@ -120,10 +120,10 @@ function Eh(r = rr) {
       subscription: c,
       getServerState: l,
       stabilityCheck: u,
-      identityFunctionCheck: d
+      identityFunctionCheck: h
     } = e();
     tt.useRef(!0);
-    const h = tt.useCallback(
+    const d = tt.useCallback(
       {
         [n.name](p) {
           return n(p);
@@ -134,7 +134,7 @@ function Eh(r = rr) {
       c.addNestedSub,
       a.getState,
       l || a.getState,
-      h,
+      d,
       i
     );
     return tt.useDebugValue(f), f;
@@ -192,7 +192,7 @@ function _h(r, e) {
     const m = n.subscribe(g);
     let b = !1;
     return () => {
-      b || (b = !0, m(), d());
+      b || (b = !0, m(), h());
     };
   }
   function a() {
@@ -207,21 +207,21 @@ function _h(r, e) {
   function u() {
     o++, t || (t = e ? e.addNestedSub(c) : r.subscribe(c), n = Th());
   }
-  function d() {
+  function h() {
     o--, t && o === 0 && (t(), t = void 0, n.clear(), n = Ma);
   }
-  function h() {
+  function d() {
     i || (i = !0, u());
   }
   function f() {
-    i && (i = !1, d());
+    i && (i = !1, h());
   }
   const p = {
     addNestedSub: s,
     notifyNestedSubs: a,
     handleChangeWrapper: c,
     isSubscribed: l,
-    trySubscribe: h,
+    trySubscribe: d,
     tryUnsubscribe: f,
     getListeners: () => n
   };
@@ -665,42 +665,42 @@ class go extends qo {
         usedParams: this.getUsedParamsDetails(t)
       } : s;
     }
-    const d = this.resolve(e, t);
-    let h = d && d.res;
-    const f = d && d.usedKey || s, p = d && d.exactUsedKey || s, g = Object.prototype.toString.apply(h), m = ["[object Number]", "[object Function]", "[object RegExp]"], b = t.joinArrays !== void 0 ? t.joinArrays : this.options.joinArrays, C = !this.i18nFormat || this.i18nFormat.handleAsObject;
-    if (C && h && (typeof h != "string" && typeof h != "boolean" && typeof h != "number") && m.indexOf(g) < 0 && !(typeof b == "string" && Array.isArray(h))) {
+    const h = this.resolve(e, t);
+    let d = h && h.res;
+    const f = h && h.usedKey || s, p = h && h.exactUsedKey || s, g = Object.prototype.toString.apply(d), m = ["[object Number]", "[object Function]", "[object RegExp]"], b = t.joinArrays !== void 0 ? t.joinArrays : this.options.joinArrays, C = !this.i18nFormat || this.i18nFormat.handleAsObject;
+    if (C && d && (typeof d != "string" && typeof d != "boolean" && typeof d != "number") && m.indexOf(g) < 0 && !(typeof b == "string" && Array.isArray(d))) {
       if (!t.returnObjects && !this.options.returnObjects) {
         this.options.returnedObjectHandler || this.logger.warn("accessing an object - but returnObjects options is not enabled!");
-        const w = this.options.returnedObjectHandler ? this.options.returnedObjectHandler(f, h, {
+        const w = this.options.returnedObjectHandler ? this.options.returnedObjectHandler(f, d, {
           ...t,
           ns: a
         }) : `key '${s} (${this.language})' returned an object instead of string.`;
-        return o ? (d.res = w, d.usedParams = this.getUsedParamsDetails(t), d) : w;
+        return o ? (h.res = w, h.usedParams = this.getUsedParamsDetails(t), h) : w;
       }
       if (i) {
-        const w = Array.isArray(h), E = w ? [] : {}, T = w ? p : f;
-        for (const A in h)
-          if (Object.prototype.hasOwnProperty.call(h, A)) {
+        const w = Array.isArray(d), E = w ? [] : {}, T = w ? p : f;
+        for (const A in d)
+          if (Object.prototype.hasOwnProperty.call(d, A)) {
             const _ = `${T}${i}${A}`;
             E[A] = this.translate(_, {
               ...t,
               joinArrays: !1,
               ns: a
-            }), E[A] === _ && (E[A] = h[A]);
+            }), E[A] === _ && (E[A] = d[A]);
           }
-        h = E;
+        d = E;
       }
-    } else if (C && typeof b == "string" && Array.isArray(h))
-      h = h.join(b), h && (h = this.extendTranslation(h, e, t, n));
+    } else if (C && typeof b == "string" && Array.isArray(d))
+      d = d.join(b), d && (d = this.extendTranslation(d, e, t, n));
     else {
       let w = !1, E = !1;
       const T = t.count !== void 0 && typeof t.count != "string", A = go.hasDefaultValue(t), _ = T ? this.pluralResolver.getSuffix(l, t.count, t) : "", L = t.ordinal && T ? this.pluralResolver.getSuffix(l, t.count, {
         ordinal: !1
       }) : "", F = T && !t.ordinal && t.count === 0 && this.pluralResolver.shouldUseIntlApi(), J = F && t[`defaultValue${this.options.pluralSeparator}zero`] || t[`defaultValue${_}`] || t[`defaultValue${L}`] || t.defaultValue;
-      !this.isValidLookup(h) && A && (w = !0, h = J), this.isValidLookup(h) || (E = !0, h = s);
-      const se = (t.missingKeyNoValueFallbackToKey || this.options.missingKeyNoValueFallbackToKey) && E ? void 0 : h, $ = A && J !== h && this.options.updateMissing;
+      !this.isValidLookup(d) && A && (w = !0, d = J), this.isValidLookup(d) || (E = !0, d = s);
+      const se = (t.missingKeyNoValueFallbackToKey || this.options.missingKeyNoValueFallbackToKey) && E ? void 0 : d, $ = A && J !== d && this.options.updateMissing;
       if (E || w || $) {
-        if (this.logger.log($ ? "updateKey" : "missingKey", l, c, s, $ ? J : h), i) {
+        if (this.logger.log($ ? "updateKey" : "missingKey", l, c, s, $ ? J : d), i) {
           const D = this.resolve(s, {
             ...t,
             keySeparator: !1
@@ -715,8 +715,8 @@ class go extends qo {
         else
           this.options.saveMissingTo === "all" ? oe = this.languageUtils.toResolveHierarchy(t.lng || this.language) : oe.push(t.lng || this.language);
         const x = (D, q, V) => {
-          const de = A && V !== h ? V : se;
-          this.options.missingKeyHandler ? this.options.missingKeyHandler(D, c, q, de, $, t) : this.backendConnector && this.backendConnector.saveMissing && this.backendConnector.saveMissing(D, c, q, de, $, t), this.emit("missingKey", D, c, q, h);
+          const de = A && V !== d ? V : se;
+          this.options.missingKeyHandler ? this.options.missingKeyHandler(D, c, q, de, $, t) : this.backendConnector && this.backendConnector.saveMissing && this.backendConnector.saveMissing(D, c, q, de, $, t), this.emit("missingKey", D, c, q, d);
         };
         this.options.saveMissing && (this.options.saveMissingPlurals && T ? oe.forEach((D) => {
           const q = this.pluralResolver.getSuffixes(D, t);
@@ -725,9 +725,9 @@ class go extends qo {
           });
         }) : x(oe, s, J));
       }
-      h = this.extendTranslation(h, e, t, d, n), E && h === s && this.options.appendNamespaceToMissingKey && (h = `${c}:${s}`), (E || w) && this.options.parseMissingKeyHandler && (this.options.compatibilityAPI !== "v1" ? h = this.options.parseMissingKeyHandler(this.options.appendNamespaceToMissingKey ? `${c}:${s}` : s, w ? h : void 0) : h = this.options.parseMissingKeyHandler(h));
+      d = this.extendTranslation(d, e, t, h, n), E && d === s && this.options.appendNamespaceToMissingKey && (d = `${c}:${s}`), (E || w) && this.options.parseMissingKeyHandler && (this.options.compatibilityAPI !== "v1" ? d = this.options.parseMissingKeyHandler(this.options.appendNamespaceToMissingKey ? `${c}:${s}` : s, w ? d : void 0) : d = this.options.parseMissingKeyHandler(d));
     }
-    return o ? (d.res = h, d.usedParams = this.getUsedParamsDetails(t), d) : h;
+    return o ? (h.res = d, h.usedParams = this.getUsedParamsDetails(t), h) : d;
   }
   extendTranslation(e, t, n, o, i) {
     var s = this;
@@ -749,19 +749,19 @@ class go extends qo {
       const l = typeof e == "string" && (n && n.interpolation && n.interpolation.skipOnVariables !== void 0 ? n.interpolation.skipOnVariables : this.options.interpolation.skipOnVariables);
       let u;
       if (l) {
-        const h = e.match(this.interpolator.nestingRegexp);
-        u = h && h.length;
+        const d = e.match(this.interpolator.nestingRegexp);
+        u = d && d.length;
       }
-      let d = n.replace && typeof n.replace != "string" ? n.replace : n;
-      if (this.options.interpolation.defaultVariables && (d = {
+      let h = n.replace && typeof n.replace != "string" ? n.replace : n;
+      if (this.options.interpolation.defaultVariables && (h = {
         ...this.options.interpolation.defaultVariables,
-        ...d
-      }), e = this.interpolator.interpolate(e, d, n.lng || this.language, n), l) {
-        const h = e.match(this.interpolator.nestingRegexp), f = h && h.length;
+        ...h
+      }), e = this.interpolator.interpolate(e, h, n.lng || this.language, n), l) {
+        const d = e.match(this.interpolator.nestingRegexp), f = d && d.length;
         u < f && (n.nest = !1);
       }
       !n.lng && this.options.compatibilityAPI !== "v1" && o && o.res && (n.lng = o.usedLng), n.nest !== !1 && (e = this.interpolator.nest(e, function() {
-        for (var h = arguments.length, f = new Array(h), p = 0; p < h; p++)
+        for (var d = arguments.length, f = new Array(d), p = 0; p < d; p++)
           f[p] = arguments[p];
         return i && i[0] === f[0] && !n.context ? (s.logger.warn(`It seems you are nesting recursively key: ${f[0]} in key: ${t[0]}`), null) : s.translate(...f, t);
       }, n)), n.interpolation && this.interpolator.reset();
@@ -782,10 +782,10 @@ class go extends qo {
         return;
       const l = this.extractFromKey(c, t), u = l.key;
       o = u;
-      let d = l.namespaces;
-      this.options.fallbackNS && (d = d.concat(this.options.fallbackNS));
-      const h = t.count !== void 0 && typeof t.count != "string", f = h && !t.ordinal && t.count === 0 && this.pluralResolver.shouldUseIntlApi(), p = t.context !== void 0 && (typeof t.context == "string" || typeof t.context == "number") && t.context !== "", g = t.lngs ? t.lngs : this.languageUtils.toResolveHierarchy(t.lng || this.language, t.fallbackLng);
-      d.forEach((m) => {
+      let h = l.namespaces;
+      this.options.fallbackNS && (h = h.concat(this.options.fallbackNS));
+      const d = t.count !== void 0 && typeof t.count != "string", f = d && !t.ordinal && t.count === 0 && this.pluralResolver.shouldUseIntlApi(), p = t.context !== void 0 && (typeof t.context == "string" || typeof t.context == "number") && t.context !== "", g = t.lngs ? t.lngs : this.languageUtils.toResolveHierarchy(t.lng || this.language, t.fallbackLng);
+      h.forEach((m) => {
         this.isValidLookup(n) || (a = m, !Ha[`${g[0]}-${m}`] && this.utils && this.utils.hasLoadedNamespace && !this.utils.hasLoadedNamespace(a) && (Ha[`${g[0]}-${m}`] = !0, this.logger.warn(`key "${o}" for languages "${g.join(", ")}" won't get resolved as namespace "${a}" was not yet loaded`, "This means something IS WRONG in your setup. You access the t function before i18next.init / i18next.loadNamespace / i18next.changeLanguage was done. Wait for the callback or Promise to resolve before accessing it!!!")), g.forEach((b) => {
           if (this.isValidLookup(n))
             return;
@@ -795,11 +795,11 @@ class go extends qo {
             this.i18nFormat.addLookupKeys(C, u, b, m, t);
           else {
             let w;
-            h && (w = this.pluralResolver.getSuffix(b, t.count, t));
+            d && (w = this.pluralResolver.getSuffix(b, t.count, t));
             const E = `${this.options.pluralSeparator}zero`, T = `${this.options.pluralSeparator}ordinal${this.options.pluralSeparator}`;
-            if (h && (C.push(u + w), t.ordinal && w.indexOf(T) === 0 && C.push(u + w.replace(T, this.options.pluralSeparator)), f && C.push(u + E)), p) {
+            if (d && (C.push(u + w), t.ordinal && w.indexOf(T) === 0 && C.push(u + w.replace(T, this.options.pluralSeparator)), f && C.push(u + E)), p) {
               const A = `${u}${this.options.contextSeparator}${t.context}`;
-              C.push(A), h && (C.push(A + w), t.ordinal && w.indexOf(T) === 0 && C.push(A + w.replace(T, this.options.pluralSeparator)), f && C.push(A + E));
+              C.push(A), d && (C.push(A + w), t.ordinal && w.indexOf(T) === 0 && C.push(A + w.replace(T, this.options.pluralSeparator)), f && C.push(A + E));
             }
           }
           let v;
@@ -1171,8 +1171,8 @@ class Xh {
       suffixEscaped: c,
       formatSeparator: l,
       unescapeSuffix: u,
-      unescapePrefix: d,
-      nestingPrefix: h,
+      unescapePrefix: h,
+      nestingPrefix: d,
       nestingPrefixEscaped: f,
       nestingSuffix: p,
       nestingSuffixEscaped: g,
@@ -1180,7 +1180,7 @@ class Xh {
       maxReplaces: b,
       alwaysFormat: C
     } = e.interpolation;
-    this.escape = t !== void 0 ? t : jh, this.escapeValue = n !== void 0 ? n : !0, this.useRawValueToEscape = o !== void 0 ? o : !1, this.prefix = i ? Fr(i) : s || "{{", this.suffix = a ? Fr(a) : c || "}}", this.formatSeparator = l || ",", this.unescapePrefix = u ? "" : d || "-", this.unescapeSuffix = this.unescapePrefix ? "" : u || "", this.nestingPrefix = h ? Fr(h) : f || Fr("$t("), this.nestingSuffix = p ? Fr(p) : g || Fr(")"), this.nestingOptionsSeparator = m || ",", this.maxReplaces = b || 1e3, this.alwaysFormat = C !== void 0 ? C : !1, this.resetRegExp();
+    this.escape = t !== void 0 ? t : jh, this.escapeValue = n !== void 0 ? n : !0, this.useRawValueToEscape = o !== void 0 ? o : !1, this.prefix = i ? Fr(i) : s || "{{", this.suffix = a ? Fr(a) : c || "}}", this.formatSeparator = l || ",", this.unescapePrefix = u ? "" : h || "-", this.unescapeSuffix = this.unescapePrefix ? "" : u || "", this.nestingPrefix = d ? Fr(d) : f || Fr("$t("), this.nestingSuffix = p ? Fr(p) : g || Fr(")"), this.nestingOptionsSeparator = m || ",", this.maxReplaces = b || 1e3, this.alwaysFormat = C !== void 0 ? C : !1, this.resetRegExp();
   }
   reset() {
     this.options && this.init(this.options);
@@ -1212,7 +1212,7 @@ class Xh {
       });
     };
     this.resetRegExp();
-    const d = o && o.missingInterpolationHandler || this.options.missingInterpolationHandler, h = o && o.interpolation && o.interpolation.skipOnVariables !== void 0 ? o.interpolation.skipOnVariables : this.options.interpolation.skipOnVariables;
+    const h = o && o.missingInterpolationHandler || this.options.missingInterpolationHandler, d = o && o.interpolation && o.interpolation.skipOnVariables !== void 0 ? o.interpolation.skipOnVariables : this.options.interpolation.skipOnVariables;
     return [{
       regex: this.regexpUnescape,
       safeValue: (p) => l(p)
@@ -1223,12 +1223,12 @@ class Xh {
       for (a = 0; i = p.regex.exec(e); ) {
         const g = i[1].trim();
         if (s = u(g), s === void 0)
-          if (typeof d == "function") {
-            const b = d(e, i, o);
+          if (typeof h == "function") {
+            const b = h(e, i, o);
             s = typeof b == "string" ? b : "";
           } else if (o && Object.prototype.hasOwnProperty.call(o, g))
             s = "";
-          else if (h) {
+          else if (d) {
             s = i[0];
             continue;
           } else
@@ -1236,7 +1236,7 @@ class Xh {
         else
           typeof s != "string" && !this.useRawValueToEscape && (s = La(s));
         const m = p.safeValue(s);
-        if (e = e.replace(i[0], m), h ? (p.regex.lastIndex += s.length, p.regex.lastIndex -= i[0].length) : p.regex.lastIndex = 0, a++, a >= this.maxReplaces)
+        if (e = e.replace(i[0], m), d ? (p.regex.lastIndex += s.length, p.regex.lastIndex -= i[0].length) : p.regex.lastIndex = 0, a++, a >= this.maxReplaces)
           break;
       }
     }), e;
@@ -1247,18 +1247,18 @@ class Xh {
       const u = this.nestingOptionsSeparator;
       if (c.indexOf(u) < 0)
         return c;
-      const d = c.split(new RegExp(`${u}[ ]*{`));
-      let h = `{${d[1]}`;
-      c = d[0], h = this.interpolate(h, s);
-      const f = h.match(/'/g), p = h.match(/"/g);
-      (f && f.length % 2 === 0 && !p || p.length % 2 !== 0) && (h = h.replace(/'/g, '"'));
+      const h = c.split(new RegExp(`${u}[ ]*{`));
+      let d = `{${h[1]}`;
+      c = h[0], d = this.interpolate(d, s);
+      const f = d.match(/'/g), p = d.match(/"/g);
+      (f && f.length % 2 === 0 && !p || p.length % 2 !== 0) && (d = d.replace(/'/g, '"'));
       try {
-        s = JSON.parse(h), l && (s = {
+        s = JSON.parse(d), l && (s = {
           ...l,
           ...s
         });
       } catch (g) {
-        return this.logger.warn(`failed parsing options string in nesting for key ${c}`, g), `${c}${u}${h}`;
+        return this.logger.warn(`failed parsing options string in nesting for key ${c}`, g), `${c}${u}${d}`;
       }
       return s.defaultValue && s.defaultValue.indexOf(this.prefix) > -1 && delete s.defaultValue, c;
     }
@@ -1269,12 +1269,12 @@ class Xh {
       }, s = s.replace && typeof s.replace != "string" ? s.replace : s, s.applyPostProcessor = !1, delete s.defaultValue;
       let l = !1;
       if (o[0].indexOf(this.formatSeparator) !== -1 && !/{.*}/.test(o[1])) {
-        const u = o[1].split(this.formatSeparator).map((d) => d.trim());
+        const u = o[1].split(this.formatSeparator).map((h) => h.trim());
         o[1] = u.shift(), c = u, l = !0;
       }
       if (i = t(a.call(this, o[1].trim(), s), s), i && o[0] === e && typeof i != "string")
         return i;
-      typeof i != "string" && (i = La(i)), i || (this.logger.warn(`missed to resolve ${o[1]} for nesting ${e}`), i = ""), l && (i = c.reduce((u, d) => this.format(u, d, n.lng, {
+      typeof i != "string" && (i = La(i)), i || (this.logger.warn(`missed to resolve ${o[1]} for nesting ${e}`), i = ""), l && (i = c.reduce((u, h) => this.format(u, h, n.lng, {
         ...n,
         interpolationkey: o[1].trim()
       }), i.trim())), e = e.replace(o[0], i), this.regexp.lastIndex = 0;
@@ -1366,18 +1366,18 @@ class ef {
         formatOptions: u
       } = Zh(c);
       if (this.formats[l]) {
-        let d = a;
+        let h = a;
         try {
-          const h = o && o.formatParams && o.formatParams[o.interpolationkey] || {}, f = h.locale || h.lng || o.locale || o.lng || n;
-          d = this.formats[l](a, f, {
+          const d = o && o.formatParams && o.formatParams[o.interpolationkey] || {}, f = d.locale || d.lng || o.locale || o.lng || n;
+          h = this.formats[l](a, f, {
             ...u,
             ...o,
-            ...h
+            ...d
           });
-        } catch (h) {
-          this.logger.warn(h);
+        } catch (d) {
+          this.logger.warn(d);
         }
-        return d;
+        return h;
       } else
         this.logger.warn(`there was no format function for ${l}`);
       return a;
@@ -1396,9 +1396,9 @@ class rf extends qo {
     const i = {}, s = {}, a = {}, c = {};
     return e.forEach((l) => {
       let u = !0;
-      t.forEach((d) => {
-        const h = `${l}|${d}`;
-        !n.reload && this.store.hasResourceBundle(l, d) ? this.state[h] = 2 : this.state[h] < 0 || (this.state[h] === 1 ? s[h] === void 0 && (s[h] = !0) : (this.state[h] = 1, u = !1, s[h] === void 0 && (s[h] = !0), i[h] === void 0 && (i[h] = !0), c[d] === void 0 && (c[d] = !0)));
+      t.forEach((h) => {
+        const d = `${l}|${h}`;
+        !n.reload && this.store.hasResourceBundle(l, h) ? this.state[d] = 2 : this.state[d] < 0 || (this.state[d] === 1 ? s[d] === void 0 && (s[d] = !0) : (this.state[d] = 1, u = !1, s[d] === void 0 && (s[d] = !0), i[d] === void 0 && (i[d] = !0), c[h] === void 0 && (c[h] = !0)));
       }), u || (a[l] = !0);
     }), (Object.keys(i).length || Object.keys(s).length) && this.queue.push({
       pending: s,
@@ -1423,8 +1423,8 @@ class rf extends qo {
       Hh(c.loaded, [i], s), tf(c, e), t && c.errors.push(t), c.pendingCount === 0 && !c.done && (Object.keys(c.loaded).forEach((l) => {
         a[l] || (a[l] = {});
         const u = c.loaded[l];
-        u.length && u.forEach((d) => {
-          a[l][d] === void 0 && (a[l][d] = !0);
+        u.length && u.forEach((h) => {
+          a[l][h] === void 0 && (a[l][h] = !0);
         });
       }), c.done = !0, c.errors.length ? c.callback(c.errors) : c.callback());
     }), this.emit("loaded", a), this.queue = this.queue.filter((c) => !c.done);
@@ -1447,8 +1447,8 @@ class rf extends qo {
     this.readingCalls++;
     const a = (l, u) => {
       if (this.readingCalls--, this.waitingReads.length > 0) {
-        const d = this.waitingReads.shift();
-        this.read(d.lng, d.ns, d.fcName, d.tried, d.wait, d.callback);
+        const h = this.waitingReads.shift();
+        this.read(h.lng, h.ns, h.fcName, h.tried, h.wait, h.callback);
       }
       if (l && u && o < this.maxRetries) {
         setTimeout(() => {
@@ -1512,7 +1512,7 @@ class rf extends qo {
         if (l.length < 6)
           try {
             let u;
-            l.length === 5 ? u = l(e, t, n, o, c) : u = l(e, t, n, o), u && typeof u.then == "function" ? u.then((d) => a(null, d)).catch(a) : a(null, u);
+            l.length === 5 ? u = l(e, t, n, o, c) : u = l(e, t, n, o), u && typeof u.then == "function" ? u.then((h) => a(null, h)).catch(a) : a(null, u);
           } catch (u) {
             a(u);
           }
@@ -1625,20 +1625,20 @@ class On extends qo {
       this.modules.logger ? Rt.init(i(this.modules.logger), this.options) : Rt.init(null, this.options);
       let u;
       this.modules.formatter ? u = this.modules.formatter : typeof Intl < "u" && (u = ef);
-      const d = new Fa(this.options);
+      const h = new Fa(this.options);
       this.store = new Ua(this.options.resources, this.options);
-      const h = this.services;
-      h.logger = Rt, h.resourceStore = this.store, h.languageUtils = d, h.pluralResolver = new Jh(d, {
+      const d = this.services;
+      d.logger = Rt, d.resourceStore = this.store, d.languageUtils = h, d.pluralResolver = new Jh(h, {
         prepend: this.options.pluralSeparator,
         compatibilityJSON: this.options.compatibilityJSON,
         simplifyPluralSuffix: this.options.simplifyPluralSuffix
-      }), u && (!this.options.interpolation.format || this.options.interpolation.format === o.interpolation.format) && (h.formatter = i(u), h.formatter.init(h, this.options), this.options.interpolation.format = h.formatter.format.bind(h.formatter)), h.interpolator = new Xh(this.options), h.utils = {
+      }), u && (!this.options.interpolation.format || this.options.interpolation.format === o.interpolation.format) && (d.formatter = i(u), d.formatter.init(d, this.options), this.options.interpolation.format = d.formatter.format.bind(d.formatter)), d.interpolator = new Xh(this.options), d.utils = {
         hasLoadedNamespace: this.hasLoadedNamespace.bind(this)
-      }, h.backendConnector = new rf(i(this.modules.backend), h.resourceStore, h, this.options), h.backendConnector.on("*", function(f) {
+      }, d.backendConnector = new rf(i(this.modules.backend), d.resourceStore, d, this.options), d.backendConnector.on("*", function(f) {
         for (var p = arguments.length, g = new Array(p > 1 ? p - 1 : 0), m = 1; m < p; m++)
           g[m - 1] = arguments[m];
         e.emit(f, ...g);
-      }), this.modules.languageDetector && (h.languageDetector = i(this.modules.languageDetector), h.languageDetector.init && h.languageDetector.init(h, this.options.detection, this.options)), this.modules.i18nFormat && (h.i18nFormat = i(this.modules.i18nFormat), h.i18nFormat.init && h.i18nFormat.init(this)), this.translator = new go(this.services, this.options), this.translator.on("*", function(f) {
+      }), this.modules.languageDetector && (d.languageDetector = i(this.modules.languageDetector), d.languageDetector.init && d.languageDetector.init(d, this.options.detection, this.options)), this.modules.i18nFormat && (d.i18nFormat = i(this.modules.i18nFormat), d.i18nFormat.init && d.i18nFormat.init(this)), this.translator = new go(this.services, this.options), this.translator.on("*", function(f) {
         for (var p = arguments.length, g = new Array(p > 1 ? p - 1 : 0), m = 1; m < p; m++)
           g[m - 1] = arguments[m];
         e.emit(f, ...g);
@@ -1660,8 +1660,8 @@ class On extends qo {
       };
     });
     const c = pn(), l = () => {
-      const u = (d, h) => {
-        this.isInitializing = !1, this.isInitialized && !this.initializedStoreOnce && this.logger.warn("init: i18next is already initialized. You should call init just once!"), this.isInitialized = !0, this.options.isClone || this.logger.log("initialized", this.options), this.emit("initialized", this.options), c.resolve(h), n(d, h);
+      const u = (h, d) => {
+        this.isInitializing = !1, this.isInitialized && !this.initializedStoreOnce && this.logger.warn("init: i18next is already initialized. You should call init just once!"), this.isInitialized = !0, this.options.isClone || this.logger.log("initialized", this.options), this.emit("initialized", this.options), c.resolve(d), n(h, d);
       };
       if (this.languages && this.options.compatibilityAPI !== "v1" && !this.isInitialized)
         return u(null, this.t.bind(this));
@@ -1738,17 +1738,17 @@ class On extends qo {
     const i = function(s, a) {
       let c;
       if (typeof a != "object") {
-        for (var l = arguments.length, u = new Array(l > 2 ? l - 2 : 0), d = 2; d < l; d++)
-          u[d - 2] = arguments[d];
+        for (var l = arguments.length, u = new Array(l > 2 ? l - 2 : 0), h = 2; h < l; h++)
+          u[h - 2] = arguments[h];
         c = o.options.overloadTranslationOptionHandler([s, a].concat(u));
       } else
         c = {
           ...a
         };
       c.lng = c.lng || i.lng, c.lngs = c.lngs || i.lngs, c.ns = c.ns || i.ns, c.keyPrefix = c.keyPrefix || n || i.keyPrefix;
-      const h = o.options.keySeparator || ".";
+      const d = o.options.keySeparator || ".";
       let f;
-      return c.keyPrefix && Array.isArray(s) ? f = s.map((p) => `${c.keyPrefix}${h}${p}`) : f = c.keyPrefix ? `${c.keyPrefix}${h}${s}` : s, o.t(f, c);
+      return c.keyPrefix && Array.isArray(s) ? f = s.map((p) => `${c.keyPrefix}${d}${p}`) : f = c.keyPrefix ? `${c.keyPrefix}${d}${s}` : s, o.t(f, c);
     };
     return typeof e == "string" ? i.lng = e : i.lngs = e, i.ns = t, i.keyPrefix = n, i;
   }
@@ -2009,10 +2009,10 @@ function fs(r) {
   let l = r || o || i.options && i.options.defaultNS;
   l = typeof l == "string" ? [l] : l || ["translation"], i.reportNamespaces.addUsedNamespaces && i.reportNamespaces.addUsedNamespaces(l);
   const u = (i.isInitialized || i.initializedStoreOnce) && l.every((v) => af(v, i, s));
-  function d() {
+  function h() {
     return i.getFixedT(e.lng || null, s.nsMode === "fallback" ? l : l[0], c);
   }
-  const [h, f] = X(d);
+  const [d, f] = X(h);
   let p = l.join();
   e.lng && (p = `${e.lng}${p}`);
   const g = Cf(p), m = ue(!0);
@@ -2022,12 +2022,12 @@ function fs(r) {
       bindI18nStore: w
     } = s;
     m.current = !0, !u && !a && (e.lng ? Ga(i, e.lng, l, () => {
-      m.current && f(d);
+      m.current && f(h);
     }) : za(i, l, () => {
-      m.current && f(d);
-    })), u && g && g !== p && m.current && f(d);
+      m.current && f(h);
+    })), u && g && g !== p && m.current && f(h);
     function E() {
-      m.current && f(d);
+      m.current && f(h);
     }
     return v && i && i.on(v, E), w && i && i.store.on(w, E), () => {
       m.current = !1, v && i && v.split(" ").forEach((T) => i.off(T, E)), w && i && w.split(" ").forEach((T) => i.store.off(T, E));
@@ -2035,10 +2035,10 @@ function fs(r) {
   }, [i, p]);
   const b = ue(!0);
   W(() => {
-    m.current && !b.current && f(d), b.current = !1;
+    m.current && !b.current && f(h), b.current = !1;
   }, [i, c]);
-  const C = [h, i, u];
-  if (C.t = h, C.i18n = i, C.ready = u, u || !u && !a)
+  const C = [d, i, u];
+  if (C.t = d, C.i18n = i, C.ready = u, u || !u && !a)
     return C;
   throw new Promise((v) => {
     e.lng ? Ga(i, e.lng, l, () => v()) : za(i, l, () => v());
@@ -2182,15 +2182,15 @@ function k(r, e, t, n) {
     function a(u) {
       try {
         l(n.next(u));
-      } catch (d) {
-        s(d);
+      } catch (h) {
+        s(h);
       }
     }
     function c(u) {
       try {
         l(n.throw(u));
-      } catch (d) {
-        s(d);
+      } catch (h) {
+        s(h);
       }
     }
     function l(u) {
@@ -2339,15 +2339,15 @@ function re(r, e, t, n) {
     function a(u) {
       try {
         l(n.next(u));
-      } catch (d) {
-        s(d);
+      } catch (h) {
+        s(h);
       }
     }
     function c(u) {
       try {
         l(n.throw(u));
-      } catch (d) {
-        s(d);
+      } catch (h) {
+        s(h);
       }
     }
     function l(u) {
@@ -3800,15 +3800,15 @@ var Ve = (
         keyId: t.sshKid,
         requestedClaimsHash: t.requestedClaimsHash
       }, l = n && n.accessToken || this.getTokenKeys().accessToken, u = [];
-      l.forEach(function(h) {
-        if (o.accessTokenKeyMatchesFilter(h, c, !0)) {
-          var f = o.getAccessTokenCredential(h);
+      l.forEach(function(d) {
+        if (o.accessTokenKeyMatchesFilter(d, c, !0)) {
+          var f = o.getAccessTokenCredential(d);
           f && o.credentialMatchesFilter(f, c) && u.push(f);
         }
       });
-      var d = u.length;
-      return d < 1 ? (this.commonLogger.info("CacheManager:getAccessToken - No token found"), null) : d > 1 ? (this.commonLogger.info("CacheManager:getAccessToken - Multiple access tokens found, clearing them"), u.forEach(function(h) {
-        o.removeAccessToken(h.generateCredentialKey());
+      var h = u.length;
+      return h < 1 ? (this.commonLogger.info("CacheManager:getAccessToken - No token found"), null) : h > 1 ? (this.commonLogger.info("CacheManager:getAccessToken - Multiple access tokens found, clearing them"), u.forEach(function(d) {
+        o.removeAccessToken(d.generateCredentialKey());
       }), null) : (this.commonLogger.info("CacheManager:getAccessToken - Returning access token"), u[0]);
     }, r.prototype.accessTokenKeyMatchesFilter = function(e, t, n) {
       var o = e.toLowerCase();
@@ -3842,8 +3842,8 @@ var Ve = (
       }, a = n && n.refreshToken || this.getTokenKeys().refreshToken, c = [];
       a.forEach(function(u) {
         if (o.refreshTokenKeyMatchesFilter(u, s)) {
-          var d = o.getRefreshTokenCredential(u);
-          d && o.credentialMatchesFilter(d, s) && c.push(d);
+          var h = o.getRefreshTokenCredential(u);
+          h && o.credentialMatchesFilter(h, s) && c.push(h);
         }
       });
       var l = c.length;
@@ -4042,7 +4042,7 @@ var Sf = 300, kl = {
   }
 };
 function Pf(r) {
-  var e = r.authOptions, t = r.systemOptions, n = r.loggerOptions, o = r.cacheOptions, i = r.storageInterface, s = r.networkInterface, a = r.cryptoInterface, c = r.clientCredentials, l = r.libraryInfo, u = r.telemetry, d = r.serverTelemetryManager, h = r.persistencePlugin, f = r.serializableCache, p = ge(ge({}, Tf), n);
+  var e = r.authOptions, t = r.systemOptions, n = r.loggerOptions, o = r.cacheOptions, i = r.storageInterface, s = r.networkInterface, a = r.cryptoInterface, c = r.clientCredentials, l = r.libraryInfo, u = r.telemetry, h = r.serverTelemetryManager, d = r.persistencePlugin, f = r.serializableCache, p = ge(ge({}, Tf), n);
   return {
     authOptions: Of(e),
     systemOptions: ge(ge({}, kl), t),
@@ -4054,8 +4054,8 @@ function Pf(r) {
     clientCredentials: c || Rf,
     libraryInfo: ge(ge({}, Af), l),
     telemetry: ge(ge({}, Nf), u),
-    serverTelemetryManager: d || null,
-    persistencePlugin: h || null,
+    serverTelemetryManager: h || null,
+    persistencePlugin: d || null,
     serializableCache: f || null
   };
 }
@@ -4466,11 +4466,11 @@ var tr = (
     function e() {
       return r !== null && r.apply(this, arguments) || this;
     }
-    return e.createAccessTokenEntity = function(t, n, o, i, s, a, c, l, u, d, h, f, p, g, m) {
+    return e.createAccessTokenEntity = function(t, n, o, i, s, a, c, l, u, h, d, f, p, g, m) {
       var b, C, v = new e();
       v.homeAccountId = t, v.credentialType = Y.ACCESS_TOKEN, v.secret = o;
       var w = ht.nowSeconds();
-      if (v.cachedAt = w.toString(), v.expiresOn = c.toString(), v.extendedExpiresOn = l.toString(), d && (v.refreshOn = d.toString()), v.environment = n, v.clientId = i, v.realm = s, v.target = a, v.userAssertionHash = f, v.tokenType = H.isEmpty(h) ? ye.BEARER : h, g && (v.requestedClaims = g, v.requestedClaimsHash = m), ((b = v.tokenType) === null || b === void 0 ? void 0 : b.toLowerCase()) !== ye.BEARER.toLowerCase())
+      if (v.cachedAt = w.toString(), v.expiresOn = c.toString(), v.extendedExpiresOn = l.toString(), h && (v.refreshOn = h.toString()), v.environment = n, v.clientId = i, v.realm = s, v.target = a, v.userAssertionHash = f, v.tokenType = H.isEmpty(d) ? ye.BEARER : d, g && (v.requestedClaims = g, v.requestedClaimsHash = m), ((b = v.tokenType) === null || b === void 0 ? void 0 : b.toLowerCase()) !== ye.BEARER.toLowerCase())
         switch (v.credentialType = Y.ACCESS_TOKEN_WITH_AUTH_SCHEME, v.tokenType) {
           case ye.POP:
             var E = Ot.extractTokenClaims(o, u);
@@ -4757,12 +4757,12 @@ var en = (
     }, r.prototype.signPayload = function(e, t, n, o) {
       return re(this, void 0, void 0, function() {
         var i, s, a, c, l, u;
-        return ne(this, function(d) {
-          switch (d.label) {
+        return ne(this, function(h) {
+          switch (h.label) {
             case 0:
               return i = n.resourceRequestMethod, s = n.resourceRequestUri, a = n.shrClaims, c = n.shrNonce, l = s ? new he(s) : void 0, u = l == null ? void 0 : l.getUrlComponents(), [4, this.cryptoUtils.signJwt(ge({ at: e, ts: ht.nowSeconds(), m: i == null ? void 0 : i.toUpperCase(), u: u == null ? void 0 : u.HostNameAndPort, nonce: c || this.cryptoUtils.createNewGuid(), p: u == null ? void 0 : u.AbsolutePath, q: u != null && u.QueryString ? [[], u.QueryString] : void 0, client_claims: a || void 0 }, o), t, n.correlationId)];
             case 1:
-              return [2, d.sent()];
+              return [2, h.sent()];
           }
         });
       });
@@ -4845,26 +4845,26 @@ var So = (
     }, r.prototype.handleServerTokenResponse = function(e, t, n, o, i, s, a, c, l) {
       var u;
       return re(this, void 0, void 0, function() {
-        var d, h, f, p, g, m, b;
+        var h, d, f, p, g, m, b;
         return ne(this, function(C) {
           switch (C.label) {
             case 0:
               if ((u = this.performanceClient) === null || u === void 0 || u.addQueueMeasurement(I.HandleServerTokenResponse, e.correlation_id), e.id_token) {
-                if (d = new Ot(e.id_token || S.EMPTY_STRING, this.cryptoObj), i && !H.isEmpty(i.nonce) && d.claims.nonce !== i.nonce)
+                if (h = new Ot(e.id_token || S.EMPTY_STRING, this.cryptoObj), i && !H.isEmpty(i.nonce) && h.claims.nonce !== i.nonce)
                   throw j.createNonceMismatchError();
                 if (o.maxAge || o.maxAge === 0) {
-                  if (h = d.claims.auth_time, !h)
+                  if (d = h.claims.auth_time, !d)
                     throw j.createAuthTimeNotFoundError();
-                  Ot.checkMaxAge(h, o.maxAge);
+                  Ot.checkMaxAge(d, o.maxAge);
                 }
               }
-              this.homeAccountIdentifier = Fe.generateHomeAccountId(e.client_info || S.EMPTY_STRING, t.authorityType, this.logger, this.cryptoObj, d == null ? void 0 : d.claims), i && i.state && (f = Bt.parseRequestState(this.cryptoObj, i.state)), e.key_id = e.key_id || o.sshKid || void 0, p = this.generateCacheRecord(e, t, n, o, d, s, i), C.label = 1;
+              this.homeAccountIdentifier = Fe.generateHomeAccountId(e.client_info || S.EMPTY_STRING, t.authorityType, this.logger, this.cryptoObj, h == null ? void 0 : h.claims), i && i.state && (f = Bt.parseRequestState(this.cryptoObj, i.state)), e.key_id = e.key_id || o.sshKid || void 0, p = this.generateCacheRecord(e, t, n, o, h, s, i), C.label = 1;
             case 1:
               return C.trys.push([1, , 5, 8]), this.persistencePlugin && this.serializableCache ? (this.logger.verbose("Persistence enabled, calling beforeCacheAccess"), g = new Df(this.serializableCache, !0), [4, this.persistencePlugin.beforeCacheAccess(g)]) : [3, 3];
             case 2:
               C.sent(), C.label = 3;
             case 3:
-              return a && !c && p.account && (m = p.account.generateAccountKey(), b = this.cacheStorage.getAccount(m), !b) ? (this.logger.warning("Account used to refresh tokens not in persistence, refreshed tokens will not be stored in the cache"), [2, r.generateAuthenticationResult(this.cryptoObj, t, p, !1, o, d, f, void 0, l)]) : [4, this.cacheStorage.saveCacheRecord(p)];
+              return a && !c && p.account && (m = p.account.generateAccountKey(), b = this.cacheStorage.getAccount(m), !b) ? (this.logger.warning("Account used to refresh tokens not in persistence, refreshed tokens will not be stored in the cache"), [2, r.generateAuthenticationResult(this.cryptoObj, t, p, !1, o, h, f, void 0, l)]) : [4, this.cacheStorage.saveCacheRecord(p)];
             case 4:
               return C.sent(), [3, 8];
             case 5:
@@ -4877,7 +4877,7 @@ var So = (
                 /*endfinally*/
               ];
             case 8:
-              return [2, r.generateAuthenticationResult(this.cryptoObj, t, p, !1, o, d, f, e, l)];
+              return [2, r.generateAuthenticationResult(this.cryptoObj, t, p, !1, o, h, f, e, l)];
           }
         });
       });
@@ -4893,17 +4893,17 @@ var So = (
         cloudGraphHostName: a == null ? void 0 : a.cloud_graph_host_name,
         msGraphHost: a == null ? void 0 : a.msgraph_host
       }, t));
-      var d = null;
+      var h = null;
       if (!H.isEmpty(e.access_token)) {
-        var h = e.scope ? De.fromString(e.scope) : new De(o.scopes || []), f = (typeof e.expires_in == "string" ? parseInt(e.expires_in, 10) : e.expires_in) || 0, p = (typeof e.ext_expires_in == "string" ? parseInt(e.ext_expires_in, 10) : e.ext_expires_in) || 0, g = (typeof e.refresh_in == "string" ? parseInt(e.refresh_in, 10) : e.refresh_in) || void 0, m = n + f, b = m + p, C = g && g > 0 ? n + g : void 0;
-        d = tr.createAccessTokenEntity(this.homeAccountIdentifier, c, e.access_token || S.EMPTY_STRING, this.clientId, i ? i.claims.tid || S.EMPTY_STRING : t.tenant, h.printScopes(), m, b, this.cryptoObj, C, e.token_type, s, e.key_id, o.claims, o.requestedClaimsHash);
+        var d = e.scope ? De.fromString(e.scope) : new De(o.scopes || []), f = (typeof e.expires_in == "string" ? parseInt(e.expires_in, 10) : e.expires_in) || 0, p = (typeof e.ext_expires_in == "string" ? parseInt(e.ext_expires_in, 10) : e.ext_expires_in) || 0, g = (typeof e.refresh_in == "string" ? parseInt(e.refresh_in, 10) : e.refresh_in) || void 0, m = n + f, b = m + p, C = g && g > 0 ? n + g : void 0;
+        h = tr.createAccessTokenEntity(this.homeAccountIdentifier, c, e.access_token || S.EMPTY_STRING, this.clientId, i ? i.claims.tid || S.EMPTY_STRING : t.tenant, d.printScopes(), m, b, this.cryptoObj, C, e.token_type, s, e.key_id, o.claims, o.requestedClaimsHash);
       }
       var v = null;
       H.isEmpty(e.refresh_token) || (v = Vr.createRefreshTokenEntity(this.homeAccountIdentifier, c, e.refresh_token || S.EMPTY_STRING, this.clientId, e.foci, s));
       var w = null;
-      return H.isEmpty(e.foci) || (w = Ki.createAppMetadataEntity(this.clientId, c, e.foci)), new Qr(u, l, d, v, w);
+      return H.isEmpty(e.foci) || (w = Ki.createAppMetadataEntity(this.clientId, c, e.foci)), new Qr(u, l, h, v, w);
     }, r.generateAuthenticationResult = function(e, t, n, o, i, s, a, c, l) {
-      var u, d, h;
+      var u, h, d;
       return re(this, void 0, void 0, function() {
         var f, p, g, m, b, C, v, w, E, T, A;
         return ne(this, function(_) {
@@ -4940,8 +4940,8 @@ var So = (
                 familyId: b,
                 tokenType: ((u = n.accessToken) === null || u === void 0 ? void 0 : u.tokenType) || S.EMPTY_STRING,
                 state: a ? a.userRequestState : S.EMPTY_STRING,
-                cloudGraphHostName: ((d = n.account) === null || d === void 0 ? void 0 : d.cloudGraphHostName) || S.EMPTY_STRING,
-                msGraphHost: ((h = n.account) === null || h === void 0 ? void 0 : h.msGraphHost) || S.EMPTY_STRING,
+                cloudGraphHostName: ((h = n.account) === null || h === void 0 ? void 0 : h.cloudGraphHostName) || S.EMPTY_STRING,
+                msGraphHost: ((d = n.account) === null || d === void 0 ? void 0 : d.msGraphHost) || S.EMPTY_STRING,
                 code: c == null ? void 0 : c.spa_code,
                 fromNativeBroker: !1
               }];
@@ -4976,17 +4976,17 @@ var Nl = (
     }, e.prototype.acquireToken = function(t, n) {
       var o, i, s, a, c, l;
       return re(this, void 0, void 0, function() {
-        var u, d, h, f, p, g, m = this;
+        var u, h, d, f, p, g, m = this;
         return ne(this, function(b) {
           switch (b.label) {
             case 0:
               if (!t || !t.code)
                 throw j.createTokenRequestCannotBeMadeError();
-              return (o = this.performanceClient) === null || o === void 0 || o.addQueueMeasurement(I.AuthClientAcquireToken, t.correlationId), u = (i = this.performanceClient) === null || i === void 0 ? void 0 : i.startMeasurement("AuthCodeClientAcquireToken", t.correlationId), this.logger.info("in acquireToken call in auth-code client"), d = ht.nowSeconds(), (s = this.performanceClient) === null || s === void 0 || s.setPreQueueTime(I.AuthClientExecuteTokenRequest, t.correlationId), [4, this.executeTokenRequest(this.authority, t)];
+              return (o = this.performanceClient) === null || o === void 0 || o.addQueueMeasurement(I.AuthClientAcquireToken, t.correlationId), u = (i = this.performanceClient) === null || i === void 0 ? void 0 : i.startMeasurement("AuthCodeClientAcquireToken", t.correlationId), this.logger.info("in acquireToken call in auth-code client"), h = ht.nowSeconds(), (s = this.performanceClient) === null || s === void 0 || s.setPreQueueTime(I.AuthClientExecuteTokenRequest, t.correlationId), [4, this.executeTokenRequest(this.authority, t)];
             case 1:
-              return h = b.sent(), f = (a = h.headers) === null || a === void 0 ? void 0 : a[ot.X_MS_REQUEST_ID], p = (c = h.headers) === null || c === void 0 ? void 0 : c[ot.X_MS_HTTP_VERSION], p && (u == null || u.addStaticFields({
+              return d = b.sent(), f = (a = d.headers) === null || a === void 0 ? void 0 : a[ot.X_MS_REQUEST_ID], p = (c = d.headers) === null || c === void 0 ? void 0 : c[ot.X_MS_HTTP_VERSION], p && (u == null || u.addStaticFields({
                 httpVerAuthority: p
-              })), g = new So(this.config.authOptions.clientId, this.cacheManager, this.cryptoUtils, this.logger, this.config.serializableCache, this.config.persistencePlugin, this.performanceClient), g.validateTokenResponse(h.body), (l = this.performanceClient) === null || l === void 0 || l.setPreQueueTime(I.HandleServerTokenResponse, t.correlationId), [2, g.handleServerTokenResponse(h.body, this.authority, d, t, n, void 0, void 0, void 0, f).then(function(C) {
+              })), g = new So(this.config.authOptions.clientId, this.cacheManager, this.cryptoUtils, this.logger, this.config.serializableCache, this.config.persistencePlugin, this.performanceClient), g.validateTokenResponse(d.body), (l = this.performanceClient) === null || l === void 0 || l.setPreQueueTime(I.HandleServerTokenResponse, t.correlationId), [2, g.handleServerTokenResponse(d.body, this.authority, h, t, n, void 0, void 0, void 0, f).then(function(C) {
                 return u == null || u.endMeasurement({
                   success: !0
                 }), C;
@@ -5016,7 +5016,7 @@ var Nl = (
     }, e.prototype.executeTokenRequest = function(t, n) {
       var o, i;
       return re(this, void 0, void 0, function() {
-        var s, a, c, l, u, d, h;
+        var s, a, c, l, u, h, d;
         return ne(this, function(f) {
           switch (f.label) {
             case 0:
@@ -5031,7 +5031,7 @@ var Nl = (
                 } catch (p) {
                   this.logger.verbose("Could not parse client info for CCS Header: " + p);
                 }
-              return d = this.createTokenRequestHeaders(l || n.ccsCredential), h = {
+              return h = this.createTokenRequestHeaders(l || n.ccsCredential), d = {
                 clientId: this.config.authOptions.clientId,
                 authority: t.canonicalAuthority,
                 scopes: n.scopes,
@@ -5041,14 +5041,14 @@ var Nl = (
                 resourceRequestUri: n.resourceRequestUri,
                 shrClaims: n.shrClaims,
                 sshKid: n.sshKid
-              }, [2, this.executePostToTokenEndpoint(a, c, d, h)];
+              }, [2, this.executePostToTokenEndpoint(a, c, h, d)];
           }
         });
       });
     }, e.prototype.createTokenRequestBody = function(t) {
       var n, o;
       return re(this, void 0, void 0, function() {
-        var i, s, a, c, l, u, d, d, h;
+        var i, s, a, c, l, u, h, h, d;
         return ne(this, function(f) {
           switch (f.label) {
             case 0:
@@ -5065,8 +5065,8 @@ var Nl = (
             case 3:
               if (l = t.correlationId || this.config.cryptoInterface.createNewGuid(), i.addCorrelationId(l), (!H.isEmptyObj(t.claims) || this.config.authOptions.clientCapabilities && this.config.authOptions.clientCapabilities.length > 0) && i.addClaims(t.claims, this.config.authOptions.clientCapabilities), u = void 0, t.clientInfo)
                 try {
-                  d = bo(t.clientInfo, this.cryptoUtils), u = {
-                    credential: "" + d.uid + Ae.CLIENT_INFO_SEPARATOR + d.utid,
+                  h = bo(t.clientInfo, this.cryptoUtils), u = {
+                    credential: "" + h.uid + Ae.CLIENT_INFO_SEPARATOR + h.utid,
                     type: rt.HOME_ACCOUNT_ID
                   };
                 } catch (p) {
@@ -5078,7 +5078,7 @@ var Nl = (
                 switch (u.type) {
                   case rt.HOME_ACCOUNT_ID:
                     try {
-                      d = Gr(u.credential), i.addCcsOid(d);
+                      h = Gr(u.credential), i.addCcsOid(h);
                     } catch (p) {
                       this.logger.verbose("Could not parse home account ID for CCS Header: " + p);
                     }
@@ -5087,16 +5087,16 @@ var Nl = (
                     i.addCcsUpn(u.credential);
                     break;
                 }
-              return t.tokenBodyParameters && i.addExtraQueryParameters(t.tokenBodyParameters), t.enableSpaAuthorizationCode && (!t.tokenBodyParameters || !t.tokenBodyParameters[ie.RETURN_SPA_CODE]) && i.addExtraQueryParameters((h = {}, h[ie.RETURN_SPA_CODE] = "1", h)), [2, i.createQueryString()];
+              return t.tokenBodyParameters && i.addExtraQueryParameters(t.tokenBodyParameters), t.enableSpaAuthorizationCode && (!t.tokenBodyParameters || !t.tokenBodyParameters[ie.RETURN_SPA_CODE]) && i.addExtraQueryParameters((d = {}, d[ie.RETURN_SPA_CODE] = "1", d)), [2, i.createQueryString()];
           }
         });
       });
     }, e.prototype.createAuthCodeUrlQueryString = function(t) {
       var n;
       return re(this, void 0, void 0, function() {
-        var o, i, s, a, c, l, l, l, u, d;
-        return ne(this, function(h) {
-          switch (h.label) {
+        var o, i, s, a, c, l, l, l, u, h;
+        return ne(this, function(d) {
+          switch (d.label) {
             case 0:
               if ((n = this.performanceClient) === null || n === void 0 || n.addQueueMeasurement(I.AuthClientCreateQueryString, t.correlationId), o = new kn(), o.addClientId(this.config.authOptions.clientId), i = zo(t.scopes || [], t.extraScopesToConsent || []), o.addScopes(i), o.addRedirectUri(t.redirectUri), s = t.correlationId || this.config.cryptoInterface.createNewGuid(), o.addCorrelationId(s), o.addResponseMode(t.responseMode), o.addResponseTypeCode(), o.addLibraryInfo(this.config.libraryInfo), o.addApplicationTelemetry(this.config.telemetry.application), o.addClientInfo(), t.codeChallenge && t.codeChallengeMethod && o.addCodeChallengeParams(t.codeChallenge, t.codeChallengeMethod), t.prompt && o.addPrompt(t.prompt), t.domainHint && o.addDomainHint(t.domainHint), t.prompt !== He.SELECT_ACCOUNT)
                 if (t.sid && t.prompt === He.NONE)
@@ -5132,7 +5132,7 @@ var Nl = (
                 this.logger.verbose("createAuthCodeUrlQueryString: Prompt is select_account, ignoring account hints");
               return t.nonce && o.addNonce(t.nonce), t.state && o.addState(t.state), (!H.isEmpty(t.claims) || this.config.authOptions.clientCapabilities && this.config.authOptions.clientCapabilities.length > 0) && o.addClaims(t.claims, this.config.authOptions.clientCapabilities), t.extraQueryParameters && o.addExtraQueryParameters(t.extraQueryParameters), t.nativeBroker ? (o.addNativeBroker(), t.authenticationScheme !== ye.POP ? [3, 2] : (u = new en(this.cryptoUtils), [4, u.generateCnf(t)])) : [3, 2];
             case 1:
-              d = h.sent(), o.addPopToken(d.reqCnfString), h.label = 2;
+              h = d.sent(), o.addPopToken(h.reqCnfString), d.label = 2;
             case 2:
               return [2, o.createQueryString()];
           }
@@ -5161,17 +5161,17 @@ var Pl = (
     return e.prototype.acquireToken = function(t) {
       var n, o, i, s, a, c, l;
       return re(this, void 0, void 0, function() {
-        var u, d, h, f, p, g, m = this;
+        var u, h, d, f, p, g, m = this;
         return ne(this, function(b) {
           switch (b.label) {
             case 0:
-              return (n = this.performanceClient) === null || n === void 0 || n.addQueueMeasurement(I.RefreshTokenClientAcquireToken, t.correlationId), u = (o = this.performanceClient) === null || o === void 0 ? void 0 : o.startMeasurement(I.RefreshTokenClientAcquireToken, t.correlationId), this.logger.verbose("RefreshTokenClientAcquireToken called", t.correlationId), d = ht.nowSeconds(), (i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(I.RefreshTokenClientExecuteTokenRequest, t.correlationId), [4, this.executeTokenRequest(t, this.authority)];
+              return (n = this.performanceClient) === null || n === void 0 || n.addQueueMeasurement(I.RefreshTokenClientAcquireToken, t.correlationId), u = (o = this.performanceClient) === null || o === void 0 ? void 0 : o.startMeasurement(I.RefreshTokenClientAcquireToken, t.correlationId), this.logger.verbose("RefreshTokenClientAcquireToken called", t.correlationId), h = ht.nowSeconds(), (i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(I.RefreshTokenClientExecuteTokenRequest, t.correlationId), [4, this.executeTokenRequest(t, this.authority)];
             case 1:
-              return h = b.sent(), f = (s = h.headers) === null || s === void 0 ? void 0 : s[ot.X_MS_HTTP_VERSION], u == null || u.addStaticFields({
-                refreshTokenSize: ((a = h.body.refresh_token) === null || a === void 0 ? void 0 : a.length) || 0
+              return d = b.sent(), f = (s = d.headers) === null || s === void 0 ? void 0 : s[ot.X_MS_HTTP_VERSION], u == null || u.addStaticFields({
+                refreshTokenSize: ((a = d.body.refresh_token) === null || a === void 0 ? void 0 : a.length) || 0
               }), f && (u == null || u.addStaticFields({
                 httpVerToken: f
-              })), p = (c = h.headers) === null || c === void 0 ? void 0 : c[ot.X_MS_REQUEST_ID], g = new So(this.config.authOptions.clientId, this.cacheManager, this.cryptoUtils, this.logger, this.config.serializableCache, this.config.persistencePlugin), g.validateTokenResponse(h.body), (l = this.performanceClient) === null || l === void 0 || l.setPreQueueTime(I.HandleServerTokenResponse, t.correlationId), [2, g.handleServerTokenResponse(h.body, this.authority, d, t, void 0, void 0, !0, t.forceCache, p).then(function(C) {
+              })), p = (c = d.headers) === null || c === void 0 ? void 0 : c[ot.X_MS_REQUEST_ID], g = new So(this.config.authOptions.clientId, this.cacheManager, this.cryptoUtils, this.logger, this.config.serializableCache, this.config.persistencePlugin), g.validateTokenResponse(d.body), (l = this.performanceClient) === null || l === void 0 || l.setPreQueueTime(I.HandleServerTokenResponse, t.correlationId), [2, g.handleServerTokenResponse(d.body, this.authority, h, t, void 0, void 0, !0, t.forceCache, p).then(function(C) {
                 return u == null || u.endMeasurement({
                   success: !0
                 }), C;
@@ -5197,10 +5197,10 @@ var Pl = (
           if (a = this.cacheManager.isAppMetadataFOCI(t.account.environment), a)
             try {
               return (o = this.performanceClient) === null || o === void 0 || o.setPreQueueTime(I.RefreshTokenClientAcquireTokenWithCachedRefreshToken, t.correlationId), [2, this.acquireTokenWithCachedRefreshToken(t, !0)];
-            } catch (d) {
-              if (c = d instanceof wt && d.errorCode === Wr.noTokensFoundError.code, l = d instanceof _r && d.errorCode === Qa.INVALID_GRANT_ERROR && d.subError === Qa.CLIENT_MISMATCH_ERROR, c || l)
+            } catch (h) {
+              if (c = h instanceof wt && h.errorCode === Wr.noTokensFoundError.code, l = h instanceof _r && h.errorCode === Qa.INVALID_GRANT_ERROR && h.subError === Qa.CLIENT_MISMATCH_ERROR, c || l)
                 return (i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(I.RefreshTokenClientAcquireTokenWithCachedRefreshToken, t.correlationId), [2, this.acquireTokenWithCachedRefreshToken(t, !1)];
-              throw d;
+              throw h;
             }
           return (s = this.performanceClient) === null || s === void 0 || s.setPreQueueTime(I.RefreshTokenClientAcquireTokenWithCachedRefreshToken, t.correlationId), [2, this.acquireTokenWithCachedRefreshToken(t, !1)];
         });
@@ -5223,13 +5223,13 @@ var Pl = (
     }, e.prototype.executeTokenRequest = function(t, n) {
       var o, i, s;
       return re(this, void 0, void 0, function() {
-        var a, c, l, u, d, h;
+        var a, c, l, u, h, d;
         return ne(this, function(f) {
           switch (f.label) {
             case 0:
               return (o = this.performanceClient) === null || o === void 0 || o.addQueueMeasurement(I.RefreshTokenClientExecuteTokenRequest, t.correlationId), a = (i = this.performanceClient) === null || i === void 0 ? void 0 : i.startMeasurement(I.RefreshTokenClientExecuteTokenRequest, t.correlationId), (s = this.performanceClient) === null || s === void 0 || s.setPreQueueTime(I.RefreshTokenClientCreateTokenRequestBody, t.correlationId), c = this.createTokenQueryParameters(t), l = he.appendQueryString(n.tokenEndpoint, c), [4, this.createTokenRequestBody(t)];
             case 1:
-              return u = f.sent(), d = this.createTokenRequestHeaders(t.ccsCredential), h = {
+              return u = f.sent(), h = this.createTokenRequestHeaders(t.ccsCredential), d = {
                 clientId: this.config.authOptions.clientId,
                 authority: n.canonicalAuthority,
                 scopes: t.scopes,
@@ -5239,7 +5239,7 @@ var Pl = (
                 resourceRequestUri: t.resourceRequestUri,
                 shrClaims: t.shrClaims,
                 sshKid: t.sshKid
-              }, [2, this.executePostToTokenEndpoint(l, u, d, h).then(function(p) {
+              }, [2, this.executePostToTokenEndpoint(l, u, h, d).then(function(p) {
                 return a == null || a.endMeasurement({
                   success: !0
                 }), p;
@@ -5254,13 +5254,13 @@ var Pl = (
     }, e.prototype.createTokenRequestBody = function(t) {
       var n, o, i;
       return re(this, void 0, void 0, function() {
-        var s, a, c, l, u, d, h;
+        var s, a, c, l, u, h, d;
         return ne(this, function(f) {
           switch (f.label) {
             case 0:
               return (n = this.performanceClient) === null || n === void 0 || n.addQueueMeasurement(I.RefreshTokenClientCreateTokenRequestBody, t.correlationId), s = t.correlationId, a = (o = this.performanceClient) === null || o === void 0 ? void 0 : o.startMeasurement(I.BaseClientCreateTokenRequestHeaders, s), c = new kn(), c.addClientId(this.config.authOptions.clientId), c.addScopes(t.scopes), c.addGrantType(yo.REFRESH_TOKEN_GRANT), c.addClientInfo(), c.addLibraryInfo(this.config.libraryInfo), c.addApplicationTelemetry(this.config.telemetry.application), c.addThrottling(), this.serverTelemetryManager && c.addServerTelemetry(this.serverTelemetryManager), c.addCorrelationId(s), c.addRefreshToken(t.refreshToken), this.config.clientCredentials.clientSecret && c.addClientSecret(this.config.clientCredentials.clientSecret), this.config.clientCredentials.clientAssertion && (l = this.config.clientCredentials.clientAssertion, c.addClientAssertion(l.assertion), c.addClientAssertionType(l.assertionType)), t.authenticationScheme !== ye.POP ? [3, 2] : (u = new en(this.cryptoUtils, this.performanceClient), (i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(I.PopTokenGenerateCnf, t.correlationId), [4, u.generateCnf(t)]);
             case 1:
-              return d = f.sent(), c.addPopToken(d.reqCnfString), [3, 3];
+              return h = f.sent(), c.addPopToken(h.reqCnfString), [3, 3];
             case 2:
               if (t.authenticationScheme === ye.SSH)
                 if (t.sshJwk)
@@ -5275,7 +5275,7 @@ var Pl = (
                 switch (t.ccsCredential.type) {
                   case rt.HOME_ACCOUNT_ID:
                     try {
-                      h = Gr(t.ccsCredential.credential), c.addCcsOid(h);
+                      d = Gr(t.ccsCredential.credential), c.addCcsOid(d);
                     } catch (p) {
                       this.logger.verbose("Could not parse home account ID for CCS Header: " + p);
                     }
@@ -5416,29 +5416,29 @@ var jf = (
     return r.prototype.detectRegion = function(e, t) {
       var n, o, i, s;
       return re(this, void 0, void 0, function() {
-        var a, c, l, u, d;
-        return ne(this, function(h) {
-          switch (h.label) {
+        var a, c, l, u, h;
+        return ne(this, function(d) {
+          switch (d.label) {
             case 0:
               if ((n = this.performanceClient) === null || n === void 0 || n.addQueueMeasurement(I.RegionDiscoveryDetectRegion, this.correlationId), a = e, a)
                 return [3, 8];
-              c = r.IMDS_OPTIONS, h.label = 1;
+              c = r.IMDS_OPTIONS, d.label = 1;
             case 1:
-              return h.trys.push([1, 6, , 7]), (o = this.performanceClient) === null || o === void 0 || o.setPreQueueTime(I.RegionDiscoveryGetRegionFromIMDS, this.correlationId), [4, this.getRegionFromIMDS(S.IMDS_VERSION, c)];
+              return d.trys.push([1, 6, , 7]), (o = this.performanceClient) === null || o === void 0 || o.setPreQueueTime(I.RegionDiscoveryGetRegionFromIMDS, this.correlationId), [4, this.getRegionFromIMDS(S.IMDS_VERSION, c)];
             case 2:
-              return l = h.sent(), l.status === zr.httpSuccess && (a = l.body, t.region_source = Jt.IMDS), l.status !== zr.httpBadRequest ? [3, 5] : ((i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(I.RegionDiscoveryGetCurrentVersion, this.correlationId), [4, this.getCurrentVersion(c)]);
+              return l = d.sent(), l.status === zr.httpSuccess && (a = l.body, t.region_source = Jt.IMDS), l.status !== zr.httpBadRequest ? [3, 5] : ((i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(I.RegionDiscoveryGetCurrentVersion, this.correlationId), [4, this.getCurrentVersion(c)]);
             case 3:
-              return u = h.sent(), u ? ((s = this.performanceClient) === null || s === void 0 || s.setPreQueueTime(I.RegionDiscoveryGetRegionFromIMDS, this.correlationId), [4, this.getRegionFromIMDS(u, c)]) : (t.region_source = Jt.FAILED_AUTO_DETECTION, [2, null]);
+              return u = d.sent(), u ? ((s = this.performanceClient) === null || s === void 0 || s.setPreQueueTime(I.RegionDiscoveryGetRegionFromIMDS, this.correlationId), [4, this.getRegionFromIMDS(u, c)]) : (t.region_source = Jt.FAILED_AUTO_DETECTION, [2, null]);
             case 4:
-              d = h.sent(), d.status === zr.httpSuccess && (a = d.body, t.region_source = Jt.IMDS), h.label = 5;
+              h = d.sent(), h.status === zr.httpSuccess && (a = h.body, t.region_source = Jt.IMDS), d.label = 5;
             case 5:
               return [3, 7];
             case 6:
-              return h.sent(), t.region_source = Jt.FAILED_AUTO_DETECTION, [2, null];
+              return d.sent(), t.region_source = Jt.FAILED_AUTO_DETECTION, [2, null];
             case 7:
               return [3, 9];
             case 8:
-              t.region_source = Jt.ENVIRONMENT_VARIABLE, h.label = 9;
+              t.region_source = Jt.ENVIRONMENT_VARIABLE, d.label = 9;
             case 9:
               return a || (t.region_source = Jt.FAILED_AUTO_DETECTION), [2, a || null];
           }
@@ -5641,8 +5641,8 @@ var Mn = (
       return a.forEach(function(c, l) {
         var u = s[l];
         if (l === 0 && t.canReplaceTenant(i)) {
-          var d = new he(t.metadata.authorization_endpoint).getUrlComponents().PathSegments[0];
-          u !== d && (t.logger.verbose("Replacing tenant domain name " + u + " with id " + d), u = d);
+          var h = new he(t.metadata.authorization_endpoint).getUrlComponents().PathSegments[0];
+          u !== h && (t.logger.verbose("Replacing tenant domain name " + u + " with id " + h), u = h);
         }
         c !== u && (n = n.replace("/" + u + "/", "/" + c + "/"));
       }), this.replaceTenant(n);
@@ -5885,16 +5885,16 @@ var To = (
     return r.createDiscoveredInstance = function(e, t, n, o, i, s, a) {
       return re(this, void 0, void 0, function() {
         var c, l, u;
-        return ne(this, function(d) {
-          switch (d.label) {
+        return ne(this, function(h) {
+          switch (h.label) {
             case 0:
-              s == null || s.addQueueMeasurement(I.AuthorityFactoryCreateDiscoveredInstance, a), c = Mn.transformCIAMAuthority(e), l = r.createInstance(c, t, n, o, i, s, a), d.label = 1;
+              s == null || s.addQueueMeasurement(I.AuthorityFactoryCreateDiscoveredInstance, a), c = Mn.transformCIAMAuthority(e), l = r.createInstance(c, t, n, o, i, s, a), h.label = 1;
             case 1:
-              return d.trys.push([1, 3, , 4]), s == null || s.setPreQueueTime(I.AuthorityResolveEndpointsAsync, a), [4, l.resolveEndpointsAsync()];
+              return h.trys.push([1, 3, , 4]), s == null || s.setPreQueueTime(I.AuthorityResolveEndpointsAsync, a), [4, l.resolveEndpointsAsync()];
             case 2:
-              return d.sent(), [2, l];
+              return h.sent(), [2, l];
             case 3:
-              throw u = d.sent(), j.createEndpointDiscoveryIncompleteError(u);
+              throw u = h.sent(), j.createEndpointDiscoveryIncompleteError(u);
             case 4:
               return [
                 2
@@ -6141,10 +6141,10 @@ var xl = (
         return this.logger.trace("PerformanceClient: Performance measurement not taken", s.correlationId), null;
       if (this.logger.trace("PerformanceClient: Performance measurement ended for " + e.name + ": " + l + " ms", e.correlationId), !a)
         return s[e.name + "DurationMs"] = Math.floor(l), ge({}, s);
-      var u = ge(ge({}, s), e), d = 0;
-      return (i = u.incompleteSubMeasurements) === null || i === void 0 || i.forEach(function(h) {
-        n.logger.trace("PerformanceClient: Incomplete submeasurement " + h.name + " found for " + e.name, u.correlationId), d++;
-      }), u.incompleteSubMeasurements = void 0, u = ge(ge({}, u), { durationMs: Math.round(l), queuedTimeMs: c.totalQueueTime, queuedCount: c.totalQueueCount, queuedManuallyCompletedCount: c.manuallyCompletedCount, status: Eo.Completed, incompleteSubsCount: d }), this.truncateIntegralFields(u, this.getIntFields()), this.emitEvents([u], e.correlationId), u;
+      var u = ge(ge({}, s), e), h = 0;
+      return (i = u.incompleteSubMeasurements) === null || i === void 0 || i.forEach(function(d) {
+        n.logger.trace("PerformanceClient: Incomplete submeasurement " + d.name + " found for " + e.name, u.correlationId), h++;
+      }), u.incompleteSubMeasurements = void 0, u = ge(ge({}, u), { durationMs: Math.round(l), queuedTimeMs: c.totalQueueTime, queuedCount: c.totalQueueCount, queuedManuallyCompletedCount: c.manuallyCompletedCount, status: Eo.Completed, incompleteSubsCount: h }), this.truncateIntegralFields(u, this.getIntFields()), this.emitEvents([u], e.correlationId), u;
     }, r.prototype.addStaticFields = function(e, t) {
       this.logger.trace("PerformanceClient: Updating static fields");
       var n = this.eventsByCorrelationId.get(t);
@@ -6757,9 +6757,9 @@ var Vi = (
           return this.internalStorage;
       }
     }, e.prototype.migrateCacheEntries = function() {
-      var t = this, n = S.CACHE_PREFIX + "." + Ie.ID_TOKEN, o = S.CACHE_PREFIX + "." + Ie.CLIENT_INFO, i = S.CACHE_PREFIX + "." + Ie.ERROR, s = S.CACHE_PREFIX + "." + Ie.ERROR_DESC, a = this.browserStorage.getItem(n), c = this.browserStorage.getItem(o), l = this.browserStorage.getItem(i), u = this.browserStorage.getItem(s), d = [a, c, l, u], h = [Ie.ID_TOKEN, Ie.CLIENT_INFO, Ie.ERROR, Ie.ERROR_DESC];
-      h.forEach(function(f, p) {
-        return t.migrateCacheEntry(f, d[p]);
+      var t = this, n = S.CACHE_PREFIX + "." + Ie.ID_TOKEN, o = S.CACHE_PREFIX + "." + Ie.CLIENT_INFO, i = S.CACHE_PREFIX + "." + Ie.ERROR, s = S.CACHE_PREFIX + "." + Ie.ERROR_DESC, a = this.browserStorage.getItem(n), c = this.browserStorage.getItem(o), l = this.browserStorage.getItem(i), u = this.browserStorage.getItem(s), h = [a, c, l, u], d = [Ie.ID_TOKEN, Ie.CLIENT_INFO, Ie.ERROR, Ie.ERROR_DESC];
+      d.forEach(function(f, p) {
+        return t.migrateCacheEntry(f, h[p]);
       });
     }, e.prototype.migrateCacheEntry = function(t, n) {
       n && this.setTemporaryCache(t, n, !0);
@@ -6792,7 +6792,7 @@ var Vi = (
                 case Y.ACCESS_TOKEN_WITH_AUTH_SCHEME:
                   if (tr.isAccessTokenEntity(c)) {
                     t.logger.trace("BrowserCacheManager:createKeyMaps - accessToken found, saving key to token key map"), t.logger.tracePii("BrowserCacheManager:createKeyMaps - accessToken with key: " + s + " found, saving key to token key map");
-                    var d = Ve.toObject(new tr(), c), u = t.updateCredentialCacheKey(s, d);
+                    var h = Ve.toObject(new tr(), c), u = t.updateCredentialCacheKey(s, h);
                     t.addTokenKey(u, Y.ACCESS_TOKEN);
                     return;
                   } else
@@ -6801,7 +6801,7 @@ var Vi = (
                 case Y.REFRESH_TOKEN:
                   if (Vr.isRefreshTokenEntity(c)) {
                     t.logger.trace("BrowserCacheManager:createKeyMaps - refreshToken found, saving key to token key map"), t.logger.tracePii("BrowserCacheManager:createKeyMaps - refreshToken with key: " + s + " found, saving key to token key map");
-                    var h = Ve.toObject(new Vr(), c), u = t.updateCredentialCacheKey(s, h);
+                    var d = Ve.toObject(new Vr(), c), u = t.updateCredentialCacheKey(s, d);
                     t.addTokenKey(u, Y.REFRESH_TOKEN);
                     return;
                   } else
@@ -7272,15 +7272,15 @@ var Vi = (
     }, e.prototype.hydrateCache = function(t, n) {
       var o, i, s, a, c, l;
       return k(this, void 0, void 0, function() {
-        var u, d, h, f;
+        var u, h, d, f;
         return N(this, function(p) {
           switch (p.label) {
             case 0:
               return u = er.createIdTokenEntity(((o = t.account) === null || o === void 0 ? void 0 : o.homeAccountId) || "", ((i = t.account) === null || i === void 0 ? void 0 : i.environment) || "", t.idToken, this.clientId, t.tenantId), n.claims ? [4, this.cryptoImpl.hashString(n.claims)] : [3, 2];
             case 1:
-              d = p.sent(), p.label = 2;
+              h = p.sent(), p.label = 2;
             case 2:
-              return h = tr.createAccessTokenEntity(
+              return d = tr.createAccessTokenEntity(
                 ((s = t.account) === null || s === void 0 ? void 0 : s.homeAccountId) || "",
                 ((a = t.account) === null || a === void 0 ? void 0 : a.environment) || "",
                 t.accessToken,
@@ -7297,8 +7297,8 @@ var Vi = (
                 // userAssertionHash
                 n.sshKid,
                 n.claims,
-                d
-              ), f = new Qr(void 0, u, h), [2, this.saveCacheRecord(f)];
+                h
+              ), f = new Qr(void 0, u, d), [2, this.saveCacheRecord(f)];
           }
         });
       });
@@ -7777,14 +7777,14 @@ var an = (
     }, e.prototype.initializeAuthorizationRequest = function(t, n) {
       return k(this, void 0, void 0, function() {
         var o, i, s, a, c, l, u;
-        return N(this, function(d) {
-          switch (d.label) {
+        return N(this, function(h) {
+          switch (h.label) {
             case 0:
               return this.performanceClient.addQueueMeasurement(I.StandardInteractionClientInitializeAuthorizationRequest, this.correlationId), this.logger.verbose("initializeAuthorizationRequest called", this.correlationId), o = this.getRedirectUri(t.redirectUri), i = {
                 interactionType: n
               }, s = Bt.setRequestState(this.browserCrypto, t && t.state || S.EMPTY_STRING, i), this.performanceClient.setPreQueueTime(I.InitializeBaseRequest, this.correlationId), c = [{}], [4, this.initializeBaseRequest(t)];
             case 1:
-              return a = B.apply(void 0, [B.apply(void 0, c.concat([d.sent()])), { redirectUri: o, state: s, nonce: t.nonce || this.browserCrypto.createNewGuid(), responseMode: mo.FRAGMENT }]), l = t.account || this.browserStorage.getActiveAccount(), l && (this.logger.verbose("Setting validated request account", this.correlationId), this.logger.verbosePii("Setting validated request account: " + l.homeAccountId, this.correlationId), a.account = l), H.isEmpty(a.loginHint) && !l && (u = this.browserStorage.getLegacyLoginHint(), u && (a.loginHint = u)), [2, a];
+              return a = B.apply(void 0, [B.apply(void 0, c.concat([h.sent()])), { redirectUri: o, state: s, nonce: t.nonce || this.browserCrypto.createNewGuid(), responseMode: mo.FRAGMENT }]), l = t.account || this.browserStorage.getActiveAccount(), l && (this.logger.verbose("Setting validated request account", this.correlationId), this.logger.verbosePii("Setting validated request account: " + l.homeAccountId, this.correlationId), a.account = l), H.isEmpty(a.loginHint) && !l && (u = this.browserStorage.getLegacyLoginHint(), u && (a.loginHint = u)), [2, a];
           }
         });
       });
@@ -7816,19 +7816,19 @@ var Cs = (
       });
     }, r.prototype.handleCodeResponseFromServer = function(e, t, n, o, i) {
       return i === void 0 && (i = !0), k(this, void 0, void 0, function() {
-        var s, a, c, l, u, d;
-        return N(this, function(h) {
-          switch (h.label) {
+        var s, a, c, l, u, h;
+        return N(this, function(d) {
+          switch (d.label) {
             case 0:
               if (this.performanceClient.addQueueMeasurement(I.HandleCodeResponseFromServer, this.authCodeRequest.correlationId), this.logger.trace("InteractionHandler.handleCodeResponseFromServer called"), s = this.browserStorage.generateStateKey(t), a = this.browserStorage.getTemporaryCache(s), !a)
                 throw j.createStateNotFoundError("Cached State");
               return c = this.browserStorage.generateNonceKey(a), l = this.browserStorage.getTemporaryCache(c), this.authCodeRequest.code = e.code, e.cloud_instance_host_name ? (this.performanceClient.setPreQueueTime(I.UpdateTokenEndpointAuthority, this.authCodeRequest.correlationId), [4, this.updateTokenEndpointAuthority(e.cloud_instance_host_name, n, o)]) : [3, 2];
             case 1:
-              h.sent(), h.label = 2;
+              d.sent(), d.label = 2;
             case 2:
               return i && (e.nonce = l || void 0), e.state = a, e.client_info ? this.authCodeRequest.clientInfo = e.client_info : (u = this.checkCcsCredentials(), u && (this.authCodeRequest.ccsCredential = u)), this.performanceClient.setPreQueueTime(I.AuthClientAcquireToken, this.authCodeRequest.correlationId), [4, this.authModule.acquireToken(this.authCodeRequest, e)];
             case 3:
-              return d = h.sent(), this.browserStorage.cleanRequestByState(t), [2, d];
+              return h = d.sent(), this.browserStorage.cleanRequestByState(t), [2, h];
           }
         });
       });
@@ -7912,7 +7912,7 @@ var ac = (
       });
     }, e.prototype.handleCodeResponseFromHash = function(t, n, o, i) {
       return k(this, void 0, void 0, function() {
-        var s, a, c, l, u, d, h;
+        var s, a, c, l, u, h, d;
         return N(this, function(f) {
           switch (f.label) {
             case 0:
@@ -7929,9 +7929,9 @@ var ac = (
             case 1:
               f.sent(), f.label = 2;
             case 2:
-              return c.nonce = u || void 0, c.state = a, c.client_info ? this.authCodeRequest.clientInfo = c.client_info : (d = this.checkCcsCredentials(), d && (this.authCodeRequest.ccsCredential = d)), [4, this.authModule.acquireToken(this.authCodeRequest, c)];
+              return c.nonce = u || void 0, c.state = a, c.client_info ? this.authCodeRequest.clientInfo = c.client_info : (h = this.checkCcsCredentials(), h && (this.authCodeRequest.ccsCredential = h)), [4, this.authModule.acquireToken(this.authCodeRequest, c)];
             case 3:
-              return h = f.sent(), this.browserStorage.cleanRequestByState(n), [2, h];
+              return d = f.sent(), this.browserStorage.cleanRequestByState(n), [2, d];
           }
         });
       });
@@ -8069,9 +8069,9 @@ var Jr = (
   /** @class */
   function(r) {
     Me(e, r);
-    function e(t, n, o, i, s, a, c, l, u, d, h, f) {
+    function e(t, n, o, i, s, a, c, l, u, h, d, f) {
       var p = r.call(this, t, n, o, i, s, a, l, u, f) || this;
-      return p.apiId = c, p.accountId = d, p.nativeMessageHandler = u, p.nativeStorageManager = h, p.silentCacheClient = new Dl(t, p.nativeStorageManager, o, i, s, a, l, u, f), p;
+      return p.apiId = c, p.accountId = h, p.nativeMessageHandler = u, p.nativeStorageManager = d, p.silentCacheClient = new Dl(t, p.nativeStorageManager, o, i, s, a, l, u, f), p;
     }
     return e.prototype.acquireToken = function(t) {
       return k(this, void 0, void 0, function() {
@@ -8098,19 +8098,19 @@ var Jr = (
                 request: i
               }, [4, this.nativeMessageHandler.sendMessage(a)];
             case 6:
-              return c = u.sent(), l = this.validateNativeResponse(c), [2, this.handleNativeResponse(l, i, o).then(function(d) {
+              return c = u.sent(), l = this.validateNativeResponse(c), [2, this.handleNativeResponse(l, i, o).then(function(h) {
                 return n.endMeasurement({
                   success: !0,
                   isNativeBroker: !0,
-                  requestId: d.requestId
-                }), d;
-              }).catch(function(d) {
+                  requestId: h.requestId
+                }), h;
+              }).catch(function(h) {
                 throw n.endMeasurement({
                   success: !1,
-                  errorCode: d.errorCode,
-                  subErrorCode: d.subError,
+                  errorCode: h.errorCode,
+                  subErrorCode: h.subError,
                   isNativeBroker: !0
-                }), d;
+                }), h;
               })];
           }
         });
@@ -8267,16 +8267,16 @@ var Jr = (
       });
     }, e.prototype.generateAuthenticationResult = function(t, n, o, i, s, a) {
       return k(this, void 0, void 0, function() {
-        var c, l, u, d, h, f, p, g;
+        var c, l, u, h, d, f, p, g;
         return N(this, function(m) {
           switch (m.label) {
             case 0:
-              return c = this.addTelemetryFromNativeResponse(t), l = t.scope ? De.fromString(t.scope) : De.fromString(n.scope), u = t.account.properties || {}, d = u.UID || o.claims.oid || o.claims.sub || S.EMPTY_STRING, h = u.TenantId || o.claims.tid || S.EMPTY_STRING, [4, this.generatePopAccessToken(t, n)];
+              return c = this.addTelemetryFromNativeResponse(t), l = t.scope ? De.fromString(t.scope) : De.fromString(n.scope), u = t.account.properties || {}, h = u.UID || o.claims.oid || o.claims.sub || S.EMPTY_STRING, d = u.TenantId || o.claims.tid || S.EMPTY_STRING, [4, this.generatePopAccessToken(t, n)];
             case 1:
               return f = m.sent(), p = n.tokenType === ye.POP ? ye.POP : ye.BEARER, g = {
                 authority: s,
-                uniqueId: d,
-                tenantId: h,
+                uniqueId: h,
+                tenantId: d,
                 scopes: l.asArray(),
                 account: i.getAccountInfo(),
                 idToken: t.id_token,
@@ -8298,7 +8298,7 @@ var Jr = (
         n.logger.error("Error occurred while removing account context from browser storage. " + o);
       });
     }, e.prototype.cacheNativeTokens = function(t, n, o, i, s, a, c) {
-      var l = er.createIdTokenEntity(o, n.authority, t.id_token || S.EMPTY_STRING, n.clientId, i.claims.tid || S.EMPTY_STRING), u = n.tokenType === ye.POP ? S.SHR_NONCE_VALIDITY : (typeof t.expires_in == "string" ? parseInt(t.expires_in, 10) : t.expires_in) || 0, d = c + u, h = this.generateScopes(t, n), f = tr.createAccessTokenEntity(o, n.authority, s, n.clientId, i ? i.claims.tid || S.EMPTY_STRING : a, h.printScopes(), d, 0, this.browserCrypto), p = new Qr(void 0, l, f);
+      var l = er.createIdTokenEntity(o, n.authority, t.id_token || S.EMPTY_STRING, n.clientId, i.claims.tid || S.EMPTY_STRING), u = n.tokenType === ye.POP ? S.SHR_NONCE_VALIDITY : (typeof t.expires_in == "string" ? parseInt(t.expires_in, 10) : t.expires_in) || 0, h = c + u, d = this.generateScopes(t, n), f = tr.createAccessTokenEntity(o, n.authority, s, n.clientId, i ? i.claims.tid || S.EMPTY_STRING : a, d.printScopes(), h, 0, this.browserCrypto), p = new Qr(void 0, l, f);
       this.nativeStorageManager.saveCacheRecord(p);
     }, e.prototype.addTelemetryFromNativeResponse = function(t) {
       var n = this.getMATSFromResponse(t);
@@ -8335,7 +8335,7 @@ var Jr = (
       return typeof t.is_cached > "u" ? (this.logger.verbose("NativeInteractionClient - MATS telemetry does not contain field indicating if response was served from cache. Returning false."), !1) : !!t.is_cached;
     }, e.prototype.initializeNativeRequest = function(t) {
       return k(this, void 0, void 0, function() {
-        var n, o, i, s, a, c, l, u, d, h, f = this;
+        var n, o, i, s, a, c, l, u, h, d, f = this;
         return N(this, function(p) {
           switch (p.label) {
             case 0:
@@ -8379,9 +8379,9 @@ var Jr = (
                 resourceRequestMethod: t.resourceRequestMethod,
                 shrClaims: t.shrClaims,
                 shrNonce: t.shrNonce
-              }, d = new en(this.browserCrypto), [4, d.generateCnf(u)]);
+              }, h = new en(this.browserCrypto), [4, h.generateCnf(u)]);
             case 3:
-              h = p.sent(), l.reqCnf = h.reqCnfString, l.keyId = h.kid, p.label = 4;
+              d = p.sent(), l.reqCnf = d.reqCnfString, l.keyId = d.kid, p.label = 4;
             case 4:
               return [2, l];
           }
@@ -8516,20 +8516,20 @@ var Jf = (
   /** @class */
   function(r) {
     Me(e, r);
-    function e(t, n, o, i, s, a, c, l, u, d) {
-      var h = r.call(this, t, n, o, i, s, a, c, u, d) || this;
-      return h.nativeStorage = l, h;
+    function e(t, n, o, i, s, a, c, l, u, h) {
+      var d = r.call(this, t, n, o, i, s, a, c, u, h) || this;
+      return d.nativeStorage = l, d;
     }
     return e.prototype.acquireToken = function(t) {
       return k(this, void 0, void 0, function() {
-        var n, o, i, s, a, c, l, u, d, h = this;
+        var n, o, i, s, a, c, l, u, h, d = this;
         return N(this, function(f) {
           switch (f.label) {
             case 0:
               return this.performanceClient.setPreQueueTime(I.StandardInteractionClientInitializeAuthorizationRequest, t.correlationId), [4, this.initializeAuthorizationRequest(t, K.Redirect)];
             case 1:
               n = f.sent(), this.browserStorage.updateCacheEntries(n.state, n.nonce, n.authority, n.loginHint || S.EMPTY_STRING, n.account || null), o = this.initializeServerTelemetryManager(be.acquireTokenRedirect), i = function(p) {
-                p.persisted && (h.logger.verbose("Page was restored from back/forward cache. Clearing temporary cache."), h.browserStorage.cleanRequestByState(n.state), h.eventHandler.emitEvent(ee.RESTORE_FROM_BFCACHE, K.Redirect));
+                p.persisted && (d.logger.verbose("Page was restored from back/forward cache. Clearing temporary cache."), d.browserStorage.cleanRequestByState(n.state), d.eventHandler.emitEvent(ee.RESTORE_FROM_BFCACHE, K.Redirect));
               }, f.label = 2;
             case 2:
               return f.trys.push([2, 7, , 8]), this.performanceClient.setPreQueueTime(I.StandardInteractionClientInitializeAuthorizationCodeRequest, t.correlationId), [4, this.initializeAuthorizationCodeRequest(n)];
@@ -8547,7 +8547,7 @@ var Jf = (
             case 6:
               return [2, f.sent()];
             case 7:
-              throw d = f.sent(), d instanceof z && d.setCorrelationId(this.correlationId), window.removeEventListener("pageshow", i), o.cacheFailedRequest(d), this.browserStorage.cleanRequestByState(n.state), d;
+              throw h = f.sent(), h instanceof z && h.setCorrelationId(this.correlationId), window.removeEventListener("pageshow", i), o.cacheFailedRequest(h), this.browserStorage.cleanRequestByState(n.state), h;
             case 8:
               return [
                 2
@@ -8558,7 +8558,7 @@ var Jf = (
       });
     }, e.prototype.handleRedirectPromise = function(t) {
       return k(this, void 0, void 0, function() {
-        var n, o, i, s, a, c, l, u, d, h, f, p;
+        var n, o, i, s, a, c, l, u, h, d, f, p;
         return N(this, function(g) {
           switch (g.label) {
             case 0:
@@ -8580,19 +8580,19 @@ var Jf = (
             case 3:
               return this.config.auth.navigateToLoginRequestUrl ? [3, 4] : (this.logger.verbose("NavigateToLoginRequestUrl set to false, handling hash"), [2, this.handleHash(o, i, n)]);
             case 4:
-              return !Se.isInIframe() || this.config.system.allowRedirectInIframe ? (this.browserStorage.setTemporaryCache(fe.URL_HASH, o, !0), d = {
+              return !Se.isInIframe() || this.config.system.allowRedirectInIframe ? (this.browserStorage.setTemporaryCache(fe.URL_HASH, o, !0), h = {
                 apiId: be.handleRedirectPromise,
                 timeout: this.config.system.redirectNavigationTimeout,
                 noHistory: !0
-              }, h = !0, !a || a === "null" ? (f = Se.getHomepage(), this.browserStorage.setTemporaryCache(fe.ORIGIN_URI, f, !0), this.logger.warning("Unable to get valid login request url from cache, redirecting to home page"), [4, this.navigationClient.navigateInternal(f, d)]) : [3, 6]) : [3, 9];
+              }, d = !0, !a || a === "null" ? (f = Se.getHomepage(), this.browserStorage.setTemporaryCache(fe.ORIGIN_URI, f, !0), this.logger.warning("Unable to get valid login request url from cache, redirecting to home page"), [4, this.navigationClient.navigateInternal(f, h)]) : [3, 6]) : [3, 9];
             case 5:
-              return h = g.sent(), [3, 8];
+              return d = g.sent(), [3, 8];
             case 6:
-              return this.logger.verbose("Navigating to loginRequestUrl: " + a), [4, this.navigationClient.navigateInternal(a, d)];
+              return this.logger.verbose("Navigating to loginRequestUrl: " + a), [4, this.navigationClient.navigateInternal(a, h)];
             case 7:
-              h = g.sent(), g.label = 8;
+              d = g.sent(), g.label = 8;
             case 8:
-              if (!h)
+              if (!d)
                 return [2, this.handleHash(o, i, n)];
               g.label = 9;
             case 9:
@@ -8616,7 +8616,7 @@ var Jf = (
       return this.browserStorage.removeItem(this.browserStorage.generateCacheKey(fe.URL_HASH)), this.logger.verbose("Hash does not contain known properties, returning cached hash"), o;
     }, e.prototype.handleHash = function(t, n, o) {
       return k(this, void 0, void 0, function() {
-        var i, s, a, c, l, u, d, h = this;
+        var i, s, a, c, l, u, h, d = this;
         return N(this, function(f) {
           switch (f.label) {
             case 0:
@@ -8628,14 +8628,14 @@ var Jf = (
                   prompt: void 0
                   // Server should handle the prompt, ideally native broker can do this part silently
                 })).finally(function() {
-                  h.browserStorage.cleanRequestByState(n);
+                  d.browserStorage.cleanRequestByState(n);
                 })];
               }
               if (l = this.browserStorage.getCachedAuthority(n), !l)
                 throw M.createNoCachedAuthorityError();
               return this.performanceClient.setPreQueueTime(I.StandardInteractionClientCreateAuthCodeClient, i.correlationId), [4, this.createAuthCodeClient(o, l)];
             case 1:
-              return u = f.sent(), this.logger.verbose("Auth code client created"), wo.removeThrottle(this.browserStorage, this.config.auth.clientId, i), d = new ac(u, this.browserStorage, i, this.logger, this.browserCrypto, this.performanceClient), [4, d.handleCodeResponseFromHash(t, n, u.authority, this.networkClient)];
+              return u = f.sent(), this.logger.verbose("Auth code client created"), wo.removeThrottle(this.browserStorage, this.config.auth.clientId, i), h = new ac(u, this.browserStorage, i, this.logger, this.browserCrypto, this.performanceClient), [4, h.handleCodeResponseFromHash(t, n, u.authority, this.networkClient)];
             case 2:
               return [2, f.sent()];
           }
@@ -8697,9 +8697,9 @@ var Xf = (
   /** @class */
   function(r) {
     Me(e, r);
-    function e(t, n, o, i, s, a, c, l, u, d) {
-      var h = r.call(this, t, n, o, i, s, a, c, u, d) || this;
-      return h.unloadWindow = h.unloadWindow.bind(h), h.nativeStorage = l, h;
+    function e(t, n, o, i, s, a, c, l, u, h) {
+      var d = r.call(this, t, n, o, i, s, a, c, u, h) || this;
+      return d.unloadWindow = d.unloadWindow.bind(d), d.nativeStorage = l, d;
     }
     return e.prototype.acquireToken = function(t) {
       try {
@@ -8726,7 +8726,7 @@ var Xf = (
       }
     }, e.prototype.acquireTokenPopupAsync = function(t, n, o, i) {
       return k(this, void 0, void 0, function() {
-        var s, a, c, l, u, d, h, f, p, g, m, b, C, v, w, E, T, A = this;
+        var s, a, c, l, u, h, d, f, p, g, m, b, C, v, w, E, T, A = this;
         return N(this, function(_) {
           switch (_.label) {
             case 0:
@@ -8738,16 +8738,16 @@ var Xf = (
             case 3:
               return c = _.sent(), this.performanceClient.setPreQueueTime(I.StandardInteractionClientCreateAuthCodeClient, t.correlationId), [4, this.createAuthCodeClient(s, a.authority, a.azureCloudOptions)];
             case 4:
-              return l = _.sent(), this.logger.verbose("Auth code client created"), u = Er.isNativeAvailable(this.config, this.logger, this.nativeMessageHandler, t.authenticationScheme), d = void 0, u && (d = this.performanceClient.startMeasurement(I.FetchAccountIdWithNativeBroker, t.correlationId)), [4, l.getAuthCodeUrl(B(B({}, a), { nativeBroker: u }))];
+              return l = _.sent(), this.logger.verbose("Auth code client created"), u = Er.isNativeAvailable(this.config, this.logger, this.nativeMessageHandler, t.authenticationScheme), h = void 0, u && (h = this.performanceClient.startMeasurement(I.FetchAccountIdWithNativeBroker, t.correlationId)), [4, l.getAuthCodeUrl(B(B({}, a), { nativeBroker: u }))];
             case 5:
-              return h = _.sent(), f = new Cs(l, this.browserStorage, c, this.logger, this.performanceClient), p = {
+              return d = _.sent(), f = new Cs(l, this.browserStorage, c, this.logger, this.performanceClient), p = {
                 popup: i,
                 popupName: n,
                 popupWindowAttributes: o
-              }, g = this.initiateAuthRequest(h, p), this.eventHandler.emitEvent(ee.POPUP_OPENED, K.Popup, { popupWindow: g }, null), [4, this.monitorPopupForHash(g)];
+              }, g = this.initiateAuthRequest(d, p), this.eventHandler.emitEvent(ee.POPUP_OPENED, K.Popup, { popupWindow: g }, null), [4, this.monitorPopupForHash(g)];
             case 6:
               if (m = _.sent(), b = he.getDeserializedHash(m), C = this.validateAndExtractStateFromHash(b, K.Popup, a.correlationId), wo.removeThrottle(this.browserStorage, this.config.auth.clientId, c), b.accountId) {
-                if (this.logger.verbose("Account id found in hash, calling WAM for token"), d && d.endMeasurement({
+                if (this.logger.verbose("Account id found in hash, calling WAM for token"), h && h.endMeasurement({
                   success: !0,
                   isNativeBroker: !0
                 }), !this.nativeMessageHandler)
@@ -8775,7 +8775,7 @@ var Xf = (
       });
     }, e.prototype.logoutPopupAsync = function(t, n, o, i, s, a) {
       return k(this, void 0, void 0, function() {
-        var c, l, u, d, h, f, p;
+        var c, l, u, h, d, f, p;
         return N(this, function(g) {
           switch (g.label) {
             case 0:
@@ -8785,13 +8785,13 @@ var Xf = (
             case 2:
               return g.sent(), this.performanceClient.setPreQueueTime(I.StandardInteractionClientCreateAuthCodeClient, t.correlationId), [4, this.createAuthCodeClient(c, i)];
             case 3:
-              return l = g.sent(), this.logger.verbose("Auth code client created"), u = l.getLogoutUri(t), this.eventHandler.emitEvent(ee.LOGOUT_SUCCESS, K.Popup, t), d = this.openPopup(u, { popupName: n, popupWindowAttributes: o, popup: s }), this.eventHandler.emitEvent(ee.POPUP_OPENED, K.Popup, { popupWindow: d }, null), [4, this.waitForLogoutPopup(d)];
+              return l = g.sent(), this.logger.verbose("Auth code client created"), u = l.getLogoutUri(t), this.eventHandler.emitEvent(ee.LOGOUT_SUCCESS, K.Popup, t), h = this.openPopup(u, { popupName: n, popupWindowAttributes: o, popup: s }), this.eventHandler.emitEvent(ee.POPUP_OPENED, K.Popup, { popupWindow: h }, null), [4, this.waitForLogoutPopup(h)];
             case 4:
-              return g.sent(), a ? (h = {
+              return g.sent(), a ? (d = {
                 apiId: be.logoutPopup,
                 timeout: this.config.system.redirectNavigationTimeout,
                 noHistory: !1
-              }, f = he.getAbsoluteUrl(a, Se.getCurrentUri()), this.logger.verbose("Redirecting main window to url specified in the request"), this.logger.verbosePii("Redirecting main window to: " + f), this.navigationClient.navigateInternal(f, h)) : this.logger.verbose("No main window navigation requested"), [3, 6];
+              }, f = he.getAbsoluteUrl(a, Se.getCurrentUri()), this.logger.verbose("Redirecting main window to url specified in the request"), this.logger.verbosePii("Redirecting main window to: " + f), this.navigationClient.navigateInternal(f, d)) : this.logger.verbose("No main window navigation requested"), [3, 6];
             case 5:
               throw p = g.sent(), s && s.close(), p instanceof z && p.setCorrelationId(this.correlationId), this.browserStorage.setInteractionInProgress(!1), this.eventHandler.emitEvent(ee.LOGOUT_FAILURE, K.Popup, null, p), this.eventHandler.emitEvent(ee.LOGOUT_END, K.Popup), c.cacheFailedRequest(p), p;
             case 6:
@@ -8848,8 +8848,8 @@ var Xf = (
         throw this.logger.error("error opening popup " + i.message), this.browserStorage.setInteractionInProgress(!1), M.createPopupWindowError(i.toString());
       }
     }, e.prototype.openSizedPopup = function(t, n, o) {
-      var i, s, a, c, l = window.screenLeft ? window.screenLeft : window.screenX, u = window.screenTop ? window.screenTop : window.screenY, d = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth, h = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight, f = (i = o.popupSize) === null || i === void 0 ? void 0 : i.width, p = (s = o.popupSize) === null || s === void 0 ? void 0 : s.height, g = (a = o.popupPosition) === null || a === void 0 ? void 0 : a.top, m = (c = o.popupPosition) === null || c === void 0 ? void 0 : c.left;
-      return (!f || f < 0 || f > d) && (this.logger.verbose("Default popup window width used. Window width not configured or invalid."), f = Ct.POPUP_WIDTH), (!p || p < 0 || p > h) && (this.logger.verbose("Default popup window height used. Window height not configured or invalid."), p = Ct.POPUP_HEIGHT), (!g || g < 0 || g > h) && (this.logger.verbose("Default popup window top position used. Window top not configured or invalid."), g = Math.max(0, h / 2 - Ct.POPUP_HEIGHT / 2 + u)), (!m || m < 0 || m > d) && (this.logger.verbose("Default popup window left position used. Window left not configured or invalid."), m = Math.max(0, d / 2 - Ct.POPUP_WIDTH / 2 + l)), window.open(t, n, "width=" + f + ", height=" + p + ", top=" + g + ", left=" + m + ", scrollbars=yes");
+      var i, s, a, c, l = window.screenLeft ? window.screenLeft : window.screenX, u = window.screenTop ? window.screenTop : window.screenY, h = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth, d = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight, f = (i = o.popupSize) === null || i === void 0 ? void 0 : i.width, p = (s = o.popupSize) === null || s === void 0 ? void 0 : s.height, g = (a = o.popupPosition) === null || a === void 0 ? void 0 : a.top, m = (c = o.popupPosition) === null || c === void 0 ? void 0 : c.left;
+      return (!f || f < 0 || f > h) && (this.logger.verbose("Default popup window width used. Window width not configured or invalid."), f = Ct.POPUP_WIDTH), (!p || p < 0 || p > d) && (this.logger.verbose("Default popup window height used. Window height not configured or invalid."), p = Ct.POPUP_HEIGHT), (!g || g < 0 || g > d) && (this.logger.verbose("Default popup window top position used. Window top not configured or invalid."), g = Math.max(0, d / 2 - Ct.POPUP_HEIGHT / 2 + u)), (!m || m < 0 || m > h) && (this.logger.verbose("Default popup window left position used. Window left not configured or invalid."), m = Math.max(0, h / 2 - Ct.POPUP_WIDTH / 2 + l)), window.open(t, n, "width=" + f + ", height=" + p + ", top=" + g + ", left=" + m + ", scrollbars=yes");
     }, e.prototype.unloadWindow = function(t) {
       this.browserStorage.cleanRequestByInteractionType(K.Popup), this.currentWindow && this.currentWindow.close(), t.preventDefault();
     }, e.prototype.cleanPopup = function(t) {
@@ -8933,18 +8933,18 @@ function np(r, e) {
       useMsrCrypto: !1,
       entropy: void 0
     }
-  }), u = B(B({}, o), { loggerOptions: (o == null ? void 0 : o.loggerOptions) || c }), d = {
+  }), u = B(B({}, o), { loggerOptions: (o == null ? void 0 : o.loggerOptions) || c }), h = {
     application: {
       appName: S.EMPTY_STRING,
       appVersion: S.EMPTY_STRING
     }
-  }, h = {
+  }, d = {
     auth: B(B({}, s), t),
     cache: B(B({}, a), n),
     system: B(B({}, l), u),
-    telemetry: B(B({}, d), i)
+    telemetry: B(B({}, h), i)
   };
-  return h;
+  return d;
 }
 /*! @azure/msal-browser v2.39.0 2024-06-06 */
 var Ul = (
@@ -8979,15 +8979,15 @@ var Ul = (
             o.removeHiddenIframe(t), clearInterval(l), s(M.createMonitorIframeTimeoutError());
             return;
           }
-          var u = S.EMPTY_STRING, d = t.contentWindow;
+          var u = S.EMPTY_STRING, h = t.contentWindow;
           try {
-            u = d ? d.location.href : S.EMPTY_STRING;
+            u = h ? h.location.href : S.EMPTY_STRING;
           } catch {
           }
           if (!H.isEmpty(u)) {
-            var h = d ? d.location.hash : S.EMPTY_STRING;
-            if (he.hashContainsKnownProperties(h)) {
-              o.removeHiddenIframe(t), clearInterval(l), i(h);
+            var d = h ? h.location.hash : S.EMPTY_STRING;
+            if (he.hashContainsKnownProperties(d)) {
+              o.removeHiddenIframe(t), clearInterval(l), i(d);
               return;
             }
           }
@@ -9021,8 +9021,8 @@ var op = (
   /** @class */
   function(r) {
     Me(e, r);
-    function e(t, n, o, i, s, a, c, l, u, d, h) {
-      var f = r.call(this, t, n, o, i, s, a, l, d, h) || this;
+    function e(t, n, o, i, s, a, c, l, u, h, d) {
+      var f = r.call(this, t, n, o, i, s, a, l, h, d) || this;
       return f.apiId = c, f.nativeStorage = u, f;
     }
     return e.prototype.acquireToken = function(t) {
@@ -9068,7 +9068,7 @@ var op = (
       return Promise.reject(M.createSilentLogoutUnsupportedError());
     }, e.prototype.silentTokenHelper = function(t, n) {
       return k(this, void 0, void 0, function() {
-        var o, i, s, a, c, l, u, d, h, f = this;
+        var o, i, s, a, c, l, u, h, d, f = this;
         return N(this, function(p) {
           switch (p.label) {
             case 0:
@@ -9083,7 +9083,7 @@ var op = (
               if (c = p.sent(), l = he.getDeserializedHash(c), u = this.validateAndExtractStateFromHash(l, K.Silent, o.correlationId), l.accountId) {
                 if (this.logger.verbose("Account id found in hash, calling WAM for token"), !this.nativeMessageHandler)
                   throw M.createNativeConnectionNotEstablishedError();
-                return d = new Jr(this.config, this.browserStorage, this.browserCrypto, this.logger, this.eventHandler, this.navigationClient, this.apiId, this.performanceClient, this.nativeMessageHandler, l.accountId, this.browserStorage, this.correlationId), h = Bt.parseRequestState(this.browserCrypto, u).userRequestState, [2, d.acquireToken(B(B({}, n), { state: h, prompt: n.prompt || He.NONE })).finally(function() {
+                return h = new Jr(this.config, this.browserStorage, this.browserCrypto, this.logger, this.eventHandler, this.navigationClient, this.apiId, this.performanceClient, this.nativeMessageHandler, l.accountId, this.browserStorage, this.correlationId), d = Bt.parseRequestState(this.browserCrypto, u).userRequestState, [2, h.acquireToken(B(B({}, n), { state: d, prompt: n.prompt || He.NONE })).finally(function() {
                   f.browserStorage.cleanRequestByState(u);
                 })];
               }
@@ -9319,8 +9319,8 @@ var ap = (
       var n = this.base64DecToArr(t);
       return jt.utf8ArrToString(n);
     }, r.prototype.base64DecToArr = function(e, t) {
-      for (var n = e.replace(/[^A-Za-z0-9\+\/]/g, S.EMPTY_STRING), o = n.length, i = t ? Math.ceil((o * 3 + 1 >>> 2) / t) * t : o * 3 + 1 >>> 2, s = new Uint8Array(i), a = void 0, c = void 0, l = 0, u = 0, d = 0; d < o; d++)
-        if (c = d & 3, l |= this.b64ToUint6(n.charCodeAt(d)) << 18 - 6 * c, c === 3 || o - d === 1) {
+      for (var n = e.replace(/[^A-Za-z0-9\+\/]/g, S.EMPTY_STRING), o = n.length, i = t ? Math.ceil((o * 3 + 1 >>> 2) / t) * t : o * 3 + 1 >>> 2, s = new Uint8Array(i), a = void 0, c = void 0, l = 0, u = 0, h = 0; h < o; h++)
+        if (c = h & 3, l |= this.b64ToUint6(n.charCodeAt(h)) << 18 - 6 * c, c === 3 || o - h === 1) {
           for (a = 0; a < 3 && u < i; a++, u++)
             s[u] = l >>> (16 >>> a & 24) & 255;
           l = 0;
@@ -9513,10 +9513,10 @@ var hp = (
         return N(this, function(a) {
           return i = jt.getSortedObjectString(e), s = jt.stringToArrayBuffer(i), [2, new Promise(function(c, l) {
             var u = window.msCrypto.subtle.importKey(tn, s, t, n, o);
-            u.addEventListener("complete", function(d) {
-              c(d.target.result);
-            }), u.addEventListener("error", function(d) {
-              l(d);
+            u.addEventListener("complete", function(h) {
+              c(h.target.result);
+            }), u.addEventListener("error", function(h) {
+              l(h);
             });
           })];
         });
@@ -9984,31 +9984,31 @@ var vp = (
       var t;
       return k(this, void 0, void 0, function() {
         var n, o, i, s, a, c, l, u;
-        return N(this, function(d) {
-          switch (d.label) {
+        return N(this, function(h) {
+          switch (h.label) {
             case 0:
               return n = (t = this.performanceClient) === null || t === void 0 ? void 0 : t.startMeasurement(I.CryptoOptsGetPublicKeyThumbprint, e.correlationId), [4, this.browserCrypto.generateKeyPair(r.EXTRACTABLE, r.POP_KEY_USAGES)];
             case 1:
-              return o = d.sent(), [4, this.browserCrypto.exportJwk(o.publicKey)];
+              return o = h.sent(), [4, this.browserCrypto.exportJwk(o.publicKey)];
             case 2:
-              return i = d.sent(), s = {
+              return i = h.sent(), s = {
                 e: i.e,
                 kty: i.kty,
                 n: i.n
               }, a = jt.getSortedObjectString(s), [4, this.hashString(a)];
             case 3:
-              return c = d.sent(), [4, this.browserCrypto.exportJwk(o.privateKey)];
+              return c = h.sent(), [4, this.browserCrypto.exportJwk(o.privateKey)];
             case 4:
-              return l = d.sent(), [4, this.browserCrypto.importJwk(l, !1, ["sign"])];
+              return l = h.sent(), [4, this.browserCrypto.importJwk(l, !1, ["sign"])];
             case 5:
-              return u = d.sent(), [4, this.cache.asymmetricKeys.setItem(c, {
+              return u = h.sent(), [4, this.cache.asymmetricKeys.setItem(c, {
                 privateKey: u,
                 publicKey: o.publicKey,
                 requestMethod: e.resourceRequestMethod,
                 requestUri: e.resourceRequestUri
               })];
             case 6:
-              return d.sent(), n && n.endMeasurement({
+              return h.sent(), n && n.endMeasurement({
                 success: !0
               }), [2, c];
           }
@@ -10042,7 +10042,7 @@ var vp = (
     }, r.prototype.signJwt = function(e, t, n) {
       var o;
       return k(this, void 0, void 0, function() {
-        var i, s, a, c, l, u, d, h, f, p, g, m, b;
+        var i, s, a, c, l, u, h, d, f, p, g, m, b;
         return N(this, function(C) {
           switch (C.label) {
             case 0:
@@ -10052,9 +10052,9 @@ var vp = (
                 throw M.createSigningKeyNotFoundInStorageError(t);
               return [4, this.browserCrypto.exportJwk(s.publicKey)];
             case 2:
-              return a = C.sent(), c = jt.getSortedObjectString(a), l = this.b64Encode.urlEncode(JSON.stringify({ kid: t })), u = Kf.getShrHeaderString({ kid: l, alg: a.alg }), d = this.b64Encode.urlEncode(u), e.cnf = {
+              return a = C.sent(), c = jt.getSortedObjectString(a), l = this.b64Encode.urlEncode(JSON.stringify({ kid: t })), u = Kf.getShrHeaderString({ kid: l, alg: a.alg }), h = this.b64Encode.urlEncode(u), e.cnf = {
                 jwk: JSON.parse(c)
-              }, h = this.b64Encode.urlEncode(JSON.stringify(e)), f = d + "." + h, p = jt.stringToArrayBuffer(f), [4, this.browserCrypto.sign(s.privateKey, p)];
+              }, d = this.b64Encode.urlEncode(JSON.stringify(e)), f = h + "." + d, p = jt.stringToArrayBuffer(f), [4, this.browserCrypto.sign(s.privateKey, p)];
             case 3:
               return g = C.sent(), m = this.b64Encode.urlEncodeArr(new Uint8Array(g)), b = f + "." + m, i && i.endMeasurement({
                 success: !0
@@ -10250,11 +10250,11 @@ var bp = (
     }, r.prototype.generateAuthenticationResult = function(e, t, n, o, i) {
       var s, a = S.EMPTY_STRING, c = [], l = null, u;
       n.accessToken && (a = n.accessToken.secret, c = De.fromString(n.accessToken.target).asArray(), l = new Date(Number(n.accessToken.expiresOn) * 1e3), u = new Date(Number(n.accessToken.extendedExpiresOn) * 1e3));
-      var d = (t == null ? void 0 : t.claims.oid) || (t == null ? void 0 : t.claims.sub) || S.EMPTY_STRING, h = (t == null ? void 0 : t.claims.tid) || S.EMPTY_STRING;
+      var h = (t == null ? void 0 : t.claims.oid) || (t == null ? void 0 : t.claims.sub) || S.EMPTY_STRING, d = (t == null ? void 0 : t.claims.tid) || S.EMPTY_STRING;
       return {
         authority: i ? i.canonicalAuthority : S.EMPTY_STRING,
-        uniqueId: d,
-        tenantId: h,
+        uniqueId: h,
+        tenantId: d,
         scopes: c,
         account: o ? o.getAccountInfo() : null,
         idToken: t ? t.rawToken : S.EMPTY_STRING,
@@ -10293,9 +10293,9 @@ var Ep = (
   /** @class */
   function(r) {
     Me(e, r);
-    function e(t, n, o, i, s, a, c, l, u, d) {
-      var h = r.call(this, t, n, o, i, s, a, l, u, d) || this;
-      return h.apiId = c, h;
+    function e(t, n, o, i, s, a, c, l, u, h) {
+      var d = r.call(this, t, n, o, i, s, a, l, u, h) || this;
+      return d.apiId = c, d;
     }
     return e.prototype.acquireToken = function(t) {
       return k(this, void 0, void 0, function() {
@@ -10383,15 +10383,15 @@ var Sp = (
     }, r.prototype.handleRedirectPromise = function(e) {
       return k(this, void 0, void 0, function() {
         var t, n, o, i, s, a, c, l, u = this;
-        return N(this, function(d) {
-          return this.logger.verbose("handleRedirectPromise called"), Se.blockNativeBrokerCalledBeforeInitialized(this.config.system.allowNativeBroker, this.initialized), t = this.getAllAccounts(), this.isBrowserEnvironment ? (n = e || S.EMPTY_STRING, o = this.redirectResponse.get(n), typeof o > "u" ? (this.eventHandler.emitEvent(ee.HANDLE_REDIRECT_START, K.Redirect), this.logger.verbose("handleRedirectPromise has been called for the first time, storing the promise"), i = this.browserStorage.getCachedNativeRequest(), s = void 0, i && Er.isNativeAvailable(this.config, this.logger, this.nativeExtensionProvider) && this.nativeExtensionProvider && !e ? (this.logger.trace("handleRedirectPromise - acquiring token from native platform"), a = new Jr(this.config, this.browserStorage, this.browserCrypto, this.logger, this.eventHandler, this.navigationClient, be.handleRedirectPromise, this.performanceClient, this.nativeExtensionProvider, i.accountId, this.nativeInternalStorage, i.correlationId), s = a.handleRedirectPromise()) : (this.logger.trace("handleRedirectPromise - acquiring token from web flow"), c = this.browserStorage.getTemporaryCache(fe.CORRELATION_ID, !0) || S.EMPTY_STRING, l = this.createRedirectClient(c), s = l.handleRedirectPromise(e)), o = s.then(function(h) {
-            if (h) {
+        return N(this, function(h) {
+          return this.logger.verbose("handleRedirectPromise called"), Se.blockNativeBrokerCalledBeforeInitialized(this.config.system.allowNativeBroker, this.initialized), t = this.getAllAccounts(), this.isBrowserEnvironment ? (n = e || S.EMPTY_STRING, o = this.redirectResponse.get(n), typeof o > "u" ? (this.eventHandler.emitEvent(ee.HANDLE_REDIRECT_START, K.Redirect), this.logger.verbose("handleRedirectPromise has been called for the first time, storing the promise"), i = this.browserStorage.getCachedNativeRequest(), s = void 0, i && Er.isNativeAvailable(this.config, this.logger, this.nativeExtensionProvider) && this.nativeExtensionProvider && !e ? (this.logger.trace("handleRedirectPromise - acquiring token from native platform"), a = new Jr(this.config, this.browserStorage, this.browserCrypto, this.logger, this.eventHandler, this.navigationClient, be.handleRedirectPromise, this.performanceClient, this.nativeExtensionProvider, i.accountId, this.nativeInternalStorage, i.correlationId), s = a.handleRedirectPromise()) : (this.logger.trace("handleRedirectPromise - acquiring token from web flow"), c = this.browserStorage.getTemporaryCache(fe.CORRELATION_ID, !0) || S.EMPTY_STRING, l = this.createRedirectClient(c), s = l.handleRedirectPromise(e)), o = s.then(function(d) {
+            if (d) {
               var f = t.length < u.getAllAccounts().length;
-              f ? (u.eventHandler.emitEvent(ee.LOGIN_SUCCESS, K.Redirect, h), u.logger.verbose("handleRedirectResponse returned result, login success")) : (u.eventHandler.emitEvent(ee.ACQUIRE_TOKEN_SUCCESS, K.Redirect, h), u.logger.verbose("handleRedirectResponse returned result, acquire token success"));
+              f ? (u.eventHandler.emitEvent(ee.LOGIN_SUCCESS, K.Redirect, d), u.logger.verbose("handleRedirectResponse returned result, login success")) : (u.eventHandler.emitEvent(ee.ACQUIRE_TOKEN_SUCCESS, K.Redirect, d), u.logger.verbose("handleRedirectResponse returned result, acquire token success"));
             }
-            return u.eventHandler.emitEvent(ee.HANDLE_REDIRECT_END, K.Redirect), h;
-          }).catch(function(h) {
-            throw t.length > 0 ? u.eventHandler.emitEvent(ee.ACQUIRE_TOKEN_FAILURE, K.Redirect, null, h) : u.eventHandler.emitEvent(ee.LOGIN_FAILURE, K.Redirect, null, h), u.eventHandler.emitEvent(ee.HANDLE_REDIRECT_END, K.Redirect), h;
+            return u.eventHandler.emitEvent(ee.HANDLE_REDIRECT_END, K.Redirect), d;
+          }).catch(function(d) {
+            throw t.length > 0 ? u.eventHandler.emitEvent(ee.ACQUIRE_TOKEN_FAILURE, K.Redirect, null, d) : u.eventHandler.emitEvent(ee.LOGIN_FAILURE, K.Redirect, null, d), u.eventHandler.emitEvent(ee.HANDLE_REDIRECT_END, K.Redirect), d;
           }), this.redirectResponse.set(n, o)) : this.logger.verbose("handleRedirectPromise has been called previously, returning the result from the first call"), [2, o]) : (this.logger.verbose("handleRedirectPromise returns null, not browser environment"), [2, null]);
         });
       });
@@ -10488,11 +10488,11 @@ var Sp = (
             }
             throw l;
           }) : (s = this.createSilentIframeClient(o.correlationId), i = s.acquireToken(o)), [2, i.then(function(l) {
-            var u, d;
+            var u, h;
             return a.eventHandler.emitEvent(ee.SSO_SILENT_SUCCESS, K.Silent, l), (u = a.ssoSilentMeasurement) === null || u === void 0 || u.addStaticFields({
               accessTokenSize: l.accessToken.length,
               idTokenSize: l.idToken.length
-            }), (d = a.ssoSilentMeasurement) === null || d === void 0 || d.endMeasurement({
+            }), (h = a.ssoSilentMeasurement) === null || h === void 0 || h.endMeasurement({
               success: !0,
               isNativeBroker: l.fromNativeBroker,
               requestId: l.requestId
@@ -10769,7 +10769,7 @@ var Tp = (
     }, e.prototype.acquireTokenSilent = function(t) {
       return k(this, void 0, void 0, function() {
         var n, o, i, s, a, c, l, u = this;
-        return N(this, function(d) {
+        return N(this, function(h) {
           if (n = this.getRequestCorrelationId(t), o = this.performanceClient.startMeasurement(I.AcquireTokenSilent, n), o.addStaticFields({
             cacheLookupPolicy: t.cacheLookupPolicy
           }), this.preflightBrowserEnvironmentCheck(K.Silent), this.logger.verbose("acquireTokenSilent called", n), i = t.account || this.getActiveAccount(), !i)
@@ -10785,23 +10785,23 @@ var Tp = (
             resourceRequestUri: t.resourceRequestUri,
             shrClaims: t.shrClaims,
             sshKid: t.sshKid
-          }, a = JSON.stringify(s), c = this.activeSilentTokenRequests.get(a), typeof c > "u" ? (this.logger.verbose("acquireTokenSilent called for the first time, storing active request", n), this.performanceClient.setPreQueueTime(I.AcquireTokenSilentAsync, n), l = this.acquireTokenSilentAsync(B(B({}, t), { correlationId: n }), i).then(function(h) {
+          }, a = JSON.stringify(s), c = this.activeSilentTokenRequests.get(a), typeof c > "u" ? (this.logger.verbose("acquireTokenSilent called for the first time, storing active request", n), this.performanceClient.setPreQueueTime(I.AcquireTokenSilentAsync, n), l = this.acquireTokenSilentAsync(B(B({}, t), { correlationId: n }), i).then(function(d) {
             return u.activeSilentTokenRequests.delete(a), o.addStaticFields({
-              accessTokenSize: h.accessToken.length,
-              idTokenSize: h.idToken.length
+              accessTokenSize: d.accessToken.length,
+              idTokenSize: d.idToken.length
             }), o.endMeasurement({
               success: !0,
-              fromCache: h.fromCache,
-              isNativeBroker: h.fromNativeBroker,
+              fromCache: d.fromCache,
+              isNativeBroker: d.fromNativeBroker,
               cacheLookupPolicy: t.cacheLookupPolicy,
-              requestId: h.requestId
-            }), h;
-          }).catch(function(h) {
+              requestId: d.requestId
+            }), d;
+          }).catch(function(d) {
             throw u.activeSilentTokenRequests.delete(a), o.endMeasurement({
-              errorCode: h.errorCode,
-              subErrorCode: h.subError,
+              errorCode: d.errorCode,
+              subErrorCode: d.subError,
               success: !1
-            }), h;
+            }), d;
           }), this.activeSilentTokenRequests.set(a, l), [2, l]) : (this.logger.verbose("acquireTokenSilent has been called previously, returning the result from the first call", n), o.discardMeasurement(), [2, c]);
         });
       });
@@ -10813,53 +10813,53 @@ var Tp = (
       var o;
       return k(this, void 0, void 0, function() {
         var i, s, a, c, l, u = this;
-        return N(this, function(d) {
-          switch (d.label) {
+        return N(this, function(h) {
+          switch (h.label) {
             case 0:
               return this.performanceClient.addQueueMeasurement(I.AcquireTokenSilentAsync, t.correlationId), this.eventHandler.emitEvent(ee.ACQUIRE_TOKEN_START, K.Silent, t), this.astsAsyncMeasurement = this.performanceClient.startMeasurement(I.AcquireTokenSilentAsync, t.correlationId), (o = this.astsAsyncMeasurement) === null || o === void 0 || o.increment({
                 visibilityChangeCount: 0
-              }), document.addEventListener("visibilitychange", this.trackPageVisibility), Er.isNativeAvailable(this.config, this.logger, this.nativeExtensionProvider, t.authenticationScheme) && n.nativeAccountId ? (this.logger.verbose("acquireTokenSilent - attempting to acquire token from native platform"), s = B(B({}, t), { account: n }), i = this.acquireTokenNative(s, be.acquireTokenSilent_silentFlow).catch(function(h) {
+              }), document.addEventListener("visibilitychange", this.trackPageVisibility), Er.isNativeAvailable(this.config, this.logger, this.nativeExtensionProvider, t.authenticationScheme) && n.nativeAccountId ? (this.logger.verbose("acquireTokenSilent - attempting to acquire token from native platform"), s = B(B({}, t), { account: n }), i = this.acquireTokenNative(s, be.acquireTokenSilent_silentFlow).catch(function(d) {
                 return k(u, void 0, void 0, function() {
                   var f;
                   return N(this, function(p) {
-                    if (h instanceof kt && h.isFatal())
+                    if (d instanceof kt && d.isFatal())
                       return this.logger.verbose("acquireTokenSilent - native platform unavailable, falling back to web flow"), this.nativeExtensionProvider = void 0, f = this.createSilentIframeClient(t.correlationId), [2, f.acquireToken(t)];
-                    throw h;
+                    throw d;
                   });
                 });
               }), [3, 3]) : [3, 1];
             case 1:
               return this.logger.verbose("acquireTokenSilent - attempting to acquire token from web flow"), a = this.createSilentCacheClient(t.correlationId), this.performanceClient.setPreQueueTime(I.InitializeSilentRequest, t.correlationId), [4, a.initializeSilentRequest(t, n)];
             case 2:
-              c = d.sent(), l = B(B({}, t), {
+              c = h.sent(), l = B(B({}, t), {
                 // set the request's CacheLookupPolicy to Default if it was not optionally passed in
                 cacheLookupPolicy: t.cacheLookupPolicy || Ye.Default
-              }), this.performanceClient.setPreQueueTime(I.AcquireTokenFromCache, c.correlationId), i = this.acquireTokenFromCache(a, c, l).catch(function(h) {
+              }), this.performanceClient.setPreQueueTime(I.AcquireTokenFromCache, c.correlationId), i = this.acquireTokenFromCache(a, c, l).catch(function(d) {
                 if (l.cacheLookupPolicy === Ye.AccessToken)
-                  throw h;
+                  throw d;
                 return Se.blockReloadInHiddenIframes(), u.eventHandler.emitEvent(ee.ACQUIRE_TOKEN_NETWORK_START, K.Silent, c), u.performanceClient.setPreQueueTime(I.AcquireTokenByRefreshToken, c.correlationId), u.acquireTokenByRefreshToken(c, l).catch(function(f) {
                   var p = f instanceof _r, g = f instanceof wt, m = f.errorCode === Wr.noTokensFoundError.code, b = f.errorCode === Ct.INVALID_GRANT_ERROR;
                   if ((!p || !b || g || l.cacheLookupPolicy === Ye.AccessTokenAndRefreshToken || l.cacheLookupPolicy === Ye.RefreshToken) && l.cacheLookupPolicy !== Ye.Skip && !m)
                     throw f;
                   return u.logger.verbose("Refresh token expired/invalid or CacheLookupPolicy is set to Skip, attempting acquire token by iframe.", t.correlationId), u.performanceClient.setPreQueueTime(I.AcquireTokenBySilentIframe, c.correlationId), u.acquireTokenBySilentIframe(c);
                 });
-              }), d.label = 3;
+              }), h.label = 3;
             case 3:
-              return [2, i.then(function(h) {
+              return [2, i.then(function(d) {
                 var f;
-                return u.eventHandler.emitEvent(ee.ACQUIRE_TOKEN_SUCCESS, K.Silent, h), (f = u.astsAsyncMeasurement) === null || f === void 0 || f.endMeasurement({
+                return u.eventHandler.emitEvent(ee.ACQUIRE_TOKEN_SUCCESS, K.Silent, d), (f = u.astsAsyncMeasurement) === null || f === void 0 || f.endMeasurement({
                   success: !0,
-                  fromCache: h.fromCache,
-                  isNativeBroker: h.fromNativeBroker,
-                  requestId: h.requestId
-                }), h;
-              }).catch(function(h) {
+                  fromCache: d.fromCache,
+                  isNativeBroker: d.fromNativeBroker,
+                  requestId: d.requestId
+                }), d;
+              }).catch(function(d) {
                 var f;
-                throw u.eventHandler.emitEvent(ee.ACQUIRE_TOKEN_FAILURE, K.Silent, null, h), (f = u.astsAsyncMeasurement) === null || f === void 0 || f.endMeasurement({
-                  errorCode: h.errorCode,
-                  subErrorCode: h.subError,
+                throw u.eventHandler.emitEvent(ee.ACQUIRE_TOKEN_FAILURE, K.Silent, null, d), (f = u.astsAsyncMeasurement) === null || f === void 0 || f.endMeasurement({
+                  errorCode: d.errorCode,
+                  subErrorCode: d.subError,
                   success: !1
-                }), h;
+                }), d;
               }).finally(function() {
                 document.removeEventListener("visibilitychange", u.trackPageVisibility);
               })];
@@ -11009,10 +11009,10 @@ function Pp({
       ((p = Yi(a.currentTarget, r)) == null ? void 0 : p.querySelectorAll(
         e
       )) || []
-    ).filter((g) => Np(a.currentTarget, g, r)), l = c.findIndex((g) => a.currentTarget === g), u = kp(l, c, n), d = Rp(l, c, n), h = i === "rtl" ? d : u, f = i === "rtl" ? u : d;
+    ).filter((g) => Np(a.currentTarget, g, r)), l = c.findIndex((g) => a.currentTarget === g), u = kp(l, c, n), h = Rp(l, c, n), d = i === "rtl" ? h : u, f = i === "rtl" ? u : h;
     switch (a.key) {
       case "ArrowRight": {
-        s === "horizontal" && (a.stopPropagation(), a.preventDefault(), c[h].focus(), o && c[h].click());
+        s === "horizontal" && (a.stopPropagation(), a.preventDefault(), c[d].focus(), o && c[d].click());
         break;
       }
       case "ArrowLeft": {
@@ -11020,7 +11020,7 @@ function Pp({
         break;
       }
       case "ArrowUp": {
-        s === "vertical" && (a.stopPropagation(), a.preventDefault(), c[d].focus(), o && c[d].click());
+        s === "vertical" && (a.stopPropagation(), a.preventDefault(), c[h].focus(), o && c[h].click());
         break;
       }
       case "ArrowDown": {
@@ -11434,10 +11434,10 @@ function ug(r) {
       a: 1
     };
   const n = parseInt(t[1], 10), o = parseInt(t[2], 10) / 100, i = parseInt(t[3], 10) / 100, s = t[5] ? parseFloat(t[5]) : void 0, a = (1 - Math.abs(2 * i - 1)) * o, c = n / 60, l = a * (1 - Math.abs(c % 2 - 1)), u = i - a / 2;
-  let d, h, f;
-  return c >= 0 && c < 1 ? (d = a, h = l, f = 0) : c >= 1 && c < 2 ? (d = l, h = a, f = 0) : c >= 2 && c < 3 ? (d = 0, h = a, f = l) : c >= 3 && c < 4 ? (d = 0, h = l, f = a) : c >= 4 && c < 5 ? (d = l, h = 0, f = a) : (d = a, h = 0, f = l), {
-    r: Math.round((d + u) * 255),
-    g: Math.round((h + u) * 255),
+  let h, d, f;
+  return c >= 0 && c < 1 ? (h = a, d = l, f = 0) : c >= 1 && c < 2 ? (h = l, d = a, f = 0) : c >= 2 && c < 3 ? (h = 0, d = a, f = l) : c >= 3 && c < 4 ? (h = 0, d = l, f = a) : c >= 4 && c < 5 ? (h = l, d = 0, f = a) : (h = a, d = 0, f = l), {
+    r: Math.round((h + u) * 255),
+    g: Math.round((d + u) * 255),
     b: Math.round((f + u) * 255),
     a: s || 1
   };
@@ -12317,17 +12317,17 @@ function Ig({
   return W(() => (r.subscribe(c), r.unsubscribe), [r.subscribe, r.unsubscribe]), Gn(() => {
     Kr(r.get(e), t);
   }, []), W(() => {
-    var d;
+    var h;
     if (n)
       return Kr(n, t), () => {
       };
     n === void 0 && Kr(i, t), o.current = window.matchMedia("(prefers-color-scheme: dark)");
-    const u = (h) => {
-      i === "auto" && Kr(h.matches ? "dark" : "light", t);
+    const u = (d) => {
+      i === "auto" && Kr(d.matches ? "dark" : "light", t);
     };
-    return (d = o.current) == null || d.addEventListener("change", u), () => {
-      var h;
-      return (h = o.current) == null ? void 0 : h.removeEventListener("change", u);
+    return (h = o.current) == null || h.addEventListener("change", u), () => {
+      var d;
+      return (d = o.current) == null ? void 0 : d.removeEventListener("change", u);
     };
   }, [i, n]), { colorScheme: a, setColorScheme: c, clearColorScheme: l };
 }
@@ -12353,8 +12353,8 @@ function nu({
   classNamesPrefix: c = "mantine",
   colorSchemeManager: l = gg(),
   defaultColorScheme: u = "light",
-  getRootElement: d = () => document.documentElement,
-  cssVariablesResolver: h,
+  getRootElement: h = () => document.documentElement,
+  cssVariablesResolver: d,
   forceColorScheme: f,
   stylesTransform: p
 }) {
@@ -12362,11 +12362,11 @@ function nu({
     defaultColorScheme: u,
     forceColorScheme: f,
     manager: l,
-    getRootElement: d
+    getRootElement: h
   });
   return Ag({
     respectReducedMotion: (r == null ? void 0 : r.respectReducedMotion) || !1,
-    getRootElement: d
+    getRootElement: h
   }), /* @__PURE__ */ y.jsx(
     Zl.Provider,
     {
@@ -12374,10 +12374,10 @@ function nu({
         colorScheme: g,
         setColorScheme: m,
         clearColorScheme: b,
-        getRootElement: d,
+        getRootElement: h,
         classNamesPrefix: c,
         getStyleNonce: t,
-        cssVariablesResolver: h,
+        cssVariablesResolver: d,
         cssVariablesSelector: a,
         withStaticClasses: n,
         stylesTransform: p
@@ -12506,21 +12506,21 @@ function Dg({
   className: c,
   rootSelector: l,
   props: u,
-  stylesCtx: d,
-  withStaticClasses: h,
+  stylesCtx: h,
+  withStaticClasses: d,
   headless: f,
   transformedStyles: p
 }) {
   return zt(
     kg({ theme: r, options: e, unstyled: a || f }),
-    Mg({ theme: r, themeName: t, selector: n, props: u, stylesCtx: d }),
+    Mg({ theme: r, themeName: t, selector: n, props: u, stylesCtx: h }),
     Lg({ options: e, classes: s, selector: n, unstyled: a }),
-    Cc({ selector: n, stylesCtx: d, theme: r, classNames: i, props: u }),
-    Cc({ selector: n, stylesCtx: d, theme: r, classNames: p, props: u }),
-    Ng({ selector: n, stylesCtx: d, options: e, props: u, theme: r }),
+    Cc({ selector: n, stylesCtx: h, theme: r, classNames: i, props: u }),
+    Cc({ selector: n, stylesCtx: h, theme: r, classNames: p, props: u }),
+    Ng({ selector: n, stylesCtx: h, options: e, props: u, theme: r }),
     Pg({ rootSelector: l, selector: n, className: c }),
     Og({ selector: n, classes: s, unstyled: a || f }),
-    h && !f && xg({
+    d && !f && xg({
       themeName: t,
       classNamesPrefix: o,
       selector: n,
@@ -12573,8 +12573,8 @@ function Fg({
   return (c = Hg([
     a ? {} : e == null ? void 0 : e(t, n, o),
     ...s.map((l) => {
-      var u, d, h;
-      return (h = (d = (u = t.components) == null ? void 0 : u[l]) == null ? void 0 : d.vars) == null ? void 0 : h.call(d, t, n, o);
+      var u, h, d;
+      return (d = (h = (u = t.components) == null ? void 0 : u[l]) == null ? void 0 : h.vars) == null ? void 0 : d.call(h, t, n, o);
     }),
     r == null ? void 0 : r(t, n, o)
   ])) == null ? void 0 : c[i];
@@ -12591,14 +12591,14 @@ function Bg({
   style: c,
   vars: l,
   varsResolver: u,
-  headless: d,
-  withStylesTransform: h
+  headless: h,
+  withStylesTransform: d
 }) {
   return {
-    ...!h && Ug({ theme: r, themeName: e, props: o, stylesCtx: i, selector: t }),
-    ...!h && Ro({ theme: r, styles: a, props: o, stylesCtx: i })[t],
-    ...!h && Ro({ theme: r, styles: n == null ? void 0 : n.styles, props: (n == null ? void 0 : n.props) || o, stylesCtx: i })[t],
-    ...Fg({ theme: r, props: o, stylesCtx: i, vars: l, varsResolver: u, selector: t, themeName: e, headless: d }),
+    ...!d && Ug({ theme: r, themeName: e, props: o, stylesCtx: i, selector: t }),
+    ...!d && Ro({ theme: r, styles: a, props: o, stylesCtx: i })[t],
+    ...!d && Ro({ theme: r, styles: n == null ? void 0 : n.styles, props: (n == null ? void 0 : n.props) || o, stylesCtx: i })[t],
+    ...Fg({ theme: r, props: o, stylesCtx: i, vars: l, varsResolver: u, selector: t, themeName: e, headless: h }),
     ...s === t ? Xi({ style: c, theme: r }) : null,
     ...Xi({ style: n == null ? void 0 : n.style, theme: r })
   };
@@ -12633,16 +12633,16 @@ function me({
   classNames: c,
   styles: l,
   vars: u,
-  varsResolver: d
+  varsResolver: h
 }) {
-  const h = Gt(), f = rg(), p = ng(), g = og(), m = (Array.isArray(r) ? r : [r]).filter((v) => v), { withStylesTransform: b, getTransformedStyles: C } = jg({
+  const d = Gt(), f = rg(), p = ng(), g = og(), m = (Array.isArray(r) ? r : [r]).filter((v) => v), { withStylesTransform: b, getTransformedStyles: C } = jg({
     props: t,
     stylesCtx: n,
     themeName: m
   });
   return (v, w) => ({
     className: Dg({
-      theme: h,
+      theme: d,
       options: w,
       themeName: m,
       selector: v,
@@ -12659,7 +12659,7 @@ function me({
       transformedStyles: C([w == null ? void 0 : w.styles, l])
     }),
     style: Bg({
-      theme: h,
+      theme: d,
       themeName: m,
       selector: v,
       options: w,
@@ -12669,7 +12669,7 @@ function me({
       styles: l,
       style: i,
       vars: u,
-      varsResolver: d,
+      varsResolver: h,
       headless: g,
       withStylesTransform: b
     })
@@ -12718,8 +12718,8 @@ function Wo(r) {
     me: c,
     ms: l,
     p: u,
-    px: d,
-    py: h,
+    px: h,
+    py: d,
     pt: f,
     pb: p,
     pl: g,
@@ -12775,8 +12775,8 @@ function Wo(r) {
     me: c,
     ms: l,
     p: u,
-    px: d,
-    py: h,
+    px: h,
+    py: d,
     pt: f,
     pb: p,
     pl: g,
@@ -12981,9 +12981,9 @@ function sm({
         const c = om(r[o]);
         return s.forEach((l) => {
           a && (n.styles[l] = Ei[i.type](a, t)), c.forEach((u) => {
-            const d = `(min-width: ${t.breakpoints[u]})`;
-            n.media[d] = {
-              ...n.media[d],
+            const h = `(min-width: ${t.breakpoints[u]})`;
+            n.media[h] = {
+              ...n.media[h],
               [l]: Ei[i.type](
                 im(r[o], u),
                 t
@@ -13053,8 +13053,8 @@ const lu = Ce(
     visibleFrom: c,
     lightHidden: l,
     darkHidden: u,
-    renderRoot: d,
-    __size: h,
+    renderRoot: h,
+    __size: d,
     ...f
   }, p) => {
     var _;
@@ -13079,7 +13079,7 @@ const lu = Ce(
       }),
       "data-variant": o,
       "data-size": $l(s) ? void 0 : s || void 0,
-      size: h,
+      size: d,
       ...cu(i),
       ...C
     };
@@ -13092,7 +13092,7 @@ const lu = Ce(
           media: T.media
         }
       ),
-      typeof d == "function" ? d(A) : /* @__PURE__ */ y.jsx(m, { ...A })
+      typeof h == "function" ? h(A) : /* @__PURE__ */ y.jsx(m, { ...A })
     ] });
   }
 );
@@ -13151,7 +13151,7 @@ function hm({
   }, u = (p) => {
     l((g) => ({ ...g, ...p }));
   };
-  function d(p) {
+  function h(p) {
     const g = r || dm(p);
     return {
       transition: `height ${g}ms ${e}, opacity ${g}ms ${e}`
@@ -13161,14 +13161,14 @@ function hm({
     typeof vn == "function" && vn(n ? () => {
       u({ willChange: "height", display: "block", overflow: "hidden" }), vn(() => {
         const p = Si(o);
-        u({ ...d(p), height: p });
+        u({ ...h(p), height: p });
       });
     } : () => {
       const p = Si(o);
-      u({ ...d(p), willChange: "height", height: p }), vn(() => u({ height: i, overflow: "hidden" }));
+      u({ ...h(p), willChange: "height", height: p }), vn(() => u({ height: i, overflow: "hidden" }));
     });
   }, [n]);
-  const h = (p) => {
+  const d = (p) => {
     if (!(p.target !== o.current || p.propertyName !== "height"))
       if (n) {
         const g = Si(o);
@@ -13182,7 +13182,7 @@ function hm({
       "aria-hidden": !n,
       ...m,
       [g]: Ql(o, b),
-      onTransitionEnd: h,
+      onTransitionEnd: d,
       style: { boxSizing: "border-box", ...p, ...a }
     };
   }
@@ -13202,7 +13202,7 @@ const fm = {
     onTransitionEnd: a,
     animateOpacity: c,
     ...l
-  } = G("Collapse", fm, r), u = Gt(), d = Jl(), f = (u.respectReducedMotion ? d : !1) ? 0 : o, p = hm({
+  } = G("Collapse", fm, r), u = Gt(), h = Jl(), f = (u.respectReducedMotion ? h : !1) ? 0 : o, p = hm({
     opened: n,
     transitionDuration: f,
     transitionTimingFunction: i,
@@ -13245,12 +13245,12 @@ function rn(r, e) {
 const gm = Ce((r, e) => {
   const { style: t, ...n } = r, o = pt(), [i, s] = X(0), [a, c] = X(0), l = !!(i && a);
   return rn(o.scrollbarX, () => {
-    var d;
-    const u = ((d = o.scrollbarX) == null ? void 0 : d.offsetHeight) || 0;
+    var h;
+    const u = ((h = o.scrollbarX) == null ? void 0 : h.offsetHeight) || 0;
     o.onCornerHeightChange(u), c(u);
   }), rn(o.scrollbarY, () => {
-    var d;
-    const u = ((d = o.scrollbarY) == null ? void 0 : d.offsetWidth) || 0;
+    var h;
+    const u = ((h = o.scrollbarY) == null ? void 0 : h.offsetWidth) || 0;
     o.onCornerWidthChange(u), s(u);
   }), l ? /* @__PURE__ */ y.jsx("div", { ...n, ref: e, style: { ...t, width: i, height: a } }) : null;
 }), mm = Ce((r, e) => {
@@ -13260,7 +13260,7 @@ const gm = Ce((r, e) => {
   scrollHideDelay: 1e3,
   type: "hover"
 }, hu = Ce((r, e) => {
-  const t = G("ScrollAreaRoot", ym, r), { type: n, scrollHideDelay: o, scrollbars: i, ...s } = t, [a, c] = X(null), [l, u] = X(null), [d, h] = X(null), [f, p] = X(null), [g, m] = X(null), [b, C] = X(0), [v, w] = X(0), [E, T] = X(!1), [A, _] = X(!1), L = ft(e, (F) => c(F));
+  const t = G("ScrollAreaRoot", ym, r), { type: n, scrollHideDelay: o, scrollbars: i, ...s } = t, [a, c] = X(null), [l, u] = X(null), [h, d] = X(null), [f, p] = X(null), [g, m] = X(null), [b, C] = X(0), [v, w] = X(0), [E, T] = X(!1), [A, _] = X(!1), L = ft(e, (F) => c(F));
   return /* @__PURE__ */ y.jsx(
     pm,
     {
@@ -13270,8 +13270,8 @@ const gm = Ce((r, e) => {
         scrollArea: a,
         viewport: l,
         onViewportChange: u,
-        content: d,
-        onContentChange: h,
+        content: h,
+        onContentChange: d,
         scrollbarX: f,
         onScrollbarXChange: p,
         scrollbarXEnabled: E,
@@ -13322,8 +13322,8 @@ function Ec(r, e, t = "ltr") {
   return pu([0, s], [0, a])(l);
 }
 function Cm(r, e, t, n = "ltr") {
-  const o = Yo(t), i = o / 2, s = e || i, a = o - s, c = t.scrollbar.paddingStart + s, l = t.scrollbar.size - t.scrollbar.paddingEnd - a, u = t.content - t.viewport, d = n === "ltr" ? [0, u] : [u * -1, 0];
-  return pu([c, l], d)(r);
+  const o = Yo(t), i = o / 2, s = e || i, a = o - s, c = t.scrollbar.paddingStart + s, l = t.scrollbar.size - t.scrollbar.paddingEnd - a, u = t.content - t.viewport, h = n === "ltr" ? [0, u] : [u * -1, 0];
+  return pu([c, l], h)(r);
 }
 function gu(r, e) {
   return r > 0 && r < e;
@@ -13349,8 +13349,8 @@ const [bm, mu] = cn(
     onDragScroll: c,
     onWheelScroll: l,
     onResize: u,
-    ...d
-  } = r, h = pt(), [f, p] = X(null), g = ft(e, (_) => p(_)), m = ue(null), b = ue(""), { viewport: C } = h, v = t.content - t.viewport, w = br(l), E = br(a), T = Go(u, 10), A = (_) => {
+    ...h
+  } = r, d = pt(), [f, p] = X(null), g = ft(e, (_) => p(_)), m = ue(null), b = ue(""), { viewport: C } = d, v = t.content - t.viewport, w = br(l), E = br(a), T = Go(u, 10), A = (_) => {
     if (m.current) {
       const L = _.clientX - m.current.left, F = _.clientY - m.current.top;
       c({ x: L, y: F });
@@ -13362,7 +13362,7 @@ const [bm, mu] = cn(
       (f == null ? void 0 : f.contains(F)) && w(L, v);
     };
     return document.addEventListener("wheel", _, { passive: !1 }), () => document.removeEventListener("wheel", _, { passive: !1 });
-  }, [C, f, v, w]), W(E, [t, E]), rn(f, T), rn(h.content, T), /* @__PURE__ */ y.jsx(
+  }, [C, f, v, w]), W(E, [t, E]), rn(f, T), rn(d.content, T), /* @__PURE__ */ y.jsx(
     bm,
     {
       value: {
@@ -13376,9 +13376,9 @@ const [bm, mu] = cn(
       children: /* @__PURE__ */ y.jsx(
         "div",
         {
-          ...d,
+          ...h,
           ref: g,
-          style: { position: "absolute", ...d.style },
+          style: { position: "absolute", ...h.style },
           onPointerDown: Sr(r.onPointerDown, (_) => {
             _.preventDefault();
             const L = 0;
@@ -13410,12 +13410,12 @@ const [bm, mu] = cn(
           ...o,
           "--sa-thumb-width": `${Yo(t)}px`
         },
-        onThumbPointerDown: (d) => r.onThumbPointerDown(d.x),
-        onDragScroll: (d) => r.onDragScroll(d.x),
-        onWheelScroll: (d, h) => {
+        onThumbPointerDown: (h) => r.onThumbPointerDown(h.x),
+        onDragScroll: (h) => r.onDragScroll(h.x),
+        onWheelScroll: (h, d) => {
           if (s.viewport) {
-            const f = s.viewport.scrollLeft + d.deltaX;
-            r.onWheelScroll(f), gu(f, h) && d.preventDefault();
+            const f = s.viewport.scrollLeft + h.deltaX;
+            r.onWheelScroll(f), gu(f, d) && h.preventDefault();
           }
         },
         onResize: () => {
@@ -13448,12 +13448,12 @@ const [bm, mu] = cn(
           "--sa-thumb-height": `${Yo(t)}px`,
           ...o
         },
-        onThumbPointerDown: (d) => r.onThumbPointerDown(d.y),
-        onDragScroll: (d) => r.onDragScroll(d.y),
-        onWheelScroll: (d, h) => {
+        onThumbPointerDown: (h) => r.onThumbPointerDown(h.y),
+        onDragScroll: (h) => r.onDragScroll(h.y),
+        onWheelScroll: (h, d) => {
           if (s.viewport) {
-            const f = s.viewport.scrollTop + d.deltaY;
-            r.onWheelScroll(f), gu(f, h) && d.preventDefault();
+            const f = s.viewport.scrollTop + h.deltaY;
+            r.onWheelScroll(f), gu(f, d) && h.preventDefault();
           }
         },
         onResize: () => {
@@ -13475,7 +13475,7 @@ const [bm, mu] = cn(
     content: 0,
     viewport: 0,
     scrollbar: { size: 0, paddingStart: 0, paddingEnd: 0 }
-  }), u = fu(c.viewport, c.content), d = {
+  }), u = fu(c.viewport, c.content), h = {
     ...n,
     sizes: c,
     onSizesChange: l,
@@ -13489,11 +13489,11 @@ const [bm, mu] = cn(
     onThumbPointerDown: (f) => {
       a.current = f;
     }
-  }, h = (f, p) => Cm(f, a.current, c, p);
+  }, d = (f, p) => Cm(f, a.current, c, p);
   return t === "horizontal" ? /* @__PURE__ */ y.jsx(
     wm,
     {
-      ...d,
+      ...h,
       ref: e,
       onThumbPositionChange: () => {
         if (i.viewport && s.current) {
@@ -13505,13 +13505,13 @@ const [bm, mu] = cn(
         i.viewport && (i.viewport.scrollLeft = f);
       },
       onDragScroll: (f) => {
-        i.viewport && (i.viewport.scrollLeft = h(f, o));
+        i.viewport && (i.viewport.scrollLeft = d(f, o));
       }
     }
   ) : t === "vertical" ? /* @__PURE__ */ y.jsx(
     Em,
     {
-      ...d,
+      ...h,
       ref: e,
       onThumbPositionChange: () => {
         if (i.viewport && s.current) {
@@ -13523,7 +13523,7 @@ const [bm, mu] = cn(
         i.viewport && (i.viewport.scrollTop = f);
       },
       onDragScroll: (f) => {
-        i.viewport && (i.viewport.scrollTop = h(f));
+        i.viewport && (i.viewport.scrollTop = d(f));
       }
     }
   ) : null;
@@ -13580,12 +13580,12 @@ const [bm, mu] = cn(
     }, [s, o.scrollHideDelay]), W(() => {
       const { viewport: l } = o, u = i ? "scrollLeft" : "scrollTop";
       if (l) {
-        let d = l[u];
-        const h = () => {
+        let h = l[u];
+        const d = () => {
           const f = l[u];
-          d !== f && (a("scrolling"), c()), d = f;
+          h !== f && (a("scrolling"), c()), h = f;
         };
-        return l.addEventListener("scroll", h), () => l.removeEventListener("scroll", h);
+        return l.addEventListener("scroll", d), () => l.removeEventListener("scroll", d);
       }
     }, [o.viewport, i, c]), t || s !== "hidden" ? /* @__PURE__ */ y.jsx(
       Ns,
@@ -13621,13 +13621,13 @@ const Im = Ce((r, e) => {
   return W(() => {
     const { viewport: u } = o;
     if (u) {
-      const d = () => {
+      const h = () => {
         if (l(), !c.current) {
-          const h = _m(u, s);
-          c.current = h, s();
+          const d = _m(u, s);
+          c.current = d, s();
         }
       };
-      return s(), u.addEventListener("scroll", d), () => u.removeEventListener("scroll", d);
+      return s(), u.addEventListener("scroll", h), () => u.removeEventListener("scroll", h);
     }
   }, [o.viewport, l, s]), /* @__PURE__ */ y.jsx(
     "div",
@@ -13641,7 +13641,7 @@ const Im = Ce((r, e) => {
         ...t
       },
       onPointerDownCapture: Sr(r.onPointerDownCapture, (u) => {
-        const h = u.target.getBoundingClientRect(), f = u.clientX - h.left, p = u.clientY - h.top;
+        const d = u.target.getBoundingClientRect(), f = u.clientX - d.left, p = u.clientY - d.top;
         i.onThumbPointerDown({ x: f, y: p });
       }),
       onPointerUp: Sr(r.onPointerUp, i.onThumbPointerUp)
@@ -13690,8 +13690,8 @@ const bu = {
     scrollbarSize: c,
     vars: l,
     type: u,
-    scrollHideDelay: d,
-    viewportProps: h,
+    scrollHideDelay: h,
+    viewportProps: d,
     viewportRef: f,
     onScrollPositionChange: p,
     children: g,
@@ -13714,7 +13714,7 @@ const bu = {
     hu,
     {
       type: u === "never" ? "always" : u,
-      scrollHideDelay: d,
+      scrollHideDelay: h,
       ref: e,
       scrollbars: b,
       ...E("root"),
@@ -13723,14 +13723,14 @@ const bu = {
         /* @__PURE__ */ y.jsx(
           Cu,
           {
-            ...h,
-            ...E("viewport", { style: h == null ? void 0 : h.style }),
+            ...d,
+            ...E("viewport", { style: d == null ? void 0 : d.style }),
             ref: f,
             "data-offset-scrollbars": m === !0 ? "xy" : m || void 0,
             "data-scrollbars": b || void 0,
             onScroll: (T) => {
               var A;
-              (A = h == null ? void 0 : h.onScroll) == null || A.call(h, T), p == null || p({ x: T.currentTarget.scrollLeft, y: T.currentTarget.scrollTop });
+              (A = d == null ? void 0 : d.onScroll) == null || A.call(d, T), p == null || p({ x: T.currentTarget.scrollLeft, y: T.currentTarget.scrollTop });
             },
             children: g
           }
@@ -13783,8 +13783,8 @@ const Os = ce((r, e) => {
     dir: c,
     offsetScrollbars: l,
     viewportRef: u,
-    onScrollPositionChange: d,
-    unstyled: h,
+    onScrollPositionChange: h,
+    unstyled: d,
     variant: f,
     viewportProps: p,
     scrollbars: g,
@@ -13803,8 +13803,8 @@ const Os = ce((r, e) => {
       dir: c,
       offsetScrollbars: l,
       viewportRef: u,
-      onScrollPositionChange: d,
-      unstyled: h,
+      onScrollPositionChange: h,
+      unstyled: d,
       variant: f,
       viewportProps: p,
       vars: b,
@@ -13831,7 +13831,7 @@ const Rm = {
       styles: c,
       style: l,
       ...u
-    } = t, d = me({
+    } = t, h = me({
       name: i,
       props: t,
       classes: wu,
@@ -13844,7 +13844,7 @@ const Rm = {
     return /* @__PURE__ */ y.jsx(
       Q,
       {
-        ...d("root", { focusable: !0 }),
+        ...h("root", { focusable: !0 }),
         component: o,
         ref: e,
         type: o === "button" ? "button" : void 0,
@@ -13887,8 +13887,8 @@ const Nm = {}, Pm = (r, { radius: e, shadow: t }) => ({
     withBorder: c,
     vars: l,
     radius: u,
-    shadow: d,
-    variant: h,
+    shadow: h,
+    variant: d,
     mod: f,
     ...p
   } = t, g = me({
@@ -13909,7 +13909,7 @@ const Nm = {}, Pm = (r, { radius: e, shadow: t }) => ({
       ref: e,
       mod: [{ "data-with-border": c }, f],
       ...g("root"),
-      variant: h,
+      variant: d,
       ...p
     }
   );
@@ -14125,7 +14125,7 @@ function Ic(r, e, t) {
     reference: n,
     floating: o
   } = r;
-  const i = Kt(e), s = Hs(e), a = Us(s), c = Tt(e), l = i === "y", u = n.x + n.width / 2 - o.width / 2, d = n.y + n.height / 2 - o.height / 2, h = n[a] / 2 - o[a] / 2;
+  const i = Kt(e), s = Hs(e), a = Us(s), c = Tt(e), l = i === "y", u = n.x + n.width / 2 - o.width / 2, h = n.y + n.height / 2 - o.height / 2, d = n[a] / 2 - o[a] / 2;
   let f;
   switch (c) {
     case "top":
@@ -14143,13 +14143,13 @@ function Ic(r, e, t) {
     case "right":
       f = {
         x: n.x + n.width,
-        y: d
+        y: h
       };
       break;
     case "left":
       f = {
         x: n.x - o.width,
-        y: d
+        y: h
       };
       break;
     default:
@@ -14160,10 +14160,10 @@ function Ic(r, e, t) {
   }
   switch (un(e)) {
     case "start":
-      f[s] -= h * (t && l ? -1 : 1);
+      f[s] -= d * (t && l ? -1 : 1);
       break;
     case "end":
-      f[s] += h * (t && l ? -1 : 1);
+      f[s] += d * (t && l ? -1 : 1);
       break;
   }
   return f;
@@ -14181,8 +14181,8 @@ const jm = async (r, e, t) => {
     strategy: o
   }), {
     x: u,
-    y: d
-  } = Ic(l, n, c), h = n, f = {}, p = 0;
+    y: h
+  } = Ic(l, n, c), d = n, f = {}, p = 0;
   for (let g = 0; g < a.length; g++) {
     const {
       name: m,
@@ -14194,9 +14194,9 @@ const jm = async (r, e, t) => {
       reset: E
     } = await b({
       x: u,
-      y: d,
+      y: h,
       initialPlacement: n,
-      placement: h,
+      placement: d,
       strategy: o,
       middlewareData: f,
       rects: l,
@@ -14206,25 +14206,25 @@ const jm = async (r, e, t) => {
         floating: e
       }
     });
-    u = C ?? u, d = v ?? d, f = {
+    u = C ?? u, h = v ?? h, f = {
       ...f,
       [m]: {
         ...f[m],
         ...w
       }
-    }, E && p <= 50 && (p++, typeof E == "object" && (E.placement && (h = E.placement), E.rects && (l = E.rects === !0 ? await s.getElementRects({
+    }, E && p <= 50 && (p++, typeof E == "object" && (E.placement && (d = E.placement), E.rects && (l = E.rects === !0 ? await s.getElementRects({
       reference: r,
       floating: e,
       strategy: o
     }) : E.rects), {
       x: u,
-      y: d
-    } = Ic(l, h, c)), g = -1);
+      y: h
+    } = Ic(l, d, c)), g = -1);
   }
   return {
     x: u,
-    y: d,
-    placement: h,
+    y: h,
+    placement: d,
     strategy: o,
     middlewareData: f
   };
@@ -14242,15 +14242,15 @@ async function Bs(r, e) {
   } = r, {
     boundary: l = "clippingAncestors",
     rootBoundary: u = "viewport",
-    elementContext: d = "floating",
-    altBoundary: h = !1,
+    elementContext: h = "floating",
+    altBoundary: d = !1,
     padding: f = 0
-  } = $t(e, r), p = Fs(f), m = a[h ? d === "floating" ? "reference" : "floating" : d], b = on(await i.getClippingRect({
+  } = $t(e, r), p = Fs(f), m = a[d ? h === "floating" ? "reference" : "floating" : h], b = on(await i.getClippingRect({
     element: (t = await (i.isElement == null ? void 0 : i.isElement(m))) == null || t ? m : m.contextElement || await (i.getDocumentElement == null ? void 0 : i.getDocumentElement(a.floating)),
     boundary: l,
     rootBoundary: u,
     strategy: c
-  })), C = d === "floating" ? {
+  })), C = h === "floating" ? {
     x: n,
     y: o,
     width: s.floating.width,
@@ -14292,15 +14292,15 @@ const $m = (r) => ({
     } = $t(r, e) || {};
     if (l == null)
       return {};
-    const d = Fs(u), h = {
+    const h = Fs(u), d = {
       x: t,
       y: n
-    }, f = Hs(o), p = Us(f), g = await s.getDimensions(l), m = f === "y", b = m ? "top" : "left", C = m ? "bottom" : "right", v = m ? "clientHeight" : "clientWidth", w = i.reference[p] + i.reference[f] - h[f] - i.floating[p], E = h[f] - i.reference[f], T = await (s.getOffsetParent == null ? void 0 : s.getOffsetParent(l));
+    }, f = Hs(o), p = Us(f), g = await s.getDimensions(l), m = f === "y", b = m ? "top" : "left", C = m ? "bottom" : "right", v = m ? "clientHeight" : "clientWidth", w = i.reference[p] + i.reference[f] - d[f] - i.floating[p], E = d[f] - i.reference[f], T = await (s.getOffsetParent == null ? void 0 : s.getOffsetParent(l));
     let A = T ? T[v] : 0;
     (!A || !await (s.isElement == null ? void 0 : s.isElement(T))) && (A = a.floating[v] || i.floating[p]);
-    const _ = w / 2 - E / 2, L = A / 2 - g[p] / 2 - 1, F = nt(d[b], L), J = nt(d[C], L), Z = F, se = A - g[p] - J, $ = A / 2 - g[p] / 2 + _, oe = es(Z, $, se), U = !c.arrow && un(o) != null && $ !== oe && i.reference[p] / 2 - ($ < Z ? F : J) - g[p] / 2 < 0, x = U ? $ < Z ? $ - Z : $ - se : 0;
+    const _ = w / 2 - E / 2, L = A / 2 - g[p] / 2 - 1, F = nt(h[b], L), J = nt(h[C], L), Z = F, se = A - g[p] - J, $ = A / 2 - g[p] / 2 + _, oe = es(Z, $, se), U = !c.arrow && un(o) != null && $ !== oe && i.reference[p] / 2 - ($ < Z ? F : J) - g[p] / 2 < 0, x = U ? $ < Z ? $ - Z : $ - se : 0;
     return {
-      [f]: h[f] + x,
+      [f]: d[f] + x,
       data: {
         [f]: oe,
         centerOffset: $ - oe - x,
@@ -14326,8 +14326,8 @@ const $m = (r) => ({
         elements: l
       } = e, {
         mainAxis: u = !0,
-        crossAxis: d = !0,
-        fallbackPlacements: h,
+        crossAxis: h = !0,
+        fallbackPlacements: d,
         fallbackStrategy: f = "bestFit",
         fallbackAxisSideDirection: p = "none",
         flipAlignment: g = !0,
@@ -14335,11 +14335,11 @@ const $m = (r) => ({
       } = $t(r, e);
       if ((t = i.arrow) != null && t.alignmentOffset)
         return {};
-      const b = Tt(o), C = Kt(a), v = Tt(a) === a, w = await (c.isRTL == null ? void 0 : c.isRTL(l.floating)), E = h || (v || !g ? [Po(a)] : Um(a)), T = p !== "none";
-      !h && T && E.push(...Fm(a, g, p, w));
+      const b = Tt(o), C = Kt(a), v = Tt(a) === a, w = await (c.isRTL == null ? void 0 : c.isRTL(l.floating)), E = d || (v || !g ? [Po(a)] : Um(a)), T = p !== "none";
+      !d && T && E.push(...Fm(a, g, p, w));
       const A = [a, ...E], _ = await Bs(e, m), L = [];
       let F = ((n = i.flip) == null ? void 0 : n.overflows) || [];
-      if (u && L.push(_[b]), d) {
+      if (u && L.push(_[b]), h) {
         const $ = Dm(o, s, w);
         L.push(_[$[0]], _[$[1]]);
       }
@@ -14424,13 +14424,13 @@ const zm = function(r) {
         padding: a = 2,
         x: c,
         y: l
-      } = $t(r, e), u = Array.from(await (i.getClientRects == null ? void 0 : i.getClientRects(n.reference)) || []), d = qm(u), h = on(Iu(u)), f = Fs(a);
+      } = $t(r, e), u = Array.from(await (i.getClientRects == null ? void 0 : i.getClientRects(n.reference)) || []), h = qm(u), d = on(Iu(u)), f = Fs(a);
       function p() {
-        if (d.length === 2 && d[0].left > d[1].right && c != null && l != null)
-          return d.find((m) => c > m.left - f.left && c < m.right + f.right && l > m.top - f.top && l < m.bottom + f.bottom) || h;
-        if (d.length >= 2) {
+        if (h.length === 2 && h[0].left > h[1].right && c != null && l != null)
+          return h.find((m) => c > m.left - f.left && c < m.right + f.right && l > m.top - f.top && l < m.bottom + f.bottom) || d;
+        if (h.length >= 2) {
           if (Kt(t) === "y") {
-            const F = d[0], J = d[d.length - 1], Z = Tt(t) === "top", se = F.top, $ = J.bottom, oe = Z ? F.left : J.left, U = Z ? F.right : J.right, x = U - oe, D = $ - se;
+            const F = h[0], J = h[h.length - 1], Z = Tt(t) === "top", se = F.top, $ = J.bottom, oe = Z ? F.left : J.left, U = Z ? F.right : J.right, x = U - oe, D = $ - se;
             return {
               top: se,
               bottom: $,
@@ -14442,7 +14442,7 @@ const zm = function(r) {
               y: se
             };
           }
-          const m = Tt(t) === "left", b = Ue(...d.map((F) => F.right)), C = nt(...d.map((F) => F.left)), v = d.filter((F) => m ? F.left === C : F.right === b), w = v[0].top, E = v[v.length - 1].bottom, T = C, A = b, _ = A - T, L = E - w;
+          const m = Tt(t) === "left", b = Ue(...h.map((F) => F.right)), C = nt(...h.map((F) => F.left)), v = h.filter((F) => m ? F.left === C : F.right === b), w = v[0].top, E = v[v.length - 1].bottom, T = C, A = b, _ = A - T, L = E - w;
           return {
             top: w,
             bottom: E,
@@ -14454,7 +14454,7 @@ const zm = function(r) {
             y: w
           };
         }
-        return h;
+        return d;
       }
       const g = await i.getElementRects({
         reference: {
@@ -14476,26 +14476,26 @@ async function Gm(r, e) {
     placement: t,
     platform: n,
     elements: o
-  } = r, i = await (n.isRTL == null ? void 0 : n.isRTL(o.floating)), s = Tt(t), a = un(t), c = Kt(t) === "y", l = ["left", "top"].includes(s) ? -1 : 1, u = i && c ? -1 : 1, d = $t(e, r);
+  } = r, i = await (n.isRTL == null ? void 0 : n.isRTL(o.floating)), s = Tt(t), a = un(t), c = Kt(t) === "y", l = ["left", "top"].includes(s) ? -1 : 1, u = i && c ? -1 : 1, h = $t(e, r);
   let {
-    mainAxis: h,
+    mainAxis: d,
     crossAxis: f,
     alignmentAxis: p
-  } = typeof d == "number" ? {
-    mainAxis: d,
+  } = typeof h == "number" ? {
+    mainAxis: h,
     crossAxis: 0,
     alignmentAxis: null
   } : {
     mainAxis: 0,
     crossAxis: 0,
     alignmentAxis: null,
-    ...d
+    ...h
   };
   return a && typeof p == "number" && (f = a === "end" ? p * -1 : p), c ? {
     x: f * u,
-    y: h * l
+    y: d * l
   } : {
-    x: h * l,
+    x: d * l,
     y: f * u
   };
 }
@@ -14549,20 +14549,20 @@ const Vm = function(r) {
       } = $t(r, e), l = {
         x: t,
         y: n
-      }, u = await Bs(e, c), d = Kt(Tt(o)), h = Ds(d);
-      let f = l[h], p = l[d];
+      }, u = await Bs(e, c), h = Kt(Tt(o)), d = Ds(h);
+      let f = l[d], p = l[h];
       if (i) {
-        const m = h === "y" ? "top" : "left", b = h === "y" ? "bottom" : "right", C = f + u[m], v = f - u[b];
+        const m = d === "y" ? "top" : "left", b = d === "y" ? "bottom" : "right", C = f + u[m], v = f - u[b];
         f = es(C, f, v);
       }
       if (s) {
-        const m = d === "y" ? "top" : "left", b = d === "y" ? "bottom" : "right", C = p + u[m], v = p - u[b];
+        const m = h === "y" ? "top" : "left", b = h === "y" ? "bottom" : "right", C = p + u[m], v = p - u[b];
         p = es(C, p, v);
       }
       const g = a.fn({
         ...e,
-        [h]: f,
-        [d]: p
+        [d]: f,
+        [h]: p
       });
       return {
         ...g,
@@ -14590,8 +14590,8 @@ const Vm = function(r) {
       } = $t(r, e), u = {
         x: t,
         y: n
-      }, d = Kt(o), h = Ds(d);
-      let f = u[h], p = u[d];
+      }, h = Kt(o), d = Ds(h);
+      let f = u[d], p = u[h];
       const g = $t(a, e), m = typeof g == "number" ? {
         mainAxis: g,
         crossAxis: 0
@@ -14601,17 +14601,17 @@ const Vm = function(r) {
         ...g
       };
       if (c) {
-        const v = h === "y" ? "height" : "width", w = i.reference[h] - i.floating[v] + m.mainAxis, E = i.reference[h] + i.reference[v] - m.mainAxis;
+        const v = d === "y" ? "height" : "width", w = i.reference[d] - i.floating[v] + m.mainAxis, E = i.reference[d] + i.reference[v] - m.mainAxis;
         f < w ? f = w : f > E && (f = E);
       }
       if (l) {
         var b, C;
-        const v = h === "y" ? "width" : "height", w = ["top", "left"].includes(Tt(o)), E = i.reference[d] - i.floating[v] + (w && ((b = s.offset) == null ? void 0 : b[d]) || 0) + (w ? 0 : m.crossAxis), T = i.reference[d] + i.reference[v] + (w ? 0 : ((C = s.offset) == null ? void 0 : C[d]) || 0) - (w ? m.crossAxis : 0);
+        const v = d === "y" ? "width" : "height", w = ["top", "left"].includes(Tt(o)), E = i.reference[h] - i.floating[v] + (w && ((b = s.offset) == null ? void 0 : b[h]) || 0) + (w ? 0 : m.crossAxis), T = i.reference[h] + i.reference[v] + (w ? 0 : ((C = s.offset) == null ? void 0 : C[h]) || 0) - (w ? m.crossAxis : 0);
         p < E ? p = E : p > T && (p = T);
       }
       return {
-        [h]: f,
-        [d]: p
+        [d]: f,
+        [h]: p
       };
     }
   };
@@ -14629,17 +14629,17 @@ const Vm = function(r) {
         apply: s = () => {
         },
         ...a
-      } = $t(r, e), c = await Bs(e, a), l = Tt(t), u = un(t), d = Kt(t) === "y", {
-        width: h,
+      } = $t(r, e), c = await Bs(e, a), l = Tt(t), u = un(t), h = Kt(t) === "y", {
+        width: d,
         height: f
       } = n.floating;
       let p, g;
       l === "top" || l === "bottom" ? (p = l, g = u === (await (o.isRTL == null ? void 0 : o.isRTL(i.floating)) ? "start" : "end") ? "left" : "right") : (g = l, p = u === "end" ? "top" : "bottom");
-      const m = f - c.top - c.bottom, b = h - c.left - c.right, C = nt(f - c[p], m), v = nt(h - c[g], b), w = !e.middlewareData.shift;
+      const m = f - c.top - c.bottom, b = d - c.left - c.right, C = nt(f - c[p], m), v = nt(d - c[g], b), w = !e.middlewareData.shift;
       let E = C, T = v;
-      if (d ? T = u || w ? nt(v, b) : b : E = u || w ? nt(C, m) : m, w && !u) {
+      if (h ? T = u || w ? nt(v, b) : b : E = u || w ? nt(C, m) : m, w && !u) {
         const _ = Ue(c.left, 0), L = Ue(c.right, 0), F = Ue(c.top, 0), J = Ue(c.bottom, 0);
-        d ? T = h - 2 * (_ !== 0 || L !== 0 ? _ + L : Ue(c.left, c.right)) : E = f - 2 * (F !== 0 || J !== 0 ? F + J : Ue(c.top, c.bottom));
+        h ? T = d - 2 * (_ !== 0 || L !== 0 ? _ + L : Ue(c.left, c.right)) : E = f - 2 * (F !== 0 || J !== 0 ? F + J : Ue(c.top, c.bottom));
       }
       await s({
         ...e,
@@ -14647,7 +14647,7 @@ const Vm = function(r) {
         availableHeight: E
       });
       const A = await o.getDimensions(i.floating);
-      return h !== A.width || f !== A.height ? {
+      return d !== A.width || f !== A.height ? {
         reset: {
           rects: !0
         }
@@ -14700,18 +14700,18 @@ function Rr(r, e, t, n) {
   let s = ir(1);
   e && (n ? Qe(n) && (s = Xr(n)) : s = Xr(r));
   const a = Xm(i, t, n) ? Ru(i) : ir(0);
-  let c = (o.left + a.x) / s.x, l = (o.top + a.y) / s.y, u = o.width / s.x, d = o.height / s.y;
+  let c = (o.left + a.x) / s.x, l = (o.top + a.y) / s.y, u = o.width / s.x, h = o.height / s.y;
   if (i) {
-    const h = st(i), f = n && Qe(n) ? st(n) : n;
-    let p = h, g = p.frameElement;
+    const d = st(i), f = n && Qe(n) ? st(n) : n;
+    let p = d, g = p.frameElement;
     for (; g && n && f !== p; ) {
       const m = Xr(g), b = g.getBoundingClientRect(), C = St(g), v = b.left + (g.clientLeft + parseFloat(C.paddingLeft)) * m.x, w = b.top + (g.clientTop + parseFloat(C.paddingTop)) * m.y;
-      c *= m.x, l *= m.y, u *= m.x, d *= m.y, c += v, l += w, p = st(g), g = p.frameElement;
+      c *= m.x, l *= m.y, u *= m.x, h *= m.y, c += v, l += w, p = st(g), g = p.frameElement;
     }
   }
   return on({
     width: u,
-    height: d,
+    height: h,
     x: c,
     y: l
   });
@@ -14730,10 +14730,10 @@ function Zm(r) {
     scrollLeft: 0,
     scrollTop: 0
   }, l = ir(1);
-  const u = ir(0), d = xt(n);
-  if ((d || !d && !i) && ((ln(n) !== "body" || Wn(s)) && (c = Xo(n)), xt(n))) {
-    const h = Rr(n);
-    l = Xr(n), u.x = h.x + n.clientLeft, u.y = h.y + n.clientTop;
+  const u = ir(0), h = xt(n);
+  if ((h || !h && !i) && ((ln(n) !== "body" || Wn(s)) && (c = Xo(n)), xt(n))) {
+    const d = Rr(n);
+    l = Xr(n), u.x = d.x + n.clientLeft, u.y = d.y + n.clientTop;
   }
   return {
     width: t.width * l.x,
@@ -14826,8 +14826,8 @@ function iy(r) {
     strategy: o
   } = r;
   const s = [...t === "clippingAncestors" ? Jo(e) ? [] : oy(e, this._c) : [].concat(t), n], a = s[0], c = s.reduce((l, u) => {
-    const d = Ac(e, u, o);
-    return l.top = Ue(d.top, l.top), l.right = nt(d.right, l.right), l.bottom = nt(d.bottom, l.bottom), l.left = Ue(d.left, l.left), l;
+    const h = Ac(e, u, o);
+    return l.top = Ue(h.top, l.top), l.right = nt(h.right, l.right), l.bottom = nt(h.bottom, l.bottom), l.left = Ue(h.left, l.left), l;
   }, Ac(e, a, o));
   return {
     width: c.right - c.left,
@@ -14855,8 +14855,8 @@ function ay(r, e, t) {
   const c = ir(0);
   if (n || !n && !i)
     if ((ln(e) !== "body" || Wn(o)) && (a = Xo(e)), n) {
-      const d = Rr(e, !0, i, e);
-      c.x = d.x + e.clientLeft, c.y = d.y + e.clientTop;
+      const h = Rr(e, !0, i, e);
+      c.x = h.x + e.clientLeft, c.y = h.y + e.clientTop;
     } else
       o && (c.x = ku(o));
   const l = s.left + a.scrollLeft - c.x, u = s.top + a.scrollTop - c.y;
@@ -14930,12 +14930,12 @@ function dy(r, e) {
     const {
       left: l,
       top: u,
-      width: d,
-      height: h
+      width: h,
+      height: d
     } = r.getBoundingClientRect();
-    if (a || e(), !d || !h)
+    if (a || e(), !h || !d)
       return;
-    const f = io(u), p = io(o.clientWidth - (l + d)), g = io(o.clientHeight - (u + h)), m = io(l), C = {
+    const f = io(u), p = io(o.clientWidth - (l + h)), g = io(o.clientHeight - (u + d)), m = io(l), C = {
       rootMargin: -f + "px " + -p + "px " + -g + "px " + -m + "px",
       threshold: Ue(0, nt(1, c)) || 1
     };
@@ -14978,11 +14978,11 @@ function hy(r, e, t, n) {
       passive: !0
     }), i && b.addEventListener("resize", t);
   });
-  const d = l && a ? dy(l, t) : null;
-  let h = -1, f = null;
+  const h = l && a ? dy(l, t) : null;
+  let d = -1, f = null;
   s && (f = new ResizeObserver((b) => {
     let [C] = b;
-    C && C.target === l && f && (f.unobserve(e), cancelAnimationFrame(h), h = requestAnimationFrame(() => {
+    C && C.target === l && f && (f.unobserve(e), cancelAnimationFrame(d), d = requestAnimationFrame(() => {
       var v;
       (v = f) == null || v.observe(e);
     })), t();
@@ -14997,7 +14997,7 @@ function hy(r, e, t, n) {
     var b;
     u.forEach((C) => {
       o && C.removeEventListener("scroll", t), i && C.removeEventListener("resize", t);
-    }), d == null || d(), (b = f) == null || b.disconnect(), f = null, c && cancelAnimationFrame(p);
+    }), h == null || h(), (b = f) == null || b.disconnect(), f = null, c && cancelAnimationFrame(p);
   };
 }
 const fy = Vm, py = Wm, gy = Km, my = Qm, kc = $m, yy = zm, vy = Ym, Cy = (r, e, t) => {
@@ -15072,15 +15072,15 @@ function by(r) {
     transform: a = !0,
     whileElementsMounted: c,
     open: l
-  } = r, [u, d] = ae.useState({
+  } = r, [u, h] = ae.useState({
     x: 0,
     y: 0,
     strategy: t,
     placement: e,
     middlewareData: {},
     isPositioned: !1
-  }), [h, f] = ae.useState(n);
-  Oo(h, n) || f(n);
+  }), [d, f] = ae.useState(n);
+  Oo(d, n) || f(n);
   const [p, g] = ae.useState(null), [m, b] = ae.useState(null), C = ae.useCallback((x) => {
     x !== T.current && (T.current = x, g(x));
   }, []), v = ae.useCallback((x) => {
@@ -15091,7 +15091,7 @@ function by(r) {
     const x = {
       placement: e,
       strategy: t,
-      middleware: h
+      middleware: d
     };
     J.current && (x.platform = J.current), Cy(T.current, A.current, x).then((D) => {
       const q = {
@@ -15099,12 +15099,12 @@ function by(r) {
         isPositioned: !0
       };
       se.current && !Oo(_.current, q) && (_.current = q, eh.flushSync(() => {
-        d(q);
+        h(q);
       }));
     });
-  }, [h, e, t, J]);
+  }, [d, e, t, J]);
   uo(() => {
-    l === !1 && _.current.isPositioned && (_.current.isPositioned = !1, d((x) => ({
+    l === !1 && _.current.isPositioned && (_.current.isPositioned = !1, h((x) => ({
       ...x,
       isPositioned: !1
     })));
@@ -15260,9 +15260,9 @@ function Hy(r) {
       reason: g,
       nested: a
     }), t == null || t(f, p, g);
-  }), d = ae.useMemo(() => ({
+  }), h = ae.useMemo(() => ({
     setPositionReference: l
-  }), []), h = ae.useMemo(() => ({
+  }), []), d = ae.useMemo(() => ({
     reference: c || n.reference || null,
     floating: n.floating || null,
     domReference: n.reference
@@ -15271,11 +15271,11 @@ function Hy(r) {
     dataRef: i,
     open: e,
     onOpenChange: u,
-    elements: h,
+    elements: d,
     events: s,
     floatingId: o,
-    refs: d
-  }), [e, u, h, s, o, d]);
+    refs: h
+  }), [e, u, d, s, o, h]);
 }
 function Fy(r) {
   r === void 0 && (r = {});
@@ -15288,9 +15288,9 @@ function Fy(r) {
       floating: null,
       ...r.elements
     }
-  }), n = r.rootContext || t, o = n.elements, [i, s] = ae.useState(null), [a, c] = ae.useState(null), u = (o == null ? void 0 : o.reference) || i, d = ae.useRef(null), h = Uy();
+  }), n = r.rootContext || t, o = n.elements, [i, s] = ae.useState(null), [a, c] = ae.useState(null), u = (o == null ? void 0 : o.reference) || i, h = ae.useRef(null), d = Uy();
   rs(() => {
-    u && (d.current = u);
+    u && (h.current = u);
   }, [u]);
   const f = by({
     ...r,
@@ -15307,7 +15307,7 @@ function Fy(r) {
     } : v;
     c(w), f.refs.setReference(w);
   }, [f.refs]), g = ae.useCallback((v) => {
-    (Qe(v) || v === null) && (d.current = v, s(v)), (Qe(f.refs.reference.current) || f.refs.reference.current === null || // Don't allow setting virtual elements using the old technique back to
+    (Qe(v) || v === null) && (h.current = v, s(v)), (Qe(f.refs.reference.current) || f.refs.reference.current === null || // Don't allow setting virtual elements using the old technique back to
     // `null` to support `positionReference` + an unstable `reference`
     // callback ref.
     v !== null && !Qe(v)) && f.refs.setReference(v);
@@ -15315,7 +15315,7 @@ function Fy(r) {
     ...f.refs,
     setReference: g,
     setPositionReference: p,
-    domReference: d
+    domReference: h
   }), [f.refs, g, p]), b = ae.useMemo(() => ({
     ...f.elements,
     domReference: u
@@ -15328,7 +15328,7 @@ function Fy(r) {
   }), [f, m, b, e, n]);
   return rs(() => {
     n.dataRef.current.floatingContext = C;
-    const v = h == null ? void 0 : h.nodesRef.current.find((w) => w.id === e);
+    const v = d == null ? void 0 : d.nodesRef.current.find((w) => w.id === e);
     v && (v.context = C);
   }), ae.useMemo(() => ({
     ...f,
@@ -15372,29 +15372,29 @@ function $y({
     transform: "rotate(45deg)",
     position: "absolute",
     [jy[c]]: n
-  }, d = -e / 2;
+  }, h = -e / 2;
   return c === "left" ? {
     ...u,
     ...Uc(l, s, t, o),
-    right: d,
+    right: h,
     borderLeftColor: "transparent",
     borderBottomColor: "transparent"
   } : c === "right" ? {
     ...u,
     ...Uc(l, s, t, o),
-    left: d,
+    left: h,
     borderRightColor: "transparent",
     borderTopColor: "transparent"
   } : c === "top" ? {
     ...u,
     ...Hc(l, i, t, o, a),
-    bottom: d,
+    bottom: h,
     borderTopColor: "transparent",
     borderLeftColor: "transparent"
   } : c === "bottom" ? {
     ...u,
     ...Hc(l, i, t, o, a),
-    top: d,
+    top: h,
     borderBottomColor: "transparent",
     borderRightColor: "transparent"
   } : {};
@@ -15412,7 +15412,7 @@ const Mu = Ce(
     style: c,
     ...l
   }, u) => {
-    const { dir: d } = ks();
+    const { dir: h } = ks();
     return i ? /* @__PURE__ */ y.jsx(
       "div",
       {
@@ -15426,7 +15426,7 @@ const Mu = Ce(
             arrowOffset: t,
             arrowRadius: n,
             arrowPosition: o,
-            dir: d,
+            dir: h,
             arrowX: s,
             arrowY: a
           })
@@ -15626,10 +15626,10 @@ function Vy({
   enterDelay: c,
   exitDelay: l
 }) {
-  const u = Gt(), d = Jl(), h = u.respectReducedMotion ? d : !1, [f, p] = X(h ? 0 : r), [g, m] = X(n ? "entered" : "exited"), b = ue(-1), C = ue(-1), v = ue(-1), w = (T) => {
+  const u = Gt(), h = Jl(), d = u.respectReducedMotion ? h : !1, [f, p] = X(d ? 0 : r), [g, m] = X(n ? "entered" : "exited"), b = ue(-1), C = ue(-1), v = ue(-1), w = (T) => {
     const A = T ? o : i, _ = T ? s : a;
     window.clearTimeout(b.current);
-    const L = h ? 0 : T ? r : e;
+    const L = d ? 0 : T ? r : e;
     p(L), L === 0 ? (typeof A == "function" && A(), typeof _ == "function" && _(), m(T ? "entered" : "exited")) : v.current = requestAnimationFrame(() => {
       ml.flushSync(() => {
         m(T ? "pre-entering" : "pre-exiting");
@@ -15676,8 +15676,8 @@ function Zo({
   onEntered: c,
   onEnter: l,
   onExited: u,
-  enterDelay: d,
-  exitDelay: h
+  enterDelay: h,
+  exitDelay: d
 }) {
   const { transitionDuration: f, transitionStatus: p, transitionTimingFunction: g } = Vy({
     mounted: o,
@@ -15688,8 +15688,8 @@ function Zo({
     onEntered: c,
     onEnter: l,
     onExited: u,
-    enterDelay: d,
-    exitDelay: h
+    enterDelay: h,
+    exitDelay: d
   });
   return f === 0 ? o ? /* @__PURE__ */ y.jsx(y.Fragment, { children: i({}) }) : r ? i({ display: "none" }) : null : p === "exited" ? r ? i({ display: "none" }) : null : /* @__PURE__ */ y.jsx(y.Fragment, { children: i(
     Gy({
@@ -15713,40 +15713,40 @@ const Wy = {}, Ks = ce((r, e) => {
     variant: c,
     classNames: l,
     styles: u,
-    ...d
-  } = t, h = Lu(), f = $p({
-    opened: h.opened,
-    shouldReturnFocus: h.returnFocus
-  }), p = h.withRoles ? {
-    "aria-labelledby": h.getTargetId(),
-    id: h.getDropdownId(),
+    ...h
+  } = t, d = Lu(), f = $p({
+    opened: d.opened,
+    shouldReturnFocus: d.returnFocus
+  }), p = d.withRoles ? {
+    "aria-labelledby": d.getTargetId(),
+    id: d.getDropdownId(),
     role: "dialog",
     tabIndex: -1
-  } : {}, g = ft(e, h.floating);
-  return h.disabled ? null : /* @__PURE__ */ y.jsx(Hu, { ...h.portalProps, withinPortal: h.withinPortal, children: /* @__PURE__ */ y.jsx(
+  } : {}, g = ft(e, d.floating);
+  return d.disabled ? null : /* @__PURE__ */ y.jsx(Hu, { ...d.portalProps, withinPortal: d.withinPortal, children: /* @__PURE__ */ y.jsx(
     Zo,
     {
-      mounted: h.opened,
-      ...h.transitionProps,
-      transition: ((m = h.transitionProps) == null ? void 0 : m.transition) || "fade",
-      duration: ((b = h.transitionProps) == null ? void 0 : b.duration) ?? 150,
-      keepMounted: h.keepMounted,
-      exitDuration: typeof ((C = h.transitionProps) == null ? void 0 : C.exitDuration) == "number" ? h.transitionProps.exitDuration : (v = h.transitionProps) == null ? void 0 : v.duration,
-      children: (w) => /* @__PURE__ */ y.jsx($s, { active: h.trapFocus, children: /* @__PURE__ */ y.jsxs(
+      mounted: d.opened,
+      ...d.transitionProps,
+      transition: ((m = d.transitionProps) == null ? void 0 : m.transition) || "fade",
+      duration: ((b = d.transitionProps) == null ? void 0 : b.duration) ?? 150,
+      keepMounted: d.keepMounted,
+      exitDuration: typeof ((C = d.transitionProps) == null ? void 0 : C.exitDuration) == "number" ? d.transitionProps.exitDuration : (v = d.transitionProps) == null ? void 0 : v.duration,
+      children: (w) => /* @__PURE__ */ y.jsx($s, { active: d.trapFocus, children: /* @__PURE__ */ y.jsxs(
         Q,
         {
           ...p,
-          ...d,
+          ...h,
           variant: c,
           ref: g,
-          onKeyDownCapture: Lp(h.onClose, {
-            active: h.closeOnEscape,
+          onKeyDownCapture: Lp(d.onClose, {
+            active: d.closeOnEscape,
             onTrigger: f,
             onKeyDown: a
           }),
-          "data-position": h.placement,
-          "data-fixed": h.floatingStrategy === "fixed" || void 0,
-          ...h.getStyles("dropdown", {
+          "data-position": d.placement,
+          "data-fixed": d.floatingStrategy === "fixed" || void 0,
+          ...d.getStyles("dropdown", {
             className: n,
             props: t,
             classNames: l,
@@ -15754,10 +15754,10 @@ const Wy = {}, Ks = ce((r, e) => {
             style: [
               {
                 ...w,
-                zIndex: h.zIndex,
-                top: h.y ?? 0,
-                left: h.x ?? 0,
-                width: h.width === "target" ? void 0 : R(h.width)
+                zIndex: d.zIndex,
+                top: d.y ?? 0,
+                left: d.x ?? 0,
+                width: d.width === "target" ? void 0 : R(d.width)
               },
               o
             ]
@@ -15767,16 +15767,16 @@ const Wy = {}, Ks = ce((r, e) => {
             /* @__PURE__ */ y.jsx(
               Mu,
               {
-                ref: h.arrowRef,
-                arrowX: h.arrowX,
-                arrowY: h.arrowY,
-                visible: h.withArrow,
-                position: h.placement,
-                arrowSize: h.arrowSize,
-                arrowRadius: h.arrowRadius,
-                arrowOffset: h.arrowOffset,
-                arrowPosition: h.arrowPosition,
-                ...h.getStyles("arrow", {
+                ref: d.arrowRef,
+                arrowX: d.arrowX,
+                arrowY: d.arrowY,
+                visible: d.withArrow,
+                position: d.placement,
+                arrowSize: d.arrowSize,
+                arrowRadius: d.arrowRadius,
+                arrowOffset: d.arrowOffset,
+                arrowPosition: d.arrowPosition,
+                ...d.getStyles("arrow", {
                   props: t,
                   classNames: l,
                   styles: u
@@ -15952,8 +15952,8 @@ function lr(r) {
     transitionProps: c,
     width: l,
     middlewares: u,
-    withArrow: d,
-    arrowSize: h,
+    withArrow: h,
+    arrowSize: d,
     arrowOffset: f,
     arrowRadius: p,
     arrowPosition: g,
@@ -15997,7 +15997,7 @@ function lr(r) {
     middlewares: u,
     width: l,
     position: By(fn, n),
-    offset: typeof o == "number" ? o + (d ? h / 2 : 0) : o,
+    offset: typeof o == "number" ? o + (h ? d / 2 : 0) : o,
     arrowRef: Qt,
     arrowOffset: f,
     onPositionChange: i,
@@ -16041,8 +16041,8 @@ function lr(r) {
         arrowRef: Qt,
         transitionProps: c,
         width: l,
-        withArrow: d,
-        arrowSize: h,
+        withArrow: h,
+        arrowSize: d,
         arrowOffset: f,
         arrowRadius: p,
         arrowPosition: g,
@@ -16108,8 +16108,8 @@ const rv = Ce(({ className: r, ...e }, t) => /* @__PURE__ */ y.jsxs(Q, { compone
     style: c,
     classNames: l,
     styles: u,
-    unstyled: d,
-    loaders: h,
+    unstyled: h,
+    loaders: d,
     variant: f,
     children: p,
     ...g
@@ -16121,7 +16121,7 @@ const rv = Ce(({ className: r, ...e }, t) => /* @__PURE__ */ y.jsxs(Q, { compone
     style: c,
     classNames: l,
     styles: u,
-    unstyled: d,
+    unstyled: h,
     vars: s,
     varsResolver: sv
   });
@@ -16130,7 +16130,7 @@ const rv = Ce(({ className: r, ...e }, t) => /* @__PURE__ */ y.jsxs(Q, { compone
     {
       ...m("root"),
       ref: e,
-      component: h[i],
+      component: d[i],
       variant: f,
       size: n,
       ...g
@@ -16155,8 +16155,8 @@ const Bc = {
     orientation: c,
     vars: l,
     borderWidth: u,
-    variant: d,
-    mod: h,
+    variant: h,
+    mod: d,
     ...f
   } = G("ActionIconGroup", Bc, r), p = me({
     name: "ActionIconGroup",
@@ -16176,8 +16176,8 @@ const Bc = {
     {
       ...p("group"),
       ref: e,
-      variant: d,
-      mod: [{ "data-orientation": c }, h],
+      variant: h,
+      mod: [{ "data-orientation": c }, d],
       role: "group",
       ...f
     }
@@ -16214,8 +16214,8 @@ const cv = {}, lv = (r, { size: e, radius: t, variant: n, gradient: o, color: i,
     style: c,
     loading: l,
     loaderProps: u,
-    size: d,
-    color: h,
+    size: h,
+    color: d,
     radius: f,
     __staticSelector: p,
     gradient: g,
@@ -16245,7 +16245,7 @@ const cv = {}, lv = (r, { size: e, radius: t, variant: n, gradient: o, color: i,
       ...T,
       unstyled: o,
       variant: i,
-      size: d,
+      size: h,
       disabled: C || l,
       ref: e,
       mod: [{ loading: l, disabled: C || v }, E],
@@ -16301,8 +16301,8 @@ const uv = {
     classNames: c,
     style: l,
     styles: u,
-    unstyled: d,
-    "data-disabled": h,
+    unstyled: h,
+    "data-disabled": d,
     disabled: f,
     variant: p,
     icon: g,
@@ -16316,7 +16316,7 @@ const uv = {
     classes: Ku,
     classNames: c,
     styles: u,
-    unstyled: d,
+    unstyled: h,
     vars: i,
     varsResolver: dv
   });
@@ -16325,11 +16325,11 @@ const uv = {
     {
       ref: e,
       ...b,
-      unstyled: d,
+      unstyled: h,
       variant: p,
       disabled: f,
-      mod: [{ disabled: f || h }, m],
-      ...C("root", { variant: p, active: !f && !h }),
+      mod: [{ disabled: f || d }, m],
+      ...C("root", { variant: p, active: !f && !d }),
       children: [
         g || /* @__PURE__ */ y.jsx($u, {}),
         o
@@ -16367,8 +16367,8 @@ const fv = {
     children: c,
     gap: l,
     align: u,
-    justify: d,
-    wrap: h,
+    justify: h,
+    wrap: d,
     grow: f,
     preventGrowOverflow: p,
     vars: g,
@@ -16427,8 +16427,8 @@ const jc = {}, mv = (r, { size: e }) => ({
     vars: c,
     size: l,
     __staticSelector: u,
-    __inheritStyles: d = !0,
-    variant: h,
+    __inheritStyles: h = !0,
+    variant: d,
     ...f
   } = G("InputDescription", jc, t), p = Qn(), g = me({
     name: ["InputWrapper", u],
@@ -16442,13 +16442,13 @@ const jc = {}, mv = (r, { size: e }) => ({
     rootSelector: "description",
     vars: c,
     varsResolver: mv
-  }), m = d && (p == null ? void 0 : p.getStyles) || g;
+  }), m = h && (p == null ? void 0 : p.getStyles) || g;
   return /* @__PURE__ */ y.jsx(
     Q,
     {
       component: "p",
       ref: e,
-      variant: h,
+      variant: d,
       size: l,
       ...m("description", p != null && p.getStyles ? { className: o, style: i } : void 0),
       ...f
@@ -16471,8 +16471,8 @@ const yv = {}, vv = (r, { size: e }) => ({
     vars: c,
     size: l,
     __staticSelector: u,
-    __inheritStyles: d = !0,
-    variant: h,
+    __inheritStyles: h = !0,
+    variant: d,
     ...f
   } = t, p = me({
     name: ["InputWrapper", u],
@@ -16486,13 +16486,13 @@ const yv = {}, vv = (r, { size: e }) => ({
     rootSelector: "error",
     vars: c,
     varsResolver: vv
-  }), g = Qn(), m = d && (g == null ? void 0 : g.getStyles) || p;
+  }), g = Qn(), m = h && (g == null ? void 0 : g.getStyles) || p;
   return /* @__PURE__ */ y.jsx(
     Q,
     {
       component: "p",
       ref: e,
-      variant: h,
+      variant: d,
       size: l,
       ...m("error", g != null && g.getStyles ? { className: o, style: i } : void 0),
       ...f
@@ -16518,8 +16518,8 @@ const $c = {
     vars: c,
     labelElement: l,
     size: u,
-    required: d,
-    htmlFor: h,
+    required: h,
+    htmlFor: d,
     onMouseDown: f,
     children: p,
     __staticSelector: g,
@@ -16547,15 +16547,15 @@ const $c = {
       variant: m,
       size: u,
       ref: e,
-      htmlFor: l === "label" ? h : void 0,
-      mod: [{ required: d }, b],
+      htmlFor: l === "label" ? d : void 0,
+      mod: [{ required: h }, b],
       onMouseDown: (T) => {
         f == null || f(T), !T.defaultPrevented && T.detail > 1 && T.preventDefault();
       },
       ...C,
       children: [
         p,
-        d && /* @__PURE__ */ y.jsx("span", { ...E("required"), "aria-hidden": !0, children: " *" })
+        h && /* @__PURE__ */ y.jsx("span", { ...E("required"), "aria-hidden": !0, children: " *" })
       ]
     }
   );
@@ -16572,8 +16572,8 @@ const Kc = {}, zs = ce((r, e) => {
     vars: c,
     __staticSelector: l,
     variant: u,
-    error: d,
-    mod: h,
+    error: h,
+    mod: d,
     ...f
   } = G("InputPlaceholder", Kc, t), p = me({
     name: ["InputPlaceholder", l],
@@ -16590,7 +16590,7 @@ const Kc = {}, zs = ce((r, e) => {
     Q,
     {
       ...p("placeholder"),
-      mod: [{ error: !!d }, h],
+      mod: [{ error: !!h }, d],
       component: "span",
       variant: u,
       ref: e,
@@ -16629,8 +16629,8 @@ const wv = {
     vars: c,
     size: l,
     variant: u,
-    __staticSelector: d,
-    inputContainer: h,
+    __staticSelector: h,
+    inputContainer: d,
     inputWrapperOrder: f,
     label: p,
     error: g,
@@ -16647,7 +16647,7 @@ const wv = {
     mod: F,
     ...J
   } = t, Z = me({
-    name: ["InputWrapper", d],
+    name: ["InputWrapper", h],
     props: L || t,
     classes: gt,
     className: o,
@@ -16660,7 +16660,7 @@ const wv = {
   }), se = {
     size: l,
     variant: u,
-    __staticSelector: d
+    __staticSelector: h
   }, $ = cr(A), oe = typeof T == "boolean" ? T : _, U = (v == null ? void 0 : v.id) || `${$}-error`, x = (C == null ? void 0 : C.id) || `${$}-description`, D = $, q = !!g && typeof g != "boolean", V = !!m, de = `${q ? U : ""} ${V ? x : ""}`, pe = de.trim().length > 0 ? de.trim() : void 0, ze = (b == null ? void 0 : b.id) || `${$}-label`, yt = p && /* @__PURE__ */ y.jsx(
     oi,
     {
@@ -16683,7 +16683,7 @@ const wv = {
       children: m
     },
     "description"
-  ), dr = /* @__PURE__ */ y.jsx(pl, { children: h(E) }, "input"), Qt = q && /* @__PURE__ */ Oi(
+  ), dr = /* @__PURE__ */ y.jsx(pl, { children: d(E) }, "input"), Qt = q && /* @__PURE__ */ Oi(
     ni,
     {
       ...v,
@@ -16763,8 +16763,8 @@ const Sv = {
     required: c,
     __staticSelector: l,
     __stylesApiProps: u,
-    size: d,
-    wrapperProps: h,
+    size: h,
+    wrapperProps: d,
     error: f,
     disabled: p,
     leftSection: g,
@@ -16811,7 +16811,7 @@ const Sv = {
     {
       ...pe("wrapper"),
       ...D,
-      ...h,
+      ...d,
       mod: [
         {
           error: !!f && $,
@@ -16824,7 +16824,7 @@ const Sv = {
         oe
       ],
       variant: A,
-      size: d,
+      size: h,
       children: [
         g && /* @__PURE__ */ y.jsx(
           "div",
@@ -16884,8 +16884,8 @@ function _v(r, e, t) {
     classNames: c,
     styles: l,
     className: u,
-    unstyled: d,
-    __staticSelector: h,
+    unstyled: h,
+    __staticSelector: d,
     __stylesApiProps: f,
     errorProps: p,
     labelProps: g,
@@ -16908,12 +16908,12 @@ function _v(r, e, t) {
     required: a,
     classNames: c,
     className: u,
-    __staticSelector: h,
+    __staticSelector: d,
     __stylesApiProps: f || n,
     errorProps: p,
     labelProps: g,
     descriptionProps: m,
-    unstyled: d,
+    unstyled: h,
     styles: l,
     size: v,
     style: w,
@@ -16929,15 +16929,15 @@ function _v(r, e, t) {
     ...se,
     classNames: c,
     styles: l,
-    unstyled: d,
+    unstyled: h,
     wrapperProps: { ...$, ...Z },
     inputProps: {
       required: a,
       classNames: c,
       styles: l,
-      unstyled: d,
+      unstyled: h,
       size: v,
-      __staticSelector: h,
+      __staticSelector: d,
       __stylesApiProps: f || n,
       error: s,
       variant: _,
@@ -16992,8 +16992,8 @@ const kv = {}, Ys = ce((r, e) => {
     icon: c,
     onClick: l,
     onKeyDown: u,
-    children: d,
-    disabled: h,
+    children: h,
+    disabled: d,
     mod: f,
     ...p
   } = G("AccordionControl", kv, r), { value: g } = zu(), m = Vs(), b = m.isItemActive(g), C = typeof m.order == "number", v = `h${m.order}`, w = /* @__PURE__ */ y.jsxs(
@@ -17004,7 +17004,7 @@ const kv = {}, Ys = ce((r, e) => {
       unstyled: m.unstyled,
       mod: [
         "accordion-control",
-        { active: b, "chevron-position": m.chevronPosition, disabled: h },
+        { active: b, "chevron-position": m.chevronPosition, disabled: d },
         f
       ],
       ref: e,
@@ -17012,7 +17012,7 @@ const kv = {}, Ys = ce((r, e) => {
         l == null || l(E), m.onChange(g);
       },
       type: "button",
-      disabled: h,
+      disabled: d,
       "aria-expanded": b,
       "aria-controls": m.getRegionId(g),
       id: m.getControlId(g),
@@ -17034,7 +17034,7 @@ const kv = {}, Ys = ce((r, e) => {
             children: a || m.chevron
           }
         ),
-        /* @__PURE__ */ y.jsx("span", { ...m.getStyles("label", { classNames: t, styles: i }), children: d }),
+        /* @__PURE__ */ y.jsx("span", { ...m.getStyles("label", { classNames: t, styles: i }), children: h }),
         c && /* @__PURE__ */ y.jsx(
           Q,
           {
@@ -17116,8 +17116,8 @@ function Ne(r) {
     children: c,
     multiple: l,
     value: u,
-    defaultValue: d,
-    onChange: h,
+    defaultValue: h,
+    onChange: d,
     id: f,
     loop: p,
     transitionDuration: g,
@@ -17131,9 +17131,9 @@ function Ne(r) {
     ...A
   } = e, _ = cr(f), [L, F] = Ar({
     value: u,
-    defaultValue: d,
+    defaultValue: h,
     finalValue: l ? [] : null,
-    onChange: h
+    onChange: d
   }), J = ($) => Array.isArray(L) ? L.includes($) : $ === L, Z = ($) => {
     const oe = Array.isArray(L) ? L.includes($) ? L.filter((U) => U !== $) : [...L, $] : $ === L ? null : $;
     F(oe);
@@ -17211,8 +17211,8 @@ const Lv = {}, Dv = (r, { radius: e, color: t, variant: n, autoContrast: o }) =>
     vars: c,
     radius: l,
     color: u,
-    title: d,
-    children: h,
+    title: h,
+    children: d,
     id: f,
     icon: p,
     withCloseButton: g,
@@ -17232,7 +17232,7 @@ const Lv = {}, Dv = (r, { radius: e, color: t, variant: n, autoContrast: o }) =>
     unstyled: a,
     vars: c,
     varsResolver: Dv
-  }), T = cr(f), A = d && `${T}-title` || void 0, _ = `${T}-body`;
+  }), T = cr(f), A = h && `${T}-title` || void 0, _ = `${T}-body`;
   return /* @__PURE__ */ y.jsx(
     Q,
     {
@@ -17247,8 +17247,8 @@ const Lv = {}, Dv = (r, { radius: e, color: t, variant: n, autoContrast: o }) =>
       children: /* @__PURE__ */ y.jsxs("div", { ...E("wrapper"), children: [
         p && /* @__PURE__ */ y.jsx("div", { ...E("icon"), children: p }),
         /* @__PURE__ */ y.jsxs("div", { ...E("body"), children: [
-          d && /* @__PURE__ */ y.jsx("div", { ...E("title"), "data-with-close-button": g || void 0, children: /* @__PURE__ */ y.jsx("span", { id: A, ...E("label"), children: d }) }),
-          h && /* @__PURE__ */ y.jsx("div", { id: _, ...E("message"), "data-variant": C, children: h })
+          h && /* @__PURE__ */ y.jsx("div", { ...E("title"), "data-with-close-button": g || void 0, children: /* @__PURE__ */ y.jsx("span", { id: A, ...E("label"), children: h }) }),
+          d && /* @__PURE__ */ y.jsx("div", { id: _, ...E("message"), "data-variant": C, children: d })
         ] }),
         g && /* @__PURE__ */ y.jsx(
           dn,
@@ -17295,8 +17295,8 @@ const Hv = {
     span: c,
     __staticSelector: l,
     vars: u,
-    className: d,
-    style: h,
+    className: h,
+    style: d,
     classNames: f,
     styles: p,
     unstyled: g,
@@ -17308,8 +17308,8 @@ const Hv = {
     name: ["Text", l],
     props: t,
     classes: Vu,
-    className: d,
-    style: h,
+    className: h,
+    style: d,
     classNames: f,
     styles: p,
     unstyled: g,
@@ -17359,7 +17359,7 @@ const Bv = {
     "--combobox-chevron-size": Re(e, "combobox-chevron-size")
   }
 }), ea = ce((r, e) => {
-  const t = G("ComboboxChevron", Bv, r), { size: n, error: o, style: i, className: s, classNames: a, styles: c, unstyled: l, vars: u, mod: d, ...h } = t, f = me({
+  const t = G("ComboboxChevron", Bv, r), { size: n, error: o, style: i, className: s, classNames: a, styles: c, unstyled: l, vars: u, mod: h, ...d } = t, f = me({
     name: "ComboboxChevron",
     classes: Xe,
     props: t,
@@ -17376,13 +17376,13 @@ const Bv = {
     Q,
     {
       component: "svg",
-      ...h,
+      ...d,
       ...f("chevron"),
       size: n,
       viewBox: "0 0 15 15",
       fill: "none",
       xmlns: "http://www.w3.org/2000/svg",
-      mod: ["combobox-chevron", { error: o }, d],
+      mod: ["combobox-chevron", { error: o }, h],
       ref: e,
       children: /* @__PURE__ */ y.jsx(
         "path",
@@ -17475,17 +17475,17 @@ function na({
   targetType: o,
   autoComplete: i
 }) {
-  const s = mt(), [a, c] = X(null), l = (d) => {
-    if (r == null || r(d), !s.readOnly && e) {
-      if (d.nativeEvent.isComposing)
+  const s = mt(), [a, c] = X(null), l = (h) => {
+    if (r == null || r(h), !s.readOnly && e) {
+      if (h.nativeEvent.isComposing)
         return;
-      if (d.nativeEvent.code === "ArrowDown" && (d.preventDefault(), s.store.dropdownOpened ? c(s.store.selectNextOption()) : (s.store.openDropdown("keyboard"), c(s.store.selectActiveOption()))), d.nativeEvent.code === "ArrowUp" && (d.preventDefault(), s.store.dropdownOpened ? c(s.store.selectPreviousOption()) : (s.store.openDropdown("keyboard"), c(s.store.selectActiveOption()))), d.nativeEvent.code === "Enter" || d.nativeEvent.code === "NumpadEnter") {
-        if (d.nativeEvent.keyCode === 229)
+      if (h.nativeEvent.code === "ArrowDown" && (h.preventDefault(), s.store.dropdownOpened ? c(s.store.selectNextOption()) : (s.store.openDropdown("keyboard"), c(s.store.selectActiveOption()))), h.nativeEvent.code === "ArrowUp" && (h.preventDefault(), s.store.dropdownOpened ? c(s.store.selectPreviousOption()) : (s.store.openDropdown("keyboard"), c(s.store.selectActiveOption()))), h.nativeEvent.code === "Enter" || h.nativeEvent.code === "NumpadEnter") {
+        if (h.nativeEvent.keyCode === 229)
           return;
-        const h = s.store.getSelectedOptionIndex();
-        s.store.dropdownOpened && h !== -1 ? (d.preventDefault(), s.store.clickSelectedOption()) : o === "button" && (d.preventDefault(), s.store.openDropdown("keyboard"));
+        const d = s.store.getSelectedOptionIndex();
+        s.store.dropdownOpened && d !== -1 ? (h.preventDefault(), s.store.clickSelectedOption()) : o === "button" && (h.preventDefault(), s.store.openDropdown("keyboard"));
       }
-      d.nativeEvent.code === "Escape" && s.store.closeDropdown("keyboard"), d.nativeEvent.code === "Space" && o === "button" && (d.preventDefault(), s.store.toggleDropdown("keyboard"));
+      h.nativeEvent.code === "Escape" && s.store.closeDropdown("keyboard"), h.nativeEvent.code === "Space" && o === "button" && (h.preventDefault(), s.store.toggleDropdown("keyboard"));
     }
   };
   return {
@@ -17523,7 +17523,7 @@ const Gv = {
     throw new Error(
       "Combobox.EventsTarget component children should be an element or a component that accepts ref. Fragments, strings, numbers and other primitive values are not supported"
     );
-  const u = mt(), d = na({
+  const u = mt(), h = na({
     targetType: a,
     withAriaAttributes: i,
     withKeyboardNavigation: o,
@@ -17532,7 +17532,7 @@ const Gv = {
     autoComplete: c
   });
   return $o(t, {
-    ...d,
+    ...h,
     ...l,
     [n]: ft(e, u.store.targetRef, t == null ? void 0 : t.ref)
   });
@@ -17624,8 +17624,8 @@ const Qv = {}, aa = ce((r, e) => {
     onClick: c,
     id: l,
     active: u,
-    onMouseDown: d,
-    onMouseOver: h,
+    onMouseDown: h,
+    onMouseOver: d,
     disabled: f,
     selected: p,
     mod: g,
@@ -17649,10 +17649,10 @@ const Qv = {}, aa = ce((r, e) => {
         f ? w.preventDefault() : ((E = b.onOptionSubmit) == null || E.call(b, t.value, t), c == null || c(w));
       },
       onMouseDown: (w) => {
-        w.preventDefault(), d == null || d(w);
+        w.preventDefault(), h == null || h(w);
       },
       onMouseOver: (w) => {
-        b.resetSelectionOnOptionHover && b.store.resetSelectedOption(), h == null || h(w);
+        b.resetSelectionOnOptionHover && b.store.resetSelectedOption(), d == null || d(w);
       }
     }
   );
@@ -17660,16 +17660,16 @@ const Qv = {}, aa = ce((r, e) => {
 aa.classes = Xe;
 aa.displayName = "@mantine/core/ComboboxOption";
 const Jv = {}, ca = ce((r, e) => {
-  const t = G("ComboboxOptions", Jv, r), { classNames: n, className: o, style: i, styles: s, id: a, onMouseDown: c, labelledBy: l, ...u } = t, d = mt(), h = cr(a);
+  const t = G("ComboboxOptions", Jv, r), { classNames: n, className: o, style: i, styles: s, id: a, onMouseDown: c, labelledBy: l, ...u } = t, h = mt(), d = cr(a);
   return W(() => {
-    d.store.setListId(h);
-  }, [h]), /* @__PURE__ */ y.jsx(
+    h.store.setListId(d);
+  }, [d]), /* @__PURE__ */ y.jsx(
     Q,
     {
       ref: e,
-      ...d.getStyles("options", { className: o, style: i, classNames: n, styles: s }),
+      ...h.getStyles("options", { className: o, style: i, classNames: n, styles: s }),
       ...u,
-      id: h,
+      id: d,
       role: "listbox",
       "aria-labelledby": l,
       onMouseDown: (f) => {
@@ -17693,8 +17693,8 @@ const Xv = {
     onKeyDown: c,
     withKeyboardNavigation: l,
     size: u,
-    ...d
-  } = t, h = mt(), f = h.getStyles("search"), p = na({
+    ...h
+  } = t, d = mt(), f = d.getStyles("search"), p = na({
     targetType: "input",
     withAriaAttributes: a,
     withKeyboardNavigation: l,
@@ -17705,12 +17705,12 @@ const Xv = {
   return /* @__PURE__ */ y.jsx(
     Be,
     {
-      ref: ft(e, h.store.searchRef),
+      ref: ft(e, d.store.searchRef),
       classNames: [{ input: f.className }, n],
       styles: [{ input: f.style }, o],
-      size: u || h.size,
+      size: u || d.size,
       ...p,
-      ...d,
+      ...h,
       __staticSelector: "Combobox"
     }
   );
@@ -17739,18 +17739,18 @@ const Zv = {
     throw new Error(
       "Combobox.Target component children should be an element or a component that accepts ref. Fragments, strings, numbers and other primitive values are not supported"
     );
-  const u = mt(), d = na({
+  const u = mt(), h = na({
     targetType: a,
     withAriaAttributes: i,
     withKeyboardNavigation: o,
     withExpandedAttribute: s,
     onKeyDown: t.props.onKeyDown,
     autoComplete: c
-  }), h = $o(t, {
-    ...d,
+  }), d = $o(t, {
+    ...h,
     ...l
   });
-  return /* @__PURE__ */ y.jsx(lr.Target, { ref: ft(e, u.store.targetRef), children: h });
+  return /* @__PURE__ */ y.jsx(lr.Target, { ref: ft(e, u.store.targetRef), children: d });
 });
 ed.displayName = "@mantine/core/ComboboxTarget";
 function eC(r, e, t) {
@@ -17795,7 +17795,7 @@ function ii({
     defaultValue: r,
     finalValue: !1,
     onChange: t
-  }), l = ue(null), u = ue(-1), d = ue(null), h = ue(null), f = ue(-1), p = ue(-1), g = ue(-1), m = ve(
+  }), l = ue(null), u = ue(-1), h = ue(null), d = ue(null), f = ue(-1), p = ue(-1), g = ue(-1), m = ve(
     (U = "unknown") => {
       a || (c(!0), o == null || o(U));
     },
@@ -17881,9 +17881,9 @@ function ii({
   }, []), Z = ve((U) => {
     l.current = U;
   }, []), se = ve(() => {
-    f.current = window.setTimeout(() => d.current.focus(), 0);
+    f.current = window.setTimeout(() => h.current.focus(), 0);
   }, []), $ = ve(() => {
-    p.current = window.setTimeout(() => h.current.focus(), 0);
+    p.current = window.setTimeout(() => d.current.focus(), 0);
   }, []), oe = ve(() => u.current, []);
   return W(
     () => () => {
@@ -17907,9 +17907,9 @@ function ii({
     listId: l.current,
     setListId: Z,
     clickSelectedOption: J,
-    searchRef: d,
+    searchRef: h,
     focusSearchInput: se,
-    targetRef: h,
+    targetRef: d,
     focusTarget: $
   };
 }
@@ -17941,8 +17941,8 @@ function le(r) {
     onOptionSubmit: c,
     onClose: l,
     size: u,
-    dropdownPadding: d,
-    resetSelectionOnOptionHover: h,
+    dropdownPadding: h,
+    resetSelectionOnOptionHover: d,
     __staticSelector: f,
     readOnly: p,
     ...g
@@ -17966,7 +17966,7 @@ function le(r) {
         store: b,
         onOptionSubmit: c,
         size: u,
-        resetSelectionOnOptionHover: h,
+        resetSelectionOnOptionHover: d,
         readOnly: p
       },
       children: /* @__PURE__ */ y.jsx(
@@ -18015,8 +18015,8 @@ const sC = td, rd = Ce(
     description: c,
     id: l,
     disabled: u,
-    error: d,
-    size: h,
+    error: h,
+    size: d,
     labelPosition: f = "left",
     bodyElement: p = "div",
     labelElement: g = "label",
@@ -18042,12 +18042,12 @@ const sC = td, rd = Ce(
         ...T("root"),
         ref: E,
         __vars: {
-          "--label-fz": it(h),
-          "--label-lh": Re(h, "label-lh")
+          "--label-fz": it(d),
+          "--label-lh": Re(d, "label-lh")
         },
         mod: [{ "label-position": f }, v],
         variant: m,
-        size: h,
+        size: d,
         ...w,
         children: /* @__PURE__ */ y.jsxs(
           Q,
@@ -18068,8 +18068,8 @@ const sC = td, rd = Ce(
                     children: a
                   }
                 ),
-                c && /* @__PURE__ */ y.jsx(Be.Description, { size: h, __inheritStyles: !1, ...T("description"), children: c }),
-                d && typeof d != "boolean" && /* @__PURE__ */ y.jsx(Be.Error, { size: h, __inheritStyles: !1, ...T("error"), children: d })
+                c && /* @__PURE__ */ y.jsx(Be.Description, { size: d, __inheritStyles: !1, ...T("description"), children: c }),
+                h && typeof h != "boolean" && /* @__PURE__ */ y.jsx(Be.Error, { size: d, __inheritStyles: !1, ...T("error"), children: h })
               ] })
             ]
           }
@@ -18097,8 +18097,8 @@ const uC = {
     vars: c,
     checked: l,
     mod: u,
-    withBorder: d,
-    value: h,
+    withBorder: h,
+    value: d,
     onClick: f,
     ...p
   } = t, g = me({
@@ -18113,18 +18113,18 @@ const uC = {
     vars: c,
     varsResolver: dC,
     rootSelector: "card"
-  }), m = od(), b = typeof l == "boolean" ? l : (m == null ? void 0 : m.value.includes(h || "")) || !1;
+  }), m = od(), b = typeof l == "boolean" ? l : (m == null ? void 0 : m.value.includes(d || "")) || !1;
   return /* @__PURE__ */ y.jsx(cC, { value: { checked: b }, children: /* @__PURE__ */ y.jsx(
     xr,
     {
       ref: e,
-      mod: [{ "with-border": d, checked: b }, u],
+      mod: [{ "with-border": h, checked: b }, u],
       ...g("card"),
       ...p,
       role: "checkbox",
       "aria-checked": b,
       onClick: (C) => {
-        f == null || f(C), m == null || m.onChange(h || "");
+        f == null || f(C), m == null || m.onChange(d || "");
       }
     }
   ) });
@@ -18136,18 +18136,18 @@ function hC({ children: r, role: e }) {
   return t ? /* @__PURE__ */ y.jsx("div", { role: e, "aria-labelledby": t.labelId, "aria-describedby": t.describedBy, children: r }) : /* @__PURE__ */ y.jsx(y.Fragment, { children: r });
 }
 const fC = {}, da = ce((r, e) => {
-  const { value: t, defaultValue: n, onChange: o, size: i, wrapperProps: s, children: a, readOnly: c, ...l } = G("CheckboxGroup", fC, r), [u, d] = Ar({
+  const { value: t, defaultValue: n, onChange: o, size: i, wrapperProps: s, children: a, readOnly: c, ...l } = G("CheckboxGroup", fC, r), [u, h] = Ar({
     value: t,
     defaultValue: n,
     finalValue: [],
     onChange: o
-  }), h = (f) => {
+  }), d = (f) => {
     const p = typeof f == "string" ? f : f.currentTarget.value;
-    !c && d(
+    !c && h(
       u.includes(p) ? u.filter((g) => g !== p) : [...u, p]
     );
   };
-  return /* @__PURE__ */ y.jsx(aC, { value: { value: u, onChange: h, size: i }, children: /* @__PURE__ */ y.jsx(
+  return /* @__PURE__ */ y.jsx(aC, { value: { value: u, onChange: d, size: i }, children: /* @__PURE__ */ y.jsx(
     Be.Wrapper,
     {
       size: i,
@@ -18221,8 +18221,8 @@ const pC = {
     vars: c,
     icon: l,
     indeterminate: u,
-    radius: d,
-    color: h,
+    radius: h,
+    color: d,
     iconColor: f,
     autoContrast: p,
     checked: g,
@@ -18281,8 +18281,8 @@ const mC = {
     vars: c,
     color: l,
     label: u,
-    id: d,
-    size: h,
+    id: h,
+    size: d,
     radius: f,
     wrapperProps: p,
     children: g,
@@ -18300,7 +18300,7 @@ const mC = {
     autoContrast: J,
     mod: Z,
     ...se
-  } = t, $ = od(), oe = h || ($ == null ? void 0 : $.size), U = A, x = me({
+  } = t, $ = od(), oe = d || ($ == null ? void 0 : $.size), U = A, x = me({
     name: "Checkbox",
     props: t,
     classes: cd,
@@ -18311,7 +18311,7 @@ const mC = {
     unstyled: a,
     vars: c,
     varsResolver: yC
-  }), { styleProps: D, rest: q } = Wo(se), V = cr(d), de = $ ? {
+  }), { styleProps: D, rest: q } = Wo(se), V = cr(h), de = $ ? {
     checked: $.value.includes(q.value),
     onChange: (pe) => {
       $.onChange(pe), F == null || F(pe);
@@ -18474,8 +18474,8 @@ function hd({
   filterOptions: c = !0,
   withCheckIcon: l = !1,
   value: u,
-  checkIconPosition: d,
-  nothingFoundMessage: h,
+  checkIconPosition: h,
+  nothingFoundMessage: d,
   unstyled: f,
   labelId: p,
   renderOption: g,
@@ -18493,7 +18493,7 @@ function hd({
       data: T,
       withCheckIcon: l,
       value: u,
-      checkIconPosition: d,
+      checkIconPosition: h,
       unstyled: f,
       renderOption: g
     },
@@ -18511,7 +18511,7 @@ function hd({
         children: E
       }
     ) : E,
-    w && h && /* @__PURE__ */ y.jsx(le.Empty, { children: h })
+    w && d && /* @__PURE__ */ y.jsx(le.Empty, { children: d })
   ] }) });
 }
 const bC = {}, pa = ce((r, e) => {
@@ -18524,8 +18524,8 @@ const bC = {}, pa = ce((r, e) => {
     defaultDropdownOpened: c,
     onDropdownClose: l,
     onDropdownOpen: u,
-    onFocus: d,
-    onBlur: h,
+    onFocus: h,
+    onBlur: d,
     onClick: f,
     onChange: p,
     data: g,
@@ -18594,10 +18594,10 @@ const bC = {}, pa = ce((r, e) => {
               de(ke.currentTarget.value), pe.openDropdown(), C && pe.selectFirstOption();
             },
             onFocus: (ke) => {
-              pe.openDropdown(), d == null || d(ke);
+              pe.openDropdown(), h == null || h(ke);
             },
             onBlur: (ke) => {
-              pe.closeDropdown(), h == null || h(ke);
+              pe.closeDropdown(), d == null || d(ke);
             },
             onClick: (ke) => {
               pe.openDropdown(), f == null || f(ke);
@@ -18647,8 +18647,8 @@ const qc = {
     orientation: c,
     vars: l,
     borderWidth: u,
-    variant: d,
-    mod: h,
+    variant: h,
+    mod: d,
     ...f
   } = G("ButtonGroup", qc, r), p = me({
     name: "ButtonGroup",
@@ -18668,8 +18668,8 @@ const qc = {
     {
       ...p("group"),
       ref: e,
-      variant: d,
-      mod: [{ "data-orientation": c }, h],
+      variant: h,
+      mod: [{ "data-orientation": c }, d],
       role: "group",
       ...f
     }
@@ -18714,8 +18714,8 @@ const EC = {
     children: c,
     leftSection: l,
     rightSection: u,
-    fullWidth: d,
-    variant: h,
+    fullWidth: h,
+    variant: d,
     radius: f,
     loading: p,
     loaderProps: g,
@@ -18745,13 +18745,13 @@ const EC = {
       ref: e,
       ..._("root", { active: !a && !p && !w }),
       unstyled: v,
-      variant: h,
+      variant: d,
       disabled: a || p,
       mod: [
         {
           disabled: a || w,
           loading: p,
-          block: d,
+          block: h,
           "with-left-section": L,
           "with-right-section": F
         },
@@ -18781,7 +18781,7 @@ Xn.displayName = "@mantine/core/Button";
 Xn.Group = ga;
 var fd = { root: "m_4451eb3a" };
 const _C = {}, ma = Vt((r, e) => {
-  const t = G("Center", _C, r), { classNames: n, className: o, style: i, styles: s, unstyled: a, vars: c, inline: l, mod: u, ...d } = t, h = me({
+  const t = G("Center", _C, r), { classNames: n, className: o, style: i, styles: s, unstyled: a, vars: c, inline: l, mod: u, ...h } = t, d = me({
     name: "Center",
     props: t,
     classes: fd,
@@ -18792,7 +18792,7 @@ const _C = {}, ma = Vt((r, e) => {
     unstyled: a,
     vars: c
   });
-  return /* @__PURE__ */ y.jsx(Q, { ref: e, mod: [{ inline: l }, u], ...h("root"), ...d });
+  return /* @__PURE__ */ y.jsx(Q, { ref: e, mod: [{ inline: l }, u], ...d("root"), ...h });
 });
 ma.classes = fd;
 ma.displayName = "@mantine/core/Center";
@@ -18802,7 +18802,7 @@ const IC = {}, AC = (r, { size: e, fluid: t }) => ({
     "--container-size": t ? void 0 : Re(e, "container-size")
   }
 }), ya = ce((r, e) => {
-  const t = G("Container", IC, r), { classNames: n, className: o, style: i, styles: s, unstyled: a, vars: c, fluid: l, mod: u, ...d } = t, h = me({
+  const t = G("Container", IC, r), { classNames: n, className: o, style: i, styles: s, unstyled: a, vars: c, fluid: l, mod: u, ...h } = t, d = me({
     name: "Container",
     classes: pd,
     props: t,
@@ -18814,7 +18814,7 @@ const IC = {}, AC = (r, { size: e, fluid: t }) => ({
     vars: c,
     varsResolver: AC
   });
-  return /* @__PURE__ */ y.jsx(Q, { ref: e, mod: [{ fluid: l }, u], ...h("root"), ...d });
+  return /* @__PURE__ */ y.jsx(Q, { ref: e, mod: [{ fluid: l }, u], ...d("root"), ...h });
 });
 ya.classes = pd;
 ya.displayName = "@mantine/core/Container";
@@ -18833,8 +18833,8 @@ const RC = {
     defaultDropdownOpened: c,
     onDropdownClose: l,
     onDropdownOpen: u,
-    onFocus: d,
-    onBlur: h,
+    onFocus: h,
+    onBlur: d,
     onClick: f,
     onChange: p,
     data: g,
@@ -18946,11 +18946,11 @@ const RC = {
                 lt(ut.currentTarget.value), vt.openDropdown(), C && vt.selectFirstOption();
               },
               onFocus: (ut) => {
-                Z && vt.openDropdown(), d == null || d(ut);
+                Z && vt.openDropdown(), h == null || h(ut);
               },
               onBlur: (ut) => {
                 var Ut;
-                Z && vt.closeDropdown(), lt(je != null && ((Ut = Lt[je]) == null ? void 0 : Ut.label) || ""), h == null || h(ut);
+                Z && vt.closeDropdown(), lt(je != null && ((Ut = Lt[je]) == null ? void 0 : Ut.label) || ""), d == null || d(ut);
               },
               onClick: (ut) => {
                 Z ? vt.openDropdown() : vt.toggleDropdown(), f == null || f(ut);
@@ -19028,8 +19028,8 @@ const NC = {
     vars: c,
     align: l,
     justify: u,
-    gap: d,
-    variant: h,
+    gap: h,
+    variant: d,
     ...f
   } = t, p = me({
     name: "Stack",
@@ -19043,7 +19043,7 @@ const NC = {
     vars: c,
     varsResolver: PC
   });
-  return /* @__PURE__ */ y.jsx(Q, { ref: e, ...p("root"), variant: h, ...f });
+  return /* @__PURE__ */ y.jsx(Q, { ref: e, ...p("root"), variant: d, ...f });
 });
 Ca.classes = md;
 Ca.displayName = "@mantine/core/Stack";
@@ -19090,8 +19090,8 @@ const LC = {
     order: c,
     vars: l,
     size: u,
-    variant: d,
-    lineClamp: h,
+    variant: h,
+    lineClamp: d,
     textWrap: f,
     mod: p,
     ...g
@@ -19112,9 +19112,9 @@ const LC = {
     {
       ...m("root"),
       component: `h${c}`,
-      variant: d,
+      variant: h,
       ref: e,
-      mod: [{ order: c, "data-line-clamp": typeof h == "number" }, p],
+      mod: [{ order: c, "data-line-clamp": typeof d == "number" }, p],
       size: u,
       ...g
     }
@@ -19197,7 +19197,7 @@ var $C = {
 }, ba = (r, e, t) => {
   const n = Ce(
     (o, i) => {
-      var s = o, { color: a = "currentColor", size: c = 24, stroke: l = 2, children: u } = s, d = VC(s, ["color", "size", "stroke", "children"]);
+      var s = o, { color: a = "currentColor", size: c = 24, stroke: l = 2, children: u } = s, h = VC(s, ["color", "size", "stroke", "children"]);
       return Oi(
         "svg",
         Gc(GC(Gc({
@@ -19208,8 +19208,8 @@ var $C = {
           stroke: a,
           strokeWidth: l,
           className: `tabler-icon tabler-icon-${r}`
-        }), d),
-        [...t.map(([h, f]) => Oi(h, f)), ...u || []]
+        }), h),
+        [...t.map(([d, f]) => Oi(d, f)), ...u || []]
       );
     }
   );
@@ -19350,17 +19350,17 @@ class eb {
       cancelToken: c,
       ...l
     }) => {
-      const u = (typeof t == "boolean" ? t : this.baseApiParams.secure) && this.securityWorker && await this.securityWorker(this.securityData) || {}, d = this.mergeRequestParams(l, u), h = i && this.toQueryString(i), f = this.contentFormatters[
+      const u = (typeof t == "boolean" ? t : this.baseApiParams.secure) && this.securityWorker && await this.securityWorker(this.securityData) || {}, h = this.mergeRequestParams(l, u), d = i && this.toQueryString(i), f = this.contentFormatters[
         o || "application/json"
         /* Json */
-      ], p = s || d.format;
-      return this.customFetch(`${a || this.baseUrl || ""}${n}${h ? `?${h}` : ""}`, {
-        ...d,
+      ], p = s || h.format;
+      return this.customFetch(`${a || this.baseUrl || ""}${n}${d ? `?${d}` : ""}`, {
+        ...h,
         headers: {
-          ...d.headers || {},
+          ...h.headers || {},
           ...o && o !== "multipart/form-data" ? { "Content-Type": o } : {}
         },
-        signal: (c ? this.createAbortSignal(c) : d.signal) || null,
+        signal: (c ? this.createAbortSignal(c) : h.signal) || null,
         body: typeof e > "u" || e === null ? null : f(e)
       }).then(async (g) => {
         const m = g;
@@ -20113,7 +20113,7 @@ function Td(r, e, t) {
       throw new Error(Oe(3));
     return o;
   }
-  function d(m) {
+  function h(m) {
     if (typeof m != "function")
       throw new Error(Oe(4));
     if (c)
@@ -20129,7 +20129,7 @@ function Td(r, e, t) {
       }
     };
   }
-  function h(m) {
+  function d(m) {
     if (!wa(m))
       throw new Error(Oe(7));
     if (typeof m.type > "u")
@@ -20150,12 +20150,12 @@ function Td(r, e, t) {
   function f(m) {
     if (typeof m != "function")
       throw new Error(Oe(10));
-    n = m, h({
+    n = m, d({
       type: Do.REPLACE
     });
   }
   function p() {
-    const m = d;
+    const m = h;
     return {
       /**
        * The minimal observable subscription method.
@@ -20181,11 +20181,11 @@ function Td(r, e, t) {
       }
     };
   }
-  return h({
+  return d({
     type: Do.INIT
   }), {
-    dispatch: h,
-    subscribe: d,
+    dispatch: d,
+    subscribe: h,
     getState: u,
     replaceReducer: f,
     [Wc]: p
@@ -20223,10 +20223,10 @@ function ab(r) {
     let c = !1;
     const l = {};
     for (let u = 0; u < n.length; u++) {
-      const d = n[u], h = t[d], f = s[d], p = h(f, a);
+      const h = n[u], d = t[h], f = s[h], p = d(f, a);
       if (typeof p > "u")
         throw a && a.type, new Error(Oe(14));
-      l[d] = p, c = c || p !== f;
+      l[h] = p, c = c || p !== f;
     }
     return c = c || n.length !== Object.keys(s).length, c ? l : s;
   };
@@ -20733,11 +20733,11 @@ function Ta(r, e = {}) {
   const { resultEqualityCheck: n } = e;
   let o, i = 0;
   function s() {
-    var d;
+    var h;
     let a = t;
     const { length: c } = arguments;
-    for (let h = 0, f = c; h < f; h++) {
-      const p = arguments[h];
+    for (let d = 0, f = c; d < f; d++) {
+      const p = arguments[d];
       if (typeof p == "function" || typeof p == "object" && p !== null) {
         let g = a.o;
         g === null && (a.o = g = /* @__PURE__ */ new WeakMap());
@@ -20755,8 +20755,8 @@ function Ta(r, e = {}) {
     if (a.s === tl)
       u = a.v;
     else if (u = r.apply(null, arguments), i++, n) {
-      const h = ((d = o == null ? void 0 : o.deref) == null ? void 0 : d.call(o)) ?? o;
-      h != null && n(h, u) && (u = h, i !== 0 && i--), o = typeof u == "object" && u !== null || typeof u == "function" ? new _b(u) : u;
+      const d = ((h = o == null ? void 0 : o.deref) == null ? void 0 : h.call(o)) ?? o;
+      d != null && n(d, u) && (u = d, i !== 0 && i--), o = typeof u == "object" && u !== null || typeof u == "function" ? new _b(u) : u;
     }
     return l.s = tl, l.v = u, u;
   }
@@ -20780,12 +20780,12 @@ function xd(r, ...e) {
       ...t,
       ...c
     }, {
-      memoize: d,
-      memoizeOptions: h = [],
+      memoize: h,
+      memoizeOptions: d = [],
       argsMemoize: f = Ta,
       argsMemoizeOptions: p = [],
       devModeChecks: g = {}
-    } = u, m = el(h), b = el(p), C = Eb(o), v = d(function() {
+    } = u, m = el(d), b = el(p), C = Eb(o), v = h(function() {
       return i++, l.apply(
         null,
         arguments
@@ -20811,7 +20811,7 @@ function xd(r, ...e) {
       resetRecomputations: () => {
         i = 0;
       },
-      memoize: d,
+      memoize: h,
       argsMemoize: f
     });
   };
@@ -20930,17 +20930,17 @@ var Mb = () => function(e) {
     // Override the base `store.subscribe` method to keep original listeners
     // from running if we're delaying notifications
     subscribe(u) {
-      const d = () => o && u(), h = n.subscribe(d);
+      const h = () => o && u(), d = n.subscribe(h);
       return a.add(u), () => {
-        h(), a.delete(u);
+        d(), a.delete(u);
       };
     },
     // Override the base `store.dispatch` method so that we can check actions
     // for the `shouldAutoBatch` flag and determine if batching is active
     dispatch(u) {
-      var d;
+      var h;
       try {
-        return o = !((d = u == null ? void 0 : u.meta) != null && d[Lb]), i = !o, i && (s || (s = !0, c(l))), n.dispatch(u);
+        return o = !((h = u == null ? void 0 : u.meta) != null && h[Lb]), i = !o, i && (s || (s = !0, c(l))), n.dispatch(u);
       } finally {
         o = !0;
       }
@@ -20976,9 +20976,9 @@ function Bb(r) {
     trace: !Fb,
     ...typeof o == "object" && o
   }));
-  const u = cb(...c), d = Hb(u);
-  let h = typeof s == "function" ? s(d) : d();
-  const f = l(...h);
+  const u = cb(...c), h = Hb(u);
+  let d = typeof s == "function" ? s(h) : h();
+  const f = l(...d);
   return Td(a, i, f);
 }
 function Ud(r) {
@@ -21022,22 +21022,22 @@ function $b(r, e) {
     }) => u(c)).map(({
       reducer: u
     }) => u)];
-    return l.filter((u) => !!u).length === 0 && (l = [o]), l.reduce((u, d) => {
-      if (d)
+    return l.filter((u) => !!u).length === 0 && (l = [o]), l.reduce((u, h) => {
+      if (h)
         if (sr(u)) {
-          const f = d(u, c);
+          const f = h(u, c);
           return f === void 0 ? u : f;
         } else {
           if (qt(u))
-            return Od(u, (h) => d(h, c));
+            return Od(u, (d) => h(d, c));
           {
-            const h = d(u, c);
-            if (h === void 0) {
+            const d = h(u, c);
+            if (d === void 0) {
               if (u === null)
                 return u;
               throw new Error(Je(9));
             }
-            return h;
+            return d;
           }
         }
       return u;
@@ -21084,10 +21084,10 @@ var Gb = ["name", "message", "stack", "code"], Ri = class {
   };
 }, Lr = /* @__PURE__ */ (() => {
   function r(e, t, n) {
-    const o = Pt(e + "/fulfilled", (c, l, u, d) => ({
+    const o = Pt(e + "/fulfilled", (c, l, u, h) => ({
       payload: c,
       meta: {
-        ...d || {},
+        ...h || {},
         arg: u,
         requestId: l,
         requestStatus: "fulfilled"
@@ -21100,22 +21100,22 @@ var Gb = ["name", "message", "stack", "code"], Ri = class {
         requestId: c,
         requestStatus: "pending"
       }
-    })), s = Pt(e + "/rejected", (c, l, u, d, h) => ({
-      payload: d,
+    })), s = Pt(e + "/rejected", (c, l, u, h, d) => ({
+      payload: h,
       error: (n && n.serializeError || Vb)(c || "Rejected"),
       meta: {
-        ...h || {},
+        ...d || {},
         arg: u,
         requestId: l,
-        rejectedWithValue: !!d,
+        rejectedWithValue: !!h,
         requestStatus: "rejected",
         aborted: (c == null ? void 0 : c.name) === "AbortError",
         condition: (c == null ? void 0 : c.name) === "ConditionError"
       }
     }));
     function a(c) {
-      return (l, u, d) => {
-        const h = n != null && n.idGenerator ? n.idGenerator(c) : Hd(), f = new AbortController();
+      return (l, u, h) => {
+        const d = n != null && n.idGenerator ? n.idGenerator(c) : Hd(), f = new AbortController();
         let p, g;
         function m(C) {
           g = C, f.abort();
@@ -21126,7 +21126,7 @@ var Gb = ["name", "message", "stack", "code"], Ri = class {
           try {
             let T = (w = n == null ? void 0 : n.condition) == null ? void 0 : w.call(n, c, {
               getState: u,
-              extra: d
+              extra: h
             });
             if (Yb(T) && (T = await T), T === !1 || f.signal.aborted)
               throw {
@@ -21141,17 +21141,17 @@ var Gb = ["name", "message", "stack", "code"], Ri = class {
                 });
               }, f.signal.addEventListener("abort", p);
             });
-            l(i(h, c, (E = n == null ? void 0 : n.getPendingMeta) == null ? void 0 : E.call(n, {
-              requestId: h,
+            l(i(d, c, (E = n == null ? void 0 : n.getPendingMeta) == null ? void 0 : E.call(n, {
+              requestId: d,
               arg: c
             }, {
               getState: u,
-              extra: d
+              extra: h
             }))), C = await Promise.race([A, Promise.resolve(t(c, {
               dispatch: l,
               getState: u,
-              extra: d,
-              requestId: h,
+              extra: h,
+              requestId: d,
               signal: f.signal,
               abort: m,
               rejectWithValue: (_, L) => new Ri(_, L),
@@ -21159,10 +21159,10 @@ var Gb = ["name", "message", "stack", "code"], Ri = class {
             })).then((_) => {
               if (_ instanceof Ri)
                 throw _;
-              return _ instanceof ol ? o(_.payload, h, c, _.meta) : o(_, h, c);
+              return _ instanceof ol ? o(_.payload, d, c, _.meta) : o(_, d, c);
             })]);
           } catch (T) {
-            C = T instanceof Ri ? s(null, h, c, T.payload, T.meta) : s(T, h, c);
+            C = T instanceof Ri ? s(null, d, c, T.payload, T.meta) : s(T, d, c);
           } finally {
             p && f.signal.removeEventListener("abort", p);
           }
@@ -21170,7 +21170,7 @@ var Gb = ["name", "message", "stack", "code"], Ri = class {
         }();
         return Object.assign(b, {
           abort: m,
-          requestId: h,
+          requestId: d,
           arg: c,
           unwrap() {
             return b.then(Wb);
@@ -21250,7 +21250,7 @@ function Xb({
       };
       rw(w) ? ow(E, w, u, e) : tw(E, w, u);
     });
-    function d() {
+    function h() {
       const [v = {}, w = [], E = void 0] = typeof o.extraReducers == "function" ? Ud(o.extraReducers) : [o.extraReducers], T = {
         ...v,
         ...l.sliceCaseReducersByType
@@ -21265,20 +21265,20 @@ function Xb({
         E && A.addDefaultCase(E);
       });
     }
-    const h = (v) => v, f = /* @__PURE__ */ new Map();
+    const d = (v) => v, f = /* @__PURE__ */ new Map();
     let p;
     function g(v, w) {
-      return p || (p = d()), p(v, w);
+      return p || (p = h()), p(v, w);
     }
     function m() {
-      return p || (p = d()), p.getInitialState();
+      return p || (p = h()), p.getInitialState();
     }
     function b(v, w = !1) {
       function E(A) {
         let _ = A[v];
         return typeof _ > "u" && w && (_ = m()), _;
       }
-      function T(A = h) {
+      function T(A = d) {
         const _ = nl(f, w, {
           insert: () => /* @__PURE__ */ new WeakMap()
         });
@@ -21396,8 +21396,8 @@ function ow({
     rejected: c,
     settled: l,
     options: u
-  } = t, d = o(r, i, u);
-  n.exposeAction(e, d), s && n.addCase(d.fulfilled, s), a && n.addCase(d.pending, a), c && n.addCase(d.rejected, c), l && n.addMatcher(d.settled, l), n.exposeCaseReducer(e, {
+  } = t, h = o(r, i, u);
+  n.exposeAction(e, h), s && n.addCase(h.fulfilled, s), a && n.addCase(h.pending, a), c && n.addCase(h.rejected, c), l && n.addMatcher(h.settled, l), n.exposeCaseReducer(e, {
     fulfilled: s || co,
     pending: a || co,
     rejected: c || co,
@@ -21550,9 +21550,9 @@ const sl = {
     function l() {
       n.api.dictionaryV1List({ IncludeTestDictionaries: e, Limit: o, Offset: i }).then((u) => {
         u.ok || c(new Error(`HTTP error! status: ${u.status}`));
-        const { data: { dictionaries: d, totalCount: h } = {} } = u;
-        if (d && typeof h < "u")
-          if (s.push(...d), i += o, s.length >= h) {
+        const { data: { dictionaries: h, totalCount: d } = {} } = u;
+        if (h && typeof d < "u")
+          if (s.push(...h), i += o, s.length >= d) {
             const f = s.reduce((p, g) => (p[g.uri] = g, p), {});
             a(f);
           } else
@@ -21754,10 +21754,10 @@ function ll(r, e) {
     return;
   const t = e.find((l) => l.name === "Attributes");
   if (t) {
-    const l = t.hasProperties.find((d) => d.name === "ObjectType");
+    const l = t.hasProperties.find((h) => h.name === "ObjectType");
     l && (l.type === "IfcPropertySingleValue" ? r.objectType = (n = l.nominalValue) == null ? void 0 : n.value : l.type === "IfcPropertyEnumeratedValue" && (r.objectType = (i = (o = l.enumerationValues) == null ? void 0 : o[0]) == null ? void 0 : i.value));
     const u = t.hasProperties.find(
-      (d) => d.name === "PredefinedType"
+      (h) => h.name === "PredefinedType"
     );
     u && (u.type === "IfcPropertySingleValue" ? r.predefinedType = (s = u.nominalValue) == null ? void 0 : s.value : u.type === "IfcPropertyEnumeratedValue" && (r.predefinedType = (c = (a = u.enumerationValues) == null ? void 0 : a[0]) == null ? void 0 : c.value));
   }
@@ -21815,12 +21815,12 @@ function xw({ callback: r, ifcEntity: e }) {
   function i(a) {
     const c = a ? { ...JSON.parse(JSON.stringify(a)) } : { hasAssociations: [], isDefinedBy: [] };
     return c.isDefinedBy = n == null ? void 0 : n.filter((l) => l.name !== "Attributes"), c.hasAssociations = [], o == null || o.forEach((l) => {
-      var u, d, h;
-      if (l.type === "IfcClassificationReference" && ((d = (u = l == null ? void 0 : l.referencedSource) == null ? void 0 : u.location) != null && d.includes("https://identifier.buildingsmart.org/uri/buildingsmart/ifc/"))) {
+      var u, h, d;
+      if (l.type === "IfcClassificationReference" && ((h = (u = l == null ? void 0 : l.referencedSource) == null ? void 0 : u.location) != null && h.includes("https://identifier.buildingsmart.org/uri/buildingsmart/ifc/"))) {
         const { type: f, predefinedType: p } = nb(l.identification);
         f && (c.type = f), p && (c.predefinedType = p), c.predefinedType || (c.predefinedType = "NOTDEFINED");
       } else
-        (h = c.hasAssociations) == null || h.push(l);
+        (d = c.hasAssociations) == null || d.push(l);
     }), c;
   }
   const s = () => {
@@ -21831,12 +21831,12 @@ function xw({ callback: r, ifcEntity: e }) {
 }
 const dl = 25, Mw = 25;
 function Lw({ height: r, options: e, label: t, value: n, setValue: o, placeholder: i = "Search values", disabled: s }) {
-  const [a, c] = X(""), [l, u] = X(e.slice(0, dl)), d = ue(null), h = ii({
+  const [a, c] = X(""), [l, u] = X(e.slice(0, dl)), h = ue(null), d = ii({
     onDropdownClose: () => {
-      h.resetSelectedOption(), h.focusTarget();
+      d.resetSelectedOption(), d.focusTarget();
     },
     onDropdownOpen: () => {
-      h.focusSearchInput();
+      d.focusSearchInput();
     }
   });
   W(() => {
@@ -21865,11 +21865,11 @@ function Lw({ height: r, options: e, label: t, value: n, setValue: o, placeholde
   return /* @__PURE__ */ y.jsx("div", { style: { display: "flex", flexDirection: "column", height: "100%" }, children: /* @__PURE__ */ y.jsxs(
     le,
     {
-      store: h,
+      store: d,
       onOptionSubmit: (g) => {
         if (!s) {
           const m = e.find((C) => C.value === g), b = m && (n == null ? void 0 : n.value) !== m.value ? m : null;
-          o(b), h.closeDropdown();
+          o(b), d.closeDropdown();
         }
       },
       disabled: s,
@@ -21893,12 +21893,12 @@ function Lw({ height: r, options: e, label: t, value: n, setValue: o, placeholde
             label: t,
             value: a,
             onChange: (g) => {
-              s || (o(null), h.updateSelectedOptionIndex(), c(g.currentTarget.value));
+              s || (o(null), d.updateSelectedOptionIndex(), c(g.currentTarget.value));
             },
             onClick: () => {
-              s || h.openDropdown();
+              s || d.openDropdown();
             },
-            onBlur: () => h.closeDropdown(),
+            onBlur: () => d.closeDropdown(),
             placeholder: s ? "" : i,
             disabled: s
           }
@@ -21907,7 +21907,7 @@ function Lw({ height: r, options: e, label: t, value: n, setValue: o, placeholde
           le.Dropdown,
           {
             style: { maxHeight: "20em", overflowY: "auto" },
-            ref: d,
+            ref: h,
             onScroll: f,
             children: /* @__PURE__ */ y.jsx(le.Options, { children: p.length > 0 ? p : /* @__PURE__ */ y.jsx(le.Empty, { children: "Nothing found..." }) })
           }
@@ -21923,7 +21923,7 @@ function Lw({ height: r, options: e, label: t, value: n, setValue: o, placeholde
               color: s ? "var(--mantine-color-gray-6)" : "inherit",
               pointerEvents: s ? "none" : "auto"
             },
-            ref: d,
+            ref: h,
             onScroll: f,
             children: /* @__PURE__ */ y.jsx(le.Options, { children: p.length > 0 ? p : /* @__PURE__ */ y.jsx(le.Empty, { children: "Nothing found..." }) })
           }
@@ -21933,12 +21933,12 @@ function Lw({ height: r, options: e, label: t, value: n, setValue: o, placeholde
   ) });
 }
 function Dw({ height: r, mainDictionaryClassification: e, handleMouseDown: t }) {
-  const n = Zn(), [o, i] = X(/* @__PURE__ */ new Map()), [s, a] = X(/* @__PURE__ */ new Map()), c = qe(dw), l = qe(Rw), u = Pn(Vd), d = Pn(Sw);
+  const n = Zn(), [o, i] = X(/* @__PURE__ */ new Map()), [s, a] = X(/* @__PURE__ */ new Map()), c = qe(dw), l = qe(Rw), u = Pn(Vd), h = Pn(Sw);
   return W(() => {
     (async () => {
       const p = Array.from(c.entries()).map(async ([C, v]) => {
         let w = [];
-        const E = d[C];
+        const E = h[C];
         if (E)
           w = E.map((T) => ({
             value: T.code,
@@ -21985,7 +21985,7 @@ function Dw({ height: r, mainDictionaryClassification: e, handleMouseDown: t }) 
         }
       }), a(b);
     })();
-  }, [c, d, n, l]), W(() => {
+  }, [c, h, n, l]), W(() => {
     (() => {
       const f = Array.from(s.entries()).map(([p, g]) => {
         if (!g || !g.value)
@@ -22009,27 +22009,27 @@ function Dw({ height: r, mainDictionaryClassification: e, handleMouseDown: t }) 
     })();
   }, [u, n, s]), W(() => {
     if (e != null && e.classRelations) {
-      const h = e.classRelations.map((f) => f.relatedClassUri);
-      h.push(e.uri), n(Gd(h));
+      const d = e.classRelations.map((f) => f.relatedClassUri);
+      d.push(e.uri), n(Gd(d));
     }
   }, [e, n]), /* @__PURE__ */ y.jsxs(Qo, { style: { height: `${r}px`, position: "relative" }, children: [
-    Array.from(c.entries()).map(([h, f]) => {
+    Array.from(c.entries()).map(([d, f]) => {
       var p;
       return /* @__PURE__ */ y.jsx(
         Lw,
         {
           height: r,
           label: f.name,
-          options: o.get(h) || [],
-          value: s.get(h) || null,
+          options: o.get(d) || [],
+          value: s.get(d) || null,
           setValue: (g) => {
             const m = new Map(s);
-            m.set(h, g), a(m);
+            m.set(d, g), a(m);
           },
           placeholder: "Search classes",
-          disabled: h === (e == null ? void 0 : e.dictionaryUri) || ((p = o.get(h)) == null ? void 0 : p.length) === 1
+          disabled: d === (e == null ? void 0 : e.dictionaryUri) || ((p = o.get(d)) == null ? void 0 : p.length) === 1
         },
-        h
+        d
       );
     }),
     /* @__PURE__ */ y.jsx(ma, { onMouseDown: t, style: { marginTop: "4px" }, children: /* @__PURE__ */ y.jsx(ti, { m: "xxs", variant: "outline", size: "lg", radius: "xl", "aria-label": "Settings", children: /* @__PURE__ */ y.jsx(WC, {}) }) })
@@ -22074,7 +22074,7 @@ function Kw({
 }) {
   const i = Zn(), [s, a] = X();
   return W(() => {
-    var c, l, u, d, h;
+    var c, l, u, h, d;
     switch (e.type) {
       case "IfcPropertySingleValue": {
         e.nominalValue.type === "IfcBoolean" ? a(
@@ -22138,7 +22138,7 @@ function Kw({
               label: t,
               description: e.name.length > 0 ? `(${e.name})` : "",
               value: f,
-              disabled: ((h = (d = e.enumerationReference) == null ? void 0 : d.enumerationValues) == null ? void 0 : h.length) === 1,
+              disabled: ((d = (h = e.enumerationReference) == null ? void 0 : h.enumerationValues) == null ? void 0 : d.length) === 1,
               onChange: (g) => {
                 const m = p.find((w) => w.value === g), b = m ? [m] : [], C = { ...n }, v = { ...r };
                 if (v.name) {
@@ -22244,15 +22244,14 @@ function Vw(r, e, t, n) {
 function Ww(r, e, t, n) {
   const o = {
     type: "IfcPropertySingleValue",
-    name: e
-  };
-  r.propertyUri && (o.specification = r.propertyUri);
-  const i = r.predefinedValue ? $n(r.dataType, r.predefinedValue) : zw(r.dataType, n, t, e);
+    name: e,
+    specification: r.propertyUri || ""
+  }, i = r.predefinedValue ? $n(r.dataType, r.predefinedValue) : zw(r.dataType, n, t, e);
   return i !== null && (o.nominalValue = i), o;
 }
 function Yw(r, e, t) {
   const { propertyCode: n } = r, o = n || "unknown", i = r.allowedValues ? Vw(r, o, e, t) : Ww(r, o, e, t);
-  return i.specification = r.propertyUri || void 0, i;
+  return i.specification = r.propertyUri || "", i;
 }
 function Qw({
   mainDictionaryClassification: r,
@@ -22266,46 +22265,59 @@ function Qw({
   }, [e, o, r]), W(() => {
     if (!r)
       return;
-    const u = {}, d = {};
-    [r].forEach((f) => {
-      var p;
-      (p = f.classProperties) == null || p.forEach((g) => {
-        if (!g)
+    const u = {};
+    [r].forEach((d) => {
+      var f;
+      (f = d.classProperties) == null || f.forEach((p) => {
+        if (!p)
           return;
-        const m = g.propertySet || f.name;
-        u[m] || (u[m] = {
+        const g = p.propertySet || d.name;
+        u[g] || (u[g] = {
           type: "IfcPropertySet",
-          name: m,
+          name: g,
           hasProperties: []
-        }), u[m].hasProperties.push(Yw(g, m, i)), g.propertyUri && a && s && s[a] && s[a][g.propertyUri] ? d[g.propertyUri] = s[a][g.propertyUri] : g.propertyCode && (d[g.propertyCode] = g.name);
+        }), u[g].hasProperties.push(Yw(p, g, i));
       });
-    }), JSON.stringify(e) !== JSON.stringify(u) && t(u), l(d);
-  }, [r, t, n, i]), /* @__PURE__ */ y.jsx("div", { children: Pi.toArray(
+    }), JSON.stringify(e) !== JSON.stringify(u) && t(u);
+  }, [i, r, e, t]), W(() => {
+    if (!r)
+      return;
+    const u = {};
+    [r].forEach((d) => {
+      var f;
+      (f = d.classProperties) == null || f.forEach((p) => {
+        p && p.propertyUri && (a && s && s[a] && s[a][p.propertyUri] ? u[p.propertyUri] = s[a][p.propertyUri] || "" : u[p.propertyUri] = p.name);
+      });
+    }), l(u);
+  }, [r, n, i, s, a]), /* @__PURE__ */ y.jsx("div", { children: Pi.toArray(
     Object.values(e).map((u) => /* @__PURE__ */ y.jsx(Ne, { children: /* @__PURE__ */ y.jsxs(Ne.Item, { value: u.name || "Unknown", children: [
       /* @__PURE__ */ y.jsx(Ne.Control, { children: u.name }),
       /* @__PURE__ */ y.jsx(Ne.Panel, { children: /* @__PURE__ */ y.jsx(Ca, { children: Pi.toArray(
-        u.hasProperties.map((d) => /* @__PURE__ */ y.jsx(
-          Kw,
-          {
-            propertySet: u,
-            property: d,
-            property_natural_language_name: c[d.name] || "",
-            propertySets: e,
-            setPropertySets: t
-          }
-        ))
+        u.hasProperties.map((h) => {
+          const d = h.specification ? c[h.specification] : "";
+          return /* @__PURE__ */ y.jsx(
+            Kw,
+            {
+              propertySet: u,
+              property: h,
+              property_natural_language_name: c[d],
+              propertySets: e,
+              setPropertySets: t
+            }
+          );
+        })
       ) }) })
     ] }, u.name) }))
   ) });
 }
 function Jw({ api: r, defaultValue: e, setActiveClassificationUri: t }) {
   var E;
-  const n = Zn(), { t: o } = fs(), [i, s] = X([]), a = qe(Ia), c = ue(null), l = ue(e), [u, d] = X(l.current), [h, f] = X(((E = l.current) == null ? void 0 : E.label) || ""), [p] = jp(h, 300), [g, m] = X(!1), b = ve((T) => {
+  const n = Zn(), { t: o } = fs(), [i, s] = X([]), a = qe(Ia), c = ue(null), l = ue(e), [u, h] = X(l.current), [d, f] = X(((E = l.current) == null ? void 0 : E.label) || ""), [p] = jp(d, 300), [g, m] = X(!1), b = ve((T) => {
     f(T);
   }, []), C = ve(
     (T) => {
       const A = i.find((_) => _.value === T);
-      A && (d(A), m(!0));
+      A && (h(A), m(!0));
     },
     [i]
   ), v = ve(
@@ -22315,7 +22327,7 @@ function Jw({ api: r, defaultValue: e, setActiveClassificationUri: t }) {
     [i, C, c]
   );
   W(() => {
-    e && !g && (f(e.label), d(e));
+    e && !g && (f(e.label), h(e));
   }, [e, g]), W(() => {
     if (a) {
       n(Gd([]));
@@ -22361,7 +22373,7 @@ function Jw({ api: r, defaultValue: e, setActiveClassificationUri: t }) {
       label: `${o("searchMainDictionaryLabel")} ${a ? a.ifcClassification.name : ""}`,
       data: i,
       placeholder: "bSDD search...",
-      value: h,
+      value: d,
       onChange: b,
       onOptionSubmit: C,
       onKeyDown: v,
@@ -22386,7 +22398,7 @@ function Jw({ api: r, defaultValue: e, setActiveClassificationUri: t }) {
 const Ni = 60.7969;
 let hl = 0, fl = 0;
 function Xw() {
-  const { t: r } = fs(), e = Zn(), [t, n] = X(), [o, i] = X(), [s, a] = X(!1), [c, l] = X({}), [u, d] = X(new Fn(Sd[rb])), h = qe(Ia), f = qe($d), [p, g] = X(null), m = qe(ls), b = qe(ls), C = qe(hw), v = qe(fw), w = qe((x) => x.ifcEntity), [E, T] = X(Ni), [A, _] = X("auto"), L = qe(bw), F = ve((x) => {
+  const { t: r } = fs(), e = Zn(), [t, n] = X(), [o, i] = X(), [s, a] = X(!1), [c, l] = X({}), [u, h] = X(new Fn(Sd[rb])), d = qe(Ia), f = qe($d), [p, g] = X(null), m = qe(ls), b = qe(ls), C = qe(hw), v = qe(fw), w = qe((x) => x.ifcEntity), [E, T] = X(Ni), [A, _] = X("auto"), L = qe(bw), F = ve((x) => {
     var q;
     const D = JSON.stringify(x);
     (q = window == null ? void 0 : window.bsddBridge) == null || q.save(D).then((V) => {
@@ -22401,7 +22413,7 @@ function Xw() {
   W(() => {
     p && (console.log("settings updated: ", p), e(Fd(p)), g(null));
   }, [p, e]), W(() => {
-    m && d(new Fn(m));
+    m && h(new Fn(m));
   }, [m]), W(() => {
   }, [e]), W(() => {
     (async () => {
@@ -22414,9 +22426,9 @@ function Xw() {
     })();
   }, []), W(() => {
     var D;
-    if (!w || !h)
+    if (!w || !d)
       return;
-    const x = h.ifcClassification.location;
+    const x = d.ifcClassification.location;
     (D = w.hasAssociations) == null || D.forEach((q) => {
       var V;
       if (q.type === "IfcClassificationReference") {
@@ -22427,7 +22439,7 @@ function Xw() {
         }));
       }
     });
-  }, [h, w]), W(() => {
+  }, [d, w]), W(() => {
     if (m !== null && C !== null) {
       const x = {
         bsddApiEnvironment: m,
