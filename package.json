@@ -17,7 +17,7 @@
   },
   "scripts": {
     "dev": "yarn dev:search && yarn dev:selection",
-    "build": "yarn build:search && yarn build:selection && node postbuild.cjs",
+    "build": "yarn build:search && yarn build:selection",
     "preview": "yarn preview:search && yarn preview:selection",
     "test": "yarn test:search && yarn test:selection",
     "coverage": "vitest run --coverage",
