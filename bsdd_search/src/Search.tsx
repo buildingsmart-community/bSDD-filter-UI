@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { BsddApi } from '../../common/src/BsddApi/BsddApi';
 import { RequestParams } from '../../common/src/BsddApi/BsddApiBase';
+import { headers } from '../../common/src/BsddApi/BsddApiWrapper';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import { fetchRelatedClasses } from './features/bsdd/bsddSlice';
 import { selectMainDictionary } from './features/settings/settingsSlice';
@@ -77,7 +78,7 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
     if (mainDictionary) {
       dispatch(fetchRelatedClasses([]));
       const params: RequestParams = {
-        headers: { Accept: 'text/plain' },
+        headers,
       };
 
       const queryParameters = {

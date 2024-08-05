@@ -6,6 +6,7 @@ import {
   ClassListItemContractV1,
   DictionaryContractV1,
 } from '../../../../common/src/BsddApi/BsddApiBase';
+import { headers } from '../../../../common/src/BsddApi/BsddApiWrapper';
 import type { RootState } from '../../app/store';
 import {
   selectBsddApiEnvironmentUri,
@@ -120,13 +121,16 @@ async function fetchDictionaryClassData(
   offset: number,
   // languageCode: string | null,
 ) {
-  const response = await api.api.dictionaryV1ClassesList({
-    Uri: location,
-    UseNestedClasses: false,
-    Limit: CLASS_ITEM_PAGE_SIZE,
-    Offset: offset,
-    // languageCode: languageCode || undefined,
-  });
+  const response = await api.api.dictionaryV1ClassesList(
+    {
+      Uri: location,
+      UseNestedClasses: false,
+      Limit: CLASS_ITEM_PAGE_SIZE,
+      Offset: offset,
+      // languageCode: languageCode || undefined,
+    },
+    { headers },
+  );
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
@@ -247,14 +251,17 @@ export const fetchClass = createAsyncThunk('bsdd/fetchClass', async (uri: string
     throw new Error('BsddApi is not initialized');
   }
 
-  const response = await bsddApi.api.classV1List({
-    Uri: uri,
-    // IncludeClassProperties: true,
-    // IncludeChildClassReferences: false,
-    // IncludeClassRelations: true,
-    // IncludeReverseRelations: true,
-    // languageCode: languageCode || undefined,
-  });
+  const response = await bsddApi.api.classV1List(
+    {
+      Uri: uri,
+      // IncludeClassProperties: true,
+      // IncludeChildClassReferences: false,
+      // IncludeClassRelations: true,
+      // IncludeReverseRelations: true,
+      // languageCode: languageCode || undefined,
+    },
+    { headers },
+  );
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);

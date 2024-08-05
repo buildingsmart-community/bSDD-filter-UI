@@ -2,6 +2,7 @@ import { defaultEnvironment } from '../env';
 import { BsddApi } from './BsddApi';
 import { ClassContractV1, DictionaryContractV1 } from './BsddApiBase';
 import { bsddEnvironments } from './BsddApiEnvironments';
+import { headers } from './BsddApiWrapper';
 
 let bsddApiBaseUri: string = bsddEnvironments[defaultEnvironment];
 let bsddApi: BsddApi<unknown> = new BsddApi(bsddApiBaseUri);
@@ -20,7 +21,7 @@ export interface DictionaryClassificationMap {
 export async function getBsddClass(
   bsddEnvironmentUri: string,
   uri: string,
-  // languageCode: string | null,
+  languageCode: string | null,
 ): Promise<ClassContractV1> {
   // reset cache if environment changes
   if (bsddApiBaseUri !== bsddEnvironmentUri) {
@@ -32,13 +33,16 @@ export async function getBsddClass(
   if (classCache[uri]) {
     return classCache[uri];
   }
-  const response = await bsddApi.api.classV1List({
-    Uri: uri,
-    IncludeClassProperties: true,
-    IncludeChildClassReferences: true,
-    IncludeClassRelations: true,
-    // languageCode: languageCode || undefined,
-  });
+  const response = await bsddApi.api.classV1List(
+    {
+      Uri: uri,
+      IncludeClassProperties: true,
+      IncludeChildClassReferences: true,
+      IncludeClassRelations: true,
+      languageCode: languageCode || undefined,
+    },
+    { headers },
+  );
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }
@@ -58,7 +62,7 @@ export async function getBsddDictionary(bsddEnvironmentUri: string, uri: string)
   if (dictionaryCache[uri]) {
     return dictionaryCache[uri];
   }
-  const response = await bsddApi.api.dictionaryV1List({ Uri: uri });
+  const response = await bsddApi.api.dictionaryV1List({ Uri: uri }, { headers });
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }

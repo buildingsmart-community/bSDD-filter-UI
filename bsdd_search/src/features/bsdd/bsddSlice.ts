@@ -14,6 +14,7 @@ import {
   ClassPropertyContractV1,
   DictionaryContractV1,
 } from '../../../../common/src/BsddApi/BsddApiBase';
+import { headers } from '../../../../common/src/BsddApi/BsddApiWrapper';
 import type { RootState } from '../../app/store';
 import { selectBsddApiEnvironmentUri } from '../settings/settingsSlice';
 
@@ -137,7 +138,7 @@ export const fetchDictionaries = createAsyncThunk<
   await Promise.all(
     dictionaryUris.map(async (uri) => {
       try {
-        const response = await api.api.dictionaryV1List({ Uri: uri });
+        const response = await api.api.dictionaryV1List({ Uri: uri }, { headers });
         if (response.ok && response.data) {
           // Assuming response.data is an array of dictionaries
           response.data.dictionaries?.forEach((dictionary: DictionaryContractV1) => {
@@ -170,15 +171,17 @@ async function fetchDictionaryClassData(
   offset: number,
   languageCode: string | null,
 ) {
-  console.log('languageCode', languageCode);
-  const response = await api.api.dictionaryV1ClassesList({
-    Uri: location,
-    UseNestedClasses: false,
-    ClassType: 'Class',
-    Offset: offset,
-    Limit: CLASS_ITEM_PAGE_SIZE,
-    languageCode: languageCode || undefined,
-  });
+  const response = await api.api.dictionaryV1ClassesList(
+    {
+      Uri: location,
+      UseNestedClasses: false,
+      ClassType: 'Class',
+      Offset: offset,
+      Limit: CLASS_ITEM_PAGE_SIZE,
+      languageCode: languageCode || undefined,
+    },
+    { headers },
+  );
 
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
@@ -283,11 +286,14 @@ export const updatePropertyNaturalLanguageNames = createAsyncThunk(
     const fetchPropertyDetails = async (property: ClassPropertyContractV1) => {
       if (bsddApi?.api && property.propertyUri) {
         try {
-          const response = await bsddApi.api.propertyV4List({
-            uri: property.propertyUri,
-            languageCode,
-            includeClasses: false,
-          });
+          const response = await bsddApi.api.propertyV4List(
+            {
+              uri: property.propertyUri,
+              languageCode,
+              includeClasses: false,
+            },
+            { headers },
+          );
 
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);

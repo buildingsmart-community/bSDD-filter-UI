@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { BsddApi } from '../../common/src/BsddApi/BsddApi';
 import { ClassContractV1, RequestParams } from '../../common/src/BsddApi/BsddApiBase';
 import { bsddEnvironments } from '../../common/src/BsddApi/BsddApiEnvironments';
+import { headers } from '../../common/src/BsddApi/BsddApiWrapper';
 import { defaultEnvironment, isProduction } from '../../common/src/env';
 import { BsddBridgeData, BsddSettings } from '../../common/src/ifc/bsddBridgeData';
 import { IfcEntity, IfcPropertySet } from '../../common/src/ifc/ifc';
@@ -189,7 +190,7 @@ function BsddSearch() {
   const fetchMainDictionaryClassification = useCallback(
     (classificationUri: string) => {
       const params: RequestParams = {
-        headers: { Accept: 'text/plain' },
+        headers,
       };
       const classificationPromise: Promise<ClassContractV1 | null> = new Promise(function (resolve) {
         const queryParameters = {
