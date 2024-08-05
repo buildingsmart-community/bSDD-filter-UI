@@ -1,6 +1,7 @@
 {
   "translation": {
     "apply": "Appliquer",
+    "save": "Enregistrer",
     "cancel": "Annuler",
     "classSearchInstruction": "Sélectionnez une classification dans la boîte de recherche ci-dessus.",
     "noDescription": "Pas de description",

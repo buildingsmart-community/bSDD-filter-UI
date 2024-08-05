@@ -1,5 +1,6 @@
 import { Accordion, Button, Group, Tabs } from '@mantine/core';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { BsddSettings } from '../../../../common/src/ifc/bsddBridgeData';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -12,6 +13,7 @@ import { setSettings } from './settingsSlice';
 
 function Settings() {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const globalSettings = useAppSelector((state) => state.settings);
 
   const [localSettings, setLocalSettings] = useState<BsddSettings>(globalSettings);
@@ -77,10 +79,10 @@ function Settings() {
           variant={isLoading ? 'light' : 'filled'}
           loaderProps={{ type: 'dots' }}
         >
-          Save
+          {t('save')}
         </Button>
         <Button fullWidth variant="light" onClick={handleCancel} disabled={!unsavedChanges}>
-          Cancel
+          {t('cancel')}
         </Button>
       </Group>
     </Tabs.Panel>

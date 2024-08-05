@@ -1,6 +1,7 @@
 {
   "translation": {
       "apply": "Anwenden",
+      "save": "Speichern",
       "cancel": "Abbrechen",
       "classSearchInstruction": "Wählen Sie eine Klassifikation im obigen Suchfeld aus.",
       "noDescription": "Keine Beschreibung",

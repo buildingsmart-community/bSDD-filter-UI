@@ -1,6 +1,7 @@
 {
   "translation": {
     "apply": "Käytä",
+    "save": "Tallenna",
     "cancel": "Peruuta",
     "classSearchInstruction": "Valitse luokitus yllä olevasta hakukentästä.",
     "noDescription": "Ei kuvausta",

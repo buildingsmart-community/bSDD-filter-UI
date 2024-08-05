@@ -1,6 +1,7 @@
 {
   "translation": {
     "apply": "Anvend",
+    "save": "Gem",
     "cancel": "Annuller",
     "classSearchInstruction": "Vælg en klassifikation i søgefeltet ovenfor.",
     "noDescription": "Ingen beskrivelse",
