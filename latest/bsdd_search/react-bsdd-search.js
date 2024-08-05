@@ -20957,7 +20957,7 @@ class Un extends nw {
 const kd = {
   test: "https://test.bsdd.buildingsmart.org",
   production: "https://api.bsdd.buildingsmart.org"
-}, ow = "v1.3.5", Xn = {
+}, ow = "v1.4.0", Xn = {
   "X-User-Agent": `bSDD-filter-UI/${ow}`,
   Accept: "text/plain"
 }, iw = "production", Zn = jh, Me = Nn;

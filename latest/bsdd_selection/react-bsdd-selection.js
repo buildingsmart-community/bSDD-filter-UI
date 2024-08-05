@@ -15574,7 +15574,7 @@ class El extends ED {
     super({ baseUrl: t });
   }
 }
-const TD = "v1.3.5", Yp = {
+const TD = "v1.4.0", Yp = {
   "X-User-Agent": `bSDD-filter-UI/${TD}`,
   Accept: "text/plain"
 }, RD = {
@@ -16036,7 +16036,7 @@ function cI({ loading: e }) {
     ] }) : /* @__PURE__ */ b.jsx(ie, { chevronPosition: "left", children: r })
   ] }) });
 }
-const uI = "v1.3.5";
+const uI = "v1.4.0";
 function dI({ id: e }) {
   const { t } = wt();
   return /* @__PURE__ */ b.jsxs(ie.Item, { value: e.toString(), children: [
