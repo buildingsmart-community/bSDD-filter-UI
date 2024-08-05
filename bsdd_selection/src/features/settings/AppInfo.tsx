@@ -1,7 +1,7 @@
 import { Accordion, Grid, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { appVersion } from '../../../../common/src/env';
+const appVersion = import.meta.env.VITE_APP_VERSION;
 
 interface AppInfoProps {
   id: number;
