@@ -334,7 +334,7 @@ class uo {
     return t = t || this.options, t.prefix = t.prefix || this.prefix, new uo(this.logger, t);
   }
 }
-var Pt = new uo();
+var kt = new uo();
 class Bo {
   constructor() {
     this.observers = {};
@@ -599,7 +599,7 @@ const xc = {};
 class mo extends Bo {
   constructor(t) {
     let n = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
-    super(), Sh(["resourceStore", "languageUtils", "pluralResolver", "interpolator", "backendConnector", "i18nFormat", "utils"], t, this), this.options = n, this.options.keySeparator === void 0 && (this.options.keySeparator = "."), this.logger = Pt.create("translator");
+    super(), Sh(["resourceStore", "languageUtils", "pluralResolver", "interpolator", "backendConnector", "i18nFormat", "utils"], t, this), this.options = n, this.options.keySeparator === void 0 && (this.options.keySeparator = "."), this.logger = kt.create("translator");
   }
   changeLanguage(t) {
     t && (this.language = t);
@@ -851,7 +851,7 @@ function Wi(e) {
 }
 class Sc {
   constructor(t) {
-    this.options = t, this.supportedLngs = this.options.supportedLngs || !1, this.logger = Pt.create("languageUtils");
+    this.options = t, this.supportedLngs = this.options.supportedLngs || !1, this.logger = kt.create("languageUtils");
   }
   getScriptPartFromCode(t) {
     if (t = po(t), !t || t.indexOf("-") < 0)
@@ -1100,7 +1100,7 @@ function Ah() {
 class Nh {
   constructor(t) {
     let n = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
-    this.languageUtils = t, this.options = n, this.logger = Pt.create("pluralResolver"), (!this.options.compatibilityJSON || jh.includes(this.options.compatibilityJSON)) && (typeof Intl > "u" || !Intl.PluralRules) && (this.options.compatibilityJSON = "v3", this.logger.error("Your environment seems not to be Intl API compatible, use an Intl.PluralRules polyfill. Will fallback to the compatibilityJSON v3 format handling.")), this.rules = Ah();
+    this.languageUtils = t, this.options = n, this.logger = kt.create("pluralResolver"), (!this.options.compatibilityJSON || jh.includes(this.options.compatibilityJSON)) && (typeof Intl > "u" || !Intl.PluralRules) && (this.options.compatibilityJSON = "v3", this.logger.error("Your environment seems not to be Intl API compatible, use an Intl.PluralRules polyfill. Will fallback to the compatibilityJSON v3 format handling.")), this.rules = Ah();
   }
   addRule(t, n) {
     this.rules[t] = n;
@@ -1154,7 +1154,7 @@ function Cc(e, t, n) {
 class Mh {
   constructor() {
     let t = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
-    this.logger = Pt.create("interpolator"), this.options = t, this.format = t.interpolation && t.interpolation.format || ((n) => n), this.init(t);
+    this.logger = kt.create("interpolator"), this.options = t, this.format = t.interpolation && t.interpolation.format || ((n) => n), this.init(t);
   }
   init() {
     let t = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
@@ -1312,7 +1312,7 @@ function In(e) {
 class Fh {
   constructor() {
     let t = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
-    this.logger = Pt.create("formatter"), this.options = t, this.formats = {
+    this.logger = kt.create("formatter"), this.options = t, this.formats = {
       number: In((n, r) => {
         const o = new Intl.NumberFormat(n, {
           ...r
@@ -1390,7 +1390,7 @@ function zh(e, t) {
 class Bh extends Bo {
   constructor(t, n, r) {
     let o = arguments.length > 3 && arguments[3] !== void 0 ? arguments[3] : {};
-    super(), this.backend = t, this.store = n, this.services = r, this.languageUtils = r.languageUtils, this.options = o, this.logger = Pt.create("backendConnector"), this.waitingReads = [], this.maxParallelReads = o.maxParallelReads || 10, this.readingCalls = 0, this.maxRetries = o.maxRetries >= 0 ? o.maxRetries : 5, this.retryTimeout = o.retryTimeout >= 1 ? o.retryTimeout : 350, this.state = {}, this.queue = [], this.backend && this.backend.init && this.backend.init(r, o.backend, o);
+    super(), this.backend = t, this.store = n, this.services = r, this.languageUtils = r.languageUtils, this.options = o, this.logger = kt.create("backendConnector"), this.waitingReads = [], this.maxParallelReads = o.maxParallelReads || 10, this.readingCalls = 0, this.maxRetries = o.maxRetries >= 0 ? o.maxRetries : 5, this.retryTimeout = o.retryTimeout >= 1 ? o.retryTimeout : 350, this.state = {}, this.queue = [], this.backend && this.backend.init && this.backend.init(r, o.backend, o);
   }
   queueLoad(t, n, r, o) {
     const i = {}, s = {}, a = {}, l = {};
@@ -1595,7 +1595,7 @@ function Vh(e) {
 class mr extends Bo {
   constructor() {
     let t = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {}, n = arguments.length > 1 ? arguments[1] : void 0;
-    if (super(), this.options = Ic(t), this.services = {}, this.logger = Pt, this.modules = {
+    if (super(), this.options = Ic(t), this.services = {}, this.logger = kt, this.modules = {
       external: []
     }, Vh(this), n && !this.isInitialized && !t.isClone) {
       if (!this.options.initImmediate)
@@ -1622,13 +1622,13 @@ class mr extends Bo {
       return u ? typeof u == "function" ? new u() : u : null;
     }
     if (!this.options.isClone) {
-      this.modules.logger ? Pt.init(i(this.modules.logger), this.options) : Pt.init(null, this.options);
+      this.modules.logger ? kt.init(i(this.modules.logger), this.options) : kt.init(null, this.options);
       let u;
       this.modules.formatter ? u = this.modules.formatter : typeof Intl < "u" && (u = Fh);
       const d = new Sc(this.options);
       this.store = new vc(this.options.resources, this.options);
       const f = this.services;
-      f.logger = Pt, f.resourceStore = this.store, f.languageUtils = d, f.pluralResolver = new Nh(d, {
+      f.logger = kt, f.resourceStore = this.store, f.languageUtils = d, f.pluralResolver = new Nh(d, {
         prepend: this.options.pluralSeparator,
         compatibilityJSON: this.options.compatibilityJSON,
         simplifyPluralSuffix: this.options.simplifyPluralSuffix
@@ -1994,7 +1994,7 @@ const rb = (e, t) => {
     n.current = t ? n.current : e;
   }, [e, t]), n.current;
 };
-function Tt(e) {
+function wt(e) {
   let t = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
   const {
     i18n: n
@@ -2056,6 +2056,7 @@ function Tt(e) {
 }
 const ob = {
   apply: "تطبيق",
+  save: "حفظ",
   cancel: "إلغاء",
   classSearchInstruction: "حدد تصنيفًا في مربع البحث أعلاه.",
   noDescription: "لا يوجد وصف",
@@ -2091,6 +2092,7 @@ const ob = {
   translation: ob
 }, sb = {
   apply: "Použít",
+  save: "Uložit",
   cancel: "Zrušit",
   classSearchInstruction: "Vyberte klasifikaci v horním vyhledávacím poli.",
   noDescription: "Žádný popis",
@@ -2126,6 +2128,7 @@ const ob = {
   translation: sb
 }, lb = {
   apply: "Anvend",
+  save: "Gem",
   cancel: "Annuller",
   classSearchInstruction: "Vælg en klassifikation i søgefeltet ovenfor.",
   noDescription: "Ingen beskrivelse",
@@ -2161,6 +2164,7 @@ const ob = {
   translation: lb
 }, ub = {
   apply: "Anwenden",
+  save: "Speichern",
   cancel: "Abbrechen",
   classSearchInstruction: "Wählen Sie eine Klassifikation im obigen Suchfeld aus.",
   noDescription: "Keine Beschreibung",
@@ -2196,6 +2200,7 @@ const ob = {
   translation: ub
 }, fb = {
   apply: "Assign",
+  save: "Save",
   cancel: "Cancel",
   classSearchInstruction: "Select a classification in the search box above.",
   noDescription: "No description",
@@ -2231,6 +2236,7 @@ const ob = {
   translation: fb
 }, mb = {
   apply: "Aplicar",
+  save: "Guardar",
   cancel: "Cancelar",
   classSearchInstruction: "Seleccione una clasificación en el cuadro de búsqueda de arriba.",
   noDescription: "Sin descripción",
@@ -2266,6 +2272,7 @@ const ob = {
   translation: mb
 }, hb = {
   apply: "Käytä",
+  save: "Tallenna",
   cancel: "Peruuta",
   classSearchInstruction: "Valitse luokitus yllä olevasta hakukentästä.",
   noDescription: "Ei kuvausta",
@@ -2301,6 +2308,7 @@ const ob = {
   translation: hb
 }, yb = {
   apply: "Appliquer",
+  save: "Enregistrer",
   cancel: "Annuler",
   classSearchInstruction: "Sélectionnez une classification dans la boîte de recherche ci-dessus.",
   noDescription: "Pas de description",
@@ -2336,6 +2344,7 @@ const ob = {
   translation: yb
 }, xb = {
   apply: "लागू करें",
+  save: "सहेजें",
   cancel: "रद्द करें",
   classSearchInstruction: "ऊपर दिए गए खोज बॉक्स में एक वर्गीकरण चुनें।",
   noDescription: "कोई विवरण नहीं",
@@ -2371,6 +2380,7 @@ const ob = {
   translation: xb
 }, wb = {
   apply: "Primijeni",
+  save: "Spremi",
   cancel: "Otkazati",
   classSearchInstruction: "Odaberite klasifikaciju u gornjem okviru za pretraživanje.",
   noDescription: "Nema opisa",
@@ -2406,6 +2416,7 @@ const ob = {
   translation: wb
 }, Db = {
   apply: "Nota",
+  save: "Vista",
   cancel: "Hætta við",
   classSearchInstruction: "Veldu flokkun í leitarglugganum hér að ofan.",
   noDescription: "Engin lýsing",
@@ -2441,6 +2452,7 @@ const ob = {
   translation: Db
 }, Pb = {
   apply: "Applica",
+  save: "Salva",
   cancel: "Annulla",
   classSearchInstruction: "Seleziona una classificazione nella casella di ricerca sopra.",
   noDescription: "Nessuna descrizione",
@@ -2476,6 +2488,7 @@ const ob = {
   translation: Pb
 }, Eb = {
   apply: "適用",
+  save: "保存",
   cancel: "キャンセル",
   classSearchInstruction: "上の検索ボックスで分類を選択してください。",
   noDescription: "説明なし",
@@ -2511,6 +2524,7 @@ const ob = {
   translation: Eb
 }, Rb = {
   apply: "적용",
+  save: "저장",
   cancel: "취소",
   classSearchInstruction: "위의 검색 상자에서 분류를 선택하세요.",
   noDescription: "설명 없음",
@@ -2546,6 +2560,7 @@ const ob = {
   translation: Rb
 }, Lb = {
   apply: "Taikyti",
+  save: "Išsaugoti",
   cancel: "Atšaukti",
   classSearchInstruction: "Pasirinkite klasifikaciją aukščiau esančiame paieškos laukelyje.",
   noDescription: "Nėra aprašymo",
@@ -2581,6 +2596,7 @@ const ob = {
   translation: Lb
 }, jb = {
   apply: "Toewijzen",
+  save: "Opslaan",
   cancel: "Annuleren",
   classSearchInstruction: "Selecteer een classificatie in het zoekveld hierboven.",
   noDescription: "Geen beschrijving",
@@ -2616,6 +2632,7 @@ const ob = {
   translation: jb
 }, Nb = {
   apply: "Bruk",
+  save: "Lagre",
   cancel: "Avbryt",
   classSearchInstruction: "Velg en klassifisering i søkeboksen ovenfor.",
   noDescription: "Ingen beskrivelse",
@@ -2651,6 +2668,7 @@ const ob = {
   translation: Nb
 }, _b = {
   apply: "Zastosuj",
+  save: "Zapisz",
   cancel: "Anuluj",
   classSearchInstruction: "Wybierz klasyfikację w polu wyszukiwania powyżej.",
   noDescription: "Brak opisu",
@@ -2686,6 +2704,7 @@ const ob = {
   translation: _b
 }, zb = {
   apply: "Aplicar",
+  save: "Salvar",
   cancel: "Cancelar",
   classSearchInstruction: "Selecione uma classificação na caixa de pesquisa acima.",
   noDescription: "Sem descrição",
@@ -2721,6 +2740,7 @@ const ob = {
   translation: zb
 }, Vb = {
   apply: "Aplicar",
+  save: "Guardar",
   cancel: "Cancelar",
   classSearchInstruction: "Selecione uma classificação na caixa de pesquisa acima.",
   noDescription: "Sem descrição",
@@ -2756,6 +2776,7 @@ const ob = {
   translation: Vb
 }, Gb = {
   apply: "Aplică",
+  save: "Salvează",
   cancel: "Anulează",
   classSearchInstruction: "Selectați o clasificare în caseta de căutare de mai sus.",
   noDescription: "Fără descriere",
@@ -2791,6 +2812,7 @@ const ob = {
   translation: Gb
 }, Ub = {
   apply: "Uporabi",
+  save: "Shrani",
   cancel: "Prekliči",
   classSearchInstruction: "Izberite klasifikacijo v iskalnem polju zgoraj.",
   noDescription: "Brez opisa",
@@ -2826,6 +2848,7 @@ const ob = {
   translation: Ub
 }, Kb = {
   apply: "Primeni",
+  save: "Sačuvaj",
   cancel: "Otkaži",
   classSearchInstruction: "Izaberite klasifikaciju u polju za pretragu iznad.",
   noDescription: "Nema opisa",
@@ -2861,6 +2884,7 @@ const ob = {
   translation: Kb
 }, Jb = {
   apply: "Tillämpa",
+  save: "Spara",
   cancel: "Avbryt",
   classSearchInstruction: "Välj en klassificering i sökrutan ovan.",
   noDescription: "Ingen beskrivning",
@@ -3721,7 +3745,7 @@ function Os(e, t) {
   }, r = it(n.from, t), o = it(n.to, t);
   return `linear-gradient(${n.deg}deg, ${r} 0%, ${o} 100%)`;
 }
-function It(e, t) {
+function Pt(e, t) {
   if (typeof e != "string" || t > 1 || t < 0)
     return "rgba(0, 0, 0, 1)";
   if (e.startsWith("var(")) {
@@ -3733,7 +3757,7 @@ function It(e, t) {
   const { r: n, g: r, b: o } = ca(e);
   return `rgba(${n}, ${r}, ${o}, ${t})`;
 }
-const Pn = It, Gy = ({
+const Pn = Pt, Gy = ({
   color: e,
   theme: t,
   variant: n,
@@ -3771,15 +3795,15 @@ const Pn = It, Gy = ({
         };
       const a = t.colors[i.color][i.shade];
       return {
-        background: It(a, 0.1),
-        hover: It(a, 0.12),
+        background: Pt(a, 0.1),
+        hover: Pt(a, 0.12),
         color: `var(--mantine-color-${i.color}-${Math.min(i.shade, 6)})`,
         border: `${E(1)} solid transparent`
       };
     }
     return {
-      background: It(e, 0.1),
-      hover: It(e, 0.12),
+      background: Pt(e, 0.1),
+      hover: Pt(e, 0.12),
       color: e,
       border: `${E(1)} solid transparent`
     };
@@ -3792,12 +3816,12 @@ const Pn = It, Gy = ({
       border: `${E(1)} solid var(--mantine-color-${e}-outline)`
     } : {
       background: "transparent",
-      hover: It(t.colors[i.color][i.shade], 0.05),
+      hover: Pt(t.colors[i.color][i.shade], 0.05),
       color: `var(--mantine-color-${i.color}-${i.shade})`,
       border: `${E(1)} solid var(--mantine-color-${i.color}-${i.shade})`
     } : {
       background: "transparent",
-      hover: It(e, 0.05),
+      hover: Pt(e, 0.05),
       color: e,
       border: `${E(1)} solid ${e}`
     };
@@ -3813,14 +3837,14 @@ const Pn = It, Gy = ({
       const a = t.colors[i.color][i.shade];
       return {
         background: "transparent",
-        hover: It(a, 0.12),
+        hover: Pt(a, 0.12),
         color: `var(--mantine-color-${i.color}-${Math.min(i.shade, 6)})`,
         border: `${E(1)} solid transparent`
       };
     }
     return {
       background: "transparent",
-      hover: It(e, 0.12),
+      hover: Pt(e, 0.12),
       color: e,
       border: `${E(1)} solid transparent`
     };
@@ -4922,12 +4946,12 @@ function Nr(e) {
     left: $e,
     bottom: ae,
     right: we,
-    inset: Ct,
+    inset: Dt,
     display: me,
     flex: ge,
     hiddenFrom: fe,
     visibleFrom: ft,
-    lightHidden: Dt,
+    lightHidden: It,
     darkHidden: be,
     sx: Ot,
     ...Pe
@@ -4979,12 +5003,12 @@ function Nr(e) {
     left: $e,
     bottom: ae,
     right: we,
-    inset: Ct,
+    inset: Dt,
     display: me,
     flex: ge,
     hiddenFrom: fe,
     visibleFrom: ft,
-    lightHidden: Dt,
+    lightHidden: It,
     darkHidden: be,
     sx: Ot
   }), rest: Pe };
@@ -7418,7 +7442,7 @@ function Gt(e) {
     return t.current == null ? void 0 : t.current(...r);
   }, []);
 }
-var kt = typeof document < "u" ? Fo : H;
+var Et = typeof document < "u" ? Fo : H;
 let Xc = !1, sS = 0;
 const Qc = () => (
   // Ensure the id is unique with multiple independent versions of Floating UI
@@ -7427,7 +7451,7 @@ const Qc = () => (
 );
 function aS() {
   const [e, t] = k.useState(() => Xc ? Qc() : void 0);
-  return kt(() => {
+  return Et(() => {
     e == null && t(Qc());
   }, []), k.useEffect(() => {
     Xc = !0;
@@ -7459,7 +7483,7 @@ function La(e) {
 }
 function ts(e) {
   const t = V(e);
-  return kt(() => {
+  return Et(() => {
     t.current = e;
   }), t;
 }
@@ -7581,7 +7605,7 @@ function fS(e, t) {
         n && M.removeEventListener("mouseleave", L), (K = s.floating) == null || K.removeEventListener("mouseleave", L), f && M.removeEventListener("mousemove", P), M.removeEventListener("mouseenter", P), M.removeEventListener("mouseleave", O);
       };
     }
-  }, [s, a, e, u, d, f, $, A, F, r, n, y, p, g, h, o]), kt(() => {
+  }, [s, a, e, u, d, f, $, A, F, r, n, y, p, g, h, o]), Et(() => {
     var j;
     if (a && n && (j = h.current) != null && j.__options.blockPointerEvents && T()) {
       const O = dn(s.floating).body;
@@ -7595,7 +7619,7 @@ function fS(e, t) {
         };
       }
     }
-  }, [a, n, m, s, p, h, T]), kt(() => {
+  }, [a, n, m, s, p, h, T]), Et(() => {
     n || (x.current = void 0, A(), F());
   }, [n, A, F]), k.useEffect(() => () => {
     A(), clearTimeout(S.current), clearTimeout(w.current), F();
@@ -7659,7 +7683,7 @@ function pS(e) {
       currentId: l
     });
   }, []);
-  return kt(() => {
+  return Et(() => {
     o.currentId ? s.current === null ? s.current = o.currentId : o.isInstantPhase || i({
       isInstantPhase: !0
     }) : (o.isInstantPhase && i({
@@ -7688,14 +7712,14 @@ function mS(e, t) {
     setState: d,
     timeoutMs: f
   } = a;
-  return kt(() => {
+  return Et(() => {
     l && (d({
       delay: {
         open: 1,
         close: ao(u, "close")
       }
     }), l !== s && r(!1));
-  }, [s, r, d, l, u]), kt(() => {
+  }, [s, r, d, l, u]), Et(() => {
     function p() {
       r(!1), d({
         delay: u,
@@ -7711,7 +7735,7 @@ function mS(e, t) {
       }
       p();
     }
-  }, [n, d, l, s, r, u, f]), kt(() => {
+  }, [n, d, l, s, r, u, f]), Et(() => {
     c === zs || !n || c(s);
   }, [n, c, s]), a;
 }
@@ -7933,7 +7957,7 @@ function $a(e) {
       ...e.elements
     }
   }), r = e.rootContext || n, o = r.elements, [i, s] = k.useState(null), [a, l] = k.useState(null), u = (o == null ? void 0 : o.reference) || i, d = k.useRef(null), f = Oa();
-  kt(() => {
+  Et(() => {
     u && (d.current = u);
   }, [u]);
   const p = tS({
@@ -7970,7 +7994,7 @@ function $a(e) {
     elements: y,
     nodeId: t
   }), [p, g, y, t, r]);
-  return kt(() => {
+  return Et(() => {
     r.dataRef.current.floatingContext = x;
     const S = f == null ? void 0 : f.nodesRef.current.find((v) => v.id === t);
     S && (S.context = x);
@@ -8796,7 +8820,7 @@ const AS = {
     "--popover-shadow": fy(n)
   }
 });
-function wt(e) {
+function Ct(e) {
   var be, Ot, Pe, ye, pt, Wt;
   const t = _("Popover", AS, e), {
     children: n,
@@ -8849,7 +8873,7 @@ function wt(e) {
     rootSelector: "dropdown",
     vars: se,
     varsResolver: NS
-  }), pe = V(null), [$e, ae] = q(null), [we, Ct] = q(null), { dir: me } = Mr(), ge = Rt(j), fe = jS({
+  }), pe = V(null), [$e, ae] = q(null), [we, Dt] = q(null), { dir: me } = Mr(), ge = Rt(j), fe = jS({
     middlewares: u,
     width: c,
     position: Nf(me, r),
@@ -8874,9 +8898,9 @@ function wt(e) {
       ae(Me), fe.floating.refs.setReference(Me);
     },
     [fe.floating.refs.setReference]
-  ), Dt = ee(
+  ), It = ee(
     (Me) => {
-      Ct(Me), fe.floating.refs.setFloating(Me);
+      Dt(Me), fe.floating.refs.setFloating(Me);
     },
     [fe.floating.refs.setFloating]
   );
@@ -8888,7 +8912,7 @@ function wt(e) {
         disabled: z,
         controlled: fe.controlled,
         reference: ft,
-        floating: Dt,
+        floating: It,
         x: fe.floating.x,
         y: fe.floating.y,
         arrowX: (Pe = (Ot = (be = fe.floating) == null ? void 0 : be.middlewareData) == null ? void 0 : Ot.arrow) == null ? void 0 : Pe.x,
@@ -8929,10 +8953,10 @@ function wt(e) {
     }
   );
 }
-wt.Target = Bf;
-wt.Dropdown = Na;
-wt.displayName = "@mantine/core/Popover";
-wt.extend = (e) => e;
+Ct.Target = Bf;
+Ct.Dropdown = Na;
+Ct.displayName = "@mantine/core/Popover";
+Ct.extend = (e) => e;
 var ht = { root: "m_5ae2e3c", barsLoader: "m_7a2bd4cd", bar: "m_870bb79", "bars-loader-animation": "m_5d2b3b9d", dotsLoader: "m_4e3f22d7", dot: "m_870c4af", "loader-dots-animation": "m_aac34a1", ovalLoader: "m_b34414df", "oval-loader-animation": "m_f8e89c4b" };
 const MS = te(({ className: e, ...t }, n) => /* @__PURE__ */ b.jsxs(B, { component: "span", className: at(ht.barsLoader, e), ...t, ref: n, children: [
   /* @__PURE__ */ b.jsx("span", { className: ht.bar }),
@@ -9265,7 +9289,7 @@ const JS = {
   zIndex: jr("modal")
 }, XS = (e, { gradient: t, color: n, backgroundOpacity: r, blur: o, radius: i, zIndex: s }) => ({
   root: {
-    "--overlay-bg": t || (n !== void 0 || r !== void 0) && It(n || "#000", r ?? 0.6) || void 0,
+    "--overlay-bg": t || (n !== void 0 || r !== void 0) && Pt(n || "#000", r ?? 0.6) || void 0,
     "--overlay-filter": o ? `blur(${E(o)})` : void 0,
     "--overlay-radius": i === void 0 ? void 0 : Le(i),
     "--overlay-z-index": s == null ? void 0 : s.toString()
@@ -10328,7 +10352,7 @@ const Pw = {}, Ka = U((e, t) => {
     e
   ), l = ut();
   return /* @__PURE__ */ b.jsx(
-    wt.Dropdown,
+    Ct.Dropdown,
     {
       ...a,
       ref: t,
@@ -10348,7 +10372,7 @@ const kw = {
     throw new Error(
       "Combobox.DropdownTarget component children should be an element or a component that accepts ref. Fragments, strings, numbers and other primitive values are not supported"
     );
-  return /* @__PURE__ */ b.jsx(wt.Target, { ref: t, refProp: r, children: n });
+  return /* @__PURE__ */ b.jsx(Ct.Target, { ref: t, refProp: r, children: n });
 });
 ep.displayName = "@mantine/core/ComboboxDropdownTarget";
 const Ew = {}, Ya = U((e, t) => {
@@ -10651,7 +10675,7 @@ const Nw = {
     ...d,
     ...c
   });
-  return /* @__PURE__ */ b.jsx(wt.Target, { ref: Ne(t, u.store.targetRef), children: f });
+  return /* @__PURE__ */ b.jsx(Ct.Target, { ref: Ne(t, u.store.targetRef), children: f });
 });
 rp.displayName = "@mantine/core/ComboboxTarget";
 function Mw(e, t, n) {
@@ -10871,7 +10895,7 @@ function J(e) {
         readOnly: m
       },
       children: /* @__PURE__ */ b.jsx(
-        wt,
+        Ct,
         {
           opened: y.dropdownOpened,
           ...h,
@@ -11781,7 +11805,7 @@ function Sp(e) {
     y0,
     e
   ), i = xp(), s = bo(n, i.openDropdown), a = bo(r, i.closeDropdown);
-  return /* @__PURE__ */ b.jsx(wt.Dropdown, { onMouseEnter: s, onMouseLeave: a, ...o, children: t });
+  return /* @__PURE__ */ b.jsx(Ct.Dropdown, { onMouseEnter: s, onMouseLeave: a, ...o, children: t });
 }
 Sp.displayName = "@mantine/core/HoverCardDropdown";
 const v0 = {
@@ -11797,7 +11821,7 @@ const v0 = {
       "HoverCard.Target component children should be an element or a component that accepts ref. Fragments, strings, numbers and other primitive values are not supported"
     );
   const s = xp(), a = bo(n.props.onMouseEnter, s.openDropdown), l = bo(n.props.onMouseLeave, s.closeDropdown), c = { onMouseEnter: a, onMouseLeave: l };
-  return /* @__PURE__ */ b.jsx(wt.Target, { refProp: r, ref: t, ...i, children: yn(
+  return /* @__PURE__ */ b.jsx(Ct.Target, { refProp: r, ref: t, ...i, children: yn(
     n,
     o ? { [o]: c } : c
   ) });
@@ -11814,7 +11838,7 @@ function mn(e) {
     x0,
     e
   ), [l, { open: c, close: u }] = Ey(s, { onClose: r, onOpen: n }), { openDropdown: d, closeDropdown: f } = u0({ open: c, close: u, openDelay: o, closeDelay: i });
-  return /* @__PURE__ */ b.jsx(b0, { value: { openDropdown: d, closeDropdown: f }, children: /* @__PURE__ */ b.jsx(wt, { ...a, opened: l, __staticSelector: "HoverCard", children: t }) });
+  return /* @__PURE__ */ b.jsx(b0, { value: { openDropdown: d, closeDropdown: f }, children: /* @__PURE__ */ b.jsx(Ct, { ...a, opened: l, __staticSelector: "HoverCard", children: t }) });
 }
 mn.displayName = "@mantine/core/HoverCard";
 mn.Target = wp;
@@ -12149,12 +12173,12 @@ const L0 = {
     inputContainer: $e,
     inputWrapperOrder: ae,
     withAsterisk: we,
-    labelProps: Ct,
+    labelProps: Dt,
     descriptionProps: me,
     errorProps: ge,
     wrapperProps: fe,
     description: ft,
-    label: Dt,
+    label: It,
     error: be,
     maxValues: Ot,
     searchable: Pe,
@@ -12282,12 +12306,12 @@ const L0 = {
               inputContainer: $e,
               inputWrapperOrder: ae,
               withAsterisk: we,
-              labelProps: Ct,
+              labelProps: Dt,
               descriptionProps: me,
               errorProps: ge,
               wrapperProps: fe,
               description: ft,
-              label: Dt,
+              label: It,
               error: be,
               multiline: !0,
               withErrorStyles: Ge,
@@ -12350,8 +12374,8 @@ const L0 = {
               withCheckIcon: pt,
               nothingFoundMessage: ye,
               unstyled: a,
-              labelId: Dt ? `${Mi}-label` : void 0,
-              "aria-label": Dt ? void 0 : lc["aria-label"],
+              labelId: It ? `${Mi}-label` : void 0,
+              "aria-label": It ? void 0 : lc["aria-label"],
               renderOption: Eg,
               scrollAreaProps: Tg
             }
@@ -12690,7 +12714,7 @@ const hu = {
     throw new Error(
       "[@mantine/core] Tooltip component children should be an element or a component that accepts ref, fragments, strings, numbers and other primitive values are not supported"
     );
-  const Ct = Ne(ae.reference, r.ref, t), me = j0($, { duration: 100, transition: "fade" });
+  const Dt = Ne(ae.reference, r.ref, t), me = j0($, { duration: 100, transition: "fade" });
   return /* @__PURE__ */ b.jsxs(b.Fragment, { children: [
     /* @__PURE__ */ b.jsx(Yo, { ...se, withinPortal: f, children: /* @__PURE__ */ b.jsx(
       Gn,
@@ -12747,7 +12771,7 @@ const hu = {
         onMouseMove: n.onMouseMove,
         onPointerDown: n.onPointerDown,
         onPointerEnter: n.onPointerEnter,
-        [i]: Ct,
+        [i]: Dt,
         className: at(S, r.props.className),
         ...r.props
       })
@@ -12809,10 +12833,10 @@ const W0 = {
     hiddenInputProps: $e,
     renderOption: ae,
     onClear: we,
-    autoComplete: Ct,
+    autoComplete: Dt,
     scrollAreaProps: me,
     ...ge
-  } = n, fe = Ht(() => Qf(h), [h]), ft = Ht(() => Ua(fe), [fe]), Dt = Rt(oe), [be, Ot, Pe] = At({
+  } = n, fe = Ht(() => Qf(h), [h]), ft = Ht(() => Ua(fe), [fe]), It = Rt(oe), [be, Ot, Pe] = At({
     value: g,
     defaultValue: y,
     finalValue: null,
@@ -12869,10 +12893,10 @@ const W0 = {
         size: A,
         ...v,
         children: [
-          /* @__PURE__ */ b.jsx(J.Target, { targetType: F ? "input" : "button", autoComplete: Ct, children: /* @__PURE__ */ b.jsx(
+          /* @__PURE__ */ b.jsx(J.Target, { targetType: F ? "input" : "button", autoComplete: Dt, children: /* @__PURE__ */ b.jsx(
             on,
             {
-              id: Dt,
+              id: It,
               ref: t,
               rightSection: W || qr || /* @__PURE__ */ b.jsx(J.Chevron, { size: A, error: se, unstyled: i }),
               rightSectionPointerEvents: he || (qr ? "all" : "none"),
@@ -12919,7 +12943,7 @@ const W0 = {
               withCheckIcon: j,
               nothingFoundMessage: P,
               unstyled: i,
-              labelId: ge.label ? `${Dt}-label` : void 0,
+              labelId: ge.label ? `${It}-label` : void 0,
               "aria-label": ge.label ? void 0 : ge["aria-label"],
               renderOption: ae,
               scrollAreaProps: me
@@ -14180,7 +14204,7 @@ var KC = typeof window < "u" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ? wi
   if (arguments.length !== 0)
     return typeof arguments[0] == "object" ? ko : ko.apply(null, arguments);
 }, YC = (e) => e && typeof e.match == "function";
-function Et(e, t) {
+function Tt(e, t) {
   function n(...r) {
     if (t) {
       let o = t(...r);
@@ -14412,7 +14436,7 @@ var cD = ["name", "message", "stack", "code"], as = class {
   };
 }, ai = /* @__PURE__ */ (() => {
   function e(t, n, r) {
-    const o = Et(t + "/fulfilled", (l, c, u, d) => ({
+    const o = Tt(t + "/fulfilled", (l, c, u, d) => ({
       payload: l,
       meta: {
         ...d || {},
@@ -14420,7 +14444,7 @@ var cD = ["name", "message", "stack", "code"], as = class {
         requestId: c,
         requestStatus: "fulfilled"
       }
-    })), i = Et(t + "/pending", (l, c, u) => ({
+    })), i = Tt(t + "/pending", (l, c, u) => ({
       payload: void 0,
       meta: {
         ...u || {},
@@ -14428,7 +14452,7 @@ var cD = ["name", "message", "stack", "code"], as = class {
         requestId: l,
         requestStatus: "pending"
       }
-    })), s = Et(t + "/rejected", (l, c, u, d, f) => ({
+    })), s = Tt(t + "/rejected", (l, c, u, d, f) => ({
       payload: d,
       error: (r && r.serializeError || uD)(l || "Rejected"),
       meta: {
@@ -14703,7 +14727,7 @@ function yD({
     i = r.reducer, s = r.prepare;
   } else
     i = r;
-  o.addCase(e, i).exposeCaseReducer(t, i).exposeAction(t, s ? Et(e, s) : Et(e));
+  o.addCase(e, i).exposeCaseReducer(t, i).exposeAction(t, s ? Tt(e, s) : Tt(e));
 }
 function vD(e) {
   return e._reducerDefinitionType === "asyncThunk";
@@ -14746,7 +14770,7 @@ var wD = (e, t) => {
     effect: i
   } = e;
   if (t)
-    o = Et(t).match;
+    o = Tt(t).match;
   else if (n)
     t = n.type, o = n.match;
   else if (r)
@@ -14776,11 +14800,11 @@ var wD = (e, t) => {
   };
 }, {
   withTypes: () => DD
-}), ID = Object.assign(Et(`${kl}/add`), {
+}), ID = Object.assign(Tt(`${kl}/add`), {
   withTypes: () => ID
 });
-Et(`${kl}/removeAll`);
-var PD = Object.assign(Et(`${kl}/remove`), {
+Tt(`${kl}/removeAll`);
+var PD = Object.assign(Tt(`${kl}/remove`), {
   withTypes: () => PD
 });
 function Be(e) {
@@ -15565,7 +15589,7 @@ const TD = "main", Yp = {
   includeTestDictionaries: null
 }, Ou = (e, t) => {
   e.language = t.payload, Ie.changeLanguage(t.payload);
-}, Tl = Et("settings/setSettings"), Jp = Pl({
+}, Tl = Tt("settings/setSettings"), Jp = Pl({
   name: "settings",
   initialState: OD,
   reducers: {
@@ -15911,7 +15935,7 @@ function iI(e, t) {
 }
 function sI({ item: e, index: t, setCardColor: n }) {
   var m;
-  const { t: r } = Tt(), o = yt(Qp), i = yt(LD), [s, a] = q("grey"), [l, c] = q([]), [u, d] = q([]);
+  const { t: r } = wt(), o = yt(Qp), i = yt(LD), [s, a] = q("grey"), [l, c] = q([]), [u, d] = q([]);
   H(() => {
     function h(g) {
       a(g), n(t, g);
@@ -15968,7 +15992,7 @@ function sI({ item: e, index: t, setCardColor: n }) {
   ] });
 }
 function aI({ category: e, items: t, index: n }) {
-  const { t: r } = Tt(), [o, i] = q("grey"), [s, a] = q(new Array(t.length).fill("grey")), l = ee((c, u) => {
+  const { t: r } = wt(), [o, i] = q("grey"), [s, a] = q(new Array(t.length).fill("grey")), l = ee((c, u) => {
     a((d) => {
       const f = [...d];
       return f[c] = u, f;
@@ -15992,7 +16016,7 @@ function lI(e, t) {
   return Object.keys(n).sort((r, o) => r.localeCompare(o, void 0, { numeric: !1 })).reduce((r, o) => (r[o] = n[o], r), {});
 }
 function cI({ loading: e }) {
-  const { t } = Tt(), n = yt(YD), r = Ht(() => n ? Object.entries(lI(n, "description")).map(([s, a], l) => /* @__PURE__ */ b.jsx(aI, { category: s, items: a, index: s || l.toString() }, s)) : [], [n]), o = /* @__PURE__ */ b.jsx(hC, {});
+  const { t } = wt(), n = yt(YD), r = Ht(() => n ? Object.entries(lI(n, "description")).map(([s, a], l) => /* @__PURE__ */ b.jsx(aI, { category: s, items: a, index: s || l.toString() }, s)) : [], [n]), o = /* @__PURE__ */ b.jsx(hC, {});
   return /* @__PURE__ */ b.jsx(bt.Panel, { value: "link", children: /* @__PURE__ */ b.jsxs(B, { pos: "relative", style: { height: "100vh" }, children: [
     /* @__PURE__ */ b.jsx(dl, { visible: e || !n }),
     n && r.length === 0 ? /* @__PURE__ */ b.jsxs(Ha, { title: "No entities selected...", icon: o, mt: "xl", children: [
@@ -16014,7 +16038,7 @@ function cI({ loading: e }) {
 }
 const uI = "main";
 function dI({ id: e }) {
-  const { t } = Tt();
+  const { t } = wt();
   return /* @__PURE__ */ b.jsxs(ie.Item, { value: e.toString(), children: [
     /* @__PURE__ */ b.jsx(ie.Control, { children: /* @__PURE__ */ b.jsx(wn, { order: 5, children: t("appInfoLabel") }) }),
     /* @__PURE__ */ b.jsxs(ie.Panel, { children: [
@@ -16077,7 +16101,7 @@ function gI({
   setUnsavedChanges: r,
   setIsLoading: o
 }) {
-  const { t: i } = Tt(), s = yt(nm), a = yt(Ll), l = yt(pI), c = yt(mI), u = Ht(() => cs(t == null ? void 0 : t.mainDictionary), [t == null ? void 0 : t.mainDictionary]), d = Ht(() => cs(t == null ? void 0 : t.ifcDictionary), [t == null ? void 0 : t.ifcDictionary]), f = Ht(() => (t == null ? void 0 : t.filterDictionaries.filter((g) => g.ifcClassification && g.ifcClassification.location).map(cs).flat()) || [], [t == null ? void 0 : t.filterDictionaries]), p = ee(
+  const { t: i } = wt(), s = yt(nm), a = yt(Ll), l = yt(pI), c = yt(mI), u = Ht(() => cs(t == null ? void 0 : t.mainDictionary), [t == null ? void 0 : t.mainDictionary]), d = Ht(() => cs(t == null ? void 0 : t.ifcDictionary), [t == null ? void 0 : t.ifcDictionary]), f = Ht(() => (t == null ? void 0 : t.filterDictionaries.filter((g) => g.ifcClassification && g.ifcClassification.location).map(cs).flat()) || [], [t == null ? void 0 : t.filterDictionaries]), p = ee(
     (g) => {
       const y = g[0], x = Au(Object.values(s), y) || null, S = ls(
         x,
@@ -22284,7 +22308,7 @@ const fR = "_item_1o9ja_1", pR = "_itemDragging_1o9ja_12", mR = "_symbol_1o9ja_1
   dragHandle: gR
 };
 function hR({ id: e, localSettings: t, setLocalSettings: n, setUnsavedChanges: r }) {
-  const { t: o } = Tt(), i = t ? t.filterDictionaries : [], s = (l) => {
+  const { t: o } = wt(), i = t ? t.filterDictionaries : [], s = (l) => {
     if (!t || !l.destination)
       return;
     const c = Array.from(i), [u] = c.splice(l.source.index, 1);
@@ -22319,7 +22343,7 @@ function bR() {
   }));
 }
 function yR({ settings: e, setSettings: t, setUnsavedChanges: n }) {
-  const { t: r, i18n: o } = Tt(), i = (s) => {
+  const { t: r, i18n: o } = wt(), i = (s) => {
     !s || !e || (o.changeLanguage(s), t({ ...e, language: s }), n(!0));
   };
   return /* @__PURE__ */ b.jsx(
@@ -22334,7 +22358,7 @@ function yR({ settings: e, setSettings: t, setUnsavedChanges: n }) {
   );
 }
 function vR({ id: e, localSettings: t, setLocalSettings: n, setUnsavedChanges: r }) {
-  const { t: o } = Tt(), i = Ol(), s = yt(Xp), a = yt($D), l = V();
+  const { t: o } = wt(), i = Ol(), s = yt(Xp), a = yt($D), l = V();
   return H(() => {
     s && i(WD(s));
   }, [i, s]), H(() => {
@@ -22375,7 +22399,7 @@ function xR({
   setLocalSettings: n,
   setUnsavedChanges: r
 }) {
-  const { t: o } = Tt(), { mainDictionary: i, filterDictionaries: s } = t, [a, l] = q([]);
+  const { t: o } = wt(), { mainDictionary: i, filterDictionaries: s } = t, [a, l] = q([]);
   H(() => {
     const u = [i, ...s].filter(Boolean), d = new Map(u.map((p) => [p.ifcClassification.location, p])), f = Array.from(d.values());
     l(f);
@@ -22418,16 +22442,16 @@ function xR({
   ] }, e);
 }
 function SR() {
-  var u, d;
-  const e = Ol(), t = yt((f) => f.settings), [n, r] = q(t), [o, i] = q(!1), [s, a] = q(!0);
+  var d, f;
+  const e = Ol(), { t } = wt(), n = yt((p) => p.settings), [r, o] = q(n), [i, s] = q(!1), [a, l] = q(!0);
   H(() => {
-    r(t);
-  }, [t]);
-  const l = () => {
-    var f;
-    console.log("Saving", n), n && (e(Tl(n)), (f = window == null ? void 0 : window.bsddBridge) == null || f.saveSettings(JSON.stringify(n)), i(!1));
-  }, c = () => {
-    r(t), i(!1);
+    o(n);
+  }, [n]);
+  const c = () => {
+    var p;
+    console.log("Saving", r), r && (e(Tl(r)), (p = window == null ? void 0 : window.bsddBridge) == null || p.saveSettings(JSON.stringify(r)), s(!1));
+  }, u = () => {
+    o(n), s(!1);
   };
   return /* @__PURE__ */ b.jsxs(bt.Panel, { value: "settings", children: [
     /* @__PURE__ */ b.jsxs(ie, { defaultValue: ["2"], multiple: !0, children: [
@@ -22436,37 +22460,37 @@ function SR() {
         vR,
         {
           id: 1,
-          localSettings: n,
-          setLocalSettings: r,
-          setUnsavedChanges: i
+          localSettings: r,
+          setLocalSettings: o,
+          setUnsavedChanges: s
         }
       ),
       /* @__PURE__ */ b.jsx(
         gI,
         {
           id: 2,
-          localSettings: n,
-          setLocalSettings: r,
-          setUnsavedChanges: i,
-          setIsLoading: a
+          localSettings: r,
+          setLocalSettings: o,
+          setUnsavedChanges: s,
+          setIsLoading: l
         }
       ),
       /* @__PURE__ */ b.jsx(
         xR,
         {
           id: 3,
-          localSettings: n,
-          setLocalSettings: r,
-          setUnsavedChanges: i
+          localSettings: r,
+          setLocalSettings: o,
+          setUnsavedChanges: s
         }
       ),
       /* @__PURE__ */ b.jsx(
         hR,
         {
           id: 4,
-          localSettings: n,
-          setLocalSettings: r,
-          setUnsavedChanges: i
+          localSettings: r,
+          setLocalSettings: o,
+          setUnsavedChanges: s
         }
       )
     ] }),
@@ -22475,15 +22499,15 @@ function SR() {
         yr,
         {
           fullWidth: !0,
-          loading: s,
-          onClick: l,
-          disabled: !o || !((d = (u = n == null ? void 0 : n.mainDictionary) == null ? void 0 : u.ifcClassification) != null && d.location),
-          variant: s ? "light" : "filled",
+          loading: a,
+          onClick: c,
+          disabled: !i || !((f = (d = r == null ? void 0 : r.mainDictionary) == null ? void 0 : d.ifcClassification) != null && f.location),
+          variant: a ? "light" : "filled",
           loaderProps: { type: "dots" },
-          children: "Save"
+          children: t("save")
         }
       ),
-      /* @__PURE__ */ b.jsx(yr, { fullWidth: !0, variant: "light", onClick: c, disabled: !o, children: "Cancel" })
+      /* @__PURE__ */ b.jsx(yr, { fullWidth: !0, variant: "light", onClick: u, disabled: !i, children: t("cancel") })
     ] })
   ] });
 }
@@ -22497,7 +22521,7 @@ const CR = (e) => async (t, n) => {
   t(Tl(s));
 };
 function DR() {
-  const e = Ol(), { t } = Tt(), n = yt(BD), [r, o] = q(null), [i, s] = q(null), [a, l] = q(!0);
+  const e = Ol(), { t } = wt(), n = yt(BD), [r, o] = q(null), [i, s] = q(null), [a, l] = q(!0);
   return H(() => {
     (async () => {
       try {

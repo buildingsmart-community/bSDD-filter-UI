@@ -2046,6 +2046,7 @@ function ma(r) {
 }
 const Tf = {
   apply: "تطبيق",
+  save: "حفظ",
   cancel: "إلغاء",
   classSearchInstruction: "حدد تصنيفًا في مربع البحث أعلاه.",
   noDescription: "لا يوجد وصف",
@@ -2081,6 +2082,7 @@ const Tf = {
   translation: Tf
 }, _f = {
   apply: "Použít",
+  save: "Uložit",
   cancel: "Zrušit",
   classSearchInstruction: "Vyberte klasifikaci v horním vyhledávacím poli.",
   noDescription: "Žádný popis",
@@ -2116,6 +2118,7 @@ const Tf = {
   translation: _f
 }, Af = {
   apply: "Anvend",
+  save: "Gem",
   cancel: "Annuller",
   classSearchInstruction: "Vælg en klassifikation i søgefeltet ovenfor.",
   noDescription: "Ingen beskrivelse",
@@ -2151,6 +2154,7 @@ const Tf = {
   translation: Af
 }, Pf = {
   apply: "Anwenden",
+  save: "Speichern",
   cancel: "Abbrechen",
   classSearchInstruction: "Wählen Sie eine Klassifikation im obigen Suchfeld aus.",
   noDescription: "Keine Beschreibung",
@@ -2186,6 +2190,7 @@ const Tf = {
   translation: Pf
 }, Of = {
   apply: "Assign",
+  save: "Save",
   cancel: "Cancel",
   classSearchInstruction: "Select a classification in the search box above.",
   noDescription: "No description",
@@ -2221,6 +2226,7 @@ const Tf = {
   translation: Of
 }, xf = {
   apply: "Aplicar",
+  save: "Guardar",
   cancel: "Cancelar",
   classSearchInstruction: "Seleccione una clasificación en el cuadro de búsqueda de arriba.",
   noDescription: "Sin descripción",
@@ -2256,6 +2262,7 @@ const Tf = {
   translation: xf
 }, Df = {
   apply: "Käytä",
+  save: "Tallenna",
   cancel: "Peruuta",
   classSearchInstruction: "Valitse luokitus yllä olevasta hakukentästä.",
   noDescription: "Ei kuvausta",
@@ -2291,6 +2298,7 @@ const Tf = {
   translation: Df
 }, Ff = {
   apply: "Appliquer",
+  save: "Enregistrer",
   cancel: "Annuler",
   classSearchInstruction: "Sélectionnez une classification dans la boîte de recherche ci-dessus.",
   noDescription: "Pas de description",
@@ -2326,6 +2334,7 @@ const Tf = {
   translation: Ff
 }, Hf = {
   apply: "लागू करें",
+  save: "सहेजें",
   cancel: "रद्द करें",
   classSearchInstruction: "ऊपर दिए गए खोज बॉक्स में एक वर्गीकरण चुनें।",
   noDescription: "कोई विवरण नहीं",
@@ -2361,6 +2370,7 @@ const Tf = {
   translation: Hf
 }, zf = {
   apply: "Primijeni",
+  save: "Spremi",
   cancel: "Otkazati",
   classSearchInstruction: "Odaberite klasifikaciju u gornjem okviru za pretraživanje.",
   noDescription: "Nema opisa",
@@ -2396,6 +2406,7 @@ const Tf = {
   translation: zf
 }, Kf = {
   apply: "Nota",
+  save: "Vista",
   cancel: "Hætta við",
   classSearchInstruction: "Veldu flokkun í leitarglugganum hér að ofan.",
   noDescription: "Engin lýsing",
@@ -2431,6 +2442,7 @@ const Tf = {
   translation: Kf
 }, Vf = {
   apply: "Applica",
+  save: "Salva",
   cancel: "Annulla",
   classSearchInstruction: "Seleziona una classificazione nella casella di ricerca sopra.",
   noDescription: "Nessuna descrizione",
@@ -2466,6 +2478,7 @@ const Tf = {
   translation: Vf
 }, Wf = {
   apply: "適用",
+  save: "保存",
   cancel: "キャンセル",
   classSearchInstruction: "上の検索ボックスで分類を選択してください。",
   noDescription: "説明なし",
@@ -2501,6 +2514,7 @@ const Tf = {
   translation: Wf
 }, Qf = {
   apply: "적용",
+  save: "저장",
   cancel: "취소",
   classSearchInstruction: "위의 검색 상자에서 분류를 선택하세요.",
   noDescription: "설명 없음",
@@ -2536,6 +2550,7 @@ const Tf = {
   translation: Qf
 }, Xf = {
   apply: "Taikyti",
+  save: "Išsaugoti",
   cancel: "Atšaukti",
   classSearchInstruction: "Pasirinkite klasifikaciją aukščiau esančiame paieškos laukelyje.",
   noDescription: "Nėra aprašymo",
@@ -2571,6 +2586,7 @@ const Tf = {
   translation: Xf
 }, ep = {
   apply: "Toewijzen",
+  save: "Opslaan",
   cancel: "Annuleren",
   classSearchInstruction: "Selecteer een classificatie in het zoekveld hierboven.",
   noDescription: "Geen beschrijving",
@@ -2606,6 +2622,7 @@ const Tf = {
   translation: ep
 }, rp = {
   apply: "Bruk",
+  save: "Lagre",
   cancel: "Avbryt",
   classSearchInstruction: "Velg en klassifisering i søkeboksen ovenfor.",
   noDescription: "Ingen beskrivelse",
@@ -2641,6 +2658,7 @@ const Tf = {
   translation: rp
 }, op = {
   apply: "Zastosuj",
+  save: "Zapisz",
   cancel: "Anuluj",
   classSearchInstruction: "Wybierz klasyfikację w polu wyszukiwania powyżej.",
   noDescription: "Brak opisu",
@@ -2676,6 +2694,7 @@ const Tf = {
   translation: op
 }, ap = {
   apply: "Aplicar",
+  save: "Salvar",
   cancel: "Cancelar",
   classSearchInstruction: "Selecione uma classificação na caixa de pesquisa acima.",
   noDescription: "Sem descrição",
@@ -2711,6 +2730,7 @@ const Tf = {
   translation: ap
 }, cp = {
   apply: "Aplicar",
+  save: "Guardar",
   cancel: "Cancelar",
   classSearchInstruction: "Selecione uma classificação na caixa de pesquisa acima.",
   noDescription: "Sem descrição",
@@ -2746,6 +2766,7 @@ const Tf = {
   translation: cp
 }, up = {
   apply: "Aplică",
+  save: "Salvează",
   cancel: "Anulează",
   classSearchInstruction: "Selectați o clasificare în caseta de căutare de mai sus.",
   noDescription: "Fără descriere",
@@ -2781,6 +2802,7 @@ const Tf = {
   translation: up
 }, hp = {
   apply: "Uporabi",
+  save: "Shrani",
   cancel: "Prekliči",
   classSearchInstruction: "Izberite klasifikacijo v iskalnem polju zgoraj.",
   noDescription: "Brez opisa",
@@ -2816,6 +2838,7 @@ const Tf = {
   translation: hp
 }, pp = {
   apply: "Primeni",
+  save: "Sačuvaj",
   cancel: "Otkaži",
   classSearchInstruction: "Izaberite klasifikaciju u polju za pretragu iznad.",
   noDescription: "Nema opisa",
@@ -2851,6 +2874,7 @@ const Tf = {
   translation: pp
 }, mp = {
   apply: "Tillämpa",
+  save: "Spara",
   cancel: "Avbryt",
   classSearchInstruction: "Välj en klassificering i sökrutan ovan.",
   noDescription: "Ingen beskrivning",
