@@ -16003,7 +16003,7 @@ function aI({ loading: e }) {
     ] }) : /* @__PURE__ */ b.jsx(ie, { chevronPosition: "left", children: r })
   ] }) });
 }
-const lI = "development";
+const lI = "main";
 function cI({ id: e }) {
   const { t } = Tt();
   return /* @__PURE__ */ b.jsxs(ie.Item, { value: e.toString(), children: [
@@ -16155,7 +16155,7 @@ function pI({
         dr,
         {
           id: "ifcDictionary",
-          label: i("Selection IFC dictionary"),
+          label: i("selectIfcDictionary"),
           value: d.map((g) => g.value),
           onChange: m,
           placeholder: "Select filter dictionaries",
