@@ -234,7 +234,7 @@ function DomainSelection({
         <MultiSelect
           key="ifcDictionary-select"
           id="ifcDictionary"
-          label={t('Selection IFC dictionary')}
+          label={t('selectIfcDictionary')}
           value={localIfcDictionaryValues.map((item) => item.value)}
           onChange={changeIfcDictionaryOption}
           placeholder="Select filter dictionaries"
