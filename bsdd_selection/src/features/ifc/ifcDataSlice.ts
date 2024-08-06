@@ -5,26 +5,26 @@ import { patchIfcClassificationReference } from '../../../../common/src/ifc/ifcV
 import type { RootState } from '../../app/store';
 
 interface EntitiesState {
-  ifcEntities: IfcEntity[] | null;
+  loadedIfcEntities: IfcEntity[] | null;
 }
 
 const initialState: EntitiesState = {
-  ifcEntities: null,
+  loadedIfcEntities: null,
 };
 
 const ifcDataSlice = createSlice({
   name: 'ifcData',
   initialState,
   reducers: {
-    setIfcData: (state, action: PayloadAction<IfcEntity[]>) => {
-      state.ifcEntities = action.payload;
+    setLoadedIfcEntities: (state, action: PayloadAction<IfcEntity[]>) => {
+      state.loadedIfcEntities = action.payload;
     },
   },
 });
 
-export const selectIfcEntities = (state: RootState) => state.ifcData.ifcEntities;
+export const selectIfcEntities = (state: RootState) => state.ifcData.loadedIfcEntities;
 
-export const { setIfcData } = ifcDataSlice.actions;
+export const { setLoadedIfcEntities } = ifcDataSlice.actions;
 
 /**
  * Converts an IFC entity name to its corresponding IfcTypeProduct name, even if it is an IfcProduct.
@@ -130,8 +130,10 @@ export const setValidatedIfcData = createAsyncThunk(
       }),
     );
 
-    dispatch(setIfcData(validatedIfcEntities));
+    dispatch(setLoadedIfcEntities(validatedIfcEntities));
   },
 );
+
+export const selectLoadedIfcEntity = (state: RootState) => state.ifcData.loadedIfcEntities;
 
 export const ifcDataReducer = ifcDataSlice.reducer;

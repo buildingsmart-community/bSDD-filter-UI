@@ -30,19 +30,28 @@ function updateObjectTypeAndPredefinedType(
   objectType: string | undefined,
   predefinedType: string | undefined,
 ) {
+  let newObjectType = state.objectType;
+  let newPredefinedType = state.predefinedType;
   // IFC Rule: If objectType is set and not empty, PredefinedType must be 'USERDEFINED', unless predefinedType is set and to something other than 'NOTDEFINED'.
   // Reference: https://ifc43-docs.standards.buildingsmart.org/IFC/RELEASE/IFC4x3/HTML/lexical/IfcObject.htm
   if (!objectType) {
-    state.objectType = '';
+    newObjectType = '';
     if (!predefinedType || predefinedType === 'USERDEFINED') {
-      state.predefinedType = 'NOTDEFINED';
+      newPredefinedType = 'NOTDEFINED';
     } else {
-      state.predefinedType = predefinedType;
+      newPredefinedType = predefinedType;
     }
   } else if (!predefinedType || predefinedType === 'NOTDEFINED') {
-    state.predefinedType = 'USERDEFINED';
+    newPredefinedType = 'USERDEFINED';
   } else {
-    state.predefinedType = predefinedType;
+    newPredefinedType = predefinedType;
+  }
+
+  if (state.objectType !== newObjectType) {
+    state.objectType = newObjectType;
+  }
+  if (state.predefinedType !== newPredefinedType) {
+    state.predefinedType = newPredefinedType;
   }
 }
 
@@ -92,11 +101,19 @@ const ifcEntitySlice = createSlice({
   initialState,
   reducers: {
     setIfcEntity: (state, action: PayloadAction<IfcEntity>) => {
-      state.type = action.payload.type;
-      state.name = action.payload.name;
-      state.description = action.payload.description;
+      if (state.type !== action.payload.type) {
+        state.type = action.payload.type;
+      }
+      if (state.name !== action.payload.name) {
+        state.name = action.payload.name;
+      }
+      if (state.description !== action.payload.description) {
+        state.description = action.payload.description;
+      }
       updateObjectTypeAndPredefinedType(state, action.payload.objectType, action.payload.predefinedType);
-      state.tag = action.payload.tag;
+      if (state.tag !== action.payload.tag) {
+        state.tag = action.payload.tag;
+      }
       updateIsDefinedBy(state, action.payload.isDefinedBy);
       updateHasAssociations(state, action.payload.hasAssociations);
     },

@@ -1,31 +1,30 @@
-import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Association, IfcEntity } from '../../../../common/src/ifc/ifc';
-import { patchIfcClassificationReference } from '../../../../common/src/ifc/ifcValidators';
+import { IfcEntity } from '../../../../common/src/ifc/ifc';
 import type { RootState } from '../../app/store';
 
 interface EntitiesState {
-  ifcEntities: IfcEntity[];
+  loadedIfcEntities: IfcEntity[];
 }
 
 const initialState: EntitiesState = {
-  ifcEntities: [],
+  loadedIfcEntities: [],
 };
 
 const ifcDataSlice = createSlice({
   name: 'ifcData',
   initialState,
   reducers: {
-    setIfcData: (state, action: PayloadAction<IfcEntity[]>) => {
-      state.ifcEntities = action.payload;
+    setLoadedIfcEntities: (state, action: PayloadAction<IfcEntity[]>) => {
+      state.loadedIfcEntities = action.payload;
     },
   },
 });
 
-export const { setIfcData } = ifcDataSlice.actions;
+export const { setLoadedIfcEntities } = ifcDataSlice.actions;
 
-export const selectIfcEntities = (state: RootState) => state.ifcData.ifcEntities;
+export const selectIfcEntities = (state: RootState) => state.ifcData.loadedIfcEntities;
 
-export const selectIfcEntity = createSelector(selectIfcEntities, (ifcEntities) => ifcEntities[0]);
+export const selectLoadedIfcEntity = createSelector(selectIfcEntities, (ifcEntities) => ifcEntities[0]);
 
 export const ifcDataReducer = ifcDataSlice.reducer;

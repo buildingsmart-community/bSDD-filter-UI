@@ -7,7 +7,7 @@ import { BsddApi } from '../../common/src/BsddApi/BsddApi';
 import { RequestParams } from '../../common/src/BsddApi/BsddApiBase';
 import { headers } from '../../common/src/BsddApi/BsddApiWrapper';
 import { useAppDispatch, useAppSelector } from './app/hooks';
-import { fetchRelatedClasses } from './features/bsdd/bsddSlice';
+import { fetchRelatedClasses, setMainDictionaryClassificationUri } from './features/bsdd/bsddSlice';
 import { selectMainDictionary } from './features/settings/settingsSlice';
 
 interface Option {
@@ -17,11 +17,10 @@ interface Option {
 
 interface Props {
   api: BsddApi<unknown>;
-  defaultValue: Option | undefined;
-  setActiveClassificationUri: (value: string) => void;
+  defaultSelection: Option | undefined;
 }
 
-function Search({ api, defaultValue: defaultSelection, setActiveClassificationUri }: Props) {
+function Search({ api, defaultSelection }: Props) {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const [searchOptions, setSearchOptions] = useState<Option[]>([]);
@@ -29,14 +28,17 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Use a ref to store the initial value of defaultSelection
-  const initialDefaultSelection = useRef(defaultSelection);
-
-  // Only use initialDefaultSelection.current to set the initial state
-  const [selected, setSelected] = useState<Option | undefined>(initialDefaultSelection.current);
-  const [searchValue, setSearchValue] = useState(initialDefaultSelection.current?.label || '');
+  const [selected, setSelected] = useState<Option | undefined>(undefined);
+  const [searchValue, setSearchValue] = useState('');
   const [debouncedSearchValue] = useDebouncedValue(searchValue, 300);
   const [userUpdated, setUserUpdated] = useState(false);
+
+  useEffect(() => {
+    if (defaultSelection) {
+      setSelected(defaultSelection);
+      setSearchValue(defaultSelection.label);
+    }
+  }, [defaultSelection]);
 
   const handleOnChange = useCallback((value: string) => {
     setSearchValue(value);
@@ -63,13 +65,12 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
         }
       }
     },
-    [searchOptions, handleOptionSubmit, inputRef],
+    [searchOptions, handleOptionSubmit],
   );
 
   useEffect(() => {
     if (defaultSelection && !userUpdated) {
       setSearchValue(defaultSelection.label);
-      // setSearchOptions([defaultSelection]);
       setSelected(defaultSelection);
     }
   }, [defaultSelection, userUpdated]);
@@ -127,16 +128,19 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
 
   useEffect(() => {
     if (selected) {
-      setActiveClassificationUri(selected.value);
+      dispatch(setMainDictionaryClassificationUri(selected.value));
+    } else {
+      dispatch(setMainDictionaryClassificationUri(null));
     }
-  }, [selected, setActiveClassificationUri]);
+  }, [dispatch, selected]);
 
-  const handleClear = () => {
+  const handleClear = useCallback(() => {
     handleOnChange('');
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  };
+    setSelected(undefined);
+  }, [handleOnChange]);
 
   return (
     <Autocomplete
@@ -155,9 +159,7 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
           onMouseDown={(event) => {
             event.preventDefault();
           }}
-          onClick={() => {
-            handleClear();
-          }}
+          onClick={handleClear}
           aria-label="Clear value"
         />
       }

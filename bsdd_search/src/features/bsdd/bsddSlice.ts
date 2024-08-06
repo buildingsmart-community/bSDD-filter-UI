@@ -13,6 +13,7 @@ import {
   ClassListItemContractV1,
   ClassPropertyContractV1,
   DictionaryContractV1,
+  RequestParams,
 } from '../../../../common/src/BsddApi/BsddApiBase';
 import { headers } from '../../../../common/src/BsddApi/BsddApiWrapper';
 import type { RootState } from '../../app/store';
@@ -23,6 +24,7 @@ const DICTIONARIES_PAGE_SIZE = 500;
 
 interface BsddState {
   mainDictionaryClassification: ClassContractV1 | null;
+  mainDictionaryClassificationUri: string | null;
   classes: { [key: string]: ClassContractV1 };
   propertyNamesByLanguage: { [languageCode: string]: { [propertyUri: string]: string } };
   dictionaries: { [key: string]: DictionaryContractV1 };
@@ -37,6 +39,7 @@ let fetchPromisesCache: Partial<Record<string, Promise<ClassListItemContractV1[]
 
 const initialState: BsddState = {
   mainDictionaryClassification: null,
+  mainDictionaryClassificationUri: null,
   classes: {},
   propertyNamesByLanguage: {},
   dictionaries: {},
@@ -326,6 +329,14 @@ const bsddSlice = createSlice({
     setMainDictionaryClassification: (state, action: PayloadAction<ClassContractV1 | null>) => {
       state.mainDictionaryClassification = action.payload;
     },
+    setMainDictionaryClassificationUri: (state, action: PayloadAction<string | null>) => {
+      if (action.payload !== state.mainDictionaryClassificationUri) {
+        state.mainDictionaryClassificationUri = action.payload;
+        if (action.payload === null) {
+          state.mainDictionaryClassification = null;
+        }
+      }
+    },
     setClasses: (state, action: PayloadAction<{ [key: string]: ClassContractV1 }>) => {
       state.classes = action.payload;
     },
@@ -391,15 +402,16 @@ export const fetchRelatedClasses = createAsyncThunk(
       throw new Error('BsddApi is not initialized');
     }
 
-    const classesAccumulator: { [key: string]: ClassContractV1 } = {};
+    const classesAccumulator: { [key: string]: ClassContractV1 } = { ...state.bsdd.classes };
 
     const fetchClass = async (relatedClassUri: string) => {
+      if (classesAccumulator[relatedClassUri]) {
+        return;
+      }
+
       if (bsddApi && bsddApi.api) {
         const response = await bsddApi.api.classV1List({
           Uri: relatedClassUri,
-          // IncludeClassProperties: true,
-          // IncludeChildClassReferences: false,
-          // IncludeClassRelations: true,
           languageCode: state.settings.language || undefined,
         });
 
@@ -422,6 +434,7 @@ export const fetchRelatedClasses = createAsyncThunk(
 );
 
 export const selectMainDictionaryClassification = (state: RootState) => state.bsdd.mainDictionaryClassification;
+export const selectMainDictionaryClassificationUri = (state: RootState) => state.bsdd.mainDictionaryClassificationUri;
 export const selectDictionary = (state: RootState, uri: string) => state.bsdd.dictionaries[uri];
 export const selectDictionaryClasses = (state: RootState, location: string) => state.bsdd.dictionaryClasses[location];
 export const selectBsddDictionaries = (state: RootState) => state.bsdd.dictionaries;
@@ -448,7 +461,81 @@ export const selectGroupedClasses = createSelector([selectClasses], (classes) =>
   return grouped;
 });
 
-export const { resetState, setMainDictionaryClassification, addDictionaryClasses, addDictionary } = bsddSlice.actions;
+export const {
+  resetState,
+  setMainDictionaryClassification,
+  setMainDictionaryClassificationUri,
+  addDictionaryClasses,
+  addDictionary,
+} = bsddSlice.actions;
+
+export const fetchMainDictionaryClassification = createAsyncThunk(
+  'bsdd/fetchMainDictionaryClassification',
+  async (classificationUri: string, { getState, dispatch }) => {
+    if (!bsddApi) {
+      throw new Error('BsddApi is not initialized');
+    }
+    const state = getState() as RootState;
+    const languageCode = state.settings.language;
+
+    const params: RequestParams = {
+      headers,
+    };
+
+    const queryParameters = {
+      Uri: classificationUri,
+      IncludeClassRelations: true,
+      IncludeClassProperties: true,
+      languageCode,
+    };
+
+    try {
+      const response = await bsddApi.api.classV1List(queryParameters, params);
+      if (response.status !== 200) {
+        console.error(`API request failed with status ${response.status}`);
+        return null;
+      }
+      const classification = response.data;
+      dispatch(setMainDictionaryClassification(classification));
+
+      const classProperties = classification?.classProperties;
+      if (classProperties && classProperties.length > 0) {
+        dispatch(updatePropertyNaturalLanguageNames({ classProperties, languageCode }));
+      }
+
+      return classification;
+    } catch (err) {
+      console.error('Error fetching classification:', err);
+      return null;
+    }
+  },
+);
+
+export const updateMainDictionaryClassificationUri = createAsyncThunk(
+  'bsdd/updateMainDictionaryClassificationUri',
+  async (uri: string | null, { dispatch, getState }) => {
+    const state = getState() as RootState; // Adjust the type as needed
+    if (uri !== state.bsdd.mainDictionaryClassificationUri) {
+      dispatch(bsddSlice.actions.setMainDictionaryClassificationUri(uri));
+      if (uri === null) {
+        dispatch(bsddSlice.actions.setMainDictionaryClassification(null));
+      } else {
+        // Fetch the main dictionary classification based on the URI
+        const action = await dispatch(fetchMainDictionaryClassification(uri));
+        const mainDictionaryClassification = action.payload as ClassContractV1 | null;
+        dispatch(bsddSlice.actions.setMainDictionaryClassification(mainDictionaryClassification));
+
+        if (mainDictionaryClassification?.classRelations) {
+          const relatedClassUris = mainDictionaryClassification.classRelations.map(
+            (relation) => relation.relatedClassUri,
+          );
+          relatedClassUris.push(mainDictionaryClassification.uri);
+          await dispatch(fetchRelatedClasses(relatedClassUris));
+        }
+      }
+    }
+  },
+);
 
 /**
  * Updates the base URL of the BsddApi and resets the state.

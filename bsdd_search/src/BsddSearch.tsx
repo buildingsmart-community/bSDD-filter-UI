@@ -3,9 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { BsddApi } from '../../common/src/BsddApi/BsddApi';
-import { ClassContractV1, RequestParams } from '../../common/src/BsddApi/BsddApiBase';
 import { bsddEnvironments } from '../../common/src/BsddApi/BsddApiEnvironments';
-import { headers } from '../../common/src/BsddApi/BsddApiWrapper';
 import { defaultEnvironment, isProduction } from '../../common/src/env';
 import { BsddBridgeData, BsddSettings } from '../../common/src/ifc/bsddBridgeData';
 import { IfcEntity, IfcPropertySet } from '../../common/src/ifc/ifc';
@@ -16,13 +14,14 @@ import Classifications from './Classifications';
 import {
   fetchAndStoreDictionaryClasses,
   fetchDictionaries,
+  fetchMainDictionaryClassification,
   selectMainDictionaryClassification,
-  setMainDictionaryClassification,
+  selectMainDictionaryClassificationUri,
+  setMainDictionaryClassificationUri,
   updateDictionaries,
-  updatePropertyNaturalLanguageNames,
 } from './features/bsdd/bsddSlice';
-import { setIfcData } from './features/ifc/ifcDataSlice';
-import { setIfcEntity } from './features/ifc/ifcEntitySlice';
+import { selectLoadedIfcEntity, setLoadedIfcEntities } from './features/ifc/ifcDataSlice';
+import { selectIfcEntity, setIfcEntity } from './features/ifc/ifcEntitySlice';
 import {
   selectActiveDictionaryUris,
   selectBsddApiEnvironmentUri,
@@ -56,7 +55,6 @@ function BsddSearch() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const [activeClassificationUri, setActiveClassificationUri] = useState<string>();
   const [defaultSearch, setDefaultSearch] = useState<Option | undefined>();
   const [recursiveMode, setRecursiveMode] = useState<boolean>(false);
   const [api, setApi] = useState<BsddApi<unknown>>(new BsddApi(bsddEnvironments[defaultEnvironment]));
@@ -68,7 +66,9 @@ function BsddSearch() {
   const bsddApiEnvironmentUri = useAppSelector(selectBsddApiEnvironmentUri);
   const includeTestDictionaries = useAppSelector(selectIncludeTestDictionaries);
   const activeDictionaryLocations = useAppSelector(selectActiveDictionaryUris);
-  const ifcEntity = useAppSelector((state) => state.ifcEntity);
+  const ifcEntity = useAppSelector(selectIfcEntity);
+  const loadedIfcEntity = useAppSelector(selectLoadedIfcEntity);
+  const mainDictionaryClassificationUri = useAppSelector(selectMainDictionaryClassificationUri);
 
   const [height, setHeight] = useState(minHeight); // Initial height
   const [panelHeight, setPanelHeight] = useState('auto'); // Initial height of the Accordion Panel
@@ -107,47 +107,52 @@ function BsddSearch() {
   }, [bsddApiEnvironment]);
 
   useEffect(() => {
-    if (isProduction) return;
-
-    const { settings, ifcData } = mockData;
-    dispatch(setIfcData(ifcData));
-    dispatchSettingsWhenLoaded(settings);
-    if (!ifcData || ifcData.length === 0) return;
-
-    const newIfcEntity = ifcData[0];
-
-    dispatch(setIfcEntity(newIfcEntity));
-  }, [dispatch]);
-
-  useEffect(() => {
     const loadSettings = async () => {
-      // @ts-ignore
-      if (window?.bsddBridge) {
-        // @ts-ignore
-        const loadedSettings = await window.bsddBridge.loadSettings();
-        const { settings, ifcData } = JSON.parse(loadedSettings) as BsddBridgeData;
-        dispatch(setIfcData(ifcData));
-        dispatchSettingsWhenLoaded(settings);
-        if (!ifcData || ifcData.length === 0) return;
+      try {
+        let settings;
+        let ifcData;
 
-        dispatch(setIfcEntity(ifcData[0]));
+        if (isProduction) {
+          // @ts-ignore
+          if (window?.bsddBridge) {
+            // @ts-ignore
+            const loadedSettings = await window.bsddBridge.loadSettings();
+            ({ settings, ifcData } = JSON.parse(loadedSettings) as BsddBridgeData);
+          }
+        } else {
+          ({ settings, ifcData } = mockData);
+        }
+
+        if (settings) {
+          dispatchSettingsWhenLoaded(settings);
+        }
+
+        if (ifcData) {
+          dispatch(setLoadedIfcEntities(ifcData));
+          if (ifcData.length > 0) {
+            const newLoadedIfcEntity = ifcData[0];
+            dispatch(setIfcEntity(newLoadedIfcEntity));
+          }
+        }
+      } catch (error) {
+        console.error('Failed to load settings:', error);
       }
     };
 
     loadSettings();
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    if (!ifcEntity || !mainDictionary) return;
+    if (!loadedIfcEntity || !mainDictionary) return;
     const newActiveClassificationUri = mainDictionary.ifcClassification.location;
 
-    ifcEntity.hasAssociations?.forEach((association) => {
+    loadedIfcEntity.hasAssociations?.forEach((association) => {
       if (association.type === 'IfcClassificationReference') {
         const classificationReference = association;
         if (classificationReference.referencedSource?.location) {
           if (classificationReference.referencedSource.location === newActiveClassificationUri) {
             if (classificationReference.location) {
-              setActiveClassificationUri(classificationReference.location);
+              dispatch(setMainDictionaryClassificationUri(classificationReference.location));
             }
             setDefaultSearch({
               label: classificationReference.name,
@@ -157,7 +162,7 @@ function BsddSearch() {
         }
       }
     });
-  }, [mainDictionary, ifcEntity]);
+  }, [mainDictionary, loadedIfcEntity, dispatch]);
 
   useEffect(() => {
     if (bsddApiEnvironment !== null && includeTestDictionaries !== null) {
@@ -181,57 +186,11 @@ function BsddSearch() {
     languageCode,
   ]);
 
-  /**
-   * Fetches a classification from the API and updates the state.
-   *
-   * @param {string} classificationUri - The URI of the classification to fetch.
-   * @returns {Promise<ClassContractV1 | null>} - A promise that resolves to the fetched classification or null if the fetch fails.
-   */
-  const fetchMainDictionaryClassification = useCallback(
-    (classificationUri: string) => {
-      const params: RequestParams = {
-        headers,
-      };
-      const classificationPromise: Promise<ClassContractV1 | null> = new Promise(function (resolve) {
-        const queryParameters = {
-          Uri: classificationUri,
-          IncludeClassRelations: true,
-          IncludeClassProperties: true,
-          languageCode,
-        };
-        resolve(
-          api.api
-            .classV1List(queryParameters, params)
-            .then((response) => {
-              if (response.status !== 200) {
-                console.error(`API request failed with status ${response.status}`);
-                return null;
-              }
-              return response.data;
-            })
-            .catch((err) => {
-              console.error('Error fetching classification:', err);
-              return null;
-            }),
-        );
-      });
-      classificationPromise.then((classification) => {
-        dispatch(setMainDictionaryClassification(classification));
-
-        const classProperties = classification?.classProperties;
-        if (classProperties && classProperties?.length > 0) {
-          dispatch(updatePropertyNaturalLanguageNames({ classProperties, languageCode }));
-        }
-      });
-    },
-    [api.api, dispatch, languageCode],
-  );
-
   useEffect(() => {
-    if (activeClassificationUri) {
-      fetchMainDictionaryClassification(activeClassificationUri);
+    if (mainDictionaryClassificationUri) {
+      dispatch(fetchMainDictionaryClassification(mainDictionaryClassificationUri));
     }
-  }, [activeClassificationUri, fetchMainDictionaryClassification]);
+  }, [mainDictionaryClassificationUri, dispatch]);
 
   useEffect(() => {
     setPanelHeight(`${height * activeDictionaryLocations.length + 48}px`);
@@ -260,10 +219,9 @@ function BsddSearch() {
       <TextInput type="hidden" name="name" id="name" value="" />
       <TextInput type="hidden" name="material" id="material" value="" />
       <Group mx="md" mt="lg" mb="sm">
-        <Search api={api} defaultValue={defaultSearch} setActiveClassificationUri={setActiveClassificationUri} />
+        <Search api={api} defaultSelection={defaultSearch} />
       </Group>
-
-      {activeClassificationUri ? (
+      {mainDictionaryClassificationUri ? (
         <>
           <Accordion defaultValue={['Classifications']} multiple>
             <Accordion.Item key="Classifications" value="Classifications">
@@ -271,11 +229,7 @@ function BsddSearch() {
                 <Title order={5}>{t('classificationsLabel')}</Title>
               </Accordion.Control>
               <Accordion.Panel style={{ height: panelHeight }}>
-                <Classifications
-                  height={height}
-                  mainDictionaryClassification={mainDictionaryClassification}
-                  handleMouseDown={handleMouseDown}
-                />
+                <Classifications height={height} handleMouseDown={handleMouseDown} />
               </Accordion.Panel>
             </Accordion.Item>
             <Accordion.Item key="Propertysets" value="Propertysets">

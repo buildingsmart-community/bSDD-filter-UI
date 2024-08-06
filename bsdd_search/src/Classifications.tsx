@@ -3,22 +3,20 @@ import { IconArrowDown } from '@tabler/icons-react';
 import { MouseEventHandler, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { ClassContractV1 } from '../../common/src/BsddApi/BsddApiBase';
 import { IfcClassification, IfcClassificationReference } from '../../common/src/ifc/ifc';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import {
   fetchDictionaryClasses,
-  fetchRelatedClasses,
   selectBsddDictionaries,
   selectGroupedClasses,
+  selectMainDictionaryClassification,
 } from './features/bsdd/bsddSlice';
 import { selectHasAssociationsMap, setHasAssociations } from './features/ifc/ifcEntitySlice';
-import { selectActiveDictionariesMap } from './features/settings/settingsSlice';
+import { selectActiveDictionariesMap, selectMainDictionaryUri } from './features/settings/settingsSlice';
 import Slicer from './Slicer';
 
 interface ClassificationsProps {
   height: number;
-  mainDictionaryClassification: ClassContractV1 | null;
   handleMouseDown: MouseEventHandler<HTMLDivElement>;
 }
 
@@ -28,7 +26,7 @@ interface Option {
   uri: string;
 }
 
-function Classifications({ height, mainDictionaryClassification, handleMouseDown }: ClassificationsProps) {
+function Classifications({ height, handleMouseDown }: ClassificationsProps) {
   const dispatch = useAppDispatch();
   const [optionsMap, setOptionsMap] = useState<Map<string, Option[]>>(new Map());
 
@@ -39,16 +37,40 @@ function Classifications({ height, mainDictionaryClassification, handleMouseDown
   const hasAssociations = useAppSelector(selectHasAssociationsMap);
   const dictionaries = useSelector(selectBsddDictionaries);
   const groupedClassRelations = useSelector(selectGroupedClasses);
+  const mainDictionaryClassification = useSelector(selectMainDictionaryClassification);
+  const mainDictionaryUri = useSelector(selectMainDictionaryUri);
 
   useEffect(() => {
     const updateOptionsMap = async () => {
       const entries = Array.from(activeDictionariesMap.entries());
       const optionsMapPromises = entries.map(async ([dictionaryUri, dictionary]): Promise<[string, Option[]]> => {
+        if (mainDictionaryClassification && dictionaryUri === mainDictionaryUri) {
+          const { code, name, uri } = mainDictionaryClassification;
+          return [
+            dictionaryUri,
+            [
+              {
+                value: code,
+                label: name,
+                uri,
+              } as Option,
+            ],
+          ];
+        }
+
         let options: Option[] = [];
         const classRelationGroup = groupedClassRelations[dictionaryUri];
 
-        if (classRelationGroup) {
-          options = classRelationGroup.map((classRelation) => ({
+        const classRelationsUris = mainDictionaryClassification?.classRelations?.map(
+          (relation) => relation.relatedClassUri,
+        );
+
+        const filteredGroup = classRelationGroup?.filter((classRelation) => {
+          return classRelationsUris?.includes(classRelation.uri);
+        });
+
+        if (filteredGroup && filteredGroup.length > 0) {
+          options = filteredGroup.map((classRelation) => ({
             value: classRelation.code,
             label: classRelation.name,
             uri: classRelation.uri,
@@ -109,7 +131,14 @@ function Classifications({ height, mainDictionaryClassification, handleMouseDown
     };
 
     updateOptionsMap();
-  }, [activeDictionariesMap, groupedClassRelations, dispatch, hasAssociations]);
+  }, [
+    activeDictionariesMap,
+    groupedClassRelations,
+    dispatch,
+    hasAssociations,
+    mainDictionaryClassification,
+    mainDictionaryUri,
+  ]);
 
   useEffect(() => {
     const fetchClasses = () => {
@@ -140,14 +169,6 @@ function Classifications({ height, mainDictionaryClassification, handleMouseDown
 
     fetchClasses();
   }, [dictionaries, dispatch, selectedIfcClassificationReferences]);
-
-  useEffect(() => {
-    if (mainDictionaryClassification?.classRelations) {
-      const relatedClassUris = mainDictionaryClassification.classRelations.map((relation) => relation.relatedClassUri);
-      relatedClassUris.push(mainDictionaryClassification.uri);
-      dispatch(fetchRelatedClasses(relatedClassUris));
-    }
-  }, [mainDictionaryClassification, dispatch]);
 
   return (
     <Paper style={{ height: `${height}px`, position: 'relative' }}>

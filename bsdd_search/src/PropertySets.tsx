@@ -13,7 +13,7 @@ import {
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import type { PropertySetMap } from './BsddSearch';
 import { selectPropertyNamesByLanguage } from './features/bsdd/bsddSlice';
-import { selectIfcEntity } from './features/ifc/ifcDataSlice';
+import { selectLoadedIfcEntity } from './features/ifc/ifcDataSlice';
 import { selectIsDefinedBy, setIsDefinedBy } from './features/ifc/ifcEntitySlice';
 import { selectLanguage } from './features/settings/settingsSlice';
 import Property from './Property';
@@ -262,7 +262,7 @@ function GetIfcProperty(
 function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertySetsProps) {
   const dispatch = useAppDispatch();
 
-  const ifcEntity = useAppSelector(selectIfcEntity);
+  const loadedIfcEntity = useAppSelector(selectLoadedIfcEntity);
   const propertySets = useAppSelector(selectIsDefinedBy);
   const propertyNamesByLanguage = useAppSelector(selectPropertyNamesByLanguage);
   const languageCode = useAppSelector(selectLanguage);
@@ -286,12 +286,14 @@ function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertyS
           };
         }
 
-        newPropertySets[propertySetName].hasProperties.push(GetIfcProperty(classProperty, propertySetName, ifcEntity));
+        newPropertySets[propertySetName].hasProperties.push(
+          GetIfcProperty(classProperty, propertySetName, loadedIfcEntity),
+        );
       });
     });
 
     dispatch(setIsDefinedBy(Object.values(newPropertySets)));
-  }, [dispatch, ifcEntity, mainDictionaryClassification]);
+  }, [dispatch, loadedIfcEntity, mainDictionaryClassification]);
 
   useEffect(() => {
     if (!mainDictionaryClassification) return;
@@ -319,7 +321,7 @@ function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertyS
     });
 
     setPropertyNaturalLanguageNamesMap(newPropertyNaturalLanguageNames);
-  }, [mainDictionaryClassification, recursiveMode, ifcEntity, propertyNamesByLanguage, languageCode]);
+  }, [mainDictionaryClassification, recursiveMode, loadedIfcEntity, propertyNamesByLanguage, languageCode]);
 
   return (
     <div>

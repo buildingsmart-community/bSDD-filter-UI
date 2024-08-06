@@ -1,9 +1,5 @@
 import { CheckIcon, CloseButton, Combobox, Group, InputBase, Paper, Text, useCombobox } from '@mantine/core';
-import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
-
-import { RootState } from './app/store';
-import { selectHasAssociations } from './features/ifc/ifcEntitySlice';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 interface Option {
   label: string;
@@ -80,19 +76,21 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
     }
   };
 
-  const comboboxOptions = renderedOptions.map((item) => (
-    <Combobox.Option value={item.value} key={item.value} active={value?.value === item.value}>
-      <Group gap="sm">
-        {value?.value === item.value ? <CheckIcon size={12} /> : null}
-        <Text fz="sm" opacity={disabled ? 0.6 : 1.0}>
-          {item.label}
-        </Text>
-        <Text fz="xs" opacity={0.6}>
-          ({item.value})
-        </Text>
-      </Group>
-    </Combobox.Option>
-  ));
+  const comboboxOptions = useMemo(() => {
+    return renderedOptions.map((item) => (
+      <Combobox.Option value={item.value} key={item.value} active={value?.value === item.value}>
+        <Group gap="sm">
+          {value?.value === item.value ? <CheckIcon size={12} /> : null}
+          <Text fz="sm" opacity={disabled ? 0.6 : 1.0}>
+            {item.label}
+          </Text>
+          <Text fz="xs" opacity={0.6}>
+            ({item.value})
+          </Text>
+        </Group>
+      </Combobox.Option>
+    ));
+  }, [renderedOptions, value, disabled]);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
