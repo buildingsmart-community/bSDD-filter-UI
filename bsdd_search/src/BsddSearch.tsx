@@ -17,8 +17,8 @@ import {
   fetchMainDictionaryClassification,
   selectMainDictionaryClassification,
   selectMainDictionaryClassificationUri,
-  setMainDictionaryClassificationUri,
   updateDictionaries,
+  updateMainDictionaryClassificationUri,
 } from './features/bsdd/bsddSlice';
 import { selectLoadedIfcEntity, setLoadedIfcEntities } from './features/ifc/ifcDataSlice';
 import { selectIfcEntity, setIfcEntity } from './features/ifc/ifcEntitySlice';
@@ -152,7 +152,7 @@ function BsddSearch() {
         if (classificationReference.referencedSource?.location) {
           if (classificationReference.referencedSource.location === newActiveClassificationUri) {
             if (classificationReference.location) {
-              dispatch(setMainDictionaryClassificationUri(classificationReference.location));
+              dispatch(updateMainDictionaryClassificationUri(classificationReference.location));
             }
             setDefaultSearch({
               label: classificationReference.name,

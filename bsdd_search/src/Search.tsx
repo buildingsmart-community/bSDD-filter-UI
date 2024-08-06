@@ -7,7 +7,7 @@ import { BsddApi } from '../../common/src/BsddApi/BsddApi';
 import { RequestParams } from '../../common/src/BsddApi/BsddApiBase';
 import { headers } from '../../common/src/BsddApi/BsddApiWrapper';
 import { useAppDispatch, useAppSelector } from './app/hooks';
-import { fetchRelatedClasses, setMainDictionaryClassificationUri } from './features/bsdd/bsddSlice';
+import { fetchRelatedClasses, updateMainDictionaryClassificationUri } from './features/bsdd/bsddSlice';
 import { selectMainDictionary } from './features/settings/settingsSlice';
 
 interface Option {
@@ -128,9 +128,9 @@ function Search({ api, defaultSelection }: Props) {
 
   useEffect(() => {
     if (selected) {
-      dispatch(setMainDictionaryClassificationUri(selected.value));
+      dispatch(updateMainDictionaryClassificationUri(selected.value));
     } else {
-      dispatch(setMainDictionaryClassificationUri(null));
+      dispatch(updateMainDictionaryClassificationUri(null));
     }
   }, [dispatch, selected]);
 

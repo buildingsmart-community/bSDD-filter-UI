@@ -330,12 +330,7 @@ const bsddSlice = createSlice({
       state.mainDictionaryClassification = action.payload;
     },
     setMainDictionaryClassificationUri: (state, action: PayloadAction<string | null>) => {
-      if (action.payload !== state.mainDictionaryClassificationUri) {
-        state.mainDictionaryClassificationUri = action.payload;
-        if (action.payload === null) {
-          state.mainDictionaryClassification = null;
-        }
-      }
+      state.mainDictionaryClassificationUri = action.payload;
     },
     setClasses: (state, action: PayloadAction<{ [key: string]: ClassContractV1 }>) => {
       state.classes = action.payload;
@@ -514,7 +509,7 @@ export const fetchMainDictionaryClassification = createAsyncThunk(
 export const updateMainDictionaryClassificationUri = createAsyncThunk(
   'bsdd/updateMainDictionaryClassificationUri',
   async (uri: string | null, { dispatch, getState }) => {
-    const state = getState() as RootState; // Adjust the type as needed
+    const state = getState() as RootState;
     if (uri !== state.bsdd.mainDictionaryClassificationUri) {
       dispatch(bsddSlice.actions.setMainDictionaryClassificationUri(uri));
       if (uri === null) {
