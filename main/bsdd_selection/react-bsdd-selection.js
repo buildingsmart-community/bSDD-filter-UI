@@ -15848,16 +15848,16 @@ function ju(e, t) {
   };
 }
 const Ol = vh, yt = lh, KD = {
-  ifcEntities: null
+  loadedIfcEntities: null
 }, rm = Pl({
   name: "ifcData",
   initialState: KD,
   reducers: {
-    setIfcData: (e, t) => {
-      e.ifcEntities = t.payload;
+    setLoadedIfcEntities: (e, t) => {
+      e.loadedIfcEntities = t.payload;
     }
   }
-}), YD = (e) => e.ifcData.ifcEntities, { setIfcData: JD } = rm.actions;
+}), YD = (e) => e.ifcData.loadedIfcEntities, { setLoadedIfcEntities: JD } = rm.actions;
 function XD(e) {
   return e.endsWith("Type") ? e.slice(0, -4) : e;
 }
