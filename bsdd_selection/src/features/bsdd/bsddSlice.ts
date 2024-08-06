@@ -4,12 +4,15 @@ import { BsddApi } from '../../../../common/src/BsddApi/BsddApi';
 import {
   ClassContractV1,
   ClassListItemContractV1,
+  DictionaryClassesResponseContractV1,
   DictionaryContractV1,
 } from '../../../../common/src/BsddApi/BsddApiBase';
 import { headers } from '../../../../common/src/BsddApi/BsddApiWrapper';
+import { useAppSelector } from '../../app/hooks';
 import type { RootState } from '../../app/store';
 import {
   selectBsddApiEnvironmentUri,
+  selectLanguage,
   // selectLanguage
 } from '../settings/settingsSlice';
 
@@ -119,15 +122,15 @@ async function fetchDictionaryClassData(
   api: BsddApi<any>,
   location: string,
   offset: number,
-  // languageCode: string | null,
-) {
+  languageCode: string | undefined,
+): Promise<DictionaryClassesResponseContractV1> {
   const response = await api.api.dictionaryV1ClassesList(
     {
       Uri: location,
       UseNestedClasses: false,
       Limit: CLASS_ITEM_PAGE_SIZE,
       Offset: offset,
-      // languageCode: languageCode || undefined,
+      languageCode,
     },
     { headers },
   );
@@ -150,7 +153,7 @@ export const fetchDictionaryClasses = createAsyncThunk(
   'bsdd/fetchDictionaryClasses',
   async (location: string, { getState, dispatch }) => {
     const state = getState() as RootState;
-    // const languageCode = useAppSelector(selectLanguage);
+    const languageCode = useAppSelector(selectLanguage);
 
     // If the classes for this location are already in the state, return them
     if (state.bsdd.dictionaryClasses[location]) {
@@ -174,7 +177,7 @@ export const fetchDictionaryClasses = createAsyncThunk(
       let offset = 0;
 
       // Fetch the initial data
-      const initialData = await fetchDictionaryClassData(api, location, offset);
+      const initialData = await fetchDictionaryClassData(api, location, offset, languageCode);
       const totalCount = initialData.classesTotalCount;
       if (totalCount === null || totalCount === undefined) {
         throw new Error('Total count is null or undefined');
@@ -185,7 +188,7 @@ export const fetchDictionaryClasses = createAsyncThunk(
       const fetchPromises = [];
       for (offset = CLASS_ITEM_PAGE_SIZE; offset < totalCount; offset += CLASS_ITEM_PAGE_SIZE) {
         fetchPromises.push(
-          fetchDictionaryClassData(api, location, offset).then((data) => {
+          fetchDictionaryClassData(api, location, offset, languageCode).then((data) => {
             classes.push(...(data.classes ?? []));
           }),
         );
@@ -242,7 +245,7 @@ const bsddSlice = createSlice({
  */
 export const fetchClass = createAsyncThunk('bsdd/fetchClass', async (uri: string, { getState, dispatch }) => {
   const state = getState() as RootState;
-  // const languageCode = useAppSelector(selectLanguage);
+  const languageCode = useAppSelector(selectLanguage);
   if (state.bsdd.classes[uri]) {
     return state.bsdd.classes[uri];
   }
@@ -258,7 +261,7 @@ export const fetchClass = createAsyncThunk('bsdd/fetchClass', async (uri: string
       // IncludeChildClassReferences: false,
       // IncludeClassRelations: true,
       // IncludeReverseRelations: true,
-      // languageCode: languageCode || undefined,
+      languageCode,
     },
     { headers },
   );

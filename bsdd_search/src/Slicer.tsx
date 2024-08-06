@@ -35,12 +35,12 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
     },
   });
 
-  // useEffect(() => {
-  //   if (options.length === 1 && value !== options[0]) {
-  //     setValue(options[0]);
-  //     setSearch(options[0].label);
-  //   }
-  // }, [options, setValue, value, setSearch]);
+  useEffect(() => {
+    if (options.length === 1 && value !== options[0]) {
+      setValue(options[0]);
+      setSearch(options[0].label);
+    }
+  }, [options, setValue, value, setSearch]);
 
   useEffect(() => {
     setSearch(value?.label || '');

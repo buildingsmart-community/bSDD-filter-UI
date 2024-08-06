@@ -172,7 +172,7 @@ async function fetchDictionaryClassData(
   api: BsddApi<any>,
   location: string,
   offset: number,
-  languageCode: string | null,
+  languageCode: string | undefined,
 ) {
   const response = await api.api.dictionaryV1ClassesList(
     {
@@ -181,7 +181,7 @@ async function fetchDictionaryClassData(
       ClassType: 'Class',
       Offset: offset,
       Limit: CLASS_ITEM_PAGE_SIZE,
-      languageCode: languageCode || undefined,
+      languageCode,
     },
     { headers },
   );
@@ -388,10 +388,12 @@ const bsddSlice = createSlice({
   },
 });
 
-export const fetchRelatedClasses = createAsyncThunk(
-  'bsdd/fetchRelatedClasses',
+// fetch classes without any relationships and properties
+export const fetchClasses = createAsyncThunk(
+  'bsdd/fetchClasses',
   async (relatedClassUris: string[], { getState, dispatch }) => {
     const state = getState() as RootState;
+    const languageCode = state.settings.language;
 
     if (!bsddApi) {
       throw new Error('BsddApi is not initialized');
@@ -407,7 +409,7 @@ export const fetchRelatedClasses = createAsyncThunk(
       if (bsddApi && bsddApi.api) {
         const response = await bsddApi.api.classV1List({
           Uri: relatedClassUri,
-          languageCode: state.settings.language || undefined,
+          languageCode,
         });
 
         if (!response.ok) {
@@ -464,6 +466,7 @@ export const {
   addDictionary,
 } = bsddSlice.actions;
 
+// fetch the main dictionary class including all relationships and properties
 export const fetchMainDictionaryClassification = createAsyncThunk(
   'bsdd/fetchMainDictionaryClassification',
   async (classificationUri: string, { getState, dispatch }) => {
@@ -525,7 +528,7 @@ export const updateMainDictionaryClassificationUri = createAsyncThunk(
             (relation) => relation.relatedClassUri,
           );
           relatedClassUris.push(mainDictionaryClassification.uri);
-          await dispatch(fetchRelatedClasses(relatedClassUris));
+          await dispatch(fetchClasses(relatedClassUris));
         }
       }
     }

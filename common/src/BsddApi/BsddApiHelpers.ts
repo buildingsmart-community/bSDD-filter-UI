@@ -21,7 +21,7 @@ export interface DictionaryClassificationMap {
 export async function getBsddClass(
   bsddEnvironmentUri: string,
   uri: string,
-  languageCode: string | null,
+  languageCode: string | undefined,
 ): Promise<ClassContractV1> {
   // reset cache if environment changes
   if (bsddApiBaseUri !== bsddEnvironmentUri) {
@@ -39,7 +39,7 @@ export async function getBsddClass(
       IncludeClassProperties: true,
       IncludeChildClassReferences: true,
       IncludeClassRelations: true,
-      languageCode: languageCode || undefined,
+      languageCode,
     },
     { headers },
   );

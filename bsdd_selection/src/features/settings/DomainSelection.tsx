@@ -224,7 +224,7 @@ function DomainSelection({
           label={t('selectMainDictionary')}
           value={localMainDictionaryValues.map((item) => item.value)}
           onChange={changeMainDictionaryOption}
-          placeholder="Select main dictionary"
+          placeholder={t('selectMainDictionaryPlaceholder')}
           data={bsddFilterDictionaryOptions}
           maxValues={1}
           searchable
@@ -237,7 +237,7 @@ function DomainSelection({
           label={t('selectIfcDictionary')}
           value={localIfcDictionaryValues.map((item) => item.value)}
           onChange={changeIfcDictionaryOption}
-          placeholder="Select filter dictionaries"
+          placeholder={t('selectIfcDictionaryPlaceholder')}
           data={bsddIfcDictionaryOptions}
           maxValues={1}
           searchable
@@ -250,7 +250,7 @@ function DomainSelection({
           label={t('selectFilterDictionaries')}
           value={localFilterDictionaryValues.map((item) => item.value)}
           onChange={changeFilterDictionaries}
-          placeholder="Select filter dictionaries"
+          placeholder={t('selectFilterDictionariesPlaceholder')}
           data={bsddFilterDictionaryOptions}
           searchable
           clearable

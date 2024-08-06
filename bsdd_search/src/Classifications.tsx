@@ -1,6 +1,7 @@
 import { ActionIcon, Center, Paper } from '@mantine/core';
 import { IconArrowDown } from '@tabler/icons-react';
 import { MouseEventHandler, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { IfcClassification, IfcClassificationReference } from '../../common/src/ifc/ifc';
@@ -28,6 +29,7 @@ interface Option {
 
 function Classifications({ height, handleMouseDown }: ClassificationsProps) {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const [optionsMap, setOptionsMap] = useState<Map<string, Option[]>>(new Map());
 
   const [selectedIfcClassificationReferences, setSelectedIfcClassificationReferences] = useState<
@@ -141,7 +143,7 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
   ]);
 
   useEffect(() => {
-    const fetchClasses = () => {
+    const fetchBsddClasses = () => {
       const newClassificationReferences = Array.from(selectedIfcClassificationReferences.entries())
         .map(([dictionaryUri, option]) => {
           if (!option || !option.value) return null;
@@ -167,7 +169,7 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
       }
     };
 
-    fetchClasses();
+    fetchBsddClasses();
   }, [dictionaries, dispatch, selectedIfcClassificationReferences]);
 
   return (
@@ -184,7 +186,7 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
             newValues.set(dictionaryUri, newValue);
             setSelectedIfcClassificationReferences(newValues);
           }}
-          placeholder="Search classes"
+          placeholder={t('searchClassesPlaceholder')}
           disabled={
             dictionaryUri === mainDictionaryClassification?.dictionaryUri || optionsMap.get(dictionaryUri)?.length === 1
           }
