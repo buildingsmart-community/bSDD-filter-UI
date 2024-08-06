@@ -22571,7 +22571,7 @@ const kS = async (n, e, t) => {
       n.mainDictionaryClassification = e.payload;
     },
     setMainDictionaryClassificationUri: (n, e) => {
-      e.payload !== n.mainDictionaryClassificationUri && (n.mainDictionaryClassificationUri = e.payload, e.payload === null && (n.mainDictionaryClassification = null));
+      n.mainDictionaryClassificationUri = e.payload;
     },
     setClasses: (n, e) => {
       n.classes = e.payload;
@@ -22639,9 +22639,9 @@ const kS = async (n, e, t) => {
 }, {})), {
   resetState: d0,
   setMainDictionaryClassification: MS,
-  setMainDictionaryClassificationUri: ga,
-  addDictionaryClasses: f0,
-  addDictionary: h0
+  setMainDictionaryClassificationUri: f0,
+  addDictionaryClasses: h0,
+  addDictionary: p0
 } = Or.actions, ef = Qt(
   "bsdd/fetchMainDictionaryClassification",
   async (n, { getState: e, dispatch: t }) => {
@@ -22667,8 +22667,7 @@ const kS = async (n, e, t) => {
       return console.error("Error fetching classification:", s), null;
     }
   }
-);
-Qt(
+), ga = Qt(
   "bsdd/updateMainDictionaryClassificationUri",
   async (n, { dispatch: e, getState: t }) => {
     const r = t();
@@ -22685,8 +22684,7 @@ Qt(
         }
       }
   }
-);
-const xS = Or.reducer, DS = {
+), xS = Or.reducer, DS = {
   type: void 0,
   name: void 0,
   description: void 0,
@@ -22759,7 +22757,7 @@ const tf = pi({
     const i = (a = o == null ? void 0 : o.referencedSource) == null ? void 0 : a.location;
     return i && (r[i] || (r[i] = []), r[i].push(o)), r;
   }, {})
-), { setIfcEntity: FS, setName: p0, setDescription: g0, setTag: m0, setPredefinedType: y0, setIsDefinedBy: po, setHasAssociations: US } = tf.actions, HS = tf.reducer;
+), { setIfcEntity: FS, setName: g0, setDescription: m0, setTag: y0, setPredefinedType: v0, setIsDefinedBy: po, setHasAssociations: US } = tf.actions, HS = tf.reducer;
 function BS({ callback: n, ifcEntity: e }) {
   const { t } = va();
   ke(Zd);
