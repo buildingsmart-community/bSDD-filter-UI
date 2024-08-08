@@ -16,10 +16,10 @@
     "url": "git+https://github.com/buildingsmart-community/bSDD-filter-UI.git"
   },
   "scripts": {
-    "dev": "vite --config vite.config.ts",
-    "build": "tsc && vite build --emptyOutDir --config vite.config.ts",
-    "preview": "vite preview --config vite.config.ts",
-    "test": "vitest --config vite.config.ts",
+    "dev": "vite",
+    "build": "tsc && vite build --emptyOutDir",
+    "preview": "vite preview",
+    "test": "vitest",
     "coverage": "vitest run --coverage",
     "generate-api": "swagger-typescript-api --path https://api.swaggerhub.com/apis/buildingSMART/Dictionaries/v1/swagger.json --output ./common/src/BsddApi/ --name BsddApiBase.ts --api-class-name BsddApiBase"
   },
@@ -77,7 +77,7 @@
     "@mantine/core": "^7.2.2",
     "@mantine/hooks": "^7.2.2",
     "@reduxjs/toolkit": "^2.1.0",
-    "@tabler/icons-react": "^2.41.0",
+    "@tabler/icons-react": "^3.5.0",
     "@vitejs/plugin-react-swc": "^3.6.0",
     "clsx": "^2.1.0",
     "i18next": "^23.7.6",

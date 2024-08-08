@@ -3,13 +3,9 @@ import '../common/i18n';
 
 import { MantineProvider } from '@mantine/core';
 
-import { BsddBridgeData } from '../common/IfcData/bsddBridgeData';
 import { theme } from '../common/theme/theme';
+import { BsddSelectionProps } from './BsddSelectionProps';
 import HomePage from './pages/Home.page';
-
-interface BsddSelectionProps {
-  initialData: BsddBridgeData | undefined;
-}
 
 function App({ initialData }: BsddSelectionProps) {
   return (

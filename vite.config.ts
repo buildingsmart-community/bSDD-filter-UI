@@ -27,6 +27,13 @@ export default defineConfig(({ mode }) => {
         name: 'bSDD',
         fileName: (format) => `[name]-${format}.js`,
       },
+      rollupOptions: {
+        input: {
+          bsdd_selection_app: 'src/mainBsddSelection.tsx',
+          bsdd_search_app: 'src/mainBsddSearch.tsx',
+          main_app: 'src/main.tsx',
+        },
+      },
     },
     plugins: [react()],
     preview: {

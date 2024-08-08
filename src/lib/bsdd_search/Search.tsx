@@ -1,13 +1,19 @@
-import { Autocomplete } from '@mantine/core';
+import { Autocomplete, CloseButton } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import { useAppSelector } from '../common/app/hooks';
+import { useAppDispatch, useAppSelector } from '../common/app/hooks';
 import { BsddApi } from '../common/BsddApi/BsddApi';
 import { RequestParams } from '../common/BsddApi/BsddApiBase';
-import { selectActiveDictionaries, selectMainDictionary } from '../common/slices/settingsSlice';
-
-const SEARCH_LIMIT = 25;
+import { headers } from '../common/BsddApi/BsddApiWrapper';
+import {
+  fetchClasses,
+  searchInDictionary,
+  selectSearchResult,
+  updateMainDictionaryClassificationUri,
+} from '../common/slices/bsddSlice';
+import { selectMainDictionary } from '../common/slices/settingsSlice';
 
 interface Option {
   label: string;
@@ -16,83 +22,30 @@ interface Option {
 
 interface Props {
   api: BsddApi<unknown>;
-  defaultValue: Option | undefined;
-  setActiveClassificationUri: (value: string) => void;
+  defaultSelection: Option | undefined;
 }
 
-const searchInSingleDictionary = (
-  api: BsddApi<unknown>,
-  activeDictionaries: Option[],
-  params: RequestParams,
-  inputValue: string,
-  callback: (options: any[]) => void,
-) => {
-  const queryParameters = {
-    SearchText: inputValue,
-    DictionaryUri: activeDictionaries[0].value,
-    Limit: SEARCH_LIMIT,
-    // LanguageCode: 'NL',
-    // RelatedIfcEntities: 'IfcWall',
-  };
-  api.api.searchInDictionaryV1List(queryParameters, params).then((response) => {
-    const searchResult = response.data;
-    if (searchResult.count) {
-      const dictionaryClasses = searchResult.dictionary?.classes;
-      if (dictionaryClasses) {
-        callback(
-          dictionaryClasses.map((c) => ({
-            value: c.uri,
-            label: c.name,
-          })),
-        );
-      }
-    }
-  });
-};
-
-const searchInMultipleDictionaries = (
-  api: BsddApi<unknown>,
-  activeDictionaries: Option[],
-  params: RequestParams,
-  inputValue: string,
-  callback: (options: any[]) => void,
-) => {
-  const queryParameters = {
-    SearchText: inputValue,
-    DictionaryUris: [activeDictionaries[0].value],
-    Limit: SEARCH_LIMIT,
-    // DictionaryUris: activeDomains.map((domain) => domain.value),
-    // LanguageCode: 'NL',
-    // RelatedIfcEntities: 'IfcWall',
-  };
-  api.api.classSearchV1List(queryParameters, params).then((response) => {
-    if (response.data.classes) {
-      callback(
-        response.data.classes.map((c) => ({
-          value: c.uri,
-          label: c.name,
-        })),
-      );
-    }
-  });
-};
-
-function Search({ api, defaultValue: defaultSelection, setActiveClassificationUri }: Props) {
-  const [searchOptions, setSearchOptions] = useState<Option[]>([]);
-  const [opened, setOpened] = useState<boolean>(false);
-  const [activeDictionaries] = useAppSelector(selectActiveDictionaries);
+function Search({ api, defaultSelection }: Props) {
+  const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const mainDictionary = useAppSelector(selectMainDictionary);
+  const searchResult = useAppSelector(selectSearchResult);
 
-  const inputRef = useRef(null);
+  const [searchOptions, setSearchOptions] = useState<Option[]>([]);
 
-  // Use a ref to store the initial value of defaultSelection
-  const initialDefaultSelection = useRef(defaultSelection);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  // Only use initialDefaultSelection.current to set the initial state
-  const [selected, setSelected] = useState<Option | undefined>(initialDefaultSelection.current);
-  const [searchValue, setSearchValue] = useState(initialDefaultSelection.current?.label || '');
+  const [selected, setSelected] = useState<Option | undefined>(undefined);
+  const [searchValue, setSearchValue] = useState('');
   const [debouncedSearchValue] = useDebouncedValue(searchValue, 300);
   const [userUpdated, setUserUpdated] = useState(false);
+
+  useEffect(() => {
+    if (defaultSelection) {
+      setSelected(defaultSelection);
+      setSearchValue(defaultSelection.label);
+    }
+  }, [defaultSelection]);
 
   const handleOnChange = useCallback((value: string) => {
     setSearchValue(value);
@@ -103,8 +56,7 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
       const selectedOption = searchOptions.find((option) => option.value === value);
       if (selectedOption) {
         setSelected(selectedOption);
-        setOpened(false);
-        setUserUpdated(true); // The user has manually updated the selection
+        setUserUpdated(true);
       }
     },
     [searchOptions],
@@ -120,88 +72,95 @@ function Search({ api, defaultValue: defaultSelection, setActiveClassificationUr
         }
       }
     },
-    [searchOptions, handleOptionSubmit, inputRef],
+    [searchOptions, handleOptionSubmit],
   );
-
-  // useEffect(() => {
-  //   setSelected(defaultSelection);
-  // }, [defaultSelection]);
 
   useEffect(() => {
     if (defaultSelection && !userUpdated) {
       setSearchValue(defaultSelection.label);
-      // setSearchOptions([defaultSelection]);
       setSelected(defaultSelection);
     }
-  }, [defaultSelection, selected, userUpdated]);
+  }, [defaultSelection, userUpdated]);
 
   useEffect(() => {
-    if (debouncedSearchValue !== '' && mainDictionary) {
-      const params: RequestParams = {
-        headers: { Accept: 'text/plain' },
-      };
-
+    if (mainDictionary) {
       const queryParameters = {
         SearchText: debouncedSearchValue,
         DictionaryUri: mainDictionary.ifcClassification.location,
-        Limit: SEARCH_LIMIT,
       };
 
-      api.api.searchInDictionaryV1List(queryParameters, params).then((response) => {
-        const searchResult = response.data;
-        if (searchResult.count) {
-          const dictionaryClasses = searchResult.dictionary?.classes;
-          if (dictionaryClasses) {
-            setSearchOptions(
-              dictionaryClasses
-                .filter((c) => c.uri && c.name)
-                .map(
-                  (c) =>
-                    ({
-                      value: c.uri,
-                      label: c.name,
-                    } as Option),
-                ),
-            );
-          }
-        }
-      });
+      dispatch(searchInDictionary(queryParameters));
     } else {
-      setSearchOptions([]);
+      dispatch(fetchClasses([]));
     }
-  }, [api.api, debouncedSearchValue, mainDictionary]);
+  }, [dispatch, debouncedSearchValue, mainDictionary]);
 
   useEffect(() => {
     if (inputRef.current) {
-      (inputRef.current as any).focus();
+      inputRef.current.focus();
     }
   }, []);
 
-  // useEffect(() => {
-  //   if (!defaultSelection) return;
-  //   setSearchValue(defaultSelection?.label || '');
-  //   setSelected(defaultSelection);
-  //   setOpened(false);
-  // }, [defaultSelection]);
+  useEffect(() => {
+    if (searchResult) {
+      if (searchResult.count) {
+        const dictionaryClasses = searchResult.dictionary?.classes;
+        if (dictionaryClasses) {
+          setSearchOptions(
+            dictionaryClasses
+              .filter((c) => c.uri && c.name)
+              .map(
+                (c) =>
+                  ({
+                    value: c.uri,
+                    label: c.name,
+                  } as Option),
+              ),
+          );
+        }
+      }
+    } else {
+      setSearchOptions([]);
+    }
+  }, [searchResult]);
 
   useEffect(() => {
     if (selected) {
-      setActiveClassificationUri(selected.value);
+      dispatch(updateMainDictionaryClassificationUri(selected.value));
+    } else {
+      dispatch(updateMainDictionaryClassificationUri(null));
     }
-  }, [selected, setActiveClassificationUri]);
+  }, [dispatch, selected]);
+
+  const handleClear = useCallback(() => {
+    handleOnChange('');
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+    setSelected(undefined);
+  }, [handleOnChange]);
 
   return (
     <Autocomplete
+      label={`${t('searchMainDictionaryLabel')} ${mainDictionary ? mainDictionary.ifcClassification.name : ''}`}
       data={searchOptions}
       placeholder="bSDD search..."
       value={searchValue}
       onChange={handleOnChange}
       onOptionSubmit={handleOptionSubmit}
       onKeyDown={handleKeyDown}
-      dropdownOpened={opened}
-      onDropdownOpen={() => setOpened(true)}
       ref={inputRef}
       style={{ width: '100%' }}
+      rightSection={
+        <CloseButton
+          size="sm"
+          onMouseDown={(event) => {
+            event.preventDefault();
+          }}
+          onClick={handleClear}
+          aria-label="Clear value"
+        />
+      }
     />
   );
 }

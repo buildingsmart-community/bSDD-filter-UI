@@ -5,16 +5,12 @@ import { PublicClientApplication } from '@azure/msal-browser';
 import { MantineProvider } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
-import { BsddBridgeData } from '../common/IfcData/bsddBridgeData';
 import { theme } from '../common/theme/theme';
 import { msalConfig } from './authConfig';
 import BsddSearch from './BsddSearch';
+import { BsddSearchProps } from './BsddSearchProps';
 
-interface BsddSearchProps {
-  initialData: BsddBridgeData | undefined;
-}
-
-function App({ initialData }: BsddSearchProps) {
+function App(bsddSearchProps: BsddSearchProps) {
   const [msalInstance, setMsalInstance] = useState<PublicClientApplication | null>(null);
 
   useEffect(() => {
@@ -28,7 +24,8 @@ function App({ initialData }: BsddSearchProps) {
 
   return (
     <MantineProvider theme={theme}>
-      <BsddSearch initialData={initialData} />
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+      <BsddSearch {...bsddSearchProps} />
     </MantineProvider>
   );
 }

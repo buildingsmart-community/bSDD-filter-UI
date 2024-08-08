@@ -1,17 +1,15 @@
 import { createAction, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../app/store';
-import { bsddEnvironments } from '../BsddApi/BsddApiEnvironments';
 import i18n from '../i18n';
 import { BsddDictionary, BsddSettings } from '../IfcData/bsddBridgeData';
 
 const initialState: BsddSettings = {
-  bsddApiEnvironment: null,
   mainDictionary: null,
   ifcDictionary: null,
   filterDictionaries: [],
   language: 'en-GB',
-  includeTestDictionaries: null,
+  includeTestDictionaries: undefined,
 };
 
 const handleSetLanguage = (state: BsddSettings, action: PayloadAction<string>) => {
@@ -25,20 +23,17 @@ const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    setBsddApiEnvironment: (state, { payload }: PayloadAction<string>) => {
-      state.bsddApiEnvironment = payload;
-    },
     setMainDictionary: (state, { payload }: PayloadAction<BsddDictionary>) => {
       state.mainDictionary = payload;
     },
     setIfcDictionary: (state, { payload }: PayloadAction<BsddDictionary>) => {
-      state.mainDictionary = payload;
+      state.ifcDictionary = payload;
     },
     setFilterDictionaries: (state, { payload }: PayloadAction<BsddDictionary[]>) => {
       state.filterDictionaries = payload;
     },
     setLanguage: handleSetLanguage,
-    setIncludeTestDictionaries: (state, action: PayloadAction<boolean>) => {
+    setIncludeTestDictionaries: (state, action: PayloadAction<boolean | undefined>) => {
       state.includeTestDictionaries = action.payload;
     },
   },
@@ -48,19 +43,9 @@ const settingsSlice = createSlice({
       (
         state,
         {
-          payload: {
-            bsddApiEnvironment,
-            mainDictionary,
-            ifcDictionary,
-            filterDictionaries,
-            language,
-            includeTestDictionaries,
-          },
+          payload: { mainDictionary, ifcDictionary, filterDictionaries, language, includeTestDictionaries },
         }: PayloadAction<BsddSettings>,
       ) => {
-        if (JSON.stringify(state.bsddApiEnvironment) !== JSON.stringify(bsddApiEnvironment)) {
-          state.bsddApiEnvironment = bsddApiEnvironment;
-        }
         if (JSON.stringify(state.mainDictionary) !== JSON.stringify(mainDictionary)) {
           state.mainDictionary = mainDictionary;
         }
@@ -82,17 +67,6 @@ const settingsSlice = createSlice({
 });
 
 /**
- * Selects the URI for the bSDD API environment from the Redux state.
- *
- * @param state - The Redux state.
- * @returns The URI for the selected bSDD API environment, or null if no environment is selected.
- */
-export const selectBsddApiEnvironmentUri = (state: RootState) => {
-  const environment = state.settings.bsddApiEnvironment;
-  return environment !== null ? bsddEnvironments[environment] : null;
-};
-
-/**
  * Selects the active dictionaries from the Redux state.
  *
  * @param state - The root state object.
@@ -109,23 +83,28 @@ export const selectActiveDictionaries = createSelector(
   },
 );
 
-export const selectActiveDictionaryLocations = createSelector(selectActiveDictionaries, (activeDictionaries) =>
-  activeDictionaries.map((dictionary) => dictionary.ifcClassification.location),
-);
+export const selectActiveDictionariesMap = createSelector(selectActiveDictionaries, (activeDictionaries) => {
+  const dictionaryMap = new Map(
+    activeDictionaries.map((dictionary) => [dictionary.ifcClassification.location, dictionary.ifcClassification]),
+  );
+  return dictionaryMap;
+});
 
-export const selectBsddApiEnvironment = (state: RootState) => state.settings.bsddApiEnvironment;
 export const selectMainDictionary = (state: RootState) => state.settings.mainDictionary;
 export const selectFilterDictionaries = (state: RootState) => state.settings.filterDictionaries;
 export const selectLanguage = (state: RootState) => state.settings.language;
 export const selectIncludeTestDictionaries = (state: RootState) => state.settings.includeTestDictionaries;
 export const selectSettings = (state: RootState) => state.settings;
 
-export const {
-  setBsddApiEnvironment,
-  setMainDictionary,
-  setFilterDictionaries,
-  setLanguage,
-  setIncludeTestDictionaries,
-} = settingsSlice.actions;
+export const selectActiveDictionaryUris = createSelector(selectActiveDictionaries, (activeDictionaries) =>
+  activeDictionaries.map((dictionary) => dictionary.ifcClassification.location),
+);
+
+export const selectMainDictionaryUri = createSelector(selectMainDictionary, (mainDictionary) =>
+  mainDictionary ? mainDictionary.ifcClassification.location : null,
+);
+
+export const { setMainDictionary, setFilterDictionaries, setLanguage, setIncludeTestDictionaries } =
+  settingsSlice.actions;
 
 export const settingsReducer = settingsSlice.reducer;

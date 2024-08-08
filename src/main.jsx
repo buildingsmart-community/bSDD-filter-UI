@@ -18,6 +18,11 @@ function Main() {
       console.log('bsddSearch called with:', ifcEntityJson);
       open();
     };
+    
+    window.bsddBridge.save = (ifcEntityJson) => {
+      console.log('save called with:', ifcEntityJson);
+      close();
+    };
 
     if (window.bsddBridge.loadSettings) {
       window.bsddBridge.loadSettings();

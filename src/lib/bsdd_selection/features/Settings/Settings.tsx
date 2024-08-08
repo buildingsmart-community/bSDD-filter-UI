@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../common/app/hooks';
 import { BsddSettings } from '../../../common/IfcData/bsddBridgeData';
 import { setSettings } from '../../../common/slices/settingsSlice';
+import AppInfo from './AppInfo';
 import DomainSelection from './DomainSelection';
 import DomainSort from './DomainSort';
 import GeneralSettings from './GeneralSettings';
@@ -26,8 +27,11 @@ function Settings() {
     if (!localSettings) return;
     dispatch(setSettings(localSettings));
 
-    // @ts-ignore
-    window?.bsddBridge?.saveSettings(JSON.stringify(localSettings));
+    if (typeof window?.bsddBridge?.saveSettings === 'function') {
+      window.bsddBridge.saveSettings(JSON.stringify(localSettings));
+    } else {
+      console.error('window.bsddBridge.saveSettings is not a function');
+    }
 
     setUnsavedChanges(false);
   };
@@ -40,6 +44,7 @@ function Settings() {
   return (
     <Tabs.Panel value="settings">
       <Accordion defaultValue={['2']} multiple>
+        <AppInfo id={0} />
         <GeneralSettings
           id={1}
           localSettings={localSettings}

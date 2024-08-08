@@ -1,17 +1,17 @@
 import { Checkbox } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 
-interface Props {
-  label: string;
+interface CheckProps {
+  label: string | null;
+  description: string | null;
   value: true | false | undefined;
   setValue: (value: true | false | undefined) => void;
   disabled: boolean;
 }
 
-function Check(props: Props) {
-  const { label, value, setValue, disabled } = props;
-  const [checked, setChecked] = useState<boolean>();
-  const [indeterminate, setIndeterminate] = useState<boolean | undefined>(undefined);
+function Check({ label, description, value, setValue, disabled }: CheckProps) {
+  const [checked, setChecked] = useState<boolean>(false);
+  const [indeterminate, setIndeterminate] = useState<boolean>(true);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.target.indeterminate = false;
@@ -34,6 +34,7 @@ function Check(props: Props) {
   return (
     <Checkbox
       label={label}
+      description={description}
       checked={checked}
       indeterminate={indeterminate}
       type="checkbox"

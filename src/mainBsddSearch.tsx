@@ -3,13 +3,20 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import BsddSearch from './lib/bsdd_search/main';
-import { mockData } from './mockData';
 
 function Main() {
+  const save = window.bsddBridge?.save;
+  const cancel = window.bsddBridge?.cancel;
+  const loadSettings = window.bsddBridge?.loadSettings;
+
+  if (!save || !cancel || !loadSettings) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <MantineProvider>
       <React.StrictMode>
-        <BsddSearch initialData={mockData} />
+        <BsddSearch />
       </React.StrictMode>
     </MantineProvider>
   );

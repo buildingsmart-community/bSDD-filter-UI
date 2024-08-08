@@ -1,17 +1,14 @@
 import { Provider } from 'react-redux';
 
 import { store } from '../common/app/store';
-import { BsddBridgeData } from '../common/IfcData/bsddBridgeData';
 import App from './App';
+import { BsddSearchProps } from './BsddSearchProps';
 
-interface BsddSearchProps {
-  initialData: BsddBridgeData | undefined;
-}
-
-function BsddSearch({ initialData }: BsddSearchProps) {
+function BsddSearch(bsddSearchProps: BsddSearchProps) {
   return (
     <Provider store={store}>
-      <App initialData={initialData} />
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+      <App {...bsddSearchProps} />
     </Provider>
   );
 }

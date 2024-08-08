@@ -1,3 +1,4 @@
+// store.ts
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 
 import { bsddReducer } from '../slices/bsddSlice';

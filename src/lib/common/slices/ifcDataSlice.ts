@@ -5,24 +5,26 @@ import { Association, IfcClassification, IfcClassificationReference, IfcEntity }
 import { patchIfcClassificationReference } from '../IfcData/ifcValidators';
 
 interface EntitiesState {
-  ifcEntities: IfcEntity[];
+  loadedIfcEntities: IfcEntity[];
 }
 
 const initialState: EntitiesState = {
-  ifcEntities: [],
+  loadedIfcEntities: [],
 };
 
 const ifcDataSlice = createSlice({
   name: 'ifcData',
   initialState,
   reducers: {
-    setIfcData: (state, action: PayloadAction<IfcEntity[]>) => {
-      state.ifcEntities = action.payload;
+    setLoadedIfcEntities: (state, action: PayloadAction<IfcEntity[]>) => {
+      state.loadedIfcEntities = action.payload;
     },
   },
 });
 
-export const { setIfcData } = ifcDataSlice.actions;
+export const { setLoadedIfcEntities } = ifcDataSlice.actions;
+
+export const selectIfcEntities = (state: RootState) => state.ifcData.loadedIfcEntities;
 
 /**
  * Converts an IFC entity name to its corresponding IfcTypeProduct name, even if it is an IfcProduct.
@@ -52,7 +54,8 @@ function ifcEntityAsInstance(ifcEntity: string) {
  * @returns The concatenated string of `type` and `predefinedType`.
  */
 function ifcEntityToBsddClass(type: string | undefined, predefinedType: string | undefined): string {
-  return (type ?? '') + (predefinedType ?? '');
+  const validPredefinedType = predefinedType !== 'NOTDEFINED' && predefinedType !== 'USERDEFINED' ? predefinedType : '';
+  return (type ?? '') + (validPredefinedType ?? '');
 }
 
 /**
@@ -127,14 +130,10 @@ export const setValidatedIfcData = createAsyncThunk(
       }),
     );
 
-    dispatch(setIfcData(validatedIfcEntities));
+    dispatch(setLoadedIfcEntities(validatedIfcEntities));
   },
 );
 
-export const selectIfcEntities = (state: RootState) => state.ifcData.ifcEntities;
-
-export const selectIfcEntity = createSelector(selectIfcEntities, (ifcEntities) =>
-  ifcEntities ? ifcEntities[0] : null,
-);
+export const selectLoadedIfcEntity = createSelector(selectIfcEntities, (ifcEntities) => ifcEntities[0]);
 
 export const ifcDataReducer = ifcDataSlice.reducer;

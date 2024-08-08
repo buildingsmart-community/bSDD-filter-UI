@@ -1,22 +1,35 @@
-import { Accordion, Button, Container, Group, TextInput, Title } from '@mantine/core';
+import { Accordion, Alert, Button, Container, Group, Space, TextInput, Title } from '@mantine/core';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { mockData } from '../../mockData';
+import { useApiFunctions } from '../common/apiFunctionsContext';
 import { useAppDispatch, useAppSelector } from '../common/app/hooks';
 import { BsddApi } from '../common/BsddApi/BsddApi';
-import { ClassContractV1, DictionaryContractV1 } from '../common/BsddApi/BsddApiBase';
 import { bsddEnvironments } from '../common/BsddApi/BsddApiEnvironments';
-import { defaultEnvironment } from '../common/env';
+import { defaultEnvironment, isProduction } from '../common/env';
 import { BsddBridgeData, BsddSettings } from '../common/IfcData/bsddBridgeData';
 import { IfcEntity, IfcPropertySet } from '../common/IfcData/ifc';
-import { setIfcData } from '../common/slices/ifcDataSlice';
 import {
-  selectActiveDictionaries,
-  selectBsddApiEnvironmentUri,
+  fetchAndStoreDictionaryClasses,
+  fetchDictionaries,
+  fetchMainDictionaryClassification,
+  selectMainDictionaryClassification,
+  selectMainDictionaryClassificationUri,
+  updateDictionaries,
+  updateMainDictionaryClassificationUri,
+} from '../common/slices/bsddSlice';
+import { selectLoadedIfcEntity, setLoadedIfcEntities } from '../common/slices/ifcDataSlice';
+import { selectIfcEntity, setIfcEntity } from '../common/slices/ifcEntitySlice';
+import {
+  selectActiveDictionaryUris,
+  selectIncludeTestDictionaries,
+  selectLanguage,
   selectMainDictionary,
   setSettings,
 } from '../common/slices/settingsSlice';
 import Apply from './Apply';
+import { BsddSearchProps } from './BsddSearchProps';
 import Classifications from './Classifications';
 import PropertySets from './PropertySets';
 import Search from './Search';
@@ -32,125 +45,103 @@ export interface BsddConfig {
   defaultSearch?: Option;
   ifcEntity?: IfcEntity;
 }
-interface BsddSearchProps {
-  initialData: BsddBridgeData | undefined;
-}
 
-const fetchDictionary = async (api: BsddApi<unknown>, uri: string) => {
-  try {
-    const response = await api.api.dictionaryV1List({
-      Uri: uri,
-      IncludeTestDictionaries: true,
-    });
-    const { dictionaries } = response.data;
-    if (dictionaries) {
-      return dictionaries.reduce((accumulator: any, domain: { uri: string }) => {
-        if (domain.uri) {
-          return { ...accumulator, [domain.uri]: domain };
-        }
-        return accumulator;
-      }, {});
-    }
-  } catch (error) {
-    console.error(`Failed to fetch dictionary ${uri}:`, error);
-  }
-  return {};
-};
+export type PropertySetMap = Record<string, IfcPropertySet>;
 
-function BsddSearch({ initialData }: BsddSearchProps) {
+const minHeight = 60.7969;
+let startY = 0;
+let startHeight = 0;
+
+function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const { bsddSearchLoadSettings, bsddSearchSave, bsddSearchCancel } = useApiFunctions();
 
-  const [activeClassificationUri, setActiveClassificationUri] = useState<string>();
   const [defaultSearch, setDefaultSearch] = useState<Option | undefined>();
-  const [ifcEntity, setIfcEntity] = useState<IfcEntity | undefined>();
   const [recursiveMode, setRecursiveMode] = useState<boolean>(false);
-  const [domains, setDomains] = useState<{ [id: string]: DictionaryContractV1 }>({});
-  const [classifications, setClassifications] = useState<ClassContractV1[]>([]);
-  const [propertySets, setPropertySets] = useState<{ [id: string]: IfcPropertySet }>({});
   const [api, setApi] = useState<BsddApi<unknown>>(new BsddApi(bsddEnvironments[defaultEnvironment]));
   const mainDictionary = useAppSelector(selectMainDictionary);
+  const languageCode = useAppSelector(selectLanguage);
+
   const [pendingSettings, setPendingSettings] = useState<BsddSettings | null>(null);
-  const bsddApiEnvironment = useAppSelector(selectBsddApiEnvironmentUri);
-  const activeDictionaries = useAppSelector(selectActiveDictionaries);
+  const includeTestDictionaries = useAppSelector(selectIncludeTestDictionaries);
+  const activeDictionaryLocations = useAppSelector(selectActiveDictionaryUris);
+  const ifcEntity = useAppSelector(selectIfcEntity);
+  const loadedIfcEntity = useAppSelector(selectLoadedIfcEntity);
+  const mainDictionaryClassificationUri = useAppSelector(selectMainDictionaryClassificationUri);
 
-  const callback = useCallback((ifcProduct: IfcEntity) => {
-    const ifcEntityJson = JSON.stringify(ifcProduct);
+  const [height, setHeight] = useState(minHeight); // Initial height
+  const [panelHeight, setPanelHeight] = useState('auto'); // Initial height of the Accordion Panel
 
-    // @ts-ignore
-    window?.bsddBridge?.save(ifcEntityJson).then((actualResult) => {
-      console.log('Sent to Revit', actualResult);
-    });
-  }, []);
+  const mainDictionaryClassification = useAppSelector(selectMainDictionaryClassification);
 
-  const cancel = useCallback(() => {
-    // @ts-ignore
-    window?.bsddBridge?.cancel();
-  }, []);
+  const callback = useCallback(
+    (ifcProduct: IfcEntity) => {
+      const ifcEntityJson = JSON.stringify(ifcProduct);
+
+      bsddSearchSave(ifcEntityJson).then((actualResult) => {
+        console.log('Sent iFC data back to host', actualResult);
+      });
+    },
+    [bsddSearchSave],
+  );
 
   const dispatchSettingsWhenLoaded = (settings: BsddSettings) => {
     setPendingSettings(settings);
   };
 
   useEffect(() => {
-    if (!initialData) return;
-
-    const { settings, ifcData } = initialData;
-    dispatch(setIfcData(ifcData));
-    dispatchSettingsWhenLoaded(settings);
-    if (!ifcData || ifcData.length === 0) return;
-
-    const newIfcEntity = ifcData[0];
-    setIfcEntity(newIfcEntity);
-  }, [dispatch, initialData]);
-
-  useEffect(() => {
     if (pendingSettings) {
+      console.log('settings updated: ', pendingSettings);
       dispatch(setSettings(pendingSettings));
       setPendingSettings(null);
     }
   }, [pendingSettings, dispatch]);
 
-  useEffect(() => {
-    if (!bsddApiEnvironment) return;
-    setApi(new BsddApi(bsddApiEnvironment));
-  }, [bsddApiEnvironment]);
+  // useEffect(() => {
+  //   const loadSettingsCallback = async () => {
+  //     try {
+  //       let settings;
+  //       let ifcData;
+
+  //       if (isProduction) {
+  //         console.log('Loading bSDD settings from host');
+  //         const loadedSettings = await bsddSearchLoadSettings();
+  //         ({ settings, ifcData } = JSON.parse(loadedSettings) as BsddBridgeData);
+  //       } else {
+  //         console.log('Using mock data');
+  //         ({ settings, ifcData } = mockData);
+  //       }
+
+  //       if (settings) {
+  //         dispatchSettingsWhenLoaded(settings);
+  //       }
+
+  //       if (ifcData) {
+  //         dispatch(setLoadedIfcEntities(ifcData));
+  //         if (ifcData.length > 0) {
+  //           dispatch(setIfcEntity(ifcData[0]));
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error('Failed to load settings:', error);
+  //     }
+  //   };
+
+  //   loadSettingsCallback();
+  // }, [dispatch, bsddSearchLoadSettings]);
 
   useEffect(() => {
-    const loadSettings = async () => {
-      try {
-        // @ts-ignore
-        if (window?.bsddBridge?.loadSettings) {
-          // @ts-ignore
-          const loadedSettings = await window.bsddBridge.loadSettings();
-          const { settings, ifcData } = JSON.parse(loadedSettings) as BsddBridgeData;
-          dispatch(setIfcData(ifcData));
-          dispatchSettingsWhenLoaded(settings);
-          if (!ifcData || ifcData.length === 0) return;
-
-          setIfcEntity(ifcData[0]);
-        } else {
-          console.error('window.bsddBridge.loadSettings is not defined');
-        }
-      } catch (error) {
-        console.error('Failed to load settings:', error);
-      }
-    };
-
-    loadSettings();
-  }, []);
-
-  useEffect(() => {
-    if (!ifcEntity || !mainDictionary) return;
+    if (!loadedIfcEntity || !mainDictionary) return;
     const newActiveClassificationUri = mainDictionary.ifcClassification.location;
 
-    ifcEntity.hasAssociations?.forEach((association) => {
+    loadedIfcEntity.hasAssociations?.forEach((association) => {
       if (association.type === 'IfcClassificationReference') {
         const classificationReference = association;
         if (classificationReference.referencedSource?.location) {
           if (classificationReference.referencedSource.location === newActiveClassificationUri) {
             if (classificationReference.location) {
-              setActiveClassificationUri(classificationReference.location);
+              dispatch(updateMainDictionaryClassificationUri(classificationReference.location));
             }
             setDefaultSearch({
               label: classificationReference.name,
@@ -160,23 +151,42 @@ function BsddSearch({ initialData }: BsddSearchProps) {
         }
       }
     });
-  }, [mainDictionary, ifcEntity]);
+  }, [mainDictionary, loadedIfcEntity, dispatch]);
 
   useEffect(() => {
-    const fetchAllDictionaries = async () => {
-      const allDomains = await Promise.all(
-        activeDictionaries.map((dictionary) => fetchDictionary(api, dictionary.ifcClassification.location)),
-      );
+    if (includeTestDictionaries !== null) {
+      dispatch(updateDictionaries(activeDictionaryLocations));
+      dispatch(fetchDictionaries(includeTestDictionaries));
+      dispatch(fetchAndStoreDictionaryClasses(activeDictionaryLocations));
+    }
+  }, [includeTestDictionaries, dispatch, activeDictionaryLocations, languageCode]);
 
-      const newDomains = allDomains.reduce((accumulator, dictionary) => {
-        return { ...accumulator, ...dictionary };
-      }, {});
+  useEffect(() => {
+    if (mainDictionaryClassificationUri) {
+      dispatch(fetchMainDictionaryClassification(mainDictionaryClassificationUri));
+    }
+  }, [mainDictionaryClassificationUri, dispatch]);
 
-      setDomains(newDomains);
-    };
+  useEffect(() => {
+    setPanelHeight(`${height * activeDictionaryLocations.length + 48}px`);
+  }, [activeDictionaryLocations.length, height]);
 
-    fetchAllDictionaries();
-  }, [api, activeDictionaries]);
+  const handleMouseMove = (e: { clientY: number }) => {
+    const newHeight = startHeight + (e.clientY - startY) / activeDictionaryLocations.length;
+    setHeight(newHeight > minHeight ? newHeight : minHeight);
+  };
+
+  const handleMouseUp = () => {
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleMouseDown = (e: { clientY: number }) => {
+    startY = e.clientY;
+    startHeight = height;
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
 
   return (
     <Container>
@@ -184,49 +194,48 @@ function BsddSearch({ initialData }: BsddSearchProps) {
       <TextInput type="hidden" name="name" id="name" value="" />
       <TextInput type="hidden" name="material" id="material" value="" />
       <Group mx="md" mt="lg" mb="sm">
-        <Search api={api} defaultValue={defaultSearch} setActiveClassificationUri={setActiveClassificationUri} />
+        <Search api={api} defaultSelection={defaultSearch} />
       </Group>
-
-      <Accordion defaultValue={['Classifications']} multiple>
-        <Accordion.Item key="Classifications" value="Classifications">
-          <Accordion.Control>
-            <Title order={5}>{t('classificationsLabel')}</Title>
-          </Accordion.Control>
-          <Accordion.Panel>
-            <Classifications
-              api={api}
-              activeClassificationUri={activeClassificationUri}
-              setClassifications={setClassifications}
-              domains={domains}
-            />
-          </Accordion.Panel>
-        </Accordion.Item>
-        <Accordion.Item key="Propertysets" value="Propertysets">
-          <Accordion.Control>
-            <Title order={5}>{t('propertysetsLabel')}</Title>
-          </Accordion.Control>
-          <Accordion.Panel>
-            <PropertySets
-              classifications={classifications}
-              propertySets={propertySets}
-              setPropertySets={setPropertySets}
-              recursiveMode={recursiveMode}
-            />
-          </Accordion.Panel>
-        </Accordion.Item>
-      </Accordion>
-      <Group my="sm" justify="center">
-        <Apply
-          callback={callback}
-          domains={domains}
-          classifications={classifications}
-          propertySetMap={propertySets}
-          ifcEntity={ifcEntity}
-        />
-        <Button fullWidth variant="light" color="gray" onClick={cancel}>
-          {t('cancel')}
-        </Button>
-      </Group>
+      {mainDictionaryClassificationUri ? (
+        <>
+          <Accordion defaultValue={['Classifications']} multiple>
+            <Accordion.Item key="Classifications" value="Classifications">
+              <Accordion.Control>
+                <Title order={5}>{t('classificationsLabel')}</Title>
+              </Accordion.Control>
+              <Accordion.Panel style={{ height: panelHeight }}>
+                <Classifications height={height} handleMouseDown={handleMouseDown} />
+              </Accordion.Panel>
+            </Accordion.Item>
+            <Accordion.Item key="Propertysets" value="Propertysets">
+              <Accordion.Control>
+                <Title order={5}>{t('propertysetsLabel')}</Title>
+              </Accordion.Control>
+              <Accordion.Panel>
+                <PropertySets
+                  mainDictionaryClassification={mainDictionaryClassification}
+                  recursiveMode={recursiveMode}
+                />
+              </Accordion.Panel>
+            </Accordion.Item>
+          </Accordion>
+          <Group my="sm" justify="center">
+            <Apply callback={callback} ifcEntity={ifcEntity} />
+            <Button fullWidth variant="light" color="gray" onClick={bsddSearchCancel}>
+              {t('cancel')}
+            </Button>
+          </Group>
+        </>
+      ) : (
+        <Alert mx="md" title={t('noClassificationSelected')} mt="xl">
+          {t('classSearchInstruction')}
+          <Space h="md" />
+          {t('needHelp')}{' '}
+          <a href="https://github.com/buildingsmart-community/bSDD-Revit-plugin/wiki" target="_blank" rel="noreferrer">
+            {t('checkDocumentation')}
+          </a>
+        </Alert>
+      )}
     </Container>
   );
 }

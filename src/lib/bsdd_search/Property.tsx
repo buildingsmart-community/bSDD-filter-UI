@@ -1,6 +1,7 @@
 import { Select, TextInput } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
+import { useAppDispatch, useAppSelector } from '../common/app/hooks';
 import {
   IfcProperty,
   IfcPropertyEnumeratedValue,
@@ -8,46 +9,70 @@ import {
   IfcPropertySingleValue,
   IfcValue,
 } from '../common/IfcData/ifc';
+import { selectIsDefinedBy, setIsDefinedBy } from '../common/slices/ifcEntitySlice';
 import Check from './Checkbox';
 
 interface PropertyProps {
   propertySet: IfcPropertySet;
   property: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue;
-  propertyIndex: number;
-  propertySets: { [id: string]: IfcPropertySet };
-  setPropertySets: (value: { [id: string]: IfcPropertySet }) => void;
+  property_natural_language_name: string;
 }
 
-function Property({ propertySet, property, propertyIndex, propertySets, setPropertySets }: PropertyProps) {
+const updatePropertySets = (
+  propertySets: IfcPropertySet[],
+  propertySetName: string,
+  propertyName: string,
+  newValue: any,
+): IfcPropertySet[] => {
+  return propertySets.map((propertySet) => {
+    if (propertySet.name === propertySetName) {
+      const updatedProperties = propertySet.hasProperties.map((property) => {
+        if (property.name === propertyName) {
+          return {
+            ...property,
+            ...newValue,
+          };
+        }
+        return property;
+      });
+
+      return {
+        ...propertySet,
+        hasProperties: updatedProperties,
+      };
+    }
+    return propertySet;
+  });
+};
+
+function Property({ propertySet, property, property_natural_language_name }: PropertyProps) {
+  const dispatch = useAppDispatch();
+  const propertySets = useAppSelector(selectIsDefinedBy);
   const [input, setInput] = useState<any>();
-  const ifcProperty: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue = property;
-  const ifcPropertySet: IfcPropertySet = propertySet;
-  const ifcPropertySets: { [id: string]: IfcPropertySet } = propertySets;
-  const setIfcPropertySets: (value: { [id: string]: IfcPropertySet }) => void = setPropertySets;
 
   useEffect(() => {
-    switch (ifcProperty.type) {
+    switch (property.type) {
       case 'IfcPropertySingleValue': {
-        if (ifcProperty.nominalValue.type === 'IfcBoolean') {
+        if (property.nominalValue.type === 'IfcBoolean') {
           setInput(
             <Check
-              label={ifcProperty.name}
+              label={property_natural_language_name}
+              description={property.name.length > 0 ? `(${property.name})` : ''}
               disabled={false}
-              value={ifcProperty.nominalValue.value}
+              value={property.nominalValue.value}
               setValue={(value: true | false | undefined) => {
-                const newPropertySets = { ...ifcPropertySets };
-                const newPropertySet = { ...ifcPropertySet };
-                if (newPropertySet.name) {
-                  const p: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue = { ...ifcProperty };
-                  p.nominalValue.value = value;
-                  const i: number = newPropertySet.hasProperties.findIndex(
-                    (element: any) => element.name === ifcProperty.name,
+                if (propertySets && propertySet.name) {
+                  const newValue = {
+                    nominalValue: { ...property.nominalValue, value },
+                  };
+
+                  const updatedPropertySets = updatePropertySets(
+                    propertySets,
+                    propertySet.name,
+                    property.name,
+                    newValue,
                   );
-                  if (i !== -1) {
-                    newPropertySet.hasProperties[i] = p;
-                    newPropertySets[newPropertySet.name] = newPropertySet;
-                    setIfcPropertySets(newPropertySets);
-                  }
+                  dispatch(setIsDefinedBy(Object.values(updatedPropertySets)));
                 }
               }}
             />,
@@ -55,23 +80,17 @@ function Property({ propertySet, property, propertyIndex, propertySets, setPrope
         } else {
           setInput(
             <TextInput
-              label={ifcProperty.name}
-              placeholder={ifcProperty.nominalValue.value}
-              value={ifcProperty.nominalValue.value}
+              label={property_natural_language_name}
+              description={property.name.length > 0 ? `(${property.name})` : ''}
+              placeholder={property.nominalValue.value}
+              value={property.nominalValue.value || ''}
               onChange={(e) => {
-                const newPropertySets = { ...ifcPropertySets };
-                const newPropertySet = { ...ifcPropertySet };
-                if (newPropertySet.name) {
-                  const p: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue = { ...ifcProperty };
-                  p.nominalValue.value = e.target.value;
-                  const i: number = newPropertySet.hasProperties.findIndex(
-                    (element: any) => element.name === ifcProperty.name,
-                  );
-                  if (i != -1) {
-                    newPropertySet.hasProperties[i] = p;
-                    newPropertySets[newPropertySet.name] = newPropertySet;
-                    setIfcPropertySets(newPropertySets);
-                  }
+                if (propertySets && propertySet.name) {
+                  const newValue = {
+                    nominalValue: { ...property.nominalValue, value: e.target.value },
+                  };
+                  const newPropertySets = updatePropertySets(propertySets, propertySet.name, property.name, newValue);
+                  dispatch(setIsDefinedBy(Object.values(newPropertySets)));
                 }
               }}
             />,
@@ -80,29 +99,23 @@ function Property({ propertySet, property, propertyIndex, propertySets, setPrope
         break;
       }
       case 'IfcPropertyEnumeratedValue': {
-        const val = ifcProperty.enumerationValues?.[0]?.value;
-        const enumerationValues = ifcProperty.enumerationReference?.enumerationValues || [];
+        const value = property.enumerationValues?.[0]?.value;
+        const enumerationValues = property.enumerationReference?.enumerationValues || [];
         setInput(
           <Select
-            label={ifcProperty.name}
-            value={val}
+            label={property_natural_language_name}
+            description={property.name.length > 0 ? `(${property.name})` : ''}
+            value={value}
+            disabled={property.enumerationReference?.enumerationValues?.length === 1}
             onChange={(e) => {
-              const foundValue = enumerationValues.find((element) => element.value === e);
-              const selectedValues: IfcValue[] = foundValue ? [foundValue] : [];
-              const newPropertySets = { ...ifcPropertySets };
-              const newPropertySet = { ...ifcPropertySet };
-              if (newPropertySet.name) {
-                const newProperty: IfcPropertyEnumeratedValue = { ...ifcProperty };
-                newProperty.enumerationValues = selectedValues;
-                const i: number = newPropertySet.hasProperties.findIndex(
-                  (prop: IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue) =>
-                    prop.name === ifcProperty.name,
-                );
-                if (i !== -1) {
-                  newPropertySet.hasProperties[i] = newProperty;
-                  newPropertySets[newPropertySet.name] = newPropertySet;
-                  setIfcPropertySets(newPropertySets);
-                }
+              if (propertySets && propertySet.name) {
+                const foundValue = enumerationValues.find((element) => element.value === e);
+                const newValue = {
+                  enumerationValues: foundValue ? [foundValue] : [],
+                };
+                const newPropertySets = updatePropertySets(propertySets, propertySet.name, property.name, newValue);
+
+                dispatch(setIsDefinedBy(Object.values(newPropertySets)));
               }
             }}
             data={enumerationValues.map((ifcValue: IfcValue) => ({
@@ -114,11 +127,11 @@ function Property({ propertySet, property, propertyIndex, propertySets, setPrope
         break;
       }
       default: {
-        setInput(<TextInput placeholder={ifcProperty.name} value="{ifcProperty.nominalValue}" />);
+        setInput(<TextInput placeholder={property.name} value="{ifcProperty.nominalValue}" />);
         break;
       }
     }
-  }, [ifcProperty, ifcPropertySet, setInput, ifcPropertySets, setIfcPropertySets]);
+  }, [property, propertySet, setInput, property_natural_language_name, dispatch, propertySets]);
 
   return input;
 }

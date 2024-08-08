@@ -1,6 +1,7 @@
-import { Select } from '@mantine/core';
+import { ComboboxItem, Select } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
+import { languages } from '../../../common/i18n';
 import { BsddSettings } from '../../../common/IfcData/bsddBridgeData';
 
 interface LanguageSelectProps {
@@ -9,13 +10,15 @@ interface LanguageSelectProps {
   setUnsavedChanges: (unsavedChanges: boolean) => void;
 }
 
+function getLanguageOptions(): ComboboxItem[] {
+  return Object.entries(languages).map(([key, value]) => ({
+    value: key,
+    label: value,
+  }));
+}
+
 function LanguageSelect({ settings, setSettings, setUnsavedChanges }: LanguageSelectProps) {
   const { t, i18n } = useTranslation();
-
-  const languages = [
-    { value: 'en-GB', label: 'English' },
-    { value: 'nl-NL', label: 'Nederlands' },
-  ];
 
   const changeLanguage = (language: string | null) => {
     if (!language || !settings) return;
@@ -27,7 +30,7 @@ function LanguageSelect({ settings, setSettings, setUnsavedChanges }: LanguageSe
   return (
     <Select
       label={t('language')}
-      data={languages}
+      data={getLanguageOptions()}
       value={i18n.language}
       onChange={changeLanguage}
       placeholder={t('selectLanguageInstruction')}

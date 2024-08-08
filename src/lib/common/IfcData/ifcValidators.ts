@@ -58,7 +58,7 @@ async function findMatchingDictionary(
  * @param {AppDispatch} dispatch - The dispatch function from Redux.
  * @returns {Promise<ClassListItemContractV1[] | null>} - The fetched classes or null if fetching fails.
  */
-const fetchClasses = async (
+const fetchBsddClasses = async (
   referencedSource: IfcClassificationReference['referencedSource'],
   state: RootState,
   dispatch: ThunkDispatch<unknown, unknown, UnknownAction>,
@@ -112,7 +112,7 @@ export const preprocessIfcClassificationReference = async (
   let dictionaryWithClasses: DictionaryClassesResponseContractV1 | null = null;
   const activeDictionaries = selectActiveDictionaries(state);
 
-  const classes = await fetchClasses(ifcReference.referencedSource, state, dispatch);
+  const classes = await fetchBsddClasses(ifcReference.referencedSource, state, dispatch);
   if (ifcReference.location) {
     validationState = 'valid';
   }
@@ -191,7 +191,7 @@ export async function patchIfcClassificationReference(
     );
   }
 
-  const classes = await fetchClasses(ifcClassificationReference.referencedSource, state, dispatch);
+  const classes = await fetchBsddClasses(ifcClassificationReference.referencedSource, state, dispatch);
   if (!classes) {
     return handleError('Failed to fetch classes for the referencedSource location', ifcClassificationReference);
   }

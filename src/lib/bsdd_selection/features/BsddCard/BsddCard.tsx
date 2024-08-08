@@ -5,6 +5,7 @@ import { IconPencil, IconPointer } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useApiFunctions } from '../../../common/apiFunctionsContext';
 import { useAppSelector } from '../../../common/app/hooks';
 import { IfcEntity } from '../../../common/IfcData/ifc';
 import { selectActiveDictionaries, selectMainDictionary } from '../../../common/slices/settingsSlice';
@@ -29,6 +30,8 @@ function BsddCard({ item: ifcEntity, index, setCardColor: setCategoryColor }: Bs
   const { t } = useTranslation();
   const activeDictionaries = useAppSelector(selectActiveDictionaries);
   const mainDictionary = useAppSelector(selectMainDictionary);
+  const { bsddSearchClick, bsddSelect } = useApiFunctions();
+
   const [cardColor, setCardColor] = useState<Color>('grey');
   const [activeClassificationStatuses, setActiveClassificationStatuses] = useState<ClassificationStatus[]>([]);
   const [activeClassificationColors, setActiveClassificationColors] = useState<Color[]>([]);
@@ -61,22 +64,6 @@ function BsddCard({ item: ifcEntity, index, setCardColor: setCategoryColor }: Bs
       activeDictionaries.map((dictionary) => getClassUriFromDictionary(ifcEntity, dictionary)),
     );
   }, [ifcEntity, activeDictionaries]);
-
-  function bsddSearchClick(ifcProduct: IfcEntity) {
-    console.log('Open bsddSearch', ifcProduct);
-
-    const ifcEntityJson = JSON.stringify(ifcProduct);
-
-    // @ts-ignore
-    window?.bsddBridge?.bsddSearch(ifcEntityJson);
-  }
-
-  function bsddSelect(ifcProduct: IfcEntity) {
-    const ifcEntityJson = JSON.stringify(ifcProduct);
-
-    // @ts-ignore
-    window?.bsddBridge?.bsddSelect(ifcEntityJson);
-  }
 
   return (
     <Group mt="xs" justify="space-between" className="flexGroup">

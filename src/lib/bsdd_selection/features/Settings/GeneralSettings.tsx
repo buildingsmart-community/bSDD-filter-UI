@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '../../../common/app/hooks';
 import { BsddSettings } from '../../../common/IfcData/bsddBridgeData';
-import { fetchDictionaries, FetchDictionaryParameters, updateBsddApi } from '../../../common/slices/bsddSlice';
-import { selectBsddApiEnvironmentUri, selectIncludeTestDictionaries } from '../../../common/slices/settingsSlice';
+import { fetchDictionaries } from '../../../common/slices/bsddSlice';
+import { selectIncludeTestDictionaries } from '../../../common/slices/settingsSlice';
 import LanguageSelect from './LanguageSelect';
 
 interface GeneralSettingsProps {
@@ -18,37 +18,22 @@ interface GeneralSettingsProps {
 function GeneralSettings({ id, localSettings, setLocalSettings, setUnsavedChanges }: GeneralSettingsProps) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const bsddApiEnvironmentUri = useAppSelector(selectBsddApiEnvironmentUri);
   const includeTestDictionaries = useAppSelector(selectIncludeTestDictionaries);
 
-  const prevFetchDictionariesParamsRef = useRef<FetchDictionaryParameters>();
-
-  useEffect(() => {
-    if (!bsddApiEnvironmentUri) return;
-    dispatch(updateBsddApi(bsddApiEnvironmentUri));
-  }, [dispatch, bsddApiEnvironmentUri]);
+  const prevIncludeTestDictionariesRef = useRef<boolean | null>(null);
 
   // Update dictionary selection list when parameters change
   useEffect(() => {
-    if (!bsddApiEnvironmentUri || includeTestDictionaries === null) return;
+    if (includeTestDictionaries === undefined) return;
 
-    const params = {
-      bsddApiEnvironment: bsddApiEnvironmentUri,
-      includeTestDictionaries,
-    };
-
-    if (
-      prevFetchDictionariesParamsRef.current &&
-      prevFetchDictionariesParamsRef.current.bsddApiEnvironment === params.bsddApiEnvironment &&
-      prevFetchDictionariesParamsRef.current.includeTestDictionaries === params.includeTestDictionaries
-    ) {
+    if (prevIncludeTestDictionariesRef.current === includeTestDictionaries) {
       return;
     }
 
-    dispatch(fetchDictionaries(params));
+    dispatch(fetchDictionaries(includeTestDictionaries));
 
-    prevFetchDictionariesParamsRef.current = params;
-  }, [dispatch, bsddApiEnvironmentUri, includeTestDictionaries]);
+    prevIncludeTestDictionariesRef.current = includeTestDictionaries;
+  }, [dispatch, includeTestDictionaries]);
 
   return (
     <Accordion.Item key={id} value={id.toString()}>
@@ -68,7 +53,7 @@ function GeneralSettings({ id, localSettings, setLocalSettings, setUnsavedChange
           }
           indeterminate={!localSettings || localSettings.includeTestDictionaries === null}
           type="checkbox"
-          onChange={(e) => {
+          onChange={(e: any) => {
             if (!localSettings) return;
             setLocalSettings({ ...localSettings, includeTestDictionaries: e.currentTarget.checked });
             setUnsavedChanges(true);

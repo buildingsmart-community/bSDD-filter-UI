@@ -1,8 +1,7 @@
 import { Accordion, Stack } from '@mantine/core';
-import { Children, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import { Children, useEffect, useState } from 'react';
 
-import { useAppSelector } from '../common/app/hooks';
+import { useAppDispatch, useAppSelector } from '../common/app/hooks';
 import { ClassContractV1, ClassPropertyContractV1 } from '../common/BsddApi/BsddApiBase';
 import {
   IfcEntity,
@@ -12,7 +11,11 @@ import {
   IfcPropertySingleValue,
   IfcValue,
 } from '../common/IfcData/ifc';
-import { selectIfcEntity } from '../common/slices/ifcDataSlice';
+import { selectPropertyNamesByLanguage } from '../common/slices/bsddSlice';
+import { selectLoadedIfcEntity } from '../common/slices/ifcDataSlice';
+import { selectIsDefinedBy, setIsDefinedBy } from '../common/slices/ifcEntitySlice';
+import { selectLanguage } from '../common/slices/settingsSlice';
+import type { PropertySetMap } from './BsddSearch';
 import Property from './Property';
 
 const valueTypeMapping: { [key: string]: string } = {
@@ -24,10 +27,8 @@ const valueTypeMapping: { [key: string]: string } = {
   Time: 'IfcDateTime',
 };
 
-interface Props {
-  classifications: ClassContractV1[];
-  propertySets: { [id: string]: IfcPropertySet };
-  setPropertySets: (value: { [id: string]: IfcPropertySet }) => void;
+interface PropertySetsProps {
+  mainDictionaryClassification: ClassContractV1 | null;
   recursiveMode: boolean;
 }
 
@@ -37,12 +38,18 @@ interface Props {
  * @param predefinedValue - The predefined value of the property.
  * @returns The IfcValue object containing the type and value.
  */
-function GetIfcPropertyValue(dataType: string | undefined | null, predefinedValue?: string | null): IfcValue {
+function GetIfcPropertyValue(dataType: string | undefined | null, predefinedValue?: string | boolean | null): IfcValue {
   const type = dataType ? valueTypeMapping[dataType] || 'default' : 'default';
 
   let value: any;
   if (dataType === 'Boolean' && typeof predefinedValue === 'string') {
-    value = predefinedValue.toUpperCase() === 'TRUE';
+    if (predefinedValue.toUpperCase() === 'TRUE') {
+      value = true;
+    } else if (predefinedValue.toUpperCase() === 'FALSE') {
+      value = false;
+    } else {
+      value = undefined;
+    }
   } else {
     value = predefinedValue;
   }
@@ -68,15 +75,23 @@ function getPropertyFromSet(
   propertySetName: string,
   name: string,
 ): IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue | undefined {
+  let property: IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue | undefined;
   if (ifcEntity && ifcEntity.isDefinedBy) {
-    const propertySet = ifcEntity.isDefinedBy.find((set: IfcPropertySet) => set.name === propertySetName);
+    let propertySet = ifcEntity.isDefinedBy.find((set: IfcPropertySet) => set.name === propertySetName);
     if (propertySet) {
-      return propertySet.hasProperties.find(
-        (prop: IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue) => prop.name === name,
-      );
+      property = propertySet.hasProperties.find((prop) => prop.name === name);
+    }
+    if (property) {
+      return property;
+    }
+
+    // Check the default propertyset if the property is not found in the specified propertyset
+    propertySet = ifcEntity.isDefinedBy.find((set: IfcPropertySet) => set.name === '');
+    if (propertySet) {
+      return propertySet.hasProperties.find((prop) => prop.name === name);
     }
   }
-  return undefined;
+  return property;
 }
 
 /**
@@ -94,13 +109,9 @@ function getNominalValueFromProperty(
   propertySetName: string,
   name: string,
 ): IfcValue {
-  if (!ifcEntity) return GetIfcPropertyValue(dataType);
-
-  const property = getPropertyFromSet(ifcEntity, propertySetName, name);
-  if (property && 'nominalValue' in property) {
-    return GetIfcPropertyValue(dataType, property.nominalValue.value);
-  }
-  return GetIfcPropertyValue(dataType);
+  const property = getPropertyFromSet(ifcEntity, propertySetName, name) as IfcPropertySingleValue;
+  const value: string | boolean | null = property?.nominalValue?.value ?? null;
+  return GetIfcPropertyValue(dataType, value);
 }
 
 /**
@@ -114,32 +125,35 @@ function getNominalValueFromProperty(
  * @returns An array of IfcValue objects representing the allowed enumeration values.
  */
 function getEnumerationValuesFromProperty(
-  ifcEntity: IfcEntity | null,
+  dataType: string | null | undefined,
+  ifcEntity: IfcEntity,
   propertySetName: string,
   name: string,
   allowedEnumerationValues: IfcValue[],
 ): IfcValue[] {
-  if (!ifcEntity) return [];
-
   const property = getPropertyFromSet(ifcEntity, propertySetName, name);
-  if (!property) return [];
 
-  if (property.type === 'IfcPropertyEnumeratedValue' && property.enumerationValues) {
-    return allowedEnumerationValues.filter((allowedValue) =>
-      property.enumerationValues?.some((value) => value.value === allowedValue.value),
-    );
-  }
+  if (property) {
+    // Also check dataType?
+    if (property.type === 'IfcPropertyEnumeratedValue') {
+      return allowedEnumerationValues.filter((allowedValue) =>
+        property.enumerationValues
+          ? property.enumerationValues.some((value) => value.value === allowedValue.value)
+          : false,
+      );
+    }
 
-  if ('nominalValue' in property && property.nominalValue) {
-    const foundValue = allowedEnumerationValues.find(
-      (allowedValue) => allowedValue.value === property.nominalValue.value,
-    );
-    return foundValue ? [foundValue] : [];
+    // Add IfcPropertySingleValue fallback for software that does not support IfcPropertyEnumeratedValue
+    if ('nominalValue' in property && property.nominalValue) {
+      const foundValue = allowedEnumerationValues.find(
+        (allowedValue) => allowedValue.value === property.nominalValue.value,
+      );
+      return foundValue ? [foundValue] : [];
+    }
   }
 
   return [];
 }
-
 /**
  * Creates an instance of IfcPropertyEnumeratedValue based on the selected bSDD class property and selected IfcEntity.
  *
@@ -153,7 +167,7 @@ function createIfcPropertyEnumeratedValue(
   classificationProperty: ClassPropertyContractV1,
   name: string,
   propertySetName: string,
-  ifcEntity: IfcEntity | null,
+  ifcEntity: IfcEntity,
 ): IfcPropertyEnumeratedValue {
   const allowedEnumerationValues: IfcValue[] =
     classificationProperty.allowedValues?.map((allowedValue) =>
@@ -164,9 +178,10 @@ function createIfcPropertyEnumeratedValue(
     name,
     enumerationReference: {
       type: 'IfcPropertyEnumeration',
-      name,
+      name, // TODO get the right property enum name
       enumerationValues: allowedEnumerationValues,
     },
+    enumerationValues: allowedEnumerationValues,
   };
 
   if (classificationProperty.propertyUri) {
@@ -175,7 +190,13 @@ function createIfcPropertyEnumeratedValue(
 
   const enumerationValues = classificationProperty.predefinedValue
     ? [GetIfcPropertyValue(classificationProperty.dataType, classificationProperty.predefinedValue)]
-    : getEnumerationValuesFromProperty(ifcEntity, propertySetName, name, allowedEnumerationValues);
+    : getEnumerationValuesFromProperty(
+        classificationProperty.dataType,
+        ifcEntity,
+        propertySetName,
+        name,
+        allowedEnumerationValues,
+      );
 
   if (enumerationValues.length > 0) {
     ifcProperty.enumerationValues = enumerationValues;
@@ -196,24 +217,21 @@ function createIfcPropertySingleValue(
   classificationProperty: ClassPropertyContractV1,
   name: string,
   propertySetName: string,
-  ifcEntity: IfcEntity | null,
+  ifcEntity: IfcEntity,
 ): IfcPropertySingleValue {
-  const { propertyUri, predefinedValue, dataType } = classificationProperty;
-  let nominalValue;
-
-  if (predefinedValue) {
-    nominalValue = GetIfcPropertyValue(dataType, predefinedValue);
-  } else if (ifcEntity) {
-    nominalValue = getNominalValueFromProperty(dataType, ifcEntity, propertySetName, name);
-  }
-
   const ifcProperty: IfcPropertySingleValue = {
     type: 'IfcPropertySingleValue',
     name,
-    specification: propertyUri || undefined,
-    nominalValue: nominalValue || undefined,
+    specification: classificationProperty.propertyUri || '',
   };
 
+  const nominalValue = classificationProperty.predefinedValue
+    ? GetIfcPropertyValue(classificationProperty.dataType, classificationProperty.predefinedValue)
+    : getNominalValueFromProperty(classificationProperty.dataType, ifcEntity, propertySetName, name);
+
+  if (nominalValue !== null) {
+    ifcProperty.nominalValue = nominalValue;
+  }
   return ifcProperty;
 }
 
@@ -227,34 +245,37 @@ function createIfcPropertySingleValue(
 function GetIfcProperty(
   classificationProperty: ClassPropertyContractV1,
   propertySetName: string,
-  ifcEntity: IfcEntity | null,
+  ifcEntity: IfcEntity,
 ): IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue {
   const { propertyCode } = classificationProperty;
   const name = propertyCode || 'unknown';
 
-  if (classificationProperty.allowedValues) {
-    return createIfcPropertyEnumeratedValue(classificationProperty, name, propertySetName, ifcEntity);
-  }
+  const property = classificationProperty.allowedValues
+    ? createIfcPropertyEnumeratedValue(classificationProperty, name, propertySetName, ifcEntity)
+    : createIfcPropertySingleValue(classificationProperty, name, propertySetName, ifcEntity);
 
-  return createIfcPropertySingleValue(classificationProperty, name, propertySetName, ifcEntity);
+  property.specification = classificationProperty.propertyUri || '';
+
+  return property;
 }
 
-function PropertySets(props: Props) {
-  const { t } = useTranslation();
-  const { classifications } = props;
-  const { propertySets } = props;
-  const { setPropertySets } = props;
-  const { recursiveMode } = props;
+function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertySetsProps) {
+  const dispatch = useAppDispatch();
 
-  const ifcEntity = useAppSelector(selectIfcEntity);
+  const loadedIfcEntity = useAppSelector(selectLoadedIfcEntity);
+  const propertySets = useAppSelector(selectIsDefinedBy);
+  const propertyNamesByLanguage = useAppSelector(selectPropertyNamesByLanguage);
+  const languageCode = useAppSelector(selectLanguage);
+  const [propertyNaturalLanguageNamesMap, setPropertyNaturalLanguageNamesMap] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    const newPropertySets: Record<string, IfcPropertySet> = {};
-    const propertyClassifications = recursiveMode ? classifications : classifications.slice(0, 1);
+    if (!mainDictionaryClassification) return;
+    const newPropertySets: PropertySetMap = {};
+    const propertyClassifications = [mainDictionaryClassification]; // recursiveMode ? classifications : classifications.slice(0, 1);
 
     propertyClassifications.forEach((classification) => {
       classification.classProperties?.forEach((classProperty: ClassPropertyContractV1) => {
-        if (!classProperty) return;
+        if (!classProperty || !classProperty.propertySet) return;
         const propertySetName = classProperty.propertySet || classification.name;
 
         if (!newPropertySets[propertySetName]) {
@@ -265,32 +286,65 @@ function PropertySets(props: Props) {
           };
         }
 
-        newPropertySets[propertySetName].hasProperties.push(GetIfcProperty(classProperty, propertySetName, ifcEntity));
+        newPropertySets[propertySetName].hasProperties.push(
+          GetIfcProperty(classProperty, propertySetName, loadedIfcEntity),
+        );
       });
     });
 
-    setPropertySets(newPropertySets);
-  }, [classifications, setPropertySets, recursiveMode, ifcEntity]);
+    dispatch(setIsDefinedBy(Object.values(newPropertySets)));
+  }, [dispatch, loadedIfcEntity, mainDictionaryClassification]);
+
+  useEffect(() => {
+    if (!mainDictionaryClassification) return;
+    const newPropertyNaturalLanguageNames: Record<string, string> = {};
+    const propertyClassifications = [mainDictionaryClassification]; // recursiveMode ? classifications : classifications.slice(0, 1);
+
+    propertyClassifications.forEach((classification) => {
+      classification.classProperties?.forEach((classProperty: ClassPropertyContractV1) => {
+        if (!classProperty) return;
+
+        if (classProperty.propertyUri) {
+          if (
+            languageCode &&
+            propertyNamesByLanguage &&
+            propertyNamesByLanguage[languageCode] &&
+            propertyNamesByLanguage[languageCode][classProperty.propertyUri]
+          ) {
+            newPropertyNaturalLanguageNames[classProperty.propertyUri] =
+              propertyNamesByLanguage[languageCode][classProperty.propertyUri] || '';
+          } else {
+            newPropertyNaturalLanguageNames[classProperty.propertyUri] = classProperty.name;
+          }
+        }
+      });
+    });
+
+    setPropertyNaturalLanguageNamesMap(newPropertyNaturalLanguageNames);
+  }, [mainDictionaryClassification, recursiveMode, loadedIfcEntity, propertyNamesByLanguage, languageCode]);
 
   return (
     <div>
       {Children.toArray(
-        Object.values(propertySets).map((propertySet, propertySetIndex) => (
+        propertySets?.map((propertySet) => (
           <Accordion>
-            <Accordion.Item key={propertySet.name} value={propertySet.name || propertySetIndex.toString()}>
+            <Accordion.Item key={propertySet.name} value={propertySet.name || 'Unknown'}>
               <Accordion.Control>{propertySet.name}</Accordion.Control>
               <Accordion.Panel>
                 <Stack>
                   {Children.toArray(
-                    propertySet.hasProperties.map((property, propertyIndex) => (
-                      <Property
-                        propertySet={propertySet}
-                        property={property}
-                        propertyIndex={propertyIndex}
-                        propertySets={propertySets}
-                        setPropertySets={setPropertySets}
-                      />
-                    )),
+                    propertySet.hasProperties.map((property) => {
+                      const specification = property.specification
+                        ? propertyNaturalLanguageNamesMap[property.specification]
+                        : '';
+                      return (
+                        <Property
+                          propertySet={propertySet}
+                          property={property}
+                          property_natural_language_name={specification}
+                        />
+                      );
+                    }),
                   )}
                 </Stack>
               </Accordion.Panel>

@@ -1,14 +1,10 @@
 import { Provider } from 'react-redux';
 
 import { store } from '../common/app/store';
-import { BsddBridgeData } from '../common/IfcData/bsddBridgeData';
 import App from './App';
+import { BsddSelectionProps } from './BsddSelectionProps';
 
-interface BsddSelectionProps {
-  initialData: BsddBridgeData | undefined;
-}
-
-function BsddSelection({ initialData }: BsddSelectionProps) {
+function BsddSelection({ initialData = undefined }: BsddSelectionProps) {
   return (
     <Provider store={store}>
       <App initialData={initialData} />

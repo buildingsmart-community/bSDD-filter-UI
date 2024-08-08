@@ -1,30 +1,31 @@
 import { Button } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 
+import { useAppSelector } from '../common/app/hooks';
 import { ClassContractV1, DictionaryContractV1 } from '../common/BsddApi/BsddApiBase';
 import { IfcClassification, IfcClassificationReference, IfcEntity, IfcPropertySet } from '../common/IfcData/ifc';
 import {
   convertBsddDictionaryToIfcClassification,
   getIfcClassAndPredefinedType,
 } from '../common/IfcData/ifcBsddConverters';
-
-type DictionaryMap = { [id: string]: DictionaryContractV1 };
-type PropertySetMap = { [id: string]: IfcPropertySet };
+import { selectBsddDictionaries } from '../common/slices/bsddSlice';
+import { selectHasAssociations, selectIsDefinedBy } from '../common/slices/ifcEntitySlice';
 
 interface ApplyProps {
   callback: (value: any) => void;
-  domains: DictionaryMap;
-  classifications: ClassContractV1[];
-  propertySetMap: PropertySetMap;
   ifcEntity: IfcEntity | undefined;
 }
 
-function Apply({ callback, domains, classifications, propertySetMap, ifcEntity }: ApplyProps) {
+function Apply({ callback, ifcEntity }: ApplyProps) {
   const { t } = useTranslation();
+  const dictionaries = useAppSelector(selectBsddDictionaries);
+  const isDefinedBy = useSelector(selectIsDefinedBy);
+  const hasAssociations = useSelector(selectHasAssociations);
 
   function getIfcClassification(domainNamespaceUri: string): IfcClassification | null {
-    if (domainNamespaceUri in domains) {
-      const dictionary: DictionaryContractV1 = domains[domainNamespaceUri];
+    if (domainNamespaceUri in dictionaries) {
+      const dictionary: DictionaryContractV1 = dictionaries[domainNamespaceUri];
       if (dictionary) {
         return convertBsddDictionaryToIfcClassification(dictionary);
       }
@@ -46,36 +47,41 @@ function Apply({ callback, domains, classifications, propertySetMap, ifcEntity }
     return ifc;
   }
 
-  function createIfcEntity(
-    ifcEntityInput: IfcEntity | undefined,
-    classificationsInput: ClassContractV1[],
-    propertySetsInput: PropertySetMap,
-  ): IfcEntity {
+  function createIfcEntity(ifcEntityInput: IfcEntity | undefined): IfcEntity {
     const baseIfc: IfcEntity = ifcEntityInput
-      ? { ...JSON.parse(JSON.stringify(ifcEntityInput)), hasAssociations: [] }
+      ? { ...JSON.parse(JSON.stringify(ifcEntityInput)) }
       : { hasAssociations: [], isDefinedBy: [] };
 
-    const updatedIfc = classificationsInput.reduce((ifc, classification) => {
-      if (classification?.dictionaryUri?.includes('https://identifier.buildingsmart.org/uri/buildingsmart/ifc/')) {
-        const { type, predefinedType } = getIfcClassAndPredefinedType(classification.code);
-        return { ...ifc, type, predefinedType };
-      }
-      const ifcClassificationReference = getIfcClassificationReference(classification);
-      if (ifcClassificationReference) {
-        return { ...ifc, hasAssociations: [...(ifc.hasAssociations || []), ifcClassificationReference] };
-      }
+    baseIfc.isDefinedBy = isDefinedBy?.filter((propertySet: IfcPropertySet) => propertySet.name !== 'Attributes');
 
-      return ifc;
-    }, baseIfc);
+    baseIfc.hasAssociations = [];
 
-    return {
-      ...updatedIfc,
-      isDefinedBy: Object.values(propertySetsInput).length ? Object.values(propertySetsInput) : [],
-    };
+    hasAssociations?.forEach((association) => {
+      if (
+        association.type === 'IfcClassificationReference' &&
+        association?.referencedSource?.location?.includes('https://identifier.buildingsmart.org/uri/buildingsmart/ifc/')
+      ) {
+        const { type, predefinedType } = getIfcClassAndPredefinedType(association.identification);
+        if (type) {
+          baseIfc.type = type;
+        }
+
+        if (predefinedType) {
+          baseIfc.predefinedType = predefinedType;
+        }
+        if (!baseIfc.predefinedType) {
+          baseIfc.predefinedType = 'NOTDEFINED';
+        }
+      } else {
+        baseIfc.hasAssociations?.push(association);
+      }
+    });
+
+    return baseIfc;
   }
 
   const handleOnChange = () => {
-    const newIfcEntity = createIfcEntity(ifcEntity, classifications, propertySetMap);
+    const newIfcEntity = createIfcEntity(ifcEntity);
     console.log(newIfcEntity);
     callback(newIfcEntity);
   };

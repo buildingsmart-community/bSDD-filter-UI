@@ -1,6 +1,33 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
+import arSA from './locales/ar-SA.json';
+import csCZ from './locales/cs-CZ.json';
+import daDK from './locales/da-DK.json';
+import deDE from './locales/de-DE.json';
+import enGB from './locales/en-GB.json';
+import esES from './locales/es-ES.json';
+import fiFI from './locales/fi-FI.json';
+import frFR from './locales/fr-FR.json';
+import hiIN from './locales/hi-IN.json';
+import hrHR from './locales/hr-HR.json';
+import isIS from './locales/is-IS.json';
+import itIT from './locales/it-IT.json';
+import jaJP from './locales/ja-JP.json';
+import koKR from './locales/ko-KR.json';
+import ltLT from './locales/lt-LT.json';
+import nlNL from './locales/nl-NL.json';
+import noNO from './locales/no-NO.json';
+import plPL from './locales/pl-PL.json';
+import ptBR from './locales/pt-BR.json';
+import ptPT from './locales/pt-PT.json';
+import roRO from './locales/ro-RO.json';
+import slSI from './locales/sl-SI.json';
+import srSP from './locales/sr-SP.json';
+import svSE from './locales/sv-SE.json';
+import trTR from './locales/tr-TR.json';
+import zhCN from './locales/zh-CN.json';
+
 // Possible dutch translations for bSDD "dictionary":
 // - domein / domeinen
 // - definitielijst (definitie)
@@ -18,72 +45,63 @@ import { initReactI18next } from 'react-i18next';
 // - object type / object types
 // - objecttype / objecttypes
 
+export const languages = {
+  'en-GB': 'English',
+  'nl-NL': 'Dutch (Nederlands)',
+  'ar-SA': 'Arabic (اَلْعَرَبِيَّةُ)',
+  'zh-CN': 'Chinese (中文)',
+  'hr-HR': 'Croatian (Hrvatski)',
+  'cs-CZ': 'Czech (Čeština)',
+  'da-DK': 'Danish (Dansk)',
+  'fi-FI': 'Finnish (Suomi)',
+  'fr-FR': 'French (Français)',
+  'de-DE': 'German (Deutsch)',
+  'hi-IN': 'Hindi (हिन्दी)',
+  'is-IS': 'Icelandic (Íslenska)',
+  'it-IT': 'Italian (Italiano)',
+  'ja-JP': 'Japanese (日本語)',
+  'ko-KR': 'Korean (한국어)',
+  'lt-LT': 'Lithuanian (Lietuviškai)',
+  'no-NO': 'Norwegian (Norsk)',
+  'pl-PL': 'Polish (Polski)',
+  'pt-PT': 'Portuguese (Português)',
+  'pt-BR': 'Portuguese, Brazilian',
+  'ro-RO': 'Romanian (Românește)',
+  'sr-SP': 'Serbian (Српски)',
+  'sl-SI': 'Slovenian (Slovenščina)',
+  'es-ES': 'Spanish (Español)',
+  'sv-SE': 'Swedish (Svenska)',
+  'tr-TR': 'Turkish (Türkçe)',
+};
+
 i18n.use(initReactI18next).init({
   resources: {
-    'en-GB': {
-      translation: {
-        apply: 'Assign',
-        cancel: 'Cancel',
-        noDescription: 'No description',
-        linkTabTitle: 'Link',
-        settingsTabTitle: 'Settings',
-        language: 'Language',
-        selectLanguageInstruction: 'Select language',
-        selectMainDictionary: 'Main dictionary',
-        selectFilterDictionaries: 'Selection filter dictionaries',
-        selectObjects: 'Select objects',
-        attachToType: 'Attach to type',
-        generalSettingsLabel: 'General settings',
-        dictionarySelectionLabel: 'Dictionary selection',
-        generalSettingsInstruction: 'Set the language and the bSDD environment.',
-        dictionarySelectionInstruction:
-          'Select the main dictionary and the filter dictionaries to use for the selection of objects. The main dictionary is used to select the objects. The filter dictionaries are used to filter the selection of objects.',
-        parameterMappingLabel: 'Parameter mapping',
-        parameterMappingInstruction:
-          'Define the Revit type parameter in which to store the selected classes for this dictionary.',
-        sortFilterDictionariesLabel: 'Sort filter dictionaries',
-        sortFilterDictionariesInstruction: 'The dictionaries will be shown in this order anywhere in the application.',
-        dictionaryValidationSummaryLabel: 'Validation per dictionary',
-        classificationsLabel: 'Classifications',
-        propertysetsLabel: 'Property sets',
-        ShowPreview: 'Show preview dictionaries',
-        entitySelectionInstruction: 'Select entities by using the dropdown at the top of the panel.',
-        needHelp: 'Need help?',
-        checkDocumentation: 'Check out our documentation',
-      },
-    },
-    'nl-NL': {
-      translation: {
-        apply: 'Toewijzen',
-        cancel: 'Annuleren',
-        noDescription: 'Geen beschrijving',
-        linkTabTitle: 'Koppelen',
-        settingsTabTitle: 'Instellingen',
-        language: 'Taal',
-        selectLanguageInstruction: 'Selecteer taal',
-        selectMainDictionary: 'bSDD domein',
-        selectFilterDictionaries: 'Selectie filter domeinen',
-        selectObjects: 'Selecteer objecten',
-        attachToType: 'Koppelen aan type',
-        generalSettingsLabel: 'Algemene instellingen',
-        generalSettingsInstruction: 'Stel de taal en de bSDD omgeving in.',
-        dictionarySelectionLabel: 'Domein selectie',
-        dictionarySelectionInstruction:
-          'Selecteer het hoofddomein en de filterdomeinen om te gebruiken voor de selectie van objecten. Het hoofddomein wordt gebruikt om de objecten te selecteren. De filterdomeinen worden gebruikt om de selectie van objecten te filteren.',
-        parameterMappingLabel: 'Parameter mapping',
-        parameterMappingInstruction:
-          'Definieer de Revit type parameter waarin de geselecteerde object typen voor dit domein moeten worden opgeslagen.',
-        sortFilterDictionariesLabel: 'Sorteer filter domeinen',
-        sortFilterDictionariesInstruction: 'De domeinen worden overal in de app in deze volgorde getoond.',
-        dictionaryValidationSummaryLabel: 'Validatie per domein',
-        classificationsLabel: 'Classificaties',
-        propertysetsLabel: 'Eigenschappen sets',
-        ShowPreview: 'Toon voorbeeld domeinen',
-        entitySelectionInstruction: 'Selecteer objecten in de dropdown bovenaan in het paneel.',
-        needHelp: 'Hulp nodig?',
-        checkDocumentation: 'Bekijk onze documentatie',
-      },
-    },
+    'en-GB': enGB,
+    'nl-NL': nlNL,
+    'ar-SA': arSA,
+    'zh-CN': zhCN,
+    'hr-HR': hrHR,
+    'cs-CZ': csCZ,
+    'da-DK': daDK,
+    'fi-FI': fiFI,
+    'fr-FR': frFR,
+    'de-DE': deDE,
+    'hi-IN': hiIN,
+    'is-IS': isIS,
+    'it-IT': itIT,
+    'ja-JP': jaJP,
+    'ko-KR': koKR,
+    'lt-LT': ltLT,
+    'no-NO': noNO,
+    'pl-PL': plPL,
+    'pt-PT': ptPT,
+    'pt-BR': ptBR,
+    'ro-RO': roRO,
+    'sr-SP': srSP,
+    'sl-SI': slSI,
+    'es-ES': esES,
+    'sv-SE': svSE,
+    'tr-TR': trTR,
   },
   lng: 'en-GB',
   fallbackLng: 'nl-NL',

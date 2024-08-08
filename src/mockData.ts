@@ -3,7 +3,6 @@ import { BsddBridgeData } from './lib/common/IfcData/bsddBridgeData';
 // eslint-disable-next-line import/prefer-default-export
 export const mockData: BsddBridgeData = {
   settings: {
-    bsddApiEnvironment: 'test',
     mainDictionary: {
       ifcClassification: {
         type: 'IfcClassification',
@@ -37,7 +36,7 @@ export const mockData: BsddBridgeData = {
       },
     ],
     language: 'en-GB',
-    includeTestDictionaries: false,
+    includeTestDictionaries: true,
   },
   ifcData: [
     {

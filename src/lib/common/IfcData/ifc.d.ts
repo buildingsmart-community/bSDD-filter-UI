@@ -5,6 +5,7 @@ export interface IfcJsonEntity {
 export interface IfcEntity extends IfcJsonEntity {
   name?: string; // IfcLabel
   description?: string; // IfcText
+  objectType?: string; // IfcLabel
   tag?: string; // IfcLabel
   predefinedType?: string; // Enumeration
   isDefinedBy?: IfcPropertySet[]; // (!) IfcRelDefines: RelatedObjects	 : 	SET [1:?] OF IfcObject;
