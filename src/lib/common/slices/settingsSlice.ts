@@ -1,8 +1,9 @@
-import { createAction, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../app/store';
 import i18n from '../i18n';
 import { BsddDictionary, BsddSettings } from '../IfcData/bsddBridgeData';
+import { validateIfcClassification } from '../IfcData/ifcValidators';
 
 const initialState: BsddSettings = {
   mainDictionary: null,
@@ -106,5 +107,25 @@ export const selectMainDictionaryUri = createSelector(selectMainDictionary, (mai
 
 export const { setMainDictionary, setFilterDictionaries, setLanguage, setIncludeTestDictionaries } =
   settingsSlice.actions;
+
+export const setSettingsWithValidation = createAsyncThunk(
+  'settings/setSettingsWithValidation',
+  async (settings: BsddSettings, { dispatch, getState }) => {
+    const state = getState() as RootState;
+    const validatedMainDictionary = validateIfcClassification(state, settings.mainDictionary);
+    console.log('validatedMainDictionary', validatedMainDictionary);
+    console.log('settings.mainDictionary', settings.mainDictionary);
+    const validatedFilterDictionaries = settings.filterDictionaries
+      .map((dictionary) => validateIfcClassification(state, dictionary))
+      .filter((dictionary): dictionary is BsddDictionary => dictionary !== null);
+
+    const updatedSettings = {
+      ...settings,
+      mainDictionary: validatedMainDictionary,
+      filterDictionaries: validatedFilterDictionaries,
+    };
+    dispatch(setSettings(updatedSettings));
+  },
+);
 
 export const settingsReducer = settingsSlice.reducer;

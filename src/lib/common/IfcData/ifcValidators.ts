@@ -3,7 +3,7 @@ import { ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
 import { ClassListItemContractV1, DictionaryClassesResponseContractV1 } from '../BsddApi/BsddApiBase';
 import { fetchDictionaryClasses, selectDictionary, selectDictionaryClasses } from '../slices/bsddSlice';
-import { selectActiveDictionaries } from '../slices/settingsSlice';
+// import { selectActiveDictionaries } from '../slices/settingsSlice';
 import { BsddDictionary } from './bsddBridgeData';
 import { IfcClassificationReference } from './ifc';
 import { convertBsddDictionaryToIfcClassification } from './ifcBsddConverters';
@@ -95,49 +95,49 @@ const findBsddClass = (
   return bsddClass;
 };
 
-/**
- * Preprocesses an IfcClassificationReference by validating, repairing, and extending it.
- * @param {IfcClassificationReference} ifcReference - The IfcClassificationReference to preprocess.
- * @param {AppDispatch} dispatch - The dispatch function from Redux.
- * @param {RootState} state - The current state of the Redux store.
- * @returns {Promise<{validationState: ValidationState, improvedReference: IfcClassificationReference}>} - The validation state and the possibly improved IfcClassificationReference.
- */
-export const preprocessIfcClassificationReference = async (
-  ifcReference: IfcClassificationReference,
-  dispatch: ThunkDispatch<unknown, unknown, UnknownAction>,
-  state: RootState,
-) => {
-  let improvedReference: IfcClassificationReference = ifcReference;
-  let validationState: ValidationState = 'invalid';
-  let dictionaryWithClasses: DictionaryClassesResponseContractV1 | null = null;
-  const activeDictionaries = selectActiveDictionaries(state);
+// /**
+//  * Preprocesses an IfcClassificationReference by validating, repairing, and extending it.
+//  * @param {IfcClassificationReference} ifcReference - The IfcClassificationReference to preprocess.
+//  * @param {AppDispatch} dispatch - The dispatch function from Redux.
+//  * @param {RootState} state - The current state of the Redux store.
+//  * @returns {Promise<{validationState: ValidationState, improvedReference: IfcClassificationReference}>} - The validation state and the possibly improved IfcClassificationReference.
+//  */
+// export const preprocessIfcClassificationReference = async (
+//   ifcReference: IfcClassificationReference,
+//   dispatch: ThunkDispatch<unknown, unknown, UnknownAction>,
+//   state: RootState,
+// ) => {
+//   let improvedReference: IfcClassificationReference = ifcReference;
+//   let validationState: ValidationState = 'invalid';
+//   let dictionaryWithClasses: DictionaryClassesResponseContractV1 | null = null;
+//   const activeDictionaries = selectActiveDictionaries(state);
 
-  const classes = await fetchBsddClasses(ifcReference.referencedSource, state, dispatch);
-  if (ifcReference.location) {
-    validationState = 'valid';
-  }
-  if (!ifcReference.location && ifcReference.identification && classes) {
-    const bsddClass = findBsddClass(classes, ifcReference);
-    if (bsddClass) {
-      validationState = 'fixed';
+//   const classes = await fetchBsddClasses(ifcReference.referencedSource, state, dispatch);
+//   if (ifcReference.location) {
+//     validationState = 'valid';
+//   }
+//   if (!ifcReference.location && ifcReference.identification && classes) {
+//     const bsddClass = findBsddClass(classes, ifcReference);
+//     if (bsddClass) {
+//       validationState = 'fixed';
 
-      // Create a new object from bsddClass that only includes properties that are not null
-      const nonNullBsddClass = Object.fromEntries(Object.entries(bsddClass).filter(([key, value]) => value !== null));
+//       // Create a new object from bsddClass that only includes properties that are not null
+//       const nonNullBsddClass = Object.fromEntries(Object.entries(bsddClass).filter(([key, value]) => value !== null));
 
-      improvedReference = { ...improvedReference, ...nonNullBsddClass };
+//       improvedReference = { ...improvedReference, ...nonNullBsddClass };
 
-      if (!dictionaryWithClasses) {
-        dictionaryWithClasses = await findMatchingDictionary(activeDictionaries, bsddClass, dispatch);
-      }
+//       if (!dictionaryWithClasses) {
+//         dictionaryWithClasses = await findMatchingDictionary(activeDictionaries, bsddClass, dispatch);
+//       }
 
-      if (dictionaryWithClasses) {
-        const referencedSource = convertBsddDictionaryToIfcClassification(dictionaryWithClasses);
-        improvedReference = { ...ifcReference, referencedSource };
-      }
-    }
-  }
-  return { validationState, improvedReference };
-};
+//       if (dictionaryWithClasses) {
+//         const referencedSource = convertBsddDictionaryToIfcClassification(dictionaryWithClasses);
+//         improvedReference = { ...ifcReference, referencedSource };
+//       }
+//     }
+//   }
+//   return { validationState, improvedReference };
+// };
 
 /**
  * Finds a matched class based on the given IfcClassificationReference.

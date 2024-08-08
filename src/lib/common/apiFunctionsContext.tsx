@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useContext } from 'react';
 
 interface ApiFunctionsContextType {
-  bsddSearchLoadSettings?: () => Promise<any>;
+  loadSettings?: () => Promise<any>;
   bsddSearchClick?: (ifcProduct: any) => void;
   bsddSelect?: (ifcProduct: any) => void;
   bsddSearchSave?: (ifcEntityJson: string) => Promise<string>;
@@ -29,7 +29,7 @@ export const useApiFunctions = (): Required<ApiFunctionsContextType> => {
     throw new Error('useApiFunctions must be used within an ApiFunctionsProvider');
   }
   return {
-    bsddSearchLoadSettings: context.bsddSearchLoadSettings ?? notImplemented('bsddSearchLoadSettings'),
+    loadSettings: context.loadSettings ?? notImplemented('bsddSearchLoadSettings'),
     bsddSearchClick: context.bsddSearchClick ?? notImplemented('bsddSearchClick'),
     bsddSelect: context.bsddSelect ?? notImplemented('bsddSelect'),
     bsddSearchSave: context.bsddSearchSave ?? notImplemented('bsddSearchSave'),

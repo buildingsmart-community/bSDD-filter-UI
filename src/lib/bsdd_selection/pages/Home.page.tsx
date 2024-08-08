@@ -1,69 +1,28 @@
 import { Container, Tabs } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useApiFunctions } from '../../common/apiFunctionsContext';
 import { useAppDispatch, useAppSelector } from '../../common/app/hooks';
-import { AppThunk } from '../../common/app/store';
-import { BsddBridgeData, BsddDictionary, BsddSettings } from '../../common/IfcData/bsddBridgeData';
 import { IfcEntity } from '../../common/IfcData/ifc';
-import { validateIfcClassification } from '../../common/IfcData/ifcValidators';
 import { selectBsddDictionariesLoaded } from '../../common/slices/bsddSlice';
 import { setValidatedIfcData } from '../../common/slices/ifcDataSlice';
-import { setIncludeTestDictionaries, setLanguage, setSettings } from '../../common/slices/settingsSlice';
 import { BsddSelectionProps } from '../BsddSelectionProps';
 import Selection from '../features/Selection/Selection';
 import Settings from '../features/Settings/Settings';
-
-const setSettingsWithValidation =
-  (settings: BsddSettings): AppThunk =>
-  async (dispatch, getState) => {
-    const state = getState();
-    const validatedMainDictionary = validateIfcClassification(state, settings.mainDictionary);
-    const validatedFilterDictionaries = settings.filterDictionaries
-      .map((dictionary) => validateIfcClassification(state, dictionary))
-      .filter((dictionary): dictionary is BsddDictionary => dictionary !== null);
-
-    const updatedSettings = {
-      ...settings,
-      mainDictionary: validatedMainDictionary,
-      filterDictionaries: validatedFilterDictionaries,
-    };
-    dispatch(setSettings(updatedSettings));
-  };
 
 function HomePage({ initialData }: BsddSelectionProps) {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const bsddDictionariesLoaded = useAppSelector(selectBsddDictionariesLoaded);
 
-  const { bsddSearchLoadSettings } = useApiFunctions();
-
-  const [pendingSettings, setPendingSettings] = useState<BsddSettings | null>(null);
   const [ifcData, setIfcData] = useState<IfcEntity[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
-  const [menuOpened, { toggle: toggleMenu }] = useDisclosure();
-
-  // Set basic settings to be able to load bSDD dictionaries
-  // when dictionary list is loaded, validate and set all settings
   useEffect(() => {
-    if (pendingSettings) {
-      if (bsddDictionariesLoaded) {
-        dispatch(setSettingsWithValidation(pendingSettings));
-        setPendingSettings(null);
-        setLoading(false);
-      } else {
-        if (pendingSettings?.includeTestDictionaries !== null) {
-          dispatch(setIncludeTestDictionaries(pendingSettings.includeTestDictionaries));
-        }
-        if (pendingSettings?.language) {
-          dispatch(setLanguage(pendingSettings.language));
-        }
-      }
+    if (bsddDictionariesLoaded) {
+      setLoading(false);
     }
-  }, [bsddDictionariesLoaded, pendingSettings, dispatch]);
+  }, [bsddDictionariesLoaded]);
 
   useEffect(() => {
     if (!loading && ifcData) {
@@ -81,27 +40,6 @@ function HomePage({ initialData }: BsddSelectionProps) {
       setIfcData(initialData.ifcData);
     }
   }, [initialData]);
-
-  // Load initial settings when present, otherwise try to load async from backend
-  useEffect(() => {
-    const loadSettingsCallback = async () => {
-      try {
-        const loadedSettings = await bsddSearchLoadSettings();
-        const { settings } = JSON.parse(loadedSettings) as BsddBridgeData;
-        console.log('initial loadSettings selection', settings);
-        setPendingSettings(settings);
-      } catch (error) {
-        console.error('Failed to load settings:', error);
-      }
-    };
-
-    if (!initialData) {
-      loadSettingsCallback();
-    } else {
-      console.log('initial loadSettings selection', initialData.settings);
-      setPendingSettings(initialData.settings);
-    }
-  }, [initialData, bsddSearchLoadSettings]);
 
   // Backend bridge API functions
 

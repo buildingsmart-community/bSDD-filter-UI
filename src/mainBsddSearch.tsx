@@ -1,24 +1,20 @@
 import { MantineProvider } from '@mantine/core';
-import React from 'react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux';
 
-import BsddSearch from './lib/bsdd_search/main';
+import BsddSearchLoader from './BsddSearchLoader';
+import { store } from './lib/common/app/store';
 
 function Main() {
-  const save = window.bsddBridge?.save;
-  const cancel = window.bsddBridge?.cancel;
-  const loadSettings = window.bsddBridge?.loadSettings;
-
-  if (!save || !cancel || !loadSettings) {
-    return <div>Loading...</div>;
-  }
-
   return (
-    <MantineProvider>
-      <React.StrictMode>
-        <BsddSearch />
-      </React.StrictMode>
-    </MantineProvider>
+    <Provider store={store}>
+      <MantineProvider>
+        <StrictMode>
+          <BsddSearchLoader />
+        </StrictMode>
+      </MantineProvider>
+    </Provider>
   );
 }
 

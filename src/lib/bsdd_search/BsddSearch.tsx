@@ -63,7 +63,6 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
   const mainDictionary = useAppSelector(selectMainDictionary);
   const languageCode = useAppSelector(selectLanguage);
 
-  const [pendingSettings, setPendingSettings] = useState<BsddSettings | null>(null);
   const includeTestDictionaries = useAppSelector(selectIncludeTestDictionaries);
   const activeDictionaryLocations = useAppSelector(selectActiveDictionaryUris);
   const ifcEntity = useAppSelector(selectIfcEntity);
@@ -85,51 +84,6 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
     },
     [bsddSearchSave],
   );
-
-  const dispatchSettingsWhenLoaded = (settings: BsddSettings) => {
-    setPendingSettings(settings);
-  };
-
-  useEffect(() => {
-    if (pendingSettings) {
-      console.log('settings updated: ', pendingSettings);
-      dispatch(setSettings(pendingSettings));
-      setPendingSettings(null);
-    }
-  }, [pendingSettings, dispatch]);
-
-  // useEffect(() => {
-  //   const loadSettingsCallback = async () => {
-  //     try {
-  //       let settings;
-  //       let ifcData;
-
-  //       if (isProduction) {
-  //         console.log('Loading bSDD settings from host');
-  //         const loadedSettings = await bsddSearchLoadSettings();
-  //         ({ settings, ifcData } = JSON.parse(loadedSettings) as BsddBridgeData);
-  //       } else {
-  //         console.log('Using mock data');
-  //         ({ settings, ifcData } = mockData);
-  //       }
-
-  //       if (settings) {
-  //         dispatchSettingsWhenLoaded(settings);
-  //       }
-
-  //       if (ifcData) {
-  //         dispatch(setLoadedIfcEntities(ifcData));
-  //         if (ifcData.length > 0) {
-  //           dispatch(setIfcEntity(ifcData[0]));
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.error('Failed to load settings:', error);
-  //     }
-  //   };
-
-  //   loadSettingsCallback();
-  // }, [dispatch, bsddSearchLoadSettings]);
 
   useEffect(() => {
     if (!loadedIfcEntity || !mainDictionary) return;
