@@ -8,6 +8,7 @@ import {
   IfcPropertySingleValue,
   IfcValue,
 } from '../../common/src/ifc/ifc';
+import { getInputDescription } from '../../common/src/tools/utils';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import Check from './Checkbox';
 import { selectIsDefinedBy, setIsDefinedBy } from './features/ifc/ifcEntitySlice';
@@ -57,7 +58,7 @@ function Property({ propertySet, property, property_natural_language_name }: Pro
           setInput(
             <Check
               label={property_natural_language_name}
-              description={property.name.length > 0 ? `(${property.name})` : ''}
+              description={getInputDescription(property_natural_language_name, property.name)}
               disabled={false}
               value={property.nominalValue.value}
               setValue={(value: true | false | undefined) => {
@@ -81,7 +82,7 @@ function Property({ propertySet, property, property_natural_language_name }: Pro
           setInput(
             <TextInput
               label={property_natural_language_name}
-              description={property.name.length > 0 ? `(${property.name})` : ''}
+              description={getInputDescription(property_natural_language_name, property.name)}
               placeholder={property.nominalValue.value}
               value={property.nominalValue.value || ''}
               onChange={(e) => {
@@ -104,7 +105,7 @@ function Property({ propertySet, property, property_natural_language_name }: Pro
         setInput(
           <Select
             label={property_natural_language_name}
-            description={property.name.length > 0 ? `(${property.name})` : ''}
+            description={getInputDescription(property_natural_language_name, property.name)}
             value={value}
             disabled={property.enumerationReference?.enumerationValues?.length === 1}
             onChange={(e) => {
