@@ -32,7 +32,7 @@ const settingsSlice = createSlice({
       state.mainDictionary = payload;
     },
     setIfcDictionary: (state, { payload }: PayloadAction<BsddDictionary>) => {
-      state.mainDictionary = payload;
+      state.ifcDictionary = payload;
     },
     setFilterDictionaries: (state, { payload }: PayloadAction<BsddDictionary[]>) => {
       state.filterDictionaries = payload;
