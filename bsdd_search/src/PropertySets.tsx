@@ -326,9 +326,13 @@ function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertyS
   return (
     <div>
       {Children.toArray(
-        propertySets?.map((propertySet) => (
-          <Accordion>
-            <Accordion.Item key={propertySet.name} value={propertySet.name || 'Unknown'}>
+        propertySets?.map((propertySet, index) => (
+          <Accordion variant="contained" radius="xs">
+            <Accordion.Item
+              key={propertySet.name || 'Unknown'}
+              value={propertySet.name || 'Unknown'}
+              style={index !== 0 ? { 'border-top-width': 0 } : {}}
+            >
               <Accordion.Control>{propertySet.name}</Accordion.Control>
               <Accordion.Panel>
                 <Stack>
