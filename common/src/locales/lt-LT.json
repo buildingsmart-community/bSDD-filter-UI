@@ -14,7 +14,10 @@
     "settingsTabTitle": "Nustatymai",
     "language": "Kalba",
     "searchMainDictionaryLabel": "Ieškoti klasės",
-    "searchClassesPlaceholder": "Ieškoti klasės",
+    "classifications": {
+      "searchClassesPlaceholder": "Ieškoti klasės",
+      "dragResize": "Tempkite, kad pakeistumėte dydį"
+    },
     "selectLanguageInstruction": "Pasirinkite kalbą",
     "selectMainDictionary": "Pagrindinis žodynas",
     "selectMainDictionaryPlaceholder": "Pasirinkite pagrindinį žodyną",

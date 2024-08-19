@@ -13,7 +13,10 @@
     "settingsTabTitle": "Ayarlar",
     "language": "Dil",
     "searchMainDictionaryLabel": "Bir sınıf ara",
-    "searchClassesPlaceholder": "Bir sınıf ara",
+    "classifications": {
+      "searchClassesPlaceholder": "Bir sınıf ara",
+      "dragResize": "Boyutlandırmak için sürükleyin"
+    },
     "selectLanguageInstruction": "Dili seçin",
     "selectMainDictionary": "Ana sözlük",
     "selectMainDictionaryPlaceholder": "Ana sözlük seçin",

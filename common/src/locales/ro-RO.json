@@ -14,7 +14,10 @@
     "settingsTabTitle": "Setări",
     "language": "Limbă",
     "searchMainDictionaryLabel": "Căutați o clasă",
-    "searchClassesPlaceholder": "Căutați o clasă",
+    "classifications": {
+      "searchClassesPlaceholder": "Căutați o clasă",
+      "dragResize": "Trageți pentru a redimensiona"
+    },
     "selectLanguageInstruction": "Selectați limba",
     "selectMainDictionary": "Dicționar principal",
     "selectMainDictionaryPlaceholder": "Selectați dicționarul principal",

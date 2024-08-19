@@ -14,7 +14,10 @@
     "settingsTabTitle": "सेटिंग्स",
     "language": "भाषा",
     "searchMainDictionaryLabel": "एक वर्ग खोजें",
-    "searchClassesPlaceholder": "वर्ग खोजें",
+    "classifications": {
+      "searchClassesPlaceholder": "वर्ग खोजें",
+      "dragResize": "रेसाइज करने के लिए खींचें"
+    },
     "selectLanguageInstruction": "भाषा चुनें",
     "selectMainDictionary": "मुख्य शब्दकोश",
     "selectMainDictionaryPlaceholder": "मुख्य शब्दकोश चुनें",

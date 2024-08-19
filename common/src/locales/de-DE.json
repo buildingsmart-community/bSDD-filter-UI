@@ -14,7 +14,10 @@
       "settingsTabTitle": "Einstellungen",
       "language": "Sprache",
       "searchMainDictionaryLabel": "Suche eine Klasse",
-      "searchClassesPlaceholder": "Suche eine Klasse",
+      "classifications": {
+        "searchClassesPlaceholder": "Suche eine Klasse",
+        "dragResize": "Zum Ändern der Größe ziehen"
+      },
       "selectLanguageInstruction": "Sprache auswählen",
       "selectMainDictionary": "Hauptwörterbuch",
       "selectMainDictionaryPlaceholder": "Hauptwörterbuch auswählen",

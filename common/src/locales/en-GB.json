@@ -14,7 +14,10 @@
     "settingsTabTitle": "Settings",
     "language": "Language",
     "searchMainDictionaryLabel": "Search a class",
-    "searchClassesPlaceholder": "Search classes",
+    "classifications": {
+      "searchClassesPlaceholder": "Search classes",
+      "dragResize": "Drag to resize"
+    },
     "selectLanguageInstruction": "Select language",
     "selectMainDictionary": "Main dictionary",
     "selectMainDictionaryPlaceholder": "Select main dictionary",

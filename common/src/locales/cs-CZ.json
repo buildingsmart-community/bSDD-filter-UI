@@ -14,7 +14,10 @@
     "settingsTabTitle": "Nastavení",
     "language": "Jazyk",
     "searchMainDictionaryLabel": "Vyhledat třídu",
-    "searchClassesPlaceholder": "Vyhledat třídu",
+    "classifications": {
+      "searchClassesPlaceholder": "Vyhledat třídu",
+      "dragResize": "Přetáhněte pro změnu velikosti"
+    },
     "selectLanguageInstruction": "Vyberte jazyk",
     "selectMainDictionary": "Hlavní slovník",
     "selectMainDictionaryPlaceholder": "Vyberte hlavní slovník",

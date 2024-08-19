@@ -14,7 +14,10 @@
     "settingsTabTitle": "Paramètres",
     "language": "Langue",
     "searchMainDictionaryLabel": "Rechercher une classe",
-    "searchClassesPlaceholder": "Rechercher une classe",
+    "classifications": {
+      "searchClassesPlaceholder": "Rechercher une classe",
+      "dragResize": "Faites glisser pour redimensionner"
+    },
     "selectLanguageInstruction": "Sélectionnez la langue",
     "selectMainDictionary": "Dictionnaire principal",
     "selectMainDictionaryPlaceholder": "Sélectionner le dictionnaire principal",

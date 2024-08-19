@@ -14,7 +14,10 @@
     "settingsTabTitle": "الإعدادات",
     "language": "اللغة",
     "searchMainDictionaryLabel": "ابحث عن فئة",
-    "searchClassesPlaceholder": "ابحث عن فئة",
+    "classifications": {
+      "searchClassesPlaceholder": "ابحث عن فئة",
+      "dragResize": "اسحب لتغيير الحجم"
+    },
     "selectLanguageInstruction": "اختر اللغة",
     "selectMainDictionary": "القاموس الرئيسي",
     "selectMainDictionaryPlaceholder": "حدد القاموس الرئيسي",

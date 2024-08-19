@@ -1,5 +1,5 @@
-import { ActionIcon, Center, Paper } from '@mantine/core';
-import { IconArrowDown } from '@tabler/icons-react';
+import { ActionIcon, Box, Button, Center, Paper, Tooltip } from '@mantine/core';
+import { IconArrowDown, IconGripHorizontal, IconGripVertical } from '@tabler/icons-react';
 import { MouseEventHandler, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -186,17 +186,19 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
             newValues.set(dictionaryUri, newValue);
             setSelectedIfcClassificationReferences(newValues);
           }}
-          placeholder={t('searchClassesPlaceholder')}
+          placeholder={t('classifications.searchClassesPlaceholder')}
           disabled={
             dictionaryUri === mainDictionaryClassification?.dictionaryUri || optionsMap.get(dictionaryUri)?.length === 1
           }
         />
       ))}
-      <Center onMouseDown={handleMouseDown} style={{ marginTop: '4px' }}>
-        <ActionIcon m="xxs" variant="outline" size="lg" radius="xl" aria-label="Settings">
-          <IconArrowDown />
-        </ActionIcon>
-      </Center>
+      <Box onMouseDown={handleMouseDown} style={{ marginTop: '4px' }}>
+        <Tooltip label={t('classifications.dragResize')} withArrow>
+          <Button fullWidth variant="subtle" size="sm" color="gray" aria-label={t('classifications.dragResize')}>
+            <IconGripHorizontal />
+          </Button>
+        </Tooltip>
+      </Box>
     </Paper>
   );
 }

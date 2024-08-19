@@ -14,7 +14,10 @@
     "settingsTabTitle": "Innstillinger",
     "language": "Språk",
     "searchMainDictionaryLabel": "Søk etter klasse",
-    "searchClassesPlaceholder": "Søk etter klasse",
+    "classifications": {
+      "searchClassesPlaceholder": "Søk etter klasse",
+      "dragResize": "Dra for å endre størrelse"
+    },
     "selectLanguageInstruction": "Velg språk",
     "selectMainDictionary": "Hovedordbok",
     "selectMainDictionaryPlaceholder": "Velg hovedordbok",

@@ -14,7 +14,10 @@
     "settingsTabTitle": "Instellingen",
     "language": "Taal",
     "searchMainDictionaryLabel": "Zoek een classificatie in",
-    "searchClassesPlaceholder": "Zoek een classificatie",
+    "classifications": {
+      "searchClassesPlaceholder": "Zoek een classificatie",
+      "dragResize": "Sleep om hoogte aan te passen"
+    },
     "selectLanguageInstruction": "Selecteer taal",
     "selectMainDictionary": "bSDD domein",
     "selectMainDictionaryPlaceholder": "Selecteer bSDD domein",

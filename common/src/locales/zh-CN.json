@@ -13,7 +13,10 @@
     "settingsTabTitle": "设置",
     "language": "语言",
     "searchMainDictionaryLabel": "搜索分类",
-    "searchClassesPlaceholder": "搜索分类",
+    "classifications": {
+      "searchClassesPlaceholder": "搜索分类",
+      "dragResize": "拖动调整大小"
+    },
     "selectLanguageInstruction": "选择语言",
     "selectMainDictionary": "主词典",
     "selectMainDictionaryPlaceholder": "选择主词典",

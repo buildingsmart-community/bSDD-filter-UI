@@ -14,7 +14,10 @@
     "settingsTabTitle": "Asetukset",
     "language": "Kieli",
     "searchMainDictionaryLabel": "Hae luokkaa",
-    "searchClassesPlaceholder": "Hae luokkaa",
+    "classifications": {
+      "searchClassesPlaceholder": "Hae luokkaa",
+      "dragResize": "Raahaa muuttaaksesi kokoa"
+    },
     "selectLanguageInstruction": "Valitse kieli",
     "selectMainDictionary": "Pääsanakirja",
     "selectMainDictionaryPlaceholder": "Valitse pääsanakirja",

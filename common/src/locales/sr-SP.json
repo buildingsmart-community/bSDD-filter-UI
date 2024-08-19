@@ -14,7 +14,10 @@
     "settingsTabTitle": "Podešavanja",
     "language": "Jezik",
     "searchMainDictionaryLabel": "Pretraži klasu",
-    "searchClassesPlaceholder": "Pretraži klasu",
+    "classifications": {
+      "searchClassesPlaceholder": "Pretraži klasu",
+      "dragResize": "Povuci za promenu veličine"
+    },
     "selectLanguageInstruction": "Izaberite jezik",
     "selectMainDictionary": "Glavni rečnik",
     "selectMainDictionaryPlaceholder": "Izaberite glavni rečnik",

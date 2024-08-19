@@ -14,7 +14,10 @@
     "settingsTabTitle": "Nastavitve",
     "language": "Jezik",
     "searchMainDictionaryLabel": "Išči razred",
-    "searchClassesPlaceholder": "Išči razred",
+    "classifications": {
+      "searchClassesPlaceholder": "Išči razred",
+      "dragResize": "Povlecite za spremembo velikosti"
+    },
     "selectLanguageInstruction": "Izberite jezik",
     "selectMainDictionary": "Glavni slovar",
     "selectMainDictionaryPlaceholder": "Izberite glavni slovar",
