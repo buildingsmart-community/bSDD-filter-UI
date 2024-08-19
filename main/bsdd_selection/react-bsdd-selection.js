@@ -2058,13 +2058,21 @@ const ob = {
   apply: "تطبيق",
   save: "حفظ",
   cancel: "إلغاء",
+  checkbox: {
+    true: "نعم",
+    false: "لا",
+    indeterminate: "غير محدد"
+  },
   classSearchInstruction: "حدد تصنيفًا في مربع البحث أعلاه.",
   noDescription: "لا يوجد وصف",
   linkTabTitle: "رابط",
   settingsTabTitle: "الإعدادات",
   language: "اللغة",
   searchMainDictionaryLabel: "ابحث عن فئة",
-  searchClassesPlaceholder: "ابحث عن فئة",
+  classifications: {
+    searchClassesPlaceholder: "ابحث عن فئة",
+    dragResize: "اسحب لتغيير الحجم"
+  },
   selectLanguageInstruction: "اختر اللغة",
   selectMainDictionary: "القاموس الرئيسي",
   selectMainDictionaryPlaceholder: "حدد القاموس الرئيسي",
@@ -2098,13 +2106,21 @@ const ob = {
   apply: "Použít",
   save: "Uložit",
   cancel: "Zrušit",
+  checkbox: {
+    true: "Ano",
+    false: "Ne",
+    indeterminate: "Nespecifikováno"
+  },
   classSearchInstruction: "Vyberte klasifikaci v horním vyhledávacím poli.",
   noDescription: "Žádný popis",
   linkTabTitle: "Odkaz",
   settingsTabTitle: "Nastavení",
   language: "Jazyk",
   searchMainDictionaryLabel: "Vyhledat třídu",
-  searchClassesPlaceholder: "Vyhledat třídu",
+  classifications: {
+    searchClassesPlaceholder: "Vyhledat třídu",
+    dragResize: "Přetáhněte pro změnu velikosti"
+  },
   selectLanguageInstruction: "Vyberte jazyk",
   selectMainDictionary: "Hlavní slovník",
   selectMainDictionaryPlaceholder: "Vyberte hlavní slovník",
@@ -2138,13 +2154,21 @@ const ob = {
   apply: "Anvend",
   save: "Gem",
   cancel: "Annuller",
+  checkbox: {
+    true: "Ja",
+    false: "Nej",
+    indeterminate: "Ikke afgjort"
+  },
   classSearchInstruction: "Vælg en klassifikation i søgefeltet ovenfor.",
   noDescription: "Ingen beskrivelse",
   linkTabTitle: "Link",
   settingsTabTitle: "Indstillinger",
   language: "Sprog",
   searchMainDictionaryLabel: "Søg en klasse",
-  searchClassesPlaceholder: "Søg en klasse",
+  classifications: {
+    searchClassesPlaceholder: "Søg en klasse",
+    dragResize: "Træk for at ændre størrelse"
+  },
   selectLanguageInstruction: "Vælg sprog",
   selectMainDictionary: "Hovedordbog",
   selectMainDictionaryPlaceholder: "Vælg hovedordbog",
@@ -2178,13 +2202,21 @@ const ob = {
   apply: "Anwenden",
   save: "Speichern",
   cancel: "Abbrechen",
+  checkbox: {
+    true: "Ja",
+    false: "Nein",
+    indeterminate: "Unbestimmt"
+  },
   classSearchInstruction: "Wählen Sie eine Klassifikation im obigen Suchfeld aus.",
   noDescription: "Keine Beschreibung",
   linkTabTitle: "Verknüpfen",
   settingsTabTitle: "Einstellungen",
   language: "Sprache",
   searchMainDictionaryLabel: "Suche eine Klasse",
-  searchClassesPlaceholder: "Suche eine Klasse",
+  classifications: {
+    searchClassesPlaceholder: "Suche eine Klasse",
+    dragResize: "Zum Ändern der Größe ziehen"
+  },
   selectLanguageInstruction: "Sprache auswählen",
   selectMainDictionary: "Hauptwörterbuch",
   selectMainDictionaryPlaceholder: "Hauptwörterbuch auswählen",
@@ -2218,13 +2250,21 @@ const ob = {
   apply: "Assign",
   save: "Save",
   cancel: "Cancel",
+  checkbox: {
+    true: "yes",
+    false: "no",
+    indeterminate: "indeterminate"
+  },
   classSearchInstruction: "Select a classification in the search box above.",
   noDescription: "No description",
   linkTabTitle: "Link",
   settingsTabTitle: "Settings",
   language: "Language",
   searchMainDictionaryLabel: "Search a class",
-  searchClassesPlaceholder: "Search classes",
+  classifications: {
+    searchClassesPlaceholder: "Search classes",
+    dragResize: "Drag to resize"
+  },
   selectLanguageInstruction: "Select language",
   selectMainDictionary: "Main dictionary",
   selectMainDictionaryPlaceholder: "Select main dictionary",
@@ -2258,13 +2298,21 @@ const ob = {
   apply: "Aplicar",
   save: "Guardar",
   cancel: "Cancelar",
+  checkbox: {
+    true: "Sí",
+    false: "No",
+    indeterminate: "Indeterminado"
+  },
   classSearchInstruction: "Seleccione una clasificación en el cuadro de búsqueda de arriba.",
   noDescription: "Sin descripción",
   linkTabTitle: "Enlace",
   settingsTabTitle: "Configuraciones",
   language: "Idioma",
   searchMainDictionaryLabel: "Buscar una clase",
-  searchClassesPlaceholder: "Buscar una clase",
+  classifications: {
+    searchClassesPlaceholder: "Buscar una clase",
+    dragResize: "Arrastrar para redimensionar"
+  },
   selectLanguageInstruction: "Seleccione el idioma",
   selectMainDictionary: "Diccionario principal",
   selectMainDictionaryPlaceholder: "Seleccione el diccionario principal",
@@ -2298,13 +2346,21 @@ const ob = {
   apply: "Käytä",
   save: "Tallenna",
   cancel: "Peruuta",
+  checkbox: {
+    true: "Kyllä",
+    false: "Ei",
+    indeterminate: "Määrittelemätön"
+  },
   classSearchInstruction: "Valitse luokitus yllä olevasta hakukentästä.",
   noDescription: "Ei kuvausta",
   linkTabTitle: "Linkki",
   settingsTabTitle: "Asetukset",
   language: "Kieli",
   searchMainDictionaryLabel: "Hae luokkaa",
-  searchClassesPlaceholder: "Hae luokkaa",
+  classifications: {
+    searchClassesPlaceholder: "Hae luokkaa",
+    dragResize: "Raahaa muuttaaksesi kokoa"
+  },
   selectLanguageInstruction: "Valitse kieli",
   selectMainDictionary: "Pääsanakirja",
   selectMainDictionaryPlaceholder: "Valitse pääsanakirja",
@@ -2338,13 +2394,21 @@ const ob = {
   apply: "Appliquer",
   save: "Enregistrer",
   cancel: "Annuler",
+  checkbox: {
+    true: "Oui",
+    false: "Non",
+    indeterminate: "Indéterminé"
+  },
   classSearchInstruction: "Sélectionnez une classification dans la boîte de recherche ci-dessus.",
   noDescription: "Pas de description",
   linkTabTitle: "Lien",
   settingsTabTitle: "Paramètres",
   language: "Langue",
   searchMainDictionaryLabel: "Rechercher une classe",
-  searchClassesPlaceholder: "Rechercher une classe",
+  classifications: {
+    searchClassesPlaceholder: "Rechercher une classe",
+    dragResize: "Faites glisser pour redimensionner"
+  },
   selectLanguageInstruction: "Sélectionnez la langue",
   selectMainDictionary: "Dictionnaire principal",
   selectMainDictionaryPlaceholder: "Sélectionner le dictionnaire principal",
@@ -2378,13 +2442,21 @@ const ob = {
   apply: "लागू करें",
   save: "सहेजें",
   cancel: "रद्द करें",
+  checkbox: {
+    true: "हाँ",
+    false: "नहीं",
+    indeterminate: "अनिश्चित"
+  },
   classSearchInstruction: "ऊपर दिए गए खोज बॉक्स में एक वर्गीकरण चुनें।",
   noDescription: "कोई विवरण नहीं",
   linkTabTitle: "लिंक",
   settingsTabTitle: "सेटिंग्स",
   language: "भाषा",
   searchMainDictionaryLabel: "एक वर्ग खोजें",
-  searchClassesPlaceholder: "वर्ग खोजें",
+  classifications: {
+    searchClassesPlaceholder: "वर्ग खोजें",
+    dragResize: "रेसाइज करने के लिए खींचें"
+  },
   selectLanguageInstruction: "भाषा चुनें",
   selectMainDictionary: "मुख्य शब्दकोश",
   selectMainDictionaryPlaceholder: "मुख्य शब्दकोश चुनें",
@@ -2418,13 +2490,21 @@ const ob = {
   apply: "Primijeni",
   save: "Spremi",
   cancel: "Otkazati",
+  checkbox: {
+    true: "Da",
+    false: "Ne",
+    indeterminate: "Nepoznato"
+  },
   classSearchInstruction: "Odaberite klasifikaciju u gornjem okviru za pretraživanje.",
   noDescription: "Nema opisa",
   linkTabTitle: "Poveznica",
   settingsTabTitle: "Postavke",
   language: "Jezik",
   searchMainDictionaryLabel: "Pretraži klasu",
-  searchClassesPlaceholder: "Pretraži klasu",
+  classifications: {
+    searchClassesPlaceholder: "Pretraži klasu",
+    dragResize: "Povuci za promjenu veličine"
+  },
   selectLanguageInstruction: "Odaberite jezik",
   selectMainDictionary: "Glavni rječnik",
   selectMainDictionaryPlaceholder: "Odaberite glavni rječnik",
@@ -2458,13 +2538,21 @@ const ob = {
   apply: "Nota",
   save: "Vista",
   cancel: "Hætta við",
+  checkbox: {
+    true: "Já",
+    false: "Nei",
+    indeterminate: "Óákveðið"
+  },
   classSearchInstruction: "Veldu flokkun í leitarglugganum hér að ofan.",
   noDescription: "Engin lýsing",
   linkTabTitle: "Tengja",
   settingsTabTitle: "Stillingar",
   language: "Tungumál",
   searchMainDictionaryLabel: "Leita að flokki",
-  searchClassesPlaceholder: "Leita að flokki",
+  classifications: {
+    searchClassesPlaceholder: "Leita að flokki",
+    dragResize: "Dragðu til að breyta stærð"
+  },
   selectLanguageInstruction: "Veldu tungumál",
   selectMainDictionary: "Aðalorðabók",
   selectMainDictionaryPlaceholder: "Veldu aðalorðabók",
@@ -2498,13 +2586,21 @@ const ob = {
   apply: "Applica",
   save: "Salva",
   cancel: "Annulla",
+  checkbox: {
+    true: "Sì",
+    false: "No",
+    indeterminate: "Indeterminato"
+  },
   classSearchInstruction: "Seleziona una classificazione nella casella di ricerca sopra.",
   noDescription: "Nessuna descrizione",
   linkTabTitle: "Collega",
   settingsTabTitle: "Impostazioni",
   language: "Lingua",
   searchMainDictionaryLabel: "Cerca una classe",
-  searchClassesPlaceholder: "Cerca una classe",
+  classifications: {
+    searchClassesPlaceholder: "Cerca una classe",
+    dragResize: "Trascina per ridimensionare"
+  },
   selectLanguageInstruction: "Seleziona lingua",
   selectMainDictionary: "Dizionario principale",
   selectMainDictionaryPlaceholder: "Seleziona dizionario principale",
@@ -2538,13 +2634,21 @@ const ob = {
   apply: "適用",
   save: "保存",
   cancel: "キャンセル",
+  checkbox: {
+    true: "はい",
+    false: "いいえ",
+    indeterminate: "不確定"
+  },
   classSearchInstruction: "上の検索ボックスで分類を選択してください。",
   noDescription: "説明なし",
   linkTabTitle: "リンク",
   settingsTabTitle: "設定",
   language: "言語",
   searchMainDictionaryLabel: "クラスを検索",
-  searchClassesPlaceholder: "クラスを検索",
+  classifications: {
+    searchClassesPlaceholder: "クラスを検索",
+    dragResize: "ドラッグしてリサイズ"
+  },
   selectLanguageInstruction: "言語を選択",
   selectMainDictionary: "メイン辞書",
   selectMainDictionaryPlaceholder: "メイン辞書を選択",
@@ -2578,13 +2682,21 @@ const ob = {
   apply: "적용",
   save: "저장",
   cancel: "취소",
+  checkbox: {
+    true: "예",
+    false: "아니요",
+    indeterminate: "불확실"
+  },
   classSearchInstruction: "위의 검색 상자에서 분류를 선택하세요.",
   noDescription: "설명 없음",
   linkTabTitle: "링크",
   settingsTabTitle: "설정",
   language: "언어",
   searchMainDictionaryLabel: "클래스 검색",
-  searchClassesPlaceholder: "클래스 검색",
+  classifications: {
+    searchClassesPlaceholder: "클래스 검색",
+    dragResize: "드래그하여 크기 조정"
+  },
   selectLanguageInstruction: "언어 선택",
   selectMainDictionary: "주요 사전",
   selectMainDictionaryPlaceholder: "주요 사전 선택",
@@ -2618,13 +2730,21 @@ const ob = {
   apply: "Taikyti",
   save: "Išsaugoti",
   cancel: "Atšaukti",
+  checkbox: {
+    true: "Taip",
+    false: "Ne",
+    indeterminate: "Neapibrėžta"
+  },
   classSearchInstruction: "Pasirinkite klasifikaciją aukščiau esančiame paieškos laukelyje.",
   noDescription: "Nėra aprašymo",
   linkTabTitle: "Nuoroda",
   settingsTabTitle: "Nustatymai",
   language: "Kalba",
   searchMainDictionaryLabel: "Ieškoti klasės",
-  searchClassesPlaceholder: "Ieškoti klasės",
+  classifications: {
+    searchClassesPlaceholder: "Ieškoti klasės",
+    dragResize: "Tempkite, kad pakeistumėte dydį"
+  },
   selectLanguageInstruction: "Pasirinkite kalbą",
   selectMainDictionary: "Pagrindinis žodynas",
   selectMainDictionaryPlaceholder: "Pasirinkite pagrindinį žodyną",
@@ -2658,13 +2778,21 @@ const ob = {
   apply: "Toewijzen",
   save: "Opslaan",
   cancel: "Annuleren",
+  checkbox: {
+    true: "ja",
+    false: "nee",
+    indeterminate: "onbepaald"
+  },
   classSearchInstruction: "Selecteer een classificatie in het zoekveld hierboven.",
   noDescription: "Geen beschrijving",
   linkTabTitle: "Koppelen",
   settingsTabTitle: "Instellingen",
   language: "Taal",
   searchMainDictionaryLabel: "Zoek een classificatie in",
-  searchClassesPlaceholder: "Zoek een classificatie",
+  classifications: {
+    searchClassesPlaceholder: "Zoek een classificatie",
+    dragResize: "Sleep om hoogte aan te passen"
+  },
   selectLanguageInstruction: "Selecteer taal",
   selectMainDictionary: "bSDD domein",
   selectMainDictionaryPlaceholder: "Selecteer bSDD domein",
@@ -2698,13 +2826,21 @@ const ob = {
   apply: "Bruk",
   save: "Lagre",
   cancel: "Avbryt",
+  checkbox: {
+    true: "Ja",
+    false: "Nei",
+    indeterminate: "Ubestemt"
+  },
   classSearchInstruction: "Velg en klassifisering i søkeboksen ovenfor.",
   noDescription: "Ingen beskrivelse",
   linkTabTitle: "Lenke",
   settingsTabTitle: "Innstillinger",
   language: "Språk",
   searchMainDictionaryLabel: "Søk etter klasse",
-  searchClassesPlaceholder: "Søk etter klasse",
+  classifications: {
+    searchClassesPlaceholder: "Søk etter klasse",
+    dragResize: "Dra for å endre størrelse"
+  },
   selectLanguageInstruction: "Velg språk",
   selectMainDictionary: "Hovedordbok",
   selectMainDictionaryPlaceholder: "Velg hovedordbok",
@@ -2738,13 +2874,21 @@ const ob = {
   apply: "Zastosuj",
   save: "Zapisz",
   cancel: "Anuluj",
+  checkbox: {
+    true: "Tak",
+    false: "Nie",
+    indeterminate: "Nieokreślony"
+  },
   classSearchInstruction: "Wybierz klasyfikację w polu wyszukiwania powyżej.",
   noDescription: "Brak opisu",
   linkTabTitle: "Link",
   settingsTabTitle: "Ustawienia",
   language: "Język",
   searchMainDictionaryLabel: "Szukaj klasy",
-  searchClassesPlaceholder: "Szukaj klasy",
+  classifications: {
+    searchClassesPlaceholder: "Szukaj klasy",
+    dragResize: "Przeciągnij, aby zmienić rozmiar"
+  },
   selectLanguageInstruction: "Wybierz język",
   selectMainDictionary: "Główny słownik",
   selectMainDictionaryPlaceholder: "Wybierz główny słownik",
@@ -2778,13 +2922,21 @@ const ob = {
   apply: "Aplicar",
   save: "Salvar",
   cancel: "Cancelar",
+  checkbox: {
+    true: "Sim",
+    false: "Não",
+    indeterminate: "Indeterminado"
+  },
   classSearchInstruction: "Selecione uma classificação na caixa de pesquisa acima.",
   noDescription: "Sem descrição",
   linkTabTitle: "Link",
   settingsTabTitle: "Configurações",
   language: "Idioma",
   searchMainDictionaryLabel: "Pesquisar classe",
-  searchClassesPlaceholder: "Pesquisar classe",
+  classifications: {
+    searchClassesPlaceholder: "Pesquisar classe",
+    dragResize: "Arraste para redimensionar"
+  },
   selectLanguageInstruction: "Selecione o idioma",
   selectMainDictionary: "Dicionário principal",
   selectMainDictionaryPlaceholder: "Selecione o dicionário principal",
@@ -2818,13 +2970,21 @@ const ob = {
   apply: "Aplicar",
   save: "Guardar",
   cancel: "Cancelar",
+  checkbox: {
+    true: "Sim",
+    false: "Não",
+    indeterminate: "Indeterminado"
+  },
   classSearchInstruction: "Selecione uma classificação na caixa de pesquisa acima.",
   noDescription: "Sem descrição",
   linkTabTitle: "Link",
   settingsTabTitle: "Configurações",
   language: "Idioma",
   searchMainDictionaryLabel: "Pesquisar classe",
-  searchClassesPlaceholder: "Pesquisar classe",
+  classifications: {
+    searchClassesPlaceholder: "Pesquisar classe",
+    dragResize: "Arraste para redimensionar"
+  },
   selectLanguageInstruction: "Selecione o idioma",
   selectMainDictionary: "Dicionário principal",
   selectMainDictionaryPlaceholder: "Selecione o dicionário principal",
@@ -2858,13 +3018,21 @@ const ob = {
   apply: "Aplică",
   save: "Salvează",
   cancel: "Anulează",
+  checkbox: {
+    true: "Da",
+    false: "Nu",
+    indeterminate: "Indeterminat"
+  },
   classSearchInstruction: "Selectați o clasificare în caseta de căutare de mai sus.",
   noDescription: "Fără descriere",
   linkTabTitle: "Link",
   settingsTabTitle: "Setări",
   language: "Limbă",
   searchMainDictionaryLabel: "Căutați o clasă",
-  searchClassesPlaceholder: "Căutați o clasă",
+  classifications: {
+    searchClassesPlaceholder: "Căutați o clasă",
+    dragResize: "Trageți pentru a redimensiona"
+  },
   selectLanguageInstruction: "Selectați limba",
   selectMainDictionary: "Dicționar principal",
   selectMainDictionaryPlaceholder: "Selectați dicționarul principal",
@@ -2898,13 +3066,21 @@ const ob = {
   apply: "Uporabi",
   save: "Shrani",
   cancel: "Prekliči",
+  checkbox: {
+    true: "Da",
+    false: "Ne",
+    indeterminate: "Nedoločeno"
+  },
   classSearchInstruction: "Izberite klasifikacijo v iskalnem polju zgoraj.",
   noDescription: "Brez opisa",
   linkTabTitle: "Povezava",
   settingsTabTitle: "Nastavitve",
   language: "Jezik",
   searchMainDictionaryLabel: "Išči razred",
-  searchClassesPlaceholder: "Išči razred",
+  classifications: {
+    searchClassesPlaceholder: "Išči razred",
+    dragResize: "Povlecite za spremembo velikosti"
+  },
   selectLanguageInstruction: "Izberite jezik",
   selectMainDictionary: "Glavni slovar",
   selectMainDictionaryPlaceholder: "Izberite glavni slovar",
@@ -2938,13 +3114,21 @@ const ob = {
   apply: "Primeni",
   save: "Sačuvaj",
   cancel: "Otkaži",
+  checkbox: {
+    true: "Da",
+    false: "Ne",
+    indeterminate: "Nepoznato"
+  },
   classSearchInstruction: "Izaberite klasifikaciju u polju za pretragu iznad.",
   noDescription: "Nema opisa",
   linkTabTitle: "Link",
   settingsTabTitle: "Podešavanja",
   language: "Jezik",
   searchMainDictionaryLabel: "Pretraži klasu",
-  searchClassesPlaceholder: "Pretraži klasu",
+  classifications: {
+    searchClassesPlaceholder: "Pretraži klasu",
+    dragResize: "Povuci za promenu veličine"
+  },
   selectLanguageInstruction: "Izaberite jezik",
   selectMainDictionary: "Glavni rečnik",
   selectMainDictionaryPlaceholder: "Izaberite glavni rečnik",
@@ -2978,13 +3162,21 @@ const ob = {
   apply: "Tillämpa",
   save: "Spara",
   cancel: "Avbryt",
+  checkbox: {
+    true: "Ja",
+    false: "Nej",
+    indeterminate: "Obestämd"
+  },
   classSearchInstruction: "Välj en klassificering i sökrutan ovan.",
   noDescription: "Ingen beskrivning",
   linkTabTitle: "Länk",
   settingsTabTitle: "Inställningar",
   language: "Språk",
   searchMainDictionaryLabel: "Sök en klass",
-  searchClassesPlaceholder: "Sök en klass",
+  classifications: {
+    searchClassesPlaceholder: "Sök en klass",
+    dragResize: "Dra för att ändra storlek"
+  },
   selectLanguageInstruction: "Välj språk",
   selectMainDictionary: "Huvudordbok",
   selectMainDictionaryPlaceholder: "Välj huvudordbok",
@@ -3017,13 +3209,21 @@ const ob = {
 }, Qb = {
   apply: "Uygula",
   cancel: "İptal",
+  checkbox: {
+    true: "Evet",
+    false: "Hayır",
+    indeterminate: "Belirsiz"
+  },
   classSearchInstruction: "Yukarıdaki arama kutusunda bir sınıflandırma seçin.",
   noDescription: "Açıklama yok",
   linkTabTitle: "Bağlantı",
   settingsTabTitle: "Ayarlar",
   language: "Dil",
   searchMainDictionaryLabel: "Bir sınıf ara",
-  searchClassesPlaceholder: "Bir sınıf ara",
+  classifications: {
+    searchClassesPlaceholder: "Bir sınıf ara",
+    dragResize: "Boyutlandırmak için sürükleyin"
+  },
   selectLanguageInstruction: "Dili seçin",
   selectMainDictionary: "Ana sözlük",
   selectMainDictionaryPlaceholder: "Ana sözlük seçin",
@@ -3056,13 +3256,21 @@ const ob = {
 }, ey = {
   apply: "应用",
   cancel: "取消",
+  checkbox: {
+    true: "是",
+    false: "否",
+    indeterminate: "不确定"
+  },
   classSearchInstruction: "在上面的搜索框中选择一个分类。",
   noDescription: "没有描述",
   linkTabTitle: "链接",
   settingsTabTitle: "设置",
   language: "语言",
   searchMainDictionaryLabel: "搜索分类",
-  searchClassesPlaceholder: "搜索分类",
+  classifications: {
+    searchClassesPlaceholder: "搜索分类",
+    dragResize: "拖动调整大小"
+  },
   selectLanguageInstruction: "选择语言",
   selectMainDictionary: "主词典",
   selectMainDictionaryPlaceholder: "选择主词典",
@@ -13520,6 +13728,13 @@ function vC({ indeterminate: e, ...t }) {
   return e ? /* @__PURE__ */ b.jsx(mC, { ...t }) : /* @__PURE__ */ b.jsx(pC, { ...t });
 }
 const xC = {
+  spacing: {
+    xs: "4px",
+    sm: "8px",
+    md: "12px",
+    lg: "16px",
+    xl: "20px"
+  },
   components: {
     Checkbox: Sn.extend({
       defaultProps: {
@@ -13529,7 +13744,17 @@ const xC = {
       classNames: {
         input: "checkBox"
       }
-    })
+    }),
+    InputWrapper: {
+      styles: (e) => ({
+        description: {
+          display: "inline-block"
+        },
+        label: {
+          display: "inline-block"
+        }
+      })
+    }
   }
 };
 function Ce(e) {
@@ -15704,7 +15929,7 @@ const TD = "main", Yp = {
       e.mainDictionary = t;
     },
     setIfcDictionary: (e, { payload: t }) => {
-      e.mainDictionary = t;
+      e.ifcDictionary = t;
     },
     setFilterDictionaries: (e, { payload: t }) => {
       e.filterDictionaries = t;
