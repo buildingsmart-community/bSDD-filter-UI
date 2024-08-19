@@ -3,6 +3,11 @@
     "apply": "Anvend",
     "save": "Gem",
     "cancel": "Annuller",
+    "checkbox": {
+      "true": "Ja",
+      "false": "Nej",
+      "indeterminate": "Ikke afgjort"
+    },
     "classSearchInstruction": "Vælg en klassifikation i søgefeltet ovenfor.",
     "noDescription": "Ingen beskrivelse",
     "linkTabTitle": "Link",

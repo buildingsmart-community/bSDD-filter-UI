@@ -3,6 +3,11 @@
     "apply": "Käytä",
     "save": "Tallenna",
     "cancel": "Peruuta",
+    "checkbox": {
+      "true": "Kyllä",
+      "false": "Ei",
+      "indeterminate": "Määrittelemätön"
+    },
     "classSearchInstruction": "Valitse luokitus yllä olevasta hakukentästä.",
     "noDescription": "Ei kuvausta",
     "linkTabTitle": "Linkki",

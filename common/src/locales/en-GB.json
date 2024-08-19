@@ -3,6 +3,11 @@
     "apply": "Assign",
     "save": "Save",
     "cancel": "Cancel",
+    "checkbox": {
+      "true": "yes",
+      "false": "no",
+      "indeterminate": "indeterminate"
+    },
     "classSearchInstruction": "Select a classification in the search box above.",
     "noDescription": "No description",
     "linkTabTitle": "Link",

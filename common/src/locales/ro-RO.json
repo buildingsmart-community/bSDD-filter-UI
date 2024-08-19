@@ -3,6 +3,11 @@
     "apply": "Aplică",
     "save": "Salvează",
     "cancel": "Anulează",
+    "checkbox": {
+      "true": "Da",
+      "false": "Nu",
+      "indeterminate": "Indeterminat"
+    },
     "classSearchInstruction": "Selectați o clasificare în caseta de căutare de mai sus.",
     "noDescription": "Fără descriere",
     "linkTabTitle": "Link",

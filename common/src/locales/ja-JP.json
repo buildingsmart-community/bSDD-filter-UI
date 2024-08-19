@@ -3,6 +3,11 @@
     "apply": "適用",
     "save": "保存",
     "cancel": "キャンセル",
+    "checkbox": {
+      "true": "はい",
+      "false": "いいえ",
+      "indeterminate": "不確定"
+    },
     "classSearchInstruction": "上の検索ボックスで分類を選択してください。",
     "noDescription": "説明なし",
     "linkTabTitle": "リンク",

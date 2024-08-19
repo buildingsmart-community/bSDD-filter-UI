@@ -3,6 +3,11 @@
     "apply": "Taikyti",
     "save": "Išsaugoti",
     "cancel": "Atšaukti",
+    "checkbox": {
+      "true": "Taip",
+      "false": "Ne",
+      "indeterminate": "Neapibrėžta"
+    },
     "classSearchInstruction": "Pasirinkite klasifikaciją aukščiau esančiame paieškos laukelyje.",
     "noDescription": "Nėra aprašymo",
     "linkTabTitle": "Nuoroda",

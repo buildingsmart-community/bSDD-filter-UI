@@ -3,6 +3,11 @@
     "apply": "Zastosuj",
     "save": "Zapisz",
     "cancel": "Anuluj",
+    "checkbox": {
+      "true": "Tak",
+      "false": "Nie",
+      "indeterminate": "Nieokreślony"
+    },
     "classSearchInstruction": "Wybierz klasyfikację w polu wyszukiwania powyżej.",
     "noDescription": "Brak opisu",
     "linkTabTitle": "Link",

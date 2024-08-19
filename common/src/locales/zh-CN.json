@@ -2,6 +2,11 @@
   "translation": {
     "apply": "应用",
     "cancel": "取消",
+    "checkbox": {
+      "true": "是",
+      "false": "否",
+      "indeterminate": "不确定"
+    },
     "classSearchInstruction": "在上面的搜索框中选择一个分类。",
     "noDescription": "没有描述",
     "linkTabTitle": "链接",

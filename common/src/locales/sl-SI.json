@@ -3,6 +3,11 @@
     "apply": "Uporabi",
     "save": "Shrani",
     "cancel": "Prekliči",
+    "checkbox": {
+      "true": "Da",
+      "false": "Ne",
+      "indeterminate": "Nedoločeno"
+    },
     "classSearchInstruction": "Izberite klasifikacijo v iskalnem polju zgoraj.",
     "noDescription": "Brez opisa",
     "linkTabTitle": "Povezava",

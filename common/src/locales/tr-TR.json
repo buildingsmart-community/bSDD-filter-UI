@@ -2,6 +2,11 @@
   "translation": {
     "apply": "Uygula",
     "cancel": "İptal",
+    "checkbox": {
+      "true": "Evet",
+      "false": "Hayır",
+      "indeterminate": "Belirsiz"
+    },
     "classSearchInstruction": "Yukarıdaki arama kutusunda bir sınıflandırma seçin.",
     "noDescription": "Açıklama yok",
     "linkTabTitle": "Bağlantı",

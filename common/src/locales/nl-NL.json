@@ -3,6 +3,11 @@
     "apply": "Toewijzen",
     "save": "Opslaan",
     "cancel": "Annuleren",
+    "checkbox": {
+      "true": "ja",
+      "false": "nee",
+      "indeterminate": "onbepaald"
+    },
     "classSearchInstruction": "Selecteer een classificatie in het zoekveld hierboven.",
     "noDescription": "Geen beschrijving",
     "linkTabTitle": "Koppelen",

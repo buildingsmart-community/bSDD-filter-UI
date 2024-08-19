@@ -3,6 +3,11 @@
     "apply": "Primeni",
     "save": "Sačuvaj",
     "cancel": "Otkaži",
+    "checkbox": {
+      "true": "Da",
+      "false": "Ne",
+      "indeterminate": "Nepoznato"
+    },
     "classSearchInstruction": "Izaberite klasifikaciju u polju za pretragu iznad.",
     "noDescription": "Nema opisa",
     "linkTabTitle": "Link",

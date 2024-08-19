@@ -3,6 +3,11 @@
     "apply": "लागू करें",
     "save": "सहेजें",
     "cancel": "रद्द करें",
+    "checkbox": {
+      "true": "हाँ",
+      "false": "नहीं",
+      "indeterminate": "अनिश्चित"
+    },
     "classSearchInstruction": "ऊपर दिए गए खोज बॉक्स में एक वर्गीकरण चुनें।",
     "noDescription": "कोई विवरण नहीं",
     "linkTabTitle": "लिंक",

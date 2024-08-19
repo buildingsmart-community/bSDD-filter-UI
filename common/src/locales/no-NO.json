@@ -3,6 +3,11 @@
     "apply": "Bruk",
     "save": "Lagre",
     "cancel": "Avbryt",
+    "checkbox": {
+      "true": "Ja",
+      "false": "Nei",
+      "indeterminate": "Ubestemt"
+    },
     "classSearchInstruction": "Velg en klassifisering i søkeboksen ovenfor.",
     "noDescription": "Ingen beskrivelse",
     "linkTabTitle": "Lenke",

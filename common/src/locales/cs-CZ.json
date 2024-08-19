@@ -3,6 +3,11 @@
     "apply": "Použít",
     "save": "Uložit",
     "cancel": "Zrušit",
+    "checkbox":{
+      "true": "Ano",
+      "false": "Ne",
+      "indeterminate": "Nespecifikováno"
+    },
     "classSearchInstruction": "Vyberte klasifikaci v horním vyhledávacím poli.",
     "noDescription": "Žádný popis",
     "linkTabTitle": "Odkaz",

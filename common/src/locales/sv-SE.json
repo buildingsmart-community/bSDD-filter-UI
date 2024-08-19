@@ -3,6 +3,11 @@
     "apply": "Tillämpa",
     "save": "Spara",
     "cancel": "Avbryt",
+    "checkbox": {
+      "true": "Ja",
+      "false": "Nej",
+      "indeterminate": "Obestämd"
+    },
     "classSearchInstruction": "Välj en klassificering i sökrutan ovan.",
     "noDescription": "Ingen beskrivning",
     "linkTabTitle": "Länk",

@@ -3,6 +3,11 @@
     "apply": "Nota",
     "save": "Vista",
     "cancel": "Hætta við",
+    "checkbox": {
+      "true": "Já",
+      "false": "Nei",
+      "indeterminate": "Óákveðið"
+    },
     "classSearchInstruction": "Veldu flokkun í leitarglugganum hér að ofan.",
     "noDescription": "Engin lýsing",
     "linkTabTitle": "Tengja",
