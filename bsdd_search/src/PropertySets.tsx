@@ -331,7 +331,7 @@ function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertyS
             <Accordion.Item
               key={propertySet.name || 'Unknown'}
               value={propertySet.name || 'Unknown'}
-              style={index !== 0 ? { 'border-top-width': 0 } : {}}
+              style={index !== 0 ? { borderTopWidth: 0 } : {}}
             >
               <Accordion.Control>{propertySet.name}</Accordion.Control>
               <Accordion.Panel>
