@@ -3,6 +3,7 @@
     "apply": "Bruk",
     "save": "Lagre",
     "cancel": "Avbryt",
+    "groupBy": "Grupper etter",
     "checkbox": {
       "true": "Ja",
       "false": "Nei",

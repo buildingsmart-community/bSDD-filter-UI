@@ -2,6 +2,7 @@
   "translation": {
     "apply": "应用",
     "cancel": "取消",
+    "groupBy": "分组",
     "checkbox": {
       "true": "是",
       "false": "否",

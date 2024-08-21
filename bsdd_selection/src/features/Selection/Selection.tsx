@@ -1,6 +1,6 @@
-import { Accordion, Alert, Box, LoadingOverlay, Space, Tabs } from '@mantine/core';
+import { Accordion, Alert, Box, LoadingOverlay, Select, Space, Tabs } from '@mantine/core';
 import { IconInfoCircle } from '@tabler/icons-react';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { IfcEntity } from '../../../../common/src/ifc/ifc';
@@ -43,14 +43,15 @@ function groupEntitiesBy(array: IfcEntity[], property: keyof IfcEntity) {
 function Selection({ loading }: SelectionProps) {
   const { t } = useTranslation();
   const ifcEntities = useAppSelector(selectIfcEntities);
+  const [groupByKey, setGroupByKey] = useState<keyof IfcEntity>('objectType');
 
   const categoryCollapseList = useMemo(() => {
     if (!ifcEntities) return [];
-    const list = Object.entries(groupEntitiesBy(ifcEntities, 'description')).map(([category, items], index) => (
+    const list = Object.entries(groupEntitiesBy(ifcEntities, groupByKey)).map(([category, items], index) => (
       <CategoryCollapse key={category} category={category} items={items} index={category || index.toString()} />
     ));
     return list;
-  }, [ifcEntities]);
+  }, [groupByKey, ifcEntities]);
 
   const icon = <IconInfoCircle />;
 
@@ -72,7 +73,27 @@ function Selection({ loading }: SelectionProps) {
             </a>
           </Alert>
         ) : (
-          <Accordion chevronPosition="left">{categoryCollapseList}</Accordion>
+          <Box>
+            <Select
+              my="md"
+              label={t('groupBy')}
+              placeholder="Select a key"
+              data={[
+                { value: 'type', label: 'Entity' },
+                { value: 'name', label: 'Name' },
+                { value: 'description', label: 'Description' },
+                { value: 'objectType', label: 'ObjectType' },
+                { value: 'predefinedType', label: 'PredefinedType' },
+              ]}
+              value={groupByKey}
+              onChange={(value) => {
+                if (value) {
+                  setGroupByKey(value as keyof IfcEntity);
+                }
+              }}
+            />
+            <Accordion chevronPosition="left">{categoryCollapseList}</Accordion>
+          </Box>
         )}
       </Box>
     </Tabs.Panel>

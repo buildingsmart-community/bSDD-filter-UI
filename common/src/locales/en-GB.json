@@ -3,6 +3,7 @@
     "apply": "Assign",
     "save": "Save",
     "cancel": "Cancel",
+    "groupBy": "Group",
     "checkbox": {
       "true": "yes",
       "false": "no",

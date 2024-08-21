@@ -3,6 +3,7 @@
     "apply": "Anvend",
     "save": "Gem",
     "cancel": "Annuller",
+    "groupBy": "Gruppér",
     "checkbox": {
       "true": "Ja",
       "false": "Nej",

@@ -2,6 +2,7 @@
   "translation": {
     "apply": "Uygula",
     "cancel": "İptal",
+    "groupBy": "Grupla",
     "checkbox": {
       "true": "Evet",
       "false": "Hayır",

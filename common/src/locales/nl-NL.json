@@ -3,6 +3,7 @@
     "apply": "Toewijzen",
     "save": "Opslaan",
     "cancel": "Annuleren",
+    "groupBy": "Groeperen",
     "checkbox": {
       "true": "ja",
       "false": "nee",

@@ -3,6 +3,7 @@
     "apply": "Appliquer",
     "save": "Enregistrer",
     "cancel": "Annuler",
+    "groupBy": "Grouper",
     "checkbox":{
       "true": "Oui",
       "false": "Non",
