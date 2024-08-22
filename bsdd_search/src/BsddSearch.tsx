@@ -8,6 +8,7 @@ import { defaultEnvironment, isProduction } from '../../common/src/env';
 import { BsddBridgeData, BsddSettings } from '../../common/src/ifc/bsddBridgeData';
 import { IfcEntity, IfcPropertySet } from '../../common/src/ifc/ifc';
 import { mockData } from '../../common/src/ifc/mockData';
+import defaultSettings from '../../common/src/settings/defaultSettings';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import Apply from './Apply';
 import Classifications from './Classifications';
@@ -118,6 +119,8 @@ function BsddSearch() {
             // @ts-ignore
             const loadedSettings = await window.bsddBridge.loadSettings();
             ({ settings, ifcData } = JSON.parse(loadedSettings) as BsddBridgeData);
+          } else {
+            settings = defaultSettings;
           }
         } else {
           ({ settings, ifcData } = mockData);
