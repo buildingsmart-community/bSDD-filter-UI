@@ -679,14 +679,14 @@ class To extends ei {
       }
       if (i) {
         const w = Array.isArray(d), S = w ? [] : {}, E = w ? p : h;
-        for (const k in d)
-          if (Object.prototype.hasOwnProperty.call(d, k)) {
-            const T = `${E}${i}${k}`;
-            S[k] = this.translate(T, {
+        for (const _ in d)
+          if (Object.prototype.hasOwnProperty.call(d, _)) {
+            const T = `${E}${i}${_}`;
+            S[_] = this.translate(T, {
               ...t,
               joinArrays: !1,
               ns: s
-            }), S[k] === T && (S[k] = d[k]);
+            }), S[_] === T && (S[_] = d[_]);
           }
         d = S;
       }
@@ -694,36 +694,36 @@ class To extends ei {
       d = d.join(b), d && (d = this.extendTranslation(d, e, t, r));
     else {
       let w = !1, S = !1;
-      const E = t.count !== void 0 && typeof t.count != "string", k = To.hasDefaultValue(t), T = E ? this.pluralResolver.getSuffix(l, t.count, t) : "", D = t.ordinal && E ? this.pluralResolver.getSuffix(l, t.count, {
+      const E = t.count !== void 0 && typeof t.count != "string", _ = To.hasDefaultValue(t), T = E ? this.pluralResolver.getSuffix(l, t.count, t) : "", M = t.ordinal && E ? this.pluralResolver.getSuffix(l, t.count, {
         ordinal: !1
-      }) : "", H = E && !t.ordinal && t.count === 0 && this.pluralResolver.shouldUseIntlApi(), B = H && t[`defaultValue${this.options.pluralSeparator}zero`] || t[`defaultValue${T}`] || t[`defaultValue${D}`] || t.defaultValue;
-      !this.isValidLookup(d) && k && (w = !0, d = B), this.isValidLookup(d) || (S = !0, d = a);
-      const Z = (t.missingKeyNoValueFallbackToKey || this.options.missingKeyNoValueFallbackToKey) && S ? void 0 : d, R = k && B !== d && this.options.updateMissing;
-      if (S || w || R) {
-        if (this.logger.log(R ? "updateKey" : "missingKey", l, c, a, R ? B : d), i) {
-          const N = this.resolve(a, {
+      }) : "", B = E && !t.ordinal && t.count === 0 && this.pluralResolver.shouldUseIntlApi(), z = B && t[`defaultValue${this.options.pluralSeparator}zero`] || t[`defaultValue${T}`] || t[`defaultValue${M}`] || t.defaultValue;
+      !this.isValidLookup(d) && _ && (w = !0, d = z), this.isValidLookup(d) || (S = !0, d = a);
+      const Z = (t.missingKeyNoValueFallbackToKey || this.options.missingKeyNoValueFallbackToKey) && S ? void 0 : d, D = _ && z !== d && this.options.updateMissing;
+      if (S || w || D) {
+        if (this.logger.log(D ? "updateKey" : "missingKey", l, c, a, D ? z : d), i) {
+          const P = this.resolve(a, {
             ...t,
             keySeparator: !1
           });
-          N && N.res && this.logger.warn("Seems the loaded translations were in flat JSON format instead of nested. Either set keySeparator: false on init or make sure your translations are published in nested format.");
+          P && P.res && this.logger.warn("Seems the loaded translations were in flat JSON format instead of nested. Either set keySeparator: false on init or make sure your translations are published in nested format.");
         }
-        let L = [];
-        const _ = this.languageUtils.getFallbackCodes(this.options.fallbackLng, t.lng || this.language);
-        if (this.options.saveMissingTo === "fallback" && _ && _[0])
-          for (let N = 0; N < _.length; N++)
-            L.push(_[N]);
+        let j = [];
+        const R = this.languageUtils.getFallbackCodes(this.options.fallbackLng, t.lng || this.language);
+        if (this.options.saveMissingTo === "fallback" && R && R[0])
+          for (let P = 0; P < R.length; P++)
+            j.push(R[P]);
         else
-          this.options.saveMissingTo === "all" ? L = this.languageUtils.toResolveHierarchy(t.lng || this.language) : L.push(t.lng || this.language);
-        const P = (N, V, $) => {
-          const oe = k && $ !== d ? $ : Z;
-          this.options.missingKeyHandler ? this.options.missingKeyHandler(N, c, V, oe, R, t) : this.backendConnector && this.backendConnector.saveMissing && this.backendConnector.saveMissing(N, c, V, oe, R, t), this.emit("missingKey", N, c, V, d);
+          this.options.saveMissingTo === "all" ? j = this.languageUtils.toResolveHierarchy(t.lng || this.language) : j.push(t.lng || this.language);
+        const A = (P, $, H) => {
+          const re = _ && H !== d ? H : Z;
+          this.options.missingKeyHandler ? this.options.missingKeyHandler(P, c, $, re, D, t) : this.backendConnector && this.backendConnector.saveMissing && this.backendConnector.saveMissing(P, c, $, re, D, t), this.emit("missingKey", P, c, $, d);
         };
-        this.options.saveMissing && (this.options.saveMissingPlurals && E ? L.forEach((N) => {
-          const V = this.pluralResolver.getSuffixes(N, t);
-          H && t[`defaultValue${this.options.pluralSeparator}zero`] && V.indexOf(`${this.options.pluralSeparator}zero`) < 0 && V.push(`${this.options.pluralSeparator}zero`), V.forEach(($) => {
-            P([N], a + $, t[`defaultValue${$}`] || B);
+        this.options.saveMissing && (this.options.saveMissingPlurals && E ? j.forEach((P) => {
+          const $ = this.pluralResolver.getSuffixes(P, t);
+          B && t[`defaultValue${this.options.pluralSeparator}zero`] && $.indexOf(`${this.options.pluralSeparator}zero`) < 0 && $.push(`${this.options.pluralSeparator}zero`), $.forEach((H) => {
+            A([P], a + H, t[`defaultValue${H}`] || z);
           });
-        }) : P(L, a, B));
+        }) : A(j, a, z));
       }
       d = this.extendTranslation(d, e, t, f, r), S && d === a && this.options.appendNamespaceToMissingKey && (d = `${c}:${a}`), (S || w) && this.options.parseMissingKeyHandler && (this.options.compatibilityAPI !== "v1" ? d = this.options.parseMissingKeyHandler(this.options.appendNamespaceToMissingKey ? `${c}:${a}` : a, w ? d : void 0) : d = this.options.parseMissingKeyHandler(d));
     }
@@ -798,8 +798,8 @@ class To extends ei {
             d && (w = this.pluralResolver.getSuffix(b, t.count, t));
             const S = `${this.options.pluralSeparator}zero`, E = `${this.options.pluralSeparator}ordinal${this.options.pluralSeparator}`;
             if (d && (C.push(u + w), t.ordinal && w.indexOf(E) === 0 && C.push(u + w.replace(E, this.options.pluralSeparator)), h && C.push(u + S)), p) {
-              const k = `${u}${this.options.contextSeparator}${t.context}`;
-              C.push(k), d && (C.push(k + w), t.ordinal && w.indexOf(E) === 0 && C.push(k + w.replace(E, this.options.pluralSeparator)), h && C.push(k + S));
+              const _ = `${u}${this.options.contextSeparator}${t.context}`;
+              C.push(_), d && (C.push(_ + w), t.ordinal && w.indexOf(E) === 0 && C.push(_ + w.replace(E, this.options.pluralSeparator)), h && C.push(_ + S));
             }
           }
           let v;
@@ -3926,7 +3926,7 @@ var Ro = {
   }
 };
 /*! @azure/msal-common v13.3.3 2024-06-06 */
-var j = {
+var F = {
   clientInfoDecodingError: {
     code: "client_info_decoding_error",
     desc: "The client info could not be parsed/decoded correctly. Please review the trace to determine the root cause."
@@ -4136,102 +4136,102 @@ var j = {
       return o.name = "ClientAuthError", Object.setPrototypeOf(o, e.prototype), o;
     }
     return e.createClientInfoDecodingError = function(t) {
-      return new e(j.clientInfoDecodingError.code, j.clientInfoDecodingError.desc + " Failed with error: " + t);
+      return new e(F.clientInfoDecodingError.code, F.clientInfoDecodingError.desc + " Failed with error: " + t);
     }, e.createClientInfoEmptyError = function() {
-      return new e(j.clientInfoEmptyError.code, "" + j.clientInfoEmptyError.desc);
+      return new e(F.clientInfoEmptyError.code, "" + F.clientInfoEmptyError.desc);
     }, e.createTokenParsingError = function(t) {
-      return new e(j.tokenParsingError.code, j.tokenParsingError.desc + " Failed with error: " + t);
+      return new e(F.tokenParsingError.code, F.tokenParsingError.desc + " Failed with error: " + t);
     }, e.createTokenNullOrEmptyError = function(t) {
-      return new e(j.nullOrEmptyToken.code, j.nullOrEmptyToken.desc + " Raw Token Value: " + t);
+      return new e(F.nullOrEmptyToken.code, F.nullOrEmptyToken.desc + " Raw Token Value: " + t);
     }, e.createEndpointDiscoveryIncompleteError = function(t) {
-      return new e(j.endpointResolutionError.code, j.endpointResolutionError.desc + " Detail: " + t);
+      return new e(F.endpointResolutionError.code, F.endpointResolutionError.desc + " Detail: " + t);
     }, e.createNetworkError = function(t, r) {
-      return new e(j.networkError.code, j.networkError.desc + " | Fetch client threw: " + r + " | Attempted to reach: " + t.split("?")[0]);
+      return new e(F.networkError.code, F.networkError.desc + " | Fetch client threw: " + r + " | Attempted to reach: " + t.split("?")[0]);
     }, e.createUnableToGetOpenidConfigError = function(t) {
-      return new e(j.unableToGetOpenidConfigError.code, j.unableToGetOpenidConfigError.desc + " Attempted to retrieve endpoints from: " + t);
+      return new e(F.unableToGetOpenidConfigError.code, F.unableToGetOpenidConfigError.desc + " Attempted to retrieve endpoints from: " + t);
     }, e.createHashNotDeserializedError = function(t) {
-      return new e(j.hashNotDeserialized.code, j.hashNotDeserialized.desc + " Given Object: " + t);
+      return new e(F.hashNotDeserialized.code, F.hashNotDeserialized.desc + " Given Object: " + t);
     }, e.createInvalidStateError = function(t, r) {
-      return new e(j.invalidStateError.code, j.invalidStateError.desc + " Invalid State: " + t + ", Root Err: " + r);
+      return new e(F.invalidStateError.code, F.invalidStateError.desc + " Invalid State: " + t + ", Root Err: " + r);
     }, e.createStateMismatchError = function() {
-      return new e(j.stateMismatchError.code, j.stateMismatchError.desc);
+      return new e(F.stateMismatchError.code, F.stateMismatchError.desc);
     }, e.createStateNotFoundError = function(t) {
-      return new e(j.stateNotFoundError.code, j.stateNotFoundError.desc + ":  " + t);
+      return new e(F.stateNotFoundError.code, F.stateNotFoundError.desc + ":  " + t);
     }, e.createNonceMismatchError = function() {
-      return new e(j.nonceMismatchError.code, j.nonceMismatchError.desc);
+      return new e(F.nonceMismatchError.code, F.nonceMismatchError.desc);
     }, e.createAuthTimeNotFoundError = function() {
-      return new e(j.authTimeNotFoundError.code, j.authTimeNotFoundError.desc);
+      return new e(F.authTimeNotFoundError.code, F.authTimeNotFoundError.desc);
     }, e.createMaxAgeTranspiredError = function() {
-      return new e(j.maxAgeTranspiredError.code, j.maxAgeTranspiredError.desc);
+      return new e(F.maxAgeTranspiredError.code, F.maxAgeTranspiredError.desc);
     }, e.createNonceNotFoundError = function(t) {
-      return new e(j.nonceNotFoundError.code, j.nonceNotFoundError.desc + ":  " + t);
+      return new e(F.nonceNotFoundError.code, F.nonceNotFoundError.desc + ":  " + t);
     }, e.createMultipleMatchingTokensInCacheError = function() {
-      return new e(j.multipleMatchingTokens.code, j.multipleMatchingTokens.desc + ".");
+      return new e(F.multipleMatchingTokens.code, F.multipleMatchingTokens.desc + ".");
     }, e.createMultipleMatchingAccountsInCacheError = function() {
-      return new e(j.multipleMatchingAccounts.code, j.multipleMatchingAccounts.desc);
+      return new e(F.multipleMatchingAccounts.code, F.multipleMatchingAccounts.desc);
     }, e.createMultipleMatchingAppMetadataInCacheError = function() {
-      return new e(j.multipleMatchingAppMetadata.code, j.multipleMatchingAppMetadata.desc);
+      return new e(F.multipleMatchingAppMetadata.code, F.multipleMatchingAppMetadata.desc);
     }, e.createTokenRequestCannotBeMadeError = function() {
-      return new e(j.tokenRequestCannotBeMade.code, j.tokenRequestCannotBeMade.desc);
+      return new e(F.tokenRequestCannotBeMade.code, F.tokenRequestCannotBeMade.desc);
     }, e.createAppendEmptyScopeToSetError = function(t) {
-      return new e(j.appendEmptyScopeError.code, j.appendEmptyScopeError.desc + " Given Scope: " + t);
+      return new e(F.appendEmptyScopeError.code, F.appendEmptyScopeError.desc + " Given Scope: " + t);
     }, e.createRemoveEmptyScopeFromSetError = function(t) {
-      return new e(j.removeEmptyScopeError.code, j.removeEmptyScopeError.desc + " Given Scope: " + t);
+      return new e(F.removeEmptyScopeError.code, F.removeEmptyScopeError.desc + " Given Scope: " + t);
     }, e.createAppendScopeSetError = function(t) {
-      return new e(j.appendScopeSetError.code, j.appendScopeSetError.desc + " Detail Error: " + t);
+      return new e(F.appendScopeSetError.code, F.appendScopeSetError.desc + " Detail Error: " + t);
     }, e.createEmptyInputScopeSetError = function() {
-      return new e(j.emptyInputScopeSetError.code, "" + j.emptyInputScopeSetError.desc);
+      return new e(F.emptyInputScopeSetError.code, "" + F.emptyInputScopeSetError.desc);
     }, e.createDeviceCodeCancelledError = function() {
-      return new e(j.DeviceCodePollingCancelled.code, "" + j.DeviceCodePollingCancelled.desc);
+      return new e(F.DeviceCodePollingCancelled.code, "" + F.DeviceCodePollingCancelled.desc);
     }, e.createDeviceCodeExpiredError = function() {
-      return new e(j.DeviceCodeExpired.code, "" + j.DeviceCodeExpired.desc);
+      return new e(F.DeviceCodeExpired.code, "" + F.DeviceCodeExpired.desc);
     }, e.createDeviceCodeUnknownError = function() {
-      return new e(j.DeviceCodeUnknownError.code, "" + j.DeviceCodeUnknownError.desc);
+      return new e(F.DeviceCodeUnknownError.code, "" + F.DeviceCodeUnknownError.desc);
     }, e.createNoAccountInSilentRequestError = function() {
-      return new e(j.NoAccountInSilentRequest.code, "" + j.NoAccountInSilentRequest.desc);
+      return new e(F.NoAccountInSilentRequest.code, "" + F.NoAccountInSilentRequest.desc);
     }, e.createNullOrUndefinedCacheRecord = function() {
-      return new e(j.invalidCacheRecord.code, j.invalidCacheRecord.desc);
+      return new e(F.invalidCacheRecord.code, F.invalidCacheRecord.desc);
     }, e.createInvalidCacheEnvironmentError = function() {
-      return new e(j.invalidCacheEnvironment.code, j.invalidCacheEnvironment.desc);
+      return new e(F.invalidCacheEnvironment.code, F.invalidCacheEnvironment.desc);
     }, e.createNoAccountFoundError = function() {
-      return new e(j.noAccountFound.code, j.noAccountFound.desc);
+      return new e(F.noAccountFound.code, F.noAccountFound.desc);
     }, e.createCachePluginError = function() {
-      return new e(j.CachePluginError.code, "" + j.CachePluginError.desc);
+      return new e(F.CachePluginError.code, "" + F.CachePluginError.desc);
     }, e.createNoCryptoObjectError = function(t) {
-      return new e(j.noCryptoObj.code, "" + j.noCryptoObj.desc + t);
+      return new e(F.noCryptoObj.code, "" + F.noCryptoObj.desc + t);
     }, e.createInvalidCacheTypeError = function() {
-      return new e(j.invalidCacheType.code, "" + j.invalidCacheType.desc);
+      return new e(F.invalidCacheType.code, "" + F.invalidCacheType.desc);
     }, e.createUnexpectedAccountTypeError = function() {
-      return new e(j.unexpectedAccountType.code, "" + j.unexpectedAccountType.desc);
+      return new e(F.unexpectedAccountType.code, "" + F.unexpectedAccountType.desc);
     }, e.createUnexpectedCredentialTypeError = function() {
-      return new e(j.unexpectedCredentialType.code, "" + j.unexpectedCredentialType.desc);
+      return new e(F.unexpectedCredentialType.code, "" + F.unexpectedCredentialType.desc);
     }, e.createInvalidAssertionError = function() {
-      return new e(j.invalidAssertion.code, "" + j.invalidAssertion.desc);
+      return new e(F.invalidAssertion.code, "" + F.invalidAssertion.desc);
     }, e.createInvalidCredentialError = function() {
-      return new e(j.invalidClientCredential.code, "" + j.invalidClientCredential.desc);
+      return new e(F.invalidClientCredential.code, "" + F.invalidClientCredential.desc);
     }, e.createRefreshRequiredError = function() {
-      return new e(j.tokenRefreshRequired.code, j.tokenRefreshRequired.desc);
+      return new e(F.tokenRefreshRequired.code, F.tokenRefreshRequired.desc);
     }, e.createUserTimeoutReachedError = function() {
-      return new e(j.userTimeoutReached.code, j.userTimeoutReached.desc);
+      return new e(F.userTimeoutReached.code, F.userTimeoutReached.desc);
     }, e.createTokenClaimsRequiredError = function() {
-      return new e(j.tokenClaimsRequired.code, j.tokenClaimsRequired.desc);
+      return new e(F.tokenClaimsRequired.code, F.tokenClaimsRequired.desc);
     }, e.createNoAuthCodeInServerResponseError = function() {
-      return new e(j.noAuthorizationCodeFromServer.code, j.noAuthorizationCodeFromServer.desc);
+      return new e(F.noAuthorizationCodeFromServer.code, F.noAuthorizationCodeFromServer.desc);
     }, e.createBindingKeyNotRemovedError = function() {
-      return new e(j.bindingKeyNotRemovedError.code, j.bindingKeyNotRemovedError.desc);
+      return new e(F.bindingKeyNotRemovedError.code, F.bindingKeyNotRemovedError.desc);
     }, e.createLogoutNotSupportedError = function() {
-      return new e(j.logoutNotSupported.code, j.logoutNotSupported.desc);
+      return new e(F.logoutNotSupported.code, F.logoutNotSupported.desc);
     }, e.createKeyIdMissingError = function() {
-      return new e(j.keyIdMissing.code, j.keyIdMissing.desc);
+      return new e(F.keyIdMissing.code, F.keyIdMissing.desc);
     }, e.createNoNetworkConnectivityError = function() {
-      return new e(j.noNetworkConnectivity.code, j.noNetworkConnectivity.desc);
+      return new e(F.noNetworkConnectivity.code, F.noNetworkConnectivity.desc);
     }, e.createUserCanceledError = function() {
-      return new e(j.userCanceledError.code, j.userCanceledError.desc);
+      return new e(F.userCanceledError.code, F.userCanceledError.desc);
     }, e;
   }(Q)
 );
 /*! @azure/msal-common v13.3.3 2024-06-06 */
-var K = (
+var q = (
   /** @class */
   function() {
     function n() {
@@ -4318,7 +4318,7 @@ var Fa = (
     }, n.prototype.logMessage = function(e, t) {
       if (!(t.logLevel > this.level || !this.piiLoggingEnabled && t.containsPii)) {
         var r = (/* @__PURE__ */ new Date()).toUTCString(), o;
-        K.isEmpty(t.correlationId) ? K.isEmpty(this.correlationId) ? o = "[" + r + "]" : o = "[" + r + "] : [" + this.correlationId + "]" : o = "[" + r + "] : [" + t.correlationId + "]";
+        q.isEmpty(t.correlationId) ? q.isEmpty(this.correlationId) ? o = "[" + r + "]" : o = "[" + r + "] : [" + this.correlationId + "]" : o = "[" + r + "] : [" + t.correlationId + "]";
         var i = o + " : " + this.packageName + "@" + this.packageVersion + " : " + Ie[t.logLevel] + " - " + e;
         this.executeCallback(t.logLevel, i, t.containsPii || !1);
       }
@@ -4556,7 +4556,7 @@ var Ke = (
   /** @class */
   function() {
     function n(e) {
-      var t = this, r = e ? K.trimArrayEntries(ti(e)) : [], o = r ? K.removeEmptyStringsFromArray(r) : [];
+      var t = this, r = e ? q.trimArrayEntries(ti(e)) : [], o = r ? q.removeEmptyStringsFromArray(r) : [];
       this.validateInputScopes(o), this.scopes = /* @__PURE__ */ new Set(), o.forEach(function(i) {
         return t.scopes.add(i);
       });
@@ -4572,7 +4572,7 @@ var Ke = (
         throw Se.createEmptyScopesArrayError();
     }, n.prototype.containsScope = function(e) {
       var t = this.printScopesLowerCase().split(" "), r = new n(t);
-      return K.isEmpty(e) ? !1 : r.scopes.has(e.toLowerCase());
+      return q.isEmpty(e) ? !1 : r.scopes.has(e.toLowerCase());
     }, n.prototype.containsScopeSet = function(e) {
       var t = this;
       return !e || e.scopes.size <= 0 ? !1 : this.scopes.size >= e.scopes.size && e.asArray().every(function(r) {
@@ -4584,7 +4584,7 @@ var Ke = (
         e.containsScope(r) && (t += 1);
       }), this.scopes.size === t;
     }, n.prototype.appendScope = function(e) {
-      K.isEmpty(e) || this.scopes.add(e.trim());
+      q.isEmpty(e) || this.scopes.add(e.trim());
     }, n.prototype.appendScopes = function(e) {
       var t = this;
       try {
@@ -4595,7 +4595,7 @@ var Ke = (
         throw W.createAppendScopeSetError(r);
       }
     }, n.prototype.removeScope = function(e) {
-      if (K.isEmpty(e))
+      if (q.isEmpty(e))
         throw W.createRemoveEmptyScopeFromSetError(e);
       this.scopes.delete(e.trim());
     }, n.prototype.removeOIDCScopes = function() {
@@ -4638,7 +4638,7 @@ var Ke = (
 );
 /*! @azure/msal-common v13.3.3 2024-06-06 */
 function Po(n, e) {
-  if (K.isEmpty(n))
+  if (q.isEmpty(n))
     throw W.createClientInfoEmptyError();
   try {
     var t = e.base64Decode(n);
@@ -4648,7 +4648,7 @@ function Po(n, e) {
   }
 }
 function nr(n) {
-  if (K.isEmpty(n))
+  if (q.isEmpty(n))
     throw W.createClientInfoDecodingError("Home account ID was empty.");
   var e = n.split(Me.CLIENT_INFO_SEPARATOR, 2);
   return {
@@ -4724,7 +4724,7 @@ var Ge = (
       if (e)
         try {
           var s = Po(e, o);
-          if (!K.isEmpty(s.uid) && !K.isEmpty(s.utid))
+          if (!q.isEmpty(s.uid) && !q.isEmpty(s.utid))
             return "" + s.uid + Me.CLIENT_INFO_SEPARATOR + s.utid;
         } catch {
         }
@@ -4748,12 +4748,12 @@ var Ht = (
   /** @class */
   function() {
     function n(e, t) {
-      if (K.isEmpty(e))
+      if (q.isEmpty(e))
         throw W.createTokenNullOrEmptyError(e);
       this.rawToken = e, this.claims = n.extractTokenClaims(e, t);
     }
     return n.extractTokenClaims = function(e, t) {
-      var r = K.decodeAuthToken(e);
+      var r = q.decodeAuthToken(e);
       try {
         var o = r.JWSPayload, i = t.base64Decode(o);
         return JSON.parse(i);
@@ -5395,7 +5395,7 @@ var _n = (
     function n() {
     }
     return n.validateRedirectUri = function(e) {
-      if (K.isEmpty(e))
+      if (q.isEmpty(e))
         throw Se.createRedirectUriEmptyError();
     }, n.validatePrompt = function(e) {
       var t = [];
@@ -5410,7 +5410,7 @@ var _n = (
         throw Se.createInvalidClaimsRequestError();
       }
     }, n.validateCodeChallengeParams = function(e, t) {
-      if (K.isEmpty(e) || K.isEmpty(t))
+      if (q.isEmpty(e) || q.isEmpty(t))
         throw Se.createInvalidCodeChallengeParamsError();
       this.validateCodeChallengeMethod(t);
     }, n.validateCodeChallengeMethod = function(e) {
@@ -5478,7 +5478,7 @@ var jr = (
     }, n.prototype.addPrompt = function(e) {
       _n.validatePrompt(e), this.parameters.set("" + ce.PROMPT, encodeURIComponent(e));
     }, n.prototype.addState = function(e) {
-      K.isEmpty(e) || this.parameters.set(ce.STATE, encodeURIComponent(e));
+      q.isEmpty(e) || this.parameters.set(ce.STATE, encodeURIComponent(e));
     }, n.prototype.addNonce = function(e) {
       this.parameters.set(ce.NONCE, encodeURIComponent(e));
     }, n.prototype.addCodeChallengeParams = function(e, t) {
@@ -5497,9 +5497,9 @@ var jr = (
     }, n.prototype.addClientSecret = function(e) {
       this.parameters.set(ce.CLIENT_SECRET, encodeURIComponent(e));
     }, n.prototype.addClientAssertion = function(e) {
-      K.isEmpty(e) || this.parameters.set(ce.CLIENT_ASSERTION, encodeURIComponent(e));
+      q.isEmpty(e) || this.parameters.set(ce.CLIENT_ASSERTION, encodeURIComponent(e));
     }, n.prototype.addClientAssertionType = function(e) {
-      K.isEmpty(e) || this.parameters.set(ce.CLIENT_ASSERTION_TYPE, encodeURIComponent(e));
+      q.isEmpty(e) || this.parameters.set(ce.CLIENT_ASSERTION_TYPE, encodeURIComponent(e));
     }, n.prototype.addOboAssertion = function(e) {
       this.parameters.set(ce.OBO_ASSERTION, encodeURIComponent(e));
     }, n.prototype.addRequestTokenUse = function(e) {
@@ -5531,9 +5531,9 @@ var jr = (
     }, n.prototype.addPassword = function(e) {
       this.parameters.set(Ao.password, encodeURIComponent(e));
     }, n.prototype.addPopToken = function(e) {
-      K.isEmpty(e) || (this.parameters.set(ce.TOKEN_TYPE, ve.POP), this.parameters.set(ce.REQ_CNF, encodeURIComponent(e)));
+      q.isEmpty(e) || (this.parameters.set(ce.TOKEN_TYPE, ve.POP), this.parameters.set(ce.REQ_CNF, encodeURIComponent(e)));
     }, n.prototype.addSshJwk = function(e) {
-      K.isEmpty(e) || (this.parameters.set(ce.TOKEN_TYPE, ve.SSH), this.parameters.set(ce.REQ_CNF, encodeURIComponent(e)));
+      q.isEmpty(e) || (this.parameters.set(ce.TOKEN_TYPE, ve.SSH), this.parameters.set(ce.REQ_CNF, encodeURIComponent(e)));
     }, n.prototype.addServerTelemetry = function(e) {
       this.parameters.set(ce.X_CLIENT_CURR_TELEM, e.generateCurrentRequestHeaderValue()), this.parameters.set(ce.X_CLIENT_LAST_TELEM, e.generateLastRequestHeaderValue());
     }, n.prototype.addThrottling = function() {
@@ -5699,7 +5699,7 @@ var hn = (
       var b, C, v = new e();
       v.homeAccountId = t, v.credentialType = ee.ACCESS_TOKEN, v.secret = o;
       var w = vt.nowSeconds();
-      if (v.cachedAt = w.toString(), v.expiresOn = c.toString(), v.extendedExpiresOn = l.toString(), f && (v.refreshOn = f.toString()), v.environment = r, v.clientId = i, v.realm = a, v.target = s, v.userAssertionHash = h, v.tokenType = K.isEmpty(d) ? ve.BEARER : d, g && (v.requestedClaims = g, v.requestedClaimsHash = m), ((b = v.tokenType) === null || b === void 0 ? void 0 : b.toLowerCase()) !== ve.BEARER.toLowerCase())
+      if (v.cachedAt = w.toString(), v.expiresOn = c.toString(), v.extendedExpiresOn = l.toString(), f && (v.refreshOn = f.toString()), v.environment = r, v.clientId = i, v.realm = a, v.target = s, v.userAssertionHash = h, v.tokenType = q.isEmpty(d) ? ve.BEARER : d, g && (v.requestedClaims = g, v.requestedClaimsHash = m), ((b = v.tokenType) === null || b === void 0 ? void 0 : b.toLowerCase()) !== ve.BEARER.toLowerCase())
         switch (v.credentialType = ee.ACCESS_TOKEN_WITH_AUTH_SCHEME, v.tokenType) {
           case ve.POP:
             var S = Ht.extractTokenClaims(o, u);
@@ -5790,7 +5790,7 @@ var Yt = (
     }
     return n.setRequestState = function(e, t, r) {
       var o = n.generateLibraryState(e, r);
-      return K.isEmpty(t) ? o : "" + o + I.RESOURCE_DELIM + t;
+      return q.isEmpty(t) ? o : "" + o + I.RESOURCE_DELIM + t;
     }, n.generateLibraryState = function(e, t) {
       if (!e)
         throw W.createNoCryptoObjectError("generateLibraryState");
@@ -5803,12 +5803,12 @@ var Yt = (
     }, n.parseRequestState = function(e, t) {
       if (!e)
         throw W.createNoCryptoObjectError("parseRequestState");
-      if (K.isEmpty(t))
+      if (q.isEmpty(t))
         throw W.createInvalidStateError(t, "Null, undefined or empty state");
       try {
         var r = t.split(I.RESOURCE_DELIM), o = r[0], i = r.length > 1 ? r.slice(1).join(I.RESOURCE_DELIM) : I.EMPTY_STRING, a = e.base64Decode(o), s = JSON.parse(a);
         return {
-          userRequestState: K.isEmpty(i) ? I.EMPTY_STRING : i,
+          userRequestState: q.isEmpty(i) ? I.EMPTY_STRING : i,
           libraryState: s
         };
       } catch (c) {
@@ -5822,9 +5822,9 @@ var he = (
   /** @class */
   function() {
     function n(e) {
-      if (this._urlString = e, K.isEmpty(this._urlString))
+      if (this._urlString = e, q.isEmpty(this._urlString))
         throw Se.createUrlEmptyError();
-      K.isEmpty(this.getHash()) && (this._urlString = n.canonicalizeUri(e));
+      q.isEmpty(this.getHash()) && (this._urlString = n.canonicalizeUri(e));
     }
     return Object.defineProperty(n.prototype, "urlString", {
       get: function() {
@@ -5835,7 +5835,7 @@ var he = (
     }), n.canonicalizeUri = function(e) {
       if (e) {
         var t = e.toLowerCase();
-        return K.endsWith(t, "?") ? t = t.slice(0, -1) : K.endsWith(t, "?/") && (t = t.slice(0, -2)), K.endsWith(t, "/") || (t += "/"), t;
+        return q.endsWith(t, "?") ? t = t.slice(0, -1) : q.endsWith(t, "?/") && (t = t.slice(0, -2)), q.endsWith(t, "/") || (t += "/"), t;
       }
       return e;
     }, n.prototype.validateAsUri = function() {
@@ -5850,7 +5850,7 @@ var he = (
       if (!e.Protocol || e.Protocol.toLowerCase() !== "https:")
         throw Se.createInsecureAuthorityUriError(this.urlString);
     }, n.appendQueryString = function(e, t) {
-      return K.isEmpty(t) ? e : e.indexOf("?") < 0 ? e + "?" + t : e + "&" + t;
+      return q.isEmpty(t) ? e : e.indexOf("?") < 0 ? e + "?" + t : e + "&" + t;
     }, n.removeHashFromUrl = function(e) {
       return n.canonicalizeUri(e.split("#")[0]);
     }, n.prototype.replaceTenantPath = function(e) {
@@ -5870,7 +5870,7 @@ var he = (
       }, o = r.AbsolutePath.split("/");
       return o = o.filter(function(i) {
         return i && i.length > 0;
-      }), r.PathSegments = o, !K.isEmpty(r.QueryString) && r.QueryString.endsWith("/") && (r.QueryString = r.QueryString.substring(0, r.QueryString.length - 1)), r;
+      }), r.PathSegments = o, !q.isEmpty(r.QueryString) && r.QueryString.endsWith("/") && (r.QueryString = r.QueryString.substring(0, r.QueryString.length - 1)), r;
     }, n.getDomainFromUrl = function(e) {
       var t = RegExp("^([^:/?#]+://)?([^/?#]*)"), r = e.match(t);
       if (!r)
@@ -5891,21 +5891,21 @@ var he = (
     }, n.constructAuthorityUriFromObject = function(e) {
       return new n(e.Protocol + "//" + e.HostNameAndPort + "/" + e.PathSegments.join("/"));
     }, n.getDeserializedHash = function(e) {
-      if (K.isEmpty(e))
+      if (q.isEmpty(e))
         return {};
-      var t = n.parseHash(e), r = K.queryStringToObject(K.isEmpty(t) ? e : t);
+      var t = n.parseHash(e), r = q.queryStringToObject(q.isEmpty(t) ? e : t);
       if (!r)
         throw W.createHashNotDeserializedError(JSON.stringify(r));
       return r;
     }, n.getDeserializedQueryString = function(e) {
-      if (K.isEmpty(e))
+      if (q.isEmpty(e))
         return {};
-      var t = n.parseQueryString(e), r = K.queryStringToObject(K.isEmpty(t) ? e : t);
+      var t = n.parseQueryString(e), r = q.queryStringToObject(q.isEmpty(t) ? e : t);
       if (!r)
         throw W.createHashNotDeserializedError(JSON.stringify(r));
       return r;
     }, n.hashContainsKnownProperties = function(e) {
-      if (K.isEmpty(e) || e.indexOf("=") < 0)
+      if (q.isEmpty(e) || e.indexOf("=") < 0)
         return !1;
       var t = n.getDeserializedHash(e);
       return !!(t.code || t.error_description || t.error || t.state);
@@ -5913,10 +5913,10 @@ var he = (
   }()
 );
 /*! @azure/msal-common v13.3.3 2024-06-06 */
-var A;
+var k;
 (function(n) {
   n.AcquireTokenByCode = "acquireTokenByCode", n.AcquireTokenByRefreshToken = "acquireTokenByRefreshToken", n.AcquireTokenSilent = "acquireTokenSilent", n.AcquireTokenSilentAsync = "acquireTokenSilentAsync", n.AcquireTokenPopup = "acquireTokenPopup", n.CryptoOptsGetPublicKeyThumbprint = "cryptoOptsGetPublicKeyThumbprint", n.CryptoOptsSignJwt = "cryptoOptsSignJwt", n.SilentCacheClientAcquireToken = "silentCacheClientAcquireToken", n.SilentIframeClientAcquireToken = "silentIframeClientAcquireToken", n.SilentRefreshClientAcquireToken = "silentRefreshClientAcquireToken", n.SsoSilent = "ssoSilent", n.StandardInteractionClientGetDiscoveredAuthority = "standardInteractionClientGetDiscoveredAuthority", n.FetchAccountIdWithNativeBroker = "fetchAccountIdWithNativeBroker", n.NativeInteractionClientAcquireToken = "nativeInteractionClientAcquireToken", n.BaseClientCreateTokenRequestHeaders = "baseClientCreateTokenRequestHeaders", n.BrokerHandhshake = "brokerHandshake", n.AcquireTokenByRefreshTokenInBroker = "acquireTokenByRefreshTokenInBroker", n.AcquireTokenByBroker = "acquireTokenByBroker", n.RefreshTokenClientExecuteTokenRequest = "refreshTokenClientExecuteTokenRequest", n.RefreshTokenClientAcquireToken = "refreshTokenClientAcquireToken", n.RefreshTokenClientAcquireTokenWithCachedRefreshToken = "refreshTokenClientAcquireTokenWithCachedRefreshToken", n.RefreshTokenClientAcquireTokenByRefreshToken = "refreshTokenClientAcquireTokenByRefreshToken", n.RefreshTokenClientCreateTokenRequestBody = "refreshTokenClientCreateTokenRequestBody", n.AcquireTokenFromCache = "acquireTokenFromCache", n.AcquireTokenBySilentIframe = "acquireTokenBySilentIframe", n.InitializeBaseRequest = "initializeBaseRequest", n.InitializeSilentRequest = "initializeSilentRequest", n.InitializeClientApplication = "initializeClientApplication", n.SilentIframeClientTokenHelper = "silentIframeClientTokenHelper", n.SilentHandlerInitiateAuthRequest = "silentHandlerInitiateAuthRequest", n.SilentHandlerMonitorIframeForHash = "silentHandlerMonitorIframeForHash", n.SilentHandlerLoadFrame = "silentHandlerLoadFrame", n.StandardInteractionClientCreateAuthCodeClient = "standardInteractionClientCreateAuthCodeClient", n.StandardInteractionClientGetClientConfiguration = "standardInteractionClientGetClientConfiguration", n.StandardInteractionClientInitializeAuthorizationRequest = "standardInteractionClientInitializeAuthorizationRequest", n.StandardInteractionClientInitializeAuthorizationCodeRequest = "standardInteractionClientInitializeAuthorizationCodeRequest", n.GetAuthCodeUrl = "getAuthCodeUrl", n.HandleCodeResponseFromServer = "handleCodeResponseFromServer", n.HandleCodeResponseFromHash = "handleCodeResponseFromHash", n.UpdateTokenEndpointAuthority = "updateTokenEndpointAuthority", n.AuthClientAcquireToken = "authClientAcquireToken", n.AuthClientExecuteTokenRequest = "authClientExecuteTokenRequest", n.AuthClientCreateTokenRequestBody = "authClientCreateTokenRequestBody", n.AuthClientCreateQueryString = "authClientCreateQueryString", n.PopTokenGenerateCnf = "popTokenGenerateCnf", n.PopTokenGenerateKid = "popTokenGenerateKid", n.HandleServerTokenResponse = "handleServerTokenResponse", n.AuthorityFactoryCreateDiscoveredInstance = "authorityFactoryCreateDiscoveredInstance", n.AuthorityResolveEndpointsAsync = "authorityResolveEndpointsAsync", n.AuthorityGetCloudDiscoveryMetadataFromNetwork = "authorityGetCloudDiscoveryMetadataFromNetwork", n.AuthorityUpdateCloudDiscoveryMetadata = "authorityUpdateCloudDiscoveryMetadata", n.AuthorityGetEndpointMetadataFromNetwork = "authorityGetEndpointMetadataFromNetwork", n.AuthorityUpdateEndpointMetadata = "authorityUpdateEndpointMetadata", n.AuthorityUpdateMetadataWithRegionalInformation = "authorityUpdateMetadataWithRegionalInformation", n.RegionDiscoveryDetectRegion = "regionDiscoveryDetectRegion", n.RegionDiscoveryGetRegionFromIMDS = "regionDiscoveryGetRegionFromIMDS", n.RegionDiscoveryGetCurrentVersion = "regionDiscoveryGetCurrentVersion", n.AcquireTokenByCodeAsync = "acquireTokenByCodeAsync", n.GetEndpointMetadataFromNetwork = "getEndpointMetadataFromNetwork", n.GetCloudDiscoveryMetadataFromNetworkMeasurement = "getCloudDiscoveryMetadataFromNetworkMeasurement", n.HandleRedirectPromiseMeasurement = "handleRedirectPromiseMeasurement", n.UpdateCloudDiscoveryMetadataMeasurement = "updateCloudDiscoveryMetadataMeasurement", n.UsernamePasswordClientAcquireToken = "usernamePasswordClientAcquireToken", n.NativeMessageHandlerHandshake = "nativeMessageHandlerHandshake", n.ClearTokensAndKeysWithClaims = "clearTokensAndKeysWithClaims";
-})(A || (A = {}));
+})(k || (k = {}));
 var Mo;
 (function(n) {
   n[n.NotStarted = 0] = "NotStarted", n[n.InProgress = 1] = "InProgress", n[n.Completed = 2] = "Completed";
@@ -5950,7 +5950,7 @@ var ur = (
         return se(this, function(s) {
           switch (s.label) {
             case 0:
-              return (t = this.performanceClient) === null || t === void 0 || t.addQueueMeasurement(A.PopTokenGenerateCnf, e.correlationId), (r = this.performanceClient) === null || r === void 0 || r.setPreQueueTime(A.PopTokenGenerateKid, e.correlationId), [4, this.generateKid(e)];
+              return (t = this.performanceClient) === null || t === void 0 || t.addQueueMeasurement(k.PopTokenGenerateCnf, e.correlationId), (r = this.performanceClient) === null || r === void 0 || r.setPreQueueTime(k.PopTokenGenerateKid, e.correlationId), [4, this.generateKid(e)];
             case 1:
               return o = s.sent(), i = this.cryptoUtils.base64Encode(JSON.stringify(o)), a = {
                 kid: o.kid,
@@ -5968,7 +5968,7 @@ var ur = (
         return se(this, function(o) {
           switch (o.label) {
             case 0:
-              return (t = this.performanceClient) === null || t === void 0 || t.addQueueMeasurement(A.PopTokenGenerateKid, e.correlationId), [4, this.cryptoUtils.getPublicKeyThumbprint(e)];
+              return (t = this.performanceClient) === null || t === void 0 || t.addQueueMeasurement(k.PopTokenGenerateKid, e.correlationId), [4, this.cryptoUtils.getPublicKeyThumbprint(e)];
             case 1:
               return r = o.sent(), [2, {
                 kid: r,
@@ -6078,8 +6078,8 @@ var Oo = (
         return se(this, function(C) {
           switch (C.label) {
             case 0:
-              if ((u = this.performanceClient) === null || u === void 0 || u.addQueueMeasurement(A.HandleServerTokenResponse, e.correlation_id), e.id_token) {
-                if (f = new Ht(e.id_token || I.EMPTY_STRING, this.cryptoObj), i && !K.isEmpty(i.nonce) && f.claims.nonce !== i.nonce)
+              if ((u = this.performanceClient) === null || u === void 0 || u.addQueueMeasurement(k.HandleServerTokenResponse, e.correlation_id), e.id_token) {
+                if (f = new Ht(e.id_token || I.EMPTY_STRING, this.cryptoObj), i && !q.isEmpty(i.nonce) && f.claims.nonce !== i.nonce)
                   throw W.createNonceMismatchError();
                 if (o.maxAge || o.maxAge === 0) {
                   if (d = f.claims.auth_time, !d)
@@ -6112,10 +6112,10 @@ var Oo = (
       });
     }, n.prototype.generateCacheRecord = function(e, t, r, o, i, a, s) {
       var c = t.getPreferredCache();
-      if (K.isEmpty(c))
+      if (q.isEmpty(c))
         throw W.createInvalidCacheEnvironmentError();
       var l, u;
-      !K.isEmpty(e.id_token) && i && (l = fn.createIdTokenEntity(this.homeAccountIdentifier, c, e.id_token || I.EMPTY_STRING, this.clientId, i.claims.tid || I.EMPTY_STRING), u = Ge.createAccount({
+      !q.isEmpty(e.id_token) && i && (l = fn.createIdTokenEntity(this.homeAccountIdentifier, c, e.id_token || I.EMPTY_STRING, this.clientId, i.claims.tid || I.EMPTY_STRING), u = Ge.createAccount({
         homeAccountId: this.homeAccountIdentifier,
         idTokenClaims: i.claims,
         clientInfo: e.client_info || I.EMPTY_STRING,
@@ -6123,18 +6123,18 @@ var Oo = (
         msGraphHost: s == null ? void 0 : s.msgraph_host
       }, t));
       var f = null;
-      if (!K.isEmpty(e.access_token)) {
+      if (!q.isEmpty(e.access_token)) {
         var d = e.scope ? Ke.fromString(e.scope) : new Ke(o.scopes || []), h = (typeof e.expires_in == "string" ? parseInt(e.expires_in, 10) : e.expires_in) || 0, p = (typeof e.ext_expires_in == "string" ? parseInt(e.ext_expires_in, 10) : e.ext_expires_in) || 0, g = (typeof e.refresh_in == "string" ? parseInt(e.refresh_in, 10) : e.refresh_in) || void 0, m = r + h, b = m + p, C = g && g > 0 ? r + g : void 0;
         f = hn.createAccessTokenEntity(this.homeAccountIdentifier, c, e.access_token || I.EMPTY_STRING, this.clientId, i ? i.claims.tid || I.EMPTY_STRING : t.tenant, d.printScopes(), m, b, this.cryptoObj, C, e.token_type, a, e.key_id, o.claims, o.requestedClaimsHash);
       }
       var v = null;
-      K.isEmpty(e.refresh_token) || (v = rr.createRefreshTokenEntity(this.homeAccountIdentifier, c, e.refresh_token || I.EMPTY_STRING, this.clientId, e.foci, a));
+      q.isEmpty(e.refresh_token) || (v = rr.createRefreshTokenEntity(this.homeAccountIdentifier, c, e.refresh_token || I.EMPTY_STRING, this.clientId, e.foci, a));
       var w = null;
-      return K.isEmpty(e.foci) || (w = sa.createAppMetadataEntity(this.clientId, c, e.foci)), new ar(u, l, f, v, w);
+      return q.isEmpty(e.foci) || (w = sa.createAppMetadataEntity(this.clientId, c, e.foci)), new ar(u, l, f, v, w);
     }, n.generateAuthenticationResult = function(e, t, r, o, i, a, s, c, l) {
       var u, f, d;
       return ae(this, void 0, void 0, function() {
-        var h, p, g, m, b, C, v, w, S, E, k;
+        var h, p, g, m, b, C, v, w, S, E, _;
         return se(this, function(T) {
           switch (T.label) {
             case 0:
@@ -6152,10 +6152,10 @@ var Oo = (
             case 3:
               p = Ke.fromString(r.accessToken.target).asArray(), g = new Date(Number(r.accessToken.expiresOn) * 1e3), m = new Date(Number(r.accessToken.extendedExpiresOn) * 1e3), T.label = 4;
             case 4:
-              return r.appMetadata && (b = r.appMetadata.familyId === xr ? xr : I.EMPTY_STRING), E = (a == null ? void 0 : a.claims.oid) || (a == null ? void 0 : a.claims.sub) || I.EMPTY_STRING, k = (a == null ? void 0 : a.claims.tid) || I.EMPTY_STRING, c != null && c.spa_accountid && r.account && (r.account.nativeAccountId = c == null ? void 0 : c.spa_accountid), [2, {
+              return r.appMetadata && (b = r.appMetadata.familyId === xr ? xr : I.EMPTY_STRING), E = (a == null ? void 0 : a.claims.oid) || (a == null ? void 0 : a.claims.sub) || I.EMPTY_STRING, _ = (a == null ? void 0 : a.claims.tid) || I.EMPTY_STRING, c != null && c.spa_accountid && r.account && (r.account.nativeAccountId = c == null ? void 0 : c.spa_accountid), [2, {
                 authority: t.canonicalAuthority,
                 uniqueId: E,
-                tenantId: k,
+                tenantId: _,
                 scopes: p,
                 account: r.account ? r.account.getAccountInfo() : null,
                 idToken: a ? a.rawToken : I.EMPTY_STRING,
@@ -6196,7 +6196,7 @@ var cu = (
         return se(this, function(a) {
           switch (a.label) {
             case 0:
-              return (r = this.performanceClient) === null || r === void 0 || r.addQueueMeasurement(A.GetAuthCodeUrl, t.correlationId), (o = this.performanceClient) === null || o === void 0 || o.setPreQueueTime(A.AuthClientCreateQueryString, t.correlationId), [4, this.createAuthCodeUrlQueryString(t)];
+              return (r = this.performanceClient) === null || r === void 0 || r.addQueueMeasurement(k.GetAuthCodeUrl, t.correlationId), (o = this.performanceClient) === null || o === void 0 || o.setPreQueueTime(k.AuthClientCreateQueryString, t.correlationId), [4, this.createAuthCodeUrlQueryString(t)];
             case 1:
               return i = a.sent(), [2, he.appendQueryString(this.authority.authorizationEndpoint, i)];
           }
@@ -6211,11 +6211,11 @@ var cu = (
             case 0:
               if (!t || !t.code)
                 throw W.createTokenRequestCannotBeMadeError();
-              return (o = this.performanceClient) === null || o === void 0 || o.addQueueMeasurement(A.AuthClientAcquireToken, t.correlationId), u = (i = this.performanceClient) === null || i === void 0 ? void 0 : i.startMeasurement("AuthCodeClientAcquireToken", t.correlationId), this.logger.info("in acquireToken call in auth-code client"), f = vt.nowSeconds(), (a = this.performanceClient) === null || a === void 0 || a.setPreQueueTime(A.AuthClientExecuteTokenRequest, t.correlationId), [4, this.executeTokenRequest(this.authority, t)];
+              return (o = this.performanceClient) === null || o === void 0 || o.addQueueMeasurement(k.AuthClientAcquireToken, t.correlationId), u = (i = this.performanceClient) === null || i === void 0 ? void 0 : i.startMeasurement("AuthCodeClientAcquireToken", t.correlationId), this.logger.info("in acquireToken call in auth-code client"), f = vt.nowSeconds(), (a = this.performanceClient) === null || a === void 0 || a.setPreQueueTime(k.AuthClientExecuteTokenRequest, t.correlationId), [4, this.executeTokenRequest(this.authority, t)];
             case 1:
               return d = b.sent(), h = (s = d.headers) === null || s === void 0 ? void 0 : s[ut.X_MS_REQUEST_ID], p = (c = d.headers) === null || c === void 0 ? void 0 : c[ut.X_MS_HTTP_VERSION], p && (u == null || u.addStaticFields({
                 httpVerAuthority: p
-              })), g = new Oo(this.config.authOptions.clientId, this.cacheManager, this.cryptoUtils, this.logger, this.config.serializableCache, this.config.persistencePlugin, this.performanceClient), g.validateTokenResponse(d.body), (l = this.performanceClient) === null || l === void 0 || l.setPreQueueTime(A.HandleServerTokenResponse, t.correlationId), [2, g.handleServerTokenResponse(d.body, this.authority, f, t, r, void 0, void 0, void 0, h).then(function(C) {
+              })), g = new Oo(this.config.authOptions.clientId, this.cacheManager, this.cryptoUtils, this.logger, this.config.serializableCache, this.config.persistencePlugin, this.performanceClient), g.validateTokenResponse(d.body), (l = this.performanceClient) === null || l === void 0 || l.setPreQueueTime(k.HandleServerTokenResponse, t.correlationId), [2, g.handleServerTokenResponse(d.body, this.authority, f, t, r, void 0, void 0, void 0, h).then(function(C) {
                 return u == null || u.endMeasurement({
                   success: !0
                 }), C;
@@ -6249,7 +6249,7 @@ var cu = (
         return se(this, function(h) {
           switch (h.label) {
             case 0:
-              return (o = this.performanceClient) === null || o === void 0 || o.addQueueMeasurement(A.AuthClientExecuteTokenRequest, r.correlationId), (i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(A.AuthClientCreateTokenRequestBody, r.correlationId), a = this.createTokenQueryParameters(r), s = he.appendQueryString(t.tokenEndpoint, a), [4, this.createTokenRequestBody(r)];
+              return (o = this.performanceClient) === null || o === void 0 || o.addQueueMeasurement(k.AuthClientExecuteTokenRequest, r.correlationId), (i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(k.AuthClientCreateTokenRequestBody, r.correlationId), a = this.createTokenQueryParameters(r), s = he.appendQueryString(t.tokenEndpoint, a), [4, this.createTokenRequestBody(r)];
             case 1:
               if (c = h.sent(), l = void 0, r.clientInfo)
                 try {
@@ -6281,7 +6281,7 @@ var cu = (
         return se(this, function(h) {
           switch (h.label) {
             case 0:
-              return (r = this.performanceClient) === null || r === void 0 || r.addQueueMeasurement(A.AuthClientCreateTokenRequestBody, t.correlationId), i = new jr(), i.addClientId(this.config.authOptions.clientId), this.includeRedirectUri ? i.addRedirectUri(t.redirectUri) : _n.validateRedirectUri(t.redirectUri), i.addScopes(t.scopes), i.addAuthorizationCode(t.code), i.addLibraryInfo(this.config.libraryInfo), i.addApplicationTelemetry(this.config.telemetry.application), i.addThrottling(), this.serverTelemetryManager && i.addServerTelemetry(this.serverTelemetryManager), t.codeVerifier && i.addCodeVerifier(t.codeVerifier), this.config.clientCredentials.clientSecret && i.addClientSecret(this.config.clientCredentials.clientSecret), this.config.clientCredentials.clientAssertion && (a = this.config.clientCredentials.clientAssertion, i.addClientAssertion(a.assertion), i.addClientAssertionType(a.assertionType)), i.addGrantType(ko.AUTHORIZATION_CODE_GRANT), i.addClientInfo(), t.authenticationScheme !== ve.POP ? [3, 2] : (s = new ur(this.cryptoUtils, this.performanceClient), (o = this.performanceClient) === null || o === void 0 || o.setPreQueueTime(A.PopTokenGenerateCnf, t.correlationId), [4, s.generateCnf(t)]);
+              return (r = this.performanceClient) === null || r === void 0 || r.addQueueMeasurement(k.AuthClientCreateTokenRequestBody, t.correlationId), i = new jr(), i.addClientId(this.config.authOptions.clientId), this.includeRedirectUri ? i.addRedirectUri(t.redirectUri) : _n.validateRedirectUri(t.redirectUri), i.addScopes(t.scopes), i.addAuthorizationCode(t.code), i.addLibraryInfo(this.config.libraryInfo), i.addApplicationTelemetry(this.config.telemetry.application), i.addThrottling(), this.serverTelemetryManager && i.addServerTelemetry(this.serverTelemetryManager), t.codeVerifier && i.addCodeVerifier(t.codeVerifier), this.config.clientCredentials.clientSecret && i.addClientSecret(this.config.clientCredentials.clientSecret), this.config.clientCredentials.clientAssertion && (a = this.config.clientCredentials.clientAssertion, i.addClientAssertion(a.assertion), i.addClientAssertionType(a.assertionType)), i.addGrantType(ko.AUTHORIZATION_CODE_GRANT), i.addClientInfo(), t.authenticationScheme !== ve.POP ? [3, 2] : (s = new ur(this.cryptoUtils, this.performanceClient), (o = this.performanceClient) === null || o === void 0 || o.setPreQueueTime(k.PopTokenGenerateCnf, t.correlationId), [4, s.generateCnf(t)]);
             case 1:
               return c = h.sent(), i.addPopToken(c.reqCnfString), [3, 3];
             case 2:
@@ -6292,7 +6292,7 @@ var cu = (
                   throw Se.createMissingSshJwkError();
               h.label = 3;
             case 3:
-              if (l = t.correlationId || this.config.cryptoInterface.createNewGuid(), i.addCorrelationId(l), (!K.isEmptyObj(t.claims) || this.config.authOptions.clientCapabilities && this.config.authOptions.clientCapabilities.length > 0) && i.addClaims(t.claims, this.config.authOptions.clientCapabilities), u = void 0, t.clientInfo)
+              if (l = t.correlationId || this.config.cryptoInterface.createNewGuid(), i.addCorrelationId(l), (!q.isEmptyObj(t.claims) || this.config.authOptions.clientCapabilities && this.config.authOptions.clientCapabilities.length > 0) && i.addClaims(t.claims, this.config.authOptions.clientCapabilities), u = void 0, t.clientInfo)
                 try {
                   f = Po(t.clientInfo, this.cryptoUtils), u = {
                     credential: "" + f.uid + Me.CLIENT_INFO_SEPARATOR + f.utid,
@@ -6327,7 +6327,7 @@ var cu = (
         return se(this, function(d) {
           switch (d.label) {
             case 0:
-              if ((r = this.performanceClient) === null || r === void 0 || r.addQueueMeasurement(A.AuthClientCreateQueryString, t.correlationId), o = new jr(), o.addClientId(this.config.authOptions.clientId), i = ti(t.scopes || [], t.extraScopesToConsent || []), o.addScopes(i), o.addRedirectUri(t.redirectUri), a = t.correlationId || this.config.cryptoInterface.createNewGuid(), o.addCorrelationId(a), o.addResponseMode(t.responseMode), o.addResponseTypeCode(), o.addLibraryInfo(this.config.libraryInfo), o.addApplicationTelemetry(this.config.telemetry.application), o.addClientInfo(), t.codeChallenge && t.codeChallengeMethod && o.addCodeChallengeParams(t.codeChallenge, t.codeChallengeMethod), t.prompt && o.addPrompt(t.prompt), t.domainHint && o.addDomainHint(t.domainHint), t.prompt !== Ve.SELECT_ACCOUNT)
+              if ((r = this.performanceClient) === null || r === void 0 || r.addQueueMeasurement(k.AuthClientCreateQueryString, t.correlationId), o = new jr(), o.addClientId(this.config.authOptions.clientId), i = ti(t.scopes || [], t.extraScopesToConsent || []), o.addScopes(i), o.addRedirectUri(t.redirectUri), a = t.correlationId || this.config.cryptoInterface.createNewGuid(), o.addCorrelationId(a), o.addResponseMode(t.responseMode), o.addResponseTypeCode(), o.addLibraryInfo(this.config.libraryInfo), o.addApplicationTelemetry(this.config.telemetry.application), o.addClientInfo(), t.codeChallenge && t.codeChallengeMethod && o.addCodeChallengeParams(t.codeChallenge, t.codeChallengeMethod), t.prompt && o.addPrompt(t.prompt), t.domainHint && o.addDomainHint(t.domainHint), t.prompt !== Ve.SELECT_ACCOUNT)
                 if (t.sid && t.prompt === Ve.NONE)
                   this.logger.verbose("createAuthCodeUrlQueryString: Prompt is none, adding sid from request"), o.addSid(t.sid);
                 else if (t.account) {
@@ -6359,7 +6359,7 @@ var cu = (
                   t.loginHint && (this.logger.verbose("createAuthCodeUrlQueryString: No account, adding login_hint from request"), o.addLoginHint(t.loginHint), o.addCcsUpn(t.loginHint));
               else
                 this.logger.verbose("createAuthCodeUrlQueryString: Prompt is select_account, ignoring account hints");
-              return t.nonce && o.addNonce(t.nonce), t.state && o.addState(t.state), (!K.isEmpty(t.claims) || this.config.authOptions.clientCapabilities && this.config.authOptions.clientCapabilities.length > 0) && o.addClaims(t.claims, this.config.authOptions.clientCapabilities), t.extraQueryParameters && o.addExtraQueryParameters(t.extraQueryParameters), t.nativeBroker ? (o.addNativeBroker(), t.authenticationScheme !== ve.POP ? [3, 2] : (u = new ur(this.cryptoUtils), [4, u.generateCnf(t)])) : [3, 2];
+              return t.nonce && o.addNonce(t.nonce), t.state && o.addState(t.state), (!q.isEmpty(t.claims) || this.config.authOptions.clientCapabilities && this.config.authOptions.clientCapabilities.length > 0) && o.addClaims(t.claims, this.config.authOptions.clientCapabilities), t.extraQueryParameters && o.addExtraQueryParameters(t.extraQueryParameters), t.nativeBroker ? (o.addNativeBroker(), t.authenticationScheme !== ve.POP ? [3, 2] : (u = new ur(this.cryptoUtils), [4, u.generateCnf(t)])) : [3, 2];
             case 1:
               f = d.sent(), o.addPopToken(f.reqCnfString), d.label = 2;
             case 2:
@@ -6394,13 +6394,13 @@ var lu = (
         return se(this, function(b) {
           switch (b.label) {
             case 0:
-              return (r = this.performanceClient) === null || r === void 0 || r.addQueueMeasurement(A.RefreshTokenClientAcquireToken, t.correlationId), u = (o = this.performanceClient) === null || o === void 0 ? void 0 : o.startMeasurement(A.RefreshTokenClientAcquireToken, t.correlationId), this.logger.verbose("RefreshTokenClientAcquireToken called", t.correlationId), f = vt.nowSeconds(), (i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(A.RefreshTokenClientExecuteTokenRequest, t.correlationId), [4, this.executeTokenRequest(t, this.authority)];
+              return (r = this.performanceClient) === null || r === void 0 || r.addQueueMeasurement(k.RefreshTokenClientAcquireToken, t.correlationId), u = (o = this.performanceClient) === null || o === void 0 ? void 0 : o.startMeasurement(k.RefreshTokenClientAcquireToken, t.correlationId), this.logger.verbose("RefreshTokenClientAcquireToken called", t.correlationId), f = vt.nowSeconds(), (i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(k.RefreshTokenClientExecuteTokenRequest, t.correlationId), [4, this.executeTokenRequest(t, this.authority)];
             case 1:
               return d = b.sent(), h = (a = d.headers) === null || a === void 0 ? void 0 : a[ut.X_MS_HTTP_VERSION], u == null || u.addStaticFields({
                 refreshTokenSize: ((s = d.body.refresh_token) === null || s === void 0 ? void 0 : s.length) || 0
               }), h && (u == null || u.addStaticFields({
                 httpVerToken: h
-              })), p = (c = d.headers) === null || c === void 0 ? void 0 : c[ut.X_MS_REQUEST_ID], g = new Oo(this.config.authOptions.clientId, this.cacheManager, this.cryptoUtils, this.logger, this.config.serializableCache, this.config.persistencePlugin), g.validateTokenResponse(d.body), (l = this.performanceClient) === null || l === void 0 || l.setPreQueueTime(A.HandleServerTokenResponse, t.correlationId), [2, g.handleServerTokenResponse(d.body, this.authority, f, t, void 0, void 0, !0, t.forceCache, p).then(function(C) {
+              })), p = (c = d.headers) === null || c === void 0 ? void 0 : c[ut.X_MS_REQUEST_ID], g = new Oo(this.config.authOptions.clientId, this.cacheManager, this.cryptoUtils, this.logger, this.config.serializableCache, this.config.persistencePlugin), g.validateTokenResponse(d.body), (l = this.performanceClient) === null || l === void 0 || l.setPreQueueTime(k.HandleServerTokenResponse, t.correlationId), [2, g.handleServerTokenResponse(d.body, this.authority, f, t, void 0, void 0, !0, t.forceCache, p).then(function(C) {
                 return u == null || u.endMeasurement({
                   success: !0
                 }), C;
@@ -6421,17 +6421,17 @@ var lu = (
         return se(this, function(u) {
           if (!t)
             throw Se.createEmptyTokenRequestError();
-          if ((r = this.performanceClient) === null || r === void 0 || r.addQueueMeasurement(A.RefreshTokenClientAcquireTokenByRefreshToken, t.correlationId), !t.account)
+          if ((r = this.performanceClient) === null || r === void 0 || r.addQueueMeasurement(k.RefreshTokenClientAcquireTokenByRefreshToken, t.correlationId), !t.account)
             throw W.createNoAccountInSilentRequestError();
           if (s = this.cacheManager.isAppMetadataFOCI(t.account.environment), s)
             try {
-              return (o = this.performanceClient) === null || o === void 0 || o.setPreQueueTime(A.RefreshTokenClientAcquireTokenWithCachedRefreshToken, t.correlationId), [2, this.acquireTokenWithCachedRefreshToken(t, !0)];
+              return (o = this.performanceClient) === null || o === void 0 || o.setPreQueueTime(k.RefreshTokenClientAcquireTokenWithCachedRefreshToken, t.correlationId), [2, this.acquireTokenWithCachedRefreshToken(t, !0)];
             } catch (f) {
               if (c = f instanceof Pt && f.errorCode === or.noTokensFoundError.code, l = f instanceof Ln && f.errorCode === Tc.INVALID_GRANT_ERROR && f.subError === Tc.CLIENT_MISMATCH_ERROR, c || l)
-                return (i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(A.RefreshTokenClientAcquireTokenWithCachedRefreshToken, t.correlationId), [2, this.acquireTokenWithCachedRefreshToken(t, !1)];
+                return (i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(k.RefreshTokenClientAcquireTokenWithCachedRefreshToken, t.correlationId), [2, this.acquireTokenWithCachedRefreshToken(t, !1)];
               throw f;
             }
-          return (a = this.performanceClient) === null || a === void 0 || a.setPreQueueTime(A.RefreshTokenClientAcquireTokenWithCachedRefreshToken, t.correlationId), [2, this.acquireTokenWithCachedRefreshToken(t, !1)];
+          return (a = this.performanceClient) === null || a === void 0 || a.setPreQueueTime(k.RefreshTokenClientAcquireTokenWithCachedRefreshToken, t.correlationId), [2, this.acquireTokenWithCachedRefreshToken(t, !1)];
         });
       });
     }, e.prototype.acquireTokenWithCachedRefreshToken = function(t, r) {
@@ -6439,14 +6439,14 @@ var lu = (
       return ae(this, void 0, void 0, function() {
         var s, c, l;
         return se(this, function(u) {
-          if ((o = this.performanceClient) === null || o === void 0 || o.addQueueMeasurement(A.RefreshTokenClientAcquireTokenWithCachedRefreshToken, t.correlationId), s = (i = this.performanceClient) === null || i === void 0 ? void 0 : i.startMeasurement(A.RefreshTokenClientAcquireTokenWithCachedRefreshToken, t.correlationId), this.logger.verbose("RefreshTokenClientAcquireTokenWithCachedRefreshToken called", t.correlationId), c = this.cacheManager.getRefreshToken(t.account, r), !c)
+          if ((o = this.performanceClient) === null || o === void 0 || o.addQueueMeasurement(k.RefreshTokenClientAcquireTokenWithCachedRefreshToken, t.correlationId), s = (i = this.performanceClient) === null || i === void 0 ? void 0 : i.startMeasurement(k.RefreshTokenClientAcquireTokenWithCachedRefreshToken, t.correlationId), this.logger.verbose("RefreshTokenClientAcquireTokenWithCachedRefreshToken called", t.correlationId), c = this.cacheManager.getRefreshToken(t.account, r), !c)
             throw s == null || s.discardMeasurement(), Pt.createNoTokensFoundError();
           return s == null || s.endMeasurement({
             success: !0
           }), l = ye(ye({}, t), { refreshToken: c.secret, authenticationScheme: t.authenticationScheme || ve.BEARER, ccsCredential: {
             credential: t.account.homeAccountId,
             type: ct.HOME_ACCOUNT_ID
-          } }), (a = this.performanceClient) === null || a === void 0 || a.setPreQueueTime(A.RefreshTokenClientAcquireToken, t.correlationId), [2, this.acquireToken(l)];
+          } }), (a = this.performanceClient) === null || a === void 0 || a.setPreQueueTime(k.RefreshTokenClientAcquireToken, t.correlationId), [2, this.acquireToken(l)];
         });
       });
     }, e.prototype.executeTokenRequest = function(t, r) {
@@ -6456,7 +6456,7 @@ var lu = (
         return se(this, function(h) {
           switch (h.label) {
             case 0:
-              return (o = this.performanceClient) === null || o === void 0 || o.addQueueMeasurement(A.RefreshTokenClientExecuteTokenRequest, t.correlationId), s = (i = this.performanceClient) === null || i === void 0 ? void 0 : i.startMeasurement(A.RefreshTokenClientExecuteTokenRequest, t.correlationId), (a = this.performanceClient) === null || a === void 0 || a.setPreQueueTime(A.RefreshTokenClientCreateTokenRequestBody, t.correlationId), c = this.createTokenQueryParameters(t), l = he.appendQueryString(r.tokenEndpoint, c), [4, this.createTokenRequestBody(t)];
+              return (o = this.performanceClient) === null || o === void 0 || o.addQueueMeasurement(k.RefreshTokenClientExecuteTokenRequest, t.correlationId), s = (i = this.performanceClient) === null || i === void 0 ? void 0 : i.startMeasurement(k.RefreshTokenClientExecuteTokenRequest, t.correlationId), (a = this.performanceClient) === null || a === void 0 || a.setPreQueueTime(k.RefreshTokenClientCreateTokenRequestBody, t.correlationId), c = this.createTokenQueryParameters(t), l = he.appendQueryString(r.tokenEndpoint, c), [4, this.createTokenRequestBody(t)];
             case 1:
               return u = h.sent(), f = this.createTokenRequestHeaders(t.ccsCredential), d = {
                 clientId: this.config.authOptions.clientId,
@@ -6487,7 +6487,7 @@ var lu = (
         return se(this, function(h) {
           switch (h.label) {
             case 0:
-              return (r = this.performanceClient) === null || r === void 0 || r.addQueueMeasurement(A.RefreshTokenClientCreateTokenRequestBody, t.correlationId), a = t.correlationId, s = (o = this.performanceClient) === null || o === void 0 ? void 0 : o.startMeasurement(A.BaseClientCreateTokenRequestHeaders, a), c = new jr(), c.addClientId(this.config.authOptions.clientId), c.addScopes(t.scopes), c.addGrantType(ko.REFRESH_TOKEN_GRANT), c.addClientInfo(), c.addLibraryInfo(this.config.libraryInfo), c.addApplicationTelemetry(this.config.telemetry.application), c.addThrottling(), this.serverTelemetryManager && c.addServerTelemetry(this.serverTelemetryManager), c.addCorrelationId(a), c.addRefreshToken(t.refreshToken), this.config.clientCredentials.clientSecret && c.addClientSecret(this.config.clientCredentials.clientSecret), this.config.clientCredentials.clientAssertion && (l = this.config.clientCredentials.clientAssertion, c.addClientAssertion(l.assertion), c.addClientAssertionType(l.assertionType)), t.authenticationScheme !== ve.POP ? [3, 2] : (u = new ur(this.cryptoUtils, this.performanceClient), (i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(A.PopTokenGenerateCnf, t.correlationId), [4, u.generateCnf(t)]);
+              return (r = this.performanceClient) === null || r === void 0 || r.addQueueMeasurement(k.RefreshTokenClientCreateTokenRequestBody, t.correlationId), a = t.correlationId, s = (o = this.performanceClient) === null || o === void 0 ? void 0 : o.startMeasurement(k.BaseClientCreateTokenRequestHeaders, a), c = new jr(), c.addClientId(this.config.authOptions.clientId), c.addScopes(t.scopes), c.addGrantType(ko.REFRESH_TOKEN_GRANT), c.addClientInfo(), c.addLibraryInfo(this.config.libraryInfo), c.addApplicationTelemetry(this.config.telemetry.application), c.addThrottling(), this.serverTelemetryManager && c.addServerTelemetry(this.serverTelemetryManager), c.addCorrelationId(a), c.addRefreshToken(t.refreshToken), this.config.clientCredentials.clientSecret && c.addClientSecret(this.config.clientCredentials.clientSecret), this.config.clientCredentials.clientAssertion && (l = this.config.clientCredentials.clientAssertion, c.addClientAssertion(l.assertion), c.addClientAssertionType(l.assertionType)), t.authenticationScheme !== ve.POP ? [3, 2] : (u = new ur(this.cryptoUtils, this.performanceClient), (i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(k.PopTokenGenerateCnf, t.correlationId), [4, u.generateCnf(t)]);
             case 1:
               return f = h.sent(), c.addPopToken(f.reqCnfString), [3, 3];
             case 2:
@@ -6500,7 +6500,7 @@ var lu = (
                   }), Se.createMissingSshJwkError();
               h.label = 3;
             case 3:
-              if ((!K.isEmptyObj(t.claims) || this.config.authOptions.clientCapabilities && this.config.authOptions.clientCapabilities.length > 0) && c.addClaims(t.claims, this.config.authOptions.clientCapabilities), this.config.systemOptions.preventCorsPreflight && t.ccsCredential)
+              if ((!q.isEmptyObj(t.claims) || this.config.authOptions.clientCapabilities && this.config.authOptions.clientCapabilities.length > 0) && c.addClaims(t.claims, this.config.authOptions.clientCapabilities), this.config.systemOptions.preventCorsPreflight && t.ccsCredential)
                 switch (t.ccsCredential.type) {
                   case ct.HOME_ACCOUNT_ID:
                     try {
@@ -6540,7 +6540,7 @@ var Sg = (
             case 1:
               return [2, i.sent()];
             case 2:
-              if (r = i.sent(), r instanceof W && r.errorCode === j.tokenRefreshRequired.code)
+              if (r = i.sent(), r instanceof W && r.errorCode === F.tokenRefreshRequired.code)
                 return o = new lu(this.config, this.performanceClient), [2, o.acquireTokenByRefreshToken(t)];
               throw r;
             case 3:
@@ -6562,7 +6562,7 @@ var Sg = (
                 throw Se.createEmptyTokenRequestError();
               if (t.forceRefresh)
                 throw (r = this.serverTelemetryManager) === null || r === void 0 || r.setCacheOutcome(dn.FORCE_REFRESH), this.logger.info("SilentFlowClient:acquireCachedToken - Skipping cache because forceRefresh is true."), W.createRefreshRequiredError();
-              if (!this.config.cacheOptions.claimsBasedCachingEnabled && !K.isEmptyObj(t.claims))
+              if (!this.config.cacheOptions.claimsBasedCachingEnabled && !q.isEmptyObj(t.claims))
                 throw (o = this.serverTelemetryManager) === null || o === void 0 || o.setCacheOutcome(dn.CLAIMS_REQUESTED_CACHE_SKIPPED), this.logger.info("SilentFlowClient:acquireCachedToken - Skipping cache because claims-based caching is disabled and claims were requested."), W.createRefreshRequiredError();
               if (!t.account)
                 throw W.createNoAccountInSilentRequestError();
@@ -6649,15 +6649,15 @@ var _g = (
         return se(this, function(d) {
           switch (d.label) {
             case 0:
-              if ((r = this.performanceClient) === null || r === void 0 || r.addQueueMeasurement(A.RegionDiscoveryDetectRegion, this.correlationId), s = e, s)
+              if ((r = this.performanceClient) === null || r === void 0 || r.addQueueMeasurement(k.RegionDiscoveryDetectRegion, this.correlationId), s = e, s)
                 return [3, 8];
               c = n.IMDS_OPTIONS, d.label = 1;
             case 1:
-              return d.trys.push([1, 6, , 7]), (o = this.performanceClient) === null || o === void 0 || o.setPreQueueTime(A.RegionDiscoveryGetRegionFromIMDS, this.correlationId), [4, this.getRegionFromIMDS(I.IMDS_VERSION, c)];
+              return d.trys.push([1, 6, , 7]), (o = this.performanceClient) === null || o === void 0 || o.setPreQueueTime(k.RegionDiscoveryGetRegionFromIMDS, this.correlationId), [4, this.getRegionFromIMDS(I.IMDS_VERSION, c)];
             case 2:
-              return l = d.sent(), l.status === tr.httpSuccess && (s = l.body, t.region_source = ln.IMDS), l.status !== tr.httpBadRequest ? [3, 5] : ((i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(A.RegionDiscoveryGetCurrentVersion, this.correlationId), [4, this.getCurrentVersion(c)]);
+              return l = d.sent(), l.status === tr.httpSuccess && (s = l.body, t.region_source = ln.IMDS), l.status !== tr.httpBadRequest ? [3, 5] : ((i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(k.RegionDiscoveryGetCurrentVersion, this.correlationId), [4, this.getCurrentVersion(c)]);
             case 3:
-              return u = d.sent(), u ? ((a = this.performanceClient) === null || a === void 0 || a.setPreQueueTime(A.RegionDiscoveryGetRegionFromIMDS, this.correlationId), [4, this.getRegionFromIMDS(u, c)]) : (t.region_source = ln.FAILED_AUTO_DETECTION, [2, null]);
+              return u = d.sent(), u ? ((a = this.performanceClient) === null || a === void 0 || a.setPreQueueTime(k.RegionDiscoveryGetRegionFromIMDS, this.correlationId), [4, this.getRegionFromIMDS(u, c)]) : (t.region_source = ln.FAILED_AUTO_DETECTION, [2, null]);
             case 4:
               f = d.sent(), f.status === tr.httpSuccess && (s = f.body, t.region_source = ln.IMDS), d.label = 5;
             case 5:
@@ -6677,7 +6677,7 @@ var _g = (
       var r;
       return ae(this, void 0, void 0, function() {
         return se(this, function(o) {
-          return (r = this.performanceClient) === null || r === void 0 || r.addQueueMeasurement(A.RegionDiscoveryGetRegionFromIMDS, this.correlationId), [2, this.networkInterface.sendGetRequestAsync(I.IMDS_ENDPOINT + "?api-version=" + e + "&format=text", t, I.IMDS_TIMEOUT)];
+          return (r = this.performanceClient) === null || r === void 0 || r.addQueueMeasurement(k.RegionDiscoveryGetRegionFromIMDS, this.correlationId), [2, this.networkInterface.sendGetRequestAsync(I.IMDS_ENDPOINT + "?api-version=" + e + "&format=text", t, I.IMDS_TIMEOUT)];
         });
       });
     }, n.prototype.getCurrentVersion = function(e) {
@@ -6687,7 +6687,7 @@ var _g = (
         return se(this, function(o) {
           switch (o.label) {
             case 0:
-              (t = this.performanceClient) === null || t === void 0 || t.addQueueMeasurement(A.RegionDiscoveryGetCurrentVersion, this.correlationId), o.label = 1;
+              (t = this.performanceClient) === null || t === void 0 || t.addQueueMeasurement(k.RegionDiscoveryGetCurrentVersion, this.correlationId), o.label = 1;
             case 1:
               return o.trys.push([1, 3, , 4]), [4, this.networkInterface.sendGetRequestAsync(I.IMDS_ENDPOINT + "?format=json", e)];
             case 2:
@@ -6893,9 +6893,9 @@ var Kr = (
         return se(this, function(c) {
           switch (c.label) {
             case 0:
-              return (e = this.performanceClient) === null || e === void 0 || e.addQueueMeasurement(A.AuthorityResolveEndpointsAsync, this.correlationId), o = this.cacheManager.getAuthorityMetadataByAlias(this.hostnameAndPort), o || (o = new ca(), o.updateCanonicalAuthority(this.canonicalAuthority)), (t = this.performanceClient) === null || t === void 0 || t.setPreQueueTime(A.AuthorityUpdateCloudDiscoveryMetadata, this.correlationId), [4, this.updateCloudDiscoveryMetadata(o)];
+              return (e = this.performanceClient) === null || e === void 0 || e.addQueueMeasurement(k.AuthorityResolveEndpointsAsync, this.correlationId), o = this.cacheManager.getAuthorityMetadataByAlias(this.hostnameAndPort), o || (o = new ca(), o.updateCanonicalAuthority(this.canonicalAuthority)), (t = this.performanceClient) === null || t === void 0 || t.setPreQueueTime(k.AuthorityUpdateCloudDiscoveryMetadata, this.correlationId), [4, this.updateCloudDiscoveryMetadata(o)];
             case 1:
-              return i = c.sent(), this.canonicalAuthority = this.canonicalAuthority.replace(this.hostnameAndPort, o.preferred_network), (r = this.performanceClient) === null || r === void 0 || r.setPreQueueTime(A.AuthorityUpdateEndpointMetadata, this.correlationId), [4, this.updateEndpointMetadata(o)];
+              return i = c.sent(), this.canonicalAuthority = this.canonicalAuthority.replace(this.hostnameAndPort, o.preferred_network), (r = this.performanceClient) === null || r === void 0 || r.setPreQueueTime(k.AuthorityUpdateEndpointMetadata, this.correlationId), [4, this.updateEndpointMetadata(o)];
             case 2:
               return a = c.sent(), i !== yt.CACHE && a !== yt.CACHE && (o.resetExpiresAt(), o.updateCanonicalAuthority(this.canonicalAuthority)), s = this.cacheManager.generateAuthorityMetadataCacheKey(o.preferred_cache), this.cacheManager.setAuthorityMetadata(s, o), this.metadata = o, [
                 2
@@ -6911,15 +6911,15 @@ var Kr = (
         return se(this, function(u) {
           switch (u.label) {
             case 0:
-              return (t = this.performanceClient) === null || t === void 0 || t.addQueueMeasurement(A.AuthorityUpdateEndpointMetadata, this.correlationId), c = this.getEndpointMetadataFromConfig(), c ? (e.updateEndpointMetadata(c, !1), [2, yt.CONFIG]) : this.isAuthoritySameType(e) && e.endpointsFromNetwork && !e.isExpired() ? [2, yt.CACHE] : ((r = this.performanceClient) === null || r === void 0 || r.setPreQueueTime(A.AuthorityGetEndpointMetadataFromNetwork, this.correlationId), [4, this.getEndpointMetadataFromNetwork()]);
+              return (t = this.performanceClient) === null || t === void 0 || t.addQueueMeasurement(k.AuthorityUpdateEndpointMetadata, this.correlationId), c = this.getEndpointMetadataFromConfig(), c ? (e.updateEndpointMetadata(c, !1), [2, yt.CONFIG]) : this.isAuthoritySameType(e) && e.endpointsFromNetwork && !e.isExpired() ? [2, yt.CACHE] : ((r = this.performanceClient) === null || r === void 0 || r.setPreQueueTime(k.AuthorityGetEndpointMetadataFromNetwork, this.correlationId), [4, this.getEndpointMetadataFromNetwork()]);
             case 1:
-              return c = u.sent(), c ? !((o = this.authorityOptions.azureRegionConfiguration) === null || o === void 0) && o.azureRegion ? ((i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(A.AuthorityUpdateMetadataWithRegionalInformation, this.correlationId), [4, this.updateMetadataWithRegionalInformation(c)]) : [3, 3] : [3, 4];
+              return c = u.sent(), c ? !((o = this.authorityOptions.azureRegionConfiguration) === null || o === void 0) && o.azureRegion ? ((i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(k.AuthorityUpdateMetadataWithRegionalInformation, this.correlationId), [4, this.updateMetadataWithRegionalInformation(c)]) : [3, 3] : [3, 4];
             case 2:
               c = u.sent(), u.label = 3;
             case 3:
               return e.updateEndpointMetadata(c, !0), [2, yt.NETWORK];
             case 4:
-              return l = this.getEndpointMetadataFromHardcodedValues(), l && !this.authorityOptions.skipAuthorityMetadataCache ? !((a = this.authorityOptions.azureRegionConfiguration) === null || a === void 0) && a.azureRegion ? ((s = this.performanceClient) === null || s === void 0 || s.setPreQueueTime(A.AuthorityUpdateMetadataWithRegionalInformation, this.correlationId), [4, this.updateMetadataWithRegionalInformation(l)]) : [3, 6] : [3, 7];
+              return l = this.getEndpointMetadataFromHardcodedValues(), l && !this.authorityOptions.skipAuthorityMetadataCache ? !((a = this.authorityOptions.azureRegionConfiguration) === null || a === void 0) && a.azureRegion ? ((s = this.performanceClient) === null || s === void 0 || s.setPreQueueTime(k.AuthorityUpdateMetadataWithRegionalInformation, this.correlationId), [4, this.updateMetadataWithRegionalInformation(l)]) : [3, 6] : [3, 7];
             case 5:
               l = u.sent(), u.label = 6;
             case 6:
@@ -6947,7 +6947,7 @@ var Kr = (
         return se(this, function(o) {
           switch (o.label) {
             case 0:
-              (e = this.performanceClient) === null || e === void 0 || e.addQueueMeasurement(A.AuthorityGetEndpointMetadataFromNetwork, this.correlationId), t = {}, o.label = 1;
+              (e = this.performanceClient) === null || e === void 0 || e.addQueueMeasurement(k.AuthorityGetEndpointMetadataFromNetwork, this.correlationId), t = {}, o.label = 1;
             case 1:
               return o.trys.push([1, 3, , 4]), [4, this.networkInterface.sendGetRequestAsync(this.defaultOpenIdConfigurationEndpoint, t)];
             case 2:
@@ -6971,7 +6971,7 @@ var Kr = (
         return se(this, function(c) {
           switch (c.label) {
             case 0:
-              return (t = this.performanceClient) === null || t === void 0 || t.addQueueMeasurement(A.AuthorityUpdateMetadataWithRegionalInformation, this.correlationId), a = (r = this.authorityOptions.azureRegionConfiguration) === null || r === void 0 ? void 0 : r.azureRegion, a ? a !== I.AZURE_REGION_AUTO_DISCOVER_FLAG ? (this.regionDiscoveryMetadata.region_outcome = Fr.CONFIGURED_NO_AUTO_DETECTION, this.regionDiscoveryMetadata.region_used = a, [2, n.replaceWithRegionalInformation(e, a)]) : ((o = this.performanceClient) === null || o === void 0 || o.setPreQueueTime(A.RegionDiscoveryDetectRegion, this.correlationId), [4, this.regionDiscovery.detectRegion((i = this.authorityOptions.azureRegionConfiguration) === null || i === void 0 ? void 0 : i.environmentRegion, this.regionDiscoveryMetadata)]) : [3, 2];
+              return (t = this.performanceClient) === null || t === void 0 || t.addQueueMeasurement(k.AuthorityUpdateMetadataWithRegionalInformation, this.correlationId), a = (r = this.authorityOptions.azureRegionConfiguration) === null || r === void 0 ? void 0 : r.azureRegion, a ? a !== I.AZURE_REGION_AUTO_DISCOVER_FLAG ? (this.regionDiscoveryMetadata.region_outcome = Fr.CONFIGURED_NO_AUTO_DETECTION, this.regionDiscoveryMetadata.region_used = a, [2, n.replaceWithRegionalInformation(e, a)]) : ((o = this.performanceClient) === null || o === void 0 || o.setPreQueueTime(k.RegionDiscoveryDetectRegion, this.correlationId), [4, this.regionDiscovery.detectRegion((i = this.authorityOptions.azureRegionConfiguration) === null || i === void 0 ? void 0 : i.environmentRegion, this.regionDiscoveryMetadata)]) : [3, 2];
             case 1:
               if (s = c.sent(), s)
                 return this.regionDiscoveryMetadata.region_outcome = Fr.AUTO_DETECTION_REQUESTED_SUCCESSFUL, this.regionDiscoveryMetadata.region_used = s, [2, n.replaceWithRegionalInformation(e, s)];
@@ -6988,7 +6988,7 @@ var Kr = (
         return se(this, function(s) {
           switch (s.label) {
             case 0:
-              return (t = this.performanceClient) === null || t === void 0 || t.addQueueMeasurement(A.AuthorityUpdateCloudDiscoveryMetadata, this.correlationId), this.logger.verbose("Attempting to get cloud discovery metadata in the config"), this.logger.verbosePii("Known Authorities: " + (this.authorityOptions.knownAuthorities || I.NOT_APPLICABLE)), this.logger.verbosePii("Authority Metadata: " + (this.authorityOptions.authorityMetadata || I.NOT_APPLICABLE)), this.logger.verbosePii("Canonical Authority: " + (e.canonical_authority || I.NOT_APPLICABLE)), o = this.getCloudDiscoveryMetadataFromConfig(), o ? (this.logger.verbose("Found cloud discovery metadata in the config."), e.updateCloudDiscoveryMetadata(o, !1), [2, yt.CONFIG]) : (this.logger.verbose("Did not find cloud discovery metadata in the config... Attempting to get cloud discovery metadata from the cache."), i = e.isExpired(), this.isAuthoritySameType(e) && e.aliasesFromNetwork && !i ? (this.logger.verbose("Found metadata in the cache."), [2, yt.CACHE]) : (i && this.logger.verbose("The metadata entity is expired."), this.logger.verbose("Did not find cloud discovery metadata in the cache... Attempting to get cloud discovery metadata from the network."), (r = this.performanceClient) === null || r === void 0 || r.setPreQueueTime(A.AuthorityGetCloudDiscoveryMetadataFromNetwork, this.correlationId), [4, this.getCloudDiscoveryMetadataFromNetwork()]));
+              return (t = this.performanceClient) === null || t === void 0 || t.addQueueMeasurement(k.AuthorityUpdateCloudDiscoveryMetadata, this.correlationId), this.logger.verbose("Attempting to get cloud discovery metadata in the config"), this.logger.verbosePii("Known Authorities: " + (this.authorityOptions.knownAuthorities || I.NOT_APPLICABLE)), this.logger.verbosePii("Authority Metadata: " + (this.authorityOptions.authorityMetadata || I.NOT_APPLICABLE)), this.logger.verbosePii("Canonical Authority: " + (e.canonical_authority || I.NOT_APPLICABLE)), o = this.getCloudDiscoveryMetadataFromConfig(), o ? (this.logger.verbose("Found cloud discovery metadata in the config."), e.updateCloudDiscoveryMetadata(o, !1), [2, yt.CONFIG]) : (this.logger.verbose("Did not find cloud discovery metadata in the config... Attempting to get cloud discovery metadata from the cache."), i = e.isExpired(), this.isAuthoritySameType(e) && e.aliasesFromNetwork && !i ? (this.logger.verbose("Found metadata in the cache."), [2, yt.CACHE]) : (i && this.logger.verbose("The metadata entity is expired."), this.logger.verbose("Did not find cloud discovery metadata in the cache... Attempting to get cloud discovery metadata from the network."), (r = this.performanceClient) === null || r === void 0 || r.setPreQueueTime(k.AuthorityGetCloudDiscoveryMetadataFromNetwork, this.correlationId), [4, this.getCloudDiscoveryMetadataFromNetwork()]));
             case 1:
               if (o = s.sent(), o)
                 return this.logger.verbose("cloud discovery metadata was successfully returned from getCloudDiscoveryMetadataFromNetwork()"), e.updateCloudDiscoveryMetadata(o, !0), [2, yt.NETWORK];
@@ -7021,7 +7021,7 @@ var Kr = (
         return se(this, function(u) {
           switch (u.label) {
             case 0:
-              (e = this.performanceClient) === null || e === void 0 || e.addQueueMeasurement(A.AuthorityGetCloudDiscoveryMetadataFromNetwork, this.correlationId), t = "" + I.AAD_INSTANCE_DISCOVERY_ENDPT + this.canonicalAuthority + "oauth2/v2.0/authorize", r = {}, o = null, u.label = 1;
+              (e = this.performanceClient) === null || e === void 0 || e.addQueueMeasurement(k.AuthorityGetCloudDiscoveryMetadataFromNetwork, this.correlationId), t = "" + I.AAD_INSTANCE_DISCOVERY_ENDPT + this.canonicalAuthority + "oauth2/v2.0/authorize", r = {}, o = null, u.label = 1;
             case 1:
               return u.trys.push([1, 3, , 4]), [4, this.networkInterface.sendGetRequestAsync(t, r)];
             case 2:
@@ -7117,9 +7117,9 @@ var xo = (
         return se(this, function(f) {
           switch (f.label) {
             case 0:
-              a == null || a.addQueueMeasurement(A.AuthorityFactoryCreateDiscoveredInstance, s), c = Kr.transformCIAMAuthority(e), l = n.createInstance(c, t, r, o, i, a, s), f.label = 1;
+              a == null || a.addQueueMeasurement(k.AuthorityFactoryCreateDiscoveredInstance, s), c = Kr.transformCIAMAuthority(e), l = n.createInstance(c, t, r, o, i, a, s), f.label = 1;
             case 1:
-              return f.trys.push([1, 3, , 4]), a == null || a.setPreQueueTime(A.AuthorityResolveEndpointsAsync, s), [4, l.resolveEndpointsAsync()];
+              return f.trys.push([1, 3, , 4]), a == null || a.setPreQueueTime(k.AuthorityResolveEndpointsAsync, s), [4, l.resolveEndpointsAsync()];
             case 2:
               return f.sent(), [2, l];
             case 3:
@@ -7133,7 +7133,7 @@ var xo = (
         });
       });
     }, n.createInstance = function(e, t, r, o, i, a, s) {
-      if (K.isEmpty(e))
+      if (q.isEmpty(e))
         throw Se.createUrlEmptyError();
       return new Kr(e, t, r, o, i, a, s);
     }, n;
@@ -7239,7 +7239,7 @@ var Rg = (
       return [Le.SCHEMA_VERSION, e.cacheHits, r, o, s].join(Le.CATEGORY_SEPARATOR);
     }, n.prototype.cacheFailedRequest = function(e) {
       var t = this.getLastRequests();
-      t.errors.length >= Le.MAX_CACHED_ERRORS && (t.failedRequests.shift(), t.failedRequests.shift(), t.errors.shift()), t.failedRequests.push(this.apiId, this.correlationId), K.isEmpty(e.subError) ? K.isEmpty(e.errorCode) ? e && e.toString() ? t.errors.push(e.toString()) : t.errors.push(Le.UNKNOWN_ERROR) : t.errors.push(e.errorCode) : t.errors.push(e.subError), this.cacheManager.setServerTelemetry(this.telemetryCacheKey, t);
+      t.errors.length >= Le.MAX_CACHED_ERRORS && (t.failedRequests.shift(), t.failedRequests.shift(), t.errors.shift()), t.failedRequests.push(this.apiId, this.correlationId), q.isEmpty(e.subError) ? q.isEmpty(e.errorCode) ? e && e.toString() ? t.errors.push(e.toString()) : t.errors.push(Le.UNKNOWN_ERROR) : t.errors.push(e.errorCode) : t.errors.push(e.subError), this.cacheManager.setServerTelemetry(this.telemetryCacheKey, t);
     }, n.prototype.incrementCacheHits = function() {
       var e = this.getLastRequests();
       return e.cacheHits += 1, this.cacheManager.setServerTelemetry(this.telemetryCacheKey, e), e.cacheHits;
@@ -7455,7 +7455,7 @@ var Nc = (
   }(du)
 );
 /*! @azure/msal-browser v2.39.0 2024-06-06 */
-var F = {
+var L = {
   pkceNotGenerated: {
     code: "pkce_not_created",
     desc: "The PKCE code challenge and verifier could not be generated."
@@ -7636,7 +7636,7 @@ var F = {
     code: "native_prompt_not_supported",
     desc: "The provided prompt is not supported by the native platform. This request should be routed to the web based flow."
   }
-}, z = (
+}, K = (
   /** @class */
   function(n) {
     He(e, n);
@@ -7645,96 +7645,96 @@ var F = {
       return Object.setPrototypeOf(o, e.prototype), o.name = "BrowserAuthError", o;
     }
     return e.createPkceNotGeneratedError = function(t) {
-      return new e(F.pkceNotGenerated.code, F.pkceNotGenerated.desc + " Detail:" + t);
+      return new e(L.pkceNotGenerated.code, L.pkceNotGenerated.desc + " Detail:" + t);
     }, e.createCryptoNotAvailableError = function(t) {
-      return new e(F.cryptoDoesNotExist.code, F.cryptoDoesNotExist.desc + " Detail:" + t);
+      return new e(L.cryptoDoesNotExist.code, L.cryptoDoesNotExist.desc + " Detail:" + t);
     }, e.createHttpMethodNotImplementedError = function(t) {
-      return new e(F.httpMethodNotImplementedError.code, F.httpMethodNotImplementedError.desc + " Given Method: " + t);
+      return new e(L.httpMethodNotImplementedError.code, L.httpMethodNotImplementedError.desc + " Given Method: " + t);
     }, e.createEmptyNavigationUriError = function() {
-      return new e(F.emptyNavigateUriError.code, F.emptyNavigateUriError.desc);
+      return new e(L.emptyNavigateUriError.code, L.emptyNavigateUriError.desc);
     }, e.createEmptyHashError = function(t) {
-      return new e(F.hashEmptyError.code, F.hashEmptyError.desc + " Given Url: " + t);
+      return new e(L.hashEmptyError.code, L.hashEmptyError.desc + " Given Url: " + t);
     }, e.createHashDoesNotContainStateError = function() {
-      return new e(F.hashDoesNotContainStateError.code, F.hashDoesNotContainStateError.desc);
+      return new e(L.hashDoesNotContainStateError.code, L.hashDoesNotContainStateError.desc);
     }, e.createHashDoesNotContainKnownPropertiesError = function() {
-      return new e(F.hashDoesNotContainKnownPropertiesError.code, F.hashDoesNotContainKnownPropertiesError.desc);
+      return new e(L.hashDoesNotContainKnownPropertiesError.code, L.hashDoesNotContainKnownPropertiesError.desc);
     }, e.createUnableToParseStateError = function() {
-      return new e(F.unableToParseStateError.code, F.unableToParseStateError.desc);
+      return new e(L.unableToParseStateError.code, L.unableToParseStateError.desc);
     }, e.createStateInteractionTypeMismatchError = function() {
-      return new e(F.stateInteractionTypeMismatchError.code, F.stateInteractionTypeMismatchError.desc);
+      return new e(L.stateInteractionTypeMismatchError.code, L.stateInteractionTypeMismatchError.desc);
     }, e.createInteractionInProgressError = function() {
-      return new e(F.interactionInProgress.code, F.interactionInProgress.desc);
+      return new e(L.interactionInProgress.code, L.interactionInProgress.desc);
     }, e.createPopupWindowError = function(t) {
-      var r = F.popupWindowError.desc;
-      return r = K.isEmpty(t) ? r : r + " Details: " + t, new e(F.popupWindowError.code, r);
+      var r = L.popupWindowError.desc;
+      return r = q.isEmpty(t) ? r : r + " Details: " + t, new e(L.popupWindowError.code, r);
     }, e.createEmptyWindowCreatedError = function() {
-      return new e(F.emptyWindowError.code, F.emptyWindowError.desc);
+      return new e(L.emptyWindowError.code, L.emptyWindowError.desc);
     }, e.createUserCancelledError = function() {
-      return new e(F.userCancelledError.code, F.userCancelledError.desc);
+      return new e(L.userCancelledError.code, L.userCancelledError.desc);
     }, e.createMonitorPopupTimeoutError = function() {
-      return new e(F.monitorPopupTimeoutError.code, F.monitorPopupTimeoutError.desc);
+      return new e(L.monitorPopupTimeoutError.code, L.monitorPopupTimeoutError.desc);
     }, e.createMonitorIframeTimeoutError = function() {
-      return new e(F.monitorIframeTimeoutError.code, F.monitorIframeTimeoutError.desc);
+      return new e(L.monitorIframeTimeoutError.code, L.monitorIframeTimeoutError.desc);
     }, e.createRedirectInIframeError = function(t) {
-      return new e(F.redirectInIframeError.code, F.redirectInIframeError.desc + " (window.parent !== window) => " + t);
+      return new e(L.redirectInIframeError.code, L.redirectInIframeError.desc + " (window.parent !== window) => " + t);
     }, e.createBlockReloadInHiddenIframeError = function() {
-      return new e(F.blockTokenRequestsInHiddenIframeError.code, F.blockTokenRequestsInHiddenIframeError.desc);
+      return new e(L.blockTokenRequestsInHiddenIframeError.code, L.blockTokenRequestsInHiddenIframeError.desc);
     }, e.createBlockAcquireTokenInPopupsError = function() {
-      return new e(F.blockAcquireTokenInPopupsError.code, F.blockAcquireTokenInPopupsError.desc);
+      return new e(L.blockAcquireTokenInPopupsError.code, L.blockAcquireTokenInPopupsError.desc);
     }, e.createIframeClosedPrematurelyError = function() {
-      return new e(F.iframeClosedPrematurelyError.code, F.iframeClosedPrematurelyError.desc);
+      return new e(L.iframeClosedPrematurelyError.code, L.iframeClosedPrematurelyError.desc);
     }, e.createSilentLogoutUnsupportedError = function() {
-      return new e(F.silentLogoutUnsupportedError.code, F.silentLogoutUnsupportedError.desc);
+      return new e(L.silentLogoutUnsupportedError.code, L.silentLogoutUnsupportedError.desc);
     }, e.createNoAccountError = function() {
-      return new e(F.noAccountError.code, F.noAccountError.desc);
+      return new e(L.noAccountError.code, L.noAccountError.desc);
     }, e.createSilentPromptValueError = function(t) {
-      return new e(F.silentPromptValueError.code, F.silentPromptValueError.desc + " Given value: " + t);
+      return new e(L.silentPromptValueError.code, L.silentPromptValueError.desc + " Given value: " + t);
     }, e.createUnableToParseTokenRequestCacheError = function() {
-      return new e(F.unableToParseTokenRequestCacheError.code, F.unableToParseTokenRequestCacheError.desc);
+      return new e(L.unableToParseTokenRequestCacheError.code, L.unableToParseTokenRequestCacheError.desc);
     }, e.createNoTokenRequestCacheError = function() {
-      return new e(F.noTokenRequestCacheError.code, F.noTokenRequestCacheError.desc);
+      return new e(L.noTokenRequestCacheError.code, L.noTokenRequestCacheError.desc);
     }, e.createAuthRequestNotSetError = function() {
-      return new e(F.authRequestNotSet.code, F.authRequestNotSet.desc);
+      return new e(L.authRequestNotSet.code, L.authRequestNotSet.desc);
     }, e.createNoCachedAuthorityError = function() {
-      return new e(F.noCachedAuthorityError.code, F.noCachedAuthorityError.desc);
+      return new e(L.noCachedAuthorityError.code, L.noCachedAuthorityError.desc);
     }, e.createInvalidCacheTypeError = function() {
-      return new e(F.invalidCacheType.code, "" + F.invalidCacheType.desc);
+      return new e(L.invalidCacheType.code, "" + L.invalidCacheType.desc);
     }, e.createNonBrowserEnvironmentError = function() {
-      return new e(F.notInBrowserEnvironment.code, F.notInBrowserEnvironment.desc);
+      return new e(L.notInBrowserEnvironment.code, L.notInBrowserEnvironment.desc);
     }, e.createDatabaseNotOpenError = function() {
-      return new e(F.databaseNotOpen.code, F.databaseNotOpen.desc);
+      return new e(L.databaseNotOpen.code, L.databaseNotOpen.desc);
     }, e.createNoNetworkConnectivityError = function() {
-      return new e(F.noNetworkConnectivity.code, F.noNetworkConnectivity.desc);
+      return new e(L.noNetworkConnectivity.code, L.noNetworkConnectivity.desc);
     }, e.createPostRequestFailedError = function(t, r) {
-      return new e(F.postRequestFailed.code, F.postRequestFailed.desc + " | Network client threw: " + t + " | Attempted to reach: " + r.split("?")[0]);
+      return new e(L.postRequestFailed.code, L.postRequestFailed.desc + " | Network client threw: " + t + " | Attempted to reach: " + r.split("?")[0]);
     }, e.createGetRequestFailedError = function(t, r) {
-      return new e(F.getRequestFailed.code, F.getRequestFailed.desc + " | Network client threw: " + t + " | Attempted to reach: " + r.split("?")[0]);
+      return new e(L.getRequestFailed.code, L.getRequestFailed.desc + " | Network client threw: " + t + " | Attempted to reach: " + r.split("?")[0]);
     }, e.createFailedToParseNetworkResponseError = function(t) {
-      return new e(F.failedToParseNetworkResponse.code, F.failedToParseNetworkResponse.desc + " | Attempted to reach: " + t.split("?")[0]);
+      return new e(L.failedToParseNetworkResponse.code, L.failedToParseNetworkResponse.desc + " | Attempted to reach: " + t.split("?")[0]);
     }, e.createUnableToLoadTokenError = function(t) {
-      return new e(F.unableToLoadTokenError.code, F.unableToLoadTokenError.desc + " | " + t);
+      return new e(L.unableToLoadTokenError.code, L.unableToLoadTokenError.desc + " | " + t);
     }, e.createSigningKeyNotFoundInStorageError = function(t) {
-      return new e(F.signingKeyNotFoundInStorage.code, F.signingKeyNotFoundInStorage.desc + " | No match found for KeyId: " + t);
+      return new e(L.signingKeyNotFoundInStorage.code, L.signingKeyNotFoundInStorage.desc + " | No match found for KeyId: " + t);
     }, e.createAuthCodeRequiredError = function() {
-      return new e(F.authCodeRequired.code, F.authCodeRequired.desc);
+      return new e(L.authCodeRequired.code, L.authCodeRequired.desc);
     }, e.createAuthCodeOrNativeAccountIdRequiredError = function() {
-      return new e(F.authCodeOrNativeAccountRequired.code, F.authCodeOrNativeAccountRequired.desc);
+      return new e(L.authCodeOrNativeAccountRequired.code, L.authCodeOrNativeAccountRequired.desc);
     }, e.createSpaCodeAndNativeAccountIdPresentError = function() {
-      return new e(F.spaCodeAndNativeAccountPresent.code, F.spaCodeAndNativeAccountPresent.desc);
+      return new e(L.spaCodeAndNativeAccountPresent.code, L.spaCodeAndNativeAccountPresent.desc);
     }, e.createDatabaseUnavailableError = function() {
-      return new e(F.databaseUnavailable.code, F.databaseUnavailable.desc);
+      return new e(L.databaseUnavailable.code, L.databaseUnavailable.desc);
     }, e.createUnableToAcquireTokenFromNativePlatformError = function() {
-      return new e(F.unableToAcquireTokenFromNativePlatform.code, F.unableToAcquireTokenFromNativePlatform.desc);
+      return new e(L.unableToAcquireTokenFromNativePlatform.code, L.unableToAcquireTokenFromNativePlatform.desc);
     }, e.createNativeHandshakeTimeoutError = function() {
-      return new e(F.nativeHandshakeTimeout.code, F.nativeHandshakeTimeout.desc);
+      return new e(L.nativeHandshakeTimeout.code, L.nativeHandshakeTimeout.desc);
     }, e.createNativeExtensionNotInstalledError = function() {
-      return new e(F.nativeExtensionNotInstalled.code, F.nativeExtensionNotInstalled.desc);
+      return new e(L.nativeExtensionNotInstalled.code, L.nativeExtensionNotInstalled.desc);
     }, e.createNativeConnectionNotEstablishedError = function() {
-      return new e(F.nativeConnectionNotEstablished.code, F.nativeConnectionNotEstablished.desc);
+      return new e(L.nativeConnectionNotEstablished.code, L.nativeConnectionNotEstablished.desc);
     }, e.createNativeBrokerCalledBeforeInitialize = function() {
-      return new e(F.nativeBrokerCalledBeforeInitialize.code, F.nativeBrokerCalledBeforeInitialize.desc);
+      return new e(L.nativeBrokerCalledBeforeInitialize.code, L.nativeBrokerCalledBeforeInitialize.desc);
     }, e.createNativePromptParameterNotSupportedError = function() {
-      return new e(F.nativePromptNotSupported.code, F.nativePromptNotSupported.desc);
+      return new e(L.nativePromptNotSupported.code, L.nativePromptNotSupported.desc);
     }, e;
   }(Q)
 );
@@ -7935,7 +7935,7 @@ var fu = (
     function n() {
     }
     return n.extractBrowserRequestState = function(e, t) {
-      if (K.isEmpty(t))
+      if (q.isEmpty(t))
         return null;
       try {
         var r = Yt.parseRequestState(e, t);
@@ -8372,7 +8372,7 @@ var da = (
     }, e.prototype.setCache = function() {
     }, e.prototype.generateCacheKey = function(t) {
       var r = this.validateAndParseJson(t);
-      return r ? JSON.stringify(t) : K.startsWith(t, I.CACHE_PREFIX) || K.startsWith(t, Pe.ADAL_ID_TOKEN) ? t : I.CACHE_PREFIX + "." + this.clientId + "." + t;
+      return r ? JSON.stringify(t) : q.startsWith(t, I.CACHE_PREFIX) || q.startsWith(t, Pe.ADAL_ID_TOKEN) ? t : I.CACHE_PREFIX + "." + this.clientId + "." + t;
     }, e.prototype.generateAuthorityKey = function(t) {
       var r = Yt.parseRequestState(this.cryptoImpl, t).libraryState.id;
       return this.generateCacheKey(ge.AUTHORITY + "." + r);
@@ -8401,7 +8401,7 @@ var da = (
           type: ct.HOME_ACCOUNT_ID
         };
         this.setTemporaryCache(ge.CCS_CREDENTIAL, JSON.stringify(u), !0);
-      } else if (!K.isEmpty(i)) {
+      } else if (!q.isEmpty(i)) {
         var u = {
           credential: i,
           type: ct.UPN
@@ -8410,7 +8410,7 @@ var da = (
       }
     }, e.prototype.resetRequestCache = function(t) {
       var r = this;
-      this.logger.trace("BrowserCacheManager.resetRequestCache called"), K.isEmpty(t) || this.getKeys().forEach(function(o) {
+      this.logger.trace("BrowserCacheManager.resetRequestCache called"), q.isEmpty(t) || this.getKeys().forEach(function(o) {
         o.indexOf(t) !== -1 && r.removeItem(o);
       }), t && (this.removeItem(this.generateStateKey(t)), this.removeItem(this.generateNonceKey(t)), this.removeItem(this.generateAuthorityKey(t))), this.removeItem(this.generateCacheKey(ge.REQUEST_PARAMS)), this.removeItem(this.generateCacheKey(ge.ORIGIN_URI)), this.removeItem(this.generateCacheKey(ge.URL_HASH)), this.removeItem(this.generateCacheKey(ge.CORRELATION_ID)), this.removeItem(this.generateCacheKey(ge.CCS_CREDENTIAL)), this.removeItem(this.generateCacheKey(ge.NATIVE_REQUEST)), this.setInteractionInProgress(!1);
     }, e.prototype.cleanRequestByState = function(t) {
@@ -8438,14 +8438,14 @@ var da = (
       this.logger.trace("BrowserCacheManager.getCachedRequest called");
       var o = this.getTemporaryCache(ge.REQUEST_PARAMS, !0);
       if (!o)
-        throw z.createNoTokenRequestCacheError();
+        throw K.createNoTokenRequestCacheError();
       var i = this.validateAndParseJson(r.base64Decode(o));
       if (!i)
-        throw z.createUnableToParseTokenRequestCacheError();
-      if (this.removeItem(this.generateCacheKey(ge.REQUEST_PARAMS)), K.isEmpty(i.authority)) {
+        throw K.createUnableToParseTokenRequestCacheError();
+      if (this.removeItem(this.generateCacheKey(ge.REQUEST_PARAMS)), q.isEmpty(i.authority)) {
         var a = this.generateAuthorityKey(t), s = this.getTemporaryCache(a);
         if (!s)
-          throw z.createNoCachedAuthorityError();
+          throw K.createNoCachedAuthorityError();
         i.authority = s;
       }
       return i;
@@ -8466,7 +8466,7 @@ var da = (
       var r = I.CACHE_PREFIX + "." + ge.INTERACTION_STATUS_KEY;
       if (t) {
         if (this.getInteractionInProgress())
-          throw z.createInteractionInProgressError();
+          throw K.createInteractionInProgressError();
         this.setTemporaryCache(r, this.clientId, !1);
       } else
         !t && this.getInteractionInProgress() === this.clientId && this.removeItem(r);
@@ -8565,7 +8565,7 @@ var xg = (
             case 1:
               return r = a.sent(), [3, 3];
             case 2:
-              throw o = a.sent(), window.navigator.onLine ? z.createGetRequestFailedError(o, e) : z.createNoNetworkConnectivityError();
+              throw o = a.sent(), window.navigator.onLine ? K.createGetRequestFailedError(o, e) : K.createNoNetworkConnectivityError();
             case 3:
               return a.trys.push([3, 5, , 6]), i = {
                 headers: this.getHeaderDict(r.headers)
@@ -8573,7 +8573,7 @@ var xg = (
             case 4:
               return [2, (i.body = a.sent(), i.status = r.status, i)];
             case 5:
-              throw a.sent(), z.createFailedToParseNetworkResponseError(e);
+              throw a.sent(), K.createFailedToParseNetworkResponseError(e);
             case 6:
               return [
                 2
@@ -8598,7 +8598,7 @@ var xg = (
             case 2:
               return o = s.sent(), [3, 4];
             case 3:
-              throw i = s.sent(), window.navigator.onLine ? z.createPostRequestFailedError(i, e) : z.createNoNetworkConnectivityError();
+              throw i = s.sent(), window.navigator.onLine ? K.createPostRequestFailedError(i, e) : K.createNoNetworkConnectivityError();
             case 4:
               return s.trys.push([4, 6, , 7]), a = {
                 headers: this.getHeaderDict(o.headers)
@@ -8606,7 +8606,7 @@ var xg = (
             case 5:
               return [2, (a.body = s.sent(), a.status = o.status, a)];
             case 6:
-              throw s.sent(), z.createFailedToParseNetworkResponseError(e);
+              throw s.sent(), K.createFailedToParseNetworkResponseError(e);
             case 7:
               return [
                 2
@@ -8659,7 +8659,7 @@ var Dg = (
           /* async: */
           !0
         ), o.setXhrHeaders(s, r), s.onload = function() {
-          (s.status < 200 || s.status >= 300) && (t === xt.POST ? a(z.createPostRequestFailedError("Failed with status " + s.status, e)) : a(z.createGetRequestFailedError("Failed with status " + s.status, e)));
+          (s.status < 200 || s.status >= 300) && (t === xt.POST ? a(K.createPostRequestFailedError("Failed with status " + s.status, e)) : a(K.createGetRequestFailedError("Failed with status " + s.status, e)));
           try {
             var c = JSON.parse(s.responseText), l = {
               headers: o.getHeaderDict(s),
@@ -8668,16 +8668,16 @@ var Dg = (
             };
             i(l);
           } catch {
-            a(z.createFailedToParseNetworkResponseError(e));
+            a(K.createFailedToParseNetworkResponseError(e));
           }
         }, s.onerror = function() {
-          window.navigator.onLine ? t === xt.POST ? a(z.createPostRequestFailedError("Failed with status " + s.status, e)) : a(z.createGetRequestFailedError("Failed with status " + s.status, e)) : a(z.createNoNetworkConnectivityError());
+          window.navigator.onLine ? t === xt.POST ? a(K.createPostRequestFailedError("Failed with status " + s.status, e)) : a(K.createGetRequestFailedError("Failed with status " + s.status, e)) : a(K.createNoNetworkConnectivityError());
         }, t === xt.POST && r && r.body)
           s.send(r.body);
         else if (t === xt.GET)
           s.send();
         else
-          throw z.createHttpMethodNotImplementedError(t);
+          throw K.createHttpMethodNotImplementedError(t);
       });
     }, n.prototype.setXhrHeaders = function(e, t) {
       if (t && t.headers) {
@@ -8720,20 +8720,20 @@ var Te = (
     }, n.blockReloadInHiddenIframes = function() {
       var e = he.hashContainsKnownProperties(window.location.hash);
       if (e && n.isInIframe())
-        throw z.createBlockReloadInHiddenIframeError();
+        throw K.createBlockReloadInHiddenIframeError();
     }, n.blockRedirectInIframe = function(e, t) {
       var r = n.isInIframe();
       if (e === Y.Redirect && r && !t)
-        throw z.createRedirectInIframeError(r);
+        throw K.createRedirectInIframeError(r);
     }, n.blockAcquireTokenInPopups = function() {
       if (n.isInPopup())
-        throw z.createBlockAcquireTokenInPopupsError();
+        throw K.createBlockAcquireTokenInPopupsError();
     }, n.blockNonBrowserEnvironment = function(e) {
       if (!e)
-        throw z.createNonBrowserEnvironmentError();
+        throw K.createNonBrowserEnvironmentError();
     }, n.blockNativeBrokerCalledBeforeInitialized = function(e, t) {
       if (e && !t)
-        throw z.createNativeBrokerCalledBeforeInitialize();
+        throw K.createNativeBrokerCalledBeforeInitialize();
     }, n.detectIEOrEdge = function() {
       var e = window.navigator.userAgent, t = e.indexOf("MSIE "), r = e.indexOf("Trident/"), o = e.indexOf("Edge/"), i = t > 0 || r > 0, a = o > 0;
       return i || a;
@@ -8785,7 +8785,7 @@ var hu = (
         return x(this, function(s) {
           switch (s.label) {
             case 0:
-              return this.performanceClient.addQueueMeasurement(A.InitializeBaseRequest, e.correlationId), this.logger.verbose("Initializing BaseAuthRequest"), r = e.authority || this.config.auth.authority, t ? [4, this.validateRequestAuthority(r, t)] : [3, 2];
+              return this.performanceClient.addQueueMeasurement(k.InitializeBaseRequest, e.correlationId), this.logger.verbose("Initializing BaseAuthRequest"), r = e.authority || this.config.auth.authority, t ? [4, this.validateRequestAuthority(r, t)] : [3, 2];
             case 1:
               s.sent(), s.label = 2;
             case 2:
@@ -8804,7 +8804,7 @@ var hu = (
                 }
                 this.logger.verbose('Authentication Scheme set to "' + i.authenticationScheme + '" as configured in Auth request');
               }
-              return this.config.cache.claimsBasedCachingEnabled && e.claims && !K.isEmptyObj(e.claims) ? (a = i, [4, this.browserCrypto.hashString(e.claims)]) : [3, 4];
+              return this.config.cache.claimsBasedCachingEnabled && e.claims && !q.isEmptyObj(e.claims) ? (a = i, [4, this.browserCrypto.hashString(e.claims)]) : [3, 4];
             case 3:
               a.requestedClaimsHash = s.sent(), s.label = 4;
             case 4:
@@ -8882,7 +8882,7 @@ var mr = (
         return x(this, function(i) {
           switch (i.label) {
             case 0:
-              return this.performanceClient.addQueueMeasurement(A.StandardInteractionClientInitializeAuthorizationCodeRequest, t.correlationId), this.logger.verbose("initializeAuthorizationRequest called", t.correlationId), [4, this.browserCrypto.generatePkceCodes()];
+              return this.performanceClient.addQueueMeasurement(k.StandardInteractionClientInitializeAuthorizationCodeRequest, t.correlationId), this.logger.verbose("initializeAuthorizationRequest called", t.correlationId), [4, this.browserCrypto.generatePkceCodes()];
             case 1:
               return r = i.sent(), o = G(G({}, t), { redirectUri: t.redirectUri, code: I.EMPTY_STRING, codeVerifier: r.verifier }), t.codeChallenge = r.challenge, t.codeChallengeMethod = I.S256_CODE_CHALLENGE_METHOD, [2, o];
           }
@@ -8917,7 +8917,7 @@ var mr = (
         return x(this, function(a) {
           switch (a.label) {
             case 0:
-              return this.performanceClient.addQueueMeasurement(A.StandardInteractionClientCreateAuthCodeClient, this.correlationId), this.performanceClient.setPreQueueTime(A.StandardInteractionClientGetClientConfiguration, this.correlationId), [4, this.getClientConfiguration(t, r, o)];
+              return this.performanceClient.addQueueMeasurement(k.StandardInteractionClientCreateAuthCodeClient, this.correlationId), this.performanceClient.setPreQueueTime(k.StandardInteractionClientGetClientConfiguration, this.correlationId), [4, this.getClientConfiguration(t, r, o)];
             case 1:
               return i = a.sent(), [2, new cu(i, this.performanceClient)];
           }
@@ -8929,7 +8929,7 @@ var mr = (
         return x(this, function(s) {
           switch (s.label) {
             case 0:
-              return this.performanceClient.addQueueMeasurement(A.StandardInteractionClientGetClientConfiguration, this.correlationId), this.logger.verbose("getClientConfiguration called", this.correlationId), this.performanceClient.setPreQueueTime(A.StandardInteractionClientGetDiscoveredAuthority, this.correlationId), [4, this.getDiscoveredAuthority(r, o)];
+              return this.performanceClient.addQueueMeasurement(k.StandardInteractionClientGetClientConfiguration, this.correlationId), this.logger.verbose("getClientConfiguration called", this.correlationId), this.performanceClient.setPreQueueTime(k.StandardInteractionClientGetDiscoveredAuthority, this.correlationId), [4, this.getDiscoveredAuthority(r, o)];
             case 1:
               return i = s.sent(), a = this.config.system.loggerOptions, [2, {
                 authOptions: {
@@ -8967,12 +8967,12 @@ var mr = (
       });
     }, e.prototype.validateAndExtractStateFromHash = function(t, r, o) {
       if (this.logger.verbose("validateAndExtractStateFromHash called", o), !t.state)
-        throw z.createHashDoesNotContainStateError();
+        throw K.createHashDoesNotContainStateError();
       var i = fu.extractBrowserRequestState(this.browserCrypto, t.state);
       if (!i)
-        throw z.createUnableToParseStateError();
+        throw K.createUnableToParseStateError();
       if (i.interactionType !== r)
-        throw z.createStateInteractionTypeMismatchError();
+        throw K.createStateInteractionTypeMismatchError();
       return this.logger.verbose("Returning state from hash", o), t.state;
     }, e.prototype.getDiscoveredAuthority = function(t, r) {
       var o;
@@ -8981,13 +8981,13 @@ var mr = (
         return x(this, function(l) {
           switch (l.label) {
             case 0:
-              return this.performanceClient.addQueueMeasurement(A.StandardInteractionClientGetDiscoveredAuthority, this.correlationId), this.logger.verbose("getDiscoveredAuthority called", this.correlationId), i = (o = this.performanceClient) === null || o === void 0 ? void 0 : o.startMeasurement(A.StandardInteractionClientGetDiscoveredAuthority, this.correlationId), a = {
+              return this.performanceClient.addQueueMeasurement(k.StandardInteractionClientGetDiscoveredAuthority, this.correlationId), this.logger.verbose("getDiscoveredAuthority called", this.correlationId), i = (o = this.performanceClient) === null || o === void 0 ? void 0 : o.startMeasurement(k.StandardInteractionClientGetDiscoveredAuthority, this.correlationId), a = {
                 protocolMode: this.config.auth.protocolMode,
                 knownAuthorities: this.config.auth.knownAuthorities,
                 cloudDiscoveryMetadata: this.config.auth.cloudDiscoveryMetadata,
                 authorityMetadata: this.config.auth.authorityMetadata,
                 skipAuthorityMetadataCache: this.config.auth.skipAuthorityMetadataCache
-              }, s = t || this.config.auth.authority, c = Kr.generateAuthority(s, r || this.config.auth.azureCloudOptions), this.logger.verbose("Creating discovered authority with configured authority", this.correlationId), this.performanceClient.setPreQueueTime(A.AuthorityFactoryCreateDiscoveredInstance, this.correlationId), [4, xo.createDiscoveredInstance(c, this.config.system.networkClient, this.browserStorage, a, this.logger, this.performanceClient, this.correlationId).then(function(u) {
+              }, s = t || this.config.auth.authority, c = Kr.generateAuthority(s, r || this.config.auth.azureCloudOptions), this.logger.verbose("Creating discovered authority with configured authority", this.correlationId), this.performanceClient.setPreQueueTime(k.AuthorityFactoryCreateDiscoveredInstance, this.correlationId), [4, xo.createDiscoveredInstance(c, this.config.system.networkClient, this.browserStorage, a, this.logger, this.performanceClient, this.correlationId).then(function(u) {
                 return i.endMeasurement({
                   success: !0
                 }), u;
@@ -9009,11 +9009,11 @@ var mr = (
         return x(this, function(f) {
           switch (f.label) {
             case 0:
-              return this.performanceClient.addQueueMeasurement(A.StandardInteractionClientInitializeAuthorizationRequest, this.correlationId), this.logger.verbose("initializeAuthorizationRequest called", this.correlationId), o = this.getRedirectUri(t.redirectUri), i = {
+              return this.performanceClient.addQueueMeasurement(k.StandardInteractionClientInitializeAuthorizationRequest, this.correlationId), this.logger.verbose("initializeAuthorizationRequest called", this.correlationId), o = this.getRedirectUri(t.redirectUri), i = {
                 interactionType: r
-              }, a = Yt.setRequestState(this.browserCrypto, t && t.state || I.EMPTY_STRING, i), this.performanceClient.setPreQueueTime(A.InitializeBaseRequest, this.correlationId), c = [{}], [4, this.initializeBaseRequest(t)];
+              }, a = Yt.setRequestState(this.browserCrypto, t && t.state || I.EMPTY_STRING, i), this.performanceClient.setPreQueueTime(k.InitializeBaseRequest, this.correlationId), c = [{}], [4, this.initializeBaseRequest(t)];
             case 1:
-              return s = G.apply(void 0, [G.apply(void 0, c.concat([f.sent()])), { redirectUri: o, state: a, nonce: t.nonce || this.browserCrypto.createNewGuid(), responseMode: _o.FRAGMENT }]), l = t.account || this.browserStorage.getActiveAccount(), l && (this.logger.verbose("Setting validated request account", this.correlationId), this.logger.verbosePii("Setting validated request account: " + l.homeAccountId, this.correlationId), s.account = l), K.isEmpty(s.loginHint) && !l && (u = this.browserStorage.getLegacyLoginHint(), u && (s.loginHint = u)), [2, s];
+              return s = G.apply(void 0, [G.apply(void 0, c.concat([f.sent()])), { redirectUri: o, state: a, nonce: t.nonce || this.browserCrypto.createNewGuid(), responseMode: _o.FRAGMENT }]), l = t.account || this.browserStorage.getActiveAccount(), l && (this.logger.verbose("Setting validated request account", this.correlationId), this.logger.verbosePii("Setting validated request account: " + l.homeAccountId, this.correlationId), s.account = l), q.isEmpty(s.loginHint) && !l && (u = this.browserStorage.getLegacyLoginHint(), u && (s.loginHint = u)), [2, s];
           }
         });
       });
@@ -9031,16 +9031,16 @@ var Ba = (
       return O(this, void 0, void 0, function() {
         var i, a, s;
         return x(this, function(c) {
-          if (this.performanceClient.addQueueMeasurement(A.HandleCodeResponseFromHash, this.authCodeRequest.correlationId), this.logger.verbose("InteractionHandler.handleCodeResponse called"), K.isEmpty(e))
-            throw z.createEmptyHashError(e);
+          if (this.performanceClient.addQueueMeasurement(k.HandleCodeResponseFromHash, this.authCodeRequest.correlationId), this.logger.verbose("InteractionHandler.handleCodeResponse called"), q.isEmpty(e))
+            throw K.createEmptyHashError(e);
           if (i = this.browserStorage.generateStateKey(t), a = this.browserStorage.getTemporaryCache(i), !a)
             throw W.createStateNotFoundError("Cached State");
           try {
             s = this.authModule.handleFragmentResponse(e, a);
           } catch (l) {
-            throw l instanceof Ln && l.subError === F.userCancelledError.code ? z.createUserCancelledError() : l;
+            throw l instanceof Ln && l.subError === L.userCancelledError.code ? K.createUserCancelledError() : l;
           }
-          return this.performanceClient.setPreQueueTime(A.HandleCodeResponseFromServer, this.authCodeRequest.correlationId), [2, this.handleCodeResponseFromServer(s, t, r, o)];
+          return this.performanceClient.setPreQueueTime(k.HandleCodeResponseFromServer, this.authCodeRequest.correlationId), [2, this.handleCodeResponseFromServer(s, t, r, o)];
         });
       });
     }, n.prototype.handleCodeResponseFromServer = function(e, t, r, o, i) {
@@ -9049,13 +9049,13 @@ var Ba = (
         return x(this, function(d) {
           switch (d.label) {
             case 0:
-              if (this.performanceClient.addQueueMeasurement(A.HandleCodeResponseFromServer, this.authCodeRequest.correlationId), this.logger.trace("InteractionHandler.handleCodeResponseFromServer called"), a = this.browserStorage.generateStateKey(t), s = this.browserStorage.getTemporaryCache(a), !s)
+              if (this.performanceClient.addQueueMeasurement(k.HandleCodeResponseFromServer, this.authCodeRequest.correlationId), this.logger.trace("InteractionHandler.handleCodeResponseFromServer called"), a = this.browserStorage.generateStateKey(t), s = this.browserStorage.getTemporaryCache(a), !s)
                 throw W.createStateNotFoundError("Cached State");
-              return c = this.browserStorage.generateNonceKey(s), l = this.browserStorage.getTemporaryCache(c), this.authCodeRequest.code = e.code, e.cloud_instance_host_name ? (this.performanceClient.setPreQueueTime(A.UpdateTokenEndpointAuthority, this.authCodeRequest.correlationId), [4, this.updateTokenEndpointAuthority(e.cloud_instance_host_name, r, o)]) : [3, 2];
+              return c = this.browserStorage.generateNonceKey(s), l = this.browserStorage.getTemporaryCache(c), this.authCodeRequest.code = e.code, e.cloud_instance_host_name ? (this.performanceClient.setPreQueueTime(k.UpdateTokenEndpointAuthority, this.authCodeRequest.correlationId), [4, this.updateTokenEndpointAuthority(e.cloud_instance_host_name, r, o)]) : [3, 2];
             case 1:
               d.sent(), d.label = 2;
             case 2:
-              return i && (e.nonce = l || void 0), e.state = s, e.client_info ? this.authCodeRequest.clientInfo = e.client_info : (u = this.checkCcsCredentials(), u && (this.authCodeRequest.ccsCredential = u)), this.performanceClient.setPreQueueTime(A.AuthClientAcquireToken, this.authCodeRequest.correlationId), [4, this.authModule.acquireToken(this.authCodeRequest, e)];
+              return i && (e.nonce = l || void 0), e.state = s, e.client_info ? this.authCodeRequest.clientInfo = e.client_info : (u = this.checkCcsCredentials(), u && (this.authCodeRequest.ccsCredential = u)), this.performanceClient.setPreQueueTime(k.AuthClientAcquireToken, this.authCodeRequest.correlationId), [4, this.authModule.acquireToken(this.authCodeRequest, e)];
             case 3:
               return f = d.sent(), this.browserStorage.cleanRequestByState(t), [2, f];
           }
@@ -9067,7 +9067,7 @@ var Ba = (
         return x(this, function(a) {
           switch (a.label) {
             case 0:
-              return this.performanceClient.addQueueMeasurement(A.UpdateTokenEndpointAuthority, this.authCodeRequest.correlationId), o = "https://" + e + "/" + t.tenant + "/", [4, xo.createDiscoveredInstance(o, r, this.browserStorage, t.options, this.logger, this.performanceClient, this.authCodeRequest.correlationId)];
+              return this.performanceClient.addQueueMeasurement(k.UpdateTokenEndpointAuthority, this.authCodeRequest.correlationId), o = "https://" + e + "/" + t.tenant + "/", [4, xo.createDiscoveredInstance(o, r, this.browserStorage, t.options, this.logger, this.performanceClient, this.authCodeRequest.correlationId)];
             case 1:
               return i = a.sent(), this.authModule.updateAuthority(i), [
                 2
@@ -9103,7 +9103,7 @@ var Lc = (
         return x(this, function(a) {
           switch (a.label) {
             case 0:
-              return this.logger.verbose("RedirectHandler.initiateAuthRequest called"), K.isEmpty(t) ? [3, 7] : (r.redirectStartPage && (this.logger.verbose("RedirectHandler.initiateAuthRequest: redirectStartPage set, caching start page"), this.browserStorage.setTemporaryCache(ge.ORIGIN_URI, r.redirectStartPage, !0)), this.browserStorage.setTemporaryCache(ge.CORRELATION_ID, this.authCodeRequest.correlationId, !0), this.browserStorage.cacheCodeRequest(this.authCodeRequest, this.browserCrypto), this.logger.infoPii("RedirectHandler.initiateAuthRequest: Navigate to: " + t), o = {
+              return this.logger.verbose("RedirectHandler.initiateAuthRequest called"), q.isEmpty(t) ? [3, 7] : (r.redirectStartPage && (this.logger.verbose("RedirectHandler.initiateAuthRequest: redirectStartPage set, caching start page"), this.browserStorage.setTemporaryCache(ge.ORIGIN_URI, r.redirectStartPage, !0)), this.browserStorage.setTemporaryCache(ge.CORRELATION_ID, this.authCodeRequest.correlationId, !0), this.browserStorage.cacheCodeRequest(this.authCodeRequest, this.browserCrypto), this.logger.infoPii("RedirectHandler.initiateAuthRequest: Navigate to: " + t), o = {
                 apiId: we.acquireTokenRedirect,
                 timeout: r.redirectTimeout,
                 noHistory: !1
@@ -9130,7 +9130,7 @@ var Lc = (
             case 6:
               return [3, 8];
             case 7:
-              throw this.logger.info("RedirectHandler.initiateAuthRequest: Navigate url is empty"), z.createEmptyNavigationUriError();
+              throw this.logger.info("RedirectHandler.initiateAuthRequest: Navigate url is empty"), K.createEmptyNavigationUriError();
             case 8:
               return [
                 2
@@ -9145,14 +9145,14 @@ var Lc = (
         return x(this, function(h) {
           switch (h.label) {
             case 0:
-              if (this.logger.verbose("RedirectHandler.handleCodeResponse called"), K.isEmpty(t))
-                throw z.createEmptyHashError(t);
+              if (this.logger.verbose("RedirectHandler.handleCodeResponse called"), q.isEmpty(t))
+                throw K.createEmptyHashError(t);
               if (this.browserStorage.setInteractionInProgress(!1), a = this.browserStorage.generateStateKey(r), s = this.browserStorage.getTemporaryCache(a), !s)
                 throw W.createStateNotFoundError("Cached State");
               try {
                 c = this.authModule.handleFragmentResponse(t, s);
               } catch (p) {
-                throw p instanceof Ln && p.subError === F.userCancelledError.code ? z.createUserCancelledError() : p;
+                throw p instanceof Ln && p.subError === L.userCancelledError.code ? K.createUserCancelledError() : p;
               }
               return l = this.browserStorage.generateNonceKey(s), u = this.browserStorage.getTemporaryCache(l), this.authCodeRequest.code = c.code, c.cloud_instance_host_name ? [4, this.updateTokenEndpointAuthority(c.cloud_instance_host_name, o, i)] : [3, 2];
             case 1:
@@ -9168,10 +9168,10 @@ var Lc = (
   }(Ba)
 );
 /*! @azure/msal-browser v2.39.0 2024-06-06 */
-var re;
+var oe;
 (function(n) {
   n.INITIALIZE_START = "msal:initializeStart", n.INITIALIZE_END = "msal:initializeEnd", n.ACCOUNT_ADDED = "msal:accountAdded", n.ACCOUNT_REMOVED = "msal:accountRemoved", n.LOGIN_START = "msal:loginStart", n.LOGIN_SUCCESS = "msal:loginSuccess", n.LOGIN_FAILURE = "msal:loginFailure", n.ACQUIRE_TOKEN_START = "msal:acquireTokenStart", n.ACQUIRE_TOKEN_SUCCESS = "msal:acquireTokenSuccess", n.ACQUIRE_TOKEN_FAILURE = "msal:acquireTokenFailure", n.ACQUIRE_TOKEN_NETWORK_START = "msal:acquireTokenFromNetworkStart", n.SSO_SILENT_START = "msal:ssoSilentStart", n.SSO_SILENT_SUCCESS = "msal:ssoSilentSuccess", n.SSO_SILENT_FAILURE = "msal:ssoSilentFailure", n.ACQUIRE_TOKEN_BY_CODE_START = "msal:acquireTokenByCodeStart", n.ACQUIRE_TOKEN_BY_CODE_SUCCESS = "msal:acquireTokenByCodeSuccess", n.ACQUIRE_TOKEN_BY_CODE_FAILURE = "msal:acquireTokenByCodeFailure", n.HANDLE_REDIRECT_START = "msal:handleRedirectStart", n.HANDLE_REDIRECT_END = "msal:handleRedirectEnd", n.POPUP_OPENED = "msal:popupOpened", n.LOGOUT_START = "msal:logoutStart", n.LOGOUT_SUCCESS = "msal:logoutSuccess", n.LOGOUT_FAILURE = "msal:logoutFailure", n.LOGOUT_END = "msal:logoutEnd", n.RESTORE_FROM_BFCACHE = "msal:restoreFromBFCache";
-})(re || (re = {}));
+})(oe || (oe = {}));
 /*! @azure/msal-browser v2.39.0 2024-06-06 */
 var un;
 (function(n) {
@@ -9214,9 +9214,9 @@ var Ir = {
           case un.USER_INTERACTION_REQUIRED:
             return new Pt(t, r);
           case un.USER_CANCEL:
-            return z.createUserCancelledError();
+            return K.createUserCancelledError();
           case un.NO_NETWORK:
-            return z.createNoNetworkConnectivityError();
+            return K.createNoNetworkConnectivityError();
         }
       return new e(t, r, o);
     }, e.createUserSwitchError = function() {
@@ -9240,7 +9240,7 @@ var pu = (
         return x(this, function(c) {
           switch (c.label) {
             case 0:
-              return r = this.performanceClient.startMeasurement(A.SilentCacheClientAcquireToken, t.correlationId), o = this.initializeServerTelemetryManager(we.acquireTokenSilent_silentFlow), [4, this.createSilentFlowClient(o, t.authority, t.azureCloudOptions)];
+              return r = this.performanceClient.startMeasurement(k.SilentCacheClientAcquireToken, t.correlationId), o = this.initializeServerTelemetryManager(we.acquireTokenSilent_silentFlow), [4, this.createSilentFlowClient(o, t.authority, t.azureCloudOptions)];
             case 1:
               i = c.sent(), this.logger.verbose("Silent auth client created"), c.label = 2;
             case 2:
@@ -9251,7 +9251,7 @@ var pu = (
                 fromCache: !0
               }), [2, a];
             case 4:
-              throw s = c.sent(), s instanceof z && s.errorCode === F.signingKeyNotFoundInStorage.code && this.logger.verbose("Signing keypair for bound access token not found. Refreshing bound access token and generating a new crypto keypair."), r.endMeasurement({
+              throw s = c.sent(), s instanceof K && s.errorCode === L.signingKeyNotFoundInStorage.code && this.logger.verbose("Signing keypair for bound access token not found. Refreshing bound access token and generating a new crypto keypair."), r.endMeasurement({
                 errorCode: s instanceof Q && s.errorCode || void 0,
                 subErrorCode: s instanceof Q && s.subError || void 0,
                 success: !1
@@ -9265,14 +9265,14 @@ var pu = (
         });
       });
     }, e.prototype.logout = function() {
-      return Promise.reject(z.createSilentLogoutUnsupportedError());
+      return Promise.reject(K.createSilentLogoutUnsupportedError());
     }, e.prototype.createSilentFlowClient = function(t, r, o) {
       return O(this, void 0, void 0, function() {
         var i;
         return x(this, function(a) {
           switch (a.label) {
             case 0:
-              return this.performanceClient.setPreQueueTime(A.StandardInteractionClientGetClientConfiguration, this.correlationId), [4, this.getClientConfiguration(t, r, o)];
+              return this.performanceClient.setPreQueueTime(k.StandardInteractionClientGetClientConfiguration, this.correlationId), [4, this.getClientConfiguration(t, r, o)];
             case 1:
               return i = a.sent(), [2, new Sg(i, this.performanceClient)];
           }
@@ -9284,7 +9284,7 @@ var pu = (
         return x(this, function(i) {
           switch (i.label) {
             case 0:
-              return this.performanceClient.addQueueMeasurement(A.InitializeSilentRequest, this.correlationId), this.performanceClient.setPreQueueTime(A.InitializeBaseRequest, this.correlationId), o = [G({}, t)], [4, this.initializeBaseRequest(t, r)];
+              return this.performanceClient.addQueueMeasurement(k.InitializeSilentRequest, this.correlationId), this.performanceClient.setPreQueueTime(k.InitializeBaseRequest, this.correlationId), o = [G({}, t)], [4, this.initializeBaseRequest(t, r)];
             case 1:
               return [2, G.apply(void 0, [G.apply(void 0, o.concat([i.sent()])), { account: r, forceRefresh: t.forceRefresh || !1 }])];
           }
@@ -9308,7 +9308,7 @@ var sr = (
         return x(this, function(u) {
           switch (u.label) {
             case 0:
-              return this.logger.trace("NativeInteractionClient - acquireToken called."), r = this.performanceClient.startMeasurement(A.NativeInteractionClientAcquireToken, t.correlationId), o = vt.nowSeconds(), [4, this.initializeNativeRequest(t)];
+              return this.logger.trace("NativeInteractionClient - acquireToken called."), r = this.performanceClient.startMeasurement(k.NativeInteractionClientAcquireToken, t.correlationId), o = vt.nowSeconds(), [4, this.initializeNativeRequest(t)];
             case 1:
               i = u.sent(), u.label = 2;
             case 2:
@@ -9588,7 +9588,7 @@ var sr = (
                   case Ve.LOGIN:
                     return h.logger.trace("initializeNativeRequest: prompt is compatible with native flow"), t.prompt;
                   default:
-                    throw h.logger.trace("initializeNativeRequest: prompt = " + t.prompt + " is not compatible with native flow"), z.createNativePromptParameterNotSupportedError();
+                    throw h.logger.trace("initializeNativeRequest: prompt = " + t.prompt + " is not compatible with native flow"), K.createNativePromptParameterNotSupportedError();
                 }
               }, l = G(G({}, a), {
                 accountId: this.accountId,
@@ -9624,7 +9624,7 @@ var On = (
   /** @class */
   function() {
     function n(e, t, r, o) {
-      this.logger = e, this.handshakeTimeoutMs = t, this.extensionId = o, this.resolvers = /* @__PURE__ */ new Map(), this.handshakeResolvers = /* @__PURE__ */ new Map(), this.responseId = 0, this.messageChannel = new MessageChannel(), this.windowListener = this.onWindowMessage.bind(this), this.performanceClient = r, this.handshakeEvent = r.startMeasurement(A.NativeMessageHandlerHandshake);
+      this.logger = e, this.handshakeTimeoutMs = t, this.extensionId = o, this.resolvers = /* @__PURE__ */ new Map(), this.handshakeResolvers = /* @__PURE__ */ new Map(), this.responseId = 0, this.messageChannel = new MessageChannel(), this.windowListener = this.onWindowMessage.bind(this), this.performanceClient = r, this.handshakeEvent = r.startMeasurement(k.NativeMessageHandlerHandshake);
     }
     return n.prototype.sendMessage = function(e) {
       return O(this, void 0, void 0, function() {
@@ -9681,7 +9681,7 @@ var On = (
             t.onChannelMessage(o);
           }, window.postMessage(e, window.origin, [this.messageChannel.port2]), [2, new Promise(function(o, i) {
             t.handshakeResolvers.set(e.responseId, { resolve: o, reject: i }), t.timeoutId = window.setTimeout(function() {
-              window.removeEventListener("message", t.windowListener, !1), t.messageChannel.port1.close(), t.messageChannel.port2.close(), t.handshakeEvent.endMeasurement({ extensionHandshakeTimedOut: !0, success: !1 }), i(z.createNativeHandshakeTimeoutError()), t.handshakeResolvers.delete(e.responseId);
+              window.removeEventListener("message", t.windowListener, !1), t.messageChannel.port1.close(), t.messageChannel.port2.close(), t.handshakeEvent.endMeasurement({ extensionHandshakeTimedOut: !0, success: !1 }), i(K.createNativeHandshakeTimeoutError()), t.handshakeResolvers.delete(e.responseId);
             }, t.handshakeTimeoutMs);
           })];
         });
@@ -9692,7 +9692,7 @@ var On = (
         if (!(!t.channel || t.channel !== Rr.CHANNEL_ID) && !(t.extensionId && t.extensionId !== this.extensionId) && t.body.method === Wt.HandshakeRequest) {
           this.logger.verbose(t.extensionId ? "Extension with id: " + t.extensionId + " not installed" : "No extension installed"), clearTimeout(this.timeoutId), this.messageChannel.port1.close(), this.messageChannel.port2.close(), window.removeEventListener("message", this.windowListener, !1);
           var r = this.handshakeResolvers.get(t.responseId);
-          r && (this.handshakeEvent.endMeasurement({ success: !1, extensionInstalled: !1 }), r.reject(z.createNativeExtensionNotInstalledError()));
+          r && (this.handshakeEvent.endMeasurement({ success: !1, extensionInstalled: !1 }), r.reject(K.createNativeExtensionNotInstalledError()));
         }
       }
     }, n.prototype.onChannelMessage = function(e) {
@@ -9755,15 +9755,15 @@ var Lg = (
         return x(this, function(h) {
           switch (h.label) {
             case 0:
-              return this.performanceClient.setPreQueueTime(A.StandardInteractionClientInitializeAuthorizationRequest, t.correlationId), [4, this.initializeAuthorizationRequest(t, Y.Redirect)];
+              return this.performanceClient.setPreQueueTime(k.StandardInteractionClientInitializeAuthorizationRequest, t.correlationId), [4, this.initializeAuthorizationRequest(t, Y.Redirect)];
             case 1:
               r = h.sent(), this.browserStorage.updateCacheEntries(r.state, r.nonce, r.authority, r.loginHint || I.EMPTY_STRING, r.account || null), o = this.initializeServerTelemetryManager(we.acquireTokenRedirect), i = function(p) {
-                p.persisted && (d.logger.verbose("Page was restored from back/forward cache. Clearing temporary cache."), d.browserStorage.cleanRequestByState(r.state), d.eventHandler.emitEvent(re.RESTORE_FROM_BFCACHE, Y.Redirect));
+                p.persisted && (d.logger.verbose("Page was restored from back/forward cache. Clearing temporary cache."), d.browserStorage.cleanRequestByState(r.state), d.eventHandler.emitEvent(oe.RESTORE_FROM_BFCACHE, Y.Redirect));
               }, h.label = 2;
             case 2:
-              return h.trys.push([2, 7, , 8]), this.performanceClient.setPreQueueTime(A.StandardInteractionClientInitializeAuthorizationCodeRequest, t.correlationId), [4, this.initializeAuthorizationCodeRequest(r)];
+              return h.trys.push([2, 7, , 8]), this.performanceClient.setPreQueueTime(k.StandardInteractionClientInitializeAuthorizationCodeRequest, t.correlationId), [4, this.initializeAuthorizationCodeRequest(r)];
             case 3:
-              return a = h.sent(), this.performanceClient.setPreQueueTime(A.StandardInteractionClientCreateAuthCodeClient, t.correlationId), [4, this.createAuthCodeClient(o, r.authority, r.azureCloudOptions)];
+              return a = h.sent(), this.performanceClient.setPreQueueTime(k.StandardInteractionClientCreateAuthCodeClient, t.correlationId), [4, this.createAuthCodeClient(o, r.authority, r.azureCloudOptions)];
             case 4:
               return s = h.sent(), this.logger.verbose("Auth code client created"), c = new Lc(s, this.browserStorage, a, this.logger, this.browserCrypto, this.performanceClient), [4, s.getAuthCodeUrl(G(G({}, r), { nativeBroker: On.isNativeAvailable(this.config, this.logger, this.nativeMessageHandler, t.authenticationScheme) }))];
             case 5:
@@ -9851,7 +9851,7 @@ var Lg = (
             case 0:
               if (i = this.browserStorage.getCachedRequest(r, this.browserCrypto), this.logger.verbose("handleHash called, retrieved cached request"), a = he.getDeserializedHash(t), a.accountId) {
                 if (this.logger.verbose("Account id found in hash, calling WAM for token"), !this.nativeMessageHandler)
-                  throw z.createNativeConnectionNotEstablishedError();
+                  throw K.createNativeConnectionNotEstablishedError();
                 return s = new sr(this.config, this.browserStorage, this.browserCrypto, this.logger, this.eventHandler, this.navigationClient, we.acquireTokenPopup, this.performanceClient, this.nativeMessageHandler, a.accountId, this.nativeStorage, i.correlationId), c = Yt.parseRequestState(this.browserCrypto, r).userRequestState, [2, s.acquireToken(G(G({}, i), {
                   state: c,
                   prompt: void 0
@@ -9861,8 +9861,8 @@ var Lg = (
                 })];
               }
               if (l = this.browserStorage.getCachedAuthority(r), !l)
-                throw z.createNoCachedAuthorityError();
-              return this.performanceClient.setPreQueueTime(A.StandardInteractionClientCreateAuthCodeClient, i.correlationId), [4, this.createAuthCodeClient(o, l)];
+                throw K.createNoCachedAuthorityError();
+              return this.performanceClient.setPreQueueTime(k.StandardInteractionClientCreateAuthCodeClient, i.correlationId), [4, this.createAuthCodeClient(o, l)];
             case 1:
               return u = h.sent(), this.logger.verbose("Auth code client created"), No.removeThrottle(this.browserStorage, this.config.auth.clientId, i), f = new Lc(u, this.browserStorage, i, this.logger, this.browserCrypto, this.performanceClient), [4, f.handleCodeResponseFromHash(t, r, u.authority, this.networkClient)];
             case 2:
@@ -9878,15 +9878,15 @@ var Lg = (
             case 0:
               this.logger.verbose("logoutRedirect called"), r = this.initializeLogoutRequest(t), o = this.initializeServerTelemetryManager(we.logout), u.label = 1;
             case 1:
-              return u.trys.push([1, 10, , 11]), this.eventHandler.emitEvent(re.LOGOUT_START, Y.Redirect, t), [4, this.clearCacheOnLogout(r.account)];
+              return u.trys.push([1, 10, , 11]), this.eventHandler.emitEvent(oe.LOGOUT_START, Y.Redirect, t), [4, this.clearCacheOnLogout(r.account)];
             case 2:
               return u.sent(), i = {
                 apiId: we.logout,
                 timeout: this.config.system.redirectNavigationTimeout,
                 noHistory: !1
-              }, this.performanceClient.setPreQueueTime(A.StandardInteractionClientCreateAuthCodeClient, r.correlationId), [4, this.createAuthCodeClient(o, t && t.authority)];
+              }, this.performanceClient.setPreQueueTime(k.StandardInteractionClientCreateAuthCodeClient, r.correlationId), [4, this.createAuthCodeClient(o, t && t.authority)];
             case 3:
-              return a = u.sent(), this.logger.verbose("Auth code client created"), s = a.getLogoutUri(r), this.eventHandler.emitEvent(re.LOGOUT_SUCCESS, Y.Redirect, r), t && typeof t.onRedirectNavigate == "function" ? (c = t.onRedirectNavigate(s), c === !1 ? [3, 5] : (this.logger.verbose("Logout onRedirectNavigate did not return false, navigating"), this.browserStorage.getInteractionInProgress() || this.browserStorage.setInteractionInProgress(!0), [4, this.navigationClient.navigateExternal(s, i)])) : [3, 7];
+              return a = u.sent(), this.logger.verbose("Auth code client created"), s = a.getLogoutUri(r), this.eventHandler.emitEvent(oe.LOGOUT_SUCCESS, Y.Redirect, r), t && typeof t.onRedirectNavigate == "function" ? (c = t.onRedirectNavigate(s), c === !1 ? [3, 5] : (this.logger.verbose("Logout onRedirectNavigate did not return false, navigating"), this.browserStorage.getInteractionInProgress() || this.browserStorage.setInteractionInProgress(!0), [4, this.navigationClient.navigateExternal(s, i)])) : [3, 7];
             case 4:
               return u.sent(), [
                 2
@@ -9906,9 +9906,9 @@ var Lg = (
             case 9:
               return [3, 11];
             case 10:
-              throw l = u.sent(), l instanceof Q && l.setCorrelationId(this.correlationId), o.cacheFailedRequest(l), this.eventHandler.emitEvent(re.LOGOUT_FAILURE, Y.Redirect, null, l), this.eventHandler.emitEvent(re.LOGOUT_END, Y.Redirect), l;
+              throw l = u.sent(), l instanceof Q && l.setCorrelationId(this.correlationId), o.cacheFailedRequest(l), this.eventHandler.emitEvent(oe.LOGOUT_FAILURE, Y.Redirect, null, l), this.eventHandler.emitEvent(oe.LOGOUT_END, Y.Redirect), l;
             case 11:
-              return this.eventHandler.emitEvent(re.LOGOUT_END, Y.Redirect), [
+              return this.eventHandler.emitEvent(oe.LOGOUT_END, Y.Redirect), [
                 2
                 /*return*/
               ];
@@ -9955,38 +9955,38 @@ var Fg = (
       }
     }, e.prototype.acquireTokenPopupAsync = function(t, r, o, i) {
       return O(this, void 0, void 0, function() {
-        var a, s, c, l, u, f, d, h, p, g, m, b, C, v, w, S, E, k = this;
+        var a, s, c, l, u, f, d, h, p, g, m, b, C, v, w, S, E, _ = this;
         return x(this, function(T) {
           switch (T.label) {
             case 0:
-              return this.logger.verbose("acquireTokenPopupAsync called"), a = this.initializeServerTelemetryManager(we.acquireTokenPopup), this.performanceClient.setPreQueueTime(A.StandardInteractionClientInitializeAuthorizationRequest, t.correlationId), [4, this.initializeAuthorizationRequest(t, Y.Popup)];
+              return this.logger.verbose("acquireTokenPopupAsync called"), a = this.initializeServerTelemetryManager(we.acquireTokenPopup), this.performanceClient.setPreQueueTime(k.StandardInteractionClientInitializeAuthorizationRequest, t.correlationId), [4, this.initializeAuthorizationRequest(t, Y.Popup)];
             case 1:
               s = T.sent(), this.browserStorage.updateCacheEntries(s.state, s.nonce, s.authority, s.loginHint || I.EMPTY_STRING, s.account || null), T.label = 2;
             case 2:
-              return T.trys.push([2, 8, , 9]), this.performanceClient.setPreQueueTime(A.StandardInteractionClientInitializeAuthorizationCodeRequest, t.correlationId), [4, this.initializeAuthorizationCodeRequest(s)];
+              return T.trys.push([2, 8, , 9]), this.performanceClient.setPreQueueTime(k.StandardInteractionClientInitializeAuthorizationCodeRequest, t.correlationId), [4, this.initializeAuthorizationCodeRequest(s)];
             case 3:
-              return c = T.sent(), this.performanceClient.setPreQueueTime(A.StandardInteractionClientCreateAuthCodeClient, t.correlationId), [4, this.createAuthCodeClient(a, s.authority, s.azureCloudOptions)];
+              return c = T.sent(), this.performanceClient.setPreQueueTime(k.StandardInteractionClientCreateAuthCodeClient, t.correlationId), [4, this.createAuthCodeClient(a, s.authority, s.azureCloudOptions)];
             case 4:
-              return l = T.sent(), this.logger.verbose("Auth code client created"), u = On.isNativeAvailable(this.config, this.logger, this.nativeMessageHandler, t.authenticationScheme), f = void 0, u && (f = this.performanceClient.startMeasurement(A.FetchAccountIdWithNativeBroker, t.correlationId)), [4, l.getAuthCodeUrl(G(G({}, s), { nativeBroker: u }))];
+              return l = T.sent(), this.logger.verbose("Auth code client created"), u = On.isNativeAvailable(this.config, this.logger, this.nativeMessageHandler, t.authenticationScheme), f = void 0, u && (f = this.performanceClient.startMeasurement(k.FetchAccountIdWithNativeBroker, t.correlationId)), [4, l.getAuthCodeUrl(G(G({}, s), { nativeBroker: u }))];
             case 5:
               return d = T.sent(), h = new Ba(l, this.browserStorage, c, this.logger, this.performanceClient), p = {
                 popup: i,
                 popupName: r,
                 popupWindowAttributes: o
-              }, g = this.initiateAuthRequest(d, p), this.eventHandler.emitEvent(re.POPUP_OPENED, Y.Popup, { popupWindow: g }, null), [4, this.monitorPopupForHash(g)];
+              }, g = this.initiateAuthRequest(d, p), this.eventHandler.emitEvent(oe.POPUP_OPENED, Y.Popup, { popupWindow: g }, null), [4, this.monitorPopupForHash(g)];
             case 6:
               if (m = T.sent(), b = he.getDeserializedHash(m), C = this.validateAndExtractStateFromHash(b, Y.Popup, s.correlationId), No.removeThrottle(this.browserStorage, this.config.auth.clientId, c), b.accountId) {
                 if (this.logger.verbose("Account id found in hash, calling WAM for token"), f && f.endMeasurement({
                   success: !0,
                   isNativeBroker: !0
                 }), !this.nativeMessageHandler)
-                  throw z.createNativeConnectionNotEstablishedError();
+                  throw K.createNativeConnectionNotEstablishedError();
                 return v = new sr(this.config, this.browserStorage, this.browserCrypto, this.logger, this.eventHandler, this.navigationClient, we.acquireTokenPopup, this.performanceClient, this.nativeMessageHandler, b.accountId, this.nativeStorage, s.correlationId), w = Yt.parseRequestState(this.browserCrypto, C).userRequestState, [2, v.acquireToken(G(G({}, s), {
                   state: w,
                   prompt: void 0
                   // Server should handle the prompt, ideally native broker can do this part silently
                 })).finally(function() {
-                  k.browserStorage.cleanRequestByState(C);
+                  _.browserStorage.cleanRequestByState(C);
                 })];
               }
               return [4, h.handleCodeResponseFromHash(m, C, l.authority, this.networkClient)];
@@ -10008,13 +10008,13 @@ var Fg = (
         return x(this, function(g) {
           switch (g.label) {
             case 0:
-              this.logger.verbose("logoutPopupAsync called"), this.eventHandler.emitEvent(re.LOGOUT_START, Y.Popup, t), c = this.initializeServerTelemetryManager(we.logoutPopup), g.label = 1;
+              this.logger.verbose("logoutPopupAsync called"), this.eventHandler.emitEvent(oe.LOGOUT_START, Y.Popup, t), c = this.initializeServerTelemetryManager(we.logoutPopup), g.label = 1;
             case 1:
               return g.trys.push([1, 5, , 6]), [4, this.clearCacheOnLogout(t.account)];
             case 2:
-              return g.sent(), this.performanceClient.setPreQueueTime(A.StandardInteractionClientCreateAuthCodeClient, t.correlationId), [4, this.createAuthCodeClient(c, i)];
+              return g.sent(), this.performanceClient.setPreQueueTime(k.StandardInteractionClientCreateAuthCodeClient, t.correlationId), [4, this.createAuthCodeClient(c, i)];
             case 3:
-              return l = g.sent(), this.logger.verbose("Auth code client created"), u = l.getLogoutUri(t), this.eventHandler.emitEvent(re.LOGOUT_SUCCESS, Y.Popup, t), f = this.openPopup(u, { popupName: r, popupWindowAttributes: o, popup: a }), this.eventHandler.emitEvent(re.POPUP_OPENED, Y.Popup, { popupWindow: f }, null), [4, this.waitForLogoutPopup(f)];
+              return l = g.sent(), this.logger.verbose("Auth code client created"), u = l.getLogoutUri(t), this.eventHandler.emitEvent(oe.LOGOUT_SUCCESS, Y.Popup, t), f = this.openPopup(u, { popupName: r, popupWindowAttributes: o, popup: a }), this.eventHandler.emitEvent(oe.POPUP_OPENED, Y.Popup, { popupWindow: f }, null), [4, this.waitForLogoutPopup(f)];
             case 4:
               return g.sent(), s ? (d = {
                 apiId: we.logoutPopup,
@@ -10022,9 +10022,9 @@ var Fg = (
                 noHistory: !1
               }, h = he.getAbsoluteUrl(s, Te.getCurrentUri()), this.logger.verbose("Redirecting main window to url specified in the request"), this.logger.verbosePii("Redirecting main window to: " + h), this.navigationClient.navigateInternal(h, d)) : this.logger.verbose("No main window navigation requested"), [3, 6];
             case 5:
-              throw p = g.sent(), a && a.close(), p instanceof Q && p.setCorrelationId(this.correlationId), this.browserStorage.setInteractionInProgress(!1), this.eventHandler.emitEvent(re.LOGOUT_FAILURE, Y.Popup, null, p), this.eventHandler.emitEvent(re.LOGOUT_END, Y.Popup), c.cacheFailedRequest(p), p;
+              throw p = g.sent(), a && a.close(), p instanceof Q && p.setCorrelationId(this.correlationId), this.browserStorage.setInteractionInProgress(!1), this.eventHandler.emitEvent(oe.LOGOUT_FAILURE, Y.Popup, null, p), this.eventHandler.emitEvent(oe.LOGOUT_END, Y.Popup), c.cacheFailedRequest(p), p;
             case 6:
-              return this.eventHandler.emitEvent(re.LOGOUT_END, Y.Popup), [
+              return this.eventHandler.emitEvent(oe.LOGOUT_END, Y.Popup), [
                 2
                 /*return*/
               ];
@@ -10032,8 +10032,8 @@ var Fg = (
         });
       });
     }, e.prototype.initiateAuthRequest = function(t, r) {
-      if (K.isEmpty(t))
-        throw this.logger.error("Navigate url is empty"), z.createEmptyNavigationUriError();
+      if (q.isEmpty(t))
+        throw this.logger.error("Navigate url is empty"), K.createEmptyNavigationUriError();
       return this.logger.infoPii("Navigate to: " + t), this.openPopup(t, r);
     }, e.prototype.monitorPopupForHash = function(t) {
       var r = this;
@@ -10042,7 +10042,7 @@ var Fg = (
         r.logger.verbose("PopupHandler.monitorPopupForHash - polling started");
         var c = setInterval(function() {
           if (t.closed) {
-            r.logger.error("PopupHandler.monitorPopupForHash - window closed"), r.cleanPopup(), clearInterval(c), i(z.createUserCancelledError());
+            r.logger.error("PopupHandler.monitorPopupForHash - window closed"), r.cleanPopup(), clearInterval(c), i(K.createUserCancelledError());
             return;
           }
           var l = I.EMPTY_STRING, u = I.EMPTY_STRING;
@@ -10050,7 +10050,7 @@ var Fg = (
             l = t.location.href, u = t.location.hash;
           } catch {
           }
-          K.isEmpty(l) || l === "about:blank" || (r.logger.verbose("PopupHandler.monitorPopupForHash - popup window is on same origin as caller"), s++, u ? (r.logger.verbose("PopupHandler.monitorPopupForHash - found hash in url"), clearInterval(c), r.cleanPopup(t), he.hashContainsKnownProperties(u) ? (r.logger.verbose("PopupHandler.monitorPopupForHash - hash contains known properties, returning."), o(u)) : (r.logger.error("PopupHandler.monitorPopupForHash - found hash in url but it does not contain known properties. Check that your router is not changing the hash prematurely."), r.logger.errorPii("PopupHandler.monitorPopupForHash - hash found: " + u), i(z.createHashDoesNotContainKnownPropertiesError()))) : s > a && (r.logger.error("PopupHandler.monitorPopupForHash - unable to find hash in url, timing out"), clearInterval(c), i(z.createMonitorPopupTimeoutError())));
+          q.isEmpty(l) || l === "about:blank" || (r.logger.verbose("PopupHandler.monitorPopupForHash - popup window is on same origin as caller"), s++, u ? (r.logger.verbose("PopupHandler.monitorPopupForHash - found hash in url"), clearInterval(c), r.cleanPopup(t), he.hashContainsKnownProperties(u) ? (r.logger.verbose("PopupHandler.monitorPopupForHash - hash contains known properties, returning."), o(u)) : (r.logger.error("PopupHandler.monitorPopupForHash - found hash in url but it does not contain known properties. Check that your router is not changing the hash prematurely."), r.logger.errorPii("PopupHandler.monitorPopupForHash - hash found: " + u), i(K.createHashDoesNotContainKnownPropertiesError()))) : s > a && (r.logger.error("PopupHandler.monitorPopupForHash - unable to find hash in url, timing out"), clearInterval(c), i(K.createMonitorPopupTimeoutError())));
         }, r.config.system.pollIntervalMilliseconds);
       });
     }, e.prototype.waitForLogoutPopup = function(t) {
@@ -10064,17 +10064,17 @@ var Fg = (
             a = t.location.href;
           } catch {
           }
-          K.isEmpty(a) || a === "about:blank" || (r.logger.verbose("PopupHandler.waitForLogoutPopup - popup window is on same origin as caller, closing."), clearInterval(i), r.cleanPopup(t), o());
+          q.isEmpty(a) || a === "about:blank" || (r.logger.verbose("PopupHandler.waitForLogoutPopup - popup window is on same origin as caller, closing."), clearInterval(i), r.cleanPopup(t), o());
         }, r.config.system.pollIntervalMilliseconds);
       });
     }, e.prototype.openPopup = function(t, r) {
       try {
         var o = void 0;
         if (r.popup ? (o = r.popup, this.logger.verbosePii("Navigating popup window to: " + t), o.location.assign(t)) : typeof r.popup > "u" && (this.logger.verbosePii("Opening popup window to: " + t), o = this.openSizedPopup(t, r.popupName, r.popupWindowAttributes)), !o)
-          throw z.createEmptyWindowCreatedError();
+          throw K.createEmptyWindowCreatedError();
         return o.focus && o.focus(), this.currentWindow = o, window.addEventListener("beforeunload", this.unloadWindow), o;
       } catch (i) {
-        throw this.logger.error("error opening popup " + i.message), this.browserStorage.setInteractionInProgress(!1), z.createPopupWindowError(i.toString());
+        throw this.logger.error("error opening popup " + i.message), this.browserStorage.setInteractionInProgress(!1), K.createPopupWindowError(i.toString());
       }
     }, e.prototype.openSizedPopup = function(t, r, o) {
       var i, a, s, c, l = window.screenLeft ? window.screenLeft : window.screenX, u = window.screenTop ? window.screenTop : window.screenY, f = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth, d = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight, h = (i = o.popupSize) === null || i === void 0 ? void 0 : i.width, p = (a = o.popupSize) === null || a === void 0 ? void 0 : a.height, g = (s = o.popupPosition) === null || s === void 0 ? void 0 : s.top, m = (c = o.popupPosition) === null || c === void 0 ? void 0 : c.left;
@@ -10189,9 +10189,9 @@ var gu = (
         return x(this, function(r) {
           switch (r.label) {
             case 0:
-              if (this.performanceClient.addQueueMeasurement(A.SilentHandlerInitiateAuthRequest, this.authCodeRequest.correlationId), K.isEmpty(t))
-                throw this.logger.info("Navigate url is empty"), z.createEmptyNavigationUriError();
-              return this.navigateFrameWait ? (this.performanceClient.setPreQueueTime(A.SilentHandlerLoadFrame, this.authCodeRequest.correlationId), [4, this.loadFrame(t)]) : [3, 2];
+              if (this.performanceClient.addQueueMeasurement(k.SilentHandlerInitiateAuthRequest, this.authCodeRequest.correlationId), q.isEmpty(t))
+                throw this.logger.info("Navigate url is empty"), K.createEmptyNavigationUriError();
+              return this.navigateFrameWait ? (this.performanceClient.setPreQueueTime(k.SilentHandlerLoadFrame, this.authCodeRequest.correlationId), [4, this.loadFrame(t)]) : [3, 2];
             case 1:
               return [2, r.sent()];
             case 2:
@@ -10201,11 +10201,11 @@ var gu = (
       });
     }, e.prototype.monitorIframeForHash = function(t, r) {
       var o = this;
-      return this.performanceClient.addQueueMeasurement(A.SilentHandlerMonitorIframeForHash, this.authCodeRequest.correlationId), new Promise(function(i, a) {
+      return this.performanceClient.addQueueMeasurement(k.SilentHandlerMonitorIframeForHash, this.authCodeRequest.correlationId), new Promise(function(i, a) {
         r < fa && o.logger.warning("system.loadFrameTimeout or system.iframeHashTimeout set to lower (" + r + "ms) than the default (" + fa + "ms). This may result in timeouts.");
         var s = window.performance.now(), c = s + r, l = setInterval(function() {
           if (window.performance.now() > c) {
-            o.removeHiddenIframe(t), clearInterval(l), a(z.createMonitorIframeTimeoutError());
+            o.removeHiddenIframe(t), clearInterval(l), a(K.createMonitorIframeTimeoutError());
             return;
           }
           var u = I.EMPTY_STRING, f = t.contentWindow;
@@ -10213,7 +10213,7 @@ var gu = (
             u = f ? f.location.href : I.EMPTY_STRING;
           } catch {
           }
-          if (!K.isEmpty(u)) {
+          if (!q.isEmpty(u)) {
             var d = f ? f.location.hash : I.EMPTY_STRING;
             if (he.hashContainsKnownProperties(d)) {
               o.removeHiddenIframe(t), clearInterval(l), i(d);
@@ -10224,7 +10224,7 @@ var gu = (
       });
     }, e.prototype.loadFrame = function(t) {
       var r = this;
-      return this.performanceClient.addQueueMeasurement(A.SilentHandlerLoadFrame, this.authCodeRequest.correlationId), new Promise(function(o, i) {
+      return this.performanceClient.addQueueMeasurement(k.SilentHandlerLoadFrame, this.authCodeRequest.correlationId), new Promise(function(o, i) {
         var a = r.createHiddenIframe();
         setTimeout(function() {
           if (!a) {
@@ -10260,17 +10260,17 @@ var $g = (
         return x(this, function(c) {
           switch (c.label) {
             case 0:
-              if (this.performanceClient.addQueueMeasurement(A.SilentIframeClientAcquireToken, t.correlationId), this.logger.verbose("acquireTokenByIframe called"), r = this.performanceClient.startMeasurement(A.SilentIframeClientAcquireToken, t.correlationId), K.isEmpty(t.loginHint) && K.isEmpty(t.sid) && (!t.account || K.isEmpty(t.account.username)) && this.logger.warning("No user hint provided. The authorization server may need more information to complete this request."), t.prompt && t.prompt !== Ve.NONE && t.prompt !== Ve.NO_SESSION)
+              if (this.performanceClient.addQueueMeasurement(k.SilentIframeClientAcquireToken, t.correlationId), this.logger.verbose("acquireTokenByIframe called"), r = this.performanceClient.startMeasurement(k.SilentIframeClientAcquireToken, t.correlationId), q.isEmpty(t.loginHint) && q.isEmpty(t.sid) && (!t.account || q.isEmpty(t.account.username)) && this.logger.warning("No user hint provided. The authorization server may need more information to complete this request."), t.prompt && t.prompt !== Ve.NONE && t.prompt !== Ve.NO_SESSION)
                 throw r.endMeasurement({
                   success: !1
-                }), z.createSilentPromptValueError(t.prompt);
-              return this.performanceClient.setPreQueueTime(A.StandardInteractionClientInitializeAuthorizationRequest, t.correlationId), [4, this.initializeAuthorizationRequest(G(G({}, t), { prompt: t.prompt || Ve.NONE }), Y.Silent)];
+                }), K.createSilentPromptValueError(t.prompt);
+              return this.performanceClient.setPreQueueTime(k.StandardInteractionClientInitializeAuthorizationRequest, t.correlationId), [4, this.initializeAuthorizationRequest(G(G({}, t), { prompt: t.prompt || Ve.NONE }), Y.Silent)];
             case 1:
               o = c.sent(), this.browserStorage.updateCacheEntries(o.state, o.nonce, o.authority, o.loginHint || I.EMPTY_STRING, o.account || null), i = this.initializeServerTelemetryManager(this.apiId), c.label = 2;
             case 2:
-              return c.trys.push([2, 5, , 6]), this.performanceClient.setPreQueueTime(A.StandardInteractionClientCreateAuthCodeClient, t.correlationId), [4, this.createAuthCodeClient(i, o.authority, o.azureCloudOptions)];
+              return c.trys.push([2, 5, , 6]), this.performanceClient.setPreQueueTime(k.StandardInteractionClientCreateAuthCodeClient, t.correlationId), [4, this.createAuthCodeClient(i, o.authority, o.azureCloudOptions)];
             case 3:
-              return a = c.sent(), this.logger.verbose("Auth code client created"), this.performanceClient.setPreQueueTime(A.SilentIframeClientTokenHelper, t.correlationId), [4, this.silentTokenHelper(a, o).then(function(l) {
+              return a = c.sent(), this.logger.verbose("Auth code client created"), this.performanceClient.setPreQueueTime(k.SilentIframeClientTokenHelper, t.correlationId), [4, this.silentTokenHelper(a, o).then(function(l) {
                 return r.endMeasurement({
                   success: !0,
                   fromCache: !1,
@@ -10294,29 +10294,29 @@ var $g = (
         });
       });
     }, e.prototype.logout = function() {
-      return Promise.reject(z.createSilentLogoutUnsupportedError());
+      return Promise.reject(K.createSilentLogoutUnsupportedError());
     }, e.prototype.silentTokenHelper = function(t, r) {
       return O(this, void 0, void 0, function() {
         var o, i, a, s, c, l, u, f, d, h = this;
         return x(this, function(p) {
           switch (p.label) {
             case 0:
-              return this.performanceClient.addQueueMeasurement(A.SilentIframeClientTokenHelper, r.correlationId), this.performanceClient.setPreQueueTime(A.StandardInteractionClientInitializeAuthorizationCodeRequest, r.correlationId), [4, this.initializeAuthorizationCodeRequest(r)];
+              return this.performanceClient.addQueueMeasurement(k.SilentIframeClientTokenHelper, r.correlationId), this.performanceClient.setPreQueueTime(k.StandardInteractionClientInitializeAuthorizationCodeRequest, r.correlationId), [4, this.initializeAuthorizationCodeRequest(r)];
             case 1:
-              return o = p.sent(), this.performanceClient.setPreQueueTime(A.GetAuthCodeUrl, r.correlationId), [4, t.getAuthCodeUrl(G(G({}, r), { nativeBroker: On.isNativeAvailable(this.config, this.logger, this.nativeMessageHandler, r.authenticationScheme) }))];
+              return o = p.sent(), this.performanceClient.setPreQueueTime(k.GetAuthCodeUrl, r.correlationId), [4, t.getAuthCodeUrl(G(G({}, r), { nativeBroker: On.isNativeAvailable(this.config, this.logger, this.nativeMessageHandler, r.authenticationScheme) }))];
             case 2:
-              return i = p.sent(), a = new gu(t, this.browserStorage, o, this.logger, this.config.system, this.performanceClient), this.performanceClient.setPreQueueTime(A.SilentHandlerInitiateAuthRequest, r.correlationId), [4, a.initiateAuthRequest(i)];
+              return i = p.sent(), a = new gu(t, this.browserStorage, o, this.logger, this.config.system, this.performanceClient), this.performanceClient.setPreQueueTime(k.SilentHandlerInitiateAuthRequest, r.correlationId), [4, a.initiateAuthRequest(i)];
             case 3:
-              return s = p.sent(), this.performanceClient.setPreQueueTime(A.SilentHandlerMonitorIframeForHash, r.correlationId), [4, a.monitorIframeForHash(s, this.config.system.iframeHashTimeout)];
+              return s = p.sent(), this.performanceClient.setPreQueueTime(k.SilentHandlerMonitorIframeForHash, r.correlationId), [4, a.monitorIframeForHash(s, this.config.system.iframeHashTimeout)];
             case 4:
               if (c = p.sent(), l = he.getDeserializedHash(c), u = this.validateAndExtractStateFromHash(l, Y.Silent, o.correlationId), l.accountId) {
                 if (this.logger.verbose("Account id found in hash, calling WAM for token"), !this.nativeMessageHandler)
-                  throw z.createNativeConnectionNotEstablishedError();
+                  throw K.createNativeConnectionNotEstablishedError();
                 return f = new sr(this.config, this.browserStorage, this.browserCrypto, this.logger, this.eventHandler, this.navigationClient, this.apiId, this.performanceClient, this.nativeMessageHandler, l.accountId, this.browserStorage, this.correlationId), d = Yt.parseRequestState(this.browserCrypto, u).userRequestState, [2, f.acquireToken(G(G({}, r), { state: d, prompt: r.prompt || Ve.NONE })).finally(function() {
                   h.browserStorage.cleanRequestByState(u);
                 })];
               }
-              return this.performanceClient.setPreQueueTime(A.HandleCodeResponseFromHash, r.correlationId), [2, a.handleCodeResponseFromHash(c, u, t.authority, this.networkClient)];
+              return this.performanceClient.setPreQueueTime(k.HandleCodeResponseFromHash, r.correlationId), [2, a.handleCodeResponseFromHash(c, u, t.authority, this.networkClient)];
           }
         });
       });
@@ -10337,11 +10337,11 @@ var Kg = (
         return x(this, function(l) {
           switch (l.label) {
             case 0:
-              return this.performanceClient.addQueueMeasurement(A.SilentRefreshClientAcquireToken, t.correlationId), this.performanceClient.setPreQueueTime(A.InitializeBaseRequest, t.correlationId), o = [G({}, t)], [4, this.initializeBaseRequest(t, t.account)];
+              return this.performanceClient.addQueueMeasurement(k.SilentRefreshClientAcquireToken, t.correlationId), this.performanceClient.setPreQueueTime(k.InitializeBaseRequest, t.correlationId), o = [G({}, t)], [4, this.initializeBaseRequest(t, t.account)];
             case 1:
-              return r = G.apply(void 0, o.concat([l.sent()])), i = this.performanceClient.startMeasurement(A.SilentRefreshClientAcquireToken, r.correlationId), a = this.initializeServerTelemetryManager(we.acquireTokenSilent_silentFlow), [4, this.createRefreshTokenClient(a, r.authority, r.azureCloudOptions)];
+              return r = G.apply(void 0, o.concat([l.sent()])), i = this.performanceClient.startMeasurement(k.SilentRefreshClientAcquireToken, r.correlationId), a = this.initializeServerTelemetryManager(we.acquireTokenSilent_silentFlow), [4, this.createRefreshTokenClient(a, r.authority, r.azureCloudOptions)];
             case 2:
-              return s = l.sent(), this.logger.verbose("Refresh token client created"), this.performanceClient.setPreQueueTime(A.RefreshTokenClientAcquireTokenByRefreshToken, t.correlationId), [2, s.acquireTokenByRefreshToken(r).then(function(u) {
+              return s = l.sent(), this.logger.verbose("Refresh token client created"), this.performanceClient.setPreQueueTime(k.RefreshTokenClientAcquireTokenByRefreshToken, t.correlationId), [2, s.acquireTokenByRefreshToken(r).then(function(u) {
                 return i.endMeasurement({
                   success: !0,
                   fromCache: u.fromCache,
@@ -10358,14 +10358,14 @@ var Kg = (
         });
       });
     }, e.prototype.logout = function() {
-      return Promise.reject(z.createSilentLogoutUnsupportedError());
+      return Promise.reject(K.createSilentLogoutUnsupportedError());
     }, e.prototype.createRefreshTokenClient = function(t, r, o) {
       return O(this, void 0, void 0, function() {
         var i;
         return x(this, function(a) {
           switch (a.label) {
             case 0:
-              return this.performanceClient.setPreQueueTime(A.StandardInteractionClientGetClientConfiguration, this.correlationId), [4, this.getClientConfiguration(t, r, o)];
+              return this.performanceClient.setPreQueueTime(k.StandardInteractionClientGetClientConfiguration, this.correlationId), [4, this.getClientConfiguration(t, r, o)];
             case 1:
               return i = a.sent(), [2, new lu(i, this.performanceClient)];
           }
@@ -10416,7 +10416,7 @@ var qg = (
         if (typeof r != "object" || !Ge.isAccountEntity(r))
           return;
         var o = Ze.toObject(new Ge(), r), i = o.getAccountInfo();
-        !e.oldValue && e.newValue ? (this.logger.info("Account was added to cache in a different window"), this.emitEvent(re.ACCOUNT_ADDED, void 0, i)) : !e.newValue && e.oldValue && (this.logger.info("Account was removed from cache in a different window"), this.emitEvent(re.ACCOUNT_REMOVED, void 0, i));
+        !e.oldValue && e.newValue ? (this.logger.info("Account was added to cache in a different window"), this.emitEvent(oe.ACCOUNT_ADDED, void 0, i)) : !e.newValue && e.oldValue && (this.logger.info("Account was removed from cache in a different window"), this.emitEvent(oe.ACCOUNT_REMOVED, void 0, i));
       } catch {
         return;
       }
@@ -10589,7 +10589,7 @@ var Gg = 32, Wg = (
         var t = this.base64Encode.urlEncodeArr(e);
         return t;
       } catch (r) {
-        throw z.createPkceNotGeneratedError(r);
+        throw K.createPkceNotGeneratedError(r);
       }
     }, n.prototype.generateCodeChallengeFromVerifier = function(e) {
       return O(this, void 0, void 0, function() {
@@ -10601,7 +10601,7 @@ var Gg = 32, Wg = (
             case 1:
               return t = o.sent(), [2, this.base64Encode.urlEncodeArr(new Uint8Array(t))];
             case 2:
-              throw r = o.sent(), z.createPkceNotGeneratedError(r);
+              throw r = o.sent(), K.createPkceNotGeneratedError(r);
             case 3:
               return [
                 2
@@ -10792,7 +10792,7 @@ var Xg = "RSASSA-PKCS1-v1_5", Fc = "SHA-256", Zg = 2048, em = new Uint8Array([1,
       else if (this.hasMsrCrypto() && (!((r = this.cryptoOptions) === null || r === void 0) && r.useMsrCrypto))
         this.logger.verbose("BrowserCrypto: MSR crypto interface available"), this.subtleCrypto = new Qg();
       else
-        throw this.hasMsrCrypto() && this.logger.info("BrowserCrypto: MSR Crypto interface available but system.cryptoOptions.useMsrCrypto not enabled"), this.logger.error("BrowserCrypto: No crypto interfaces available."), z.createCryptoNotAvailableError("Browser crypto, msCrypto, or msrCrypto interfaces not available.");
+        throw this.hasMsrCrypto() && this.logger.info("BrowserCrypto: MSR Crypto interface available but system.cryptoOptions.useMsrCrypto not enabled"), this.logger.error("BrowserCrypto: No crypto interfaces available."), K.createCryptoNotAvailableError("Browser crypto, msCrypto, or msrCrypto interfaces not available.");
       if (this.subtleCrypto.initPrng) {
         if (this.logger.verbose("BrowserCrypto: Interface requires entropy"), !(!((o = this.cryptoOptions) === null || o === void 0) && o.entropy))
           throw this.logger.error("BrowserCrypto: Interface requires entropy but none provided."), Lo.createEntropyNotProvided();
@@ -10867,7 +10867,7 @@ var tm = (
               var s = a;
               e.db = s.target.result, e.dbOpen = !0, r();
             }), i.addEventListener("error", function() {
-              return o(z.createDatabaseUnavailableError());
+              return o(K.createDatabaseUnavailableError());
             });
           })];
         });
@@ -10901,7 +10901,7 @@ var tm = (
             case 1:
               return r.sent(), [2, new Promise(function(o, i) {
                 if (!t.db)
-                  return i(z.createDatabaseNotOpenError());
+                  return i(K.createDatabaseNotOpenError());
                 var a = t.db.transaction([t.tableName], "readonly"), s = a.objectStore(t.tableName), c = s.get(e);
                 c.addEventListener("success", function(l) {
                   var u = l;
@@ -10923,7 +10923,7 @@ var tm = (
             case 1:
               return o.sent(), [2, new Promise(function(i, a) {
                 if (!r.db)
-                  return a(z.createDatabaseNotOpenError());
+                  return a(K.createDatabaseNotOpenError());
                 var s = r.db.transaction([r.tableName], "readwrite"), c = s.objectStore(r.tableName), l = c.put(t, e);
                 l.addEventListener("success", function() {
                   r.closeConnection(), i();
@@ -10944,7 +10944,7 @@ var tm = (
             case 1:
               return r.sent(), [2, new Promise(function(o, i) {
                 if (!t.db)
-                  return i(z.createDatabaseNotOpenError());
+                  return i(K.createDatabaseNotOpenError());
                 var a = t.db.transaction([t.tableName], "readwrite"), s = a.objectStore(t.tableName), c = s.delete(e);
                 c.addEventListener("success", function() {
                   t.closeConnection(), o();
@@ -10965,7 +10965,7 @@ var tm = (
             case 1:
               return t.sent(), [2, new Promise(function(r, o) {
                 if (!e.db)
-                  return o(z.createDatabaseNotOpenError());
+                  return o(K.createDatabaseNotOpenError());
                 var i = e.db.transaction([e.tableName], "readonly"), a = i.objectStore(e.tableName), s = a.getAllKeys();
                 s.addEventListener("success", function(c) {
                   var l = c;
@@ -10987,7 +10987,7 @@ var tm = (
             case 1:
               return r.sent(), [2, new Promise(function(o, i) {
                 if (!t.db)
-                  return i(z.createDatabaseNotOpenError());
+                  return i(K.createDatabaseNotOpenError());
                 var a = t.db.transaction([t.tableName], "readonly"), s = a.objectStore(t.tableName), c = s.count(e);
                 c.addEventListener("success", function(l) {
                   var u = l;
@@ -11025,7 +11025,7 @@ var jc = (
       this.inMemoryCache = new ua(), this.indexedDBCache = new tm(), this.logger = e, this.storeName = t;
     }
     return n.prototype.handleDatabaseAccessError = function(e) {
-      if (e instanceof z && e.errorCode === F.databaseUnavailable.code)
+      if (e instanceof K && e.errorCode === L.databaseUnavailable.code)
         this.logger.error("Could not access persistent storage. This may be caused by browser privacy features which block persistent storage in third-party contexts.");
       else
         throw e;
@@ -11216,7 +11216,7 @@ var rm = (
         return x(this, function(f) {
           switch (f.label) {
             case 0:
-              return r = (t = this.performanceClient) === null || t === void 0 ? void 0 : t.startMeasurement(A.CryptoOptsGetPublicKeyThumbprint, e.correlationId), [4, this.browserCrypto.generateKeyPair(n.EXTRACTABLE, n.POP_KEY_USAGES)];
+              return r = (t = this.performanceClient) === null || t === void 0 ? void 0 : t.startMeasurement(k.CryptoOptsGetPublicKeyThumbprint, e.correlationId), [4, this.browserCrypto.generateKeyPair(n.EXTRACTABLE, n.POP_KEY_USAGES)];
             case 1:
               return o = f.sent(), [4, this.browserCrypto.exportJwk(o.publicKey)];
             case 2:
@@ -11275,10 +11275,10 @@ var rm = (
         return x(this, function(C) {
           switch (C.label) {
             case 0:
-              return i = (o = this.performanceClient) === null || o === void 0 ? void 0 : o.startMeasurement(A.CryptoOptsSignJwt, r), [4, this.cache.asymmetricKeys.getItem(t)];
+              return i = (o = this.performanceClient) === null || o === void 0 ? void 0 : o.startMeasurement(k.CryptoOptsSignJwt, r), [4, this.cache.asymmetricKeys.getItem(t)];
             case 1:
               if (a = C.sent(), !a)
-                throw z.createSigningKeyNotFoundInStorageError(t);
+                throw K.createSigningKeyNotFoundInStorageError(t);
               return [4, this.browserCrypto.exportJwk(a.publicKey)];
             case 2:
               return s = C.sent(), c = Qt.getSortedObjectString(s), l = this.b64Encode.urlEncode(JSON.stringify({ kid: t })), u = Ag.getShrHeaderString({ kid: l, alg: s.alg }), f = this.b64Encode.urlEncode(u), e.cnf = {
@@ -11424,7 +11424,7 @@ var im = (
     }
     return n.prototype.loadExternalTokens = function(e, t, r) {
       if (this.logger.info("TokenCache - loadExternalTokens called"), !t.id_token)
-        throw z.createUnableToLoadTokenError("Please ensure server response includes id token.");
+        throw K.createUnableToLoadTokenError("Please ensure server response includes id token.");
       var o = new Ht(t.id_token, this.cryptoObj), i, a, s;
       if (e.account)
         s = Ge.createFromAccountInfo(e.account), i = new ar(s, this.loadIdToken(o, s.homeAccountId, e.account.environment, e.account.tenantId), this.loadAccessToken(e, t, s.homeAccountId, e.account.environment, e.account.tenantId, r), this.loadRefreshToken(e, t, s.homeAccountId, e.account.environment));
@@ -11441,41 +11441,41 @@ var im = (
         else if (t.client_info)
           this.logger.trace("TokenCache - homeAccountId from response"), s = this.loadAccount(o, a, t.client_info), i = new ar(s, this.loadIdToken(o, s.homeAccountId, a.hostnameAndPort, a.tenant), this.loadAccessToken(e, t, s.homeAccountId, a.hostnameAndPort, a.tenant, r), this.loadRefreshToken(e, t, s.homeAccountId, a.hostnameAndPort));
         else
-          throw z.createUnableToLoadTokenError("Please provide clientInfo in the response or options.");
+          throw K.createUnableToLoadTokenError("Please provide clientInfo in the response or options.");
       } else
-        throw z.createUnableToLoadTokenError("Please provide a request with an account or a request with authority.");
+        throw K.createUnableToLoadTokenError("Please provide a request with an account or a request with authority.");
       return this.generateAuthenticationResult(e, o, i, s, a);
     }, n.prototype.loadAccount = function(e, t, r, o) {
       var i;
       if (o ? i = o : t.authorityType !== void 0 && r && (i = Ge.generateHomeAccountId(r, t.authorityType, this.logger, this.cryptoObj, e.claims)), !i)
-        throw z.createUnableToLoadTokenError("Unexpected missing homeAccountId");
+        throw K.createUnableToLoadTokenError("Unexpected missing homeAccountId");
       var a = Ge.createAccount({ homeAccountId: i, idTokenClaims: e.claims, clientInfo: r, environment: t.hostnameAndPort }, t);
       if (this.isBrowserEnvironment)
         return this.logger.verbose("TokenCache - loading account"), this.storage.setAccount(a), a;
-      throw z.createUnableToLoadTokenError("loadExternalTokens is designed to work in browser environments only.");
+      throw K.createUnableToLoadTokenError("loadExternalTokens is designed to work in browser environments only.");
     }, n.prototype.loadIdToken = function(e, t, r, o) {
       var i = fn.createIdTokenEntity(t, r, e.rawToken, this.config.auth.clientId, o);
       if (this.isBrowserEnvironment)
         return this.logger.verbose("TokenCache - loading id token"), this.storage.setIdTokenCredential(i), i;
-      throw z.createUnableToLoadTokenError("loadExternalTokens is designed to work in browser environments only.");
+      throw K.createUnableToLoadTokenError("loadExternalTokens is designed to work in browser environments only.");
     }, n.prototype.loadAccessToken = function(e, t, r, o, i, a) {
       if (!t.access_token)
         return this.logger.verbose("TokenCache - No access token provided for caching"), null;
       if (!t.expires_in)
-        throw z.createUnableToLoadTokenError("Please ensure server response includes expires_in value.");
+        throw K.createUnableToLoadTokenError("Please ensure server response includes expires_in value.");
       if (!a.extendedExpiresOn)
-        throw z.createUnableToLoadTokenError("Please provide an extendedExpiresOn value in the options.");
+        throw K.createUnableToLoadTokenError("Please provide an extendedExpiresOn value in the options.");
       var s = new Ke(e.scopes).printScopes(), c = a.expiresOn || t.expires_in + (/* @__PURE__ */ new Date()).getTime() / 1e3, l = a.extendedExpiresOn, u = hn.createAccessTokenEntity(r, o, t.access_token, this.config.auth.clientId, i, s, c, l, this.cryptoObj);
       if (this.isBrowserEnvironment)
         return this.logger.verbose("TokenCache - loading access token"), this.storage.setAccessTokenCredential(u), u;
-      throw z.createUnableToLoadTokenError("loadExternalTokens is designed to work in browser environments only.");
+      throw K.createUnableToLoadTokenError("loadExternalTokens is designed to work in browser environments only.");
     }, n.prototype.loadRefreshToken = function(e, t, r, o) {
       if (!t.refresh_token)
         return this.logger.verbose("TokenCache - No refresh token provided for caching"), null;
       var i = rr.createRefreshTokenEntity(r, o, t.refresh_token, this.config.auth.clientId);
       if (this.isBrowserEnvironment)
         return this.logger.verbose("TokenCache - loading refresh token"), this.storage.setRefreshTokenCredential(i), i;
-      throw z.createUnableToLoadTokenError("loadExternalTokens is designed to work in browser environments only.");
+      throw K.createUnableToLoadTokenError("loadExternalTokens is designed to work in browser environments only.");
     }, n.prototype.generateAuthenticationResult = function(e, t, r, o, i) {
       var a, s = I.EMPTY_STRING, c = [], l = null, u;
       r.accessToken && (s = r.accessToken.secret, c = Ke.fromString(r.accessToken.target).asArray(), l = new Date(Number(r.accessToken.expiresOn) * 1e3), u = new Date(Number(r.accessToken.extendedExpiresOn) * 1e3));
@@ -11533,12 +11533,12 @@ var sm = (
           switch (u.label) {
             case 0:
               if (this.logger.trace("SilentAuthCodeClient.acquireToken called"), !t.code)
-                throw z.createAuthCodeRequiredError();
-              return this.performanceClient.setPreQueueTime(A.StandardInteractionClientInitializeAuthorizationRequest, t.correlationId), [4, this.initializeAuthorizationRequest(t, Y.Silent)];
+                throw K.createAuthCodeRequiredError();
+              return this.performanceClient.setPreQueueTime(k.StandardInteractionClientInitializeAuthorizationRequest, t.correlationId), [4, this.initializeAuthorizationRequest(t, Y.Silent)];
             case 1:
               r = u.sent(), this.browserStorage.updateCacheEntries(r.state, r.nonce, r.authority, r.loginHint || I.EMPTY_STRING, r.account || null), o = this.initializeServerTelemetryManager(this.apiId), u.label = 2;
             case 2:
-              return u.trys.push([2, 4, , 5]), i = G(G({}, r), { code: t.code }), this.performanceClient.setPreQueueTime(A.StandardInteractionClientGetClientConfiguration, t.correlationId), [4, this.getClientConfiguration(o, r.authority)];
+              return u.trys.push([2, 4, , 5]), i = G(G({}, r), { code: t.code }), this.performanceClient.setPreQueueTime(k.StandardInteractionClientGetClientConfiguration, t.correlationId), [4, this.getClientConfiguration(o, r.authority)];
             case 3:
               return a = u.sent(), s = new am(a), this.logger.verbose("Auth code client created"), c = new gu(s, this.browserStorage, i, this.logger, this.config.system, this.performanceClient), [2, c.handleCodeResponseFromServer({
                 code: t.code,
@@ -11557,7 +11557,7 @@ var sm = (
         });
       });
     }, e.prototype.logout = function() {
-      return Promise.reject(z.createSilentLogoutUnsupportedError());
+      return Promise.reject(K.createSilentLogoutUnsupportedError());
     }, e;
   }(mr)
 );
@@ -11588,7 +11588,7 @@ var cm = (
                   2
                   /*return*/
                 ];
-              if (e = this.config.system.allowNativeBroker, t = this.performanceClient.startMeasurement(A.InitializeClientApplication), this.eventHandler.emitEvent(re.INITIALIZE_START), !e)
+              if (e = this.config.system.allowNativeBroker, t = this.performanceClient.startMeasurement(k.InitializeClientApplication), this.eventHandler.emitEvent(oe.INITIALIZE_START), !e)
                 return [3, 4];
               a.label = 1;
             case 1:
@@ -11598,11 +11598,11 @@ var cm = (
             case 3:
               return o = a.sent(), this.logger.verbose(o), [3, 4];
             case 4:
-              return this.config.cache.claimsBasedCachingEnabled ? [3, 6] : (this.logger.verbose("Claims-based caching is disabled. Clearing the previous cache with claims"), i = this.performanceClient.startMeasurement(A.ClearTokensAndKeysWithClaims), [4, this.browserStorage.clearTokensAndKeysWithClaims()]);
+              return this.config.cache.claimsBasedCachingEnabled ? [3, 6] : (this.logger.verbose("Claims-based caching is disabled. Clearing the previous cache with claims"), i = this.performanceClient.startMeasurement(k.ClearTokensAndKeysWithClaims), [4, this.browserStorage.clearTokensAndKeysWithClaims()]);
             case 5:
               a.sent(), i.endMeasurement({ success: !0 }), a.label = 6;
             case 6:
-              return this.initialized = !0, this.eventHandler.emitEvent(re.INITIALIZE_END), t.endMeasurement({ allowNativeBroker: e, success: !0 }), [
+              return this.initialized = !0, this.eventHandler.emitEvent(oe.INITIALIZE_END), t.endMeasurement({ allowNativeBroker: e, success: !0 }), [
                 2
                 /*return*/
               ];
@@ -11613,14 +11613,14 @@ var cm = (
       return O(this, void 0, void 0, function() {
         var t, r, o, i, a, s, c, l, u = this;
         return x(this, function(f) {
-          return this.logger.verbose("handleRedirectPromise called"), Te.blockNativeBrokerCalledBeforeInitialized(this.config.system.allowNativeBroker, this.initialized), t = this.getAllAccounts(), this.isBrowserEnvironment ? (r = e || I.EMPTY_STRING, o = this.redirectResponse.get(r), typeof o > "u" ? (this.eventHandler.emitEvent(re.HANDLE_REDIRECT_START, Y.Redirect), this.logger.verbose("handleRedirectPromise has been called for the first time, storing the promise"), i = this.browserStorage.getCachedNativeRequest(), a = void 0, i && On.isNativeAvailable(this.config, this.logger, this.nativeExtensionProvider) && this.nativeExtensionProvider && !e ? (this.logger.trace("handleRedirectPromise - acquiring token from native platform"), s = new sr(this.config, this.browserStorage, this.browserCrypto, this.logger, this.eventHandler, this.navigationClient, we.handleRedirectPromise, this.performanceClient, this.nativeExtensionProvider, i.accountId, this.nativeInternalStorage, i.correlationId), a = s.handleRedirectPromise()) : (this.logger.trace("handleRedirectPromise - acquiring token from web flow"), c = this.browserStorage.getTemporaryCache(ge.CORRELATION_ID, !0) || I.EMPTY_STRING, l = this.createRedirectClient(c), a = l.handleRedirectPromise(e)), o = a.then(function(d) {
+          return this.logger.verbose("handleRedirectPromise called"), Te.blockNativeBrokerCalledBeforeInitialized(this.config.system.allowNativeBroker, this.initialized), t = this.getAllAccounts(), this.isBrowserEnvironment ? (r = e || I.EMPTY_STRING, o = this.redirectResponse.get(r), typeof o > "u" ? (this.eventHandler.emitEvent(oe.HANDLE_REDIRECT_START, Y.Redirect), this.logger.verbose("handleRedirectPromise has been called for the first time, storing the promise"), i = this.browserStorage.getCachedNativeRequest(), a = void 0, i && On.isNativeAvailable(this.config, this.logger, this.nativeExtensionProvider) && this.nativeExtensionProvider && !e ? (this.logger.trace("handleRedirectPromise - acquiring token from native platform"), s = new sr(this.config, this.browserStorage, this.browserCrypto, this.logger, this.eventHandler, this.navigationClient, we.handleRedirectPromise, this.performanceClient, this.nativeExtensionProvider, i.accountId, this.nativeInternalStorage, i.correlationId), a = s.handleRedirectPromise()) : (this.logger.trace("handleRedirectPromise - acquiring token from web flow"), c = this.browserStorage.getTemporaryCache(ge.CORRELATION_ID, !0) || I.EMPTY_STRING, l = this.createRedirectClient(c), a = l.handleRedirectPromise(e)), o = a.then(function(d) {
             if (d) {
               var h = t.length < u.getAllAccounts().length;
-              h ? (u.eventHandler.emitEvent(re.LOGIN_SUCCESS, Y.Redirect, d), u.logger.verbose("handleRedirectResponse returned result, login success")) : (u.eventHandler.emitEvent(re.ACQUIRE_TOKEN_SUCCESS, Y.Redirect, d), u.logger.verbose("handleRedirectResponse returned result, acquire token success"));
+              h ? (u.eventHandler.emitEvent(oe.LOGIN_SUCCESS, Y.Redirect, d), u.logger.verbose("handleRedirectResponse returned result, login success")) : (u.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_SUCCESS, Y.Redirect, d), u.logger.verbose("handleRedirectResponse returned result, acquire token success"));
             }
-            return u.eventHandler.emitEvent(re.HANDLE_REDIRECT_END, Y.Redirect), d;
+            return u.eventHandler.emitEvent(oe.HANDLE_REDIRECT_END, Y.Redirect), d;
           }).catch(function(d) {
-            throw t.length > 0 ? u.eventHandler.emitEvent(re.ACQUIRE_TOKEN_FAILURE, Y.Redirect, null, d) : u.eventHandler.emitEvent(re.LOGIN_FAILURE, Y.Redirect, null, d), u.eventHandler.emitEvent(re.HANDLE_REDIRECT_END, Y.Redirect), d;
+            throw t.length > 0 ? u.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_FAILURE, Y.Redirect, null, d) : u.eventHandler.emitEvent(oe.LOGIN_FAILURE, Y.Redirect, null, d), u.eventHandler.emitEvent(oe.HANDLE_REDIRECT_END, Y.Redirect), d;
           }), this.redirectResponse.set(r, o)) : this.logger.verbose("handleRedirectPromise has been called previously, returning the result from the first call"), [2, o]) : (this.logger.verbose("handleRedirectPromise returns null, not browser environment"), [2, null]);
         });
       });
@@ -11628,7 +11628,7 @@ var cm = (
       return O(this, void 0, void 0, function() {
         var t, r, o, i, a, s = this;
         return x(this, function(c) {
-          return t = this.getRequestCorrelationId(e), this.logger.verbose("acquireTokenRedirect called", t), this.preflightBrowserEnvironmentCheck(Y.Redirect), r = this.getAllAccounts().length > 0, r ? this.eventHandler.emitEvent(re.ACQUIRE_TOKEN_START, Y.Redirect, e) : this.eventHandler.emitEvent(re.LOGIN_START, Y.Redirect, e), this.nativeExtensionProvider && this.canUseNative(e) ? (i = new sr(this.config, this.browserStorage, this.browserCrypto, this.logger, this.eventHandler, this.navigationClient, we.acquireTokenRedirect, this.performanceClient, this.nativeExtensionProvider, this.getNativeAccountId(e), this.nativeInternalStorage, e.correlationId), o = i.acquireTokenRedirect(e).catch(function(l) {
+          return t = this.getRequestCorrelationId(e), this.logger.verbose("acquireTokenRedirect called", t), this.preflightBrowserEnvironmentCheck(Y.Redirect), r = this.getAllAccounts().length > 0, r ? this.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_START, Y.Redirect, e) : this.eventHandler.emitEvent(oe.LOGIN_START, Y.Redirect, e), this.nativeExtensionProvider && this.canUseNative(e) ? (i = new sr(this.config, this.browserStorage, this.browserCrypto, this.logger, this.eventHandler, this.navigationClient, we.acquireTokenRedirect, this.performanceClient, this.nativeExtensionProvider, this.getNativeAccountId(e), this.nativeInternalStorage, e.correlationId), o = i.acquireTokenRedirect(e).catch(function(l) {
             if (l instanceof Lt && l.isFatal()) {
               s.nativeExtensionProvider = void 0;
               var u = s.createRedirectClient(e.correlationId);
@@ -11640,19 +11640,19 @@ var cm = (
             }
             throw s.browserStorage.setInteractionInProgress(!1), l;
           })) : (a = this.createRedirectClient(e.correlationId), o = a.acquireToken(e)), [2, o.catch(function(l) {
-            throw r ? s.eventHandler.emitEvent(re.ACQUIRE_TOKEN_FAILURE, Y.Redirect, null, l) : s.eventHandler.emitEvent(re.LOGIN_FAILURE, Y.Redirect, null, l), l;
+            throw r ? s.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_FAILURE, Y.Redirect, null, l) : s.eventHandler.emitEvent(oe.LOGIN_FAILURE, Y.Redirect, null, l), l;
           })];
         });
       });
     }, n.prototype.acquireTokenPopup = function(e) {
-      var t = this, r = this.getRequestCorrelationId(e), o = this.performanceClient.startMeasurement(A.AcquireTokenPopup, r);
+      var t = this, r = this.getRequestCorrelationId(e), o = this.performanceClient.startMeasurement(k.AcquireTokenPopup, r);
       try {
         this.logger.verbose("acquireTokenPopup called", r), this.preflightBrowserEnvironmentCheck(Y.Popup);
       } catch (c) {
         return Promise.reject(c);
       }
       var i = this.getAllAccounts();
-      i.length > 0 ? this.eventHandler.emitEvent(re.ACQUIRE_TOKEN_START, Y.Popup, e) : this.eventHandler.emitEvent(re.LOGIN_START, Y.Popup, e);
+      i.length > 0 ? this.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_START, Y.Popup, e) : this.eventHandler.emitEvent(oe.LOGIN_START, Y.Popup, e);
       var a;
       if (this.canUseNative(e))
         a = this.acquireTokenNative(e, we.acquireTokenPopup).then(function(c) {
@@ -11679,7 +11679,7 @@ var cm = (
       }
       return a.then(function(c) {
         var l = i.length < t.getAllAccounts().length;
-        return l ? t.eventHandler.emitEvent(re.LOGIN_SUCCESS, Y.Popup, c) : t.eventHandler.emitEvent(re.ACQUIRE_TOKEN_SUCCESS, Y.Popup, c), o.addStaticFields({
+        return l ? t.eventHandler.emitEvent(oe.LOGIN_SUCCESS, Y.Popup, c) : t.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_SUCCESS, Y.Popup, c), o.addStaticFields({
           accessTokenSize: c.accessToken.length,
           idTokenSize: c.idToken.length
         }), o.endMeasurement({
@@ -11687,7 +11687,7 @@ var cm = (
           requestId: c.requestId
         }), c;
       }).catch(function(c) {
-        return i.length > 0 ? t.eventHandler.emitEvent(re.ACQUIRE_TOKEN_FAILURE, Y.Popup, null, c) : t.eventHandler.emitEvent(re.LOGIN_FAILURE, Y.Popup, null, c), o.endMeasurement({
+        return i.length > 0 ? t.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_FAILURE, Y.Popup, null, c) : t.eventHandler.emitEvent(oe.LOGIN_FAILURE, Y.Popup, null, c), o.endMeasurement({
           errorCode: c.errorCode,
           subErrorCode: c.subError,
           success: !1
@@ -11707,9 +11707,9 @@ var cm = (
             // will be PromptValue.NONE or PromptValue.NO_SESSION
             prompt: e.prompt,
             correlationId: r
-          }), this.preflightBrowserEnvironmentCheck(Y.Silent), this.ssoSilentMeasurement = this.performanceClient.startMeasurement(A.SsoSilent, r), (t = this.ssoSilentMeasurement) === null || t === void 0 || t.increment({
+          }), this.preflightBrowserEnvironmentCheck(Y.Silent), this.ssoSilentMeasurement = this.performanceClient.startMeasurement(k.SsoSilent, r), (t = this.ssoSilentMeasurement) === null || t === void 0 || t.increment({
             visibilityChangeCount: 0
-          }), document.addEventListener("visibilitychange", this.trackPageVisibilityWithMeasurement), this.logger.verbose("ssoSilent called", r), this.eventHandler.emitEvent(re.SSO_SILENT_START, Y.Silent, o), this.canUseNative(o) ? i = this.acquireTokenNative(o, we.ssoSilent).catch(function(l) {
+          }), document.addEventListener("visibilitychange", this.trackPageVisibilityWithMeasurement), this.logger.verbose("ssoSilent called", r), this.eventHandler.emitEvent(oe.SSO_SILENT_START, Y.Silent, o), this.canUseNative(o) ? i = this.acquireTokenNative(o, we.ssoSilent).catch(function(l) {
             if (l instanceof Lt && l.isFatal()) {
               s.nativeExtensionProvider = void 0;
               var u = s.createSilentIframeClient(o.correlationId);
@@ -11718,7 +11718,7 @@ var cm = (
             throw l;
           }) : (a = this.createSilentIframeClient(o.correlationId), i = a.acquireToken(o)), [2, i.then(function(l) {
             var u, f;
-            return s.eventHandler.emitEvent(re.SSO_SILENT_SUCCESS, Y.Silent, l), (u = s.ssoSilentMeasurement) === null || u === void 0 || u.addStaticFields({
+            return s.eventHandler.emitEvent(oe.SSO_SILENT_SUCCESS, Y.Silent, l), (u = s.ssoSilentMeasurement) === null || u === void 0 || u.addStaticFields({
               accessTokenSize: l.accessToken.length,
               idTokenSize: l.idToken.length
             }), (f = s.ssoSilentMeasurement) === null || f === void 0 || f.endMeasurement({
@@ -11728,7 +11728,7 @@ var cm = (
             }), l;
           }).catch(function(l) {
             var u;
-            throw s.eventHandler.emitEvent(re.SSO_SILENT_FAILURE, Y.Silent, null, l), (u = s.ssoSilentMeasurement) === null || u === void 0 || u.endMeasurement({
+            throw s.eventHandler.emitEvent(oe.SSO_SILENT_FAILURE, Y.Silent, null, l), (u = s.ssoSilentMeasurement) === null || u === void 0 || u.endMeasurement({
               errorCode: l.errorCode,
               subErrorCode: l.subError,
               success: !1
@@ -11742,13 +11742,13 @@ var cm = (
       return O(this, void 0, void 0, function() {
         var t, r, o, i, a = this;
         return x(this, function(s) {
-          t = this.getRequestCorrelationId(e), this.preflightBrowserEnvironmentCheck(Y.Silent), this.logger.trace("acquireTokenByCode called", t), this.eventHandler.emitEvent(re.ACQUIRE_TOKEN_BY_CODE_START, Y.Silent, e), r = this.performanceClient.startMeasurement(A.AcquireTokenByCode, e.correlationId);
+          t = this.getRequestCorrelationId(e), this.preflightBrowserEnvironmentCheck(Y.Silent), this.logger.trace("acquireTokenByCode called", t), this.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_BY_CODE_START, Y.Silent, e), r = this.performanceClient.startMeasurement(k.AcquireTokenByCode, e.correlationId);
           try {
             if (e.code && e.nativeAccountId)
-              throw z.createSpaCodeAndNativeAccountIdPresentError();
+              throw K.createSpaCodeAndNativeAccountIdPresentError();
             if (e.code)
               return o = e.code, i = this.hybridAuthCodeResponses.get(o), i ? (this.logger.verbose("Existing acquireTokenByCode request found", e.correlationId), r.discardMeasurement()) : (this.logger.verbose("Initiating new acquireTokenByCode request", t), i = this.acquireTokenByCodeAsync(G(G({}, e), { correlationId: t })).then(function(c) {
-                return a.eventHandler.emitEvent(re.ACQUIRE_TOKEN_BY_CODE_SUCCESS, Y.Silent, c), a.hybridAuthCodeResponses.delete(o), r.addStaticFields({
+                return a.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_BY_CODE_SUCCESS, Y.Silent, c), a.hybridAuthCodeResponses.delete(o), r.addStaticFields({
                   accessTokenSize: c.accessToken.length,
                   idTokenSize: c.idToken.length
                 }), r.endMeasurement({
@@ -11757,7 +11757,7 @@ var cm = (
                   requestId: c.requestId
                 }), c;
               }).catch(function(c) {
-                throw a.hybridAuthCodeResponses.delete(o), a.eventHandler.emitEvent(re.ACQUIRE_TOKEN_BY_CODE_FAILURE, Y.Silent, null, c), r.endMeasurement({
+                throw a.hybridAuthCodeResponses.delete(o), a.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_BY_CODE_FAILURE, Y.Silent, null, c), r.endMeasurement({
                   errorCode: c.errorCode,
                   subErrorCode: c.subError,
                   success: !1
@@ -11768,11 +11768,11 @@ var cm = (
                 return [2, this.acquireTokenNative(e, we.acquireTokenByCode, e.nativeAccountId).catch(function(c) {
                   throw c instanceof Lt && c.isFatal() && (a.nativeExtensionProvider = void 0), c;
                 })];
-              throw z.createUnableToAcquireTokenFromNativePlatformError();
+              throw K.createUnableToAcquireTokenFromNativePlatformError();
             } else
-              throw z.createAuthCodeOrNativeAccountIdRequiredError();
+              throw K.createAuthCodeOrNativeAccountIdRequiredError();
           } catch (c) {
-            throw this.eventHandler.emitEvent(re.ACQUIRE_TOKEN_BY_CODE_FAILURE, Y.Silent, null, c), r.endMeasurement({
+            throw this.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_BY_CODE_FAILURE, Y.Silent, null, c), r.endMeasurement({
               errorCode: c instanceof Q && c.errorCode || void 0,
               subErrorCode: c instanceof Q && c.subError || void 0,
               success: !1
@@ -11791,7 +11791,7 @@ var cm = (
         return x(this, function(a) {
           switch (a.label) {
             case 0:
-              return this.logger.trace("acquireTokenByCodeAsync called", e.correlationId), this.acquireTokenByCodeAsyncMeasurement = this.performanceClient.startMeasurement(A.AcquireTokenByCodeAsync, e.correlationId), (t = this.acquireTokenByCodeAsyncMeasurement) === null || t === void 0 || t.increment({
+              return this.logger.trace("acquireTokenByCodeAsync called", e.correlationId), this.acquireTokenByCodeAsyncMeasurement = this.performanceClient.startMeasurement(k.AcquireTokenByCodeAsync, e.correlationId), (t = this.acquireTokenByCodeAsyncMeasurement) === null || t === void 0 || t.increment({
                 visibilityChangeCount: 0
               }), document.addEventListener("visibilitychange", this.trackPageVisibilityWithMeasurement), r = this.createSilentAuthCodeClient(e.correlationId), [4, r.acquireToken(e).then(function(s) {
                 var c;
@@ -11819,7 +11819,7 @@ var cm = (
     }, n.prototype.acquireTokenFromCache = function(e, t, r) {
       return O(this, void 0, void 0, function() {
         return x(this, function(o) {
-          switch (this.performanceClient.addQueueMeasurement(A.AcquireTokenFromCache, t.correlationId), r.cacheLookupPolicy) {
+          switch (this.performanceClient.addQueueMeasurement(k.AcquireTokenFromCache, t.correlationId), r.cacheLookupPolicy) {
             case tt.Default:
             case tt.AccessToken:
             case tt.AccessTokenAndRefreshToken:
@@ -11837,12 +11837,12 @@ var cm = (
       return O(this, void 0, void 0, function() {
         var r;
         return x(this, function(o) {
-          switch (this.performanceClient.addQueueMeasurement(A.AcquireTokenByRefreshToken, e.correlationId), t.cacheLookupPolicy) {
+          switch (this.performanceClient.addQueueMeasurement(k.AcquireTokenByRefreshToken, e.correlationId), t.cacheLookupPolicy) {
             case tt.Default:
             case tt.AccessTokenAndRefreshToken:
             case tt.RefreshToken:
             case tt.RefreshTokenAndNetwork:
-              return r = this.createSilentRefreshClient(e.correlationId), this.performanceClient.setPreQueueTime(A.SilentRefreshClientAcquireToken, e.correlationId), [2, r.acquireToken(e)];
+              return r = this.createSilentRefreshClient(e.correlationId), this.performanceClient.setPreQueueTime(k.SilentRefreshClientAcquireToken, e.correlationId), [2, r.acquireToken(e)];
             default:
               throw W.createRefreshRequiredError();
           }
@@ -11856,7 +11856,7 @@ var cm = (
       return O(this, void 0, void 0, function() {
         var t;
         return x(this, function(r) {
-          return this.performanceClient.addQueueMeasurement(A.AcquireTokenBySilentIframe, e.correlationId), t = this.createSilentIframeClient(e.correlationId), this.performanceClient.setPreQueueTime(A.SilentIframeClientAcquireToken, e.correlationId), [2, t.acquireToken(e)];
+          return this.performanceClient.addQueueMeasurement(k.AcquireTokenBySilentIframe, e.correlationId), t = this.createSilentIframeClient(e.correlationId), this.performanceClient.setPreQueueTime(k.SilentIframeClientAcquireToken, e.correlationId), [2, t.acquireToken(e)];
         });
       });
     }, n.prototype.logout = function(e) {
@@ -11914,7 +11914,7 @@ var cm = (
         var o;
         return x(this, function(i) {
           if (this.logger.trace("acquireTokenNative called"), !this.nativeExtensionProvider)
-            throw z.createNativeConnectionNotEstablishedError();
+            throw K.createNativeConnectionNotEstablishedError();
           return o = new sr(this.config, this.browserStorage, this.browserCrypto, this.logger, this.eventHandler, this.navigationClient, t, this.performanceClient, this.nativeExtensionProvider, r || this.getNativeAccountId(e), this.nativeInternalStorage, e.correlationId), [2, o.acquireToken(e)];
         });
       });
@@ -11999,10 +11999,10 @@ var lm = (
       return O(this, void 0, void 0, function() {
         var r, o, i, a, s, c, l, u = this;
         return x(this, function(f) {
-          if (r = this.getRequestCorrelationId(t), o = this.performanceClient.startMeasurement(A.AcquireTokenSilent, r), o.addStaticFields({
+          if (r = this.getRequestCorrelationId(t), o = this.performanceClient.startMeasurement(k.AcquireTokenSilent, r), o.addStaticFields({
             cacheLookupPolicy: t.cacheLookupPolicy
           }), this.preflightBrowserEnvironmentCheck(Y.Silent), this.logger.verbose("acquireTokenSilent called", r), i = t.account || this.getActiveAccount(), !i)
-            throw z.createNoAccountError();
+            throw K.createNoAccountError();
           return a = {
             clientId: this.config.auth.clientId,
             authority: t.authority || I.EMPTY_STRING,
@@ -12014,7 +12014,7 @@ var lm = (
             resourceRequestUri: t.resourceRequestUri,
             shrClaims: t.shrClaims,
             sshKid: t.sshKid
-          }, s = JSON.stringify(a), c = this.activeSilentTokenRequests.get(s), typeof c > "u" ? (this.logger.verbose("acquireTokenSilent called for the first time, storing active request", r), this.performanceClient.setPreQueueTime(A.AcquireTokenSilentAsync, r), l = this.acquireTokenSilentAsync(G(G({}, t), { correlationId: r }), i).then(function(d) {
+          }, s = JSON.stringify(a), c = this.activeSilentTokenRequests.get(s), typeof c > "u" ? (this.logger.verbose("acquireTokenSilent called for the first time, storing active request", r), this.performanceClient.setPreQueueTime(k.AcquireTokenSilentAsync, r), l = this.acquireTokenSilentAsync(G(G({}, t), { correlationId: r }), i).then(function(d) {
             return u.activeSilentTokenRequests.delete(s), o.addStaticFields({
               accessTokenSize: d.accessToken.length,
               idTokenSize: d.idToken.length
@@ -12045,7 +12045,7 @@ var lm = (
         return x(this, function(f) {
           switch (f.label) {
             case 0:
-              return this.performanceClient.addQueueMeasurement(A.AcquireTokenSilentAsync, t.correlationId), this.eventHandler.emitEvent(re.ACQUIRE_TOKEN_START, Y.Silent, t), this.astsAsyncMeasurement = this.performanceClient.startMeasurement(A.AcquireTokenSilentAsync, t.correlationId), (o = this.astsAsyncMeasurement) === null || o === void 0 || o.increment({
+              return this.performanceClient.addQueueMeasurement(k.AcquireTokenSilentAsync, t.correlationId), this.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_START, Y.Silent, t), this.astsAsyncMeasurement = this.performanceClient.startMeasurement(k.AcquireTokenSilentAsync, t.correlationId), (o = this.astsAsyncMeasurement) === null || o === void 0 || o.increment({
                 visibilityChangeCount: 0
               }), document.addEventListener("visibilitychange", this.trackPageVisibility), On.isNativeAvailable(this.config, this.logger, this.nativeExtensionProvider, t.authenticationScheme) && r.nativeAccountId ? (this.logger.verbose("acquireTokenSilent - attempting to acquire token from native platform"), a = G(G({}, t), { account: r }), i = this.acquireTokenNative(a, we.acquireTokenSilent_silentFlow).catch(function(d) {
                 return O(u, void 0, void 0, function() {
@@ -12058,25 +12058,25 @@ var lm = (
                 });
               }), [3, 3]) : [3, 1];
             case 1:
-              return this.logger.verbose("acquireTokenSilent - attempting to acquire token from web flow"), s = this.createSilentCacheClient(t.correlationId), this.performanceClient.setPreQueueTime(A.InitializeSilentRequest, t.correlationId), [4, s.initializeSilentRequest(t, r)];
+              return this.logger.verbose("acquireTokenSilent - attempting to acquire token from web flow"), s = this.createSilentCacheClient(t.correlationId), this.performanceClient.setPreQueueTime(k.InitializeSilentRequest, t.correlationId), [4, s.initializeSilentRequest(t, r)];
             case 2:
               c = f.sent(), l = G(G({}, t), {
                 // set the request's CacheLookupPolicy to Default if it was not optionally passed in
                 cacheLookupPolicy: t.cacheLookupPolicy || tt.Default
-              }), this.performanceClient.setPreQueueTime(A.AcquireTokenFromCache, c.correlationId), i = this.acquireTokenFromCache(s, c, l).catch(function(d) {
+              }), this.performanceClient.setPreQueueTime(k.AcquireTokenFromCache, c.correlationId), i = this.acquireTokenFromCache(s, c, l).catch(function(d) {
                 if (l.cacheLookupPolicy === tt.AccessToken)
                   throw d;
-                return Te.blockReloadInHiddenIframes(), u.eventHandler.emitEvent(re.ACQUIRE_TOKEN_NETWORK_START, Y.Silent, c), u.performanceClient.setPreQueueTime(A.AcquireTokenByRefreshToken, c.correlationId), u.acquireTokenByRefreshToken(c, l).catch(function(h) {
+                return Te.blockReloadInHiddenIframes(), u.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_NETWORK_START, Y.Silent, c), u.performanceClient.setPreQueueTime(k.AcquireTokenByRefreshToken, c.correlationId), u.acquireTokenByRefreshToken(c, l).catch(function(h) {
                   var p = h instanceof Ln, g = h instanceof Pt, m = h.errorCode === or.noTokensFoundError.code, b = h.errorCode === At.INVALID_GRANT_ERROR;
                   if ((!p || !b || g || l.cacheLookupPolicy === tt.AccessTokenAndRefreshToken || l.cacheLookupPolicy === tt.RefreshToken) && l.cacheLookupPolicy !== tt.Skip && !m)
                     throw h;
-                  return u.logger.verbose("Refresh token expired/invalid or CacheLookupPolicy is set to Skip, attempting acquire token by iframe.", t.correlationId), u.performanceClient.setPreQueueTime(A.AcquireTokenBySilentIframe, c.correlationId), u.acquireTokenBySilentIframe(c);
+                  return u.logger.verbose("Refresh token expired/invalid or CacheLookupPolicy is set to Skip, attempting acquire token by iframe.", t.correlationId), u.performanceClient.setPreQueueTime(k.AcquireTokenBySilentIframe, c.correlationId), u.acquireTokenBySilentIframe(c);
                 });
               }), f.label = 3;
             case 3:
               return [2, i.then(function(d) {
                 var h;
-                return u.eventHandler.emitEvent(re.ACQUIRE_TOKEN_SUCCESS, Y.Silent, d), (h = u.astsAsyncMeasurement) === null || h === void 0 || h.endMeasurement({
+                return u.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_SUCCESS, Y.Silent, d), (h = u.astsAsyncMeasurement) === null || h === void 0 || h.endMeasurement({
                   success: !0,
                   fromCache: d.fromCache,
                   isNativeBroker: d.fromNativeBroker,
@@ -12084,7 +12084,7 @@ var lm = (
                 }), d;
               }).catch(function(d) {
                 var h;
-                throw u.eventHandler.emitEvent(re.ACQUIRE_TOKEN_FAILURE, Y.Silent, null, d), (h = u.astsAsyncMeasurement) === null || h === void 0 || h.endMeasurement({
+                throw u.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_FAILURE, Y.Silent, null, d), (h = u.astsAsyncMeasurement) === null || h === void 0 || h.endMeasurement({
                   errorCode: d.errorCode,
                   subErrorCode: d.subError,
                   success: !1
@@ -12161,7 +12161,7 @@ function bu(n, { shouldScale: e = !1 } = {}) {
   }
   return t;
 }
-const M = bu("rem", { shouldScale: !0 }), Hc = bu("em");
+const N = bu("rem", { shouldScale: !0 }), Hc = bu("em");
 function $a(n) {
   return Object.keys(n).reduce((e, t) => (n[t] !== void 0 && (e[t] = n[t]), e), {});
 }
@@ -12289,7 +12289,7 @@ function bm(n, e = { active: !0 }) {
 }
 function De(n, e = "size", t = !0) {
   if (n !== void 0)
-    return Cu(n) ? t ? M(n) : n : `var(--${e}-${n})`;
+    return Cu(n) ? t ? N(n) : n : `var(--${e}-${n})`;
 }
 function qa(n) {
   return De(n, "mantine-spacing");
@@ -12808,17 +12808,17 @@ const Qn = Gt, Jm = ({
       background: `var(--mantine-color-${n}-filled)`,
       hover: `var(--mantine-color-${n}-filled-hover)`,
       color: s,
-      border: `${M(1)} solid transparent`
+      border: `${N(1)} solid transparent`
     } : {
       background: `var(--mantine-color-${i.color}-${i.shade})`,
       hover: `var(--mantine-color-${i.color}-${i.shade === 9 ? 8 : i.shade + 1})`,
       color: s,
-      border: `${M(1)} solid transparent`
+      border: `${N(1)} solid transparent`
     } : {
       background: n,
       hover: ho(n, 0.1),
       color: s,
-      border: `${M(1)} solid transparent`
+      border: `${N(1)} solid transparent`
     };
   }
   if (t === "light") {
@@ -12828,21 +12828,21 @@ const Qn = Gt, Jm = ({
           background: `var(--mantine-color-${n}-light)`,
           hover: `var(--mantine-color-${n}-light-hover)`,
           color: `var(--mantine-color-${n}-light-color)`,
-          border: `${M(1)} solid transparent`
+          border: `${N(1)} solid transparent`
         };
       const s = e.colors[i.color][i.shade];
       return {
         background: Gt(s, 0.1),
         hover: Gt(s, 0.12),
         color: `var(--mantine-color-${i.color}-${Math.min(i.shade, 6)})`,
-        border: `${M(1)} solid transparent`
+        border: `${N(1)} solid transparent`
       };
     }
     return {
       background: Gt(n, 0.1),
       hover: Gt(n, 0.12),
       color: n,
-      border: `${M(1)} solid transparent`
+      border: `${N(1)} solid transparent`
     };
   }
   if (t === "outline")
@@ -12850,17 +12850,17 @@ const Qn = Gt, Jm = ({
       background: "transparent",
       hover: `var(--mantine-color-${n}-outline-hover)`,
       color: `var(--mantine-color-${n}-outline)`,
-      border: `${M(1)} solid var(--mantine-color-${n}-outline)`
+      border: `${N(1)} solid var(--mantine-color-${n}-outline)`
     } : {
       background: "transparent",
       hover: Gt(e.colors[i.color][i.shade], 0.05),
       color: `var(--mantine-color-${i.color}-${i.shade})`,
-      border: `${M(1)} solid var(--mantine-color-${i.color}-${i.shade})`
+      border: `${N(1)} solid var(--mantine-color-${i.color}-${i.shade})`
     } : {
       background: "transparent",
       hover: Gt(n, 0.05),
       color: n,
-      border: `${M(1)} solid ${n}`
+      border: `${N(1)} solid ${n}`
     };
   if (t === "subtle") {
     if (i.isThemeColor) {
@@ -12869,53 +12869,53 @@ const Qn = Gt, Jm = ({
           background: "transparent",
           hover: `var(--mantine-color-${n}-light-hover)`,
           color: `var(--mantine-color-${n}-light-color)`,
-          border: `${M(1)} solid transparent`
+          border: `${N(1)} solid transparent`
         };
       const s = e.colors[i.color][i.shade];
       return {
         background: "transparent",
         hover: Gt(s, 0.12),
         color: `var(--mantine-color-${i.color}-${Math.min(i.shade, 6)})`,
-        border: `${M(1)} solid transparent`
+        border: `${N(1)} solid transparent`
       };
     }
     return {
       background: "transparent",
       hover: Gt(n, 0.12),
       color: n,
-      border: `${M(1)} solid transparent`
+      border: `${N(1)} solid transparent`
     };
   }
   return t === "transparent" ? i.isThemeColor ? i.shade === void 0 ? {
     background: "transparent",
     hover: "transparent",
     color: `var(--mantine-color-${n}-light-color)`,
-    border: `${M(1)} solid transparent`
+    border: `${N(1)} solid transparent`
   } : {
     background: "transparent",
     hover: "transparent",
     color: `var(--mantine-color-${i.color}-${Math.min(i.shade, 6)})`,
-    border: `${M(1)} solid transparent`
+    border: `${N(1)} solid transparent`
   } : {
     background: "transparent",
     hover: "transparent",
     color: n,
-    border: `${M(1)} solid transparent`
+    border: `${N(1)} solid transparent`
   } : t === "white" ? i.isThemeColor ? i.shade === void 0 ? {
     background: "var(--mantine-color-white)",
     hover: ho(e.white, 0.01),
     color: `var(--mantine-color-${n}-filled)`,
-    border: `${M(1)} solid transparent`
+    border: `${N(1)} solid transparent`
   } : {
     background: "var(--mantine-color-white)",
     hover: ho(e.white, 0.01),
     color: `var(--mantine-color-${i.color}-${i.shade})`,
-    border: `${M(1)} solid transparent`
+    border: `${N(1)} solid transparent`
   } : {
     background: "var(--mantine-color-white)",
     hover: ho(e.white, 0.01),
     color: n,
-    border: `${M(1)} solid transparent`
+    border: `${N(1)} solid transparent`
   } : t === "gradient" ? {
     background: ga(r, e),
     hover: ga(r, e),
@@ -12925,7 +12925,7 @@ const Qn = Gt, Jm = ({
     background: "var(--mantine-color-default)",
     hover: "var(--mantine-color-default-hover)",
     color: "var(--mantine-color-default-color)",
-    border: `${M(1)} solid var(--mantine-color-default-border)`
+    border: `${N(1)} solid var(--mantine-color-default-border)`
   } : {};
 }, Xm = {
   dark: [
@@ -13121,20 +13121,20 @@ const Qn = Gt, Jm = ({
     fontWeight: "700",
     textWrap: "wrap",
     sizes: {
-      h1: { fontSize: M(34), lineHeight: "1.3" },
-      h2: { fontSize: M(26), lineHeight: "1.35" },
-      h3: { fontSize: M(22), lineHeight: "1.4" },
-      h4: { fontSize: M(18), lineHeight: "1.45" },
-      h5: { fontSize: M(16), lineHeight: "1.5" },
-      h6: { fontSize: M(14), lineHeight: "1.5" }
+      h1: { fontSize: N(34), lineHeight: "1.3" },
+      h2: { fontSize: N(26), lineHeight: "1.35" },
+      h3: { fontSize: N(22), lineHeight: "1.4" },
+      h4: { fontSize: N(18), lineHeight: "1.45" },
+      h5: { fontSize: N(16), lineHeight: "1.5" },
+      h6: { fontSize: N(14), lineHeight: "1.5" }
     }
   },
   fontSizes: {
-    xs: M(12),
-    sm: M(14),
-    md: M(16),
-    lg: M(18),
-    xl: M(20)
+    xs: N(12),
+    sm: N(14),
+    md: N(16),
+    lg: N(18),
+    xl: N(20)
   },
   lineHeights: {
     xs: "1.4",
@@ -13144,18 +13144,18 @@ const Qn = Gt, Jm = ({
     xl: "1.65"
   },
   radius: {
-    xs: M(2),
-    sm: M(4),
-    md: M(8),
-    lg: M(16),
-    xl: M(32)
+    xs: N(2),
+    sm: N(4),
+    md: N(8),
+    lg: N(16),
+    xl: N(32)
   },
   spacing: {
-    xs: M(10),
-    sm: M(12),
-    md: M(16),
-    lg: M(20),
-    xl: M(32)
+    xs: N(10),
+    sm: N(12),
+    md: N(16),
+    lg: N(20),
+    xl: N(32)
   },
   breakpoints: {
     xs: "36em",
@@ -13165,19 +13165,19 @@ const Qn = Gt, Jm = ({
     xl: "88em"
   },
   shadows: {
-    xs: `0 ${M(1)} ${M(3)} rgba(0, 0, 0, 0.05), 0 ${M(1)} ${M(2)} rgba(0, 0, 0, 0.1)`,
-    sm: `0 ${M(1)} ${M(3)} rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 0 ${M(10)} ${M(
+    xs: `0 ${N(1)} ${N(3)} rgba(0, 0, 0, 0.05), 0 ${N(1)} ${N(2)} rgba(0, 0, 0, 0.1)`,
+    sm: `0 ${N(1)} ${N(3)} rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 0 ${N(10)} ${N(
       15
-    )} ${M(-5)}, rgba(0, 0, 0, 0.04) 0 ${M(7)} ${M(7)} ${M(-5)}`,
-    md: `0 ${M(1)} ${M(3)} rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 0 ${M(20)} ${M(
+    )} ${N(-5)}, rgba(0, 0, 0, 0.04) 0 ${N(7)} ${N(7)} ${N(-5)}`,
+    md: `0 ${N(1)} ${N(3)} rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 0 ${N(20)} ${N(
       25
-    )} ${M(-5)}, rgba(0, 0, 0, 0.04) 0 ${M(10)} ${M(10)} ${M(-5)}`,
-    lg: `0 ${M(1)} ${M(3)} rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 0 ${M(28)} ${M(
+    )} ${N(-5)}, rgba(0, 0, 0, 0.04) 0 ${N(10)} ${N(10)} ${N(-5)}`,
+    lg: `0 ${N(1)} ${N(3)} rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 0 ${N(28)} ${N(
       23
-    )} ${M(-7)}, rgba(0, 0, 0, 0.04) 0 ${M(12)} ${M(12)} ${M(-7)}`,
-    xl: `0 ${M(1)} ${M(3)} rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 0 ${M(36)} ${M(
+    )} ${N(-7)}, rgba(0, 0, 0, 0.04) 0 ${N(12)} ${N(12)} ${N(-7)}`,
+    xl: `0 ${N(1)} ${N(3)} rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 0 ${N(36)} ${N(
       28
-    )} ${M(-7)}, rgba(0, 0, 0, 0.04) 0 ${M(17)} ${M(17)} ${M(-7)}`
+    )} ${N(-7)}, rgba(0, 0, 0, 0.04) 0 ${N(17)} ${N(17)} ${N(-7)}`
   },
   other: {},
   components: {}
@@ -13373,7 +13373,7 @@ function Jn(n, e, t) {
   );
 }
 const Ou = (n) => {
-  const e = qr(n, "light"), t = n.defaultRadius in n.radius ? n.radius[n.defaultRadius] : M(n.defaultRadius), r = {
+  const e = qr(n, "light"), t = n.defaultRadius in n.radius ? n.radius[n.defaultRadius] : N(n.defaultRadius), r = {
     variables: {
       "--mantine-scale": n.scale.toString(),
       "--mantine-cursor-type": n.cursorType,
@@ -13959,21 +13959,21 @@ function oi(n) {
     bg: w,
     c: S,
     opacity: E,
-    ff: k,
+    ff: _,
     fz: T,
-    fw: D,
-    lts: H,
-    ta: B,
-    lh: q,
+    fw: M,
+    lts: B,
+    ta: z,
+    lh: V,
     fs: Z,
-    tt: R,
-    td: L,
-    w: _,
-    miw: P,
-    maw: N,
-    h: V,
-    mih: $,
-    mah: oe,
+    tt: D,
+    td: j,
+    w: R,
+    miw: A,
+    maw: P,
+    h: $,
+    mih: H,
+    mah: re,
     bgsz: fe,
     bgp: _e,
     bgr: Be,
@@ -14016,21 +14016,21 @@ function oi(n) {
     bg: w,
     c: S,
     opacity: E,
-    ff: k,
+    ff: _,
     fz: T,
-    fw: D,
-    lts: H,
-    ta: B,
-    lh: q,
+    fw: M,
+    lts: B,
+    ta: z,
+    lh: V,
     fs: Z,
-    tt: R,
-    td: L,
-    w: _,
-    miw: P,
-    maw: N,
-    h: V,
-    mih: $,
-    mah: oe,
+    tt: D,
+    td: j,
+    w: R,
+    miw: A,
+    maw: P,
+    h: $,
+    mih: H,
+    mah: re,
     bgsz: fe,
     bgp: _e,
     bgr: Be,
@@ -14111,10 +14111,10 @@ function Ry(n, e) {
 }
 function Py(n, e) {
   if (typeof n == "number")
-    return M(n);
+    return N(n);
   if (typeof n == "string") {
     const [t, r, ...o] = n.split(" ").filter((a) => a.trim() !== "");
-    let i = `${M(t)}`;
+    let i = `${N(t)}`;
     return r && (i += ` ${r}`), o.length > 0 && (i += ` ${Ja(o.join(" "), e)}`), i.trim();
   }
   return n;
@@ -14131,7 +14131,7 @@ function Ny(n) {
 }
 const My = ["h1", "h2", "h3", "h4", "h5", "h6"];
 function Oy(n, e) {
-  return typeof n == "string" && n in e.fontSizes ? `var(--mantine-font-size-${n})` : typeof n == "string" && My.includes(n) ? `var(--mantine-${n}-font-size)` : typeof n == "number" || typeof n == "string" ? M(n) : n;
+  return typeof n == "string" && n in e.fontSizes ? `var(--mantine-font-size-${n})` : typeof n == "string" && My.includes(n) ? `var(--mantine-${n}-font-size)` : typeof n == "number" || typeof n == "string" ? N(n) : n;
 }
 function xy(n) {
   return n;
@@ -14141,15 +14141,15 @@ function Ly(n, e) {
   return typeof n == "string" && n in e.lineHeights ? `var(--mantine-line-height-${n})` : typeof n == "string" && Dy.includes(n) ? `var(--mantine-${n}-line-height)` : n;
 }
 function Fy(n) {
-  return typeof n == "number" ? M(n) : n;
+  return typeof n == "number" ? N(n) : n;
 }
 function jy(n, e) {
   if (typeof n == "number")
-    return M(n);
+    return N(n);
   if (typeof n == "string") {
     const t = n.replace("-", "");
     if (!(t in e.spacing))
-      return M(n);
+      return N(n);
     const r = `--mantine-spacing-${t}`;
     return n.startsWith("-") ? `calc(var(${r}) * -1)` : `var(${r})`;
   }
@@ -14291,7 +14291,7 @@ const Hu = Ce(
       styleProps: b,
       theme: g,
       data: Ay
-    }), k = {
+    }), _ = {
       ref: p,
       style: Gy({
         theme: g,
@@ -14321,7 +14321,7 @@ const Hu = Ce(
           media: E.media
         }
       ),
-      typeof f == "function" ? f(k) : /* @__PURE__ */ y.jsx(m, { ...k })
+      typeof f == "function" ? f(_) : /* @__PURE__ */ y.jsx(m, { ..._ })
     ] });
   }
 );
@@ -14489,7 +14489,7 @@ const Zy = Ce((n, e) => {
   scrollHideDelay: 1e3,
   type: "hover"
 }, $u = Ce((n, e) => {
-  const t = J("ScrollAreaRoot", tv, n), { type: r, scrollHideDelay: o, scrollbars: i, ...a } = t, [s, c] = te(null), [l, u] = te(null), [f, d] = te(null), [h, p] = te(null), [g, m] = te(null), [b, C] = te(0), [v, w] = te(0), [S, E] = te(!1), [k, T] = te(!1), D = at(e, (H) => c(H));
+  const t = J("ScrollAreaRoot", tv, n), { type: r, scrollHideDelay: o, scrollbars: i, ...a } = t, [s, c] = te(null), [l, u] = te(null), [f, d] = te(null), [h, p] = te(null), [g, m] = te(null), [b, C] = te(0), [v, w] = te(0), [S, E] = te(!1), [_, T] = te(!1), M = at(e, (B) => c(B));
   return /* @__PURE__ */ y.jsx(
     Xy,
     {
@@ -14507,7 +14507,7 @@ const Zy = Ce((n, e) => {
         onScrollbarXEnabledChange: E,
         scrollbarY: g,
         onScrollbarYChange: m,
-        scrollbarYEnabled: k,
+        scrollbarYEnabled: _,
         onScrollbarYEnabledChange: T,
         onCornerWidthChange: C,
         onCornerHeightChange: w
@@ -14516,7 +14516,7 @@ const Zy = Ce((n, e) => {
         ne,
         {
           ...a,
-          ref: D,
+          ref: M,
           __vars: {
             "--sa-corner-width": i !== "xy" ? "0px" : `${b}px`,
             "--sa-corner-height": i !== "xy" ? "0px" : `${v}px`
@@ -14579,16 +14579,16 @@ const [ov, Gu] = yr(
     onWheelScroll: l,
     onResize: u,
     ...f
-  } = n, d = wt(), [h, p] = te(null), g = at(e, (T) => p(T)), m = ue(null), b = ue(""), { viewport: C } = d, v = t.content - t.viewport, w = Rn(l), S = Rn(s), E = ni(u, 10), k = (T) => {
+  } = n, d = wt(), [h, p] = te(null), g = at(e, (T) => p(T)), m = ue(null), b = ue(""), { viewport: C } = d, v = t.content - t.viewport, w = Rn(l), S = Rn(s), E = ni(u, 10), _ = (T) => {
     if (m.current) {
-      const D = T.clientX - m.current.left, H = T.clientY - m.current.top;
-      c({ x: D, y: H });
+      const M = T.clientX - m.current.left, B = T.clientY - m.current.top;
+      c({ x: M, y: B });
     }
   };
   return X(() => {
-    const T = (D) => {
-      const H = D.target;
-      (h == null ? void 0 : h.contains(H)) && w(D, v);
+    const T = (M) => {
+      const B = M.target;
+      (h == null ? void 0 : h.contains(B)) && w(M, v);
     };
     return document.addEventListener("wheel", T, { passive: !1 }), () => document.removeEventListener("wheel", T, { passive: !1 });
   }, [C, h, v, w]), X(S, [t, S]), fr(h, E), fr(d.content, E), /* @__PURE__ */ y.jsx(
@@ -14610,14 +14610,14 @@ const [ov, Gu] = yr(
           style: { position: "absolute", ...f.style },
           onPointerDown: xn(n.onPointerDown, (T) => {
             T.preventDefault();
-            const D = 0;
-            T.button === D && (T.target.setPointerCapture(T.pointerId), m.current = h.getBoundingClientRect(), b.current = document.body.style.webkitUserSelect, document.body.style.webkitUserSelect = "none", document.body.style.pointerEvents = "none", k(T));
+            const M = 0;
+            T.button === M && (T.target.setPointerCapture(T.pointerId), m.current = h.getBoundingClientRect(), b.current = document.body.style.webkitUserSelect, document.body.style.webkitUserSelect = "none", document.body.style.pointerEvents = "none", _(T));
           }),
-          onPointerMove: xn(n.onPointerMove, k),
+          onPointerMove: xn(n.onPointerMove, _),
           onPointerUp: xn(n.onPointerUp, (T) => {
             T.preventDefault();
-            const D = T.target;
-            D.hasPointerCapture(T.pointerId) && D.releasePointerCapture(T.pointerId), document.body.style.webkitUserSelect = b.current, document.body.style.pointerEvents = "auto", m.current = null;
+            const M = T.target;
+            M.hasPointerCapture(T.pointerId) && M.releasePointerCapture(T.pointerId), document.body.style.webkitUserSelect = b.current, document.body.style.pointerEvents = "auto", m.current = null;
           })
         }
       )
@@ -14907,7 +14907,7 @@ const Ju = {
   scrollbars: "xy"
 }, dv = (n, { scrollbarSize: e }) => ({
   root: {
-    "--scrollarea-scrollbar-size": M(e)
+    "--scrollarea-scrollbar-size": N(e)
   }
 }), no = le((n, e) => {
   const t = J("ScrollArea", Ju, n), {
@@ -14958,8 +14958,8 @@ const Ju = {
             "data-offset-scrollbars": m === !0 ? "xy" : m || void 0,
             "data-scrollbars": b || void 0,
             onScroll: (E) => {
-              var k;
-              (k = d == null ? void 0 : d.onScroll) == null || k.call(d, E), p == null || p({ x: E.currentTarget.scrollLeft, y: E.currentTarget.scrollTop });
+              var _;
+              (_ = d == null ? void 0 : d.onScroll) == null || _.call(d, E), p == null || p({ x: E.currentTarget.scrollLeft, y: E.currentTarget.scrollTop });
             },
             children: g
           }
@@ -15608,19 +15608,19 @@ const xv = (n) => ({
       x: t,
       y: r
     }, h = ss(o), p = as(h), g = await a.getDimensions(l), m = h === "y", b = m ? "top" : "left", C = m ? "bottom" : "right", v = m ? "clientHeight" : "clientWidth", w = i.reference[p] + i.reference[h] - d[h] - i.floating[p], S = d[h] - i.reference[h], E = await (a.getOffsetParent == null ? void 0 : a.getOffsetParent(l));
-    let k = E ? E[v] : 0;
-    (!k || !await (a.isElement == null ? void 0 : a.isElement(E))) && (k = s.floating[v] || i.floating[p]);
-    const T = w / 2 - S / 2, D = k / 2 - g[p] / 2 - 1, H = lt(f[b], D), B = lt(f[C], D), q = H, Z = k - g[p] - B, R = k / 2 - g[p] / 2 + T, L = Ca(q, R, Z), _ = !c.arrow && Cr(o) != null && R !== L && i.reference[p] / 2 - (R < q ? H : B) - g[p] / 2 < 0, P = _ ? R < q ? R - q : R - Z : 0;
+    let _ = E ? E[v] : 0;
+    (!_ || !await (a.isElement == null ? void 0 : a.isElement(E))) && (_ = s.floating[v] || i.floating[p]);
+    const T = w / 2 - S / 2, M = _ / 2 - g[p] / 2 - 1, B = lt(f[b], M), z = lt(f[C], M), V = B, Z = _ - g[p] - z, D = _ / 2 - g[p] / 2 + T, j = Ca(V, D, Z), R = !c.arrow && Cr(o) != null && D !== j && i.reference[p] / 2 - (D < V ? B : z) - g[p] / 2 < 0, A = R ? D < V ? D - V : D - Z : 0;
     return {
-      [h]: d[h] + P,
+      [h]: d[h] + A,
       data: {
-        [h]: L,
-        centerOffset: R - L - P,
-        ..._ && {
-          alignmentOffset: P
+        [h]: j,
+        centerOffset: D - j - A,
+        ...R && {
+          alignmentOffset: A
         }
       },
-      reset: _
+      reset: R
     };
   }
 }), Dv = function(n) {
@@ -15649,53 +15649,53 @@ const xv = (n) => ({
         return {};
       const b = Mt(o), C = en(s), v = Mt(s) === s, w = await (c.isRTL == null ? void 0 : c.isRTL(l.floating)), S = d || (v || !g ? [Bo(s)] : Rv(s)), E = p !== "none";
       !d && E && S.push(...Nv(s, g, p, w));
-      const k = [s, ...S], T = await ls(e, m), D = [];
-      let H = ((r = i.flip) == null ? void 0 : r.overflows) || [];
-      if (u && D.push(T[b]), f) {
-        const R = Av(o, a, w);
-        D.push(T[R[0]], T[R[1]]);
+      const _ = [s, ...S], T = await ls(e, m), M = [];
+      let B = ((r = i.flip) == null ? void 0 : r.overflows) || [];
+      if (u && M.push(T[b]), f) {
+        const D = Av(o, a, w);
+        M.push(T[D[0]], T[D[1]]);
       }
-      if (H = [...H, {
+      if (B = [...B, {
         placement: o,
-        overflows: D
-      }], !D.every((R) => R <= 0)) {
-        var B, q;
-        const R = (((B = i.flip) == null ? void 0 : B.index) || 0) + 1, L = k[R];
-        if (L)
+        overflows: M
+      }], !M.every((D) => D <= 0)) {
+        var z, V;
+        const D = (((z = i.flip) == null ? void 0 : z.index) || 0) + 1, j = _[D];
+        if (j)
           return {
             data: {
-              index: R,
-              overflows: H
+              index: D,
+              overflows: B
             },
             reset: {
-              placement: L
+              placement: j
             }
           };
-        let _ = (q = H.filter((P) => P.overflows[0] <= 0).sort((P, N) => P.overflows[1] - N.overflows[1])[0]) == null ? void 0 : q.placement;
-        if (!_)
+        let R = (V = B.filter((A) => A.overflows[0] <= 0).sort((A, P) => A.overflows[1] - P.overflows[1])[0]) == null ? void 0 : V.placement;
+        if (!R)
           switch (h) {
             case "bestFit": {
               var Z;
-              const P = (Z = H.filter((N) => {
+              const A = (Z = B.filter((P) => {
                 if (E) {
-                  const V = en(N.placement);
-                  return V === C || // Create a bias to the `y` side axis due to horizontal
+                  const $ = en(P.placement);
+                  return $ === C || // Create a bias to the `y` side axis due to horizontal
                   // reading directions favoring greater width.
-                  V === "y";
+                  $ === "y";
                 }
                 return !0;
-              }).map((N) => [N.placement, N.overflows.filter((V) => V > 0).reduce((V, $) => V + $, 0)]).sort((N, V) => N[1] - V[1])[0]) == null ? void 0 : Z[0];
-              P && (_ = P);
+              }).map((P) => [P.placement, P.overflows.filter(($) => $ > 0).reduce(($, H) => $ + H, 0)]).sort((P, $) => P[1] - $[1])[0]) == null ? void 0 : Z[0];
+              A && (R = A);
               break;
             }
             case "initialPlacement":
-              _ = s;
+              R = s;
               break;
           }
-        if (o !== _)
+        if (o !== R)
           return {
             reset: {
-              placement: _
+              placement: R
             }
           };
       }
@@ -15742,26 +15742,26 @@ const Fv = function(n) {
           return f.find((m) => c > m.left - h.left && c < m.right + h.right && l > m.top - h.top && l < m.bottom + h.bottom) || d;
         if (f.length >= 2) {
           if (en(t) === "y") {
-            const H = f[0], B = f[f.length - 1], q = Mt(t) === "top", Z = H.top, R = B.bottom, L = q ? H.left : B.left, _ = q ? H.right : B.right, P = _ - L, N = R - Z;
+            const B = f[0], z = f[f.length - 1], V = Mt(t) === "top", Z = B.top, D = z.bottom, j = V ? B.left : z.left, R = V ? B.right : z.right, A = R - j, P = D - Z;
             return {
               top: Z,
-              bottom: R,
-              left: L,
-              right: _,
-              width: P,
-              height: N,
-              x: L,
+              bottom: D,
+              left: j,
+              right: R,
+              width: A,
+              height: P,
+              x: j,
               y: Z
             };
           }
-          const m = Mt(t) === "left", b = qe(...f.map((H) => H.right)), C = lt(...f.map((H) => H.left)), v = f.filter((H) => m ? H.left === C : H.right === b), w = v[0].top, S = v[v.length - 1].bottom, E = C, k = b, T = k - E, D = S - w;
+          const m = Mt(t) === "left", b = qe(...f.map((B) => B.right)), C = lt(...f.map((B) => B.left)), v = f.filter((B) => m ? B.left === C : B.right === b), w = v[0].top, S = v[v.length - 1].bottom, E = C, _ = b, T = _ - E, M = S - w;
           return {
             top: w,
             bottom: S,
             left: E,
-            right: k,
+            right: _,
             width: T,
-            height: D,
+            height: M,
             x: E,
             y: w
           };
@@ -15950,16 +15950,16 @@ const Uv = function(n) {
       const m = h - c.top - c.bottom, b = d - c.left - c.right, C = lt(h - c[p], m), v = lt(d - c[g], b), w = !e.middlewareData.shift;
       let S = C, E = v;
       if (f ? E = u || w ? lt(v, b) : b : S = u || w ? lt(C, m) : m, w && !u) {
-        const T = qe(c.left, 0), D = qe(c.right, 0), H = qe(c.top, 0), B = qe(c.bottom, 0);
-        f ? E = d - 2 * (T !== 0 || D !== 0 ? T + D : qe(c.left, c.right)) : S = h - 2 * (H !== 0 || B !== 0 ? H + B : qe(c.top, c.bottom));
+        const T = qe(c.left, 0), M = qe(c.right, 0), B = qe(c.top, 0), z = qe(c.bottom, 0);
+        f ? E = d - 2 * (T !== 0 || M !== 0 ? T + M : qe(c.left, c.right)) : S = h - 2 * (B !== 0 || z !== 0 ? B + z : qe(c.top, c.bottom));
       }
       await a({
         ...e,
         availableWidth: E,
         availableHeight: S
       });
-      const k = await o.getDimensions(i.floating);
-      return d !== k.width || h !== k.height ? {
+      const _ = await o.getDimensions(i.floating);
+      return d !== _.width || h !== _.height ? {
         reset: {
           rects: !0
         }
@@ -16393,31 +16393,31 @@ function fb(n) {
     isPositioned: !1
   }), [d, h] = U.useState(r);
   zo(d, r) || h(r);
-  const [p, g] = U.useState(null), [m, b] = U.useState(null), C = U.useCallback((P) => {
-    P !== E.current && (E.current = P, g(P));
-  }, []), v = U.useCallback((P) => {
-    P !== k.current && (k.current = P, b(P));
-  }, []), w = i || p, S = a || m, E = U.useRef(null), k = U.useRef(null), T = U.useRef(u), D = c != null, H = sl(c), B = sl(o), q = U.useCallback(() => {
-    if (!E.current || !k.current)
+  const [p, g] = U.useState(null), [m, b] = U.useState(null), C = U.useCallback((A) => {
+    A !== E.current && (E.current = A, g(A));
+  }, []), v = U.useCallback((A) => {
+    A !== _.current && (_.current = A, b(A));
+  }, []), w = i || p, S = a || m, E = U.useRef(null), _ = U.useRef(null), T = U.useRef(u), M = c != null, B = sl(c), z = sl(o), V = U.useCallback(() => {
+    if (!E.current || !_.current)
       return;
-    const P = {
+    const A = {
       placement: e,
       strategy: t,
       middleware: d
     };
-    B.current && (P.platform = B.current), db(E.current, k.current, P).then((N) => {
-      const V = {
-        ...N,
+    z.current && (A.platform = z.current), db(E.current, _.current, A).then((P) => {
+      const $ = {
+        ...P,
         isPositioned: !0
       };
-      Z.current && !zo(T.current, V) && (T.current = V, zf.flushSync(() => {
-        f(V);
+      Z.current && !zo(T.current, $) && (T.current = $, zf.flushSync(() => {
+        f($);
       }));
     });
-  }, [d, e, t, B]);
+  }, [d, e, t, z]);
   Co(() => {
-    l === !1 && T.current.isPositioned && (T.current.isPositioned = !1, f((P) => ({
-      ...P,
+    l === !1 && T.current.isPositioned && (T.current.isPositioned = !1, f((A) => ({
+      ...A,
       isPositioned: !1
     })));
   }, [l]);
@@ -16425,48 +16425,48 @@ function fb(n) {
   Co(() => (Z.current = !0, () => {
     Z.current = !1;
   }), []), Co(() => {
-    if (w && (E.current = w), S && (k.current = S), w && S) {
-      if (H.current)
-        return H.current(w, S, q);
-      q();
+    if (w && (E.current = w), S && (_.current = S), w && S) {
+      if (B.current)
+        return B.current(w, S, V);
+      V();
     }
-  }, [w, S, q, H, D]);
-  const R = U.useMemo(() => ({
+  }, [w, S, V, B, M]);
+  const D = U.useMemo(() => ({
     reference: E,
-    floating: k,
+    floating: _,
     setReference: C,
     setFloating: v
-  }), [C, v]), L = U.useMemo(() => ({
+  }), [C, v]), j = U.useMemo(() => ({
     reference: w,
     floating: S
-  }), [w, S]), _ = U.useMemo(() => {
-    const P = {
+  }), [w, S]), R = U.useMemo(() => {
+    const A = {
       position: t,
       left: 0,
       top: 0
     };
-    if (!L.floating)
-      return P;
-    const N = al(L.floating, u.x), V = al(L.floating, u.y);
+    if (!j.floating)
+      return A;
+    const P = al(j.floating, u.x), $ = al(j.floating, u.y);
     return s ? {
-      ...P,
-      transform: "translate(" + N + "px, " + V + "px)",
-      ...dd(L.floating) >= 1.5 && {
+      ...A,
+      transform: "translate(" + P + "px, " + $ + "px)",
+      ...dd(j.floating) >= 1.5 && {
         willChange: "transform"
       }
     } : {
       position: t,
-      left: N,
-      top: V
+      left: P,
+      top: $
     };
-  }, [t, s, L.floating, u.x, u.y]);
+  }, [t, s, j.floating, u.x, u.y]);
   return U.useMemo(() => ({
     ...u,
-    update: q,
-    refs: R,
-    elements: L,
-    floatingStyles: _
-  }), [u, q, R, L, _]);
+    update: V,
+    refs: D,
+    elements: j,
+    floatingStyles: R
+  }), [u, V, D, j, R]);
 }
 const hb = (n) => {
   function e(t) {
@@ -16588,153 +16588,153 @@ function Eb(n, e) {
     mouseOnly: u = !1,
     restMs: f = 0,
     move: d = !0
-  } = e, h = hs(), p = fs(), g = ji(l), m = ji(c), b = ji(t), C = U.useRef(), v = U.useRef(-1), w = U.useRef(), S = U.useRef(-1), E = U.useRef(!0), k = U.useRef(!1), T = U.useRef(() => {
-  }), D = U.useCallback(() => {
-    var L;
-    const _ = (L = o.current.openEvent) == null ? void 0 : L.type;
-    return (_ == null ? void 0 : _.includes("mouse")) && _ !== "mousedown";
+  } = e, h = hs(), p = fs(), g = ji(l), m = ji(c), b = ji(t), C = U.useRef(), v = U.useRef(-1), w = U.useRef(), S = U.useRef(-1), E = U.useRef(!0), _ = U.useRef(!1), T = U.useRef(() => {
+  }), M = U.useCallback(() => {
+    var j;
+    const R = (j = o.current.openEvent) == null ? void 0 : j.type;
+    return (R == null ? void 0 : R.includes("mouse")) && R !== "mousedown";
   }, [o]);
   U.useEffect(() => {
     if (!s)
       return;
-    function L(_) {
+    function j(R) {
       let {
-        open: P
-      } = _;
-      P || (clearTimeout(v.current), clearTimeout(S.current), E.current = !0);
+        open: A
+      } = R;
+      A || (clearTimeout(v.current), clearTimeout(S.current), E.current = !0);
     }
-    return i.on("openchange", L), () => {
-      i.off("openchange", L);
+    return i.on("openchange", j), () => {
+      i.off("openchange", j);
     };
   }, [s, i]), U.useEffect(() => {
     if (!s || !g.current || !t)
       return;
-    function L(P) {
-      D() && r(!1, P, "hover");
+    function j(A) {
+      M() && r(!1, A, "hover");
     }
-    const _ = Nn(a.floating).documentElement;
-    return _.addEventListener("mouseleave", L), () => {
-      _.removeEventListener("mouseleave", L);
+    const R = Nn(a.floating).documentElement;
+    return R.addEventListener("mouseleave", j), () => {
+      R.removeEventListener("mouseleave", j);
     };
-  }, [a.floating, t, r, s, g, D]);
-  const H = U.useCallback(function(L, _, P) {
-    _ === void 0 && (_ = !0), P === void 0 && (P = "hover");
-    const N = wo(m.current, "close", C.current);
-    N && !w.current ? (clearTimeout(v.current), v.current = window.setTimeout(() => r(!1, L, P), N)) : _ && (clearTimeout(v.current), r(!1, L, P));
-  }, [m, r]), B = pn(() => {
+  }, [a.floating, t, r, s, g, M]);
+  const B = U.useCallback(function(j, R, A) {
+    R === void 0 && (R = !0), A === void 0 && (A = "hover");
+    const P = wo(m.current, "close", C.current);
+    P && !w.current ? (clearTimeout(v.current), v.current = window.setTimeout(() => r(!1, j, A), P)) : R && (clearTimeout(v.current), r(!1, j, A));
+  }, [m, r]), z = pn(() => {
     T.current(), w.current = void 0;
-  }), q = pn(() => {
-    if (k.current) {
-      const L = Nn(a.floating).body;
-      L.style.pointerEvents = "", L.removeAttribute(dl), k.current = !1;
+  }), V = pn(() => {
+    if (_.current) {
+      const j = Nn(a.floating).body;
+      j.style.pointerEvents = "", j.removeAttribute(dl), _.current = !1;
     }
   });
   U.useEffect(() => {
     if (!s)
       return;
-    function L() {
+    function j() {
       return o.current.openEvent ? ["click", "mousedown"].includes(o.current.openEvent.type) : !1;
     }
-    function _($) {
+    function R(H) {
       if (clearTimeout(v.current), E.current = !1, u && !ba(C.current) || f > 0 && !wo(m.current, "open"))
         return;
-      const oe = wo(m.current, "open", C.current);
-      oe ? v.current = window.setTimeout(() => {
-        b.current || r(!0, $, "hover");
-      }, oe) : r(!0, $, "hover");
+      const re = wo(m.current, "open", C.current);
+      re ? v.current = window.setTimeout(() => {
+        b.current || r(!0, H, "hover");
+      }, re) : r(!0, H, "hover");
     }
-    function P($) {
-      if (L())
+    function A(H) {
+      if (j())
         return;
       T.current();
-      const oe = Nn(a.floating);
+      const re = Nn(a.floating);
       if (clearTimeout(S.current), g.current && o.current.floatingContext) {
         t || clearTimeout(v.current), w.current = g.current({
           ...o.current.floatingContext,
           tree: h,
-          x: $.clientX,
-          y: $.clientY,
+          x: H.clientX,
+          y: H.clientY,
           onClose() {
-            q(), B(), H($, !0, "safe-polygon");
+            V(), z(), B(H, !0, "safe-polygon");
           }
         });
         const _e = w.current;
-        oe.addEventListener("mousemove", _e), T.current = () => {
-          oe.removeEventListener("mousemove", _e);
+        re.addEventListener("mousemove", _e), T.current = () => {
+          re.removeEventListener("mousemove", _e);
         };
         return;
       }
-      (C.current === "touch" ? !Vr(a.floating, $.relatedTarget) : !0) && H($);
+      (C.current === "touch" ? !Vr(a.floating, H.relatedTarget) : !0) && B(H);
     }
-    function N($) {
-      L() || o.current.floatingContext && (g.current == null || g.current({
+    function P(H) {
+      j() || o.current.floatingContext && (g.current == null || g.current({
         ...o.current.floatingContext,
         tree: h,
-        x: $.clientX,
-        y: $.clientY,
+        x: H.clientX,
+        y: H.clientY,
         onClose() {
-          q(), B(), H($);
+          V(), z(), B(H);
         }
-      })($));
+      })(H));
     }
     if (Ee(a.domReference)) {
-      var V;
-      const $ = a.domReference;
-      return t && $.addEventListener("mouseleave", N), (V = a.floating) == null || V.addEventListener("mouseleave", N), d && $.addEventListener("mousemove", _, {
+      var $;
+      const H = a.domReference;
+      return t && H.addEventListener("mouseleave", P), ($ = a.floating) == null || $.addEventListener("mouseleave", P), d && H.addEventListener("mousemove", R, {
         once: !0
-      }), $.addEventListener("mouseenter", _), $.addEventListener("mouseleave", P), () => {
-        var oe;
-        t && $.removeEventListener("mouseleave", N), (oe = a.floating) == null || oe.removeEventListener("mouseleave", N), d && $.removeEventListener("mousemove", _), $.removeEventListener("mouseenter", _), $.removeEventListener("mouseleave", P);
+      }), H.addEventListener("mouseenter", R), H.addEventListener("mouseleave", A), () => {
+        var re;
+        t && H.removeEventListener("mouseleave", P), (re = a.floating) == null || re.removeEventListener("mouseleave", P), d && H.removeEventListener("mousemove", R), H.removeEventListener("mouseenter", R), H.removeEventListener("mouseleave", A);
       };
     }
-  }, [a, s, n, u, f, d, H, B, q, r, t, b, h, m, g, o]), jt(() => {
-    var L;
-    if (s && t && (L = g.current) != null && L.__options.blockPointerEvents && D()) {
-      const P = Nn(a.floating).body;
-      P.setAttribute(dl, ""), P.style.pointerEvents = "none", k.current = !0;
-      const N = a.floating;
-      if (Ee(a.domReference) && N) {
-        var _;
-        const V = a.domReference, $ = h == null || (_ = h.nodesRef.current.find((oe) => oe.id === p)) == null || (_ = _.context) == null ? void 0 : _.elements.floating;
-        return $ && ($.style.pointerEvents = ""), V.style.pointerEvents = "auto", N.style.pointerEvents = "auto", () => {
-          V.style.pointerEvents = "", N.style.pointerEvents = "";
+  }, [a, s, n, u, f, d, B, z, V, r, t, b, h, m, g, o]), jt(() => {
+    var j;
+    if (s && t && (j = g.current) != null && j.__options.blockPointerEvents && M()) {
+      const A = Nn(a.floating).body;
+      A.setAttribute(dl, ""), A.style.pointerEvents = "none", _.current = !0;
+      const P = a.floating;
+      if (Ee(a.domReference) && P) {
+        var R;
+        const $ = a.domReference, H = h == null || (R = h.nodesRef.current.find((re) => re.id === p)) == null || (R = R.context) == null ? void 0 : R.elements.floating;
+        return H && (H.style.pointerEvents = ""), $.style.pointerEvents = "auto", P.style.pointerEvents = "auto", () => {
+          $.style.pointerEvents = "", P.style.pointerEvents = "";
         };
       }
     }
-  }, [s, t, p, a, h, g, D]), jt(() => {
-    t || (C.current = void 0, B(), q());
-  }, [t, B, q]), U.useEffect(() => () => {
-    B(), clearTimeout(v.current), clearTimeout(S.current), q();
-  }, [s, a.domReference, B, q]);
+  }, [s, t, p, a, h, g, M]), jt(() => {
+    t || (C.current = void 0, z(), V());
+  }, [t, z, V]), U.useEffect(() => () => {
+    z(), clearTimeout(v.current), clearTimeout(S.current), V();
+  }, [s, a.domReference, z, V]);
   const Z = U.useMemo(() => {
-    function L(_) {
-      C.current = _.pointerType;
+    function j(R) {
+      C.current = R.pointerType;
     }
     return {
-      onPointerDown: L,
-      onPointerEnter: L,
-      onMouseMove(_) {
+      onPointerDown: j,
+      onPointerEnter: j,
+      onMouseMove(R) {
         const {
-          nativeEvent: P
-        } = _;
-        function N() {
-          !E.current && !b.current && r(!0, P, "hover");
+          nativeEvent: A
+        } = R;
+        function P() {
+          !E.current && !b.current && r(!0, A, "hover");
         }
-        u && !ba(C.current) || t || f === 0 || (clearTimeout(S.current), C.current === "touch" ? N() : S.current = window.setTimeout(N, f));
+        u && !ba(C.current) || t || f === 0 || (clearTimeout(S.current), C.current === "touch" ? P() : S.current = window.setTimeout(P, f));
       }
     };
-  }, [u, r, t, b, f]), R = U.useMemo(() => ({
+  }, [u, r, t, b, f]), D = U.useMemo(() => ({
     onMouseEnter() {
       clearTimeout(v.current);
     },
-    onMouseLeave(L) {
-      H(L.nativeEvent, !1);
+    onMouseLeave(j) {
+      B(j.nativeEvent, !1);
     }
-  }), [H]);
+  }), [B]);
   return U.useMemo(() => s ? {
     reference: Z,
-    floating: R
-  } : {}, [s, Z, R]);
+    floating: D
+  } : {}, [s, Z, D]);
 }
 const Ia = () => {
 }, md = /* @__PURE__ */ U.createContext({
@@ -16873,62 +16873,62 @@ function Ab(n, e) {
     outsidePress: S
   } = fl(h), {
     escapeKey: E,
-    outsidePress: k
-  } = fl(p), T = pn((R) => {
-    var L;
-    if (!t || !a || !s || R.key !== "Escape")
+    outsidePress: _
+  } = fl(p), T = pn((D) => {
+    var j;
+    if (!t || !a || !s || D.key !== "Escape")
       return;
-    const _ = (L = i.current.floatingContext) == null ? void 0 : L.nodeId, P = g ? Ui(g.nodesRef.current, _) : [];
-    if (!w && (R.stopPropagation(), P.length > 0)) {
-      let N = !0;
-      if (P.forEach((V) => {
-        var $;
-        if (($ = V.context) != null && $.open && !V.context.dataRef.current.__escapeKeyBubbles) {
-          N = !1;
+    const R = (j = i.current.floatingContext) == null ? void 0 : j.nodeId, A = g ? Ui(g.nodesRef.current, R) : [];
+    if (!w && (D.stopPropagation(), A.length > 0)) {
+      let P = !0;
+      if (A.forEach(($) => {
+        var H;
+        if ((H = $.context) != null && H.open && !$.context.dataRef.current.__escapeKeyBubbles) {
+          P = !1;
           return;
         }
-      }), !N)
+      }), !P)
         return;
     }
-    r(!1, Sv(R) ? R.nativeEvent : R, "escape-key");
-  }), D = pn((R) => {
-    var L;
-    const _ = () => {
-      var P;
-      T(R), (P = Zn(R)) == null || P.removeEventListener("keydown", _);
+    r(!1, Sv(D) ? D.nativeEvent : D, "escape-key");
+  }), M = pn((D) => {
+    var j;
+    const R = () => {
+      var A;
+      T(D), (A = Zn(D)) == null || A.removeEventListener("keydown", R);
     };
-    (L = Zn(R)) == null || L.addEventListener("keydown", _);
-  }), H = pn((R) => {
-    var L;
-    const _ = C.current;
+    (j = Zn(D)) == null || j.addEventListener("keydown", R);
+  }), B = pn((D) => {
+    var j;
+    const R = C.current;
     C.current = !1;
-    const P = v.current;
-    if (v.current = !1, l === "click" && P || _ || typeof b == "function" && !b(R))
+    const A = v.current;
+    if (v.current = !1, l === "click" && A || R || typeof b == "function" && !b(D))
       return;
-    const N = Zn(R), V = "[" + ps("inert") + "]", $ = Nn(o.floating).querySelectorAll(V);
-    let oe = Ee(N) ? N : null;
-    for (; oe && !yn(oe); ) {
-      const pe = Xt(oe);
+    const P = Zn(D), $ = "[" + ps("inert") + "]", H = Nn(o.floating).querySelectorAll($);
+    let re = Ee(P) ? P : null;
+    for (; re && !yn(re); ) {
+      const pe = Xt(re);
       if (yn(pe) || !Ee(pe))
         break;
-      oe = pe;
+      re = pe;
     }
-    if ($.length && Ee(N) && !Ev(N) && // Clicked on a direct ancestor (e.g. FloatingOverlay).
-    !Vr(N, o.floating) && // If the target root element contains none of the markers, then the
+    if (H.length && Ee(P) && !Ev(P) && // Clicked on a direct ancestor (e.g. FloatingOverlay).
+    !Vr(P, o.floating) && // If the target root element contains none of the markers, then the
     // element was injected after the floating element rendered.
-    Array.from($).every((pe) => !Vr(oe, pe)))
+    Array.from(H).every((pe) => !Vr(re, pe)))
       return;
-    if (ft(N) && Z) {
-      const pe = N.clientWidth > 0 && N.scrollWidth > N.clientWidth, Oe = N.clientHeight > 0 && N.scrollHeight > N.clientHeight;
-      let ze = Oe && R.offsetX > N.clientWidth;
-      if (Oe && bt(N).direction === "rtl" && (ze = R.offsetX <= N.offsetWidth - N.clientWidth), ze || pe && R.offsetY > N.clientHeight)
+    if (ft(P) && Z) {
+      const pe = P.clientWidth > 0 && P.scrollWidth > P.clientWidth, Oe = P.clientHeight > 0 && P.scrollHeight > P.clientHeight;
+      let ze = Oe && D.offsetX > P.clientWidth;
+      if (Oe && bt(P).direction === "rtl" && (ze = D.offsetX <= P.offsetWidth - P.clientWidth), ze || pe && D.offsetY > P.clientHeight)
         return;
     }
-    const fe = (L = i.current.floatingContext) == null ? void 0 : L.nodeId, _e = g && Ui(g.nodesRef.current, fe).some((pe) => {
+    const fe = (j = i.current.floatingContext) == null ? void 0 : j.nodeId, _e = g && Ui(g.nodesRef.current, fe).some((pe) => {
       var Oe;
-      return Li(R, (Oe = pe.context) == null ? void 0 : Oe.elements.floating);
+      return Li(D, (Oe = pe.context) == null ? void 0 : Oe.elements.floating);
     });
-    if (Li(R, o.floating) || Li(R, o.domReference) || _e)
+    if (Li(D, o.floating) || Li(D, o.domReference) || _e)
       return;
     const Be = g ? Ui(g.nodesRef.current, fe) : [];
     if (Be.length > 0) {
@@ -16942,44 +16942,44 @@ function Ab(n, e) {
       }), !pe)
         return;
     }
-    r(!1, R, "outside-press");
-  }), B = pn((R) => {
-    var L;
-    const _ = () => {
-      var P;
-      H(R), (P = Zn(R)) == null || P.removeEventListener(l, _);
+    r(!1, D, "outside-press");
+  }), z = pn((D) => {
+    var j;
+    const R = () => {
+      var A;
+      B(D), (A = Zn(D)) == null || A.removeEventListener(l, R);
     };
-    (L = Zn(R)) == null || L.addEventListener(l, _);
+    (j = Zn(D)) == null || j.addEventListener(l, R);
   });
   U.useEffect(() => {
     if (!t || !a)
       return;
     i.current.__escapeKeyBubbles = w, i.current.__outsidePressBubbles = S;
-    function R(P) {
-      r(!1, P, "ancestor-scroll");
+    function D(A) {
+      r(!1, A, "ancestor-scroll");
     }
-    const L = Nn(o.floating);
-    s && L.addEventListener("keydown", E ? D : T, E), b && L.addEventListener(l, k ? B : H, k);
-    let _ = [];
-    return d && (Ee(o.domReference) && (_ = Jt(o.domReference)), Ee(o.floating) && (_ = _.concat(Jt(o.floating))), !Ee(o.reference) && o.reference && o.reference.contextElement && (_ = _.concat(Jt(o.reference.contextElement)))), _ = _.filter((P) => {
-      var N;
-      return P !== ((N = L.defaultView) == null ? void 0 : N.visualViewport);
-    }), _.forEach((P) => {
-      P.addEventListener("scroll", R, {
+    const j = Nn(o.floating);
+    s && j.addEventListener("keydown", E ? M : T, E), b && j.addEventListener(l, _ ? z : B, _);
+    let R = [];
+    return d && (Ee(o.domReference) && (R = Jt(o.domReference)), Ee(o.floating) && (R = R.concat(Jt(o.floating))), !Ee(o.reference) && o.reference && o.reference.contextElement && (R = R.concat(Jt(o.reference.contextElement)))), R = R.filter((A) => {
+      var P;
+      return A !== ((P = j.defaultView) == null ? void 0 : P.visualViewport);
+    }), R.forEach((A) => {
+      A.addEventListener("scroll", D, {
         passive: !0
       });
     }), () => {
-      s && L.removeEventListener("keydown", E ? D : T, E), b && L.removeEventListener(l, k ? B : H, k), _.forEach((P) => {
-        P.removeEventListener("scroll", R);
+      s && j.removeEventListener("keydown", E ? M : T, E), b && j.removeEventListener(l, _ ? z : B, _), R.forEach((A) => {
+        A.removeEventListener("scroll", D);
       });
     };
-  }, [i, o, s, b, l, t, r, d, a, w, S, T, E, D, H, k, B]), U.useEffect(() => {
+  }, [i, o, s, b, l, t, r, d, a, w, S, T, E, M, B, _, z]), U.useEffect(() => {
     C.current = !1;
   }, [b, l]);
-  const q = U.useMemo(() => ({
+  const V = U.useMemo(() => ({
     onKeyDown: T,
-    [_b[f]]: (R) => {
-      u && r(!1, R.nativeEvent, "reference-press");
+    [_b[f]]: (D) => {
+      u && r(!1, D.nativeEvent, "reference-press");
     }
   }), [T, r, u, f]), Z = U.useMemo(() => ({
     onKeyDown: T,
@@ -16994,9 +16994,9 @@ function Ab(n, e) {
     }
   }), [T, l]);
   return U.useMemo(() => a ? {
-    reference: q,
+    reference: V,
     floating: Z
-  } : {}, [a, q, Z]);
+  } : {}, [a, V, Z]);
 }
 function Rb(n) {
   const {
@@ -17432,7 +17432,7 @@ function ui({ withinPortal: n = !0, children: e, ...t }) {
 ui.displayName = "@mantine/core/OptionalPortal";
 const Ar = (n) => ({
   in: { opacity: 1, transform: "scale(1)" },
-  out: { opacity: 0, transform: `scale(.9) translateY(${M(n === "bottom" ? 10 : -10)})` },
+  out: { opacity: 0, transform: `scale(.9) translateY(${N(n === "bottom" ? 10 : -10)})` },
   transitionProperty: "transform, opacity"
 }), mo = {
   fade: {
@@ -17442,22 +17442,22 @@ const Ar = (n) => ({
   },
   "fade-up": {
     in: { opacity: 1, transform: "translateY(0)" },
-    out: { opacity: 0, transform: `translateY(${M(30)}` },
+    out: { opacity: 0, transform: `translateY(${N(30)}` },
     transitionProperty: "opacity, transform"
   },
   "fade-down": {
     in: { opacity: 1, transform: "translateY(0)" },
-    out: { opacity: 0, transform: `translateY(${M(-30)}` },
+    out: { opacity: 0, transform: `translateY(${N(-30)}` },
     transitionProperty: "opacity, transform"
   },
   "fade-left": {
     in: { opacity: 1, transform: "translateX(0)" },
-    out: { opacity: 0, transform: `translateX(${M(30)}` },
+    out: { opacity: 0, transform: `translateX(${N(30)}` },
     transitionProperty: "opacity, transform"
   },
   "fade-right": {
     in: { opacity: 1, transform: "translateX(0)" },
-    out: { opacity: 0, transform: `translateX(${M(-30)}` },
+    out: { opacity: 0, transform: `translateX(${N(-30)}` },
     transitionProperty: "opacity, transform"
   },
   scale: {
@@ -17480,25 +17480,25 @@ const Ar = (n) => ({
   },
   "skew-up": {
     in: { opacity: 1, transform: "translateY(0) skew(0deg, 0deg)" },
-    out: { opacity: 0, transform: `translateY(${M(-20)}) skew(-10deg, -5deg)` },
+    out: { opacity: 0, transform: `translateY(${N(-20)}) skew(-10deg, -5deg)` },
     common: { transformOrigin: "top" },
     transitionProperty: "transform, opacity"
   },
   "skew-down": {
     in: { opacity: 1, transform: "translateY(0) skew(0deg, 0deg)" },
-    out: { opacity: 0, transform: `translateY(${M(20)}) skew(-10deg, -5deg)` },
+    out: { opacity: 0, transform: `translateY(${N(20)}) skew(-10deg, -5deg)` },
     common: { transformOrigin: "bottom" },
     transitionProperty: "transform, opacity"
   },
   "rotate-left": {
     in: { opacity: 1, transform: "translateY(0) rotate(0deg)" },
-    out: { opacity: 0, transform: `translateY(${M(20)}) rotate(-5deg)` },
+    out: { opacity: 0, transform: `translateY(${N(20)}) rotate(-5deg)` },
     common: { transformOrigin: "bottom" },
     transitionProperty: "transform, opacity"
   },
   "rotate-right": {
     in: { opacity: 1, transform: "translateY(0) rotate(0deg)" },
-    out: { opacity: 0, transform: `translateY(${M(20)}) rotate(5deg)` },
+    out: { opacity: 0, transform: `translateY(${N(20)}) rotate(5deg)` },
     common: { transformOrigin: "top" },
     transitionProperty: "transform, opacity"
   },
@@ -17589,16 +17589,16 @@ function Hb({
   exitDelay: l
 }) {
   const u = $t(), f = Ru(), d = u.respectReducedMotion ? f : !1, [h, p] = te(d ? 0 : n), [g, m] = te(r ? "entered" : "exited"), b = ue(-1), C = ue(-1), v = ue(-1), w = (E) => {
-    const k = E ? o : i, T = E ? a : s;
+    const _ = E ? o : i, T = E ? a : s;
     window.clearTimeout(b.current);
-    const D = d ? 0 : E ? n : e;
-    p(D), D === 0 ? (typeof k == "function" && k(), typeof T == "function" && T(), m(E ? "entered" : "exited")) : v.current = requestAnimationFrame(() => {
+    const M = d ? 0 : E ? n : e;
+    p(M), M === 0 ? (typeof _ == "function" && _(), typeof T == "function" && T(), m(E ? "entered" : "exited")) : v.current = requestAnimationFrame(() => {
       Wl.flushSync(() => {
         m(E ? "pre-entering" : "pre-exiting");
       }), v.current = requestAnimationFrame(() => {
-        typeof k == "function" && k(), m(E ? "entering" : "exiting"), b.current = window.setTimeout(() => {
+        typeof _ == "function" && _(), m(E ? "entering" : "exiting"), b.current = window.setTimeout(() => {
           typeof T == "function" && T(), m(E ? "entered" : "exited");
-        }, D);
+        }, M);
       });
     });
   }, S = (E) => {
@@ -17719,7 +17719,7 @@ const Bb = {}, vs = le((n, e) => {
                 zIndex: d.zIndex,
                 top: d.y ?? 0,
                 left: d.x ?? 0,
-                width: d.width === "target" ? void 0 : M(d.width)
+                width: d.width === "target" ? void 0 : N(d.width)
               },
               o
             ]
@@ -17926,27 +17926,27 @@ function wn(n) {
     withinPortal: w,
     portalProps: S,
     closeOnEscape: E,
-    clickOutsideEvents: k,
+    clickOutsideEvents: _,
     trapFocus: T,
-    onClose: D,
-    onOpen: H,
-    onChange: B,
-    zIndex: q,
+    onClose: M,
+    onOpen: B,
+    onChange: z,
+    zIndex: V,
     radius: Z,
-    shadow: R,
-    id: L,
-    defaultOpened: _,
-    __staticSelector: P,
-    withRoles: N,
-    disabled: V,
-    returnFocus: $,
-    variant: oe,
+    shadow: D,
+    id: j,
+    defaultOpened: R,
+    __staticSelector: A,
+    withRoles: P,
+    disabled: $,
+    returnFocus: H,
+    variant: re,
     keepMounted: fe,
     vars: _e,
     floatingStrategy: Be,
     ...pe
   } = e, Oe = be({
-    name: P,
+    name: A,
     props: e,
     classes: Sd,
     classNames: b,
@@ -17955,7 +17955,7 @@ function wn(n) {
     rootSelector: "dropdown",
     vars: _e,
     varsResolver: Gb
-  }), ze = ue(null), [It, Re] = te(null), [Tt, En] = te(null), { dir: cn } = ii(), _t = rn(L), ke = qb({
+  }), ze = ue(null), [It, Re] = te(null), [Tt, En] = te(null), { dir: cn } = ii(), _t = rn(j), ke = qb({
     middlewares: u,
     width: l,
     position: vd(cn, r),
@@ -17965,13 +17965,13 @@ function wn(n) {
     onPositionChange: i,
     positionDependencies: a,
     opened: s,
-    defaultOpened: _,
-    onChange: B,
-    onOpen: H,
-    onClose: D,
+    defaultOpened: R,
+    onChange: z,
+    onOpen: B,
+    onClose: M,
     strategy: Be
   });
-  wm(() => v && ke.onClose(), k, [
+  wm(() => v && ke.onClose(), _, [
     It,
     Tt
   ]);
@@ -17990,8 +17990,8 @@ function wn(n) {
     Lb,
     {
       value: {
-        returnFocus: $,
-        disabled: V,
+        returnFocus: H,
+        disabled: $,
         controlled: ke.controlled,
         reference: Kt,
         floating: qn,
@@ -18012,21 +18012,21 @@ function wn(n) {
         trapFocus: T,
         withinPortal: w,
         portalProps: S,
-        zIndex: q,
+        zIndex: V,
         radius: Z,
-        shadow: R,
+        shadow: D,
         closeOnEscape: E,
         onClose: ke.onClose,
         onToggle: ke.onToggle,
         getTargetId: () => `${_t}-target`,
         getDropdownId: () => `${_t}-dropdown`,
-        withRoles: N,
+        withRoles: P,
         targetProps: pe,
-        __staticSelector: P,
+        __staticSelector: A,
         classNames: b,
         styles: C,
         unstyled: m,
-        variant: oe,
+        variant: re,
         keepMounted: fe,
         getStyles: Oe,
         floatingStrategy: Be
@@ -18132,7 +18132,7 @@ const Zb = {
   root: {
     "--cb-size": De(e, "cb-size"),
     "--cb-radius": t === void 0 ? void 0 : Ct(t),
-    "--cb-icon-size": M(r)
+    "--cb-icon-size": N(r)
   }
 }), wr = $n((n, e) => {
   const t = J("CloseButton", Zb, n), {
@@ -18219,7 +18219,7 @@ const nC = {
     __size: b,
     mod: C,
     ...v
-  } = t, w = tC(c), S = w.length, E = qa(l ?? "md"), T = { childWidth: `calc(${100 / S}% - (${E} - ${E} / ${S}))` }, D = be({
+  } = t, w = tC(c), S = w.length, E = qa(l ?? "md"), T = { childWidth: `calc(${100 / S}% - (${E} - ${E} / ${S}))` }, M = be({
     name: "Group",
     props: t,
     stylesCtx: T,
@@ -18235,7 +18235,7 @@ const nC = {
   return /* @__PURE__ */ y.jsx(
     ne,
     {
-      ...D("root"),
+      ...M("root"),
       ref: e,
       variant: m,
       mod: [{ grow: h }, C],
@@ -18258,7 +18258,7 @@ const [oC, oo] = wu({
 var St = { wrapper: "m_6c018570", input: "m_8fb7ebe7", section: "m_82577fc2", placeholder: "m_88bacfd0", root: "m_46b77525", label: "m_8fdc1311", required: "m_78a94662", error: "m_8f816625", description: "m_fe47ce59" };
 const vl = {}, iC = (n, { size: e }) => ({
   description: {
-    "--input-description-size": e === void 0 ? void 0 : `calc(${dt(e)} - ${M(2)})`
+    "--input-description-size": e === void 0 ? void 0 : `calc(${dt(e)} - ${N(2)})`
   }
 }), hi = le((n, e) => {
   const t = J("InputDescription", vl, n), {
@@ -18302,7 +18302,7 @@ hi.classes = St;
 hi.displayName = "@mantine/core/InputDescription";
 const aC = {}, sC = (n, { size: e }) => ({
   error: {
-    "--input-error-size": e === void 0 ? void 0 : `calc(${dt(e)} - ${M(2)})`
+    "--input-error-size": e === void 0 ? void 0 : `calc(${dt(e)} - ${N(2)})`
   }
 }), pi = le((n, e) => {
   const t = J("InputError", aC, n), {
@@ -18457,10 +18457,10 @@ const uC = {
     "--input-asterisk-color": void 0
   },
   error: {
-    "--input-error-size": e === void 0 ? void 0 : `calc(${dt(e)} - ${M(2)})`
+    "--input-error-size": e === void 0 ? void 0 : `calc(${dt(e)} - ${N(2)})`
   },
   description: {
-    "--input-description-size": e === void 0 ? void 0 : `calc(${dt(e)} - ${M(2)})`
+    "--input-description-size": e === void 0 ? void 0 : `calc(${dt(e)} - ${N(2)})`
   }
 }), Cs = le((n, e) => {
   const t = J("InputWrapper", uC, n), {
@@ -18484,14 +18484,14 @@ const uC = {
     labelElement: w,
     children: S,
     withAsterisk: E,
-    id: k,
+    id: _,
     required: T,
-    __stylesApiProps: D,
-    mod: H,
-    ...B
-  } = t, q = be({
+    __stylesApiProps: M,
+    mod: B,
+    ...z
+  } = t, V = be({
     name: ["InputWrapper", f],
-    props: D || t,
+    props: M || t,
     classes: St,
     className: o,
     style: i,
@@ -18504,36 +18504,36 @@ const uC = {
     size: l,
     variant: u,
     __staticSelector: f
-  }, R = rn(k), L = typeof E == "boolean" ? E : T, _ = (v == null ? void 0 : v.id) || `${R}-error`, P = (C == null ? void 0 : C.id) || `${R}-description`, N = R, V = !!g && typeof g != "boolean", $ = !!m, oe = `${V ? _ : ""} ${$ ? P : ""}`, fe = oe.trim().length > 0 ? oe.trim() : void 0, _e = (b == null ? void 0 : b.id) || `${R}-label`, Be = p && /* @__PURE__ */ y.jsx(
+  }, D = rn(_), j = typeof E == "boolean" ? E : T, R = (v == null ? void 0 : v.id) || `${D}-error`, A = (C == null ? void 0 : C.id) || `${D}-description`, P = D, $ = !!g && typeof g != "boolean", H = !!m, re = `${$ ? R : ""} ${H ? A : ""}`, fe = re.trim().length > 0 ? re.trim() : void 0, _e = (b == null ? void 0 : b.id) || `${D}-label`, Be = p && /* @__PURE__ */ y.jsx(
     gi,
     {
       labelElement: w,
       id: _e,
-      htmlFor: N,
-      required: L,
+      htmlFor: P,
+      required: j,
       ...Z,
       ...b,
       children: p
     },
     "label"
-  ), pe = $ && /* @__PURE__ */ y.jsx(
+  ), pe = H && /* @__PURE__ */ y.jsx(
     hi,
     {
       ...C,
       ...Z,
       size: (C == null ? void 0 : C.size) || Z.size,
-      id: (C == null ? void 0 : C.id) || P,
+      id: (C == null ? void 0 : C.id) || A,
       children: m
     },
     "description"
-  ), Oe = /* @__PURE__ */ y.jsx(Vl, { children: d(S) }, "input"), ze = V && /* @__PURE__ */ Qi(
+  ), Oe = /* @__PURE__ */ y.jsx(Vl, { children: d(S) }, "input"), ze = $ && /* @__PURE__ */ Qi(
     pi,
     {
       ...v,
       ...Z,
       size: (v == null ? void 0 : v.size) || Z.size,
       key: "error",
-      id: (v == null ? void 0 : v.id) || _
+      id: (v == null ? void 0 : v.id) || R
     },
     g
   ), It = h.map((Re) => {
@@ -18554,11 +18554,11 @@ const uC = {
     oC,
     {
       value: {
-        getStyles: q,
+        getStyles: V,
         describedBy: fe,
-        inputId: N,
+        inputId: P,
         labelId: _e,
-        ...lC(h, { hasDescription: $, hasError: V })
+        ...lC(h, { hasDescription: H, hasError: $ })
       },
       children: /* @__PURE__ */ y.jsx(
         ne,
@@ -18566,9 +18566,9 @@ const uC = {
           ref: e,
           variant: u,
           size: l,
-          mod: [{ error: !!g }, H],
-          ...q("root"),
-          ...B,
+          mod: [{ error: !!g }, B],
+          ...V("root"),
+          ...z,
           children: It
         }
       )
@@ -18590,8 +18590,8 @@ const fC = {
     "--input-height": De(e.size, "input-height"),
     "--input-fz": dt(e.size),
     "--input-radius": e.radius === void 0 ? void 0 : Ct(e.radius),
-    "--input-left-section-width": e.leftSectionWidth !== void 0 ? M(e.leftSectionWidth) : void 0,
-    "--input-right-section-width": e.rightSectionWidth !== void 0 ? M(e.rightSectionWidth) : void 0,
+    "--input-left-section-width": e.leftSectionWidth !== void 0 ? N(e.leftSectionWidth) : void 0,
+    "--input-right-section-width": e.rightSectionWidth !== void 0 ? N(e.rightSectionWidth) : void 0,
     "--input-padding-y": e.multiline ? De(e.size, "input-padding-y") : void 0,
     "--input-left-section-pointer-events": e.leftSectionPointerEvents,
     "--input-right-section-pointer-events": e.rightSectionPointerEvents
@@ -18618,18 +18618,18 @@ const fC = {
     rightSectionWidth: w,
     rightSectionPointerEvents: S,
     leftSectionPointerEvents: E,
-    variant: k,
+    variant: _,
     vars: T,
-    pointer: D,
-    multiline: H,
-    radius: B,
-    id: q,
+    pointer: M,
+    multiline: B,
+    radius: z,
+    id: V,
     withAria: Z,
-    withErrorStyles: R,
-    mod: L,
-    inputSize: _,
-    ...P
-  } = t, { styleProps: N, rest: V } = oi(P), $ = oo(), oe = { offsetBottom: $ == null ? void 0 : $.offsetBottom, offsetTop: $ == null ? void 0 : $.offsetTop }, fe = be({
+    withErrorStyles: D,
+    mod: j,
+    inputSize: R,
+    ...A
+  } = t, { styleProps: P, rest: $ } = oi(A), H = oo(), re = { offsetBottom: H == null ? void 0 : H.offsetBottom, offsetTop: H == null ? void 0 : H.offsetTop }, fe = be({
     name: ["Input", l],
     props: u || t,
     classes: St,
@@ -18638,7 +18638,7 @@ const fC = {
     classNames: r,
     styles: a,
     unstyled: s,
-    stylesCtx: oe,
+    stylesCtx: re,
     rootSelector: "wrapper",
     vars: T,
     varsResolver: hC
@@ -18646,27 +18646,27 @@ const fC = {
     required: c,
     disabled: p,
     "aria-invalid": !!h,
-    "aria-describedby": $ == null ? void 0 : $.describedBy,
-    id: ($ == null ? void 0 : $.inputId) || q
+    "aria-describedby": H == null ? void 0 : H.describedBy,
+    id: (H == null ? void 0 : H.inputId) || V
   } : {};
   return /* @__PURE__ */ y.jsxs(
     ne,
     {
       ...fe("wrapper"),
-      ...N,
+      ...P,
       ...d,
       mod: [
         {
-          error: !!h && R,
-          pointer: D,
+          error: !!h && D,
+          pointer: M,
           disabled: p,
-          multiline: H,
+          multiline: B,
           "data-with-right-section": !!C,
           "data-with-left-section": !!g
         },
-        L
+        j
       ],
-      variant: k,
+      variant: _,
       size: f,
       children: [
         g && /* @__PURE__ */ y.jsx(
@@ -18685,13 +18685,13 @@ const fC = {
           ne,
           {
             component: "input",
-            ...V,
+            ...$,
             ..._e,
             ref: e,
             required: c,
-            mod: { disabled: p, error: !!h && R },
-            variant: k,
-            __size: _,
+            mod: { disabled: p, error: !!h && D },
+            variant: _,
+            __size: R,
             ...fe("input")
           }
         ),
@@ -18739,12 +18739,12 @@ function pC(n, e, t) {
     style: w,
     inputContainer: S,
     inputWrapperOrder: E,
-    withAsterisk: k,
+    withAsterisk: _,
     variant: T,
-    vars: D,
-    mod: H,
-    ...B
-  } = r, { styleProps: q, rest: Z } = oi(B), R = {
+    vars: M,
+    mod: B,
+    ...z
+  } = r, { styleProps: V, rest: Z } = oi(z), D = {
     label: o,
     description: i,
     error: a,
@@ -18762,10 +18762,10 @@ function pC(n, e, t) {
     style: w,
     inputContainer: S,
     inputWrapperOrder: E,
-    withAsterisk: k,
+    withAsterisk: _,
     variant: T,
     id: C,
-    mod: H,
+    mod: B,
     ...b
   };
   return {
@@ -18773,7 +18773,7 @@ function pC(n, e, t) {
     classNames: c,
     styles: l,
     unstyled: f,
-    wrapperProps: { ...R, ...q },
+    wrapperProps: { ...D, ...V },
     inputProps: {
       required: s,
       classNames: c,
@@ -18807,7 +18807,7 @@ function Ss({ style: n, size: e = 16, ...t }) {
       viewBox: "0 0 15 15",
       fill: "none",
       xmlns: "http://www.w3.org/2000/svg",
-      style: { ...n, width: M(e), height: M(e), display: "block" },
+      style: { ...n, width: N(e), height: N(e), display: "block" },
       ...t,
       children: /* @__PURE__ */ y.jsx(
         "path",
@@ -18944,7 +18944,7 @@ const wC = {
 }, SC = (n, { transitionDuration: e, chevronSize: t, radius: r }) => ({
   root: {
     "--accordion-transition-duration": e === void 0 ? void 0 : `${e}ms`,
-    "--accordion-chevron-size": t === void 0 ? void 0 : M(t),
+    "--accordion-chevron-size": t === void 0 ? void 0 : N(t),
     "--accordion-radius": r === void 0 ? void 0 : Ct(r)
   }
 });
@@ -18971,15 +18971,15 @@ function xe(n) {
     chevron: w,
     variant: S,
     radius: E,
-    ...k
-  } = e, T = rn(h), [D, H] = Fn({
+    ..._
+  } = e, T = rn(h), [M, B] = Fn({
     value: u,
     defaultValue: f,
     finalValue: l ? [] : null,
     onChange: d
-  }), B = (R) => Array.isArray(D) ? D.includes(R) : R === D, q = (R) => {
-    const L = Array.isArray(D) ? D.includes(R) ? D.filter((_) => _ !== R) : [...D, R] : R === D ? null : R;
-    H(L);
+  }), z = (D) => Array.isArray(M) ? M.includes(D) : D === M, V = (D) => {
+    const j = Array.isArray(M) ? M.includes(D) ? M.filter((R) => R !== D) : [...M, D] : D === M ? null : D;
+    B(j);
   }, Z = be({
     name: "Accordion",
     classes: io,
@@ -18996,8 +18996,8 @@ function xe(n) {
     mC,
     {
       value: {
-        isItemActive: B,
-        onChange: q,
+        isItemActive: z,
+        onChange: V,
         getControlId: Bc(
           `${T}-control`,
           "Accordion.Item component was rendered with invalid value or without value"
@@ -19016,7 +19016,7 @@ function xe(n) {
         variant: S,
         unstyled: a
       },
-      children: /* @__PURE__ */ y.jsx(ne, { ...Z("root"), id: T, ...k, variant: S, "data-accordion": !0, children: c })
+      children: /* @__PURE__ */ y.jsx(ne, { ...Z("root"), id: T, ..._, variant: S, "data-accordion": !0, children: c })
     }
   );
 }
@@ -19075,7 +19075,7 @@ const IC = {}, TC = (n, { radius: e, color: t, variant: r, autoContrast: o }) =>
     unstyled: s,
     vars: c,
     varsResolver: TC
-  }), E = rn(h), k = f && `${E}-title` || void 0, T = `${E}-body`;
+  }), E = rn(h), _ = f && `${E}-title` || void 0, T = `${E}-body`;
   return /* @__PURE__ */ y.jsx(
     ne,
     {
@@ -19086,11 +19086,11 @@ const IC = {}, TC = (n, { radius: e, color: t, variant: r, autoContrast: o }) =>
       ...w,
       role: "alert",
       "aria-describedby": T,
-      "aria-labelledby": k,
+      "aria-labelledby": _,
       children: /* @__PURE__ */ y.jsxs("div", { ...S("wrapper"), children: [
         p && /* @__PURE__ */ y.jsx("div", { ...S("icon"), children: p }),
         /* @__PURE__ */ y.jsxs("div", { ...S("body"), children: [
-          f && /* @__PURE__ */ y.jsx("div", { ...S("title"), "data-with-close-button": g || void 0, children: /* @__PURE__ */ y.jsx("span", { id: k, ...S("label"), children: f }) }),
+          f && /* @__PURE__ */ y.jsx("div", { ...S("title"), "data-with-close-button": g || void 0, children: /* @__PURE__ */ y.jsx("span", { id: _, ...S("label"), children: f }) }),
           d && /* @__PURE__ */ y.jsx("div", { id: T, ...S("message"), "data-variant": C, children: d })
         ] }),
         g && /* @__PURE__ */ y.jsx(
@@ -19639,41 +19639,41 @@ function mi({
     finalValue: !1,
     onChange: t
   }), l = ue(null), u = ue(-1), f = ue(null), d = ue(null), h = ue(-1), p = ue(-1), g = ue(-1), m = me(
-    (_ = "unknown") => {
-      s || (c(!0), o == null || o(_));
+    (R = "unknown") => {
+      s || (c(!0), o == null || o(R));
     },
     [c, o, s]
   ), b = me(
-    (_ = "unknown") => {
-      s && (c(!1), r == null || r(_));
+    (R = "unknown") => {
+      s && (c(!1), r == null || r(R));
     },
     [c, r, s]
   ), C = me(
-    (_ = "unknown") => {
-      s ? b(_) : m(_);
+    (R = "unknown") => {
+      s ? b(R) : m(R);
     },
     [b, m, s]
   ), v = me(() => {
-    const _ = document.querySelector(`#${l.current} [data-combobox-selected]`);
-    _ == null || _.removeAttribute("data-combobox-selected"), _ == null || _.removeAttribute("aria-selected");
+    const R = document.querySelector(`#${l.current} [data-combobox-selected]`);
+    R == null || R.removeAttribute("data-combobox-selected"), R == null || R.removeAttribute("aria-selected");
   }, []), w = me(
-    (_) => {
-      const P = document.getElementById(l.current), N = P == null ? void 0 : P.querySelectorAll("[data-combobox-option]");
-      if (!N)
+    (R) => {
+      const A = document.getElementById(l.current), P = A == null ? void 0 : A.querySelectorAll("[data-combobox-option]");
+      if (!P)
         return null;
-      const V = _ >= N.length ? 0 : _ < 0 ? N.length - 1 : _;
-      return u.current = V, N != null && N[V] && !N[V].hasAttribute("data-combobox-disabled") ? (v(), N[V].setAttribute("data-combobox-selected", "true"), N[V].setAttribute("aria-selected", "true"), N[V].scrollIntoView({ block: "nearest", behavior: a }), N[V].id) : null;
+      const $ = R >= P.length ? 0 : R < 0 ? P.length - 1 : R;
+      return u.current = $, P != null && P[$] && !P[$].hasAttribute("data-combobox-disabled") ? (v(), P[$].setAttribute("data-combobox-selected", "true"), P[$].setAttribute("aria-selected", "true"), P[$].scrollIntoView({ block: "nearest", behavior: a }), P[$].id) : null;
     },
     [a, v]
   ), S = me(() => {
-    const _ = document.querySelector(
+    const R = document.querySelector(
       `#${l.current} [data-combobox-active]`
     );
-    if (_) {
-      const P = document.querySelectorAll(
+    if (R) {
+      const A = document.querySelectorAll(
         `#${l.current} [data-combobox-option]`
-      ), N = Array.from(P).findIndex((V) => V === _);
-      return w(N);
+      ), P = Array.from(A).findIndex(($) => $ === R);
+      return w(P);
     }
     return w(0);
   }, [w]), E = me(
@@ -19685,7 +19685,7 @@ function mi({
       )
     ),
     [w, i]
-  ), k = me(
+  ), _ = me(
     () => w(
       $C(
         u.current,
@@ -19701,33 +19701,33 @@ function mi({
       )
     ),
     [w]
-  ), D = me(
-    (_ = "selected", P) => {
+  ), M = me(
+    (R = "selected", A) => {
       g.current = window.setTimeout(() => {
-        var $;
-        const N = document.querySelectorAll(
+        var H;
+        const P = document.querySelectorAll(
           `#${l.current} [data-combobox-option]`
-        ), V = Array.from(N).findIndex(
-          (oe) => oe.hasAttribute(`data-combobox-${_}`)
+        ), $ = Array.from(P).findIndex(
+          (re) => re.hasAttribute(`data-combobox-${R}`)
         );
-        u.current = V, P != null && P.scrollIntoView && (($ = N[V]) == null || $.scrollIntoView({ block: "nearest", behavior: a }));
+        u.current = $, A != null && A.scrollIntoView && ((H = P[$]) == null || H.scrollIntoView({ block: "nearest", behavior: a }));
       }, 0);
     },
     []
-  ), H = me(() => {
+  ), B = me(() => {
     u.current = -1, v();
-  }, [v]), B = me(() => {
-    const _ = document.querySelectorAll(
+  }, [v]), z = me(() => {
+    const R = document.querySelectorAll(
       `#${l.current} [data-combobox-option]`
-    ), P = _ == null ? void 0 : _[u.current];
-    P == null || P.click();
-  }, []), q = me((_) => {
-    l.current = _;
+    ), A = R == null ? void 0 : R[u.current];
+    A == null || A.click();
+  }, []), V = me((R) => {
+    l.current = R;
   }, []), Z = me(() => {
     h.current = window.setTimeout(() => f.current.focus(), 0);
-  }, []), R = me(() => {
+  }, []), D = me(() => {
     p.current = window.setTimeout(() => d.current.focus(), 0);
-  }, []), L = me(() => u.current, []);
+  }, []), j = me(() => u.current, []);
   return X(
     () => () => {
       window.clearTimeout(h.current), window.clearTimeout(p.current), window.clearTimeout(g.current);
@@ -19739,21 +19739,21 @@ function mi({
     closeDropdown: b,
     toggleDropdown: C,
     selectedOptionIndex: u.current,
-    getSelectedOptionIndex: L,
+    getSelectedOptionIndex: j,
     selectOption: w,
     selectFirstOption: T,
     selectActiveOption: S,
     selectNextOption: E,
-    selectPreviousOption: k,
-    resetSelectedOption: H,
-    updateSelectedOptionIndex: D,
+    selectPreviousOption: _,
+    resetSelectedOption: B,
+    updateSelectedOptionIndex: M,
     listId: l.current,
-    setListId: q,
-    clickSelectedOption: B,
+    setListId: V,
+    clickSelectedOption: z,
     searchRef: f,
     focusSearchInput: Z,
     targetRef: d,
-    focusTarget: R
+    focusTarget: D
   };
 }
 const VC = {
@@ -19768,7 +19768,7 @@ const VC = {
     "--combobox-option-padding": De(e, "combobox-option-padding")
   },
   dropdown: {
-    "--combobox-padding": t === void 0 ? void 0 : M(t),
+    "--combobox-padding": t === void 0 ? void 0 : N(t),
     "--combobox-option-fz": dt(e),
     "--combobox-option-padding": De(e, "combobox-option-padding")
   }
@@ -20006,7 +20006,7 @@ const nw = {}, Us = le((n, e) => {
 Us.classes = je.Wrapper.classes;
 Us.displayName = "@mantine/core/CheckboxGroup";
 function Hs({ size: n, style: e, ...t }) {
-  const r = n !== void 0 ? { width: M(n), height: M(n), ...e } : e;
+  const r = n !== void 0 ? { width: N(n), height: N(n), ...e } : e;
   return /* @__PURE__ */ y.jsx(
     "svg",
     {
@@ -20085,14 +20085,14 @@ const rw = {
     vars: c,
     varsResolver: ow,
     rootSelector: "indicator"
-  }), E = XC(), k = typeof g == "boolean" || typeof u == "boolean" ? g || u : (E == null ? void 0 : E.checked) || !1;
+  }), E = XC(), _ = typeof g == "boolean" || typeof u == "boolean" ? g || u : (E == null ? void 0 : E.checked) || !1;
   return /* @__PURE__ */ y.jsx(
     ne,
     {
       ref: e,
       ...S("indicator", { variant: b }),
       variant: b,
-      mod: [{ checked: k, disabled: C }, m],
+      mod: [{ checked: _, disabled: C }, m],
       ...v,
       children: /* @__PURE__ */ y.jsx(w, { indeterminate: u, ...S("icon") })
     }
@@ -20136,14 +20136,14 @@ const iw = {
     disabled: w,
     variant: S,
     indeterminate: E,
-    icon: k,
+    icon: _,
     rootRef: T,
-    iconColor: D,
-    onChange: H,
-    autoContrast: B,
-    mod: q,
+    iconColor: M,
+    onChange: B,
+    autoContrast: z,
+    mod: V,
     ...Z
-  } = t, R = zd(), L = d || (R == null ? void 0 : R.size), _ = k, P = be({
+  } = t, D = zd(), j = d || (D == null ? void 0 : D.size), R = _, A = be({
     name: "Checkbox",
     props: t,
     classes: Vd,
@@ -20154,20 +20154,20 @@ const iw = {
     unstyled: s,
     vars: c,
     varsResolver: aw
-  }), { styleProps: N, rest: V } = oi(Z), $ = rn(f), oe = R ? {
-    checked: R.value.includes(V.value),
+  }), { styleProps: P, rest: $ } = oi(Z), H = rn(f), re = D ? {
+    checked: D.value.includes($.value),
     onChange: (fe) => {
-      R.onChange(fe), H == null || H(fe);
+      D.onChange(fe), B == null || B(fe);
     }
   } : {};
   return /* @__PURE__ */ y.jsx(
     Hd,
     {
-      ...P("root"),
+      ...A("root"),
       __staticSelector: "Checkbox",
       __stylesApiProps: t,
-      id: $,
-      size: L,
+      id: H,
+      size: j,
       labelPosition: b,
       label: u,
       description: C,
@@ -20176,30 +20176,30 @@ const iw = {
       classNames: r,
       styles: a,
       unstyled: s,
-      "data-checked": oe.checked || m || void 0,
+      "data-checked": re.checked || m || void 0,
       variant: S,
       ref: T,
-      mod: q,
-      ...N,
+      mod: V,
+      ...P,
       ...p,
-      children: /* @__PURE__ */ y.jsxs(ne, { ...P("inner"), mod: { "data-label-position": b }, children: [
+      children: /* @__PURE__ */ y.jsxs(ne, { ...A("inner"), mod: { "data-label-position": b }, children: [
         /* @__PURE__ */ y.jsx(
           ne,
           {
             component: "input",
-            id: $,
+            id: H,
             ref: e,
             checked: m,
             disabled: w,
             mod: { error: !!v, indeterminate: E },
-            ...P("input", { focusable: !0, variant: S }),
-            onChange: H,
-            ...V,
-            ...oe,
+            ...A("input", { focusable: !0, variant: S }),
+            onChange: B,
+            ...$,
+            ...re,
             type: "checkbox"
           }
         ),
-        /* @__PURE__ */ y.jsx(_, { indeterminate: E, ...P("icon") })
+        /* @__PURE__ */ y.jsx(R, { indeterminate: E, ...A("icon") })
       ] })
     }
   );
@@ -20379,17 +20379,17 @@ const lw = {}, zs = le((n, e) => {
     comboboxProps: w,
     readOnly: S,
     disabled: E,
-    filter: k,
+    filter: _,
     limit: T,
-    withScrollArea: D,
-    maxDropdownHeight: H,
-    size: B,
-    id: q,
+    withScrollArea: M,
+    maxDropdownHeight: B,
+    size: z,
+    id: V,
     renderOption: Z,
-    autoComplete: R,
-    scrollAreaProps: L,
-    ..._
-  } = t, P = rn(q), N = Od(g), V = ks(N), [$, oe] = Fn({
+    autoComplete: D,
+    scrollAreaProps: j,
+    ...R
+  } = t, A = rn(V), P = Od(g), $ = ks(P), [H, re] = Fn({
     value: m,
     defaultValue: b,
     finalValue: "",
@@ -20408,7 +20408,7 @@ const lw = {}, zs = le((n, e) => {
   });
   return X(() => {
     C && fe.selectFirstOption();
-  }, [C, $]), /* @__PURE__ */ y.jsxs(
+  }, [C, H]), /* @__PURE__ */ y.jsxs(
     de,
     {
       store: fe,
@@ -20418,23 +20418,23 @@ const lw = {}, zs = le((n, e) => {
       unstyled: i,
       readOnly: S,
       onOptionSubmit: (pe) => {
-        v == null || v(pe), oe(V[pe].label), fe.closeDropdown();
+        v == null || v(pe), re($[pe].label), fe.closeDropdown();
       },
-      size: B,
+      size: z,
       ...w,
       children: [
-        /* @__PURE__ */ y.jsx(de.Target, { autoComplete: R, children: /* @__PURE__ */ y.jsx(
+        /* @__PURE__ */ y.jsx(de.Target, { autoComplete: D, children: /* @__PURE__ */ y.jsx(
           an,
           {
             ref: e,
-            ..._,
-            size: B,
+            ...R,
+            size: z,
             __staticSelector: "Autocomplete",
             disabled: E,
             readOnly: S,
-            value: $,
+            value: H,
             onChange: (pe) => {
-              oe(pe.currentTarget.value), fe.openDropdown(), C && fe.selectFirstOption();
+              re(pe.currentTarget.value), fe.openDropdown(), C && fe.selectFirstOption();
             },
             onFocus: (pe) => {
               fe.openDropdown(), f == null || f(pe);
@@ -20448,25 +20448,25 @@ const lw = {}, zs = le((n, e) => {
             classNames: _e,
             styles: Be,
             unstyled: i,
-            id: P
+            id: A
           }
         ) }),
         /* @__PURE__ */ y.jsx(
           Qd,
           {
-            data: N,
+            data: P,
             hidden: S || E,
-            filter: k,
-            search: $,
+            filter: _,
+            search: H,
             limit: T,
             hiddenWhenEmpty: !0,
-            withScrollArea: D,
-            maxDropdownHeight: H,
+            withScrollArea: M,
+            maxDropdownHeight: B,
             unstyled: i,
-            labelId: _.label ? `${P}-label` : void 0,
-            "aria-label": _.label ? void 0 : _["aria-label"],
+            labelId: R.label ? `${A}-label` : void 0,
+            "aria-label": R.label ? void 0 : R["aria-label"],
             renderOption: Z,
-            scrollAreaProps: L
+            scrollAreaProps: j
           }
         )
       ]
@@ -20479,7 +20479,7 @@ var yi = { root: "m_77c9d27d", inner: "m_80f1301b", label: "m_811560b9", section
 const wl = {
   orientation: "horizontal"
 }, uw = (n, { borderWidth: e }) => ({
-  group: { "--button-border-width": M(e) }
+  group: { "--button-border-width": N(e) }
 }), $s = le((n, e) => {
   const t = J("ButtonGroup", wl, n), {
     className: r,
@@ -20521,7 +20521,7 @@ const wl = {
 $s.classes = yi;
 $s.displayName = "@mantine/core/ButtonGroup";
 const dw = {
-  in: { opacity: 1, transform: `translate(-50%, calc(-50% + ${M(1)}))` },
+  in: { opacity: 1, transform: `translate(-50%, calc(-50% + ${N(1)}))` },
   out: { opacity: 0, transform: "translate(-50%, -200%)" },
   common: { transformOrigin: "center" },
   transitionProperty: "transform, opacity"
@@ -20569,7 +20569,7 @@ const dw = {
     "data-disabled": w,
     autoContrast: S,
     mod: E,
-    ...k
+    ..._
   } = t, T = be({
     name: "Button",
     props: t,
@@ -20581,7 +20581,7 @@ const dw = {
     unstyled: v,
     vars: o,
     varsResolver: hw
-  }), D = !!l, H = !!u;
+  }), M = !!l, B = !!u;
   return /* @__PURE__ */ y.jsxs(
     vr,
     {
@@ -20595,14 +20595,14 @@ const dw = {
           disabled: s || w,
           loading: p,
           block: f,
-          "with-left-section": D,
-          "with-right-section": H
+          "with-left-section": M,
+          "with-right-section": B
         },
         E
       ],
-      ...k,
+      ..._,
       children: [
-        /* @__PURE__ */ y.jsx(di, { mounted: !!p, transition: dw, duration: 150, children: (B) => /* @__PURE__ */ y.jsx(ne, { component: "span", ...T("loader", { style: B }), "aria-hidden": !0, children: /* @__PURE__ */ y.jsx(
+        /* @__PURE__ */ y.jsx(di, { mounted: !!p, transition: dw, duration: 150, children: (z) => /* @__PURE__ */ y.jsx(ne, { component: "span", ...T("loader", { style: z }), "aria-hidden": !0, children: /* @__PURE__ */ y.jsx(
           fi,
           {
             color: "var(--button-color)",
@@ -20735,8 +20735,8 @@ const bw = {
     variant: w,
     vars: S,
     portalProps: E,
-    ...k
-  } = t, T = $t(), D = be({
+    ..._
+  } = t, T = $t(), M = be({
     name: "TooltipFloating",
     props: t,
     classes: vi,
@@ -20748,7 +20748,7 @@ const bw = {
     rootSelector: "tooltip",
     vars: S,
     varsResolver: Cw
-  }), { handleMouseMove: H, x: B, y: q, opened: Z, boundaryRef: R, floating: L, setOpened: _ } = vw({
+  }), { handleMouseMove: B, x: z, y: V, opened: Z, boundaryRef: D, floating: j, setOpened: R } = vw({
     offset: p,
     position: g,
     defaultOpened: v
@@ -20757,38 +20757,38 @@ const bw = {
     throw new Error(
       "[@mantine/core] Tooltip.Floating component children should be an element or a component that accepts ref, fragments, strings, numbers and other primitive values are not supported"
     );
-  const P = at(R, r.ref, e), N = ($) => {
-    var oe, fe;
-    (fe = (oe = r.props).onMouseEnter) == null || fe.call(oe, $), H($), _(!0);
-  }, V = ($) => {
-    var oe, fe;
-    (fe = (oe = r.props).onMouseLeave) == null || fe.call(oe, $), _(!1);
+  const A = at(D, r.ref, e), P = (H) => {
+    var re, fe;
+    (fe = (re = r.props).onMouseEnter) == null || fe.call(re, H), B(H), R(!0);
+  }, $ = (H) => {
+    var re, fe;
+    (fe = (re = r.props).onMouseLeave) == null || fe.call(re, H), R(!1);
   };
   return /* @__PURE__ */ y.jsxs(y.Fragment, { children: [
     /* @__PURE__ */ y.jsx(ui, { ...E, withinPortal: i, children: /* @__PURE__ */ y.jsx(
       ne,
       {
-        ...k,
-        ...D("tooltip", {
+        ..._,
+        ...M("tooltip", {
           style: {
             ...Xa(a, T),
             zIndex: b,
             display: !C && Z ? "block" : "none",
-            top: (q && Math.round(q)) ?? "",
-            left: (B && Math.round(B)) ?? ""
+            top: (V && Math.round(V)) ?? "",
+            left: (z && Math.round(z)) ?? ""
           }
         }),
         variant: w,
-        ref: L,
+        ref: j,
         mod: { multiline: m },
         children: h
       }
     ) }),
     gr(r, {
       ...r.props,
-      [o]: P,
-      onMouseEnter: N,
-      onMouseLeave: V
+      [o]: A,
+      onMouseEnter: P,
+      onMouseLeave: $
     })
   ] });
 });
@@ -20804,10 +20804,10 @@ function Zd(n) {
 }
 Zd.displayName = "@mantine/core/TooltipGroup";
 function Iw(n) {
-  var E, k, T;
+  var E, _, T;
   const [e, t] = te(n.defaultOpened), o = typeof n.opened == "boolean" ? n.opened : e, i = Sw(), a = rn(), { delay: s, currentId: c, setCurrentId: l } = yd(), u = me(
-    (D) => {
-      t(D), D && l(a);
+    (M) => {
+      t(M), M && l(a);
     },
     [l, a]
   ), {
@@ -20834,7 +20834,7 @@ function Iw(n) {
     Eb(h, {
       enabled: (E = n.events) == null ? void 0 : E.hover,
       delay: i ? s : { open: n.openDelay, close: n.closeDelay },
-      mouseOnly: !((k = n.events) != null && k.touch)
+      mouseOnly: !((_ = n.events) != null && _.touch)
     }),
     Pb(h, { enabled: (T = n.events) == null ? void 0 : T.focus, visibleOnly: !0 }),
     Ob(h, { role: "tooltip" }),
@@ -20848,8 +20848,8 @@ function Iw(n) {
     positionDependencies: n.positionDependencies,
     floating: { refs: p, update: g }
   }), mn(() => {
-    var D;
-    (D = n.onPositionChange) == null || D.call(n, m);
+    var M;
+    (M = n.onPositionChange) == null || M.call(n, m);
   }, [m]);
   const S = o && c && c !== a;
   return {
@@ -20909,21 +20909,21 @@ const Sl = {
     withArrow: w,
     arrowSize: S,
     arrowOffset: E,
-    arrowRadius: k,
+    arrowRadius: _,
     arrowPosition: T,
-    offset: D,
-    transitionProps: H,
-    multiline: B,
-    events: q,
+    offset: M,
+    transitionProps: B,
+    multiline: z,
+    events: V,
     zIndex: Z,
-    disabled: R,
-    positionDependencies: L,
-    onClick: _,
-    onMouseEnter: P,
-    onMouseLeave: N,
-    inline: V,
-    variant: $,
-    keepMounted: oe,
+    disabled: D,
+    positionDependencies: j,
+    onClick: R,
+    onMouseEnter: A,
+    onMouseLeave: P,
+    inline: $,
+    variant: H,
+    keepMounted: re,
     vars: fe,
     portalProps: _e,
     mod: Be,
@@ -20936,12 +20936,12 @@ const Sl = {
     onPositionChange: l,
     opened: u,
     defaultOpened: f,
-    events: q,
+    events: V,
     arrowRef: It,
     arrowOffset: E,
-    offset: typeof D == "number" ? D + (w ? S / 2 : 0) : D,
-    positionDependencies: [...L, r],
-    inline: V,
+    offset: typeof M == "number" ? M + (w ? S / 2 : 0) : M,
+    positionDependencies: [...j, r],
+    inline: $,
     strategy: pe
   }), Tt = be({
     name: "Tooltip",
@@ -20960,21 +20960,21 @@ const Sl = {
     throw new Error(
       "[@mantine/core] Tooltip component children should be an element or a component that accepts ref, fragments, strings, numbers and other primitive values are not supported"
     );
-  const En = at(Re.reference, r.ref, e), cn = yw(H, { duration: 100, transition: "fade" });
+  const En = at(Re.reference, r.ref, e), cn = yw(B, { duration: 100, transition: "fade" });
   return /* @__PURE__ */ y.jsxs(y.Fragment, { children: [
     /* @__PURE__ */ y.jsx(ui, { ..._e, withinPortal: d, children: /* @__PURE__ */ y.jsx(
       di,
       {
         ...cn,
-        keepMounted: oe,
-        mounted: !R && !!Re.opened,
+        keepMounted: re,
+        mounted: !D && !!Re.opened,
         duration: Re.isGroupPhase ? 10 : cn.duration,
         children: (_t) => /* @__PURE__ */ y.jsxs(
           ne,
           {
             ...Oe,
-            variant: $,
-            mod: [{ multiline: B }, Be],
+            variant: H,
+            mod: [{ multiline: z }, Be],
             ...Re.getFloatingProps({
               ref: Re.floating,
               className: Tt("tooltip").className,
@@ -20998,7 +20998,7 @@ const Sl = {
                   position: Re.placement,
                   arrowSize: S,
                   arrowOffset: E,
-                  arrowRadius: k,
+                  arrowRadius: _,
                   arrowPosition: T,
                   ...Tt("arrow")
                 }
@@ -21011,9 +21011,9 @@ const Sl = {
     gr(
       r,
       Re.getReferenceProps({
-        onClick: _,
-        onMouseEnter: P,
-        onMouseLeave: N,
+        onClick: R,
+        onMouseEnter: A,
+        onMouseLeave: P,
         onMouseMove: t.onMouseMove,
         onPointerDown: t.onPointerDown,
         onPointerEnter: t.onPointerEnter,
@@ -21055,21 +21055,21 @@ const _w = {
     comboboxProps: w,
     readOnly: S,
     disabled: E,
-    filter: k,
+    filter: _,
     limit: T,
-    withScrollArea: D,
-    maxDropdownHeight: H,
-    size: B,
-    searchable: q,
+    withScrollArea: M,
+    maxDropdownHeight: B,
+    size: z,
+    searchable: V,
     rightSection: Z,
-    checkIconPosition: R,
-    withCheckIcon: L,
-    nothingFoundMessage: _,
-    name: P,
-    form: N,
-    searchValue: V,
-    defaultSearchValue: $,
-    onSearchChange: oe,
+    checkIconPosition: D,
+    withCheckIcon: j,
+    nothingFoundMessage: R,
+    name: A,
+    form: P,
+    searchValue: $,
+    defaultSearchValue: H,
+    onSearchChange: re,
     allowDeselect: fe,
     error: _e,
     rightSectionPointerEvents: Be,
@@ -21088,10 +21088,10 @@ const _w = {
     finalValue: null,
     onChange: p
   }), Ye = typeof We == "string" ? Kt[We] : void 0, qt = Lm(Ye), [Gn, gt] = Fn({
-    value: V,
-    defaultValue: $,
+    value: $,
+    defaultValue: H,
     finalValue: Ye ? Ye.label : "",
-    onChange: oe
+    onChange: re
   }), kt = mi({
     opened: s,
     defaultOpened: c,
@@ -21114,7 +21114,7 @@ const _w = {
   const ic = Oe && !!We && !E && !S && /* @__PURE__ */ y.jsx(
     de.ClearButton,
     {
-      size: B,
+      size: z,
       ...ze,
       onClear: () => {
         In(null, null), gt(""), Tt == null || Tt();
@@ -21136,39 +21136,39 @@ const _w = {
           const Vt = fe && Kt[mt].value === We ? null : Kt[mt], Ii = Vt ? Vt.value : null;
           Ii !== We && In(Ii, Vt), !Vn && gt(typeof Ii == "string" && (Vt == null ? void 0 : Vt.label) || ""), kt.closeDropdown();
         },
-        size: B,
+        size: z,
         ...w,
         children: [
-          /* @__PURE__ */ y.jsx(de.Target, { targetType: q ? "input" : "button", autoComplete: En, children: /* @__PURE__ */ y.jsx(
+          /* @__PURE__ */ y.jsx(de.Target, { targetType: V ? "input" : "button", autoComplete: En, children: /* @__PURE__ */ y.jsx(
             an,
             {
               id: qn,
               ref: e,
-              rightSection: Z || ic || /* @__PURE__ */ y.jsx(de.Chevron, { size: B, error: _e, unstyled: i }),
+              rightSection: Z || ic || /* @__PURE__ */ y.jsx(de.Chevron, { size: z, error: _e, unstyled: i }),
               rightSectionPointerEvents: Be || (ic ? "all" : "none"),
               ..._t,
-              size: B,
+              size: z,
               __staticSelector: "Select",
               disabled: E,
-              readOnly: S || !q,
+              readOnly: S || !V,
               value: Gn,
               onChange: (mt) => {
                 gt(mt.currentTarget.value), kt.openDropdown(), C && kt.selectFirstOption();
               },
               onFocus: (mt) => {
-                q && kt.openDropdown(), f == null || f(mt);
+                V && kt.openDropdown(), f == null || f(mt);
               },
               onBlur: (mt) => {
                 var Vt;
-                q && kt.closeDropdown(), gt(We != null && ((Vt = Kt[We]) == null ? void 0 : Vt.label) || ""), d == null || d(mt);
+                V && kt.closeDropdown(), gt(We != null && ((Vt = Kt[We]) == null ? void 0 : Vt.label) || ""), d == null || d(mt);
               },
               onClick: (mt) => {
-                q ? kt.openDropdown() : kt.toggleDropdown(), h == null || h(mt);
+                V ? kt.openDropdown() : kt.toggleDropdown(), h == null || h(mt);
               },
               classNames: rc,
               styles: oc,
               unstyled: i,
-              pointer: !q,
+              pointer: !V,
               error: _e
             }
           ) }),
@@ -21177,17 +21177,17 @@ const _w = {
             {
               data: ke,
               hidden: S || E,
-              filter: k,
+              filter: _,
               search: Gn,
               limit: T,
-              hiddenWhenEmpty: !_,
-              withScrollArea: D,
-              maxDropdownHeight: H,
-              filterOptions: q && (Ye == null ? void 0 : Ye.label) !== Gn,
+              hiddenWhenEmpty: !R,
+              withScrollArea: M,
+              maxDropdownHeight: B,
+              filterOptions: V && (Ye == null ? void 0 : Ye.label) !== Gn,
               value: We,
-              checkIconPosition: R,
-              withCheckIcon: L,
-              nothingFoundMessage: _,
+              checkIconPosition: D,
+              withCheckIcon: j,
+              nothingFoundMessage: R,
               unstyled: i,
               labelId: _t.label ? `${qn}-label` : void 0,
               "aria-label": _t.label ? void 0 : _t["aria-label"],
@@ -21202,8 +21202,8 @@ const _w = {
       de.HiddenInput,
       {
         value: We,
-        name: P,
-        form: N,
+        name: A,
+        form: P,
         disabled: E,
         ...It
       }
@@ -21271,7 +21271,7 @@ function Mw(n, e) {
     fontWeight: `var(--mantine-${t}-font-weight)`,
     lineHeight: `var(--mantine-${t}-line-height)`
   } : {
-    fontSize: M(t),
+    fontSize: N(t),
     fontWeight: `var(--mantine-h${n}-font-weight)`,
     lineHeight: `var(--mantine-h${n}-line-height)`
   };
@@ -23400,9 +23400,9 @@ var VS = ["name", "message", "stack", "code"], Ki = class {
                 name: "ConditionError",
                 message: "Aborted due to condition callback returning false."
               };
-            const k = new Promise((T, D) => {
+            const _ = new Promise((T, M) => {
               p = () => {
-                D({
+                M({
                   name: "AbortError",
                   message: g || "Aborted"
                 });
@@ -23414,15 +23414,15 @@ var VS = ["name", "message", "stack", "code"], Ki = class {
             }, {
               getState: u,
               extra: f
-            }))), C = await Promise.race([k, Promise.resolve(t(c, {
+            }))), C = await Promise.race([_, Promise.resolve(t(c, {
               dispatch: l,
               getState: u,
               extra: f,
               requestId: d,
               signal: h.signal,
               abort: m,
-              rejectWithValue: (T, D) => new Ki(T, D),
-              fulfillWithValue: (T, D) => new Ll(T, D)
+              rejectWithValue: (T, M) => new Ki(T, M),
+              fulfillWithValue: (T, M) => new Ll(T, M)
             })).then((T) => {
               if (T instanceof Ki)
                 throw T;
@@ -23522,14 +23522,14 @@ function XS({
         ...v,
         ...l.sliceCaseReducersByType
       };
-      return zS(o.initialState, (k) => {
+      return zS(o.initialState, (_) => {
         for (let T in E)
-          k.addCase(T, E[T]);
+          _.addCase(T, E[T]);
         for (let T of l.sliceMatchers)
-          k.addMatcher(T.matcher, T.reducer);
+          _.addMatcher(T.matcher, T.reducer);
         for (let T of w)
-          k.addMatcher(T.matcher, T.reducer);
-        S && k.addDefaultCase(S);
+          _.addMatcher(T.matcher, T.reducer);
+        S && _.addDefaultCase(S);
       });
     }
     const d = (v) => v, h = /* @__PURE__ */ new Map();
@@ -23541,20 +23541,20 @@ function XS({
       return p || (p = f()), p.getInitialState();
     }
     function b(v, w = !1) {
-      function S(k) {
-        let T = k[v];
+      function S(_) {
+        let T = _[v];
         return typeof T > "u" && w && (T = m()), T;
       }
-      function E(k = d) {
+      function E(_ = d) {
         const T = Dl(h, w, {
           insert: () => /* @__PURE__ */ new WeakMap()
         });
-        return Dl(T, k, {
+        return Dl(T, _, {
           insert: () => {
-            const D = {};
-            for (const [H, B] of Object.entries(o.selectors ?? {}))
-              D[H] = ZS(B, k, m, w);
-            return D;
+            const M = {};
+            for (const [B, z] of Object.entries(o.selectors ?? {}))
+              M[B] = ZS(z, _, m, w);
+            return M;
           }
         });
       }
@@ -24035,9 +24035,7 @@ const C0 = async (n, e, t) => {
       if (s.status !== 200)
         return console.error(`API request failed with status ${s.status}`), null;
       const c = s.data;
-      t(_0(c));
-      const l = c == null ? void 0 : c.classProperties;
-      return l && l.length > 0 && t(Pf({ classProperties: l, languageCode: o })), c;
+      return t(_0(c)), c;
     } catch (s) {
       return console.error("Error fetching classification:", s), null;
     }
@@ -24177,8 +24175,8 @@ function L0({ height: n, options: e, label: t, value: r, setValue: o, placeholde
   const h = (g) => {
     const { scrollTop: m, scrollHeight: b, clientHeight: C } = g.currentTarget, v = 5;
     b - m <= C + v && u((S) => {
-      const E = S.length, k = e.filter((T) => T == null ? void 0 : T.label.toLowerCase().includes(s.toLowerCase().trim())).slice(E, E + D0);
-      return [...S, ...k];
+      const E = S.length, _ = e.filter((T) => T == null ? void 0 : T.label.toLowerCase().includes(s.toLowerCase().trim())).slice(E, E + D0);
+      return [...S, ..._];
     });
   }, p = Br(() => l.map((g) => /* @__PURE__ */ y.jsx(de.Option, { value: g.value, active: (r == null ? void 0 : r.value) === g.value, children: /* @__PURE__ */ y.jsxs(Gr, { gap: "sm", children: [
     (r == null ? void 0 : r.value) === g.value ? /* @__PURE__ */ y.jsx(Hs, { size: 12 }) : null,
@@ -24264,29 +24262,29 @@ function F0({ height: n, handleMouseDown: e }) {
   return X(() => {
     (async () => {
       const m = Array.from(c.entries()).map(async ([w, S]) => {
-        var H;
+        var B;
         if (d && w === h) {
-          const { code: B, name: q, uri: Z } = d;
+          const { code: z, name: V, uri: Z } = d;
           return [
             w,
             [
               {
-                value: B,
-                label: q,
+                value: z,
+                label: V,
                 uri: Z
               }
             ]
           ];
         }
         let E = [];
-        const k = f[w], T = (H = d == null ? void 0 : d.classRelations) == null ? void 0 : H.map(
-          (B) => B.relatedClassUri
-        ), D = k == null ? void 0 : k.filter((B) => T == null ? void 0 : T.includes(B.uri));
-        if (D && D.length > 0)
-          E = D.map((B) => ({
-            value: B.code,
-            label: B.name,
-            uri: B.uri
+        const _ = f[w], T = (B = d == null ? void 0 : d.classRelations) == null ? void 0 : B.map(
+          (z) => z.relatedClassUri
+        ), M = _ == null ? void 0 : _.filter((z) => T == null ? void 0 : T.includes(z.uri));
+        if (M && M.length > 0)
+          E = M.map((z) => ({
+            value: z.code,
+            label: z.name,
+            uri: z.uri
           }));
         else
           try {
@@ -24296,14 +24294,14 @@ function F0({ height: n, handleMouseDown: e }) {
                 languageCode: "nl-NL"
               })
             ).unwrap()).map(
-              (q) => ({
-                value: q.code,
-                label: q.name || "",
-                uri: q.uri
+              (V) => ({
+                value: V.code,
+                label: V.name || "",
+                uri: V.uri
               })
             );
-          } catch (B) {
-            console.error("Failed to fetch dictionary classes for", w, B), E = [];
+          } catch (z) {
+            console.error("Failed to fetch dictionary classes for", w, z), E = [];
           }
         return [w, E];
       }), b = await Promise.all(m), C = new Map(b);
@@ -24315,14 +24313,14 @@ function F0({ height: n, handleMouseDown: e }) {
         else if (S in l) {
           const E = l[S];
           if (E.length === 1) {
-            const k = E[0];
-            if (w.some((D) => D.value === k.identification)) {
-              const D = {
-                label: k.name || "",
-                value: k.identification || "",
+            const _ = E[0];
+            if (w.some((M) => M.value === _.identification)) {
+              const M = {
+                label: _.name || "",
+                value: _.identification || "",
                 uri: S
               };
-              v.set(S, D);
+              v.set(S, M);
             }
           }
         }
@@ -24683,16 +24681,16 @@ function J0({ api: n, defaultSelection: e }) {
         DictionaryUri: a.ifcClassification.location
       };
       n.api.searchInDictionaryV1List(w, v).then((S) => {
-        var k;
+        var _;
         const E = S.data;
         if (E) {
           if (E.count) {
-            const T = (k = E.dictionary) == null ? void 0 : k.classes;
+            const T = (_ = E.dictionary) == null ? void 0 : _.classes;
             T && i(
-              T.filter((D) => D.uri && D.name).map(
-                (D) => ({
-                  value: D.uri,
-                  label: D.name
+              T.filter((M) => M.uri && M.name).map(
+                (M) => ({
+                  value: M.uri,
+                  label: M.name
                 })
               )
             );
@@ -24741,64 +24739,69 @@ function J0({ api: n, defaultSelection: e }) {
 const Wi = 60.7969;
 let Kl = 0, ql = 0;
 function X0() {
-  const { t: n } = Zr(), e = so(), [t, r] = te(), [o, i] = te(!1), [a, s] = te(new Yr(lf[tS])), c = Ne(ec), l = Ne(Af), [u, f] = te(null), d = Ne(Na), h = Ne(Na), p = Ne(h0), g = Ne(p0), m = Ne(R0), b = Ne(jf), C = Ne(S0), [v, w] = te(Wi), [S, E] = te("auto"), k = Ne(Mf), T = me((R) => {
-    var _;
-    const L = JSON.stringify(R);
-    (_ = window == null ? void 0 : window.bsddBridge) == null || _.save(L).then((P) => {
-      console.log("Sent to Revit", P);
+  const { t: n } = Zr(), e = so(), [t, r] = te(), [o, i] = te(!1), [a, s] = te(new Yr(lf[tS])), c = Ne(ec), l = Ne(Af), [u, f] = te(null), d = Ne(Na), h = Ne(Na), p = Ne(h0), g = Ne(p0), m = Ne(R0), b = Ne(jf), C = Ne(S0), [v, w] = te(Wi), [S, E] = te("auto"), [_, T] = te(!1), M = Ne(Mf), B = me((A) => {
+    var $;
+    const P = JSON.stringify(A);
+    ($ = window == null ? void 0 : window.bsddBridge) == null || $.save(P).then((H) => {
+      console.log("Sent to Revit", H);
     });
-  }, []), D = me(() => {
-    var R;
-    (R = window == null ? void 0 : window.bsddBridge) == null || R.cancel();
-  }, []), H = (R) => {
-    f(R);
+  }, []), z = me(() => {
+    var A;
+    (A = window == null ? void 0 : window.bsddBridge) == null || A.cancel();
+  }, []), V = (A) => {
+    f(A);
   };
   X(() => {
+    if (!M || !_)
+      return;
+    const A = M.classProperties || [];
+    e(Pf({ classProperties: A, languageCode: l }));
+  }, [M, _, l, e]), X(() => {
     u && (console.log("settings updated: ", u), e(Tf(u)), f(null));
   }, [u, e]), X(() => {
     d && s(new Yr(d));
   }, [d]), X(() => {
     (async () => {
       try {
-        let L, _;
+        let P, $;
         if (eS)
           if (window != null && window.bsddBridge) {
-            const P = await window.bsddBridge.loadSettings();
-            ({ settings: L, ifcData: _ } = JSON.parse(P));
+            const H = await window.bsddBridge.loadSettings();
+            ({ settings: P, ifcData: $ } = JSON.parse(H));
           } else
-            L = nS;
-        if (L && H(L), _ && (e(U0(_)), _.length > 0)) {
-          const P = _[0];
-          e(N0(P));
+            P = nS;
+        if (P && V(P), $ && (e(U0($)), $.length > 0)) {
+          const H = $[0];
+          e(N0(H));
         }
-      } catch (L) {
-        console.error("Failed to load settings:", L);
+      } catch (P) {
+        console.error("Failed to load settings:", P);
       }
     })();
   }, [e]), X(() => {
-    var L;
+    var P;
     if (!b || !c)
       return;
-    const R = c.ifcClassification.location;
-    (L = b.hasAssociations) == null || L.forEach((_) => {
-      var P;
-      if (_.type === "IfcClassificationReference") {
-        const N = _;
-        (P = N.referencedSource) != null && P.location && N.referencedSource.location === R && (N.location && e(Oa(N.location)), r({
-          label: N.name,
-          value: N.location
+    const A = c.ifcClassification.location;
+    (P = b.hasAssociations) == null || P.forEach(($) => {
+      var H;
+      if ($.type === "IfcClassificationReference") {
+        const re = $;
+        (H = re.referencedSource) != null && H.location && re.referencedSource.location === A && (re.location && e(Oa(re.location)), r({
+          label: re.name,
+          value: re.location
         }));
       }
     });
   }, [c, b, e]), X(() => {
     if (d !== null && p !== null) {
-      const R = {
+      const A = {
         bsddApiEnvironment: d,
         includeTestDictionaries: p,
         languageCode: l,
         dictionaryUris: g
       };
-      e(Rf(g)), e(b0(R)), e(w0(R));
+      e(Rf(g)), e(b0(A)), e(w0(A));
     }
   }, [
     d,
@@ -24812,13 +24815,15 @@ function X0() {
   }, [C, e]), X(() => {
     E(`${v * g.length + 48}px`);
   }, [g.length, v]);
-  const B = (R) => {
-    const L = ql + (R.clientY - Kl) / g.length;
-    w(L > Wi ? L : Wi);
-  }, q = () => {
-    document.removeEventListener("mousemove", B), document.removeEventListener("mouseup", q);
-  }, Z = (R) => {
-    Kl = R.clientY, ql = v, document.addEventListener("mousemove", B), document.addEventListener("mouseup", q);
+  const Z = (A) => {
+    const P = ql + (A.clientY - Kl) / g.length;
+    w(P > Wi ? P : Wi);
+  }, D = () => {
+    document.removeEventListener("mousemove", Z), document.removeEventListener("mouseup", D);
+  }, j = (A) => {
+    Kl = A.clientY, ql = v, document.addEventListener("mousemove", Z), document.addEventListener("mouseup", D);
+  }, R = (A) => {
+    T(A.includes("Propertysets"));
   };
   return /* @__PURE__ */ y.jsxs(Ks, { children: [
     /* @__PURE__ */ y.jsx(Dn, { type: "hidden", name: "ifcType", id: "ifcType", value: "" }),
@@ -24826,25 +24831,25 @@ function X0() {
     /* @__PURE__ */ y.jsx(Dn, { type: "hidden", name: "material", id: "material", value: "" }),
     /* @__PURE__ */ y.jsx(Gr, { mx: "md", mt: "lg", mb: "sm", children: /* @__PURE__ */ y.jsx(J0, { api: a, defaultSelection: t }) }),
     C ? /* @__PURE__ */ y.jsxs(y.Fragment, { children: [
-      /* @__PURE__ */ y.jsxs(xe, { defaultValue: ["Classifications"], multiple: !0, children: [
+      /* @__PURE__ */ y.jsxs(xe, { defaultValue: ["Classifications"], multiple: !0, onChange: R, children: [
         /* @__PURE__ */ y.jsxs(xe.Item, { value: "Classifications", children: [
           /* @__PURE__ */ y.jsx(xe.Control, { children: /* @__PURE__ */ y.jsx(Ko, { order: 5, children: n("classificationsLabel") }) }),
-          /* @__PURE__ */ y.jsx(xe.Panel, { style: { height: S }, children: /* @__PURE__ */ y.jsx(F0, { height: v, handleMouseDown: Z }) })
+          /* @__PURE__ */ y.jsx(xe.Panel, { style: { height: S }, children: /* @__PURE__ */ y.jsx(F0, { height: v, handleMouseDown: j }) })
         ] }, "Classifications"),
         /* @__PURE__ */ y.jsxs(xe.Item, { value: "Propertysets", children: [
           /* @__PURE__ */ y.jsx(xe.Control, { children: /* @__PURE__ */ y.jsx(Ko, { order: 5, children: n("propertysetsLabel") }) }),
           /* @__PURE__ */ y.jsx(xe.Panel, { children: /* @__PURE__ */ y.jsx(
             Q0,
             {
-              mainDictionaryClassification: k,
+              mainDictionaryClassification: M,
               recursiveMode: o
             }
           ) })
         ] }, "Propertysets")
       ] }),
       /* @__PURE__ */ y.jsxs(Gr, { my: "sm", justify: "center", children: [
-        /* @__PURE__ */ y.jsx(x0, { callback: T, ifcEntity: m }),
-        /* @__PURE__ */ y.jsx(Sr, { fullWidth: !0, variant: "light", color: "gray", onClick: D, children: n("cancel") })
+        /* @__PURE__ */ y.jsx(x0, { callback: B, ifcEntity: m }),
+        /* @__PURE__ */ y.jsx(Sr, { fullWidth: !0, variant: "light", color: "gray", onClick: z, children: n("cancel") })
       ] })
     ] }) : /* @__PURE__ */ y.jsxs(_s, { mx: "md", title: n("noClassificationSelected"), mt: "xl", children: [
       n("classSearchInstruction"),
