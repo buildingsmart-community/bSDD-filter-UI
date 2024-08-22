@@ -20,6 +20,7 @@ import {
   selectMainDictionaryClassificationUri,
   updateDictionaries,
   updateMainDictionaryClassificationUri,
+  updatePropertyNaturalLanguageNames,
 } from './features/bsdd/bsddSlice';
 import { selectLoadedIfcEntity, setLoadedIfcEntities } from './features/ifc/ifcDataSlice';
 import { selectIfcEntity, setIfcEntity } from './features/ifc/ifcEntitySlice';
@@ -73,6 +74,7 @@ function BsddSearch() {
 
   const [height, setHeight] = useState(minHeight); // Initial height
   const [panelHeight, setPanelHeight] = useState('auto'); // Initial height of the Accordion Panel
+  const [propertySetsOpened, setPropertySetsOpened] = useState<boolean>(false);
 
   const mainDictionaryClassification = useAppSelector(selectMainDictionaryClassification);
 
@@ -93,6 +95,12 @@ function BsddSearch() {
   const dispatchSettingsWhenLoaded = (settings: BsddSettings) => {
     setPendingSettings(settings);
   };
+
+  useEffect(() => {
+    if (!mainDictionaryClassification || !propertySetsOpened) return;
+    const classProperties = mainDictionaryClassification.classProperties || [];
+    dispatch(updatePropertyNaturalLanguageNames({ classProperties, languageCode }));
+  }, [mainDictionaryClassification, propertySetsOpened, languageCode, dispatch]);
 
   useEffect(() => {
     if (pendingSettings) {
@@ -216,6 +224,10 @@ function BsddSearch() {
     document.addEventListener('mouseup', handleMouseUp);
   };
 
+  const handleAccordionChange = (value: string[]) => {
+    setPropertySetsOpened(value.includes('Propertysets'));
+  };
+
   return (
     <Container>
       <TextInput type="hidden" name="ifcType" id="ifcType" value="" />
@@ -226,7 +238,7 @@ function BsddSearch() {
       </Group>
       {mainDictionaryClassificationUri ? (
         <>
-          <Accordion defaultValue={['Classifications']} multiple>
+          <Accordion defaultValue={['Classifications']} multiple onChange={handleAccordionChange}>
             <Accordion.Item key="Classifications" value="Classifications">
               <Accordion.Control>
                 <Title order={5}>{t('classificationsLabel')}</Title>
