@@ -6,13 +6,21 @@
     "save": "Salva",
     "cancel": "Annulla",
     "groupBy": "Raggruppa",
+    "checkbox": {
+      "true": "Sì",
+      "false": "No",
+      "indeterminate": "Indeterminato"
+    },
     "classSearchInstruction": "Seleziona una classificazione nella casella di ricerca sopra.",
     "noDescription": "Nessuna descrizione",
     "linkTabTitle": "Collega",
     "settingsTabTitle": "Impostazioni",
     "language": "Lingua",
     "searchMainDictionaryLabel": "Cerca una classe",
-    "searchClassesPlaceholder": "Cerca una classe",
+    "classifications": {
+      "searchClassesPlaceholder": "Cerca una classe",
+      "dragResize": "Trascina per ridimensionare"
+    },
     "selectLanguageInstruction": "Seleziona lingua",
     "selectMainDictionary": "Dizionario principale",
     "selectMainDictionaryPlaceholder": "Seleziona dizionario principale",

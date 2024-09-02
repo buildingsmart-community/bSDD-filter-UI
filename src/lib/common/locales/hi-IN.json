@@ -6,13 +6,21 @@
     "save": "सहेजें",
     "cancel": "रद्द करें",
     "groupBy": "समूहित करें",
+    "checkbox": {
+      "true": "हाँ",
+      "false": "नहीं",
+      "indeterminate": "अनिश्चित"
+    },
     "classSearchInstruction": "ऊपर दिए गए खोज बॉक्स में एक वर्गीकरण चुनें।",
     "noDescription": "कोई विवरण नहीं",
     "linkTabTitle": "लिंक",
     "settingsTabTitle": "सेटिंग्स",
     "language": "भाषा",
     "searchMainDictionaryLabel": "एक वर्ग खोजें",
-    "searchClassesPlaceholder": "वर्ग खोजें",
+    "classifications": {
+      "searchClassesPlaceholder": "वर्ग खोजें",
+      "dragResize": "रेसाइज करने के लिए खींचें"
+    },
     "selectLanguageInstruction": "भाषा चुनें",
     "selectMainDictionary": "मुख्य शब्दकोश",
     "selectMainDictionaryPlaceholder": "मुख्य शब्दकोश चुनें",

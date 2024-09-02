@@ -6,13 +6,21 @@
     "save": "Save",
     "cancel": "Cancel",
     "groupBy": "Group",
+    "checkbox": {
+      "true": "yes",
+      "false": "no",
+      "indeterminate": "indeterminate"
+    },
     "classSearchInstruction": "Select a classification in the search box above.",
     "noDescription": "No description",
     "linkTabTitle": "Link",
     "settingsTabTitle": "Settings",
     "language": "Language",
     "searchMainDictionaryLabel": "Search a class",
-    "searchClassesPlaceholder": "Search classes",
+    "classifications": {
+      "searchClassesPlaceholder": "Search classes",
+      "dragResize": "Drag to resize"
+    },
     "selectLanguageInstruction": "Select language",
     "selectMainDictionary": "Main dictionary",
     "selectMainDictionaryPlaceholder": "Select main dictionary",

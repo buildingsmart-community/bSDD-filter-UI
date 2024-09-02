@@ -6,13 +6,21 @@
     "save": "Vista",
     "cancel": "Hætta við",
     "groupBy": "Flokkun",
+    "checkbox": {
+      "true": "Já",
+      "false": "Nei",
+      "indeterminate": "Óákveðið"
+    },
     "classSearchInstruction": "Veldu flokkun í leitarglugganum hér að ofan.",
     "noDescription": "Engin lýsing",
     "linkTabTitle": "Tengja",
     "settingsTabTitle": "Stillingar",
     "language": "Tungumál",
     "searchMainDictionaryLabel": "Leita að flokki",
-    "searchClassesPlaceholder": "Leita að flokki",
+    "classifications": {
+      "searchClassesPlaceholder": "Leita að flokki",
+      "dragResize": "Dragðu til að breyta stærð"
+    },
     "selectLanguageInstruction": "Veldu tungumál",
     "selectMainDictionary": "Aðalorðabók",
     "selectMainDictionaryPlaceholder": "Veldu aðalorðabók",

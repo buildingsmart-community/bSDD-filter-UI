@@ -5,13 +5,21 @@
     "apply": "Uygula",
     "cancel": "İptal",
     "groupBy": "Grupla",
+    "checkbox": {
+      "true": "Evet",
+      "false": "Hayır",
+      "indeterminate": "Belirsiz"
+    },
     "classSearchInstruction": "Yukarıdaki arama kutusunda bir sınıflandırma seçin.",
     "noDescription": "Açıklama yok",
     "linkTabTitle": "Bağlantı",
     "settingsTabTitle": "Ayarlar",
     "language": "Dil",
     "searchMainDictionaryLabel": "Bir sınıf ara",
-    "searchClassesPlaceholder": "Bir sınıf ara",
+    "classifications": {
+      "searchClassesPlaceholder": "Bir sınıf ara",
+      "dragResize": "Boyutlandırmak için sürükleyin"
+    },
     "selectLanguageInstruction": "Dili seçin",
     "selectMainDictionary": "Ana sözlük",
     "selectMainDictionaryPlaceholder": "Ana sözlük seçin",

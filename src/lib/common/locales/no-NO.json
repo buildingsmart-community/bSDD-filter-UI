@@ -6,13 +6,21 @@
     "save": "Lagre",
     "cancel": "Avbryt",
     "groupBy": "Grupper etter",
+    "checkbox": {
+      "true": "Ja",
+      "false": "Nei",
+      "indeterminate": "Ubestemt"
+    },
     "classSearchInstruction": "Velg en klassifisering i søkeboksen ovenfor.",
     "noDescription": "Ingen beskrivelse",
     "linkTabTitle": "Lenke",
     "settingsTabTitle": "Innstillinger",
     "language": "Språk",
     "searchMainDictionaryLabel": "Søk etter klasse",
-    "searchClassesPlaceholder": "Søk etter klasse",
+    "classifications": {
+      "searchClassesPlaceholder": "Søk etter klasse",
+      "dragResize": "Dra for å endre størrelse"
+    },
     "selectLanguageInstruction": "Velg språk",
     "selectMainDictionary": "Hovedordbok",
     "selectMainDictionaryPlaceholder": "Velg hovedordbok",

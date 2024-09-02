@@ -6,13 +6,21 @@
     "save": "保存",
     "cancel": "キャンセル",
     "groupBy": "グループ化",
+    "checkbox": {
+      "true": "はい",
+      "false": "いいえ",
+      "indeterminate": "不確定"
+    },
     "classSearchInstruction": "上の検索ボックスで分類を選択してください。",
     "noDescription": "説明なし",
     "linkTabTitle": "リンク",
     "settingsTabTitle": "設定",
     "language": "言語",
     "searchMainDictionaryLabel": "クラスを検索",
-    "searchClassesPlaceholder": "クラスを検索",
+    "classifications": {
+      "searchClassesPlaceholder": "クラスを検索",
+      "dragResize": "ドラッグしてリサイズ"
+    },
     "selectLanguageInstruction": "言語を選択",
     "selectMainDictionary": "メイン辞書",
     "selectMainDictionaryPlaceholder": "メイン辞書を選択",

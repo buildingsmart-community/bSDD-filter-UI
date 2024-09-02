@@ -38,17 +38,33 @@ function Search({ api, defaultSelection }: Props) {
   const [selected, setSelected] = useState<Option | undefined>(undefined);
   const [searchValue, setSearchValue] = useState('');
   const [debouncedSearchValue] = useDebouncedValue(searchValue, 300);
-  const [userUpdated, setUserUpdated] = useState(false);
+  const [defaultSet, setDefaultSet] = useState(false); // New state variable
+  const [highlightedIndex, setHighlightedIndex] = useState<number>(-1); // State to track highlighted option
 
+  // Set default selection only once
   useEffect(() => {
-    if (defaultSelection) {
-      setSelected(defaultSelection);
-      setSearchValue(defaultSelection.label);
+    if (defaultSelection && !defaultSet && searchOptions.length > 0) {
+      const selectedOption = searchOptions.find((option) => option.value === defaultSelection.value);
+      if (selectedOption) {
+        setSelected(defaultSelection);
+        setSearchValue(defaultSelection.label);
+        if (inputRef.current) {
+          inputRef.current.blur(); // Close the popout
+        }
+      } else {
+        setSearchValue(defaultSelection.label);
+        if (inputRef.current) {
+          inputRef.current.focus(); // Focus the input
+          inputRef.current.setSelectionRange(0, inputRef.current.value.length); // Select the text
+        }
+      }
+      setDefaultSet(true);
     }
-  }, [defaultSelection]);
+  }, [defaultSelection, defaultSet, searchOptions]);
 
   const handleOnChange = useCallback((value: string) => {
     setSearchValue(value);
+    setHighlightedIndex(-1); // Reset highlighted index to -1 on change
   }, []);
 
   const handleOptionSubmit = useCallback(
@@ -56,7 +72,9 @@ function Search({ api, defaultSelection }: Props) {
       const selectedOption = searchOptions.find((option) => option.value === value);
       if (selectedOption) {
         setSelected(selectedOption);
-        setUserUpdated(true);
+        if (inputRef.current) {
+          inputRef.current.blur(); // Close the popout
+        }
       }
     },
     [searchOptions],
@@ -64,24 +82,29 @@ function Search({ api, defaultSelection }: Props) {
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLInputElement>) => {
-      if (event.key === 'Enter' && searchOptions[0]) {
-        setSearchValue(searchOptions[0].label);
-        handleOptionSubmit(searchOptions[0].value);
-        if (inputRef.current) {
-          (inputRef.current as any).blur();
+      if (event.key === 'Enter') {
+        if (highlightedIndex >= 0 && highlightedIndex < searchOptions.length) {
+          const highlightedOption = searchOptions[highlightedIndex];
+          setSearchValue(highlightedOption.label);
+          handleOptionSubmit(highlightedOption.value);
+        } else if (highlightedIndex === -1 && searchOptions.length > 0) {
+          const firstOption = searchOptions[0];
+          setSearchValue(firstOption.label);
+          handleOptionSubmit(firstOption.value);
         }
+        if (inputRef.current) {
+          inputRef.current.blur();
+        }
+      } else if (event.key === 'ArrowDown') {
+        setHighlightedIndex((prevIndex) => Math.min(prevIndex + 1, searchOptions.length - 1));
+      } else if (event.key === 'ArrowUp') {
+        setHighlightedIndex((prevIndex) => Math.max(prevIndex - 1, -1));
       }
     },
-    [searchOptions, handleOptionSubmit],
+    [highlightedIndex, searchOptions, handleOptionSubmit],
   );
 
-  useEffect(() => {
-    if (defaultSelection && !userUpdated) {
-      setSearchValue(defaultSelection.label);
-      setSelected(defaultSelection);
-    }
-  }, [defaultSelection, userUpdated]);
-
+  // Fetch search options based on debounced search value
   useEffect(() => {
     if (mainDictionary) {
       const queryParameters = {

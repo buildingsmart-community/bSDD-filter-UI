@@ -437,11 +437,6 @@ export const fetchMainDictionaryClassification = createAsyncThunk(
       const classification = response.data;
       dispatch(setMainDictionaryClassification(classification));
 
-      const classProperties = classification?.classProperties;
-      if (classProperties && classProperties.length > 0) {
-        dispatch(updatePropertyNaturalLanguageNames({ classProperties, languageCode }));
-      }
-
       return classification;
     } catch (err) {
       console.error('Error fetching classification:', err);

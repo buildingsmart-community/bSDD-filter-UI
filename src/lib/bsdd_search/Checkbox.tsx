@@ -1,5 +1,6 @@
-import { Checkbox } from '@mantine/core';
+import { Checkbox, Input } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface CheckProps {
   label: string | null;
@@ -10,8 +11,16 @@ interface CheckProps {
 }
 
 function Check({ label, description, value, setValue, disabled }: CheckProps) {
+  const { t } = useTranslation();
   const [checked, setChecked] = useState<boolean>(false);
   const [indeterminate, setIndeterminate] = useState<boolean>(true);
+
+  const getDescription = () => {
+    if (indeterminate) {
+      return t('checkbox.indeterminate');
+    }
+    return checked ? t('checkbox.true') : t('checkbox.false');
+  };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.target.indeterminate = false;
@@ -32,15 +41,16 @@ function Check({ label, description, value, setValue, disabled }: CheckProps) {
   }, [value]);
 
   return (
-    <Checkbox
-      label={label}
-      description={description}
-      checked={checked}
-      indeterminate={indeterminate}
-      type="checkbox"
-      onChange={(e) => handleOnChange(e)}
-      disabled={disabled}
-    />
+    <Input.Wrapper label={label} description={description}>
+      <Checkbox
+        description={getDescription()}
+        checked={checked}
+        indeterminate={indeterminate}
+        type="checkbox"
+        onChange={(e) => handleOnChange(e)}
+        disabled={disabled}
+      />
+    </Input.Wrapper>
   );
 }
 

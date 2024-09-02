@@ -5,13 +5,21 @@
     "apply": "应用",
     "cancel": "取消",
     "groupBy": "分组",
+    "checkbox": {
+      "true": "是",
+      "false": "否",
+      "indeterminate": "不确定"
+    },
     "classSearchInstruction": "在上面的搜索框中选择一个分类。",
     "noDescription": "没有描述",
     "linkTabTitle": "链接",
     "settingsTabTitle": "设置",
     "language": "语言",
     "searchMainDictionaryLabel": "搜索分类",
-    "searchClassesPlaceholder": "搜索分类",
+    "classifications": {
+      "searchClassesPlaceholder": "搜索分类",
+      "dragResize": "拖动调整大小"
+    },
     "selectLanguageInstruction": "选择语言",
     "selectMainDictionary": "主词典",
     "selectMainDictionaryPlaceholder": "选择主词典",

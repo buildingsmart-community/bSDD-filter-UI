@@ -1,6 +1,6 @@
 import './styles.css';
 
-import { Checkbox, CheckboxProps, createTheme } from '@mantine/core';
+import { Checkbox, createTheme, MantineTheme } from '@mantine/core';
 import { IconCheck, IconDots } from '@tabler/icons-react';
 
 type CheckboxIconProps = {
@@ -14,6 +14,13 @@ function CheckboxIcon({ indeterminate, ...others }: CheckboxIconProps) {
 }
 
 const theme = createTheme({
+  spacing: {
+    xs: '4px',
+    sm: '8px',
+    md: '12px',
+    lg: '16px',
+    xl: '20px',
+  },
   components: {
     Checkbox: Checkbox.extend({
       defaultProps: {
@@ -24,6 +31,16 @@ const theme = createTheme({
         input: 'checkBox',
       },
     }),
+    InputWrapper: {
+      styles: (mantineTheme: MantineTheme) => ({
+        description: {
+          display: 'inline-block',
+        },
+        label: {
+          display: 'inline-block',
+        },
+      }),
+    },
   },
 });
 

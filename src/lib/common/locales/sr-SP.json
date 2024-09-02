@@ -6,13 +6,21 @@
     "save": "Sačuvaj",
     "cancel": "Otkaži",
     "groupBy": "Grupiši",
+    "checkbox": {
+      "true": "Da",
+      "false": "Ne",
+      "indeterminate": "Nepoznato"
+    },
     "classSearchInstruction": "Izaberite klasifikaciju u polju za pretragu iznad.",
     "noDescription": "Nema opisa",
     "linkTabTitle": "Link",
     "settingsTabTitle": "Podešavanja",
     "language": "Jezik",
     "searchMainDictionaryLabel": "Pretraži klasu",
-    "searchClassesPlaceholder": "Pretraži klasu",
+    "classifications": {
+      "searchClassesPlaceholder": "Pretraži klasu",
+      "dragResize": "Povuci za promenu veličine"
+    },
     "selectLanguageInstruction": "Izaberite jezik",
     "selectMainDictionary": "Glavni rečnik",
     "selectMainDictionaryPlaceholder": "Izaberite glavni rečnik",

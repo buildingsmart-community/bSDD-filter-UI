@@ -6,13 +6,21 @@
     "save": "Tallenna",
     "cancel": "Peruuta",
     "groupBy": "Ryhmittele",
+    "checkbox": {
+      "true": "Kyllä",
+      "false": "Ei",
+      "indeterminate": "Määrittelemätön"
+    },
     "classSearchInstruction": "Valitse luokitus yllä olevasta hakukentästä.",
     "noDescription": "Ei kuvausta",
     "linkTabTitle": "Linkki",
     "settingsTabTitle": "Asetukset",
     "language": "Kieli",
     "searchMainDictionaryLabel": "Hae luokkaa",
-    "searchClassesPlaceholder": "Hae luokkaa",
+    "classifications": {
+      "searchClassesPlaceholder": "Hae luokkaa",
+      "dragResize": "Raahaa muuttaaksesi kokoa"
+    },
     "selectLanguageInstruction": "Valitse kieli",
     "selectMainDictionary": "Pääsanakirja",
     "selectMainDictionaryPlaceholder": "Valitse pääsanakirja",

@@ -6,13 +6,21 @@
     "save": "Uložit",
     "cancel": "Zrušit",
     "groupBy": "Seskupit",
+    "checkbox":{
+      "true": "Ano",
+      "false": "Ne",
+      "indeterminate": "Nespecifikováno"
+    },
     "classSearchInstruction": "Vyberte klasifikaci v horním vyhledávacím poli.",
     "noDescription": "Žádný popis",
     "linkTabTitle": "Odkaz",
     "settingsTabTitle": "Nastavení",
     "language": "Jazyk",
     "searchMainDictionaryLabel": "Vyhledat třídu",
-    "searchClassesPlaceholder": "Vyhledat třídu",
+    "classifications": {
+      "searchClassesPlaceholder": "Vyhledat třídu",
+      "dragResize": "Přetáhněte pro změnu velikosti"
+    },
     "selectLanguageInstruction": "Vyberte jazyk",
     "selectMainDictionary": "Hlavní slovník",
     "selectMainDictionaryPlaceholder": "Vyberte hlavní slovník",

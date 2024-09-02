@@ -71,6 +71,7 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
 
   const [height, setHeight] = useState(minHeight); // Initial height
   const [panelHeight, setPanelHeight] = useState('auto'); // Initial height of the Accordion Panel
+  const [propertySetsOpened, setPropertySetsOpened] = useState<boolean>(false);
 
   const mainDictionaryClassification = useAppSelector(selectMainDictionaryClassification);
 
@@ -148,6 +149,10 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
     document.addEventListener('mouseup', handleMouseUp);
   };
 
+  const handleAccordionChange = (value: string[]) => {
+    setPropertySetsOpened(value.includes('Propertysets'));
+  };
+
   return (
     <Container>
       <TextInput type="hidden" name="ifcType" id="ifcType" value="" />
@@ -158,7 +163,7 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
       </Group>
       {mainDictionaryClassificationUri ? (
         <>
-          <Accordion defaultValue={['Classifications']} multiple>
+          <Accordion defaultValue={['Classifications']} multiple onChange={handleAccordionChange}>
             <Accordion.Item key="Classifications" value="Classifications">
               <Accordion.Control>
                 <Title order={5}>{t('classificationsLabel')}</Title>

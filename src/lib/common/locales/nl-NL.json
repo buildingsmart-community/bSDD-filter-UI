@@ -6,13 +6,21 @@
     "save": "Opslaan",
     "cancel": "Annuleren",
     "groupBy": "Groeperen",
+    "checkbox": {
+      "true": "ja",
+      "false": "nee",
+      "indeterminate": "onbepaald"
+    },
     "classSearchInstruction": "Selecteer een classificatie in het zoekveld hierboven.",
     "noDescription": "Geen beschrijving",
     "linkTabTitle": "Koppelen",
     "settingsTabTitle": "Instellingen",
     "language": "Taal",
     "searchMainDictionaryLabel": "Zoek een classificatie in",
-    "searchClassesPlaceholder": "Zoek een classificatie",
+    "classifications": {
+      "searchClassesPlaceholder": "Zoek een classificatie",
+      "dragResize": "Sleep om hoogte aan te passen"
+    },
     "selectLanguageInstruction": "Selecteer taal",
     "selectMainDictionary": "bSDD domein",
     "selectMainDictionaryPlaceholder": "Selecteer bSDD domein",

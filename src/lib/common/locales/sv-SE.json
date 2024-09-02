@@ -6,13 +6,21 @@
     "save": "Spara",
     "cancel": "Avbryt",
     "groupBy": "Gruppera efter",
+    "checkbox": {
+      "true": "Ja",
+      "false": "Nej",
+      "indeterminate": "Obestämd"
+    },
     "classSearchInstruction": "Välj en klassificering i sökrutan ovan.",
     "noDescription": "Ingen beskrivning",
     "linkTabTitle": "Länk",
     "settingsTabTitle": "Inställningar",
     "language": "Språk",
     "searchMainDictionaryLabel": "Sök en klass",
-    "searchClassesPlaceholder": "Sök en klass",
+    "classifications": {
+      "searchClassesPlaceholder": "Sök en klass",
+      "dragResize": "Dra för att ändra storlek"
+    },
     "selectLanguageInstruction": "Välj språk",
     "selectMainDictionary": "Huvudordbok",
     "selectMainDictionaryPlaceholder": "Välj huvudordbok",
