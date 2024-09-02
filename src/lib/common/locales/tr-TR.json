@@ -1,7 +1,10 @@
 {
   "translation": {
+    "appTitle": "bSDD BIM veri yöneticisi",
+    "updateSelection": "Seçimi güncelle",
     "apply": "Uygula",
     "cancel": "İptal",
+    "groupBy": "Grupla",
     "classSearchInstruction": "Yukarıdaki arama kutusunda bir sınıflandırma seçin.",
     "noDescription": "Açıklama yok",
     "linkTabTitle": "Bağlantı",

@@ -1,8 +1,11 @@
 {
   "translation": {
+    "appTitle": "bSDD BIM duomenų tvarkyklė",
+    "updateSelection": "Atnaujinti pasirinkimą",
     "apply": "Taikyti",
     "save": "Išsaugoti",
     "cancel": "Atšaukti",
+    "groupBy": "Grupuoti",
     "classSearchInstruction": "Pasirinkite klasifikaciją aukščiau esančiame paieškos laukelyje.",
     "noDescription": "Nėra aprašymo",
     "linkTabTitle": "Nuoroda",

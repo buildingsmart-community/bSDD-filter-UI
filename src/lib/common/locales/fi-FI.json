@@ -1,8 +1,11 @@
 {
   "translation": {
+    "appTitle": "bSDD BIM-tietojenhallinta",
+    "updateSelection": "Päivitä valinta",
     "apply": "Käytä",
     "save": "Tallenna",
     "cancel": "Peruuta",
+    "groupBy": "Ryhmittele",
     "classSearchInstruction": "Valitse luokitus yllä olevasta hakukentästä.",
     "noDescription": "Ei kuvausta",
     "linkTabTitle": "Linkki",

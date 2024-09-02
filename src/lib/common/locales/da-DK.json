@@ -1,8 +1,11 @@
 {
   "translation": {
+    "appTitle": "bSDD BIM-datastyring",
+    "updateSelection": "Opdater valg",
     "apply": "Anvend",
     "save": "Gem",
     "cancel": "Annuller",
+    "groupBy": "Gruppér",
     "classSearchInstruction": "Vælg en klassifikation i søgefeltet ovenfor.",
     "noDescription": "Ingen beskrivelse",
     "linkTabTitle": "Link",

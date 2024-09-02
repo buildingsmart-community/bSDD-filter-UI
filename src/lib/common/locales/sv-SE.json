@@ -1,8 +1,11 @@
 {
   "translation": {
+    "appTitle": "bSDD BIM-datamanager",
+    "updateSelection": "Uppdatera val",
     "apply": "Tillämpa",
     "save": "Spara",
     "cancel": "Avbryt",
+    "groupBy": "Gruppera efter",
     "classSearchInstruction": "Välj en klassificering i sökrutan ovan.",
     "noDescription": "Ingen beskrivning",
     "linkTabTitle": "Länk",

@@ -1,8 +1,11 @@
 {
   "translation": {
+    "appTitle": "مدير بيانات bSDD BIM",
+    "updateSelection": "تحديث التحديد",
     "apply": "تطبيق",
     "save": "حفظ",
     "cancel": "إلغاء",
+    "groupBy": "تجميع",
     "classSearchInstruction": "حدد تصنيفًا في مربع البحث أعلاه.",
     "noDescription": "لا يوجد وصف",
     "linkTabTitle": "رابط",

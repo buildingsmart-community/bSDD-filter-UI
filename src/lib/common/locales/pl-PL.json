@@ -1,8 +1,11 @@
 {
   "translation": {
+    "appTitle": "bSDD Menedżer danych BIM",
+    "updateSelection": "Aktualizuj wybór",
     "apply": "Zastosuj",
     "save": "Zapisz",
     "cancel": "Anuluj",
+    "groupBy": "Grupuj",
     "classSearchInstruction": "Wybierz klasyfikację w polu wyszukiwania powyżej.",
     "noDescription": "Brak opisu",
     "linkTabTitle": "Link",

@@ -59,16 +59,19 @@ async function findMatchingDictionary(
  * @returns {Promise<ClassListItemContractV1[] | null>} - The fetched classes or null if fetching fails.
  */
 const fetchBsddClasses = async (
-  referencedSource: IfcClassificationReference['referencedSource'],
+  ifcClassificationReference: IfcClassificationReference,
   state: RootState,
   dispatch: ThunkDispatch<unknown, unknown, UnknownAction>,
 ): Promise<ClassListItemContractV1[] | null> => {
-  if (!referencedSource?.location) return null;
+  const { referencedSource } = ifcClassificationReference;
 
-  const classes = selectDictionaryClasses(state, referencedSource.location);
+  const location = referencedSource?.location ?? ifcClassificationReference.location; // hacky catch to search for IfcClassification.location in referencedSource.location if it is missing
+  if (!location) return null;
+
+  const classes = selectDictionaryClasses(state, location);
   if (classes) return classes;
 
-  const result = await dispatch(fetchDictionaryClasses(referencedSource.location));
+  const result = await dispatch(fetchDictionaryClasses(location));
   if (result.payload) {
     return result.payload as ClassListItemContractV1[];
   }
@@ -88,9 +91,15 @@ const findBsddClass = (
 ): ClassListItemContractV1 | null => {
   if (!classes) return null;
 
-  let bsddClass = classes.find((dictionaryClass) => dictionaryClass.code === ifcReference.identification) || null;
+  let bsddClass =
+    classes.find(
+      (dictionaryClass) => dictionaryClass.code?.toUpperCase() === ifcReference.identification?.toUpperCase(),
+    ) || null;
+
   if (!bsddClass) {
-    bsddClass = classes.find((dictionaryClass) => dictionaryClass.name === ifcReference.name) || null;
+    bsddClass =
+      classes.find((dictionaryClass) => dictionaryClass.name?.toUpperCase() === ifcReference.name?.toUpperCase()) ||
+      null;
   }
   return bsddClass;
 };
@@ -151,9 +160,14 @@ function findMatchedClass(
   classes: ClassListItemContractV1[],
 ): ClassListItemContractV1 | undefined {
   if (ifcClassificationReference.identification) {
-    return classes.find((dictionaryClass) => dictionaryClass.code === ifcClassificationReference.identification);
+    return classes.find(
+      (dictionaryClass) =>
+        dictionaryClass.code?.toUpperCase() === ifcClassificationReference.identification?.toUpperCase(),
+    );
   }
-  return classes.find((dictionaryClass) => dictionaryClass.name === ifcClassificationReference.name);
+  return classes.find(
+    (dictionaryClass) => dictionaryClass.name?.toUpperCase() === ifcClassificationReference.name?.toUpperCase(),
+  );
 }
 
 /**
@@ -191,7 +205,7 @@ export async function patchIfcClassificationReference(
     );
   }
 
-  const classes = await fetchBsddClasses(ifcClassificationReference.referencedSource, state, dispatch);
+  const classes = await fetchBsddClasses(ifcClassificationReference, state, dispatch);
   if (!classes) {
     return handleError('Failed to fetch classes for the referencedSource location', ifcClassificationReference);
   }

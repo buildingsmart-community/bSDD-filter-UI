@@ -55,7 +55,7 @@ let startHeight = 0;
 function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { bsddSearchLoadSettings, bsddSearchSave, bsddSearchCancel } = useApiFunctions();
+  const { bsddSearchSave, bsddSearchCancel } = useApiFunctions();
 
   const [defaultSearch, setDefaultSearch] = useState<Option | undefined>();
   const [recursiveMode, setRecursiveMode] = useState<boolean>(false);
@@ -73,6 +73,12 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
   const [panelHeight, setPanelHeight] = useState('auto'); // Initial height of the Accordion Panel
 
   const mainDictionaryClassification = useAppSelector(selectMainDictionaryClassification);
+
+  useEffect(() => {
+    if (selectedIfcEntity) {
+      dispatch(setIfcEntity(selectedIfcEntity));
+    }
+  }, [dispatch, selectedIfcEntity]);
 
   const callback = useCallback(
     (ifcProduct: IfcEntity) => {

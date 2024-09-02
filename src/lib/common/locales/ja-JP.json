@@ -1,8 +1,11 @@
 {
   "translation": {
+    "appTitle": "bSDD BIM データマネージャ",
+    "updateSelection": "選択を更新",
     "apply": "適用",
     "save": "保存",
     "cancel": "キャンセル",
+    "groupBy": "グループ化",
     "classSearchInstruction": "上の検索ボックスで分類を選択してください。",
     "noDescription": "説明なし",
     "linkTabTitle": "リンク",

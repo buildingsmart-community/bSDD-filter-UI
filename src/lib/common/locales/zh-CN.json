@@ -1,7 +1,10 @@
 {
   "translation": {
+    "appTitle": "bSDD BIM 数据管理器",
+    "updateSelection": "更新选择",
     "apply": "应用",
     "cancel": "取消",
+    "groupBy": "分组",
     "classSearchInstruction": "在上面的搜索框中选择一个分类。",
     "noDescription": "没有描述",
     "linkTabTitle": "链接",

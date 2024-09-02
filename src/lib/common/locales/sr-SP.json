@@ -1,8 +1,11 @@
 {
   "translation": {
+    "appTitle": "bSDD BIM menadžer podataka",
+    "updateSelection": "Ažuriraj izbor",
     "apply": "Primeni",
     "save": "Sačuvaj",
     "cancel": "Otkaži",
+    "groupBy": "Grupiši",
     "classSearchInstruction": "Izaberite klasifikaciju u polju za pretragu iznad.",
     "noDescription": "Nema opisa",
     "linkTabTitle": "Link",

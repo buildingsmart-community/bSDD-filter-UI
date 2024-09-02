@@ -50,7 +50,7 @@ function HomePage({ initialData }: BsddSelectionProps) {
   };
 
   return (
-    <Container size="40rem">
+    <Container>
       <Tabs defaultValue="link">
         <Tabs.List grow>
           <Tabs.Tab value="link">{t('linkTabTitle')}</Tabs.Tab>

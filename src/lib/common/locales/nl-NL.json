@@ -1,8 +1,11 @@
 {
   "translation": {
+    "appTitle": "bSDD BIM data verrijking",
+    "updateSelection": "Update selectie",
     "apply": "Toewijzen",
     "save": "Opslaan",
     "cancel": "Annuleren",
+    "groupBy": "Groeperen",
     "classSearchInstruction": "Selecteer een classificatie in het zoekveld hierboven.",
     "noDescription": "Geen beschrijving",
     "linkTabTitle": "Koppelen",

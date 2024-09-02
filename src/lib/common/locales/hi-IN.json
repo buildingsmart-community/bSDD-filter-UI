@@ -1,8 +1,11 @@
 {
   "translation": {
+    "appTitle": "bSDD BIM डेटा प्रबंधक",
+    "updateSelection": "चयन अपडेट करें",
     "apply": "लागू करें",
     "save": "सहेजें",
     "cancel": "रद्द करें",
+    "groupBy": "समूहित करें",
     "classSearchInstruction": "ऊपर दिए गए खोज बॉक्स में एक वर्गीकरण चुनें।",
     "noDescription": "कोई विवरण नहीं",
     "linkTabTitle": "लिंक",

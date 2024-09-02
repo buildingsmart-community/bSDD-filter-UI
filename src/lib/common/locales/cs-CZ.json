@@ -1,8 +1,11 @@
 {
   "translation": {
+    "appTitle": "Správce dat BIM bSDD",
+    "updateSelection": "Aktualizovat výběr",
     "apply": "Použít",
     "save": "Uložit",
     "cancel": "Zrušit",
+    "groupBy": "Seskupit",
     "classSearchInstruction": "Vyberte klasifikaci v horním vyhledávacím poli.",
     "noDescription": "Žádný popis",
     "linkTabTitle": "Odkaz",

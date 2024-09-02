@@ -1,8 +1,11 @@
 {
   "translation": {
+    "appTitle": "bSDD Manager de date BIM",
+    "updateSelection": "Actualizează selecția",
     "apply": "Aplică",
     "save": "Salvează",
     "cancel": "Anulează",
+    "groupBy": "Grupare",
     "classSearchInstruction": "Selectați o clasificare în caseta de căutare de mai sus.",
     "noDescription": "Fără descriere",
     "linkTabTitle": "Link",

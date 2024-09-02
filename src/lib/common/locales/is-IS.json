@@ -1,8 +1,11 @@
 {
   "translation": {
+    "appTitle": "bSDD BIM gagnastjóri",
+    "updateSelection": "Uppfæra val",
     "apply": "Nota",
     "save": "Vista",
     "cancel": "Hætta við",
+    "groupBy": "Flokkun",
     "classSearchInstruction": "Veldu flokkun í leitarglugganum hér að ofan.",
     "noDescription": "Engin lýsing",
     "linkTabTitle": "Tengja",
