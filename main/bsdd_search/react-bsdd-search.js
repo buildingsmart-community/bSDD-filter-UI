@@ -2,7 +2,7 @@ var Hf = Object.defineProperty;
 var Bf = (n, e, t) => e in n ? Hf(n, e, { enumerable: !0, configurable: !0, writable: !0, value: t }) : n[e] = t;
 var Qe = (n, e, t) => (Bf(n, typeof e != "symbol" ? e + "" : e, t), t);
 import * as U from "react";
-import Xo, { createContext as Cn, useContext as nn, useState as te, useRef as ue, useEffect as X, Fragment as Vl, useMemo as Br, useCallback as me, useLayoutEffect as xa, useId as Gl, forwardRef as Ce, cloneElement as gr, Children as Yi, createElement as Qi } from "react";
+import Xo, { createContext as Cn, useContext as nn, useState as Z, useRef as ue, useEffect as ee, Fragment as Vl, useMemo as Br, useCallback as me, useLayoutEffect as xa, useId as Gl, forwardRef as Ce, cloneElement as gr, Children as Yi, createElement as Qi } from "react";
 import * as zf from "react-dom";
 import Wl, { flushSync as $f, createPortal as Kf } from "react-dom";
 function qf(n) {
@@ -190,9 +190,9 @@ function hh(n, e) {
   function a(g) {
     u();
     const m = r.subscribe(g);
-    let b = !1;
+    let v = !1;
     return () => {
-      b || (b = !0, m(), f());
+      v || (v = !0, m(), f());
     };
   }
   function s() {
@@ -667,8 +667,8 @@ class To extends ei {
     }
     const f = this.resolve(e, t);
     let d = f && f.res;
-    const h = f && f.usedKey || a, p = f && f.exactUsedKey || a, g = Object.prototype.toString.apply(d), m = ["[object Number]", "[object Function]", "[object RegExp]"], b = t.joinArrays !== void 0 ? t.joinArrays : this.options.joinArrays, C = !this.i18nFormat || this.i18nFormat.handleAsObject;
-    if (C && d && (typeof d != "string" && typeof d != "boolean" && typeof d != "number") && m.indexOf(g) < 0 && !(typeof b == "string" && Array.isArray(d))) {
+    const h = f && f.usedKey || a, p = f && f.exactUsedKey || a, g = Object.prototype.toString.apply(d), m = ["[object Number]", "[object Function]", "[object RegExp]"], v = t.joinArrays !== void 0 ? t.joinArrays : this.options.joinArrays, b = !this.i18nFormat || this.i18nFormat.handleAsObject;
+    if (b && d && (typeof d != "string" && typeof d != "boolean" && typeof d != "number") && m.indexOf(g) < 0 && !(typeof v == "string" && Array.isArray(d))) {
       if (!t.returnObjects && !this.options.returnObjects) {
         this.options.returnedObjectHandler || this.logger.warn("accessing an object - but returnObjects options is not enabled!");
         const w = this.options.returnedObjectHandler ? this.options.returnedObjectHandler(h, d, {
@@ -690,15 +690,15 @@ class To extends ei {
           }
         d = S;
       }
-    } else if (C && typeof b == "string" && Array.isArray(d))
-      d = d.join(b), d && (d = this.extendTranslation(d, e, t, r));
+    } else if (b && typeof v == "string" && Array.isArray(d))
+      d = d.join(v), d && (d = this.extendTranslation(d, e, t, r));
     else {
       let w = !1, S = !1;
-      const E = t.count !== void 0 && typeof t.count != "string", _ = To.hasDefaultValue(t), T = E ? this.pluralResolver.getSuffix(l, t.count, t) : "", M = t.ordinal && E ? this.pluralResolver.getSuffix(l, t.count, {
+      const E = t.count !== void 0 && typeof t.count != "string", _ = To.hasDefaultValue(t), T = E ? this.pluralResolver.getSuffix(l, t.count, t) : "", x = t.ordinal && E ? this.pluralResolver.getSuffix(l, t.count, {
         ordinal: !1
-      }) : "", B = E && !t.ordinal && t.count === 0 && this.pluralResolver.shouldUseIntlApi(), z = B && t[`defaultValue${this.options.pluralSeparator}zero`] || t[`defaultValue${T}`] || t[`defaultValue${M}`] || t.defaultValue;
+      }) : "", B = E && !t.ordinal && t.count === 0 && this.pluralResolver.shouldUseIntlApi(), z = B && t[`defaultValue${this.options.pluralSeparator}zero`] || t[`defaultValue${T}`] || t[`defaultValue${x}`] || t.defaultValue;
       !this.isValidLookup(d) && _ && (w = !0, d = z), this.isValidLookup(d) || (S = !0, d = a);
-      const Z = (t.missingKeyNoValueFallbackToKey || this.options.missingKeyNoValueFallbackToKey) && S ? void 0 : d, D = _ && z !== d && this.options.updateMissing;
+      const X = (t.missingKeyNoValueFallbackToKey || this.options.missingKeyNoValueFallbackToKey) && S ? void 0 : d, D = _ && z !== d && this.options.updateMissing;
       if (S || w || D) {
         if (this.logger.log(D ? "updateKey" : "missingKey", l, c, a, D ? z : d), i) {
           const P = this.resolve(a, {
@@ -715,7 +715,7 @@ class To extends ei {
         else
           this.options.saveMissingTo === "all" ? j = this.languageUtils.toResolveHierarchy(t.lng || this.language) : j.push(t.lng || this.language);
         const A = (P, $, H) => {
-          const re = _ && H !== d ? H : Z;
+          const re = _ && H !== d ? H : X;
           this.options.missingKeyHandler ? this.options.missingKeyHandler(P, c, $, re, D, t) : this.backendConnector && this.backendConnector.saveMissing && this.backendConnector.saveMissing(P, c, $, re, D, t), this.emit("missingKey", P, c, $, d);
         };
         this.options.saveMissing && (this.options.saveMissingPlurals && E ? j.forEach((P) => {
@@ -786,25 +786,25 @@ class To extends ei {
       this.options.fallbackNS && (f = f.concat(this.options.fallbackNS));
       const d = t.count !== void 0 && typeof t.count != "string", h = d && !t.ordinal && t.count === 0 && this.pluralResolver.shouldUseIntlApi(), p = t.context !== void 0 && (typeof t.context == "string" || typeof t.context == "number") && t.context !== "", g = t.lngs ? t.lngs : this.languageUtils.toResolveHierarchy(t.lng || this.language, t.fallbackLng);
       f.forEach((m) => {
-        this.isValidLookup(r) || (s = m, !hc[`${g[0]}-${m}`] && this.utils && this.utils.hasLoadedNamespace && !this.utils.hasLoadedNamespace(s) && (hc[`${g[0]}-${m}`] = !0, this.logger.warn(`key "${o}" for languages "${g.join(", ")}" won't get resolved as namespace "${s}" was not yet loaded`, "This means something IS WRONG in your setup. You access the t function before i18next.init / i18next.loadNamespace / i18next.changeLanguage was done. Wait for the callback or Promise to resolve before accessing it!!!")), g.forEach((b) => {
+        this.isValidLookup(r) || (s = m, !hc[`${g[0]}-${m}`] && this.utils && this.utils.hasLoadedNamespace && !this.utils.hasLoadedNamespace(s) && (hc[`${g[0]}-${m}`] = !0, this.logger.warn(`key "${o}" for languages "${g.join(", ")}" won't get resolved as namespace "${s}" was not yet loaded`, "This means something IS WRONG in your setup. You access the t function before i18next.init / i18next.loadNamespace / i18next.changeLanguage was done. Wait for the callback or Promise to resolve before accessing it!!!")), g.forEach((v) => {
           if (this.isValidLookup(r))
             return;
-          a = b;
-          const C = [u];
+          a = v;
+          const b = [u];
           if (this.i18nFormat && this.i18nFormat.addLookupKeys)
-            this.i18nFormat.addLookupKeys(C, u, b, m, t);
+            this.i18nFormat.addLookupKeys(b, u, v, m, t);
           else {
             let w;
-            d && (w = this.pluralResolver.getSuffix(b, t.count, t));
+            d && (w = this.pluralResolver.getSuffix(v, t.count, t));
             const S = `${this.options.pluralSeparator}zero`, E = `${this.options.pluralSeparator}ordinal${this.options.pluralSeparator}`;
-            if (d && (C.push(u + w), t.ordinal && w.indexOf(E) === 0 && C.push(u + w.replace(E, this.options.pluralSeparator)), h && C.push(u + S)), p) {
+            if (d && (b.push(u + w), t.ordinal && w.indexOf(E) === 0 && b.push(u + w.replace(E, this.options.pluralSeparator)), h && b.push(u + S)), p) {
               const _ = `${u}${this.options.contextSeparator}${t.context}`;
-              C.push(_), d && (C.push(_ + w), t.ordinal && w.indexOf(E) === 0 && C.push(_ + w.replace(E, this.options.pluralSeparator)), h && C.push(_ + S));
+              b.push(_), d && (b.push(_ + w), t.ordinal && w.indexOf(E) === 0 && b.push(_ + w.replace(E, this.options.pluralSeparator)), h && b.push(_ + S));
             }
           }
-          let v;
-          for (; v = C.pop(); )
-            this.isValidLookup(r) || (i = v, r = this.getResource(b, m, v, t));
+          let C;
+          for (; C = b.pop(); )
+            this.isValidLookup(r) || (i = C, r = this.getResource(v, m, C, t));
         }));
       });
     }), {
@@ -1177,10 +1177,10 @@ class Hh {
       nestingSuffix: p,
       nestingSuffixEscaped: g,
       nestingOptionsSeparator: m,
-      maxReplaces: b,
-      alwaysFormat: C
+      maxReplaces: v,
+      alwaysFormat: b
     } = e.interpolation;
-    this.escape = t !== void 0 ? t : Rh, this.escapeValue = r !== void 0 ? r : !0, this.useRawValueToEscape = o !== void 0 ? o : !1, this.prefix = i ? Wn(i) : a || "{{", this.suffix = s ? Wn(s) : c || "}}", this.formatSeparator = l || ",", this.unescapePrefix = u ? "" : f || "-", this.unescapeSuffix = this.unescapePrefix ? "" : u || "", this.nestingPrefix = d ? Wn(d) : h || Wn("$t("), this.nestingSuffix = p ? Wn(p) : g || Wn(")"), this.nestingOptionsSeparator = m || ",", this.maxReplaces = b || 1e3, this.alwaysFormat = C !== void 0 ? C : !1, this.resetRegExp();
+    this.escape = t !== void 0 ? t : Rh, this.escapeValue = r !== void 0 ? r : !0, this.useRawValueToEscape = o !== void 0 ? o : !1, this.prefix = i ? Wn(i) : a || "{{", this.suffix = s ? Wn(s) : c || "}}", this.formatSeparator = l || ",", this.unescapePrefix = u ? "" : f || "-", this.unescapeSuffix = this.unescapePrefix ? "" : u || "", this.nestingPrefix = d ? Wn(d) : h || Wn("$t("), this.nestingSuffix = p ? Wn(p) : g || Wn(")"), this.nestingOptionsSeparator = m || ",", this.maxReplaces = v || 1e3, this.alwaysFormat = b !== void 0 ? b : !1, this.resetRegExp();
   }
   reset() {
     this.options && this.init(this.options);
@@ -1197,15 +1197,15 @@ class Hh {
     }
     const u = (p) => {
       if (p.indexOf(this.formatSeparator) < 0) {
-        const C = mc(t, c, p, this.options.keySeparator, this.options.ignoreJSONStructure);
-        return this.alwaysFormat ? this.format(C, void 0, r, {
+        const b = mc(t, c, p, this.options.keySeparator, this.options.ignoreJSONStructure);
+        return this.alwaysFormat ? this.format(b, void 0, r, {
           ...o,
           ...t,
           interpolationkey: p
-        }) : C;
+        }) : b;
       }
-      const g = p.split(this.formatSeparator), m = g.shift().trim(), b = g.join(this.formatSeparator).trim();
-      return this.format(mc(t, c, m, this.options.keySeparator, this.options.ignoreJSONStructure), b, r, {
+      const g = p.split(this.formatSeparator), m = g.shift().trim(), v = g.join(this.formatSeparator).trim();
+      return this.format(mc(t, c, m, this.options.keySeparator, this.options.ignoreJSONStructure), v, r, {
         ...o,
         ...t,
         interpolationkey: m
@@ -1224,8 +1224,8 @@ class Hh {
         const g = i[1].trim();
         if (a = u(g), a === void 0)
           if (typeof f == "function") {
-            const b = f(e, i, o);
-            a = typeof b == "string" ? b : "";
+            const v = f(e, i, o);
+            a = typeof v == "string" ? v : "";
           } else if (o && Object.prototype.hasOwnProperty.call(o, g))
             a = "";
           else if (d) {
@@ -1980,7 +1980,7 @@ class ip {
 }
 const ap = (n, e) => {
   const t = ue();
-  return X(() => {
+  return ee(() => {
     t.current = e ? t.current : n;
   }, [n, e]), t.current;
 };
@@ -1994,8 +1994,8 @@ function Zr(n) {
   } = nn(op) || {}, i = t || r || np();
   if (i && !i.reportNamespaces && (i.reportNamespaces = new ip()), !i) {
     ea("You will need to pass in an i18next instance by using initReactI18next");
-    const v = (S, E) => typeof E == "string" ? E : E && typeof E == "object" && typeof E.defaultValue == "string" ? E.defaultValue : Array.isArray(S) ? S[S.length - 1] : S, w = [v, {}, !1];
-    return w.t = v, w.i18n = {}, w.ready = !1, w;
+    const C = (S, E) => typeof E == "string" ? E : E && typeof E == "object" && typeof E.defaultValue == "string" ? E.defaultValue : Array.isArray(S) ? S[S.length - 1] : S, w = [C, {}, !1];
+    return w.t = C, w.i18n = {}, w.ready = !1, w;
   }
   i.options.react && i.options.react.wait !== void 0 && ea("It seems you are still using the old wait option, you may migrate to the new useSuspense behaviour.");
   const a = {
@@ -2008,17 +2008,17 @@ function Zr(n) {
   } = a;
   let l = n || o || i.options && i.options.defaultNS;
   l = typeof l == "string" ? [l] : l || ["translation"], i.reportNamespaces.addUsedNamespaces && i.reportNamespaces.addUsedNamespaces(l);
-  const u = (i.isInitialized || i.initializedStoreOnce) && l.every((v) => Wh(v, i, a));
+  const u = (i.isInitialized || i.initializedStoreOnce) && l.every((C) => Wh(C, i, a));
   function f() {
     return i.getFixedT(e.lng || null, a.nsMode === "fallback" ? l : l[0], c);
   }
-  const [d, h] = te(f);
+  const [d, h] = Z(f);
   let p = l.join();
   e.lng && (p = `${e.lng}${p}`);
   const g = ap(p), m = ue(!0);
-  X(() => {
+  ee(() => {
     const {
-      bindI18n: v,
+      bindI18n: C,
       bindI18nStore: w
     } = a;
     m.current = !0, !u && !s && (e.lng ? wc(i, e.lng, l, () => {
@@ -2029,19 +2029,19 @@ function Zr(n) {
     function S() {
       m.current && h(f);
     }
-    return v && i && i.on(v, S), w && i && i.store.on(w, S), () => {
-      m.current = !1, v && i && v.split(" ").forEach((E) => i.off(E, S)), w && i && w.split(" ").forEach((E) => i.store.off(E, S));
+    return C && i && i.on(C, S), w && i && i.store.on(w, S), () => {
+      m.current = !1, C && i && C.split(" ").forEach((E) => i.off(E, S)), w && i && w.split(" ").forEach((E) => i.store.off(E, S));
     };
   }, [i, p]);
-  const b = ue(!0);
-  X(() => {
-    m.current && !b.current && h(f), b.current = !1;
+  const v = ue(!0);
+  ee(() => {
+    m.current && !v.current && h(f), v.current = !1;
   }, [i, c]);
-  const C = [d, i, u];
-  if (C.t = d, C.i18n = i, C.ready = u, u || !u && !s)
-    return C;
-  throw new Promise((v) => {
-    e.lng ? wc(i, e.lng, l, () => v()) : Cc(i, l, () => v());
+  const b = [d, i, u];
+  if (b.t = d, b.i18n = i, b.ready = u, u || !u && !s)
+    return b;
+  throw new Promise((C) => {
+    e.lng ? wc(i, e.lng, l, () => C()) : Cc(i, l, () => C());
   });
 }
 const sp = {
@@ -3401,7 +3401,7 @@ function Sc(n, e) {
       e.indexOf(r[o]) < 0 && Object.prototype.propertyIsEnumerable.call(n, r[o]) && (t[r[o]] = n[r[o]]);
   return t;
 }
-function O(n, e, t, r) {
+function M(n, e, t, r) {
   function o(i) {
     return i instanceof t ? i : new t(function(a) {
       a(i);
@@ -3428,7 +3428,7 @@ function O(n, e, t, r) {
     l((r = r.apply(n, e || [])).next());
   });
 }
-function x(n, e) {
+function O(n, e) {
   var t = { label: 0, sent: function() {
     if (i[0] & 1)
       throw i[1];
@@ -3768,10 +3768,10 @@ var Me;
 (function(n) {
   n.CACHE_KEY_SEPARATOR = "-", n.CLIENT_INFO_SEPARATOR = ".";
 })(Me || (Me = {}));
-var ee;
+var te;
 (function(n) {
   n.ID_TOKEN = "IdToken", n.ACCESS_TOKEN = "AccessToken", n.ACCESS_TOKEN_WITH_AUTH_SCHEME = "AccessToken_With_AuthScheme", n.REFRESH_TOKEN = "RefreshToken";
-})(ee || (ee = {}));
+})(te || (te = {}));
 var Or;
 (function(n) {
   n[n.ADFS = 1001] = "ADFS", n[n.MSA = 1002] = "MSA", n[n.MSSTS = 1003] = "MSSTS", n[n.GENERIC = 1004] = "GENERIC", n[n.ACCESS_TOKEN = 2001] = "ACCESS_TOKEN", n[n.REFRESH_TOKEN = 2002] = "REFRESH_TOKEN", n[n.ID_TOKEN = 2003] = "ID_TOKEN", n[n.APP_METADATA = 3001] = "APP_METADATA", n[n.UNDEFINED = 9999] = "UNDEFINED";
@@ -4857,17 +4857,17 @@ var Ze = (
       if (e.split(Me.CACHE_KEY_SEPARATOR).length < 6)
         return !1;
       var t = e.toLowerCase();
-      if (t.indexOf(ee.ID_TOKEN.toLowerCase()) === -1 && t.indexOf(ee.ACCESS_TOKEN.toLowerCase()) === -1 && t.indexOf(ee.ACCESS_TOKEN_WITH_AUTH_SCHEME.toLowerCase()) === -1 && t.indexOf(ee.REFRESH_TOKEN.toLowerCase()) === -1)
+      if (t.indexOf(te.ID_TOKEN.toLowerCase()) === -1 && t.indexOf(te.ACCESS_TOKEN.toLowerCase()) === -1 && t.indexOf(te.ACCESS_TOKEN_WITH_AUTH_SCHEME.toLowerCase()) === -1 && t.indexOf(te.REFRESH_TOKEN.toLowerCase()) === -1)
         return !1;
-      if (t.indexOf(ee.REFRESH_TOKEN.toLowerCase()) > -1) {
-        var r = "" + ee.REFRESH_TOKEN + Me.CACHE_KEY_SEPARATOR + this.clientId + Me.CACHE_KEY_SEPARATOR, o = "" + ee.REFRESH_TOKEN + Me.CACHE_KEY_SEPARATOR + xr + Me.CACHE_KEY_SEPARATOR;
+      if (t.indexOf(te.REFRESH_TOKEN.toLowerCase()) > -1) {
+        var r = "" + te.REFRESH_TOKEN + Me.CACHE_KEY_SEPARATOR + this.clientId + Me.CACHE_KEY_SEPARATOR, o = "" + te.REFRESH_TOKEN + Me.CACHE_KEY_SEPARATOR + xr + Me.CACHE_KEY_SEPARATOR;
         if (t.indexOf(r.toLowerCase()) === -1 && t.indexOf(o.toLowerCase()) === -1)
           return !1;
       } else if (t.indexOf(this.clientId.toLowerCase()) === -1)
         return !1;
       return !0;
     }, n.prototype.credentialMatchesFilter = function(e, t) {
-      return !(t.clientId && !this.matchClientId(e, t.clientId) || t.userAssertionHash && !this.matchUserAssertionHash(e, t.userAssertionHash) || typeof t.homeAccountId == "string" && !this.matchHomeAccountId(e, t.homeAccountId) || t.environment && !this.matchEnvironment(e, t.environment) || t.realm && !this.matchRealm(e, t.realm) || t.credentialType && !this.matchCredentialType(e, t.credentialType) || t.familyId && !this.matchFamilyId(e, t.familyId) || t.target && !this.matchTarget(e, t.target) || (t.requestedClaimsHash || e.requestedClaimsHash) && e.requestedClaimsHash !== t.requestedClaimsHash || e.credentialType === ee.ACCESS_TOKEN_WITH_AUTH_SCHEME && (t.tokenType && !this.matchTokenType(e, t.tokenType) || t.tokenType === ve.SSH && t.keyId && !this.matchKeyId(e, t.keyId)));
+      return !(t.clientId && !this.matchClientId(e, t.clientId) || t.userAssertionHash && !this.matchUserAssertionHash(e, t.userAssertionHash) || typeof t.homeAccountId == "string" && !this.matchHomeAccountId(e, t.homeAccountId) || t.environment && !this.matchEnvironment(e, t.environment) || t.realm && !this.matchRealm(e, t.realm) || t.credentialType && !this.matchCredentialType(e, t.credentialType) || t.familyId && !this.matchFamilyId(e, t.familyId) || t.target && !this.matchTarget(e, t.target) || (t.requestedClaimsHash || e.requestedClaimsHash) && e.requestedClaimsHash !== t.requestedClaimsHash || e.credentialType === te.ACCESS_TOKEN_WITH_AUTH_SCHEME && (t.tokenType && !this.matchTokenType(e, t.tokenType) || t.tokenType === ve.SSH && t.keyId && !this.matchKeyId(e, t.keyId)));
     }, n.prototype.getAppMetadataFilteredBy = function(e) {
       return this.getAppMetadataFilteredByInternal(e.environment, e.clientId);
     }, n.prototype.getAppMetadataFilteredByInternal = function(e, t) {
@@ -4952,7 +4952,7 @@ var Ze = (
                   2
                   /*return*/
                 ];
-              if (t.credentialType.toLowerCase() !== ee.ACCESS_TOKEN_WITH_AUTH_SCHEME.toLowerCase())
+              if (t.credentialType.toLowerCase() !== te.ACCESS_TOKEN_WITH_AUTH_SCHEME.toLowerCase())
                 return [3, 4];
               if (t.tokenType !== ve.POP)
                 return [3, 4];
@@ -4993,7 +4993,7 @@ var Ze = (
       var o = {
         homeAccountId: e.homeAccountId,
         environment: e.environment,
-        credentialType: ee.ID_TOKEN,
+        credentialType: te.ID_TOKEN,
         clientId: this.clientId,
         realm: e.tenantId
       }, i = this.getIdTokensByFilter(o, t), a = i.length;
@@ -5018,7 +5018,7 @@ var Ze = (
     }, n.prototype.getAccessToken = function(e, t, r) {
       var o = this;
       this.commonLogger.trace("CacheManager - getAccessToken called");
-      var i = Ke.createSearchScopes(t.scopes), a = t.authenticationScheme || ve.BEARER, s = a && a.toLowerCase() !== ve.BEARER.toLowerCase() ? ee.ACCESS_TOKEN_WITH_AUTH_SCHEME : ee.ACCESS_TOKEN, c = {
+      var i = Ke.createSearchScopes(t.scopes), a = t.authenticationScheme || ve.BEARER, s = a && a.toLowerCase() !== ve.BEARER.toLowerCase() ? te.ACCESS_TOKEN_WITH_AUTH_SCHEME : te.ACCESS_TOKEN, c = {
         homeAccountId: e.homeAccountId,
         environment: e.environment,
         credentialType: s,
@@ -5065,7 +5065,7 @@ var Ze = (
       var i = t ? xr : void 0, a = {
         homeAccountId: e.homeAccountId,
         environment: e.environment,
-        credentialType: ee.REFRESH_TOKEN,
+        credentialType: te.REFRESH_TOKEN,
         clientId: this.clientId,
         familyId: i
       }, s = r && r.refreshToken || this.getTokenKeys().refreshToken, c = [];
@@ -5117,7 +5117,7 @@ var Ze = (
     }, n.prototype.matchNativeAccountId = function(e, t) {
       return !!(e.nativeAccountId && t === e.nativeAccountId);
     }, n.prototype.matchTarget = function(e, t) {
-      var r = e.credentialType !== ee.ACCESS_TOKEN && e.credentialType !== ee.ACCESS_TOKEN_WITH_AUTH_SCHEME;
+      var r = e.credentialType !== te.ACCESS_TOKEN && e.credentialType !== te.ACCESS_TOKEN_WITH_AUTH_SCHEME;
       if (r || !e.target)
         return !1;
       var o = Ke.fromString(e.target);
@@ -5610,12 +5610,12 @@ var Ha = (
       return n.generateCredentialCacheKey(this.homeAccountId, this.environment, this.credentialType, this.clientId, this.realm, this.target, this.familyId, this.tokenType, this.requestedClaimsHash);
     }, n.prototype.generateType = function() {
       switch (this.credentialType) {
-        case ee.ID_TOKEN:
+        case te.ID_TOKEN:
           return Or.ID_TOKEN;
-        case ee.ACCESS_TOKEN:
-        case ee.ACCESS_TOKEN_WITH_AUTH_SCHEME:
+        case te.ACCESS_TOKEN:
+        case te.ACCESS_TOKEN_WITH_AUTH_SCHEME:
           return Or.ACCESS_TOKEN;
-        case ee.REFRESH_TOKEN:
+        case te.REFRESH_TOKEN:
           return Or.REFRESH_TOKEN;
         default:
           throw W.createUnexpectedCredentialTypeError();
@@ -5633,7 +5633,7 @@ var Ha = (
       var r = [e, t];
       return r.join(Me.CACHE_KEY_SEPARATOR).toLowerCase();
     }, n.generateCredentialIdForCacheKey = function(e, t, r, o) {
-      var i = e === ee.REFRESH_TOKEN && o || t, a = [
+      var i = e === te.REFRESH_TOKEN && o || t, a = [
         e,
         i,
         r || I.EMPTY_STRING
@@ -5658,9 +5658,9 @@ var fn = (
     }
     return e.createIdTokenEntity = function(t, r, o, i, a) {
       var s = new e();
-      return s.credentialType = ee.ID_TOKEN, s.homeAccountId = t, s.environment = r, s.clientId = i, s.secret = o, s.realm = a, s;
+      return s.credentialType = te.ID_TOKEN, s.homeAccountId = t, s.environment = r, s.clientId = i, s.secret = o, s.realm = a, s;
     }, e.isIdTokenEntity = function(t) {
-      return t ? t.hasOwnProperty("homeAccountId") && t.hasOwnProperty("environment") && t.hasOwnProperty("credentialType") && t.hasOwnProperty("realm") && t.hasOwnProperty("clientId") && t.hasOwnProperty("secret") && t.credentialType === ee.ID_TOKEN : !1;
+      return t ? t.hasOwnProperty("homeAccountId") && t.hasOwnProperty("environment") && t.hasOwnProperty("credentialType") && t.hasOwnProperty("realm") && t.hasOwnProperty("clientId") && t.hasOwnProperty("secret") && t.credentialType === te.ID_TOKEN : !1;
     }, e;
   }(Ha)
 );
@@ -5696,23 +5696,23 @@ var hn = (
       return n !== null && n.apply(this, arguments) || this;
     }
     return e.createAccessTokenEntity = function(t, r, o, i, a, s, c, l, u, f, d, h, p, g, m) {
-      var b, C, v = new e();
-      v.homeAccountId = t, v.credentialType = ee.ACCESS_TOKEN, v.secret = o;
+      var v, b, C = new e();
+      C.homeAccountId = t, C.credentialType = te.ACCESS_TOKEN, C.secret = o;
       var w = vt.nowSeconds();
-      if (v.cachedAt = w.toString(), v.expiresOn = c.toString(), v.extendedExpiresOn = l.toString(), f && (v.refreshOn = f.toString()), v.environment = r, v.clientId = i, v.realm = a, v.target = s, v.userAssertionHash = h, v.tokenType = q.isEmpty(d) ? ve.BEARER : d, g && (v.requestedClaims = g, v.requestedClaimsHash = m), ((b = v.tokenType) === null || b === void 0 ? void 0 : b.toLowerCase()) !== ve.BEARER.toLowerCase())
-        switch (v.credentialType = ee.ACCESS_TOKEN_WITH_AUTH_SCHEME, v.tokenType) {
+      if (C.cachedAt = w.toString(), C.expiresOn = c.toString(), C.extendedExpiresOn = l.toString(), f && (C.refreshOn = f.toString()), C.environment = r, C.clientId = i, C.realm = a, C.target = s, C.userAssertionHash = h, C.tokenType = q.isEmpty(d) ? ve.BEARER : d, g && (C.requestedClaims = g, C.requestedClaimsHash = m), ((v = C.tokenType) === null || v === void 0 ? void 0 : v.toLowerCase()) !== ve.BEARER.toLowerCase())
+        switch (C.credentialType = te.ACCESS_TOKEN_WITH_AUTH_SCHEME, C.tokenType) {
           case ve.POP:
             var S = Ht.extractTokenClaims(o, u);
-            if (!(!((C = S == null ? void 0 : S.cnf) === null || C === void 0) && C.kid))
+            if (!(!((b = S == null ? void 0 : S.cnf) === null || b === void 0) && b.kid))
               throw W.createTokenClaimsRequiredError();
-            v.keyId = S.cnf.kid;
+            C.keyId = S.cnf.kid;
             break;
           case ve.SSH:
-            v.keyId = p;
+            C.keyId = p;
         }
-      return v;
+      return C;
     }, e.isAccessTokenEntity = function(t) {
-      return t ? t.hasOwnProperty("homeAccountId") && t.hasOwnProperty("environment") && t.hasOwnProperty("credentialType") && t.hasOwnProperty("realm") && t.hasOwnProperty("clientId") && t.hasOwnProperty("secret") && t.hasOwnProperty("target") && (t.credentialType === ee.ACCESS_TOKEN || t.credentialType === ee.ACCESS_TOKEN_WITH_AUTH_SCHEME) : !1;
+      return t ? t.hasOwnProperty("homeAccountId") && t.hasOwnProperty("environment") && t.hasOwnProperty("credentialType") && t.hasOwnProperty("realm") && t.hasOwnProperty("clientId") && t.hasOwnProperty("secret") && t.hasOwnProperty("target") && (t.credentialType === te.ACCESS_TOKEN || t.credentialType === te.ACCESS_TOKEN_WITH_AUTH_SCHEME) : !1;
     }, e;
   }(Ha)
 );
@@ -5726,9 +5726,9 @@ var rr = (
     }
     return e.createRefreshTokenEntity = function(t, r, o, i, a, s) {
       var c = new e();
-      return c.clientId = i, c.credentialType = ee.REFRESH_TOKEN, c.environment = r, c.homeAccountId = t, c.secret = o, c.userAssertionHash = s, a && (c.familyId = a), c;
+      return c.clientId = i, c.credentialType = te.REFRESH_TOKEN, c.environment = r, c.homeAccountId = t, c.secret = o, c.userAssertionHash = s, a && (c.familyId = a), c;
     }, e.isRefreshTokenEntity = function(t) {
-      return t ? t.hasOwnProperty("homeAccountId") && t.hasOwnProperty("environment") && t.hasOwnProperty("credentialType") && t.hasOwnProperty("clientId") && t.hasOwnProperty("secret") && t.credentialType === ee.REFRESH_TOKEN : !1;
+      return t ? t.hasOwnProperty("homeAccountId") && t.hasOwnProperty("environment") && t.hasOwnProperty("credentialType") && t.hasOwnProperty("clientId") && t.hasOwnProperty("secret") && t.credentialType === te.REFRESH_TOKEN : !1;
     }, e;
   }(Ha)
 );
@@ -6074,9 +6074,9 @@ var Oo = (
     }, n.prototype.handleServerTokenResponse = function(e, t, r, o, i, a, s, c, l) {
       var u;
       return ae(this, void 0, void 0, function() {
-        var f, d, h, p, g, m, b;
-        return se(this, function(C) {
-          switch (C.label) {
+        var f, d, h, p, g, m, v;
+        return se(this, function(b) {
+          switch (b.label) {
             case 0:
               if ((u = this.performanceClient) === null || u === void 0 || u.addQueueMeasurement(k.HandleServerTokenResponse, e.correlation_id), e.id_token) {
                 if (f = new Ht(e.id_token || I.EMPTY_STRING, this.cryptoObj), i && !q.isEmpty(i.nonce) && f.claims.nonce !== i.nonce)
@@ -6087,19 +6087,19 @@ var Oo = (
                   Ht.checkMaxAge(d, o.maxAge);
                 }
               }
-              this.homeAccountIdentifier = Ge.generateHomeAccountId(e.client_info || I.EMPTY_STRING, t.authorityType, this.logger, this.cryptoObj, f == null ? void 0 : f.claims), i && i.state && (h = Yt.parseRequestState(this.cryptoObj, i.state)), e.key_id = e.key_id || o.sshKid || void 0, p = this.generateCacheRecord(e, t, r, o, f, a, i), C.label = 1;
+              this.homeAccountIdentifier = Ge.generateHomeAccountId(e.client_info || I.EMPTY_STRING, t.authorityType, this.logger, this.cryptoObj, f == null ? void 0 : f.claims), i && i.state && (h = Yt.parseRequestState(this.cryptoObj, i.state)), e.key_id = e.key_id || o.sshKid || void 0, p = this.generateCacheRecord(e, t, r, o, f, a, i), b.label = 1;
             case 1:
-              return C.trys.push([1, , 5, 8]), this.persistencePlugin && this.serializableCache ? (this.logger.verbose("Persistence enabled, calling beforeCacheAccess"), g = new wg(this.serializableCache, !0), [4, this.persistencePlugin.beforeCacheAccess(g)]) : [3, 3];
+              return b.trys.push([1, , 5, 8]), this.persistencePlugin && this.serializableCache ? (this.logger.verbose("Persistence enabled, calling beforeCacheAccess"), g = new wg(this.serializableCache, !0), [4, this.persistencePlugin.beforeCacheAccess(g)]) : [3, 3];
             case 2:
-              C.sent(), C.label = 3;
+              b.sent(), b.label = 3;
             case 3:
-              return s && !c && p.account && (m = p.account.generateAccountKey(), b = this.cacheStorage.getAccount(m), !b) ? (this.logger.warning("Account used to refresh tokens not in persistence, refreshed tokens will not be stored in the cache"), [2, n.generateAuthenticationResult(this.cryptoObj, t, p, !1, o, f, h, void 0, l)]) : [4, this.cacheStorage.saveCacheRecord(p)];
+              return s && !c && p.account && (m = p.account.generateAccountKey(), v = this.cacheStorage.getAccount(m), !v) ? (this.logger.warning("Account used to refresh tokens not in persistence, refreshed tokens will not be stored in the cache"), [2, n.generateAuthenticationResult(this.cryptoObj, t, p, !1, o, f, h, void 0, l)]) : [4, this.cacheStorage.saveCacheRecord(p)];
             case 4:
-              return C.sent(), [3, 8];
+              return b.sent(), [3, 8];
             case 5:
               return this.persistencePlugin && this.serializableCache && g ? (this.logger.verbose("Persistence enabled, calling afterCacheAccess"), [4, this.persistencePlugin.afterCacheAccess(g)]) : [3, 7];
             case 6:
-              C.sent(), C.label = 7;
+              b.sent(), b.label = 7;
             case 7:
               return [
                 7
@@ -6124,27 +6124,27 @@ var Oo = (
       }, t));
       var f = null;
       if (!q.isEmpty(e.access_token)) {
-        var d = e.scope ? Ke.fromString(e.scope) : new Ke(o.scopes || []), h = (typeof e.expires_in == "string" ? parseInt(e.expires_in, 10) : e.expires_in) || 0, p = (typeof e.ext_expires_in == "string" ? parseInt(e.ext_expires_in, 10) : e.ext_expires_in) || 0, g = (typeof e.refresh_in == "string" ? parseInt(e.refresh_in, 10) : e.refresh_in) || void 0, m = r + h, b = m + p, C = g && g > 0 ? r + g : void 0;
-        f = hn.createAccessTokenEntity(this.homeAccountIdentifier, c, e.access_token || I.EMPTY_STRING, this.clientId, i ? i.claims.tid || I.EMPTY_STRING : t.tenant, d.printScopes(), m, b, this.cryptoObj, C, e.token_type, a, e.key_id, o.claims, o.requestedClaimsHash);
+        var d = e.scope ? Ke.fromString(e.scope) : new Ke(o.scopes || []), h = (typeof e.expires_in == "string" ? parseInt(e.expires_in, 10) : e.expires_in) || 0, p = (typeof e.ext_expires_in == "string" ? parseInt(e.ext_expires_in, 10) : e.ext_expires_in) || 0, g = (typeof e.refresh_in == "string" ? parseInt(e.refresh_in, 10) : e.refresh_in) || void 0, m = r + h, v = m + p, b = g && g > 0 ? r + g : void 0;
+        f = hn.createAccessTokenEntity(this.homeAccountIdentifier, c, e.access_token || I.EMPTY_STRING, this.clientId, i ? i.claims.tid || I.EMPTY_STRING : t.tenant, d.printScopes(), m, v, this.cryptoObj, b, e.token_type, a, e.key_id, o.claims, o.requestedClaimsHash);
       }
-      var v = null;
-      q.isEmpty(e.refresh_token) || (v = rr.createRefreshTokenEntity(this.homeAccountIdentifier, c, e.refresh_token || I.EMPTY_STRING, this.clientId, e.foci, a));
+      var C = null;
+      q.isEmpty(e.refresh_token) || (C = rr.createRefreshTokenEntity(this.homeAccountIdentifier, c, e.refresh_token || I.EMPTY_STRING, this.clientId, e.foci, a));
       var w = null;
-      return q.isEmpty(e.foci) || (w = sa.createAppMetadataEntity(this.clientId, c, e.foci)), new ar(u, l, f, v, w);
+      return q.isEmpty(e.foci) || (w = sa.createAppMetadataEntity(this.clientId, c, e.foci)), new ar(u, l, f, C, w);
     }, n.generateAuthenticationResult = function(e, t, r, o, i, a, s, c, l) {
       var u, f, d;
       return ae(this, void 0, void 0, function() {
-        var h, p, g, m, b, C, v, w, S, E, _;
+        var h, p, g, m, v, b, C, w, S, E, _;
         return se(this, function(T) {
           switch (T.label) {
             case 0:
-              if (h = I.EMPTY_STRING, p = [], g = null, b = I.EMPTY_STRING, !r.accessToken)
+              if (h = I.EMPTY_STRING, p = [], g = null, v = I.EMPTY_STRING, !r.accessToken)
                 return [3, 4];
               if (r.accessToken.tokenType !== ve.POP)
                 return [3, 2];
-              if (C = new ur(e), v = r.accessToken, w = v.secret, S = v.keyId, !S)
+              if (b = new ur(e), C = r.accessToken, w = C.secret, S = C.keyId, !S)
                 throw W.createKeyIdMissingError();
-              return [4, C.signPopToken(w, S, i)];
+              return [4, b.signPopToken(w, S, i)];
             case 1:
               return h = T.sent(), [3, 3];
             case 2:
@@ -6152,7 +6152,7 @@ var Oo = (
             case 3:
               p = Ke.fromString(r.accessToken.target).asArray(), g = new Date(Number(r.accessToken.expiresOn) * 1e3), m = new Date(Number(r.accessToken.extendedExpiresOn) * 1e3), T.label = 4;
             case 4:
-              return r.appMetadata && (b = r.appMetadata.familyId === xr ? xr : I.EMPTY_STRING), E = (a == null ? void 0 : a.claims.oid) || (a == null ? void 0 : a.claims.sub) || I.EMPTY_STRING, _ = (a == null ? void 0 : a.claims.tid) || I.EMPTY_STRING, c != null && c.spa_accountid && r.account && (r.account.nativeAccountId = c == null ? void 0 : c.spa_accountid), [2, {
+              return r.appMetadata && (v = r.appMetadata.familyId === xr ? xr : I.EMPTY_STRING), E = (a == null ? void 0 : a.claims.oid) || (a == null ? void 0 : a.claims.sub) || I.EMPTY_STRING, _ = (a == null ? void 0 : a.claims.tid) || I.EMPTY_STRING, c != null && c.spa_accountid && r.account && (r.account.nativeAccountId = c == null ? void 0 : c.spa_accountid), [2, {
                 authority: t.canonicalAuthority,
                 uniqueId: E,
                 tenantId: _,
@@ -6166,7 +6166,7 @@ var Oo = (
                 correlationId: i.correlationId,
                 requestId: l || I.EMPTY_STRING,
                 extExpiresOn: m,
-                familyId: b,
+                familyId: v,
                 tokenType: ((u = r.accessToken) === null || u === void 0 ? void 0 : u.tokenType) || I.EMPTY_STRING,
                 state: s ? s.userRequestState : I.EMPTY_STRING,
                 cloudGraphHostName: ((f = r.account) === null || f === void 0 ? void 0 : f.cloudGraphHostName) || I.EMPTY_STRING,
@@ -6206,25 +6206,25 @@ var cu = (
       var o, i, a, s, c, l;
       return ae(this, void 0, void 0, function() {
         var u, f, d, h, p, g, m = this;
-        return se(this, function(b) {
-          switch (b.label) {
+        return se(this, function(v) {
+          switch (v.label) {
             case 0:
               if (!t || !t.code)
                 throw W.createTokenRequestCannotBeMadeError();
               return (o = this.performanceClient) === null || o === void 0 || o.addQueueMeasurement(k.AuthClientAcquireToken, t.correlationId), u = (i = this.performanceClient) === null || i === void 0 ? void 0 : i.startMeasurement("AuthCodeClientAcquireToken", t.correlationId), this.logger.info("in acquireToken call in auth-code client"), f = vt.nowSeconds(), (a = this.performanceClient) === null || a === void 0 || a.setPreQueueTime(k.AuthClientExecuteTokenRequest, t.correlationId), [4, this.executeTokenRequest(this.authority, t)];
             case 1:
-              return d = b.sent(), h = (s = d.headers) === null || s === void 0 ? void 0 : s[ut.X_MS_REQUEST_ID], p = (c = d.headers) === null || c === void 0 ? void 0 : c[ut.X_MS_HTTP_VERSION], p && (u == null || u.addStaticFields({
+              return d = v.sent(), h = (s = d.headers) === null || s === void 0 ? void 0 : s[ut.X_MS_REQUEST_ID], p = (c = d.headers) === null || c === void 0 ? void 0 : c[ut.X_MS_HTTP_VERSION], p && (u == null || u.addStaticFields({
                 httpVerAuthority: p
-              })), g = new Oo(this.config.authOptions.clientId, this.cacheManager, this.cryptoUtils, this.logger, this.config.serializableCache, this.config.persistencePlugin, this.performanceClient), g.validateTokenResponse(d.body), (l = this.performanceClient) === null || l === void 0 || l.setPreQueueTime(k.HandleServerTokenResponse, t.correlationId), [2, g.handleServerTokenResponse(d.body, this.authority, f, t, r, void 0, void 0, void 0, h).then(function(C) {
+              })), g = new Oo(this.config.authOptions.clientId, this.cacheManager, this.cryptoUtils, this.logger, this.config.serializableCache, this.config.persistencePlugin, this.performanceClient), g.validateTokenResponse(d.body), (l = this.performanceClient) === null || l === void 0 || l.setPreQueueTime(k.HandleServerTokenResponse, t.correlationId), [2, g.handleServerTokenResponse(d.body, this.authority, f, t, r, void 0, void 0, void 0, h).then(function(b) {
                 return u == null || u.endMeasurement({
                   success: !0
-                }), C;
-              }).catch(function(C) {
+                }), b;
+              }).catch(function(b) {
                 throw m.logger.verbose("Error in fetching token in ACC", t.correlationId), u == null || u.endMeasurement({
-                  errorCode: C.errorCode,
-                  subErrorCode: C.subError,
+                  errorCode: b.errorCode,
+                  subErrorCode: b.subError,
                   success: !1
-                }), C;
+                }), b;
               })];
           }
         });
@@ -6391,25 +6391,25 @@ var lu = (
       var r, o, i, a, s, c, l;
       return ae(this, void 0, void 0, function() {
         var u, f, d, h, p, g, m = this;
-        return se(this, function(b) {
-          switch (b.label) {
+        return se(this, function(v) {
+          switch (v.label) {
             case 0:
               return (r = this.performanceClient) === null || r === void 0 || r.addQueueMeasurement(k.RefreshTokenClientAcquireToken, t.correlationId), u = (o = this.performanceClient) === null || o === void 0 ? void 0 : o.startMeasurement(k.RefreshTokenClientAcquireToken, t.correlationId), this.logger.verbose("RefreshTokenClientAcquireToken called", t.correlationId), f = vt.nowSeconds(), (i = this.performanceClient) === null || i === void 0 || i.setPreQueueTime(k.RefreshTokenClientExecuteTokenRequest, t.correlationId), [4, this.executeTokenRequest(t, this.authority)];
             case 1:
-              return d = b.sent(), h = (a = d.headers) === null || a === void 0 ? void 0 : a[ut.X_MS_HTTP_VERSION], u == null || u.addStaticFields({
+              return d = v.sent(), h = (a = d.headers) === null || a === void 0 ? void 0 : a[ut.X_MS_HTTP_VERSION], u == null || u.addStaticFields({
                 refreshTokenSize: ((s = d.body.refresh_token) === null || s === void 0 ? void 0 : s.length) || 0
               }), h && (u == null || u.addStaticFields({
                 httpVerToken: h
-              })), p = (c = d.headers) === null || c === void 0 ? void 0 : c[ut.X_MS_REQUEST_ID], g = new Oo(this.config.authOptions.clientId, this.cacheManager, this.cryptoUtils, this.logger, this.config.serializableCache, this.config.persistencePlugin), g.validateTokenResponse(d.body), (l = this.performanceClient) === null || l === void 0 || l.setPreQueueTime(k.HandleServerTokenResponse, t.correlationId), [2, g.handleServerTokenResponse(d.body, this.authority, f, t, void 0, void 0, !0, t.forceCache, p).then(function(C) {
+              })), p = (c = d.headers) === null || c === void 0 ? void 0 : c[ut.X_MS_REQUEST_ID], g = new Oo(this.config.authOptions.clientId, this.cacheManager, this.cryptoUtils, this.logger, this.config.serializableCache, this.config.persistencePlugin), g.validateTokenResponse(d.body), (l = this.performanceClient) === null || l === void 0 || l.setPreQueueTime(k.HandleServerTokenResponse, t.correlationId), [2, g.handleServerTokenResponse(d.body, this.authority, f, t, void 0, void 0, !0, t.forceCache, p).then(function(b) {
                 return u == null || u.endMeasurement({
                   success: !0
-                }), C;
-              }).catch(function(C) {
+                }), b;
+              }).catch(function(b) {
                 throw m.logger.verbose("Error in fetching refresh token", t.correlationId), u == null || u.endMeasurement({
-                  errorCode: C.errorCode,
-                  subErrorCode: C.subError,
+                  errorCode: b.errorCode,
+                  subErrorCode: b.subError,
                   success: !1
-                }), C;
+                }), b;
               })];
           }
         });
@@ -8008,30 +8008,30 @@ var da = (
             var c = t.validateAndParseJson(s);
             if (c && c.hasOwnProperty("credentialType"))
               switch (c.credentialType) {
-                case ee.ID_TOKEN:
+                case te.ID_TOKEN:
                   if (fn.isIdTokenEntity(c)) {
                     t.logger.trace("BrowserCacheManager:createKeyMaps - idToken found, saving key to token key map"), t.logger.tracePii("BrowserCacheManager:createKeyMaps - idToken with key: " + a + " found, saving key to token key map");
                     var l = Ze.toObject(new fn(), c), u = t.updateCredentialCacheKey(a, l);
-                    t.addTokenKey(u, ee.ID_TOKEN);
+                    t.addTokenKey(u, te.ID_TOKEN);
                     return;
                   } else
                     t.logger.trace("BrowserCacheManager:createKeyMaps - key found matching idToken schema with value containing idToken credentialType field but value failed IdTokenEntity validation, skipping."), t.logger.tracePii("BrowserCacheManager:createKeyMaps - failed idToken validation on key: " + a);
                   break;
-                case ee.ACCESS_TOKEN:
-                case ee.ACCESS_TOKEN_WITH_AUTH_SCHEME:
+                case te.ACCESS_TOKEN:
+                case te.ACCESS_TOKEN_WITH_AUTH_SCHEME:
                   if (hn.isAccessTokenEntity(c)) {
                     t.logger.trace("BrowserCacheManager:createKeyMaps - accessToken found, saving key to token key map"), t.logger.tracePii("BrowserCacheManager:createKeyMaps - accessToken with key: " + a + " found, saving key to token key map");
                     var f = Ze.toObject(new hn(), c), u = t.updateCredentialCacheKey(a, f);
-                    t.addTokenKey(u, ee.ACCESS_TOKEN);
+                    t.addTokenKey(u, te.ACCESS_TOKEN);
                     return;
                   } else
                     t.logger.trace("BrowserCacheManager:createKeyMaps - key found matching accessToken schema with value containing accessToken credentialType field but value failed AccessTokenEntity validation, skipping."), t.logger.tracePii("BrowserCacheManager:createKeyMaps - failed accessToken validation on key: " + a);
                   break;
-                case ee.REFRESH_TOKEN:
+                case te.REFRESH_TOKEN:
                   if (rr.isRefreshTokenEntity(c)) {
                     t.logger.trace("BrowserCacheManager:createKeyMaps - refreshToken found, saving key to token key map"), t.logger.tracePii("BrowserCacheManager:createKeyMaps - refreshToken with key: " + a + " found, saving key to token key map");
                     var d = Ze.toObject(new rr(), c), u = t.updateCredentialCacheKey(a, d);
-                    t.addTokenKey(u, ee.REFRESH_TOKEN);
+                    t.addTokenKey(u, te.REFRESH_TOKEN);
                     return;
                   } else
                     t.logger.trace("BrowserCacheManager:createKeyMaps - key found matching refreshToken schema with value containing refreshToken credentialType field but value failed RefreshTokenEntity validation, skipping."), t.logger.tracePii("BrowserCacheManager:createKeyMaps - failed refreshToken validation on key: " + a);
@@ -8082,8 +8082,8 @@ var da = (
       var r = this.getAccountKeys(), o = r.indexOf(t);
       o > -1 ? (r.splice(o, 1), this.setItem(Ot.ACCOUNT_KEYS, JSON.stringify(r)), this.logger.trace("BrowserCacheManager.removeAccountKeyFromMap account key removed")) : this.logger.trace("BrowserCacheManager.removeAccountKeyFromMap key not found in existing map");
     }, e.prototype.removeAccount = function(t) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(r) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(r) {
           return n.prototype.removeAccount.call(this, t), this.removeAccountKeyFromMap(t), [
             2
             /*return*/
@@ -8091,18 +8091,18 @@ var da = (
         });
       });
     }, e.prototype.removeIdToken = function(t) {
-      n.prototype.removeIdToken.call(this, t), this.removeTokenKey(t, ee.ID_TOKEN);
+      n.prototype.removeIdToken.call(this, t), this.removeTokenKey(t, te.ID_TOKEN);
     }, e.prototype.removeAccessToken = function(t) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(r) {
-          return n.prototype.removeAccessToken.call(this, t), this.removeTokenKey(t, ee.ACCESS_TOKEN), [
+      return M(this, void 0, void 0, function() {
+        return O(this, function(r) {
+          return n.prototype.removeAccessToken.call(this, t), this.removeTokenKey(t, te.ACCESS_TOKEN), [
             2
             /*return*/
           ];
         });
       });
     }, e.prototype.removeRefreshToken = function(t) {
-      n.prototype.removeRefreshToken.call(this, t), this.removeTokenKey(t, ee.REFRESH_TOKEN);
+      n.prototype.removeRefreshToken.call(this, t), this.removeTokenKey(t, te.REFRESH_TOKEN);
     }, e.prototype.getTokenKeys = function() {
       this.logger.trace("BrowserCacheManager.getTokenKeys called");
       var t = this.getItem(Ot.TOKEN_KEYS + "." + this.clientId);
@@ -8122,13 +8122,13 @@ var da = (
       this.logger.trace("BrowserCacheManager addTokenKey called");
       var o = this.getTokenKeys();
       switch (r) {
-        case ee.ID_TOKEN:
+        case te.ID_TOKEN:
           o.idToken.indexOf(t) === -1 && (this.logger.info("BrowserCacheManager: addTokenKey - idToken added to map"), o.idToken.push(t));
           break;
-        case ee.ACCESS_TOKEN:
+        case te.ACCESS_TOKEN:
           o.accessToken.indexOf(t) === -1 && (this.logger.info("BrowserCacheManager: addTokenKey - accessToken added to map"), o.accessToken.push(t));
           break;
-        case ee.REFRESH_TOKEN:
+        case te.REFRESH_TOKEN:
           o.refreshToken.indexOf(t) === -1 && (this.logger.info("BrowserCacheManager: addTokenKey - refreshToken added to map"), o.refreshToken.push(t));
           break;
         default:
@@ -8139,17 +8139,17 @@ var da = (
       this.logger.trace("BrowserCacheManager removeTokenKey called");
       var o = this.getTokenKeys();
       switch (r) {
-        case ee.ID_TOKEN:
+        case te.ID_TOKEN:
           this.logger.infoPii("BrowserCacheManager: removeTokenKey - attempting to remove idToken with key: " + t + " from map");
           var i = o.idToken.indexOf(t);
           i > -1 ? (this.logger.info("BrowserCacheManager: removeTokenKey - idToken removed from map"), o.idToken.splice(i, 1)) : this.logger.info("BrowserCacheManager: removeTokenKey - idToken does not exist in map. Either it was previously removed or it was never added.");
           break;
-        case ee.ACCESS_TOKEN:
+        case te.ACCESS_TOKEN:
           this.logger.infoPii("BrowserCacheManager: removeTokenKey - attempting to remove accessToken with key: " + t + " from map");
           var a = o.accessToken.indexOf(t);
           a > -1 ? (this.logger.info("BrowserCacheManager: removeTokenKey - accessToken removed from map"), o.accessToken.splice(a, 1)) : this.logger.info("BrowserCacheManager: removeTokenKey - accessToken does not exist in map. Either it was previously removed or it was never added.");
           break;
-        case ee.REFRESH_TOKEN:
+        case te.REFRESH_TOKEN:
           this.logger.infoPii("BrowserCacheManager: removeTokenKey - attempting to remove refreshToken with key: " + t + " from map");
           var s = o.refreshToken.indexOf(t);
           s > -1 ? (this.logger.info("BrowserCacheManager: removeTokenKey - refreshToken removed from map"), o.refreshToken.splice(s, 1)) : this.logger.info("BrowserCacheManager: removeTokenKey - refreshToken does not exist in map. Either it was previously removed or it was never added.");
@@ -8161,33 +8161,33 @@ var da = (
     }, e.prototype.getIdTokenCredential = function(t) {
       var r = this.getItem(t);
       if (!r)
-        return this.logger.trace("BrowserCacheManager.getIdTokenCredential: called, no cache hit"), this.removeTokenKey(t, ee.ID_TOKEN), null;
+        return this.logger.trace("BrowserCacheManager.getIdTokenCredential: called, no cache hit"), this.removeTokenKey(t, te.ID_TOKEN), null;
       var o = this.validateAndParseJson(r);
-      return !o || !fn.isIdTokenEntity(o) ? (this.logger.trace("BrowserCacheManager.getIdTokenCredential: called, no cache hit"), this.removeTokenKey(t, ee.ID_TOKEN), null) : (this.logger.trace("BrowserCacheManager.getIdTokenCredential: cache hit"), Ze.toObject(new fn(), o));
+      return !o || !fn.isIdTokenEntity(o) ? (this.logger.trace("BrowserCacheManager.getIdTokenCredential: called, no cache hit"), this.removeTokenKey(t, te.ID_TOKEN), null) : (this.logger.trace("BrowserCacheManager.getIdTokenCredential: cache hit"), Ze.toObject(new fn(), o));
     }, e.prototype.setIdTokenCredential = function(t) {
       this.logger.trace("BrowserCacheManager.setIdTokenCredential called");
       var r = t.generateCredentialKey();
-      this.setItem(r, JSON.stringify(t)), this.addTokenKey(r, ee.ID_TOKEN);
+      this.setItem(r, JSON.stringify(t)), this.addTokenKey(r, te.ID_TOKEN);
     }, e.prototype.getAccessTokenCredential = function(t) {
       var r = this.getItem(t);
       if (!r)
-        return this.logger.trace("BrowserCacheManager.getAccessTokenCredential: called, no cache hit"), this.removeTokenKey(t, ee.ACCESS_TOKEN), null;
+        return this.logger.trace("BrowserCacheManager.getAccessTokenCredential: called, no cache hit"), this.removeTokenKey(t, te.ACCESS_TOKEN), null;
       var o = this.validateAndParseJson(r);
-      return !o || !hn.isAccessTokenEntity(o) ? (this.logger.trace("BrowserCacheManager.getAccessTokenCredential: called, no cache hit"), this.removeTokenKey(t, ee.ACCESS_TOKEN), null) : (this.logger.trace("BrowserCacheManager.getAccessTokenCredential: cache hit"), Ze.toObject(new hn(), o));
+      return !o || !hn.isAccessTokenEntity(o) ? (this.logger.trace("BrowserCacheManager.getAccessTokenCredential: called, no cache hit"), this.removeTokenKey(t, te.ACCESS_TOKEN), null) : (this.logger.trace("BrowserCacheManager.getAccessTokenCredential: cache hit"), Ze.toObject(new hn(), o));
     }, e.prototype.setAccessTokenCredential = function(t) {
       this.logger.trace("BrowserCacheManager.setAccessTokenCredential called");
       var r = t.generateCredentialKey();
-      this.setItem(r, JSON.stringify(t)), this.addTokenKey(r, ee.ACCESS_TOKEN);
+      this.setItem(r, JSON.stringify(t)), this.addTokenKey(r, te.ACCESS_TOKEN);
     }, e.prototype.getRefreshTokenCredential = function(t) {
       var r = this.getItem(t);
       if (!r)
-        return this.logger.trace("BrowserCacheManager.getRefreshTokenCredential: called, no cache hit"), this.removeTokenKey(t, ee.REFRESH_TOKEN), null;
+        return this.logger.trace("BrowserCacheManager.getRefreshTokenCredential: called, no cache hit"), this.removeTokenKey(t, te.REFRESH_TOKEN), null;
       var o = this.validateAndParseJson(r);
-      return !o || !rr.isRefreshTokenEntity(o) ? (this.logger.trace("BrowserCacheManager.getRefreshTokenCredential: called, no cache hit"), this.removeTokenKey(t, ee.REFRESH_TOKEN), null) : (this.logger.trace("BrowserCacheManager.getRefreshTokenCredential: cache hit"), Ze.toObject(new rr(), o));
+      return !o || !rr.isRefreshTokenEntity(o) ? (this.logger.trace("BrowserCacheManager.getRefreshTokenCredential: called, no cache hit"), this.removeTokenKey(t, te.REFRESH_TOKEN), null) : (this.logger.trace("BrowserCacheManager.getRefreshTokenCredential: cache hit"), Ze.toObject(new rr(), o));
     }, e.prototype.setRefreshTokenCredential = function(t) {
       this.logger.trace("BrowserCacheManager.setRefreshTokenCredential called");
       var r = t.generateCredentialKey();
-      this.setItem(r, JSON.stringify(t)), this.addTokenKey(r, ee.REFRESH_TOKEN);
+      this.setItem(r, JSON.stringify(t)), this.addTokenKey(r, te.REFRESH_TOKEN);
     }, e.prototype.getAppMetadata = function(t) {
       var r = this.getItem(t);
       if (!r)
@@ -8303,9 +8303,9 @@ var da = (
     }, e.prototype.getKeys = function() {
       return La(this.browserStorage.getKeys(), this.temporaryCacheStorage.getKeys());
     }, e.prototype.clear = function() {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t = this;
-        return x(this, function(r) {
+        return O(this, function(r) {
           switch (r.label) {
             case 0:
               return [4, this.removeAllAccounts()];
@@ -8320,9 +8320,9 @@ var da = (
         });
       });
     }, e.prototype.clearTokensAndKeysWithClaims = function() {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t, r, o = this;
-        return x(this, function(i) {
+        return O(this, function(i) {
           switch (i.label) {
             case 0:
               return this.logger.trace("BrowserCacheManager.clearTokensAndKeysWithClaims called"), t = this.getTokenKeys(), r = [], t.accessToken.forEach(function(a) {
@@ -8500,9 +8500,9 @@ var da = (
       this.setTemporaryCache(ge.REDIRECT_CONTEXT, t, !0);
     }, e.prototype.hydrateCache = function(t, r) {
       var o, i, a, s, c, l;
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var u, f, d, h;
-        return x(this, function(p) {
+        return O(this, function(p) {
           switch (p.label) {
             case 0:
               return u = fn.createIdTokenEntity(((o = t.account) === null || o === void 0 ? void 0 : o.homeAccountId) || "", ((i = t.account) === null || i === void 0 ? void 0 : i.environment) || "", t.idToken, this.clientId, t.tenantId), r.claims ? [4, this.cryptoImpl.hashString(r.claims)] : [3, 2];
@@ -8553,9 +8553,9 @@ var xg = (
     function n() {
     }
     return n.prototype.sendGetRequestAsync = function(e, t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r, o, i;
-        return x(this, function(a) {
+        return O(this, function(a) {
           switch (a.label) {
             case 0:
               return a.trys.push([0, 2, , 3]), [4, fetch(e, {
@@ -8583,9 +8583,9 @@ var xg = (
         });
       });
     }, n.prototype.sendPostRequestAsync = function(e, t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r, o, i, a;
-        return x(this, function(s) {
+        return O(this, function(s) {
           switch (s.label) {
             case 0:
               r = t && t.body || I.EMPTY_STRING, s.label = 1;
@@ -8638,14 +8638,14 @@ var Dg = (
     function n() {
     }
     return n.prototype.sendGetRequestAsync = function(e, t) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(r) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(r) {
           return [2, this.sendRequestAsync(e, xt.GET, t)];
         });
       });
     }, n.prototype.sendPostRequestAsync = function(e, t) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(r) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(r) {
           return [2, this.sendRequestAsync(e, xt.POST, t)];
         });
       });
@@ -8748,8 +8748,8 @@ var hu = (
       this.config = e, this.browserStorage = t, this.browserCrypto = r, this.networkClient = this.config.system.networkClient, this.eventHandler = i, this.navigationClient = a, this.nativeMessageHandler = c, this.correlationId = l || this.browserCrypto.createNewGuid(), this.logger = o.clone(At.MSAL_SKU, Ur, this.correlationId), this.performanceClient = s;
     }
     return n.prototype.clearCacheOnLogout = function(e) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(t) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(t) {
           switch (t.label) {
             case 0:
               if (!e)
@@ -8780,9 +8780,9 @@ var hu = (
         });
       });
     }, n.prototype.initializeBaseRequest = function(e, t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r, o, i, a;
-        return x(this, function(s) {
+        return O(this, function(s) {
           switch (s.label) {
             case 0:
               return this.performanceClient.addQueueMeasurement(k.InitializeBaseRequest, e.correlationId), this.logger.verbose("Initializing BaseAuthRequest"), r = e.authority || this.config.auth.authority, t ? [4, this.validateRequestAuthority(r, t)] : [3, 2];
@@ -8817,9 +8817,9 @@ var hu = (
       var t = e || this.config.auth.redirectUri || Te.getCurrentUri();
       return he.getAbsoluteUrl(t, Te.getCurrentUri());
     }, n.prototype.validateRequestAuthority = function(e, t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r;
-        return x(this, function(o) {
+        return O(this, function(o) {
           switch (o.label) {
             case 0:
               return [4, this.getDiscoveredAuthority(e)];
@@ -8845,9 +8845,9 @@ var hu = (
       };
       return new Rg(r, this.browserStorage);
     }, n.prototype.getDiscoveredAuthority = function(e) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t;
-        return x(this, function(r) {
+        return O(this, function(r) {
           switch (r.label) {
             case 0:
               return this.logger.verbose("getDiscoveredAuthority called"), t = {
@@ -8877,9 +8877,9 @@ var mr = (
       return n !== null && n.apply(this, arguments) || this;
     }
     return e.prototype.initializeAuthorizationCodeRequest = function(t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r, o;
-        return x(this, function(i) {
+        return O(this, function(i) {
           switch (i.label) {
             case 0:
               return this.performanceClient.addQueueMeasurement(k.StandardInteractionClientInitializeAuthorizationCodeRequest, t.correlationId), this.logger.verbose("initializeAuthorizationRequest called", t.correlationId), [4, this.browserCrypto.generatePkceCodes()];
@@ -8912,9 +8912,9 @@ var mr = (
         this.logger.verbose("The provided account does not contain ID Token Claims, logoutHint will not be added to logout request");
       return null;
     }, e.prototype.createAuthCodeClient = function(t, r, o) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var i;
-        return x(this, function(a) {
+        return O(this, function(a) {
           switch (a.label) {
             case 0:
               return this.performanceClient.addQueueMeasurement(k.StandardInteractionClientCreateAuthCodeClient, this.correlationId), this.performanceClient.setPreQueueTime(k.StandardInteractionClientGetClientConfiguration, this.correlationId), [4, this.getClientConfiguration(t, r, o)];
@@ -8924,9 +8924,9 @@ var mr = (
         });
       });
     }, e.prototype.getClientConfiguration = function(t, r, o) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var i, a;
-        return x(this, function(s) {
+        return O(this, function(s) {
           switch (s.label) {
             case 0:
               return this.performanceClient.addQueueMeasurement(k.StandardInteractionClientGetClientConfiguration, this.correlationId), this.logger.verbose("getClientConfiguration called", this.correlationId), this.performanceClient.setPreQueueTime(k.StandardInteractionClientGetDiscoveredAuthority, this.correlationId), [4, this.getDiscoveredAuthority(r, o)];
@@ -8976,9 +8976,9 @@ var mr = (
       return this.logger.verbose("Returning state from hash", o), t.state;
     }, e.prototype.getDiscoveredAuthority = function(t, r) {
       var o;
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var i, a, s, c;
-        return x(this, function(l) {
+        return O(this, function(l) {
           switch (l.label) {
             case 0:
               return this.performanceClient.addQueueMeasurement(k.StandardInteractionClientGetDiscoveredAuthority, this.correlationId), this.logger.verbose("getDiscoveredAuthority called", this.correlationId), i = (o = this.performanceClient) === null || o === void 0 ? void 0 : o.startMeasurement(k.StandardInteractionClientGetDiscoveredAuthority, this.correlationId), a = {
@@ -9004,9 +9004,9 @@ var mr = (
         });
       });
     }, e.prototype.initializeAuthorizationRequest = function(t, r) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var o, i, a, s, c, l, u;
-        return x(this, function(f) {
+        return O(this, function(f) {
           switch (f.label) {
             case 0:
               return this.performanceClient.addQueueMeasurement(k.StandardInteractionClientInitializeAuthorizationRequest, this.correlationId), this.logger.verbose("initializeAuthorizationRequest called", this.correlationId), o = this.getRedirectUri(t.redirectUri), i = {
@@ -9028,9 +9028,9 @@ var Ba = (
       this.authModule = e, this.browserStorage = t, this.authCodeRequest = r, this.logger = o, this.performanceClient = i;
     }
     return n.prototype.handleCodeResponseFromHash = function(e, t, r, o) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var i, a, s;
-        return x(this, function(c) {
+        return O(this, function(c) {
           if (this.performanceClient.addQueueMeasurement(k.HandleCodeResponseFromHash, this.authCodeRequest.correlationId), this.logger.verbose("InteractionHandler.handleCodeResponse called"), q.isEmpty(e))
             throw K.createEmptyHashError(e);
           if (i = this.browserStorage.generateStateKey(t), a = this.browserStorage.getTemporaryCache(i), !a)
@@ -9044,9 +9044,9 @@ var Ba = (
         });
       });
     }, n.prototype.handleCodeResponseFromServer = function(e, t, r, o, i) {
-      return i === void 0 && (i = !0), O(this, void 0, void 0, function() {
+      return i === void 0 && (i = !0), M(this, void 0, void 0, function() {
         var a, s, c, l, u, f;
-        return x(this, function(d) {
+        return O(this, function(d) {
           switch (d.label) {
             case 0:
               if (this.performanceClient.addQueueMeasurement(k.HandleCodeResponseFromServer, this.authCodeRequest.correlationId), this.logger.trace("InteractionHandler.handleCodeResponseFromServer called"), a = this.browserStorage.generateStateKey(t), s = this.browserStorage.getTemporaryCache(a), !s)
@@ -9062,9 +9062,9 @@ var Ba = (
         });
       });
     }, n.prototype.updateTokenEndpointAuthority = function(e, t, r) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var o, i;
-        return x(this, function(a) {
+        return O(this, function(a) {
           switch (a.label) {
             case 0:
               return this.performanceClient.addQueueMeasurement(k.UpdateTokenEndpointAuthority, this.authCodeRequest.correlationId), o = "https://" + e + "/" + t.tenant + "/", [4, xo.createDiscoveredInstance(o, r, this.browserStorage, t.options, this.logger, this.performanceClient, this.authCodeRequest.correlationId)];
@@ -9098,9 +9098,9 @@ var Lc = (
       return c.browserCrypto = a, c;
     }
     return e.prototype.initiateAuthRequest = function(t, r) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var o, i;
-        return x(this, function(a) {
+        return O(this, function(a) {
           switch (a.label) {
             case 0:
               return this.logger.verbose("RedirectHandler.initiateAuthRequest called"), q.isEmpty(t) ? [3, 7] : (r.redirectStartPage && (this.logger.verbose("RedirectHandler.initiateAuthRequest: redirectStartPage set, caching start page"), this.browserStorage.setTemporaryCache(ge.ORIGIN_URI, r.redirectStartPage, !0)), this.browserStorage.setTemporaryCache(ge.CORRELATION_ID, this.authCodeRequest.correlationId, !0), this.browserStorage.cacheCodeRequest(this.authCodeRequest, this.browserCrypto), this.logger.infoPii("RedirectHandler.initiateAuthRequest: Navigate to: " + t), o = {
@@ -9140,9 +9140,9 @@ var Lc = (
         });
       });
     }, e.prototype.handleCodeResponseFromHash = function(t, r, o, i) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var a, s, c, l, u, f, d;
-        return x(this, function(h) {
+        return O(this, function(h) {
           switch (h.label) {
             case 0:
               if (this.logger.verbose("RedirectHandler.handleCodeResponse called"), q.isEmpty(t))
@@ -9235,9 +9235,9 @@ var pu = (
       return n !== null && n.apply(this, arguments) || this;
     }
     return e.prototype.acquireToken = function(t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r, o, i, a, s;
-        return x(this, function(c) {
+        return O(this, function(c) {
           switch (c.label) {
             case 0:
               return r = this.performanceClient.startMeasurement(k.SilentCacheClientAcquireToken, t.correlationId), o = this.initializeServerTelemetryManager(we.acquireTokenSilent_silentFlow), [4, this.createSilentFlowClient(o, t.authority, t.azureCloudOptions)];
@@ -9267,9 +9267,9 @@ var pu = (
     }, e.prototype.logout = function() {
       return Promise.reject(K.createSilentLogoutUnsupportedError());
     }, e.prototype.createSilentFlowClient = function(t, r, o) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var i;
-        return x(this, function(a) {
+        return O(this, function(a) {
           switch (a.label) {
             case 0:
               return this.performanceClient.setPreQueueTime(k.StandardInteractionClientGetClientConfiguration, this.correlationId), [4, this.getClientConfiguration(t, r, o)];
@@ -9279,9 +9279,9 @@ var pu = (
         });
       });
     }, e.prototype.initializeSilentRequest = function(t, r) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var o;
-        return x(this, function(i) {
+        return O(this, function(i) {
           switch (i.label) {
             case 0:
               return this.performanceClient.addQueueMeasurement(k.InitializeSilentRequest, this.correlationId), this.performanceClient.setPreQueueTime(k.InitializeBaseRequest, this.correlationId), o = [G({}, t)], [4, this.initializeBaseRequest(t, r)];
@@ -9303,9 +9303,9 @@ var sr = (
       return p.apiId = c, p.accountId = f, p.nativeMessageHandler = u, p.nativeStorageManager = d, p.silentCacheClient = new pu(t, p.nativeStorageManager, o, i, a, s, l, u, h), p;
     }
     return e.prototype.acquireToken = function(t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r, o, i, a, s, c, l;
-        return x(this, function(u) {
+        return O(this, function(u) {
           switch (u.label) {
             case 0:
               return this.logger.trace("NativeInteractionClient - acquireToken called."), r = this.performanceClient.startMeasurement(k.NativeInteractionClientAcquireToken, t.correlationId), o = vt.nowSeconds(), [4, this.initializeNativeRequest(t)];
@@ -9353,9 +9353,9 @@ var sr = (
         forceRefresh: !1
       };
     }, e.prototype.acquireTokensFromCache = function(t, r) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var o, i, a, s, c;
-        return x(this, function(l) {
+        return O(this, function(l) {
           switch (l.label) {
             case 0:
               if (!t)
@@ -9378,9 +9378,9 @@ var sr = (
         });
       });
     }, e.prototype.acquireTokenRedirect = function(t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r, o, i, a, s, c;
-        return x(this, function(l) {
+        return O(this, function(l) {
           switch (l.label) {
             case 0:
               return this.logger.trace("NativeInteractionClient - acquireTokenRedirect called."), [4, this.initializeNativeRequest(t)];
@@ -9412,9 +9412,9 @@ var sr = (
         });
       });
     }, e.prototype.handleRedirectPromise = function() {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t, r, o, i, a, s, c, l;
-        return x(this, function(u) {
+        return O(this, function(u) {
           switch (u.label) {
             case 0:
               if (this.logger.trace("NativeInteractionClient - handleRedirectPromise called."), !this.browserStorage.isInteractionInProgress(!0))
@@ -9442,9 +9442,9 @@ var sr = (
     }, e.prototype.logout = function() {
       return this.logger.trace("NativeInteractionClient - logout called."), Promise.reject("Logout not implemented yet");
     }, e.prototype.handleNativeResponse = function(t, r, o) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var i, a, s, c, l;
-        return x(this, function(u) {
+        return O(this, function(u) {
           switch (u.label) {
             case 0:
               if (this.logger.trace("NativeInteractionClient - handleNativeResponse called."), t.account.id !== r.accountId)
@@ -9470,9 +9470,9 @@ var sr = (
     }, e.prototype.generateScopes = function(t, r) {
       return t.scope ? Ke.fromString(t.scope) : Ke.fromString(r.scope);
     }, e.prototype.generatePopAccessToken = function(t, r) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var o, i;
-        return x(this, function(a) {
+        return O(this, function(a) {
           switch (a.label) {
             case 0:
               if (r.tokenType !== ve.POP)
@@ -9495,9 +9495,9 @@ var sr = (
         });
       });
     }, e.prototype.generateAuthenticationResult = function(t, r, o, i, a, s) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var c, l, u, f, d, h, p, g;
-        return x(this, function(m) {
+        return O(this, function(m) {
           switch (m.label) {
             case 0:
               return c = this.addTelemetryFromNativeResponse(t), l = t.scope ? Ke.fromString(t.scope) : Ke.fromString(r.scope), u = t.account.properties || {}, f = u.UID || o.claims.oid || o.claims.sub || I.EMPTY_STRING, d = u.TenantId || o.claims.tid || I.EMPTY_STRING, [4, this.generatePopAccessToken(t, r)];
@@ -9563,9 +9563,9 @@ var sr = (
     }, e.prototype.isResponseFromCache = function(t) {
       return typeof t.is_cached > "u" ? (this.logger.verbose("NativeInteractionClient - MATS telemetry does not contain field indicating if response was served from cache. Returning false."), !1) : !!t.is_cached;
     }, e.prototype.initializeNativeRequest = function(t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r, o, i, a, s, c, l, u, f, d, h = this;
-        return x(this, function(p) {
+        return O(this, function(p) {
           switch (p.label) {
             case 0:
               return this.logger.trace("NativeInteractionClient - initializeNativeRequest called"), r = t.authority || this.config.auth.authority, t.account ? [4, this.validateRequestAuthority(r, t.account)] : [3, 2];
@@ -9627,9 +9627,9 @@ var On = (
       this.logger = e, this.handshakeTimeoutMs = t, this.extensionId = o, this.resolvers = /* @__PURE__ */ new Map(), this.handshakeResolvers = /* @__PURE__ */ new Map(), this.responseId = 0, this.messageChannel = new MessageChannel(), this.windowListener = this.onWindowMessage.bind(this), this.performanceClient = r, this.handshakeEvent = r.startMeasurement(k.NativeMessageHandlerHandshake);
     }
     return n.prototype.sendMessage = function(e) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t, r = this;
-        return x(this, function(o) {
+        return O(this, function(o) {
           return this.logger.trace("NativeMessageHandler - sendMessage called."), t = {
             channel: Rr.CHANNEL_ID,
             extensionId: this.extensionId,
@@ -9641,9 +9641,9 @@ var On = (
         });
       });
     }, n.createProvider = function(e, t, r) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var o, i;
-        return x(this, function(a) {
+        return O(this, function(a) {
           switch (a.label) {
             case 0:
               e.trace("NativeMessageHandler - createProvider called."), a.label = 1;
@@ -9664,9 +9664,9 @@ var On = (
         });
       });
     }, n.prototype.sendHandshakeRequest = function() {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var e, t = this;
-        return x(this, function(r) {
+        return O(this, function(r) {
           return this.logger.trace("NativeMessageHandler - sendHandshakeRequest called."), window.addEventListener("message", this.windowListener, !1), e = {
             channel: Rr.CHANNEL_ID,
             extensionId: this.extensionId,
@@ -9750,9 +9750,9 @@ var Lg = (
       return d.nativeStorage = l, d;
     }
     return e.prototype.acquireToken = function(t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r, o, i, a, s, c, l, u, f, d = this;
-        return x(this, function(h) {
+        return O(this, function(h) {
           switch (h.label) {
             case 0:
               return this.performanceClient.setPreQueueTime(k.StandardInteractionClientInitializeAuthorizationRequest, t.correlationId), [4, this.initializeAuthorizationRequest(t, Y.Redirect)];
@@ -9786,9 +9786,9 @@ var Lg = (
         });
       });
     }, e.prototype.handleRedirectPromise = function(t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r, o, i, a, s, c, l, u, f, d, h, p;
-        return x(this, function(g) {
+        return O(this, function(g) {
           switch (g.label) {
             case 0:
               r = this.initializeServerTelemetryManager(we.handleRedirectPromise), g.label = 1;
@@ -9844,9 +9844,9 @@ var Lg = (
       var o = this.browserStorage.getTemporaryCache(ge.URL_HASH, !0);
       return this.browserStorage.removeItem(this.browserStorage.generateCacheKey(ge.URL_HASH)), this.logger.verbose("Hash does not contain known properties, returning cached hash"), o;
     }, e.prototype.handleHash = function(t, r, o) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var i, a, s, c, l, u, f, d = this;
-        return x(this, function(h) {
+        return O(this, function(h) {
           switch (h.label) {
             case 0:
               if (i = this.browserStorage.getCachedRequest(r, this.browserCrypto), this.logger.verbose("handleHash called, retrieved cached request"), a = he.getDeserializedHash(t), a.accountId) {
@@ -9871,9 +9871,9 @@ var Lg = (
         });
       });
     }, e.prototype.logout = function(t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r, o, i, a, s, c, l;
-        return x(this, function(u) {
+        return O(this, function(u) {
           switch (u.label) {
             case 0:
               this.logger.verbose("logoutRedirect called"), r = this.initializeLogoutRequest(t), o = this.initializeServerTelemetryManager(we.logout), u.label = 1;
@@ -9954,9 +9954,9 @@ var Fg = (
         return Promise.reject(l);
       }
     }, e.prototype.acquireTokenPopupAsync = function(t, r, o, i) {
-      return O(this, void 0, void 0, function() {
-        var a, s, c, l, u, f, d, h, p, g, m, b, C, v, w, S, E, _ = this;
-        return x(this, function(T) {
+      return M(this, void 0, void 0, function() {
+        var a, s, c, l, u, f, d, h, p, g, m, v, b, C, w, S, E, _ = this;
+        return O(this, function(T) {
           switch (T.label) {
             case 0:
               return this.logger.verbose("acquireTokenPopupAsync called"), a = this.initializeServerTelemetryManager(we.acquireTokenPopup), this.performanceClient.setPreQueueTime(k.StandardInteractionClientInitializeAuthorizationRequest, t.correlationId), [4, this.initializeAuthorizationRequest(t, Y.Popup)];
@@ -9975,21 +9975,21 @@ var Fg = (
                 popupWindowAttributes: o
               }, g = this.initiateAuthRequest(d, p), this.eventHandler.emitEvent(oe.POPUP_OPENED, Y.Popup, { popupWindow: g }, null), [4, this.monitorPopupForHash(g)];
             case 6:
-              if (m = T.sent(), b = he.getDeserializedHash(m), C = this.validateAndExtractStateFromHash(b, Y.Popup, s.correlationId), No.removeThrottle(this.browserStorage, this.config.auth.clientId, c), b.accountId) {
+              if (m = T.sent(), v = he.getDeserializedHash(m), b = this.validateAndExtractStateFromHash(v, Y.Popup, s.correlationId), No.removeThrottle(this.browserStorage, this.config.auth.clientId, c), v.accountId) {
                 if (this.logger.verbose("Account id found in hash, calling WAM for token"), f && f.endMeasurement({
                   success: !0,
                   isNativeBroker: !0
                 }), !this.nativeMessageHandler)
                   throw K.createNativeConnectionNotEstablishedError();
-                return v = new sr(this.config, this.browserStorage, this.browserCrypto, this.logger, this.eventHandler, this.navigationClient, we.acquireTokenPopup, this.performanceClient, this.nativeMessageHandler, b.accountId, this.nativeStorage, s.correlationId), w = Yt.parseRequestState(this.browserCrypto, C).userRequestState, [2, v.acquireToken(G(G({}, s), {
+                return C = new sr(this.config, this.browserStorage, this.browserCrypto, this.logger, this.eventHandler, this.navigationClient, we.acquireTokenPopup, this.performanceClient, this.nativeMessageHandler, v.accountId, this.nativeStorage, s.correlationId), w = Yt.parseRequestState(this.browserCrypto, b).userRequestState, [2, C.acquireToken(G(G({}, s), {
                   state: w,
                   prompt: void 0
                   // Server should handle the prompt, ideally native broker can do this part silently
                 })).finally(function() {
-                  _.browserStorage.cleanRequestByState(C);
+                  _.browserStorage.cleanRequestByState(b);
                 })];
               }
-              return [4, h.handleCodeResponseFromHash(m, C, l.authority, this.networkClient)];
+              return [4, h.handleCodeResponseFromHash(m, b, l.authority, this.networkClient)];
             case 7:
               return S = T.sent(), [2, S];
             case 8:
@@ -10003,9 +10003,9 @@ var Fg = (
         });
       });
     }, e.prototype.logoutPopupAsync = function(t, r, o, i, a, s) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var c, l, u, f, d, h, p;
-        return x(this, function(g) {
+        return O(this, function(g) {
           switch (g.label) {
             case 0:
               this.logger.verbose("logoutPopupAsync called"), this.eventHandler.emitEvent(oe.LOGOUT_START, Y.Popup, t), c = this.initializeServerTelemetryManager(we.logoutPopup), g.label = 1;
@@ -10185,8 +10185,8 @@ var gu = (
       return c.navigateFrameWait = a.navigateFrameWait, c.pollIntervalMilliseconds = a.pollIntervalMilliseconds, c;
     }
     return e.prototype.initiateAuthRequest = function(t) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(r) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(r) {
           switch (r.label) {
             case 0:
               if (this.performanceClient.addQueueMeasurement(k.SilentHandlerInitiateAuthRequest, this.authCodeRequest.correlationId), q.isEmpty(t))
@@ -10255,9 +10255,9 @@ var $g = (
       return h.apiId = c, h.nativeStorage = u, h;
     }
     return e.prototype.acquireToken = function(t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r, o, i, a, s;
-        return x(this, function(c) {
+        return O(this, function(c) {
           switch (c.label) {
             case 0:
               if (this.performanceClient.addQueueMeasurement(k.SilentIframeClientAcquireToken, t.correlationId), this.logger.verbose("acquireTokenByIframe called"), r = this.performanceClient.startMeasurement(k.SilentIframeClientAcquireToken, t.correlationId), q.isEmpty(t.loginHint) && q.isEmpty(t.sid) && (!t.account || q.isEmpty(t.account.username)) && this.logger.warning("No user hint provided. The authorization server may need more information to complete this request."), t.prompt && t.prompt !== Ve.NONE && t.prompt !== Ve.NO_SESSION)
@@ -10296,9 +10296,9 @@ var $g = (
     }, e.prototype.logout = function() {
       return Promise.reject(K.createSilentLogoutUnsupportedError());
     }, e.prototype.silentTokenHelper = function(t, r) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var o, i, a, s, c, l, u, f, d, h = this;
-        return x(this, function(p) {
+        return O(this, function(p) {
           switch (p.label) {
             case 0:
               return this.performanceClient.addQueueMeasurement(k.SilentIframeClientTokenHelper, r.correlationId), this.performanceClient.setPreQueueTime(k.StandardInteractionClientInitializeAuthorizationCodeRequest, r.correlationId), [4, this.initializeAuthorizationCodeRequest(r)];
@@ -10332,9 +10332,9 @@ var Kg = (
       return n !== null && n.apply(this, arguments) || this;
     }
     return e.prototype.acquireToken = function(t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r, o, i, a, s, c = this;
-        return x(this, function(l) {
+        return O(this, function(l) {
           switch (l.label) {
             case 0:
               return this.performanceClient.addQueueMeasurement(k.SilentRefreshClientAcquireToken, t.correlationId), this.performanceClient.setPreQueueTime(k.InitializeBaseRequest, t.correlationId), o = [G({}, t)], [4, this.initializeBaseRequest(t, t.account)];
@@ -10360,9 +10360,9 @@ var Kg = (
     }, e.prototype.logout = function() {
       return Promise.reject(K.createSilentLogoutUnsupportedError());
     }, e.prototype.createRefreshTokenClient = function(t, r, o) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var i;
-        return x(this, function(a) {
+        return O(this, function(a) {
           switch (a.label) {
             case 0:
               return this.performanceClient.setPreQueueTime(k.StandardInteractionClientGetClientConfiguration, this.correlationId), [4, this.getClientConfiguration(t, r, o)];
@@ -10568,9 +10568,9 @@ var Gg = 32, Wg = (
       this.base64Encode = new yu(), this.cryptoObj = e;
     }
     return n.prototype.generateCodes = function() {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var e, t;
-        return x(this, function(r) {
+        return O(this, function(r) {
           switch (r.label) {
             case 0:
               return e = this.generateCodeVerifier(), [4, this.generateCodeChallengeFromVerifier(e)];
@@ -10592,9 +10592,9 @@ var Gg = 32, Wg = (
         throw K.createPkceNotGeneratedError(r);
       }
     }, n.prototype.generateCodeChallengeFromVerifier = function(e) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t, r;
-        return x(this, function(o) {
+        return O(this, function(o) {
           switch (o.label) {
             case 0:
               return o.trys.push([0, 2, , 3]), [4, this.cryptoObj.sha256Digest(e)];
@@ -10622,32 +10622,32 @@ var Yg = (
     return n.prototype.getRandomValues = function(e) {
       return window.crypto.getRandomValues(e);
     }, n.prototype.generateKey = function(e, t, r) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(o) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(o) {
           return [2, window.crypto.subtle.generateKey(e, t, r)];
         });
       });
     }, n.prototype.exportKey = function(e) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(t) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(t) {
           return [2, window.crypto.subtle.exportKey(dr, e)];
         });
       });
     }, n.prototype.importKey = function(e, t, r, o) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(i) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(i) {
           return [2, window.crypto.subtle.importKey(dr, e, t, r, o)];
         });
       });
     }, n.prototype.sign = function(e, t, r) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(o) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(o) {
           return [2, window.crypto.subtle.sign(e, t, r)];
         });
       });
     }, n.prototype.digest = function(e, t) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(r) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(r) {
           return [2, window.crypto.subtle.digest(e, t)];
         });
       });
@@ -10665,32 +10665,32 @@ var Qg = (
     }, n.prototype.getRandomValues = function(e) {
       return window.msrCrypto.getRandomValues(e);
     }, n.prototype.generateKey = function(e, t, r) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(o) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(o) {
           return [2, window.msrCrypto.subtle.generateKey(e, t, r)];
         });
       });
     }, n.prototype.exportKey = function(e) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(t) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(t) {
           return [2, window.msrCrypto.subtle.exportKey(dr, e)];
         });
       });
     }, n.prototype.importKey = function(e, t, r, o) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(i) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(i) {
           return [2, window.msrCrypto.subtle.importKey(dr, e, t, r, o)];
         });
       });
     }, n.prototype.sign = function(e, t, r) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(o) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(o) {
           return [2, window.msrCrypto.subtle.sign(e, t, r)];
         });
       });
     }, n.prototype.digest = function(e, t) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(r) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(r) {
           return [2, window.msrCrypto.subtle.digest(e, t)];
         });
       });
@@ -10706,8 +10706,8 @@ var Jg = (
     return n.prototype.getRandomValues = function(e) {
       return window.msCrypto.getRandomValues(e);
     }, n.prototype.generateKey = function(e, t, r) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(o) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(o) {
           return [2, new Promise(function(i, a) {
             var s = window.msCrypto.subtle.generateKey(e, t, r);
             s.addEventListener("complete", function(c) {
@@ -10719,8 +10719,8 @@ var Jg = (
         });
       });
     }, n.prototype.exportKey = function(e) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(t) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(t) {
           return [2, new Promise(function(r, o) {
             var i = window.msCrypto.subtle.exportKey(dr, e);
             i.addEventListener("complete", function(a) {
@@ -10737,9 +10737,9 @@ var Jg = (
         });
       });
     }, n.prototype.importKey = function(e, t, r, o) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var i, a;
-        return x(this, function(s) {
+        return O(this, function(s) {
           return i = Qt.getSortedObjectString(e), a = Qt.stringToArrayBuffer(i), [2, new Promise(function(c, l) {
             var u = window.msCrypto.subtle.importKey(dr, a, t, r, o);
             u.addEventListener("complete", function(f) {
@@ -10751,8 +10751,8 @@ var Jg = (
         });
       });
     }, n.prototype.sign = function(e, t, r) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(o) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(o) {
           return [2, new Promise(function(i, a) {
             var s = window.msCrypto.subtle.sign(e, t, r);
             s.addEventListener("complete", function(c) {
@@ -10764,8 +10764,8 @@ var Jg = (
         });
       });
     }, n.prototype.digest = function(e, t) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(r) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(r) {
           return [2, new Promise(function(o, i) {
             var a = window.msCrypto.subtle.digest(e, t.buffer);
             a.addEventListener("complete", function(s) {
@@ -10812,35 +10812,35 @@ var Xg = "RSASSA-PKCS1-v1_5", Fc = "SHA-256", Zg = 2048, em = new Uint8Array([1,
     }, n.prototype.hasMsrCrypto = function() {
       return "msrCrypto" in window;
     }, n.prototype.sha256Digest = function(e) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t;
-        return x(this, function(r) {
+        return O(this, function(r) {
           return t = Qt.stringToUtf8Arr(e), [2, this.subtleCrypto.digest({ name: Fc }, t)];
         });
       });
     }, n.prototype.getRandomValues = function(e) {
       return this.subtleCrypto.getRandomValues(e);
     }, n.prototype.generateKeyPair = function(e, t) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(r) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(r) {
           return [2, this.subtleCrypto.generateKey(this.keygenAlgorithmOptions, e, t)];
         });
       });
     }, n.prototype.exportJwk = function(e) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(t) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(t) {
           return [2, this.subtleCrypto.exportKey(e)];
         });
       });
     }, n.prototype.importJwk = function(e, t, r) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(o) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(o) {
           return [2, this.subtleCrypto.importKey(e, this.keygenAlgorithmOptions, t, r)];
         });
       });
     }, n.prototype.sign = function(e, t) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(r) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(r) {
           return [2, this.subtleCrypto.sign(this.keygenAlgorithmOptions, e, t)];
         });
       });
@@ -10855,9 +10855,9 @@ var tm = (
       this.dbName = la, this.version = Ng, this.tableName = Mg, this.dbOpen = !1;
     }
     return n.prototype.open = function() {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var e = this;
-        return x(this, function(t) {
+        return O(this, function(t) {
           return [2, new Promise(function(r, o) {
             var i = window.indexedDB.open(e.dbName, e.version);
             i.addEventListener("upgradeneeded", function(a) {
@@ -10876,8 +10876,8 @@ var tm = (
       var e = this.db;
       e && this.dbOpen && (e.close(), this.dbOpen = !1);
     }, n.prototype.validateDbIsOpen = function() {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(e) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(e) {
           switch (e.label) {
             case 0:
               return this.dbOpen ? [3, 2] : [4, this.open()];
@@ -10892,9 +10892,9 @@ var tm = (
         });
       });
     }, n.prototype.getItem = function(e) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t = this;
-        return x(this, function(r) {
+        return O(this, function(r) {
           switch (r.label) {
             case 0:
               return [4, this.validateDbIsOpen()];
@@ -10914,9 +10914,9 @@ var tm = (
         });
       });
     }, n.prototype.setItem = function(e, t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r = this;
-        return x(this, function(o) {
+        return O(this, function(o) {
           switch (o.label) {
             case 0:
               return [4, this.validateDbIsOpen()];
@@ -10935,9 +10935,9 @@ var tm = (
         });
       });
     }, n.prototype.removeItem = function(e) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t = this;
-        return x(this, function(r) {
+        return O(this, function(r) {
           switch (r.label) {
             case 0:
               return [4, this.validateDbIsOpen()];
@@ -10956,9 +10956,9 @@ var tm = (
         });
       });
     }, n.prototype.getKeys = function() {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var e = this;
-        return x(this, function(t) {
+        return O(this, function(t) {
           switch (t.label) {
             case 0:
               return [4, this.validateDbIsOpen()];
@@ -10978,9 +10978,9 @@ var tm = (
         });
       });
     }, n.prototype.containsKey = function(e) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t = this;
-        return x(this, function(r) {
+        return O(this, function(r) {
           switch (r.label) {
             case 0:
               return [4, this.validateDbIsOpen()];
@@ -11000,8 +11000,8 @@ var tm = (
         });
       });
     }, n.prototype.deleteDatabase = function() {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(e) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(e) {
           return this.db && this.dbOpen && this.closeConnection(), [2, new Promise(function(t, r) {
             var o = window.indexedDB.deleteDatabase(la);
             o.addEventListener("success", function() {
@@ -11030,9 +11030,9 @@ var jc = (
       else
         throw e;
     }, n.prototype.getItem = function(e) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t, r;
-        return x(this, function(o) {
+        return O(this, function(o) {
           switch (o.label) {
             case 0:
               if (t = this.inMemoryCache.getItem(e), t)
@@ -11050,9 +11050,9 @@ var jc = (
         });
       });
     }, n.prototype.setItem = function(e, t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r;
-        return x(this, function(o) {
+        return O(this, function(o) {
           switch (o.label) {
             case 0:
               this.inMemoryCache.setItem(e, t), o.label = 1;
@@ -11071,9 +11071,9 @@ var jc = (
         });
       });
     }, n.prototype.removeItem = function(e) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t;
-        return x(this, function(r) {
+        return O(this, function(r) {
           switch (r.label) {
             case 0:
               this.inMemoryCache.removeItem(e), r.label = 1;
@@ -11092,9 +11092,9 @@ var jc = (
         });
       });
     }, n.prototype.getKeys = function() {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var e, t;
-        return x(this, function(r) {
+        return O(this, function(r) {
           switch (r.label) {
             case 0:
               if (e = this.inMemoryCache.getKeys(), e.length !== 0)
@@ -11112,9 +11112,9 @@ var jc = (
         });
       });
     }, n.prototype.containsKey = function(e) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t, r;
-        return x(this, function(o) {
+        return O(this, function(o) {
           switch (o.label) {
             case 0:
               if (t = this.inMemoryCache.containsKey(e), t)
@@ -11134,9 +11134,9 @@ var jc = (
     }, n.prototype.clearInMemory = function() {
       this.logger.verbose("Deleting in-memory keystore " + this.storeName), this.inMemoryCache.clear(), this.logger.verbose("In-memory keystore " + this.storeName + " deleted");
     }, n.prototype.clearPersistent = function() {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var e, t;
-        return x(this, function(r) {
+        return O(this, function(r) {
           switch (r.label) {
             case 0:
               return r.trys.push([0, 2, , 3]), this.logger.verbose("Deleting persistent keystore"), [4, this.indexedDBCache.deleteDatabase()];
@@ -11167,9 +11167,9 @@ var nm = (
       this.logger = e, this.asymmetricKeys = new jc(this.logger, Fo.asymmetricKeys), this.symmetricKeys = new jc(this.logger, Fo.symmetricKeys);
     }
     return n.prototype.clear = function() {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var e;
-        return x(this, function(t) {
+        return O(this, function(t) {
           switch (t.label) {
             case 0:
               this.asymmetricKeys.clearInMemory(), this.symmetricKeys.clearInMemory(), t.label = 1;
@@ -11204,16 +11204,16 @@ var rm = (
     }, n.prototype.base64Decode = function(e) {
       return this.b64Decode.decode(e);
     }, n.prototype.generatePkceCodes = function() {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(e) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(e) {
           return [2, this.pkceGenerator.generateCodes()];
         });
       });
     }, n.prototype.getPublicKeyThumbprint = function(e) {
       var t;
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r, o, i, a, s, c, l, u;
-        return x(this, function(f) {
+        return O(this, function(f) {
           switch (f.label) {
             case 0:
               return r = (t = this.performanceClient) === null || t === void 0 ? void 0 : t.startMeasurement(k.CryptoOptsGetPublicKeyThumbprint, e.correlationId), [4, this.browserCrypto.generateKeyPair(n.EXTRACTABLE, n.POP_KEY_USAGES)];
@@ -11244,9 +11244,9 @@ var rm = (
         });
       });
     }, n.prototype.removeTokenBindingKey = function(e) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t;
-        return x(this, function(r) {
+        return O(this, function(r) {
           switch (r.label) {
             case 0:
               return [4, this.cache.asymmetricKeys.removeItem(e)];
@@ -11258,8 +11258,8 @@ var rm = (
         });
       });
     }, n.prototype.clearKeystore = function() {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(e) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(e) {
           switch (e.label) {
             case 0:
               return [4, this.cache.clear()];
@@ -11270,31 +11270,31 @@ var rm = (
       });
     }, n.prototype.signJwt = function(e, t, r) {
       var o;
-      return O(this, void 0, void 0, function() {
-        var i, a, s, c, l, u, f, d, h, p, g, m, b;
-        return x(this, function(C) {
-          switch (C.label) {
+      return M(this, void 0, void 0, function() {
+        var i, a, s, c, l, u, f, d, h, p, g, m, v;
+        return O(this, function(b) {
+          switch (b.label) {
             case 0:
               return i = (o = this.performanceClient) === null || o === void 0 ? void 0 : o.startMeasurement(k.CryptoOptsSignJwt, r), [4, this.cache.asymmetricKeys.getItem(t)];
             case 1:
-              if (a = C.sent(), !a)
+              if (a = b.sent(), !a)
                 throw K.createSigningKeyNotFoundInStorageError(t);
               return [4, this.browserCrypto.exportJwk(a.publicKey)];
             case 2:
-              return s = C.sent(), c = Qt.getSortedObjectString(s), l = this.b64Encode.urlEncode(JSON.stringify({ kid: t })), u = Ag.getShrHeaderString({ kid: l, alg: s.alg }), f = this.b64Encode.urlEncode(u), e.cnf = {
+              return s = b.sent(), c = Qt.getSortedObjectString(s), l = this.b64Encode.urlEncode(JSON.stringify({ kid: t })), u = Ag.getShrHeaderString({ kid: l, alg: s.alg }), f = this.b64Encode.urlEncode(u), e.cnf = {
                 jwk: JSON.parse(c)
               }, d = this.b64Encode.urlEncode(JSON.stringify(e)), h = f + "." + d, p = Qt.stringToArrayBuffer(h), [4, this.browserCrypto.sign(a.privateKey, p)];
             case 3:
-              return g = C.sent(), m = this.b64Encode.urlEncodeArr(new Uint8Array(g)), b = h + "." + m, i && i.endMeasurement({
+              return g = b.sent(), m = this.b64Encode.urlEncodeArr(new Uint8Array(g)), v = h + "." + m, i && i.endMeasurement({
                 success: !0
-              }), [2, b];
+              }), [2, v];
           }
         });
       });
     }, n.prototype.hashString = function(e) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t, r;
-        return x(this, function(o) {
+        return O(this, function(o) {
           switch (o.label) {
             case 0:
               return [4, this.browserCrypto.sha256Digest(e)];
@@ -11527,9 +11527,9 @@ var sm = (
       return d.apiId = c, d;
     }
     return e.prototype.acquireToken = function(t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r, o, i, a, s, c, l;
-        return x(this, function(u) {
+        return O(this, function(u) {
           switch (u.label) {
             case 0:
               if (this.logger.trace("SilentAuthCodeClient.acquireToken called"), !t.code)
@@ -11578,9 +11578,9 @@ var cm = (
       this.nativeInternalStorage = new da(this.config.auth.clientId, t, this.browserCrypto, this.logger), this.tokenCache = new im(this.config, this.browserStorage, this.logger, this.browserCrypto), this.trackPageVisibilityWithMeasurement = this.trackPageVisibilityWithMeasurement.bind(this);
     }
     return n.prototype.initialize = function() {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var e, t, r, o, i;
-        return x(this, function(a) {
+        return O(this, function(a) {
           switch (a.label) {
             case 0:
               if (this.logger.trace("initialize called"), this.initialized)
@@ -11610,9 +11610,9 @@ var cm = (
         });
       });
     }, n.prototype.handleRedirectPromise = function(e) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t, r, o, i, a, s, c, l, u = this;
-        return x(this, function(f) {
+        return O(this, function(f) {
           return this.logger.verbose("handleRedirectPromise called"), Te.blockNativeBrokerCalledBeforeInitialized(this.config.system.allowNativeBroker, this.initialized), t = this.getAllAccounts(), this.isBrowserEnvironment ? (r = e || I.EMPTY_STRING, o = this.redirectResponse.get(r), typeof o > "u" ? (this.eventHandler.emitEvent(oe.HANDLE_REDIRECT_START, Y.Redirect), this.logger.verbose("handleRedirectPromise has been called for the first time, storing the promise"), i = this.browserStorage.getCachedNativeRequest(), a = void 0, i && On.isNativeAvailable(this.config, this.logger, this.nativeExtensionProvider) && this.nativeExtensionProvider && !e ? (this.logger.trace("handleRedirectPromise - acquiring token from native platform"), s = new sr(this.config, this.browserStorage, this.browserCrypto, this.logger, this.eventHandler, this.navigationClient, we.handleRedirectPromise, this.performanceClient, this.nativeExtensionProvider, i.accountId, this.nativeInternalStorage, i.correlationId), a = s.handleRedirectPromise()) : (this.logger.trace("handleRedirectPromise - acquiring token from web flow"), c = this.browserStorage.getTemporaryCache(ge.CORRELATION_ID, !0) || I.EMPTY_STRING, l = this.createRedirectClient(c), a = l.handleRedirectPromise(e)), o = a.then(function(d) {
             if (d) {
               var h = t.length < u.getAllAccounts().length;
@@ -11625,9 +11625,9 @@ var cm = (
         });
       });
     }, n.prototype.acquireTokenRedirect = function(e) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t, r, o, i, a, s = this;
-        return x(this, function(c) {
+        return O(this, function(c) {
           return t = this.getRequestCorrelationId(e), this.logger.verbose("acquireTokenRedirect called", t), this.preflightBrowserEnvironmentCheck(Y.Redirect), r = this.getAllAccounts().length > 0, r ? this.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_START, Y.Redirect, e) : this.eventHandler.emitEvent(oe.LOGIN_START, Y.Redirect, e), this.nativeExtensionProvider && this.canUseNative(e) ? (i = new sr(this.config, this.browserStorage, this.browserCrypto, this.logger, this.eventHandler, this.navigationClient, we.acquireTokenRedirect, this.performanceClient, this.nativeExtensionProvider, this.getNativeAccountId(e), this.nativeInternalStorage, e.correlationId), o = i.acquireTokenRedirect(e).catch(function(l) {
             if (l instanceof Lt && l.isFatal()) {
               s.nativeExtensionProvider = void 0;
@@ -11700,9 +11700,9 @@ var cm = (
       }));
     }, n.prototype.ssoSilent = function(e) {
       var t;
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r, o, i, a, s = this;
-        return x(this, function(c) {
+        return O(this, function(c) {
           return r = this.getRequestCorrelationId(e), o = G(G({}, e), {
             // will be PromptValue.NONE or PromptValue.NO_SESSION
             prompt: e.prompt,
@@ -11739,9 +11739,9 @@ var cm = (
         });
       });
     }, n.prototype.acquireTokenByCode = function(e) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t, r, o, i, a = this;
-        return x(this, function(s) {
+        return O(this, function(s) {
           t = this.getRequestCorrelationId(e), this.preflightBrowserEnvironmentCheck(Y.Silent), this.logger.trace("acquireTokenByCode called", t), this.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_BY_CODE_START, Y.Silent, e), r = this.performanceClient.startMeasurement(k.AcquireTokenByCode, e.correlationId);
           try {
             if (e.code && e.nativeAccountId)
@@ -11786,9 +11786,9 @@ var cm = (
       });
     }, n.prototype.acquireTokenByCodeAsync = function(e) {
       var t;
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r, o, i = this;
-        return x(this, function(a) {
+        return O(this, function(a) {
           switch (a.label) {
             case 0:
               return this.logger.trace("acquireTokenByCodeAsync called", e.correlationId), this.acquireTokenByCodeAsyncMeasurement = this.performanceClient.startMeasurement(k.AcquireTokenByCodeAsync, e.correlationId), (t = this.acquireTokenByCodeAsyncMeasurement) === null || t === void 0 || t.increment({
@@ -11817,8 +11817,8 @@ var cm = (
         });
       });
     }, n.prototype.acquireTokenFromCache = function(e, t, r) {
-      return O(this, void 0, void 0, function() {
-        return x(this, function(o) {
+      return M(this, void 0, void 0, function() {
+        return O(this, function(o) {
           switch (this.performanceClient.addQueueMeasurement(k.AcquireTokenFromCache, t.correlationId), r.cacheLookupPolicy) {
             case tt.Default:
             case tt.AccessToken:
@@ -11834,9 +11834,9 @@ var cm = (
         });
       });
     }, n.prototype.acquireTokenByRefreshToken = function(e, t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r;
-        return x(this, function(o) {
+        return O(this, function(o) {
           switch (this.performanceClient.addQueueMeasurement(k.AcquireTokenByRefreshToken, e.correlationId), t.cacheLookupPolicy) {
             case tt.Default:
             case tt.AccessTokenAndRefreshToken:
@@ -11853,23 +11853,23 @@ var cm = (
         });
       });
     }, n.prototype.acquireTokenBySilentIframe = function(e) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t;
-        return x(this, function(r) {
+        return O(this, function(r) {
           return this.performanceClient.addQueueMeasurement(k.AcquireTokenBySilentIframe, e.correlationId), t = this.createSilentIframeClient(e.correlationId), this.performanceClient.setPreQueueTime(k.SilentIframeClientAcquireToken, e.correlationId), [2, t.acquireToken(e)];
         });
       });
     }, n.prototype.logout = function(e) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t;
-        return x(this, function(r) {
+        return O(this, function(r) {
           return t = this.getRequestCorrelationId(e), this.logger.warning("logout API is deprecated and will be removed in msal-browser v3.0.0. Use logoutRedirect instead.", t), [2, this.logoutRedirect(G({ correlationId: t }, e))];
         });
       });
     }, n.prototype.logoutRedirect = function(e) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var t, r;
-        return x(this, function(o) {
+        return O(this, function(o) {
           return t = this.getRequestCorrelationId(e), this.preflightBrowserEnvironmentCheck(Y.Redirect), r = this.createRedirectClient(t), [2, r.logout(e)];
         });
       });
@@ -11910,9 +11910,9 @@ var cm = (
     }, n.prototype.preflightInteractiveRequest = function(e) {
       this.logger.verbose("preflightInteractiveRequest called, validating app environment"), Te.blockReloadInHiddenIframes(), e && this.browserStorage.setInteractionInProgress(!0);
     }, n.prototype.acquireTokenNative = function(e, t, r) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var o;
-        return x(this, function(i) {
+        return O(this, function(i) {
           if (this.logger.trace("acquireTokenNative called"), !this.nativeExtensionProvider)
             throw K.createNativeConnectionNotEstablishedError();
           return o = new sr(this.config, this.browserStorage, this.browserCrypto, this.logger, this.eventHandler, this.navigationClient, t, this.performanceClient, this.nativeExtensionProvider, r || this.getNativeAccountId(e), this.nativeInternalStorage, e.correlationId), [2, o.acquireToken(e)];
@@ -11986,9 +11986,9 @@ var lm = (
       return r.astsAsyncMeasurement = void 0, r.activeSilentTokenRequests = /* @__PURE__ */ new Map(), r.trackPageVisibility = r.trackPageVisibility.bind(r), r;
     }
     return e.prototype.loginRedirect = function(t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r;
-        return x(this, function(o) {
+        return O(this, function(o) {
           return r = this.getRequestCorrelationId(t), this.logger.verbose("loginRedirect called", r), [2, this.acquireTokenRedirect(G({ correlationId: r }, t || Oc))];
         });
       });
@@ -11996,9 +11996,9 @@ var lm = (
       var r = this.getRequestCorrelationId(t);
       return this.logger.verbose("loginPopup called", r), this.acquireTokenPopup(G({ correlationId: r }, t || Oc));
     }, e.prototype.acquireTokenSilent = function(t) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var r, o, i, a, s, c, l, u = this;
-        return x(this, function(f) {
+        return O(this, function(f) {
           if (r = this.getRequestCorrelationId(t), o = this.performanceClient.startMeasurement(k.AcquireTokenSilent, r), o.addStaticFields({
             cacheLookupPolicy: t.cacheLookupPolicy
           }), this.preflightBrowserEnvironmentCheck(Y.Silent), this.logger.verbose("acquireTokenSilent called", r), i = t.account || this.getActiveAccount(), !i)
@@ -12040,17 +12040,17 @@ var lm = (
       }));
     }, e.prototype.acquireTokenSilentAsync = function(t, r) {
       var o;
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var i, a, s, c, l, u = this;
-        return x(this, function(f) {
+        return O(this, function(f) {
           switch (f.label) {
             case 0:
               return this.performanceClient.addQueueMeasurement(k.AcquireTokenSilentAsync, t.correlationId), this.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_START, Y.Silent, t), this.astsAsyncMeasurement = this.performanceClient.startMeasurement(k.AcquireTokenSilentAsync, t.correlationId), (o = this.astsAsyncMeasurement) === null || o === void 0 || o.increment({
                 visibilityChangeCount: 0
               }), document.addEventListener("visibilitychange", this.trackPageVisibility), On.isNativeAvailable(this.config, this.logger, this.nativeExtensionProvider, t.authenticationScheme) && r.nativeAccountId ? (this.logger.verbose("acquireTokenSilent - attempting to acquire token from native platform"), a = G(G({}, t), { account: r }), i = this.acquireTokenNative(a, we.acquireTokenSilent_silentFlow).catch(function(d) {
-                return O(u, void 0, void 0, function() {
+                return M(u, void 0, void 0, function() {
                   var h;
-                  return x(this, function(p) {
+                  return O(this, function(p) {
                     if (d instanceof Lt && d.isFatal())
                       return this.logger.verbose("acquireTokenSilent - native platform unavailable, falling back to web flow"), this.nativeExtensionProvider = void 0, h = this.createSilentIframeClient(t.correlationId), [2, h.acquireToken(t)];
                     throw d;
@@ -12067,8 +12067,8 @@ var lm = (
                 if (l.cacheLookupPolicy === tt.AccessToken)
                   throw d;
                 return Te.blockReloadInHiddenIframes(), u.eventHandler.emitEvent(oe.ACQUIRE_TOKEN_NETWORK_START, Y.Silent, c), u.performanceClient.setPreQueueTime(k.AcquireTokenByRefreshToken, c.correlationId), u.acquireTokenByRefreshToken(c, l).catch(function(h) {
-                  var p = h instanceof Ln, g = h instanceof Pt, m = h.errorCode === or.noTokensFoundError.code, b = h.errorCode === At.INVALID_GRANT_ERROR;
-                  if ((!p || !b || g || l.cacheLookupPolicy === tt.AccessTokenAndRefreshToken || l.cacheLookupPolicy === tt.RefreshToken) && l.cacheLookupPolicy !== tt.Skip && !m)
+                  var p = h instanceof Ln, g = h instanceof Pt, m = h.errorCode === or.noTokensFoundError.code, v = h.errorCode === At.INVALID_GRANT_ERROR;
+                  if ((!p || !v || g || l.cacheLookupPolicy === tt.AccessTokenAndRefreshToken || l.cacheLookupPolicy === tt.RefreshToken) && l.cacheLookupPolicy !== tt.Skip && !m)
                     throw h;
                   return u.logger.verbose("Refresh token expired/invalid or CacheLookupPolicy is set to Skip, attempting acquire token by iframe.", t.correlationId), u.performanceClient.setPreQueueTime(k.AcquireTokenBySilentIframe, c.correlationId), u.acquireTokenBySilentIframe(c);
                 });
@@ -12096,9 +12096,9 @@ var lm = (
         });
       });
     }, e.prototype.hydrateCache = function(t, r) {
-      return O(this, void 0, void 0, function() {
+      return M(this, void 0, void 0, function() {
         var o;
-        return x(this, function(i) {
+        return O(this, function(i) {
           return this.logger.verbose("hydrateCache called"), t.account ? (o = Ge.createFromAccountInfo(t.account, t.cloudGraphHostName, t.msGraphHost), this.browserStorage.setAccount(o), t.fromNativeBroker ? (this.logger.verbose("Response was from native broker, storing in-memory"), [2, this.nativeInternalStorage.hydrateCache(t, r)]) : [2, this.browserStorage.hydrateCache(t, r)]) : [
             2
             /*return*/
@@ -12312,7 +12312,7 @@ function Eu() {
 }
 function Rn(n) {
   const e = ue(n);
-  return X(() => {
+  return ee(() => {
     e.current = n;
   }), Br(() => (...t) => {
     var r;
@@ -12321,7 +12321,7 @@ function Rn(n) {
 }
 function ni(n, e) {
   const t = Rn(n), r = ue(0);
-  return X(() => () => window.clearTimeout(r.current), []), me(
+  return ee(() => () => window.clearTimeout(r.current), []), me(
     (...o) => {
       window.clearTimeout(r.current), r.current = window.setTimeout(() => t(...o), e);
     },
@@ -12331,7 +12331,7 @@ function ni(n, e) {
 const zc = ["mousedown", "touchstart"];
 function wm(n, e, t) {
   const r = ue();
-  return X(() => {
+  return ee(() => {
     const o = (i) => {
       const { target: a } = i ?? {};
       if (Array.isArray(t)) {
@@ -12358,31 +12358,31 @@ function Em(n, e) {
 function Im(n, e, { getInitialValueInEffect: t } = {
   getInitialValueInEffect: !0
 }) {
-  const [r, o] = te(
+  const [r, o] = Z(
     t ? e : Em(n)
   ), i = ue();
-  return X(() => {
+  return ee(() => {
     if ("matchMedia" in window)
       return i.current = window.matchMedia(n), o(i.current.matches), Sm(i.current, (a) => o(a.matches));
   }, [n]), r;
 }
 function Tm(n, e, t = { leading: !1 }) {
-  const [r, o] = te(n), i = ue(!1), a = ue(null), s = ue(!1), c = () => window.clearTimeout(a.current);
-  return X(() => {
+  const [r, o] = Z(n), i = ue(!1), a = ue(null), s = ue(!1), c = () => window.clearTimeout(a.current);
+  return ee(() => {
     i.current && (!s.current && t.leading ? (s.current = !0, o(n)) : (c(), a.current = window.setTimeout(() => {
       s.current = !1, o(n);
     }, e)));
-  }, [n, t.leading, e]), X(() => (i.current = !0, c), []), [r, c];
+  }, [n, t.leading, e]), ee(() => (i.current = !0, c), []), [r, c];
 }
-const to = typeof document < "u" ? xa : X;
+const to = typeof document < "u" ? xa : ee;
 function mn(n, e) {
   const t = ue(!1);
-  X(
+  ee(
     () => () => {
       t.current = !1;
     },
     []
-  ), X(() => {
+  ), ee(() => {
     if (t.current)
       return n();
     t.current = !0;
@@ -12491,7 +12491,7 @@ function Om(n = !0) {
     },
     [n]
   );
-  return X(() => {
+  return ee(() => {
     if (!n)
       return;
     e.current && setTimeout(() => r(e.current));
@@ -12510,7 +12510,7 @@ function Dm() {
   return n ? `mantine-${n.replace(/:/g, "")}` : "";
 }
 function rn(n) {
-  const e = Dm(), [t, r] = te(e);
+  const e = Dm(), [t, r] = Z(e);
   return to(() => {
     r(Eu());
   }, []), typeof n == "string" ? n : typeof window > "u" ? e : t;
@@ -12533,7 +12533,7 @@ function Fn({
   onChange: r = () => {
   }
 }) {
-  const [o, i] = te(
+  const [o, i] = Z(
     e !== void 0 ? e : t
   ), a = (s, ...c) => {
     i(s), r == null || r(s, ...c);
@@ -12545,7 +12545,7 @@ function Ru(n, e) {
 }
 function Lm(n) {
   const e = ue();
-  return X(() => {
+  return ee(() => {
     e.current = n;
   }, [n]), e.current;
 }
@@ -13535,7 +13535,7 @@ function uy({
   getRootElement: t,
   forceColorScheme: r
 }) {
-  const o = ue(), [i, a] = te(() => n.get(e)), s = r || i, c = me(
+  const o = ue(), [i, a] = Z(() => n.get(e)), s = r || i, c = me(
     (u) => {
       r || (Xn(u, t), a(u), n.set(u));
     },
@@ -13543,9 +13543,9 @@ function uy({
   ), l = me(() => {
     a(e), Xn(e, t), n.clear();
   }, [n.clear, e]);
-  return X(() => (n.subscribe(c), n.unsubscribe), [n.subscribe, n.unsubscribe]), to(() => {
+  return ee(() => (n.subscribe(c), n.unsubscribe), [n.subscribe, n.unsubscribe]), to(() => {
     Xn(n.get(e), t);
-  }, []), X(() => {
+  }, []), ee(() => {
     var f;
     if (r)
       return Xn(r, t), () => {
@@ -13587,7 +13587,7 @@ function Du({
   forceColorScheme: h,
   stylesTransform: p
 }) {
-  const { colorScheme: g, setColorScheme: m, clearColorScheme: b } = uy({
+  const { colorScheme: g, setColorScheme: m, clearColorScheme: v } = uy({
     defaultColorScheme: u,
     forceColorScheme: h,
     manager: l,
@@ -13602,7 +13602,7 @@ function Du({
       value: {
         colorScheme: g,
         setColorScheme: m,
-        clearColorScheme: b,
+        clearColorScheme: v,
         getRootElement: f,
         classNamesPrefix: c,
         getStyleNonce: t,
@@ -13864,17 +13864,17 @@ function be({
   vars: u,
   varsResolver: f
 }) {
-  const d = $t(), h = Hm(), p = Bm(), g = zm(), m = (Array.isArray(n) ? n : [n]).filter((v) => v), { withStylesTransform: b, getTransformedStyles: C } = Ty({
+  const d = $t(), h = Hm(), p = Bm(), g = zm(), m = (Array.isArray(n) ? n : [n]).filter((C) => C), { withStylesTransform: v, getTransformedStyles: b } = Ty({
     props: t,
     stylesCtx: r,
     themeName: m
   });
-  return (v, w) => ({
+  return (C, w) => ({
     className: Cy({
       theme: d,
       options: w,
       themeName: m,
-      selector: v,
+      selector: C,
       classNamesPrefix: h,
       classNames: c,
       classes: e,
@@ -13885,12 +13885,12 @@ function be({
       stylesCtx: r,
       withStaticClasses: p,
       headless: g,
-      transformedStyles: C([w == null ? void 0 : w.styles, l])
+      transformedStyles: b([w == null ? void 0 : w.styles, l])
     }),
     style: Iy({
       theme: d,
       themeName: m,
-      selector: v,
+      selector: C,
       options: w,
       props: t,
       stylesCtx: r,
@@ -13900,7 +13900,7 @@ function be({
       vars: u,
       varsResolver: f,
       headless: g,
-      withStylesTransform: b
+      withStylesTransform: v
     })
   });
 }
@@ -13953,19 +13953,19 @@ function oi(n) {
     pb: p,
     pl: g,
     pr: m,
-    pe: b,
-    ps: C,
-    bd: v,
+    pe: v,
+    ps: b,
+    bd: C,
     bg: w,
     c: S,
     opacity: E,
     ff: _,
     fz: T,
-    fw: M,
+    fw: x,
     lts: B,
     ta: z,
     lh: V,
-    fs: Z,
+    fs: X,
     tt: D,
     td: j,
     w: R,
@@ -14010,19 +14010,19 @@ function oi(n) {
     pb: p,
     pl: g,
     pr: m,
-    pe: b,
-    ps: C,
-    bd: v,
+    pe: v,
+    ps: b,
+    bd: C,
     bg: w,
     c: S,
     opacity: E,
     ff: _,
     fz: T,
-    fw: M,
+    fw: x,
     lts: B,
     ta: z,
     lh: V,
-    fs: Z,
+    fs: X,
     tt: D,
     td: j,
     w: R,
@@ -14287,8 +14287,8 @@ const Hu = Ce(
     ...h
   }, p) => {
     var T;
-    const g = $t(), m = n || "div", { styleProps: b, rest: C } = oi(h), v = $m(), w = (T = v == null ? void 0 : v()) == null ? void 0 : T(b.sx), S = qy(), E = Ky({
-      styleProps: b,
+    const g = $t(), m = n || "div", { styleProps: v, rest: b } = oi(h), C = $m(), w = (T = C == null ? void 0 : C()) == null ? void 0 : T(v.sx), S = qy(), E = Ky({
+      styleProps: v,
       theme: g,
       data: Ay
     }), _ = {
@@ -14310,7 +14310,7 @@ const Hu = Ce(
       "data-size": Cu(a) ? void 0 : a || void 0,
       size: d,
       ...Uu(i),
-      ...C
+      ...b
     };
     return /* @__PURE__ */ y.jsxs(y.Fragment, { children: [
       E.hasResponsiveStyles && /* @__PURE__ */ y.jsx(
@@ -14375,7 +14375,7 @@ function Qy({
     display: "none",
     height: 0,
     overflow: "hidden"
-  }, [s, c] = te(r ? {} : a), l = (p) => {
+  }, [s, c] = Z(r ? {} : a), l = (p) => {
     $f(() => c(p));
   }, u = (p) => {
     l((g) => ({ ...g, ...p }));
@@ -14406,11 +14406,11 @@ function Qy({
         s.height === i && (l(a), t());
   };
   function h({ style: p = {}, refKey: g = "ref", ...m } = {}) {
-    const b = m[g];
+    const v = m[g];
     return {
       "aria-hidden": !r,
       ...m,
-      [g]: Au(o, b),
+      [g]: Au(o, v),
       onTransitionEnd: d,
       style: { boxSizing: "border-box", ...p, ...s }
     };
@@ -14472,7 +14472,7 @@ function fr(n, e) {
   }, [n, t]);
 }
 const Zy = Ce((n, e) => {
-  const { style: t, ...r } = n, o = wt(), [i, a] = te(0), [s, c] = te(0), l = !!(i && s);
+  const { style: t, ...r } = n, o = wt(), [i, a] = Z(0), [s, c] = Z(0), l = !!(i && s);
   return fr(o.scrollbarX, () => {
     var f;
     const u = ((f = o.scrollbarX) == null ? void 0 : f.offsetHeight) || 0;
@@ -14489,7 +14489,7 @@ const Zy = Ce((n, e) => {
   scrollHideDelay: 1e3,
   type: "hover"
 }, $u = Ce((n, e) => {
-  const t = J("ScrollAreaRoot", tv, n), { type: r, scrollHideDelay: o, scrollbars: i, ...a } = t, [s, c] = te(null), [l, u] = te(null), [f, d] = te(null), [h, p] = te(null), [g, m] = te(null), [b, C] = te(0), [v, w] = te(0), [S, E] = te(!1), [_, T] = te(!1), M = at(e, (B) => c(B));
+  const t = J("ScrollAreaRoot", tv, n), { type: r, scrollHideDelay: o, scrollbars: i, ...a } = t, [s, c] = Z(null), [l, u] = Z(null), [f, d] = Z(null), [h, p] = Z(null), [g, m] = Z(null), [v, b] = Z(0), [C, w] = Z(0), [S, E] = Z(!1), [_, T] = Z(!1), x = at(e, (B) => c(B));
   return /* @__PURE__ */ y.jsx(
     Xy,
     {
@@ -14509,17 +14509,17 @@ const Zy = Ce((n, e) => {
         onScrollbarYChange: m,
         scrollbarYEnabled: _,
         onScrollbarYEnabledChange: T,
-        onCornerWidthChange: C,
+        onCornerWidthChange: b,
         onCornerHeightChange: w
       },
       children: /* @__PURE__ */ y.jsx(
         ne,
         {
           ...a,
-          ref: M,
+          ref: x,
           __vars: {
-            "--sa-corner-width": i !== "xy" ? "0px" : `${b}px`,
-            "--sa-corner-height": i !== "xy" ? "0px" : `${v}px`
+            "--sa-corner-width": i !== "xy" ? "0px" : `${v}px`,
+            "--sa-corner-height": i !== "xy" ? "0px" : `${C}px`
           }
         }
       )
@@ -14579,19 +14579,19 @@ const [ov, Gu] = yr(
     onWheelScroll: l,
     onResize: u,
     ...f
-  } = n, d = wt(), [h, p] = te(null), g = at(e, (T) => p(T)), m = ue(null), b = ue(""), { viewport: C } = d, v = t.content - t.viewport, w = Rn(l), S = Rn(s), E = ni(u, 10), _ = (T) => {
+  } = n, d = wt(), [h, p] = Z(null), g = at(e, (T) => p(T)), m = ue(null), v = ue(""), { viewport: b } = d, C = t.content - t.viewport, w = Rn(l), S = Rn(s), E = ni(u, 10), _ = (T) => {
     if (m.current) {
-      const M = T.clientX - m.current.left, B = T.clientY - m.current.top;
-      c({ x: M, y: B });
+      const x = T.clientX - m.current.left, B = T.clientY - m.current.top;
+      c({ x, y: B });
     }
   };
-  return X(() => {
-    const T = (M) => {
-      const B = M.target;
-      (h == null ? void 0 : h.contains(B)) && w(M, v);
+  return ee(() => {
+    const T = (x) => {
+      const B = x.target;
+      (h == null ? void 0 : h.contains(B)) && w(x, C);
     };
     return document.addEventListener("wheel", T, { passive: !1 }), () => document.removeEventListener("wheel", T, { passive: !1 });
-  }, [C, h, v, w]), X(S, [t, S]), fr(h, E), fr(d.content, E), /* @__PURE__ */ y.jsx(
+  }, [b, h, C, w]), ee(S, [t, S]), fr(h, E), fr(d.content, E), /* @__PURE__ */ y.jsx(
     ov,
     {
       value: {
@@ -14610,14 +14610,14 @@ const [ov, Gu] = yr(
           style: { position: "absolute", ...f.style },
           onPointerDown: xn(n.onPointerDown, (T) => {
             T.preventDefault();
-            const M = 0;
-            T.button === M && (T.target.setPointerCapture(T.pointerId), m.current = h.getBoundingClientRect(), b.current = document.body.style.webkitUserSelect, document.body.style.webkitUserSelect = "none", document.body.style.pointerEvents = "none", _(T));
+            const x = 0;
+            T.button === x && (T.target.setPointerCapture(T.pointerId), m.current = h.getBoundingClientRect(), v.current = document.body.style.webkitUserSelect, document.body.style.webkitUserSelect = "none", document.body.style.pointerEvents = "none", _(T));
           }),
           onPointerMove: xn(n.onPointerMove, _),
           onPointerUp: xn(n.onPointerUp, (T) => {
             T.preventDefault();
-            const M = T.target;
-            M.hasPointerCapture(T.pointerId) && M.releasePointerCapture(T.pointerId), document.body.style.webkitUserSelect = b.current, document.body.style.pointerEvents = "auto", m.current = null;
+            const x = T.target;
+            x.hasPointerCapture(T.pointerId) && x.releasePointerCapture(T.pointerId), document.body.style.webkitUserSelect = v.current, document.body.style.pointerEvents = "auto", m.current = null;
           })
         }
       )
@@ -14625,8 +14625,8 @@ const [ov, Gu] = yr(
   );
 }), iv = Ce(
   (n, e) => {
-    const { sizes: t, onSizesChange: r, style: o, ...i } = n, a = wt(), [s, c] = te(), l = ue(null), u = at(e, l, a.onScrollbarXChange);
-    return X(() => {
+    const { sizes: t, onSizesChange: r, style: o, ...i } = n, a = wt(), [s, c] = Z(), l = ue(null), u = at(e, l, a.onScrollbarXChange);
+    return ee(() => {
       l.current && c(getComputedStyle(l.current));
     }, [l]), /* @__PURE__ */ y.jsx(
       Wu,
@@ -14663,8 +14663,8 @@ const [ov, Gu] = yr(
   }
 ), av = Ce(
   (n, e) => {
-    const { sizes: t, onSizesChange: r, style: o, ...i } = n, a = wt(), [s, c] = te(), l = ue(null), u = at(e, l, a.onScrollbarYChange);
-    return X(() => {
+    const { sizes: t, onSizesChange: r, style: o, ...i } = n, a = wt(), [s, c] = Z(), l = ue(null), u = at(e, l, a.onScrollbarYChange);
+    return ee(() => {
       l.current && c(window.getComputedStyle(l.current));
     }, []), /* @__PURE__ */ y.jsx(
       Wu,
@@ -14700,7 +14700,7 @@ const [ov, Gu] = yr(
     );
   }
 ), Za = Ce((n, e) => {
-  const { orientation: t = "vertical", ...r } = n, { dir: o } = ii(), i = wt(), a = ue(null), s = ue(0), [c, l] = te({
+  const { orientation: t = "vertical", ...r } = n, { dir: o } = ii(), i = wt(), a = ue(null), s = ue(0), [c, l] = Z({
     content: 0,
     viewport: 0,
     scrollbar: { size: 0, paddingStart: 0, paddingEnd: 0 }
@@ -14758,7 +14758,7 @@ const [ov, Gu] = yr(
   ) : null;
 }), Yu = Ce(
   (n, e) => {
-    const t = wt(), { forceMount: r, ...o } = n, [i, a] = te(!1), s = n.orientation === "horizontal", c = ni(() => {
+    const t = wt(), { forceMount: r, ...o } = n, [i, a] = Z(!1), s = n.orientation === "horizontal", c = ni(() => {
       if (t.viewport) {
         const l = t.viewport.offsetWidth < t.viewport.scrollWidth, u = t.viewport.offsetHeight < t.viewport.scrollHeight;
         a(s ? l : u);
@@ -14775,8 +14775,8 @@ const [ov, Gu] = yr(
   }
 ), sv = Ce(
   (n, e) => {
-    const { forceMount: t, ...r } = n, o = wt(), [i, a] = te(!1);
-    return X(() => {
+    const { forceMount: t, ...r } = n, o = wt(), [i, a] = Z(!1);
+    return ee(() => {
       const { scrollArea: s } = o;
       let c = 0;
       if (s) {
@@ -14800,13 +14800,13 @@ const [ov, Gu] = yr(
   }
 ), cv = Ce(
   (n, e) => {
-    const { forceMount: t, ...r } = n, o = wt(), i = n.orientation === "horizontal", [a, s] = te("hidden"), c = ni(() => s("idle"), 100);
-    return X(() => {
+    const { forceMount: t, ...r } = n, o = wt(), i = n.orientation === "horizontal", [a, s] = Z("hidden"), c = ni(() => s("idle"), 100);
+    return ee(() => {
       if (a === "idle") {
         const l = window.setTimeout(() => s("hidden"), o.scrollHideDelay);
         return () => window.clearTimeout(l);
       }
-    }, [a, o.scrollHideDelay]), X(() => {
+    }, [a, o.scrollHideDelay]), ee(() => {
       const { viewport: l } = o, u = i ? "scrollLeft" : "scrollTop";
       if (l) {
         let f = l[u];
@@ -14830,7 +14830,7 @@ const [ov, Gu] = yr(
 ), Xc = Ce(
   (n, e) => {
     const { forceMount: t, ...r } = n, o = wt(), { onScrollbarXEnabledChange: i, onScrollbarYEnabledChange: a } = o, s = n.orientation === "horizontal";
-    return X(() => (s ? i(!0) : a(!0), () => {
+    return ee(() => (s ? i(!0) : a(!0), () => {
       s ? i(!1) : a(!1);
     }), [s, i, a]), o.type === "hover" ? /* @__PURE__ */ y.jsx(sv, { ...r, ref: e, forceMount: t }) : o.type === "scroll" ? /* @__PURE__ */ y.jsx(cv, { ...r, ref: e, forceMount: t }) : o.type === "auto" ? /* @__PURE__ */ y.jsx(Yu, { ...r, ref: e, forceMount: t }) : o.type === "always" ? /* @__PURE__ */ y.jsx(Za, { ...r, ref: e }) : null;
   }
@@ -14847,7 +14847,7 @@ const uv = Ce((n, e) => {
   const { style: t, ...r } = n, o = wt(), i = Gu(), { onThumbPositionChange: a } = i, s = at(e, (u) => i.onThumbChange(u)), c = ue(), l = ni(() => {
     c.current && (c.current(), c.current = void 0);
   }, 100);
-  return X(() => {
+  return ee(() => {
     const { viewport: u } = o;
     if (u) {
       const f = () => {
@@ -14925,9 +14925,9 @@ const Ju = {
     onScrollPositionChange: p,
     children: g,
     offsetScrollbars: m,
-    scrollbars: b,
-    ...C
-  } = t, [v, w] = te(!1), S = be({
+    scrollbars: v,
+    ...b
+  } = t, [C, w] = Z(!1), S = be({
     name: "ScrollArea",
     props: t,
     classes: es,
@@ -14945,9 +14945,9 @@ const Ju = {
       type: u === "never" ? "always" : u,
       scrollHideDelay: f,
       ref: e,
-      scrollbars: b,
+      scrollbars: v,
       ...S("root"),
-      ...C,
+      ...b,
       children: [
         /* @__PURE__ */ y.jsx(
           Qu,
@@ -14956,7 +14956,7 @@ const Ju = {
             ...S("viewport", { style: d == null ? void 0 : d.style }),
             ref: h,
             "data-offset-scrollbars": m === !0 ? "xy" : m || void 0,
-            "data-scrollbars": b || void 0,
+            "data-scrollbars": v || void 0,
             onScroll: (E) => {
               var _;
               (_ = d == null ? void 0 : d.onScroll) == null || _.call(d, E), p == null || p({ x: E.currentTarget.scrollLeft, y: E.currentTarget.scrollTop });
@@ -14964,7 +14964,7 @@ const Ju = {
             children: g
           }
         ),
-        (b === "xy" || b === "x") && /* @__PURE__ */ y.jsx(
+        (v === "xy" || v === "x") && /* @__PURE__ */ y.jsx(
           Xc,
           {
             ...S("scrollbar"),
@@ -14976,7 +14976,7 @@ const Ju = {
             children: /* @__PURE__ */ y.jsx(Zc, { ...S("thumb") })
           }
         ),
-        (b === "xy" || b === "y") && /* @__PURE__ */ y.jsx(
+        (v === "xy" || v === "y") && /* @__PURE__ */ y.jsx(
           Xc,
           {
             ...S("scrollbar"),
@@ -14992,7 +14992,7 @@ const Ju = {
           ev,
           {
             ...S("corner"),
-            "data-hovered": v || void 0,
+            "data-hovered": C || void 0,
             "data-hidden": u === "never" || void 0
           }
         )
@@ -15018,10 +15018,10 @@ const ts = le((n, e) => {
     viewportProps: p,
     scrollbars: g,
     style: m,
-    vars: b,
-    ...C
+    vars: v,
+    ...b
   } = J("ScrollAreaAutosize", Ju, n);
-  return /* @__PURE__ */ y.jsx(ne, { ...C, ref: e, style: [{ display: "flex", overflow: "auto" }, m], children: /* @__PURE__ */ y.jsx(ne, { style: { display: "flex", flexDirection: "column", flex: 1 }, children: /* @__PURE__ */ y.jsx(
+  return /* @__PURE__ */ y.jsx(ne, { ...b, ref: e, style: [{ display: "flex", overflow: "auto" }, m], children: /* @__PURE__ */ y.jsx(ne, { style: { display: "flex", flexDirection: "column", flex: 1 }, children: /* @__PURE__ */ y.jsx(
     no,
     {
       classNames: r,
@@ -15036,7 +15036,7 @@ const ts = le((n, e) => {
       unstyled: d,
       variant: h,
       viewportProps: p,
-      vars: b,
+      vars: v,
       scrollbars: g,
       children: t
     }
@@ -15498,13 +15498,13 @@ const Ov = async (n, e, t) => {
   for (let g = 0; g < s.length; g++) {
     const {
       name: m,
-      fn: b
+      fn: v
     } = s[g], {
-      x: C,
-      y: v,
+      x: b,
+      y: C,
       data: w,
       reset: S
-    } = await b({
+    } = await v({
       x: u,
       y: f,
       initialPlacement: r,
@@ -15518,7 +15518,7 @@ const Ov = async (n, e, t) => {
         floating: e
       }
     });
-    u = C ?? u, f = v ?? f, h = {
+    u = b ?? u, f = C ?? f, h = {
       ...h,
       [m]: {
         ...h[m],
@@ -15557,17 +15557,17 @@ async function ls(n, e) {
     elementContext: f = "floating",
     altBoundary: d = !1,
     padding: h = 0
-  } = Zt(e, n), p = cs(h), m = s[d ? f === "floating" ? "reference" : "floating" : f], b = hr(await i.getClippingRect({
+  } = Zt(e, n), p = cs(h), m = s[d ? f === "floating" ? "reference" : "floating" : f], v = hr(await i.getClippingRect({
     element: (t = await (i.isElement == null ? void 0 : i.isElement(m))) == null || t ? m : m.contextElement || await (i.getDocumentElement == null ? void 0 : i.getDocumentElement(s.floating)),
     boundary: l,
     rootBoundary: u,
     strategy: c
-  })), C = f === "floating" ? {
+  })), b = f === "floating" ? {
     x: r,
     y: o,
     width: a.floating.width,
     height: a.floating.height
-  } : a.reference, v = await (i.getOffsetParent == null ? void 0 : i.getOffsetParent(s.floating)), w = await (i.isElement == null ? void 0 : i.isElement(v)) ? await (i.getScale == null ? void 0 : i.getScale(v)) || {
+  } : a.reference, C = await (i.getOffsetParent == null ? void 0 : i.getOffsetParent(s.floating)), w = await (i.isElement == null ? void 0 : i.isElement(C)) ? await (i.getScale == null ? void 0 : i.getScale(C)) || {
     x: 1,
     y: 1
   } : {
@@ -15575,15 +15575,15 @@ async function ls(n, e) {
     y: 1
   }, S = hr(i.convertOffsetParentRelativeRectToViewportRelativeRect ? await i.convertOffsetParentRelativeRectToViewportRelativeRect({
     elements: s,
-    rect: C,
-    offsetParent: v,
+    rect: b,
+    offsetParent: C,
     strategy: c
-  }) : C);
+  }) : b);
   return {
-    top: (b.top - S.top + p.top) / w.y,
-    bottom: (S.bottom - b.bottom + p.bottom) / w.y,
-    left: (b.left - S.left + p.left) / w.x,
-    right: (S.right - b.right + p.right) / w.x
+    top: (v.top - S.top + p.top) / w.y,
+    bottom: (S.bottom - v.bottom + p.bottom) / w.y,
+    left: (v.left - S.left + p.left) / w.x,
+    right: (S.right - v.right + p.right) / w.x
   };
 }
 const xv = (n) => ({
@@ -15607,10 +15607,10 @@ const xv = (n) => ({
     const f = cs(u), d = {
       x: t,
       y: r
-    }, h = ss(o), p = as(h), g = await a.getDimensions(l), m = h === "y", b = m ? "top" : "left", C = m ? "bottom" : "right", v = m ? "clientHeight" : "clientWidth", w = i.reference[p] + i.reference[h] - d[h] - i.floating[p], S = d[h] - i.reference[h], E = await (a.getOffsetParent == null ? void 0 : a.getOffsetParent(l));
-    let _ = E ? E[v] : 0;
-    (!_ || !await (a.isElement == null ? void 0 : a.isElement(E))) && (_ = s.floating[v] || i.floating[p]);
-    const T = w / 2 - S / 2, M = _ / 2 - g[p] / 2 - 1, B = lt(f[b], M), z = lt(f[C], M), V = B, Z = _ - g[p] - z, D = _ / 2 - g[p] / 2 + T, j = Ca(V, D, Z), R = !c.arrow && Cr(o) != null && D !== j && i.reference[p] / 2 - (D < V ? B : z) - g[p] / 2 < 0, A = R ? D < V ? D - V : D - Z : 0;
+    }, h = ss(o), p = as(h), g = await a.getDimensions(l), m = h === "y", v = m ? "top" : "left", b = m ? "bottom" : "right", C = m ? "clientHeight" : "clientWidth", w = i.reference[p] + i.reference[h] - d[h] - i.floating[p], S = d[h] - i.reference[h], E = await (a.getOffsetParent == null ? void 0 : a.getOffsetParent(l));
+    let _ = E ? E[C] : 0;
+    (!_ || !await (a.isElement == null ? void 0 : a.isElement(E))) && (_ = s.floating[C] || i.floating[p]);
+    const T = w / 2 - S / 2, x = _ / 2 - g[p] / 2 - 1, B = lt(f[v], x), z = lt(f[b], x), V = B, X = _ - g[p] - z, D = _ / 2 - g[p] / 2 + T, j = Ca(V, D, X), R = !c.arrow && Cr(o) != null && D !== j && i.reference[p] / 2 - (D < V ? B : z) - g[p] / 2 < 0, A = R ? D < V ? D - V : D - X : 0;
     return {
       [h]: d[h] + A,
       data: {
@@ -15647,18 +15647,18 @@ const xv = (n) => ({
       } = Zt(n, e);
       if ((t = i.arrow) != null && t.alignmentOffset)
         return {};
-      const b = Mt(o), C = en(s), v = Mt(s) === s, w = await (c.isRTL == null ? void 0 : c.isRTL(l.floating)), S = d || (v || !g ? [Bo(s)] : Rv(s)), E = p !== "none";
+      const v = Mt(o), b = en(s), C = Mt(s) === s, w = await (c.isRTL == null ? void 0 : c.isRTL(l.floating)), S = d || (C || !g ? [Bo(s)] : Rv(s)), E = p !== "none";
       !d && E && S.push(...Nv(s, g, p, w));
-      const _ = [s, ...S], T = await ls(e, m), M = [];
+      const _ = [s, ...S], T = await ls(e, m), x = [];
       let B = ((r = i.flip) == null ? void 0 : r.overflows) || [];
-      if (u && M.push(T[b]), f) {
+      if (u && x.push(T[v]), f) {
         const D = Av(o, a, w);
-        M.push(T[D[0]], T[D[1]]);
+        x.push(T[D[0]], T[D[1]]);
       }
       if (B = [...B, {
         placement: o,
-        overflows: M
-      }], !M.every((D) => D <= 0)) {
+        overflows: x
+      }], !x.every((D) => D <= 0)) {
         var z, V;
         const D = (((z = i.flip) == null ? void 0 : z.index) || 0) + 1, j = _[D];
         if (j)
@@ -15675,16 +15675,16 @@ const xv = (n) => ({
         if (!R)
           switch (h) {
             case "bestFit": {
-              var Z;
-              const A = (Z = B.filter((P) => {
+              var X;
+              const A = (X = B.filter((P) => {
                 if (E) {
                   const $ = en(P.placement);
-                  return $ === C || // Create a bias to the `y` side axis due to horizontal
+                  return $ === b || // Create a bias to the `y` side axis due to horizontal
                   // reading directions favoring greater width.
                   $ === "y";
                 }
                 return !0;
-              }).map((P) => [P.placement, P.overflows.filter(($) => $ > 0).reduce(($, H) => $ + H, 0)]).sort((P, $) => P[1] - $[1])[0]) == null ? void 0 : Z[0];
+              }).map((P) => [P.placement, P.overflows.filter(($) => $ > 0).reduce(($, H) => $ + H, 0)]).sort((P, $) => P[1] - $[1])[0]) == null ? void 0 : X[0];
               A && (R = A);
               break;
             }
@@ -15742,26 +15742,26 @@ const Fv = function(n) {
           return f.find((m) => c > m.left - h.left && c < m.right + h.right && l > m.top - h.top && l < m.bottom + h.bottom) || d;
         if (f.length >= 2) {
           if (en(t) === "y") {
-            const B = f[0], z = f[f.length - 1], V = Mt(t) === "top", Z = B.top, D = z.bottom, j = V ? B.left : z.left, R = V ? B.right : z.right, A = R - j, P = D - Z;
+            const B = f[0], z = f[f.length - 1], V = Mt(t) === "top", X = B.top, D = z.bottom, j = V ? B.left : z.left, R = V ? B.right : z.right, A = R - j, P = D - X;
             return {
-              top: Z,
+              top: X,
               bottom: D,
               left: j,
               right: R,
               width: A,
               height: P,
               x: j,
-              y: Z
+              y: X
             };
           }
-          const m = Mt(t) === "left", b = qe(...f.map((B) => B.right)), C = lt(...f.map((B) => B.left)), v = f.filter((B) => m ? B.left === C : B.right === b), w = v[0].top, S = v[v.length - 1].bottom, E = C, _ = b, T = _ - E, M = S - w;
+          const m = Mt(t) === "left", v = qe(...f.map((B) => B.right)), b = lt(...f.map((B) => B.left)), C = f.filter((B) => m ? B.left === b : B.right === v), w = C[0].top, S = C[C.length - 1].bottom, E = b, _ = v, T = _ - E, x = S - w;
           return {
             top: w,
             bottom: S,
             left: E,
             right: _,
             width: T,
-            height: M,
+            height: x,
             x: E,
             y: w
           };
@@ -15848,12 +15848,12 @@ const Uv = function(n) {
         limiter: s = {
           fn: (m) => {
             let {
-              x: b,
-              y: C
+              x: v,
+              y: b
             } = m;
             return {
-              x: b,
-              y: C
+              x: v,
+              y: b
             };
           }
         },
@@ -15864,12 +15864,12 @@ const Uv = function(n) {
       }, u = await ls(e, c), f = en(Mt(o)), d = is(f);
       let h = l[d], p = l[f];
       if (i) {
-        const m = d === "y" ? "top" : "left", b = d === "y" ? "bottom" : "right", C = h + u[m], v = h - u[b];
-        h = Ca(C, h, v);
+        const m = d === "y" ? "top" : "left", v = d === "y" ? "bottom" : "right", b = h + u[m], C = h - u[v];
+        h = Ca(b, h, C);
       }
       if (a) {
-        const m = f === "y" ? "top" : "left", b = f === "y" ? "bottom" : "right", C = p + u[m], v = p - u[b];
-        p = Ca(C, p, v);
+        const m = f === "y" ? "top" : "left", v = f === "y" ? "bottom" : "right", b = p + u[m], C = p - u[v];
+        p = Ca(b, p, C);
       }
       const g = s.fn({
         ...e,
@@ -15913,12 +15913,12 @@ const Uv = function(n) {
         ...g
       };
       if (c) {
-        const v = d === "y" ? "height" : "width", w = i.reference[d] - i.floating[v] + m.mainAxis, S = i.reference[d] + i.reference[v] - m.mainAxis;
+        const C = d === "y" ? "height" : "width", w = i.reference[d] - i.floating[C] + m.mainAxis, S = i.reference[d] + i.reference[C] - m.mainAxis;
         h < w ? h = w : h > S && (h = S);
       }
       if (l) {
-        var b, C;
-        const v = d === "y" ? "width" : "height", w = ["top", "left"].includes(Mt(o)), S = i.reference[f] - i.floating[v] + (w && ((b = a.offset) == null ? void 0 : b[f]) || 0) + (w ? 0 : m.crossAxis), E = i.reference[f] + i.reference[v] + (w ? 0 : ((C = a.offset) == null ? void 0 : C[f]) || 0) - (w ? m.crossAxis : 0);
+        var v, b;
+        const C = d === "y" ? "width" : "height", w = ["top", "left"].includes(Mt(o)), S = i.reference[f] - i.floating[C] + (w && ((v = a.offset) == null ? void 0 : v[f]) || 0) + (w ? 0 : m.crossAxis), E = i.reference[f] + i.reference[C] + (w ? 0 : ((b = a.offset) == null ? void 0 : b[f]) || 0) - (w ? m.crossAxis : 0);
         p < S ? p = S : p > E && (p = E);
       }
       return {
@@ -15947,11 +15947,11 @@ const Uv = function(n) {
       } = r.floating;
       let p, g;
       l === "top" || l === "bottom" ? (p = l, g = u === (await (o.isRTL == null ? void 0 : o.isRTL(i.floating)) ? "start" : "end") ? "left" : "right") : (g = l, p = u === "end" ? "top" : "bottom");
-      const m = h - c.top - c.bottom, b = d - c.left - c.right, C = lt(h - c[p], m), v = lt(d - c[g], b), w = !e.middlewareData.shift;
-      let S = C, E = v;
-      if (f ? E = u || w ? lt(v, b) : b : S = u || w ? lt(C, m) : m, w && !u) {
-        const T = qe(c.left, 0), M = qe(c.right, 0), B = qe(c.top, 0), z = qe(c.bottom, 0);
-        f ? E = d - 2 * (T !== 0 || M !== 0 ? T + M : qe(c.left, c.right)) : S = h - 2 * (B !== 0 || z !== 0 ? B + z : qe(c.top, c.bottom));
+      const m = h - c.top - c.bottom, v = d - c.left - c.right, b = lt(h - c[p], m), C = lt(d - c[g], v), w = !e.middlewareData.shift;
+      let S = b, E = C;
+      if (f ? E = u || w ? lt(C, v) : v : S = u || w ? lt(b, m) : m, w && !u) {
+        const T = qe(c.left, 0), x = qe(c.right, 0), B = qe(c.top, 0), z = qe(c.bottom, 0);
+        f ? E = d - 2 * (T !== 0 || x !== 0 ? T + x : qe(c.left, c.right)) : S = h - 2 * (B !== 0 || z !== 0 ? B + z : qe(c.top, c.bottom));
       }
       await a({
         ...e,
@@ -16017,8 +16017,8 @@ function jn(n, e, t, r) {
     const d = nt(i), h = r && Ee(r) ? nt(r) : r;
     let p = d, g = p.frameElement;
     for (; g && r && h !== p; ) {
-      const m = cr(g), b = g.getBoundingClientRect(), C = bt(g), v = b.left + (g.clientLeft + parseFloat(C.paddingLeft)) * m.x, w = b.top + (g.clientTop + parseFloat(C.paddingTop)) * m.y;
-      c *= m.x, l *= m.y, u *= m.x, f *= m.y, c += v, l += w, p = nt(g), g = p.frameElement;
+      const m = cr(g), v = g.getBoundingClientRect(), b = bt(g), C = v.left + (g.clientLeft + parseFloat(b.paddingLeft)) * m.x, w = v.top + (g.clientTop + parseFloat(b.paddingTop)) * m.y;
+      c *= m.x, l *= m.y, u *= m.x, f *= m.y, c += C, l += w, p = nt(g), g = p.frameElement;
     }
   }
   return hr({
@@ -16247,30 +16247,30 @@ function rb(n, e) {
     } = n.getBoundingClientRect();
     if (s || e(), !f || !d)
       return;
-    const h = go(u), p = go(o.clientWidth - (l + f)), g = go(o.clientHeight - (u + d)), m = go(l), C = {
+    const h = go(u), p = go(o.clientWidth - (l + f)), g = go(o.clientHeight - (u + d)), m = go(l), b = {
       rootMargin: -h + "px " + -p + "px " + -g + "px " + -m + "px",
       threshold: qe(0, lt(1, c)) || 1
     };
-    let v = !0;
+    let C = !0;
     function w(S) {
       const E = S[0].intersectionRatio;
       if (E !== c) {
-        if (!v)
+        if (!C)
           return a();
         E ? a(!1, E) : r = setTimeout(() => {
           a(!1, 1e-7);
         }, 1e3);
       }
-      v = !1;
+      C = !1;
     }
     try {
       t = new IntersectionObserver(w, {
-        ...C,
+        ...b,
         // Handle <iframe>s
         root: o.ownerDocument
       });
     } catch {
-      t = new IntersectionObserver(w, C);
+      t = new IntersectionObserver(w, b);
     }
     t.observe(n);
   }
@@ -16285,31 +16285,31 @@ function ob(n, e, t, r) {
     layoutShift: s = typeof IntersectionObserver == "function",
     animationFrame: c = !1
   } = r, l = us(n), u = o || i ? [...l ? Jt(l) : [], ...Jt(e)] : [];
-  u.forEach((b) => {
-    o && b.addEventListener("scroll", t, {
+  u.forEach((v) => {
+    o && v.addEventListener("scroll", t, {
       passive: !0
-    }), i && b.addEventListener("resize", t);
+    }), i && v.addEventListener("resize", t);
   });
   const f = l && s ? rb(l, t) : null;
   let d = -1, h = null;
-  a && (h = new ResizeObserver((b) => {
-    let [C] = b;
-    C && C.target === l && h && (h.unobserve(e), cancelAnimationFrame(d), d = requestAnimationFrame(() => {
-      var v;
-      (v = h) == null || v.observe(e);
+  a && (h = new ResizeObserver((v) => {
+    let [b] = v;
+    b && b.target === l && h && (h.unobserve(e), cancelAnimationFrame(d), d = requestAnimationFrame(() => {
+      var C;
+      (C = h) == null || C.observe(e);
     })), t();
   }), l && !c && h.observe(l), h.observe(e));
   let p, g = c ? jn(n) : null;
   c && m();
   function m() {
-    const b = jn(n);
-    g && (b.x !== g.x || b.y !== g.y || b.width !== g.width || b.height !== g.height) && t(), g = b, p = requestAnimationFrame(m);
+    const v = jn(n);
+    g && (v.x !== g.x || v.y !== g.y || v.width !== g.width || v.height !== g.height) && t(), g = v, p = requestAnimationFrame(m);
   }
   return t(), () => {
-    var b;
-    u.forEach((C) => {
-      o && C.removeEventListener("scroll", t), i && C.removeEventListener("resize", t);
-    }), f == null || f(), (b = h) == null || b.disconnect(), h = null, c && cancelAnimationFrame(p);
+    var v;
+    u.forEach((b) => {
+      o && b.removeEventListener("scroll", t), i && b.removeEventListener("resize", t);
+    }), f == null || f(), (v = h) == null || v.disconnect(), h = null, c && cancelAnimationFrame(p);
   };
 }
 const ib = Uv, ab = Hv, sb = Dv, cb = zv, il = xv, lb = Fv, ub = Bv, db = (n, e, t) => {
@@ -16325,7 +16325,7 @@ const ib = Uv, ab = Hv, sb = Dv, cb = zv, il = xv, lb = Fv, ub = Bv, db = (n, e,
     platform: i
   });
 };
-var Co = typeof document < "u" ? xa : X;
+var Co = typeof document < "u" ? xa : ee;
 function zo(n, e) {
   if (n === e)
     return !0;
@@ -16393,11 +16393,11 @@ function fb(n) {
     isPositioned: !1
   }), [d, h] = U.useState(r);
   zo(d, r) || h(r);
-  const [p, g] = U.useState(null), [m, b] = U.useState(null), C = U.useCallback((A) => {
+  const [p, g] = U.useState(null), [m, v] = U.useState(null), b = U.useCallback((A) => {
     A !== E.current && (E.current = A, g(A));
-  }, []), v = U.useCallback((A) => {
-    A !== _.current && (_.current = A, b(A));
-  }, []), w = i || p, S = a || m, E = U.useRef(null), _ = U.useRef(null), T = U.useRef(u), M = c != null, B = sl(c), z = sl(o), V = U.useCallback(() => {
+  }, []), C = U.useCallback((A) => {
+    A !== _.current && (_.current = A, v(A));
+  }, []), w = i || p, S = a || m, E = U.useRef(null), _ = U.useRef(null), T = U.useRef(u), x = c != null, B = sl(c), z = sl(o), V = U.useCallback(() => {
     if (!E.current || !_.current)
       return;
     const A = {
@@ -16410,7 +16410,7 @@ function fb(n) {
         ...P,
         isPositioned: !0
       };
-      Z.current && !zo(T.current, $) && (T.current = $, zf.flushSync(() => {
+      X.current && !zo(T.current, $) && (T.current = $, zf.flushSync(() => {
         f($);
       }));
     });
@@ -16421,22 +16421,22 @@ function fb(n) {
       isPositioned: !1
     })));
   }, [l]);
-  const Z = U.useRef(!1);
-  Co(() => (Z.current = !0, () => {
-    Z.current = !1;
+  const X = U.useRef(!1);
+  Co(() => (X.current = !0, () => {
+    X.current = !1;
   }), []), Co(() => {
     if (w && (E.current = w), S && (_.current = S), w && S) {
       if (B.current)
         return B.current(w, S, V);
       V();
     }
-  }, [w, S, V, B, M]);
+  }, [w, S, V, B, x]);
   const D = U.useMemo(() => ({
     reference: E,
     floating: _,
-    setReference: C,
-    setFloating: v
-  }), [C, v]), j = U.useMemo(() => ({
+    setReference: b,
+    setFloating: C
+  }), [b, C]), j = U.useMemo(() => ({
     reference: w,
     floating: S
   }), [w, S]), R = U.useMemo(() => {
@@ -16524,7 +16524,7 @@ function pn(n) {
     return e.current == null ? void 0 : e.current(...r);
   }, []);
 }
-var jt = typeof document < "u" ? xa : X;
+var jt = typeof document < "u" ? xa : ee;
 let ll = !1, yb = 0;
 const ul = () => (
   // Ensure the id is unique with multiple independent versions of Floating UI
@@ -16588,8 +16588,8 @@ function Eb(n, e) {
     mouseOnly: u = !1,
     restMs: f = 0,
     move: d = !0
-  } = e, h = hs(), p = fs(), g = ji(l), m = ji(c), b = ji(t), C = U.useRef(), v = U.useRef(-1), w = U.useRef(), S = U.useRef(-1), E = U.useRef(!0), _ = U.useRef(!1), T = U.useRef(() => {
-  }), M = U.useCallback(() => {
+  } = e, h = hs(), p = fs(), g = ji(l), m = ji(c), v = ji(t), b = U.useRef(), C = U.useRef(-1), w = U.useRef(), S = U.useRef(-1), E = U.useRef(!0), _ = U.useRef(!1), T = U.useRef(() => {
+  }), x = U.useCallback(() => {
     var j;
     const R = (j = o.current.openEvent) == null ? void 0 : j.type;
     return (R == null ? void 0 : R.includes("mouse")) && R !== "mousedown";
@@ -16601,7 +16601,7 @@ function Eb(n, e) {
       let {
         open: A
       } = R;
-      A || (clearTimeout(v.current), clearTimeout(S.current), E.current = !0);
+      A || (clearTimeout(C.current), clearTimeout(S.current), E.current = !0);
     }
     return i.on("openchange", j), () => {
       i.off("openchange", j);
@@ -16610,17 +16610,17 @@ function Eb(n, e) {
     if (!s || !g.current || !t)
       return;
     function j(A) {
-      M() && r(!1, A, "hover");
+      x() && r(!1, A, "hover");
     }
     const R = Nn(a.floating).documentElement;
     return R.addEventListener("mouseleave", j), () => {
       R.removeEventListener("mouseleave", j);
     };
-  }, [a.floating, t, r, s, g, M]);
+  }, [a.floating, t, r, s, g, x]);
   const B = U.useCallback(function(j, R, A) {
     R === void 0 && (R = !0), A === void 0 && (A = "hover");
-    const P = wo(m.current, "close", C.current);
-    P && !w.current ? (clearTimeout(v.current), v.current = window.setTimeout(() => r(!1, j, A), P)) : R && (clearTimeout(v.current), r(!1, j, A));
+    const P = wo(m.current, "close", b.current);
+    P && !w.current ? (clearTimeout(C.current), C.current = window.setTimeout(() => r(!1, j, A), P)) : R && (clearTimeout(C.current), r(!1, j, A));
   }, [m, r]), z = pn(() => {
     T.current(), w.current = void 0;
   }), V = pn(() => {
@@ -16636,11 +16636,11 @@ function Eb(n, e) {
       return o.current.openEvent ? ["click", "mousedown"].includes(o.current.openEvent.type) : !1;
     }
     function R(H) {
-      if (clearTimeout(v.current), E.current = !1, u && !ba(C.current) || f > 0 && !wo(m.current, "open"))
+      if (clearTimeout(C.current), E.current = !1, u && !ba(b.current) || f > 0 && !wo(m.current, "open"))
         return;
-      const re = wo(m.current, "open", C.current);
-      re ? v.current = window.setTimeout(() => {
-        b.current || r(!0, H, "hover");
+      const re = wo(m.current, "open", b.current);
+      re ? C.current = window.setTimeout(() => {
+        v.current || r(!0, H, "hover");
       }, re) : r(!0, H, "hover");
     }
     function A(H) {
@@ -16649,7 +16649,7 @@ function Eb(n, e) {
       T.current();
       const re = Nn(a.floating);
       if (clearTimeout(S.current), g.current && o.current.floatingContext) {
-        t || clearTimeout(v.current), w.current = g.current({
+        t || clearTimeout(C.current), w.current = g.current({
           ...o.current.floatingContext,
           tree: h,
           x: H.clientX,
@@ -16664,7 +16664,7 @@ function Eb(n, e) {
         };
         return;
       }
-      (C.current === "touch" ? !Vr(a.floating, H.relatedTarget) : !0) && B(H);
+      (b.current === "touch" ? !Vr(a.floating, H.relatedTarget) : !0) && B(H);
     }
     function P(H) {
       j() || o.current.floatingContext && (g.current == null || g.current({
@@ -16687,9 +16687,9 @@ function Eb(n, e) {
         t && H.removeEventListener("mouseleave", P), (re = a.floating) == null || re.removeEventListener("mouseleave", P), d && H.removeEventListener("mousemove", R), H.removeEventListener("mouseenter", R), H.removeEventListener("mouseleave", A);
       };
     }
-  }, [a, s, n, u, f, d, B, z, V, r, t, b, h, m, g, o]), jt(() => {
+  }, [a, s, n, u, f, d, B, z, V, r, t, v, h, m, g, o]), jt(() => {
     var j;
-    if (s && t && (j = g.current) != null && j.__options.blockPointerEvents && M()) {
+    if (s && t && (j = g.current) != null && j.__options.blockPointerEvents && x()) {
       const A = Nn(a.floating).body;
       A.setAttribute(dl, ""), A.style.pointerEvents = "none", _.current = !0;
       const P = a.floating;
@@ -16701,14 +16701,14 @@ function Eb(n, e) {
         };
       }
     }
-  }, [s, t, p, a, h, g, M]), jt(() => {
-    t || (C.current = void 0, z(), V());
+  }, [s, t, p, a, h, g, x]), jt(() => {
+    t || (b.current = void 0, z(), V());
   }, [t, z, V]), U.useEffect(() => () => {
-    z(), clearTimeout(v.current), clearTimeout(S.current), V();
+    z(), clearTimeout(C.current), clearTimeout(S.current), V();
   }, [s, a.domReference, z, V]);
-  const Z = U.useMemo(() => {
+  const X = U.useMemo(() => {
     function j(R) {
-      C.current = R.pointerType;
+      b.current = R.pointerType;
     }
     return {
       onPointerDown: j,
@@ -16718,23 +16718,23 @@ function Eb(n, e) {
           nativeEvent: A
         } = R;
         function P() {
-          !E.current && !b.current && r(!0, A, "hover");
+          !E.current && !v.current && r(!0, A, "hover");
         }
-        u && !ba(C.current) || t || f === 0 || (clearTimeout(S.current), C.current === "touch" ? P() : S.current = window.setTimeout(P, f));
+        u && !ba(b.current) || t || f === 0 || (clearTimeout(S.current), b.current === "touch" ? P() : S.current = window.setTimeout(P, f));
       }
     };
-  }, [u, r, t, b, f]), D = U.useMemo(() => ({
+  }, [u, r, t, v, f]), D = U.useMemo(() => ({
     onMouseEnter() {
-      clearTimeout(v.current);
+      clearTimeout(C.current);
     },
     onMouseLeave(j) {
       B(j.nativeEvent, !1);
     }
   }), [B]);
   return U.useMemo(() => s ? {
-    reference: Z,
+    reference: X,
     floating: D
-  } : {}, [s, Z, D]);
+  } : {}, [s, X, D]);
 }
 const Ia = () => {
 }, md = /* @__PURE__ */ U.createContext({
@@ -16868,7 +16868,7 @@ function Ab(n, e) {
     ancestorScroll: d = !1,
     bubbles: h,
     capture: p
-  } = e, g = hs(), m = pn(typeof c == "function" ? c : () => !1), b = typeof c == "function" ? m : c, C = U.useRef(!1), v = U.useRef(!1), {
+  } = e, g = hs(), m = pn(typeof c == "function" ? c : () => !1), v = typeof c == "function" ? m : c, b = U.useRef(!1), C = U.useRef(!1), {
     escapeKey: w,
     outsidePress: S
   } = fl(h), {
@@ -16891,7 +16891,7 @@ function Ab(n, e) {
         return;
     }
     r(!1, Sv(D) ? D.nativeEvent : D, "escape-key");
-  }), M = pn((D) => {
+  }), x = pn((D) => {
     var j;
     const R = () => {
       var A;
@@ -16900,10 +16900,10 @@ function Ab(n, e) {
     (j = Zn(D)) == null || j.addEventListener("keydown", R);
   }), B = pn((D) => {
     var j;
-    const R = C.current;
-    C.current = !1;
-    const A = v.current;
-    if (v.current = !1, l === "click" && A || R || typeof b == "function" && !b(D))
+    const R = b.current;
+    b.current = !1;
+    const A = C.current;
+    if (C.current = !1, l === "click" && A || R || typeof v == "function" && !v(D))
       return;
     const P = Zn(D), $ = "[" + ps("inert") + "]", H = Nn(o.floating).querySelectorAll($);
     let re = Ee(P) ? P : null;
@@ -16918,7 +16918,7 @@ function Ab(n, e) {
     // element was injected after the floating element rendered.
     Array.from(H).every((pe) => !Vr(re, pe)))
       return;
-    if (ft(P) && Z) {
+    if (ft(P) && X) {
       const pe = P.clientWidth > 0 && P.scrollWidth > P.clientWidth, Oe = P.clientHeight > 0 && P.scrollHeight > P.clientHeight;
       let ze = Oe && D.offsetX > P.clientWidth;
       if (Oe && bt(P).direction === "rtl" && (ze = D.offsetX <= P.offsetWidth - P.clientWidth), ze || pe && D.offsetY > P.clientHeight)
@@ -16959,7 +16959,7 @@ function Ab(n, e) {
       r(!1, A, "ancestor-scroll");
     }
     const j = Nn(o.floating);
-    s && j.addEventListener("keydown", E ? M : T, E), b && j.addEventListener(l, _ ? z : B, _);
+    s && j.addEventListener("keydown", E ? x : T, E), v && j.addEventListener(l, _ ? z : B, _);
     let R = [];
     return d && (Ee(o.domReference) && (R = Jt(o.domReference)), Ee(o.floating) && (R = R.concat(Jt(o.floating))), !Ee(o.reference) && o.reference && o.reference.contextElement && (R = R.concat(Jt(o.reference.contextElement)))), R = R.filter((A) => {
       var P;
@@ -16969,34 +16969,34 @@ function Ab(n, e) {
         passive: !0
       });
     }), () => {
-      s && j.removeEventListener("keydown", E ? M : T, E), b && j.removeEventListener(l, _ ? z : B, _), R.forEach((A) => {
+      s && j.removeEventListener("keydown", E ? x : T, E), v && j.removeEventListener(l, _ ? z : B, _), R.forEach((A) => {
         A.removeEventListener("scroll", D);
       });
     };
-  }, [i, o, s, b, l, t, r, d, a, w, S, T, E, M, B, _, z]), U.useEffect(() => {
-    C.current = !1;
-  }, [b, l]);
+  }, [i, o, s, v, l, t, r, d, a, w, S, T, E, x, B, _, z]), U.useEffect(() => {
+    b.current = !1;
+  }, [v, l]);
   const V = U.useMemo(() => ({
     onKeyDown: T,
     [_b[f]]: (D) => {
       u && r(!1, D.nativeEvent, "reference-press");
     }
-  }), [T, r, u, f]), Z = U.useMemo(() => ({
+  }), [T, r, u, f]), X = U.useMemo(() => ({
     onKeyDown: T,
     onMouseDown() {
-      v.current = !0;
+      C.current = !0;
     },
     onMouseUp() {
-      v.current = !0;
+      C.current = !0;
     },
     [kb[l]]: () => {
-      C.current = !0;
+      b.current = !0;
     }
   }), [T, l]);
   return U.useMemo(() => a ? {
     reference: V,
-    floating: Z
-  } : {}, [a, V, Z]);
+    floating: X
+  } : {}, [a, V, X]);
 }
 function Rb(n) {
   const {
@@ -17050,42 +17050,42 @@ function gs(n) {
         reference: s
       }
     }
-  }), p = U.useCallback((v) => {
-    const w = Ee(v) ? {
-      getBoundingClientRect: () => v.getBoundingClientRect(),
-      contextElement: v
-    } : v;
+  }), p = U.useCallback((C) => {
+    const w = Ee(C) ? {
+      getBoundingClientRect: () => C.getBoundingClientRect(),
+      contextElement: C
+    } : C;
     c(w), h.refs.setReference(w);
-  }, [h.refs]), g = U.useCallback((v) => {
-    (Ee(v) || v === null) && (f.current = v, a(v)), (Ee(h.refs.reference.current) || h.refs.reference.current === null || // Don't allow setting virtual elements using the old technique back to
+  }, [h.refs]), g = U.useCallback((C) => {
+    (Ee(C) || C === null) && (f.current = C, a(C)), (Ee(h.refs.reference.current) || h.refs.reference.current === null || // Don't allow setting virtual elements using the old technique back to
     // `null` to support `positionReference` + an unstable `reference`
     // callback ref.
-    v !== null && !Ee(v)) && h.refs.setReference(v);
+    C !== null && !Ee(C)) && h.refs.setReference(C);
   }, [h.refs]), m = U.useMemo(() => ({
     ...h.refs,
     setReference: g,
     setPositionReference: p,
     domReference: f
-  }), [h.refs, g, p]), b = U.useMemo(() => ({
+  }), [h.refs, g, p]), v = U.useMemo(() => ({
     ...h.elements,
     domReference: u
-  }), [h.elements, u]), C = U.useMemo(() => ({
+  }), [h.elements, u]), b = U.useMemo(() => ({
     ...h,
     ...r,
     refs: m,
-    elements: b,
+    elements: v,
     nodeId: e
-  }), [h, m, b, e, r]);
+  }), [h, m, v, e, r]);
   return jt(() => {
-    r.dataRef.current.floatingContext = C;
-    const v = d == null ? void 0 : d.nodesRef.current.find((w) => w.id === e);
-    v && (v.context = C);
+    r.dataRef.current.floatingContext = b;
+    const C = d == null ? void 0 : d.nodesRef.current.find((w) => w.id === e);
+    C && (C.context = b);
   }), U.useMemo(() => ({
     ...h,
-    context: C,
+    context: b,
     refs: m,
-    elements: b
-  }), [h, m, b, C]);
+    elements: v
+  }), [h, m, v, b]);
 }
 function Pb(n, e) {
   e === void 0 && (e = {});
@@ -17154,9 +17154,9 @@ function Pb(n, e) {
       l.current = !1;
       const p = h.relatedTarget, g = h.nativeEvent, m = Ee(p) && p.hasAttribute(ps("focus-guard")) && p.getAttribute("data-type") === "outside";
       u.current = window.setTimeout(() => {
-        var b;
-        const C = el(a.domReference ? a.domReference.ownerDocument : document);
-        !p && C === a.domReference || Vr((b = i.current.floatingContext) == null ? void 0 : b.refs.floating.current, C) || Vr(a.domReference, C) || m || r(!1, g, "focus");
+        var v;
+        const b = el(a.domReference ? a.domReference.ownerDocument : document);
+        !p && b === a.domReference || Vr((v = i.current.floatingContext) == null ? void 0 : v.refs.floating.current, b) || Vr(a.domReference, b) || m || r(!1, g, "focus");
       });
     }
   }), [i, a.domReference, r, c]);
@@ -17271,7 +17271,7 @@ function Ob(n, e) {
       active: g,
       selected: m
     } = p;
-    const b = {
+    const v = {
       role: "option",
       ...g && {
         id: o + "-option"
@@ -17280,12 +17280,12 @@ function Ob(n, e) {
     switch (a) {
       case "select":
         return {
-          ...b,
+          ...v,
           "aria-selected": g && m
         };
       case "combobox":
         return {
-          ...b,
+          ...v,
           ...g && {
             "aria-selected": !0
           }
@@ -17420,7 +17420,7 @@ function Fb(n) {
   return e.setAttribute("data-portal", "true"), typeof n.className == "string" && e.classList.add(...n.className.split(" ").filter(Boolean)), typeof n.style == "object" && Object.assign(e.style, n.style), typeof n.id == "string" && e.setAttribute("id", n.id), e;
 }
 const jb = {}, wd = Ce((n, e) => {
-  const { children: t, target: r, ...o } = J("Portal", jb, n), [i, a] = te(!1), s = ue(null);
+  const { children: t, target: r, ...o } = J("Portal", jb, n), [i, a] = Z(!1), s = ue(null);
   return to(() => (a(!0), s.current = r ? typeof r == "string" ? document.querySelector(r) : r : Fb(o), ku(e, s.current), !r && s.current && document.body.appendChild(s.current), () => {
     !r && s.current && document.body.removeChild(s.current);
   }), [r]), !i || !s.current ? null : Kf(/* @__PURE__ */ y.jsx(y.Fragment, { children: t }), s.current);
@@ -17588,25 +17588,25 @@ function Hb({
   enterDelay: c,
   exitDelay: l
 }) {
-  const u = $t(), f = Ru(), d = u.respectReducedMotion ? f : !1, [h, p] = te(d ? 0 : n), [g, m] = te(r ? "entered" : "exited"), b = ue(-1), C = ue(-1), v = ue(-1), w = (E) => {
+  const u = $t(), f = Ru(), d = u.respectReducedMotion ? f : !1, [h, p] = Z(d ? 0 : n), [g, m] = Z(r ? "entered" : "exited"), v = ue(-1), b = ue(-1), C = ue(-1), w = (E) => {
     const _ = E ? o : i, T = E ? a : s;
-    window.clearTimeout(b.current);
-    const M = d ? 0 : E ? n : e;
-    p(M), M === 0 ? (typeof _ == "function" && _(), typeof T == "function" && T(), m(E ? "entered" : "exited")) : v.current = requestAnimationFrame(() => {
+    window.clearTimeout(v.current);
+    const x = d ? 0 : E ? n : e;
+    p(x), x === 0 ? (typeof _ == "function" && _(), typeof T == "function" && T(), m(E ? "entered" : "exited")) : C.current = requestAnimationFrame(() => {
       Wl.flushSync(() => {
         m(E ? "pre-entering" : "pre-exiting");
-      }), v.current = requestAnimationFrame(() => {
-        typeof _ == "function" && _(), m(E ? "entering" : "exiting"), b.current = window.setTimeout(() => {
+      }), C.current = requestAnimationFrame(() => {
+        typeof _ == "function" && _(), m(E ? "entering" : "exiting"), v.current = window.setTimeout(() => {
           typeof T == "function" && T(), m(E ? "entered" : "exited");
-        }, M);
+        }, x);
       });
     });
   }, S = (E) => {
-    if (window.clearTimeout(C.current), typeof (E ? c : l) != "number") {
+    if (window.clearTimeout(b.current), typeof (E ? c : l) != "number") {
       w(E);
       return;
     }
-    C.current = window.setTimeout(
+    b.current = window.setTimeout(
       () => {
         w(E);
       },
@@ -17615,9 +17615,9 @@ function Hb({
   };
   return mn(() => {
     S(r);
-  }, [r]), X(
+  }, [r]), ee(
     () => () => {
-      window.clearTimeout(b.current), cancelAnimationFrame(v.current);
+      window.clearTimeout(v.current), cancelAnimationFrame(C.current);
     },
     []
   ), {
@@ -17665,7 +17665,7 @@ function di({
 di.displayName = "@mantine/core/Transition";
 var Sd = { dropdown: "m_38a85659", arrow: "m_a31dc6c1" };
 const Bb = {}, vs = le((n, e) => {
-  var m, b, C, v;
+  var m, v, b, C;
   const t = J("PopoverDropdown", Bb, n), {
     className: r,
     style: o,
@@ -17691,9 +17691,9 @@ const Bb = {}, vs = le((n, e) => {
       mounted: d.opened,
       ...d.transitionProps,
       transition: ((m = d.transitionProps) == null ? void 0 : m.transition) || "fade",
-      duration: ((b = d.transitionProps) == null ? void 0 : b.duration) ?? 150,
+      duration: ((v = d.transitionProps) == null ? void 0 : v.duration) ?? 150,
       keepMounted: d.keepMounted,
-      exitDuration: typeof ((C = d.transitionProps) == null ? void 0 : C.exitDuration) == "number" ? d.transitionProps.exitDuration : (v = d.transitionProps) == null ? void 0 : v.duration,
+      exitDuration: typeof ((b = d.transitionProps) == null ? void 0 : b.exitDuration) == "number" ? d.transitionProps.exitDuration : (C = d.transitionProps) == null ? void 0 : C.duration,
       children: (w) => /* @__PURE__ */ y.jsx(ys, { active: d.trapFocus, children: /* @__PURE__ */ y.jsxs(
         ne,
         {
@@ -17788,8 +17788,8 @@ function Id({
   position: t,
   positionDependencies: r
 }) {
-  const [o, i] = te(0);
-  X(() => {
+  const [o, i] = Z(0);
+  ee(() => {
     if (e.refs.reference.current && e.refs.floating.current)
       return ob(
         e.refs.reference.current,
@@ -17920,19 +17920,19 @@ function wn(n) {
     arrowRadius: p,
     arrowPosition: g,
     unstyled: m,
-    classNames: b,
-    styles: C,
-    closeOnClickOutside: v,
+    classNames: v,
+    styles: b,
+    closeOnClickOutside: C,
     withinPortal: w,
     portalProps: S,
     closeOnEscape: E,
     clickOutsideEvents: _,
     trapFocus: T,
-    onClose: M,
+    onClose: x,
     onOpen: B,
     onChange: z,
     zIndex: V,
-    radius: Z,
+    radius: X,
     shadow: D,
     id: j,
     defaultOpened: R,
@@ -17949,13 +17949,13 @@ function wn(n) {
     name: A,
     props: e,
     classes: Sd,
-    classNames: b,
-    styles: C,
+    classNames: v,
+    styles: b,
     unstyled: m,
     rootSelector: "dropdown",
     vars: _e,
     varsResolver: Gb
-  }), ze = ue(null), [It, Re] = te(null), [Tt, En] = te(null), { dir: cn } = ii(), _t = rn(j), ke = qb({
+  }), ze = ue(null), [It, Re] = Z(null), [Tt, En] = Z(null), { dir: cn } = ii(), _t = rn(j), ke = qb({
     middlewares: u,
     width: l,
     position: vd(cn, r),
@@ -17968,10 +17968,10 @@ function wn(n) {
     defaultOpened: R,
     onChange: z,
     onOpen: B,
-    onClose: M,
+    onClose: x,
     strategy: Be
   });
-  wm(() => v && ke.onClose(), _, [
+  wm(() => C && ke.onClose(), _, [
     It,
     Tt
   ]);
@@ -18013,7 +18013,7 @@ function wn(n) {
         withinPortal: w,
         portalProps: S,
         zIndex: V,
-        radius: Z,
+        radius: X,
         shadow: D,
         closeOnEscape: E,
         onClose: ke.onClose,
@@ -18023,8 +18023,8 @@ function wn(n) {
         withRoles: P,
         targetProps: pe,
         __staticSelector: A,
-        classNames: b,
-        styles: C,
+        classNames: v,
+        styles: b,
         unstyled: m,
         variant: re,
         keepMounted: fe,
@@ -18150,8 +18150,8 @@ const Zb = {
     variant: p,
     icon: g,
     mod: m,
-    ...b
-  } = t, C = be({
+    ...v
+  } = t, b = be({
     name: "CloseButton",
     props: t,
     className: s,
@@ -18167,12 +18167,12 @@ const Zb = {
     vr,
     {
       ref: e,
-      ...b,
+      ...v,
       unstyled: f,
       variant: p,
       disabled: h,
       mod: [{ disabled: h || d }, m],
-      ...C("root", { variant: p, active: !h && !d }),
+      ...b("root", { variant: p, active: !h && !d }),
       children: [
         g || /* @__PURE__ */ y.jsx(_d, {}),
         o
@@ -18216,10 +18216,10 @@ const nC = {
     preventGrowOverflow: p,
     vars: g,
     variant: m,
-    __size: b,
-    mod: C,
-    ...v
-  } = t, w = tC(c), S = w.length, E = qa(l ?? "md"), T = { childWidth: `calc(${100 / S}% - (${E} - ${E} / ${S}))` }, M = be({
+    __size: v,
+    mod: b,
+    ...C
+  } = t, w = tC(c), S = w.length, E = qa(l ?? "md"), T = { childWidth: `calc(${100 / S}% - (${E} - ${E} / ${S}))` }, x = be({
     name: "Group",
     props: t,
     stylesCtx: T,
@@ -18235,12 +18235,12 @@ const nC = {
   return /* @__PURE__ */ y.jsx(
     ne,
     {
-      ...M("root"),
+      ...x("root"),
       ref: e,
       variant: m,
-      mod: [{ grow: h }, C],
-      size: b,
-      ...v,
+      mod: [{ grow: h }, b],
+      size: v,
+      ...C,
       children: w
     }
   );
@@ -18367,9 +18367,9 @@ const bl = {
     children: p,
     __staticSelector: g,
     variant: m,
-    mod: b,
-    ...C
-  } = J("InputLabel", bl, t), v = be({
+    mod: v,
+    ...b
+  } = J("InputLabel", bl, t), C = be({
     name: ["InputWrapper", g],
     props: t,
     classes: St,
@@ -18381,7 +18381,7 @@ const bl = {
     rootSelector: "label",
     vars: c,
     varsResolver: cC
-  }), w = oo(), S = (w == null ? void 0 : w.getStyles) || v;
+  }), w = oo(), S = (w == null ? void 0 : w.getStyles) || C;
   return /* @__PURE__ */ y.jsxs(
     ne,
     {
@@ -18391,11 +18391,11 @@ const bl = {
       size: u,
       ref: e,
       htmlFor: l === "label" ? d : void 0,
-      mod: [{ required: f }, b],
+      mod: [{ required: f }, v],
       onMouseDown: (E) => {
         h == null || h(E), !E.defaultPrevented && E.detail > 1 && E.preventDefault();
       },
-      ...C,
+      ...b,
       children: [
         p,
         f && /* @__PURE__ */ y.jsx("span", { ...S("required"), "aria-hidden": !0, children: " *" })
@@ -18478,20 +18478,20 @@ const uC = {
     label: p,
     error: g,
     description: m,
-    labelProps: b,
-    descriptionProps: C,
-    errorProps: v,
+    labelProps: v,
+    descriptionProps: b,
+    errorProps: C,
     labelElement: w,
     children: S,
     withAsterisk: E,
     id: _,
     required: T,
-    __stylesApiProps: M,
+    __stylesApiProps: x,
     mod: B,
     ...z
   } = t, V = be({
     name: ["InputWrapper", f],
-    props: M || t,
+    props: x || t,
     classes: St,
     className: o,
     style: i,
@@ -18500,40 +18500,40 @@ const uC = {
     unstyled: s,
     vars: c,
     varsResolver: dC
-  }), Z = {
+  }), X = {
     size: l,
     variant: u,
     __staticSelector: f
-  }, D = rn(_), j = typeof E == "boolean" ? E : T, R = (v == null ? void 0 : v.id) || `${D}-error`, A = (C == null ? void 0 : C.id) || `${D}-description`, P = D, $ = !!g && typeof g != "boolean", H = !!m, re = `${$ ? R : ""} ${H ? A : ""}`, fe = re.trim().length > 0 ? re.trim() : void 0, _e = (b == null ? void 0 : b.id) || `${D}-label`, Be = p && /* @__PURE__ */ y.jsx(
+  }, D = rn(_), j = typeof E == "boolean" ? E : T, R = (C == null ? void 0 : C.id) || `${D}-error`, A = (b == null ? void 0 : b.id) || `${D}-description`, P = D, $ = !!g && typeof g != "boolean", H = !!m, re = `${$ ? R : ""} ${H ? A : ""}`, fe = re.trim().length > 0 ? re.trim() : void 0, _e = (v == null ? void 0 : v.id) || `${D}-label`, Be = p && /* @__PURE__ */ y.jsx(
     gi,
     {
       labelElement: w,
       id: _e,
       htmlFor: P,
       required: j,
-      ...Z,
-      ...b,
+      ...X,
+      ...v,
       children: p
     },
     "label"
   ), pe = H && /* @__PURE__ */ y.jsx(
     hi,
     {
-      ...C,
-      ...Z,
-      size: (C == null ? void 0 : C.size) || Z.size,
-      id: (C == null ? void 0 : C.id) || A,
+      ...b,
+      ...X,
+      size: (b == null ? void 0 : b.size) || X.size,
+      id: (b == null ? void 0 : b.id) || A,
       children: m
     },
     "description"
   ), Oe = /* @__PURE__ */ y.jsx(Vl, { children: d(S) }, "input"), ze = $ && /* @__PURE__ */ Qi(
     pi,
     {
-      ...v,
-      ...Z,
-      size: (v == null ? void 0 : v.size) || Z.size,
+      ...C,
+      ...X,
+      size: (C == null ? void 0 : C.size) || X.size,
       key: "error",
-      id: (v == null ? void 0 : v.id) || R
+      id: (C == null ? void 0 : C.id) || R
     },
     g
   ), It = h.map((Re) => {
@@ -18612,19 +18612,19 @@ const fC = {
     disabled: p,
     leftSection: g,
     leftSectionProps: m,
-    leftSectionWidth: b,
-    rightSection: C,
-    rightSectionProps: v,
+    leftSectionWidth: v,
+    rightSection: b,
+    rightSectionProps: C,
     rightSectionWidth: w,
     rightSectionPointerEvents: S,
     leftSectionPointerEvents: E,
     variant: _,
     vars: T,
-    pointer: M,
+    pointer: x,
     multiline: B,
     radius: z,
     id: V,
-    withAria: Z,
+    withAria: X,
     withErrorStyles: D,
     mod: j,
     inputSize: R,
@@ -18642,7 +18642,7 @@ const fC = {
     rootSelector: "wrapper",
     vars: T,
     varsResolver: hC
-  }), _e = Z ? {
+  }), _e = X ? {
     required: c,
     disabled: p,
     "aria-invalid": !!h,
@@ -18658,10 +18658,10 @@ const fC = {
       mod: [
         {
           error: !!h && D,
-          pointer: M,
+          pointer: x,
           disabled: p,
           multiline: B,
-          "data-with-right-section": !!C,
+          "data-with-right-section": !!b,
           "data-with-left-section": !!g
         },
         j
@@ -18695,16 +18695,16 @@ const fC = {
             ...fe("input")
           }
         ),
-        C && /* @__PURE__ */ y.jsx(
+        b && /* @__PURE__ */ y.jsx(
           "div",
           {
-            ...v,
+            ...C,
             "data-position": "right",
             ...fe("section", {
-              className: v == null ? void 0 : v.className,
-              style: v == null ? void 0 : v.style
+              className: C == null ? void 0 : C.className,
+              style: C == null ? void 0 : C.style
             }),
-            children: C
+            children: b
           }
         )
       ]
@@ -18733,18 +18733,18 @@ function pC(n, e, t) {
     errorProps: p,
     labelProps: g,
     descriptionProps: m,
-    wrapperProps: b,
-    id: C,
-    size: v,
+    wrapperProps: v,
+    id: b,
+    size: C,
     style: w,
     inputContainer: S,
     inputWrapperOrder: E,
     withAsterisk: _,
     variant: T,
-    vars: M,
+    vars: x,
     mod: B,
     ...z
-  } = r, { styleProps: V, rest: Z } = oi(z), D = {
+  } = r, { styleProps: V, rest: X } = oi(z), D = {
     label: o,
     description: i,
     error: a,
@@ -18758,18 +18758,18 @@ function pC(n, e, t) {
     descriptionProps: m,
     unstyled: f,
     styles: l,
-    size: v,
+    size: C,
     style: w,
     inputContainer: S,
     inputWrapperOrder: E,
     withAsterisk: _,
     variant: T,
-    id: C,
+    id: b,
     mod: B,
-    ...b
+    ...v
   };
   return {
-    ...Z,
+    ...X,
     classNames: c,
     styles: l,
     unstyled: f,
@@ -18779,12 +18779,12 @@ function pC(n, e, t) {
       classNames: c,
       styles: l,
       unstyled: f,
-      size: v,
+      size: C,
       __staticSelector: d,
       __stylesApiProps: h || r,
       error: a,
       variant: T,
-      id: C
+      id: b
     }
   };
 }
@@ -18839,7 +18839,7 @@ const vC = {}, Es = le((n, e) => {
     disabled: d,
     mod: h,
     ...p
-  } = J("AccordionControl", vC, n), { value: g } = Rd(), m = ws(), b = m.isItemActive(g), C = typeof m.order == "number", v = `h${m.order}`, w = /* @__PURE__ */ y.jsxs(
+  } = J("AccordionControl", vC, n), { value: g } = Rd(), m = ws(), v = m.isItemActive(g), b = typeof m.order == "number", C = `h${m.order}`, w = /* @__PURE__ */ y.jsxs(
     vr,
     {
       ...p,
@@ -18847,7 +18847,7 @@ const vC = {}, Es = le((n, e) => {
       unstyled: m.unstyled,
       mod: [
         "accordion-control",
-        { active: b, "chevron-position": m.chevronPosition, disabled: d },
+        { active: v, "chevron-position": m.chevronPosition, disabled: d },
         h
       ],
       ref: e,
@@ -18856,7 +18856,7 @@ const vC = {}, Es = le((n, e) => {
       },
       type: "button",
       disabled: d,
-      "aria-expanded": b,
+      "aria-expanded": v,
       "aria-controls": m.getRegionId(g),
       id: m.getControlId(g),
       onKeyDown: mm({
@@ -18872,7 +18872,7 @@ const vC = {}, Es = le((n, e) => {
           ne,
           {
             component: "span",
-            mod: { rotate: !m.disableChevronRotation && b, position: m.chevronPosition },
+            mod: { rotate: !m.disableChevronRotation && v, position: m.chevronPosition },
             ...m.getStyles("chevron", { classNames: t, styles: i }),
             children: s || m.chevron
           }
@@ -18890,7 +18890,7 @@ const vC = {}, Es = le((n, e) => {
       ]
     }
   );
-  return C ? /* @__PURE__ */ y.jsx(v, { ...m.getStyles("itemTitle", { classNames: t, styles: i }), children: w }) : w;
+  return b ? /* @__PURE__ */ y.jsx(C, { ...m.getStyles("itemTitle", { classNames: t, styles: i }), children: w }) : w;
 });
 Es.displayName = "@mantine/core/AccordionControl";
 Es.classes = io;
@@ -18965,22 +18965,22 @@ function xe(n) {
     loop: p,
     transitionDuration: g,
     disableChevronRotation: m,
-    chevronPosition: b,
-    chevronSize: C,
-    order: v,
+    chevronPosition: v,
+    chevronSize: b,
+    order: C,
     chevron: w,
     variant: S,
     radius: E,
     ..._
-  } = e, T = rn(h), [M, B] = Fn({
+  } = e, T = rn(h), [x, B] = Fn({
     value: u,
     defaultValue: f,
     finalValue: l ? [] : null,
     onChange: d
-  }), z = (D) => Array.isArray(M) ? M.includes(D) : D === M, V = (D) => {
-    const j = Array.isArray(M) ? M.includes(D) ? M.filter((R) => R !== D) : [...M, D] : D === M ? null : D;
+  }), z = (D) => Array.isArray(x) ? x.includes(D) : D === x, V = (D) => {
+    const j = Array.isArray(x) ? x.includes(D) ? x.filter((R) => R !== D) : [...x, D] : D === x ? null : D;
     B(j);
-  }, Z = be({
+  }, X = be({
     name: "Accordion",
     classes: io,
     props: e,
@@ -19008,15 +19008,15 @@ function xe(n) {
         ),
         transitionDuration: g,
         disableChevronRotation: m,
-        chevronPosition: b,
-        order: v,
+        chevronPosition: v,
+        order: C,
         chevron: w,
         loop: p,
-        getStyles: Z,
+        getStyles: X,
         variant: S,
         unstyled: a
       },
-      children: /* @__PURE__ */ y.jsx(ne, { ...Z("root"), id: T, ..._, variant: S, "data-accordion": !0, children: c })
+      children: /* @__PURE__ */ y.jsx(ne, { ...X("root"), id: T, ..._, variant: S, "data-accordion": !0, children: c })
     }
   );
 }
@@ -19060,9 +19060,9 @@ const IC = {}, TC = (n, { radius: e, color: t, variant: r, autoContrast: o }) =>
     icon: p,
     withCloseButton: g,
     onClose: m,
-    closeButtonLabel: b,
-    variant: C,
-    autoContrast: v,
+    closeButtonLabel: v,
+    variant: b,
+    autoContrast: C,
     ...w
   } = t, S = be({
     name: "Alert",
@@ -19080,8 +19080,8 @@ const IC = {}, TC = (n, { radius: e, color: t, variant: r, autoContrast: o }) =>
     ne,
     {
       id: E,
-      ...S("root", { variant: C }),
-      variant: C,
+      ...S("root", { variant: b }),
+      variant: b,
       ref: e,
       ...w,
       role: "alert",
@@ -19091,7 +19091,7 @@ const IC = {}, TC = (n, { radius: e, color: t, variant: r, autoContrast: o }) =>
         p && /* @__PURE__ */ y.jsx("div", { ...S("icon"), children: p }),
         /* @__PURE__ */ y.jsxs("div", { ...S("body"), children: [
           f && /* @__PURE__ */ y.jsx("div", { ...S("title"), "data-with-close-button": g || void 0, children: /* @__PURE__ */ y.jsx("span", { id: _, ...S("label"), children: f }) }),
-          d && /* @__PURE__ */ y.jsx("div", { id: T, ...S("message"), "data-variant": C, children: d })
+          d && /* @__PURE__ */ y.jsx("div", { id: T, ...S("message"), "data-variant": b, children: d })
         ] }),
         g && /* @__PURE__ */ y.jsx(
           wr,
@@ -19101,7 +19101,7 @@ const IC = {}, TC = (n, { radius: e, color: t, variant: r, autoContrast: o }) =>
             variant: "transparent",
             size: 16,
             iconSize: 16,
-            "aria-label": b,
+            "aria-label": v,
             unstyled: s
           }
         )
@@ -19144,9 +19144,9 @@ const kC = {
     styles: p,
     unstyled: g,
     variant: m,
-    mod: b,
-    size: C,
-    ...v
+    mod: v,
+    size: b,
+    ...C
   } = t, w = be({
     name: ["Text", l],
     props: t,
@@ -19173,10 +19173,10 @@ const kC = {
           "data-inline": i,
           "data-inherit": a
         },
-        b
+        v
       ],
-      size: C,
-      ...v
+      size: b,
+      ...C
     }
   );
 });
@@ -19318,7 +19318,7 @@ function Ns({
   targetType: o,
   autoComplete: i
 }) {
-  const a = Et(), [s, c] = te(null), l = (f) => {
+  const a = Et(), [s, c] = Z(null), l = (f) => {
     if (n == null || n(f), !a.readOnly && e) {
       if (f.nativeEvent.isComposing)
         return;
@@ -19473,14 +19473,14 @@ const UC = {}, Ds = le((n, e) => {
     selected: p,
     mod: g,
     ...m
-  } = t, b = Et(), C = Gl(), v = l || C;
+  } = t, v = Et(), b = Gl(), C = l || b;
   return /* @__PURE__ */ y.jsx(
     ne,
     {
-      ...b.getStyles("option", { className: o, classNames: r, styles: a, style: i }),
+      ...v.getStyles("option", { className: o, classNames: r, styles: a, style: i }),
       ...m,
       ref: e,
-      id: v,
+      id: C,
       mod: [
         "combobox-option",
         { "combobox-active": u, "combobox-disabled": h, "combobox-selected": p },
@@ -19489,13 +19489,13 @@ const UC = {}, Ds = le((n, e) => {
       role: "option",
       onClick: (w) => {
         var S;
-        h ? w.preventDefault() : ((S = b.onOptionSubmit) == null || S.call(b, t.value, t), c == null || c(w));
+        h ? w.preventDefault() : ((S = v.onOptionSubmit) == null || S.call(v, t.value, t), c == null || c(w));
       },
       onMouseDown: (w) => {
         w.preventDefault(), f == null || f(w);
       },
       onMouseOver: (w) => {
-        b.resetSelectionOnOptionHover && b.store.resetSelectedOption(), d == null || d(w);
+        v.resetSelectionOnOptionHover && v.store.resetSelectedOption(), d == null || d(w);
       }
     }
   );
@@ -19504,7 +19504,7 @@ Ds.classes = ot;
 Ds.displayName = "@mantine/core/ComboboxOption";
 const HC = {}, Ls = le((n, e) => {
   const t = J("ComboboxOptions", HC, n), { classNames: r, className: o, style: i, styles: a, id: s, onMouseDown: c, labelledBy: l, ...u } = t, f = Et(), d = rn(s);
-  return X(() => {
+  return ee(() => {
     f.store.setListId(d);
   }, [d]), /* @__PURE__ */ y.jsx(
     ne,
@@ -19643,17 +19643,17 @@ function mi({
       s || (c(!0), o == null || o(R));
     },
     [c, o, s]
-  ), b = me(
+  ), v = me(
     (R = "unknown") => {
       s && (c(!1), r == null || r(R));
     },
     [c, r, s]
-  ), C = me(
+  ), b = me(
     (R = "unknown") => {
-      s ? b(R) : m(R);
+      s ? v(R) : m(R);
     },
-    [b, m, s]
-  ), v = me(() => {
+    [v, m, s]
+  ), C = me(() => {
     const R = document.querySelector(`#${l.current} [data-combobox-selected]`);
     R == null || R.removeAttribute("data-combobox-selected"), R == null || R.removeAttribute("aria-selected");
   }, []), w = me(
@@ -19662,9 +19662,9 @@ function mi({
       if (!P)
         return null;
       const $ = R >= P.length ? 0 : R < 0 ? P.length - 1 : R;
-      return u.current = $, P != null && P[$] && !P[$].hasAttribute("data-combobox-disabled") ? (v(), P[$].setAttribute("data-combobox-selected", "true"), P[$].setAttribute("aria-selected", "true"), P[$].scrollIntoView({ block: "nearest", behavior: a }), P[$].id) : null;
+      return u.current = $, P != null && P[$] && !P[$].hasAttribute("data-combobox-disabled") ? (C(), P[$].setAttribute("data-combobox-selected", "true"), P[$].setAttribute("aria-selected", "true"), P[$].scrollIntoView({ block: "nearest", behavior: a }), P[$].id) : null;
     },
-    [a, v]
+    [a, C]
   ), S = me(() => {
     const R = document.querySelector(
       `#${l.current} [data-combobox-active]`
@@ -19701,7 +19701,7 @@ function mi({
       )
     ),
     [w]
-  ), M = me(
+  ), x = me(
     (R = "selected", A) => {
       g.current = window.setTimeout(() => {
         var H;
@@ -19715,20 +19715,20 @@ function mi({
     },
     []
   ), B = me(() => {
-    u.current = -1, v();
-  }, [v]), z = me(() => {
+    u.current = -1, C();
+  }, [C]), z = me(() => {
     const R = document.querySelectorAll(
       `#${l.current} [data-combobox-option]`
     ), A = R == null ? void 0 : R[u.current];
     A == null || A.click();
   }, []), V = me((R) => {
     l.current = R;
-  }, []), Z = me(() => {
+  }, []), X = me(() => {
     h.current = window.setTimeout(() => f.current.focus(), 0);
   }, []), D = me(() => {
     p.current = window.setTimeout(() => d.current.focus(), 0);
   }, []), j = me(() => u.current, []);
-  return X(
+  return ee(
     () => () => {
       window.clearTimeout(h.current), window.clearTimeout(p.current), window.clearTimeout(g.current);
     },
@@ -19736,8 +19736,8 @@ function mi({
   ), {
     dropdownOpened: s,
     openDropdown: m,
-    closeDropdown: b,
-    toggleDropdown: C,
+    closeDropdown: v,
+    toggleDropdown: b,
     selectedOptionIndex: u.current,
     getSelectedOptionIndex: j,
     selectOption: w,
@@ -19746,12 +19746,12 @@ function mi({
     selectNextOption: E,
     selectPreviousOption: _,
     resetSelectedOption: B,
-    updateSelectedOptionIndex: M,
+    updateSelectedOptionIndex: x,
     listId: l.current,
     setListId: V,
     clickSelectedOption: z,
     searchRef: f,
-    focusSearchInput: Z,
+    focusSearchInput: X,
     targetRef: d,
     focusTarget: D
   };
@@ -19789,7 +19789,7 @@ function de(n) {
     __staticSelector: h,
     readOnly: p,
     ...g
-  } = e, m = mi(), b = a || m, C = be({
+  } = e, m = mi(), v = a || m, b = be({
     name: h || "Combobox",
     classes: ot,
     props: e,
@@ -19798,15 +19798,15 @@ function de(n) {
     unstyled: o,
     vars: s,
     varsResolver: GC
-  }), v = () => {
-    l == null || l(), b.closeDropdown();
+  }), C = () => {
+    l == null || l(), v.closeDropdown();
   };
   return /* @__PURE__ */ y.jsx(
     NC,
     {
       value: {
-        getStyles: C,
-        store: b,
+        getStyles: b,
+        store: v,
         onOptionSubmit: c,
         size: u,
         resetSelectionOnOptionHover: d,
@@ -19815,9 +19815,9 @@ function de(n) {
       children: /* @__PURE__ */ y.jsx(
         wn,
         {
-          opened: b.dropdownOpened,
+          opened: v.dropdownOpened,
           ...g,
-          onClose: v,
+          onClose: C,
           withRoles: !1,
           unstyled: o,
           children: i
@@ -19864,16 +19864,16 @@ const YC = Ud, Hd = Ce(
     bodyElement: p = "div",
     labelElement: g = "label",
     variant: m,
-    style: b,
-    vars: C,
-    mod: v,
+    style: v,
+    vars: b,
+    mod: C,
     ...w
   }, S) => {
     const E = be({
       name: n,
       props: e,
       className: t,
-      style: b,
+      style: v,
       classes: Ud,
       classNames: r,
       styles: o,
@@ -19888,7 +19888,7 @@ const YC = Ud, Hd = Ce(
           "--label-fz": dt(d),
           "--label-lh": De(d, "label-lh")
         },
-        mod: [{ "label-position": h }, v],
+        mod: [{ "label-position": h }, C],
         variant: m,
         size: d,
         ...w,
@@ -19956,18 +19956,18 @@ const ZC = {
     vars: c,
     varsResolver: ew,
     rootSelector: "card"
-  }), m = zd(), b = typeof l == "boolean" ? l : (m == null ? void 0 : m.value.includes(d || "")) || !1;
-  return /* @__PURE__ */ y.jsx(JC, { value: { checked: b }, children: /* @__PURE__ */ y.jsx(
+  }), m = zd(), v = typeof l == "boolean" ? l : (m == null ? void 0 : m.value.includes(d || "")) || !1;
+  return /* @__PURE__ */ y.jsx(JC, { value: { checked: v }, children: /* @__PURE__ */ y.jsx(
     vr,
     {
       ref: e,
-      mod: [{ "with-border": f, checked: b }, u],
+      mod: [{ "with-border": f, checked: v }, u],
       ...g("card"),
       ...p,
       role: "checkbox",
-      "aria-checked": b,
-      onClick: (C) => {
-        h == null || h(C), m == null || m.onChange(d || "");
+      "aria-checked": v,
+      onClick: (b) => {
+        h == null || h(b), m == null || m.onChange(d || "");
       }
     }
   ) });
@@ -20070,9 +20070,9 @@ const rw = {
     autoContrast: p,
     checked: g,
     mod: m,
-    variant: b,
-    disabled: C,
-    ...v
+    variant: v,
+    disabled: b,
+    ...C
   } = t, w = l, S = be({
     name: "CheckboxIndicator",
     classes: qd,
@@ -20090,10 +20090,10 @@ const rw = {
     ne,
     {
       ref: e,
-      ...S("indicator", { variant: b }),
-      variant: b,
-      mod: [{ checked: _, disabled: C }, m],
-      ...v,
+      ...S("indicator", { variant: v }),
+      variant: v,
+      mod: [{ checked: _, disabled: b }, m],
+      ...C,
       children: /* @__PURE__ */ y.jsx(w, { indeterminate: u, ...S("icon") })
     }
   );
@@ -20130,19 +20130,19 @@ const iw = {
     wrapperProps: p,
     children: g,
     checked: m,
-    labelPosition: b,
-    description: C,
-    error: v,
+    labelPosition: v,
+    description: b,
+    error: C,
     disabled: w,
     variant: S,
     indeterminate: E,
     icon: _,
     rootRef: T,
-    iconColor: M,
+    iconColor: x,
     onChange: B,
     autoContrast: z,
     mod: V,
-    ...Z
+    ...X
   } = t, D = zd(), j = d || (D == null ? void 0 : D.size), R = _, A = be({
     name: "Checkbox",
     props: t,
@@ -20154,7 +20154,7 @@ const iw = {
     unstyled: s,
     vars: c,
     varsResolver: aw
-  }), { styleProps: P, rest: $ } = oi(Z), H = rn(f), re = D ? {
+  }), { styleProps: P, rest: $ } = oi(X), H = rn(f), re = D ? {
     checked: D.value.includes($.value),
     onChange: (fe) => {
       D.onChange(fe), B == null || B(fe);
@@ -20168,10 +20168,10 @@ const iw = {
       __stylesApiProps: t,
       id: H,
       size: j,
-      labelPosition: b,
+      labelPosition: v,
       label: u,
-      description: C,
-      error: v,
+      description: b,
+      error: C,
       disabled: w,
       classNames: r,
       styles: a,
@@ -20182,7 +20182,7 @@ const iw = {
       mod: V,
       ...P,
       ...p,
-      children: /* @__PURE__ */ y.jsxs(ne, { ...A("inner"), mod: { "data-label-position": b }, children: [
+      children: /* @__PURE__ */ y.jsxs(ne, { ...A("inner"), mod: { "data-label-position": v }, children: [
         /* @__PURE__ */ y.jsx(
           ne,
           {
@@ -20191,7 +20191,7 @@ const iw = {
             ref: e,
             checked: m,
             disabled: w,
-            mod: { error: !!v, indeterminate: E },
+            mod: { error: !!C, indeterminate: E },
             ...A("input", { focusable: !0, variant: S }),
             onChange: B,
             ...$,
@@ -20323,14 +20323,14 @@ function Qd({
   labelId: p,
   renderOption: g,
   scrollAreaProps: m,
-  "aria-label": b
+  "aria-label": v
 }) {
   Wd(n);
-  const v = typeof o == "string" ? (r || Gd)({
+  const C = typeof o == "string" ? (r || Gd)({
     options: n,
     search: c ? o : "",
     limit: i ?? 1 / 0
-  }) : n, w = sw(v), S = v.map((E) => /* @__PURE__ */ y.jsx(
+  }) : n, w = sw(C), S = C.map((E) => /* @__PURE__ */ y.jsx(
     Yd,
     {
       data: E,
@@ -20342,7 +20342,7 @@ function Qd({
     },
     Wr(E) ? E.group : E.value
   ));
-  return /* @__PURE__ */ y.jsx(de.Dropdown, { hidden: e || t && w, children: /* @__PURE__ */ y.jsxs(de.Options, { labelledBy: p, "aria-label": b, children: [
+  return /* @__PURE__ */ y.jsx(de.Dropdown, { hidden: e || t && w, children: /* @__PURE__ */ y.jsxs(de.Options, { labelledBy: p, "aria-label": v, children: [
     s ? /* @__PURE__ */ y.jsx(
       no.Autosize,
       {
@@ -20373,25 +20373,25 @@ const lw = {}, zs = le((n, e) => {
     onChange: p,
     data: g,
     value: m,
-    defaultValue: b,
-    selectFirstOptionOnChange: C,
-    onOptionSubmit: v,
+    defaultValue: v,
+    selectFirstOptionOnChange: b,
+    onOptionSubmit: C,
     comboboxProps: w,
     readOnly: S,
     disabled: E,
     filter: _,
     limit: T,
-    withScrollArea: M,
+    withScrollArea: x,
     maxDropdownHeight: B,
     size: z,
     id: V,
-    renderOption: Z,
+    renderOption: X,
     autoComplete: D,
     scrollAreaProps: j,
     ...R
   } = t, A = rn(V), P = Od(g), $ = ks(P), [H, re] = Fn({
     value: m,
-    defaultValue: b,
+    defaultValue: v,
     finalValue: "",
     onChange: p
   }), fe = mi({
@@ -20406,9 +20406,9 @@ const lw = {}, zs = le((n, e) => {
     styles: o,
     classNames: r
   });
-  return X(() => {
-    C && fe.selectFirstOption();
-  }, [C, H]), /* @__PURE__ */ y.jsxs(
+  return ee(() => {
+    b && fe.selectFirstOption();
+  }, [b, H]), /* @__PURE__ */ y.jsxs(
     de,
     {
       store: fe,
@@ -20418,7 +20418,7 @@ const lw = {}, zs = le((n, e) => {
       unstyled: i,
       readOnly: S,
       onOptionSubmit: (pe) => {
-        v == null || v(pe), re($[pe].label), fe.closeDropdown();
+        C == null || C(pe), re($[pe].label), fe.closeDropdown();
       },
       size: z,
       ...w,
@@ -20434,7 +20434,7 @@ const lw = {}, zs = le((n, e) => {
             readOnly: S,
             value: H,
             onChange: (pe) => {
-              re(pe.currentTarget.value), fe.openDropdown(), C && fe.selectFirstOption();
+              re(pe.currentTarget.value), fe.openDropdown(), b && fe.selectFirstOption();
             },
             onFocus: (pe) => {
               fe.openDropdown(), f == null || f(pe);
@@ -20460,12 +20460,12 @@ const lw = {}, zs = le((n, e) => {
             search: H,
             limit: T,
             hiddenWhenEmpty: !0,
-            withScrollArea: M,
+            withScrollArea: x,
             maxDropdownHeight: B,
             unstyled: i,
             labelId: R.label ? `${A}-label` : void 0,
             "aria-label": R.label ? void 0 : R["aria-label"],
-            renderOption: Z,
+            renderOption: X,
             scrollAreaProps: j
           }
         )
@@ -20563,9 +20563,9 @@ const dw = {
     loading: p,
     loaderProps: g,
     gradient: m,
-    classNames: b,
-    styles: C,
-    unstyled: v,
+    classNames: v,
+    styles: b,
+    unstyled: C,
     "data-disabled": w,
     autoContrast: S,
     mod: E,
@@ -20576,18 +20576,18 @@ const dw = {
     classes: yi,
     className: i,
     style: r,
-    classNames: b,
-    styles: C,
-    unstyled: v,
+    classNames: v,
+    styles: b,
+    unstyled: C,
     vars: o,
     varsResolver: hw
-  }), M = !!l, B = !!u;
+  }), x = !!l, B = !!u;
   return /* @__PURE__ */ y.jsxs(
     vr,
     {
       ref: e,
       ...T("root", { active: !s && !p && !w }),
-      unstyled: v,
+      unstyled: C,
       variant: d,
       disabled: s || p,
       mod: [
@@ -20595,7 +20595,7 @@ const dw = {
           disabled: s || w,
           loading: p,
           block: f,
-          "with-left-section": M,
+          "with-left-section": x,
           "with-right-section": B
         },
         E
@@ -20656,7 +20656,7 @@ function vw({
   position: e,
   defaultOpened: t
 }) {
-  const [r, o] = te(t), i = ue(), { x: a, y: s, elements: c, refs: l, update: u, placement: f } = gs({
+  const [r, o] = Z(t), i = ue(), { x: a, y: s, elements: c, refs: l, update: u, placement: f } = gs({
     placement: e,
     middleware: [
       ds({
@@ -20684,16 +20684,16 @@ function vw({
     },
     [c.reference]
   );
-  return X(() => {
+  return ee(() => {
     if (l.floating.current) {
       const g = i.current;
       g.addEventListener("mousemove", p);
       const m = Jt(l.floating.current);
-      return m.forEach((b) => {
-        b.addEventListener("scroll", u);
+      return m.forEach((v) => {
+        v.addEventListener("scroll", u);
       }), () => {
-        g.removeEventListener("mousemove", p), m.forEach((b) => {
-          b.removeEventListener("scroll", u);
+        g.removeEventListener("mousemove", p), m.forEach((v) => {
+          v.removeEventListener("scroll", u);
         });
       };
     }
@@ -20729,14 +20729,14 @@ const bw = {
     offset: p,
     position: g,
     multiline: m,
-    zIndex: b,
-    disabled: C,
-    defaultOpened: v,
+    zIndex: v,
+    disabled: b,
+    defaultOpened: C,
     variant: w,
     vars: S,
     portalProps: E,
     ..._
-  } = t, T = $t(), M = be({
+  } = t, T = $t(), x = be({
     name: "TooltipFloating",
     props: t,
     classes: vi,
@@ -20748,10 +20748,10 @@ const bw = {
     rootSelector: "tooltip",
     vars: S,
     varsResolver: Cw
-  }), { handleMouseMove: B, x: z, y: V, opened: Z, boundaryRef: D, floating: j, setOpened: R } = vw({
+  }), { handleMouseMove: B, x: z, y: V, opened: X, boundaryRef: D, floating: j, setOpened: R } = vw({
     offset: p,
     position: g,
-    defaultOpened: v
+    defaultOpened: C
   });
   if (!Hn(r))
     throw new Error(
@@ -20769,11 +20769,11 @@ const bw = {
       ne,
       {
         ..._,
-        ...M("tooltip", {
+        ...x("tooltip", {
           style: {
             ...Xa(a, T),
-            zIndex: b,
-            display: !C && Z ? "block" : "none",
+            zIndex: v,
+            display: !b && X ? "block" : "none",
             top: (V && Math.round(V)) ?? "",
             left: (z && Math.round(z)) ?? ""
           }
@@ -20805,9 +20805,9 @@ function Zd(n) {
 Zd.displayName = "@mantine/core/TooltipGroup";
 function Iw(n) {
   var E, _, T;
-  const [e, t] = te(n.defaultOpened), o = typeof n.opened == "boolean" ? n.opened : e, i = Sw(), a = rn(), { delay: s, currentId: c, setCurrentId: l } = yd(), u = me(
-    (M) => {
-      t(M), M && l(a);
+  const [e, t] = Z(n.defaultOpened), o = typeof n.opened == "boolean" ? n.opened : e, i = Sw(), a = rn(), { delay: s, currentId: c, setCurrentId: l } = yd(), u = me(
+    (x) => {
+      t(x), x && l(a);
     },
     [l, a]
   ), {
@@ -20817,7 +20817,7 @@ function Iw(n) {
     refs: p,
     update: g,
     placement: m,
-    middlewareData: { arrow: { x: b, y: C } = {} }
+    middlewareData: { arrow: { x: v, y: b } = {} }
   } = gs({
     strategy: n.strategy,
     placement: n.position,
@@ -20830,7 +20830,7 @@ function Iw(n) {
       hd({ element: n.arrowRef, padding: n.arrowOffset }),
       ...n.inline ? [Ea()] : []
     ]
-  }), { getReferenceProps: v, getFloatingProps: w } = Nb([
+  }), { getReferenceProps: C, getFloatingProps: w } = Nb([
     Eb(h, {
       enabled: (E = n.events) == null ? void 0 : E.hover,
       delay: i ? s : { open: n.openDelay, close: n.closeDelay },
@@ -20848,19 +20848,19 @@ function Iw(n) {
     positionDependencies: n.positionDependencies,
     floating: { refs: p, update: g }
   }), mn(() => {
-    var M;
-    (M = n.onPositionChange) == null || M.call(n, m);
+    var x;
+    (x = n.onPositionChange) == null || x.call(n, m);
   }, [m]);
   const S = o && c && c !== a;
   return {
     x: f,
     y: d,
-    arrowX: b,
-    arrowY: C,
+    arrowX: v,
+    arrowY: b,
     reference: p.setReference,
     floating: p.setFloating,
     getFloatingProps: w,
-    getReferenceProps: v,
+    getReferenceProps: C,
     isGroupPhase: S,
     opened: o,
     placement: m
@@ -20903,19 +20903,19 @@ const Sl = {
     color: p,
     classNames: g,
     styles: m,
-    unstyled: b,
-    style: C,
-    className: v,
+    unstyled: v,
+    style: b,
+    className: C,
     withArrow: w,
     arrowSize: S,
     arrowOffset: E,
     arrowRadius: _,
     arrowPosition: T,
-    offset: M,
+    offset: x,
     transitionProps: B,
     multiline: z,
     events: V,
-    zIndex: Z,
+    zIndex: X,
     disabled: D,
     positionDependencies: j,
     onClick: R,
@@ -20939,7 +20939,7 @@ const Sl = {
     events: V,
     arrowRef: It,
     arrowOffset: E,
-    offset: typeof M == "number" ? M + (w ? S / 2 : 0) : M,
+    offset: typeof x == "number" ? x + (w ? S / 2 : 0) : x,
     positionDependencies: [...j, r],
     inline: $,
     strategy: pe
@@ -20947,11 +20947,11 @@ const Sl = {
     name: "Tooltip",
     props: t,
     classes: vi,
-    className: v,
-    style: C,
+    className: C,
+    style: b,
     classNames: g,
     styles: m,
-    unstyled: b,
+    unstyled: v,
     rootSelector: "tooltip",
     vars: fe,
     varsResolver: Tw
@@ -20981,7 +20981,7 @@ const Sl = {
               style: {
                 ...Tt("tooltip").style,
                 ..._t,
-                zIndex: Z,
+                zIndex: X,
                 top: Re.y ?? 0,
                 left: Re.x ?? 0
               }
@@ -21018,7 +21018,7 @@ const Sl = {
         onPointerDown: t.onPointerDown,
         onPointerEnter: t.onPointerEnter,
         [i]: En,
-        className: zt(v, r.props.className),
+        className: zt(C, r.props.className),
         ...r.props
       })
     )
@@ -21049,19 +21049,19 @@ const _w = {
     onChange: p,
     data: g,
     value: m,
-    defaultValue: b,
-    selectFirstOptionOnChange: C,
-    onOptionSubmit: v,
+    defaultValue: v,
+    selectFirstOptionOnChange: b,
+    onOptionSubmit: C,
     comboboxProps: w,
     readOnly: S,
     disabled: E,
     filter: _,
     limit: T,
-    withScrollArea: M,
+    withScrollArea: x,
     maxDropdownHeight: B,
     size: z,
     searchable: V,
-    rightSection: Z,
+    rightSection: X,
     checkIconPosition: D,
     withCheckIcon: j,
     nothingFoundMessage: R,
@@ -21084,7 +21084,7 @@ const _w = {
     ..._t
   } = t, ke = Br(() => Od(g), [g]), Kt = Br(() => ks(ke), [ke]), qn = rn(pe), [We, In, Vn] = Fn({
     value: m,
-    defaultValue: b,
+    defaultValue: v,
     finalValue: null,
     onChange: p
   }), Ye = typeof We == "string" ? Kt[We] : void 0, qt = Lm(Ye), [Gn, gt] = Fn({
@@ -21106,9 +21106,9 @@ const _w = {
     styles: o,
     classNames: r
   });
-  X(() => {
-    C && kt.selectFirstOption();
-  }, [C, We]), X(() => {
+  ee(() => {
+    b && kt.selectFirstOption();
+  }, [b, We]), ee(() => {
     m === null && gt(""), typeof m == "string" && Ye && ((qt == null ? void 0 : qt.value) !== Ye.value || (qt == null ? void 0 : qt.label) !== Ye.label) && gt(Ye.label);
   }, [m, Ye]);
   const ic = Oe && !!We && !E && !S && /* @__PURE__ */ y.jsx(
@@ -21132,7 +21132,7 @@ const _w = {
         unstyled: i,
         readOnly: S,
         onOptionSubmit: (mt) => {
-          v == null || v(mt);
+          C == null || C(mt);
           const Vt = fe && Kt[mt].value === We ? null : Kt[mt], Ii = Vt ? Vt.value : null;
           Ii !== We && In(Ii, Vt), !Vn && gt(typeof Ii == "string" && (Vt == null ? void 0 : Vt.label) || ""), kt.closeDropdown();
         },
@@ -21144,7 +21144,7 @@ const _w = {
             {
               id: qn,
               ref: e,
-              rightSection: Z || ic || /* @__PURE__ */ y.jsx(de.Chevron, { size: z, error: _e, unstyled: i }),
+              rightSection: X || ic || /* @__PURE__ */ y.jsx(de.Chevron, { size: z, error: _e, unstyled: i }),
               rightSectionPointerEvents: Be || (ic ? "all" : "none"),
               ..._t,
               size: z,
@@ -21153,7 +21153,7 @@ const _w = {
               readOnly: S || !V,
               value: Gn,
               onChange: (mt) => {
-                gt(mt.currentTarget.value), kt.openDropdown(), C && kt.selectFirstOption();
+                gt(mt.currentTarget.value), kt.openDropdown(), b && kt.selectFirstOption();
               },
               onFocus: (mt) => {
                 V && kt.openDropdown(), f == null || f(mt);
@@ -21181,7 +21181,7 @@ const _w = {
               search: Gn,
               limit: T,
               hiddenWhenEmpty: !R,
-              withScrollArea: M,
+              withScrollArea: x,
               maxDropdownHeight: B,
               filterOptions: V && (Ye == null ? void 0 : Ye.label) !== Gn,
               value: We,
@@ -21595,10 +21595,10 @@ class Xw {
       }).then(async (g) => {
         const m = g;
         m.data = null, m.error = null;
-        const b = p ? await g[p]().then((C) => (m.ok ? m.data = C : m.error = C, m)).catch((C) => (m.error = C, m)) : m;
+        const v = p ? await g[p]().then((b) => (m.ok ? m.data = b : m.error = b, m)).catch((b) => (m.error = b, m)) : m;
         if (c && this.abortControllers.delete(c), !g.ok)
-          throw b;
-        return b;
+          throw v;
+        return v;
       });
     });
     Object.assign(this, e);
@@ -22371,8 +22371,8 @@ function uf(n, e, t) {
   }
   let r = n, o = e, i = /* @__PURE__ */ new Map(), a = i, s = 0, c = !1;
   function l() {
-    a === i && (a = /* @__PURE__ */ new Map(), i.forEach((m, b) => {
-      a.set(b, m);
+    a === i && (a = /* @__PURE__ */ new Map(), i.forEach((m, v) => {
+      a.set(v, m);
     }));
   }
   function u() {
@@ -22385,14 +22385,14 @@ function uf(n, e, t) {
       throw new Error(Fe(4));
     if (c)
       throw new Error(Fe(5));
-    let b = !0;
+    let v = !0;
     l();
-    const C = s++;
-    return a.set(C, m), function() {
-      if (b) {
+    const b = s++;
+    return a.set(b, m), function() {
+      if (v) {
         if (c)
           throw new Error(Fe(6));
-        b = !1, l(), a.delete(C), i = null;
+        v = !1, l(), a.delete(b), i = null;
       }
     };
   }
@@ -22410,8 +22410,8 @@ function uf(n, e, t) {
     } finally {
       c = !1;
     }
-    return (i = a).forEach((C) => {
-      C();
+    return (i = a).forEach((b) => {
+      b();
     }), m;
   }
   function h(m) {
@@ -22432,15 +22432,15 @@ function uf(n, e, t) {
        * be used to unsubscribe the observable from the store, and prevent further
        * emission of values from the observable.
        */
-      subscribe(b) {
-        if (typeof b != "object" || b === null)
+      subscribe(v) {
+        if (typeof v != "object" || v === null)
           throw new Error(Fe(11));
-        function C() {
-          const w = b;
+        function b() {
+          const w = v;
           w.next && w.next(u());
         }
-        return C(), {
-          unsubscribe: m(C)
+        return b(), {
+          unsubscribe: m(b)
         };
       },
       [_l]() {
@@ -23052,7 +23052,7 @@ function bf(n, ...e) {
       argsMemoize: h = Xs,
       argsMemoizeOptions: p = [],
       devModeChecks: g = {}
-    } = u, m = Ml(d), b = Ml(p), C = SS(o), v = f(function() {
+    } = u, m = Ml(d), v = Ml(p), b = SS(o), C = f(function() {
       return i++, l.apply(
         null,
         arguments
@@ -23060,15 +23060,15 @@ function bf(n, ...e) {
     }, ...m), w = h(function() {
       a++;
       const E = ES(
-        C,
+        b,
         arguments
       );
-      return s = v.apply(null, E), s;
-    }, ...b);
+      return s = C.apply(null, E), s;
+    }, ...v);
     return Object.assign(w, {
       resultFunc: l,
-      memoizedResultFunc: v,
-      dependencies: C,
+      memoizedResultFunc: C,
+      dependencies: b,
       dependencyRecomputations: () => a,
       resetDependencyRecomputations: () => {
         a = 0;
@@ -23384,12 +23384,12 @@ var VS = ["name", "message", "stack", "code"], Ki = class {
       return (l, u, f) => {
         const d = r != null && r.idGenerator ? r.idGenerator(c) : If(), h = new AbortController();
         let p, g;
-        function m(C) {
-          g = C, h.abort();
+        function m(b) {
+          g = b, h.abort();
         }
-        const b = async function() {
+        const v = async function() {
           var w, S;
-          let C;
+          let b;
           try {
             let E = (w = r == null ? void 0 : r.condition) == null ? void 0 : w.call(r, c, {
               getState: u,
@@ -23400,9 +23400,9 @@ var VS = ["name", "message", "stack", "code"], Ki = class {
                 name: "ConditionError",
                 message: "Aborted due to condition callback returning false."
               };
-            const _ = new Promise((T, M) => {
+            const _ = new Promise((T, x) => {
               p = () => {
-                M({
+                x({
                   name: "AbortError",
                   message: g || "Aborted"
                 });
@@ -23414,33 +23414,33 @@ var VS = ["name", "message", "stack", "code"], Ki = class {
             }, {
               getState: u,
               extra: f
-            }))), C = await Promise.race([_, Promise.resolve(t(c, {
+            }))), b = await Promise.race([_, Promise.resolve(t(c, {
               dispatch: l,
               getState: u,
               extra: f,
               requestId: d,
               signal: h.signal,
               abort: m,
-              rejectWithValue: (T, M) => new Ki(T, M),
-              fulfillWithValue: (T, M) => new Ll(T, M)
+              rejectWithValue: (T, x) => new Ki(T, x),
+              fulfillWithValue: (T, x) => new Ll(T, x)
             })).then((T) => {
               if (T instanceof Ki)
                 throw T;
               return T instanceof Ll ? o(T.payload, d, c, T.meta) : o(T, d, c);
             })]);
           } catch (E) {
-            C = E instanceof Ki ? a(null, d, c, E.payload, E.meta) : a(E, d, c);
+            b = E instanceof Ki ? a(null, d, c, E.payload, E.meta) : a(E, d, c);
           } finally {
             p && h.signal.removeEventListener("abort", p);
           }
-          return r && !r.dispatchConditionRejection && a.match(C) && C.meta.condition || l(C), C;
+          return r && !r.dispatchConditionRejection && a.match(b) && b.meta.condition || l(b), b;
         }();
-        return Object.assign(b, {
+        return Object.assign(v, {
           abort: m,
           requestId: d,
           arg: c,
           unwrap() {
-            return b.then(WS);
+            return v.then(WS);
           }
         });
       };
@@ -23488,38 +23488,38 @@ function XS({
       actionCreators: {},
       sliceMatchers: []
     }, u = {
-      addCase(v, w) {
-        const S = typeof v == "string" ? v : v.type;
+      addCase(C, w) {
+        const S = typeof C == "string" ? C : C.type;
         if (!S)
           throw new Error(rt(12));
         if (S in l.sliceCaseReducersByType)
           throw new Error(rt(13));
         return l.sliceCaseReducersByType[S] = w, u;
       },
-      addMatcher(v, w) {
+      addMatcher(C, w) {
         return l.sliceMatchers.push({
-          matcher: v,
+          matcher: C,
           reducer: w
         }), u;
       },
-      exposeAction(v, w) {
-        return l.actionCreators[v] = w, u;
+      exposeAction(C, w) {
+        return l.actionCreators[C] = w, u;
       },
-      exposeCaseReducer(v, w) {
-        return l.sliceCaseReducersByName[v] = w, u;
+      exposeCaseReducer(C, w) {
+        return l.sliceCaseReducersByName[C] = w, u;
       }
     };
-    c.forEach((v) => {
-      const w = s[v], S = {
-        reducerName: v,
-        type: JS(i, v),
+    c.forEach((C) => {
+      const w = s[C], S = {
+        reducerName: C,
+        type: JS(i, C),
         createNotation: typeof o.reducers == "function"
       };
       n0(w) ? o0(S, w, u, e) : t0(S, w, u);
     });
     function f() {
-      const [v = {}, w = [], S = void 0] = typeof o.extraReducers == "function" ? Ef(o.extraReducers) : [o.extraReducers], E = {
-        ...v,
+      const [C = {}, w = [], S = void 0] = typeof o.extraReducers == "function" ? Ef(o.extraReducers) : [o.extraReducers], E = {
+        ...C,
         ...l.sliceCaseReducersByType
       };
       return zS(o.initialState, (_) => {
@@ -23532,17 +23532,17 @@ function XS({
         S && _.addDefaultCase(S);
       });
     }
-    const d = (v) => v, h = /* @__PURE__ */ new Map();
+    const d = (C) => C, h = /* @__PURE__ */ new Map();
     let p;
-    function g(v, w) {
-      return p || (p = f()), p(v, w);
+    function g(C, w) {
+      return p || (p = f()), p(C, w);
     }
     function m() {
       return p || (p = f()), p.getInitialState();
     }
-    function b(v, w = !1) {
+    function v(C, w = !1) {
       function S(_) {
-        let T = _[v];
+        let T = _[C];
         return typeof T > "u" && w && (T = m()), T;
       }
       function E(_ = d) {
@@ -23551,15 +23551,15 @@ function XS({
         });
         return Dl(T, _, {
           insert: () => {
-            const M = {};
+            const x = {};
             for (const [B, z] of Object.entries(o.selectors ?? {}))
-              M[B] = ZS(z, _, m, w);
-            return M;
+              x[B] = ZS(z, _, m, w);
+            return x;
           }
         });
       }
       return {
-        reducerPath: v,
+        reducerPath: C,
         getSelectors: E,
         get selectors() {
           return E(S);
@@ -23567,28 +23567,28 @@ function XS({
         selectSlice: S
       };
     }
-    const C = {
+    const b = {
       name: i,
       reducer: g,
       actions: l.actionCreators,
       caseReducers: l.sliceCaseReducersByName,
       getInitialState: m,
-      ...b(a),
-      injectInto(v, {
+      ...v(a),
+      injectInto(C, {
         reducerPath: w,
         ...S
       } = {}) {
         const E = w ?? a;
-        return v.inject({
+        return C.inject({
           reducerPath: E,
           reducer: g
         }, S), {
-          ...C,
-          ...b(E, !0)
+          ...b,
+          ...v(E, !0)
         };
       }
     };
-    return C;
+    return b;
   };
 }
 function ZS(n, e, t, r) {
@@ -24154,7 +24154,7 @@ function x0({ callback: n, ifcEntity: e }) {
 }
 const $l = 25, D0 = 25;
 function L0({ height: n, options: e, label: t, value: r, setValue: o, placeholder: i = "Search values", disabled: a }) {
-  const [s, c] = te(""), [l, u] = te(e.slice(0, $l)), f = ue(null), d = mi({
+  const [s, c] = Z(""), [l, u] = Z(e.slice(0, $l)), f = ue(null), d = mi({
     onDropdownClose: () => {
       d.resetSelectedOption(), d.focusTarget();
     },
@@ -24162,19 +24162,19 @@ function L0({ height: n, options: e, label: t, value: r, setValue: o, placeholde
       d.focusSearchInput();
     }
   });
-  X(() => {
+  ee(() => {
     e.length === 1 && r !== e[0] && (o(e[0]), c(e[0].label));
-  }, [e, o, r, c]), X(() => {
+  }, [e, o, r, c]), ee(() => {
     c((r == null ? void 0 : r.label) || "");
-  }, [r]), X(() => {
+  }, [r]), ee(() => {
     const g = r === null ? e.filter(
       (m) => (m == null ? void 0 : m.label.toLowerCase().includes(s.toLowerCase().trim())) || (m == null ? void 0 : m.value.toString().toLowerCase().includes(s.toLowerCase().trim()))
     ) : e;
     u(g.slice(0, $l));
   }, [e, s, r]);
   const h = (g) => {
-    const { scrollTop: m, scrollHeight: b, clientHeight: C } = g.currentTarget, v = 5;
-    b - m <= C + v && u((S) => {
+    const { scrollTop: m, scrollHeight: v, clientHeight: b } = g.currentTarget, C = 5;
+    v - m <= b + C && u((S) => {
       const E = S.length, _ = e.filter((T) => T == null ? void 0 : T.label.toLowerCase().includes(s.toLowerCase().trim())).slice(E, E + D0);
       return [...S, ..._];
     });
@@ -24193,8 +24193,8 @@ function L0({ height: n, options: e, label: t, value: r, setValue: o, placeholde
       store: d,
       onOptionSubmit: (g) => {
         if (!a) {
-          const m = e.find((C) => C.value === g), b = m && (r == null ? void 0 : r.value) !== m.value ? m : null;
-          o(b), d.closeDropdown();
+          const m = e.find((b) => b.value === g), v = m && (r == null ? void 0 : r.value) !== m.value ? m : null;
+          o(v), d.closeDropdown();
         }
       },
       disabled: a,
@@ -24258,20 +24258,20 @@ function L0({ height: n, options: e, label: t, value: r, setValue: o, placeholde
   ) });
 }
 function F0({ height: n, handleMouseDown: e }) {
-  const t = so(), { t: r } = Zr(), [o, i] = te(/* @__PURE__ */ new Map()), [a, s] = te(/* @__PURE__ */ new Map()), c = Ne(f0), l = Ne(P0), u = Pn(Of), f = Pn(T0), d = Pn(Mf), h = Pn(g0);
-  return X(() => {
+  const t = so(), { t: r } = Zr(), [o, i] = Z(/* @__PURE__ */ new Map()), [a, s] = Z(/* @__PURE__ */ new Map()), c = Ne(f0), l = Ne(P0), u = Pn(Of), f = Pn(T0), d = Pn(Mf), h = Pn(g0);
+  return ee(() => {
     (async () => {
       const m = Array.from(c.entries()).map(async ([w, S]) => {
         var B;
         if (d && w === h) {
-          const { code: z, name: V, uri: Z } = d;
+          const { code: z, name: V, uri: X } = d;
           return [
             w,
             [
               {
                 value: z,
                 label: V,
-                uri: Z
+                uri: X
               }
             ]
           ];
@@ -24279,9 +24279,9 @@ function F0({ height: n, handleMouseDown: e }) {
         let E = [];
         const _ = f[w], T = (B = d == null ? void 0 : d.classRelations) == null ? void 0 : B.map(
           (z) => z.relatedClassUri
-        ), M = _ == null ? void 0 : _.filter((z) => T == null ? void 0 : T.includes(z.uri));
-        if (M && M.length > 0)
-          E = M.map((z) => ({
+        ), x = _ == null ? void 0 : _.filter((z) => T == null ? void 0 : T.includes(z.uri));
+        if (x && x.length > 0)
+          E = x.map((z) => ({
             value: z.code,
             label: z.name,
             uri: z.uri
@@ -24304,27 +24304,27 @@ function F0({ height: n, handleMouseDown: e }) {
             console.error("Failed to fetch dictionary classes for", w, z), E = [];
           }
         return [w, E];
-      }), b = await Promise.all(m), C = new Map(b);
-      i(C);
-      const v = /* @__PURE__ */ new Map();
-      C.forEach((w, S) => {
+      }), v = await Promise.all(m), b = new Map(v);
+      i(b);
+      const C = /* @__PURE__ */ new Map();
+      b.forEach((w, S) => {
         if (w.length === 1)
-          v.set(S, w[0]);
+          C.set(S, w[0]);
         else if (S in l) {
           const E = l[S];
           if (E.length === 1) {
             const _ = E[0];
-            if (w.some((M) => M.value === _.identification)) {
-              const M = {
+            if (w.some((x) => x.value === _.identification)) {
+              const x = {
                 label: _.name || "",
                 value: _.identification || "",
                 uri: S
               };
-              v.set(S, M);
+              C.set(S, x);
             }
           }
         }
-      }), s(v);
+      }), s(C);
     })();
   }, [
     c,
@@ -24333,23 +24333,23 @@ function F0({ height: n, handleMouseDown: e }) {
     l,
     d,
     h
-  ]), X(() => {
+  ]), ee(() => {
     (() => {
-      const g = Array.from(a.entries()).map(([m, b]) => {
-        if (!b || !b.value)
+      const g = Array.from(a.entries()).map(([m, v]) => {
+        if (!v || !v.value)
           return null;
-        const C = u[m];
+        const b = u[m];
         return {
           type: "IfcClassificationReference",
-          name: b.label,
-          location: b.uri,
-          identification: b.value,
+          name: v.label,
+          location: v.uri,
+          identification: v.value,
           referencedSource: {
             type: "IfcClassification",
-            name: C.name,
-            location: C.uri,
-            edition: C.version,
-            editionDate: C.releaseDate
+            name: b.name,
+            location: b.uri,
+            edition: b.version,
+            editionDate: b.releaseDate
           }
         };
       }).filter((m) => m !== null);
@@ -24365,9 +24365,9 @@ function F0({ height: n, handleMouseDown: e }) {
           label: g.name,
           options: o.get(p) || [],
           value: a.get(p) || null,
-          setValue: (b) => {
-            const C = new Map(a);
-            C.set(p, b), s(C);
+          setValue: (v) => {
+            const b = new Map(a);
+            b.set(p, v), s(b);
           },
           placeholder: r("classifications.searchClassesPlaceholder"),
           disabled: p === (d == null ? void 0 : d.dictionaryUri) || ((m = o.get(p)) == null ? void 0 : m.length) === 1
@@ -24393,10 +24393,10 @@ function Vi(n, e) {
   return n == null || e == null ? null : n.toLowerCase() !== e.toLowerCase() ? `(${e})` : null;
 }
 function z0({ label: n, description: e, value: t, setValue: r, disabled: o }) {
-  const { t: i } = Zr(), [a, s] = te(!1), [c, l] = te(!0), u = () => i(c ? "checkbox.indeterminate" : a ? "checkbox.true" : "checkbox.false"), f = (d) => {
+  const { t: i } = Zr(), [a, s] = Z(!1), [c, l] = Z(!0), u = () => i(c ? "checkbox.indeterminate" : a ? "checkbox.true" : "checkbox.false"), f = (d) => {
     d.target.indeterminate = !1, r(d.target.checked);
   };
-  return X(() => {
+  return ee(() => {
     t === !0 ? (s(!0), l(!1)) : t === !1 ? (s(!1), l(!1)) : t === void 0 && (s(!1), l(!0));
   }, [t]), /* @__PURE__ */ y.jsx(je.Wrapper, { label: n, description: e, children: /* @__PURE__ */ y.jsx(
     Kn,
@@ -24424,8 +24424,8 @@ const Gi = (n, e, t, r) => n.map((o) => {
   return o;
 });
 function $0({ propertySet: n, property: e, property_natural_language_name: t }) {
-  const r = so(), o = Ne(nc), [i, a] = te();
-  return X(() => {
+  const r = so(), o = Ne(nc), [i, a] = Z();
+  return ee(() => {
     var s, c, l, u, f;
     switch (e.type) {
       case "IfcPropertySingleValue": {
@@ -24485,10 +24485,10 @@ function $0({ propertySet: n, property: e, property_natural_language_name: t }) 
               disabled: ((f = (u = e.enumerationReference) == null ? void 0 : u.enumerationValues) == null ? void 0 : f.length) === 1,
               onChange: (p) => {
                 if (o && n.name) {
-                  const g = h.find((C) => C.value === p), m = {
+                  const g = h.find((b) => b.value === p), m = {
                     enumerationValues: g ? [g] : []
-                  }, b = Gi(o, n.name, e.name, m);
-                  r(So(Object.values(b)));
+                  }, v = Gi(o, n.name, e.name, m);
+                  r(So(Object.values(v)));
                 }
               },
               data: h.map((p) => ({
@@ -24593,8 +24593,8 @@ function Y0(n, e, t) {
   return i.specification = n.propertyUri || "", i;
 }
 function Q0({ mainDictionaryClassification: n, recursiveMode: e }) {
-  const t = so(), r = Ne(jf), o = Ne(nc), i = Ne(I0), a = Ne(Af), [s, c] = te({});
-  return X(() => {
+  const t = so(), r = Ne(jf), o = Ne(nc), i = Ne(I0), a = Ne(Af), [s, c] = Z({});
+  return ee(() => {
     if (!n)
       return;
     const l = {};
@@ -24613,7 +24613,7 @@ function Q0({ mainDictionaryClassification: n, recursiveMode: e }) {
         );
       });
     }), t(So(Object.values(l)));
-  }, [t, r, n]), X(() => {
+  }, [t, r, n]), ee(() => {
     if (!n)
       return;
     const l = {};
@@ -24651,65 +24651,69 @@ function Q0({ mainDictionaryClassification: n, recursiveMode: e }) {
   ) });
 }
 function J0({ api: n, defaultSelection: e }) {
-  const t = so(), { t: r } = Zr(), [o, i] = te([]), a = Ne(ec), s = ue(null), [c, l] = te(void 0), [u, f] = te(""), [d] = Tm(u, 300), [h, p] = te(!1);
-  X(() => {
-    e && (l(e), f(e.label));
-  }, [e]);
-  const g = me((v) => {
-    f(v);
-  }, []), m = me(
-    (v) => {
-      const w = o.find((S) => S.value === v);
-      w && (l(w), p(!0));
+  const t = so(), { t: r } = Zr(), [o, i] = Z([]), a = Ne(ec), s = ue(null), [c, l] = Z(void 0), [u, f] = Z(""), [d] = Tm(u, 300), [h, p] = Z(!1), [g, m] = Z(-1);
+  ee(() => {
+    e && !h && o.length > 0 && (o.find((E) => E.value === e.value) ? (l(e), f(e.label), s.current && s.current.blur()) : (f(e.label), s.current && (s.current.focus(), s.current.setSelectionRange(0, s.current.value.length))), p(!0));
+  }, [e, h, o]);
+  const v = me((S) => {
+    f(S), m(-1);
+  }, []), b = me(
+    (S) => {
+      const E = o.find((_) => _.value === S);
+      E && (l(E), s.current && s.current.blur());
     },
     [o]
-  ), b = me(
-    (v) => {
-      v.key === "Enter" && o[0] && (f(o[0].label), m(o[0].value), s.current && s.current.blur());
+  ), C = me(
+    (S) => {
+      if (S.key === "Enter") {
+        if (g >= 0 && g < o.length) {
+          const E = o[g];
+          f(E.label), b(E.value);
+        } else if (g === -1 && o.length > 0) {
+          const E = o[0];
+          f(E.label), b(E.value);
+        }
+        s.current && s.current.blur();
+      } else
+        S.key === "ArrowDown" ? m((E) => Math.min(E + 1, o.length - 1)) : S.key === "ArrowUp" && m((E) => Math.max(E - 1, -1));
     },
-    [o, m]
+    [g, o, b]
   );
-  X(() => {
-    e && !h && (f(e.label), l(e));
-  }, [e, h]), X(() => {
+  ee(() => {
     if (a) {
       t(Nf([]));
-      const v = {
+      const S = {
         headers: co
-      }, w = {
+      }, E = {
         SearchText: d,
         DictionaryUri: a.ifcClassification.location
       };
-      n.api.searchInDictionaryV1List(w, v).then((S) => {
-        var _;
-        const E = S.data;
-        if (E) {
-          if (E.count) {
-            const T = (_ = E.dictionary) == null ? void 0 : _.classes;
-            T && i(
-              T.filter((M) => M.uri && M.name).map(
-                (M) => ({
-                  value: M.uri,
-                  label: M.name
-                })
-              )
-            );
-          }
+      n.api.searchInDictionaryV1List(E, S).then((_) => {
+        var x;
+        const T = _.data;
+        if (T && T.count) {
+          const B = (x = T.dictionary) == null ? void 0 : x.classes;
+          B && i(
+            B.filter((z) => z.uri && z.name).map(
+              (z) => ({
+                value: z.uri,
+                label: z.name
+              })
+            )
+          );
         } else
-          console.error("API response data is null", S);
-      }).catch((S) => {
-        console.error("API request failed", S);
+          i([]);
+      }).catch((_) => {
+        console.error("API request failed", _), i([]);
       });
     } else
       i([]);
-  }, [n.api, d, t, a]), X(() => {
-    s.current && s.current.focus();
-  }, []), X(() => {
+  }, [n.api, d, t, a]), ee(() => {
     t(Oa(c ? c.value : null));
   }, [t, c]);
-  const C = me(() => {
-    g(""), s.current && s.current.focus(), l(void 0);
-  }, [g]);
+  const w = me(() => {
+    v(""), s.current && s.current.focus(), l(void 0);
+  }, [v]);
   return /* @__PURE__ */ y.jsx(
     zs,
     {
@@ -24717,19 +24721,19 @@ function J0({ api: n, defaultSelection: e }) {
       data: o,
       placeholder: "bSDD search...",
       value: u,
-      onChange: g,
-      onOptionSubmit: m,
-      onKeyDown: b,
+      onChange: v,
+      onOptionSubmit: b,
+      onKeyDown: C,
       ref: s,
       style: { width: "100%" },
       rightSection: /* @__PURE__ */ y.jsx(
         wr,
         {
           size: "sm",
-          onMouseDown: (v) => {
-            v.preventDefault();
+          onMouseDown: (S) => {
+            S.preventDefault();
           },
-          onClick: C,
+          onClick: w,
           "aria-label": "Clear value"
         }
       )
@@ -24739,7 +24743,7 @@ function J0({ api: n, defaultSelection: e }) {
 const Wi = 60.7969;
 let Kl = 0, ql = 0;
 function X0() {
-  const { t: n } = Zr(), e = so(), [t, r] = te(), [o, i] = te(!1), [a, s] = te(new Yr(lf[tS])), c = Ne(ec), l = Ne(Af), [u, f] = te(null), d = Ne(Na), h = Ne(Na), p = Ne(h0), g = Ne(p0), m = Ne(R0), b = Ne(jf), C = Ne(S0), [v, w] = te(Wi), [S, E] = te("auto"), [_, T] = te(!1), M = Ne(Mf), B = me((A) => {
+  const { t: n } = Zr(), e = so(), [t, r] = Z(), [o, i] = Z(!1), [a, s] = Z(new Yr(lf[tS])), c = Ne(ec), l = Ne(Af), [u, f] = Z(null), d = Ne(Na), h = Ne(Na), p = Ne(h0), g = Ne(p0), m = Ne(R0), v = Ne(jf), b = Ne(S0), [C, w] = Z(Wi), [S, E] = Z("auto"), [_, T] = Z(!1), x = Ne(Mf), B = me((A) => {
     var $;
     const P = JSON.stringify(A);
     ($ = window == null ? void 0 : window.bsddBridge) == null || $.save(P).then((H) => {
@@ -24751,16 +24755,16 @@ function X0() {
   }, []), V = (A) => {
     f(A);
   };
-  X(() => {
-    if (!M || !_)
+  ee(() => {
+    if (!x || !_)
       return;
-    const A = M.classProperties || [];
+    const A = x.classProperties || [];
     e(Pf({ classProperties: A, languageCode: l }));
-  }, [M, _, l, e]), X(() => {
+  }, [x, _, l, e]), ee(() => {
     u && (console.log("settings updated: ", u), e(Tf(u)), f(null));
-  }, [u, e]), X(() => {
+  }, [u, e]), ee(() => {
     d && s(new Yr(d));
-  }, [d]), X(() => {
+  }, [d]), ee(() => {
     (async () => {
       try {
         let P, $;
@@ -24778,12 +24782,12 @@ function X0() {
         console.error("Failed to load settings:", P);
       }
     })();
-  }, [e]), X(() => {
+  }, [e]), ee(() => {
     var P;
-    if (!b || !c)
+    if (!v || !c)
       return;
     const A = c.ifcClassification.location;
-    (P = b.hasAssociations) == null || P.forEach(($) => {
+    (P = v.hasAssociations) == null || P.forEach(($) => {
       var H;
       if ($.type === "IfcClassificationReference") {
         const re = $;
@@ -24793,7 +24797,7 @@ function X0() {
         }));
       }
     });
-  }, [c, b, e]), X(() => {
+  }, [c, v, e]), ee(() => {
     if (d !== null && p !== null) {
       const A = {
         bsddApiEnvironment: d,
@@ -24810,18 +24814,18 @@ function X0() {
     e,
     g,
     l
-  ]), X(() => {
-    C && e(xf(C));
-  }, [C, e]), X(() => {
-    E(`${v * g.length + 48}px`);
-  }, [g.length, v]);
-  const Z = (A) => {
+  ]), ee(() => {
+    b && e(xf(b));
+  }, [b, e]), ee(() => {
+    E(`${C * g.length + 48}px`);
+  }, [g.length, C]);
+  const X = (A) => {
     const P = ql + (A.clientY - Kl) / g.length;
     w(P > Wi ? P : Wi);
   }, D = () => {
-    document.removeEventListener("mousemove", Z), document.removeEventListener("mouseup", D);
+    document.removeEventListener("mousemove", X), document.removeEventListener("mouseup", D);
   }, j = (A) => {
-    Kl = A.clientY, ql = v, document.addEventListener("mousemove", Z), document.addEventListener("mouseup", D);
+    Kl = A.clientY, ql = C, document.addEventListener("mousemove", X), document.addEventListener("mouseup", D);
   }, R = (A) => {
     T(A.includes("Propertysets"));
   };
@@ -24830,18 +24834,18 @@ function X0() {
     /* @__PURE__ */ y.jsx(Dn, { type: "hidden", name: "name", id: "name", value: "" }),
     /* @__PURE__ */ y.jsx(Dn, { type: "hidden", name: "material", id: "material", value: "" }),
     /* @__PURE__ */ y.jsx(Gr, { mx: "md", mt: "lg", mb: "sm", children: /* @__PURE__ */ y.jsx(J0, { api: a, defaultSelection: t }) }),
-    C ? /* @__PURE__ */ y.jsxs(y.Fragment, { children: [
+    b ? /* @__PURE__ */ y.jsxs(y.Fragment, { children: [
       /* @__PURE__ */ y.jsxs(xe, { defaultValue: ["Classifications"], multiple: !0, onChange: R, children: [
         /* @__PURE__ */ y.jsxs(xe.Item, { value: "Classifications", children: [
           /* @__PURE__ */ y.jsx(xe.Control, { children: /* @__PURE__ */ y.jsx(Ko, { order: 5, children: n("classificationsLabel") }) }),
-          /* @__PURE__ */ y.jsx(xe.Panel, { style: { height: S }, children: /* @__PURE__ */ y.jsx(F0, { height: v, handleMouseDown: j }) })
+          /* @__PURE__ */ y.jsx(xe.Panel, { style: { height: S }, children: /* @__PURE__ */ y.jsx(F0, { height: C, handleMouseDown: j }) })
         ] }, "Classifications"),
         /* @__PURE__ */ y.jsxs(xe.Item, { value: "Propertysets", children: [
           /* @__PURE__ */ y.jsx(xe.Control, { children: /* @__PURE__ */ y.jsx(Ko, { order: 5, children: n("propertysetsLabel") }) }),
           /* @__PURE__ */ y.jsx(xe.Panel, { children: /* @__PURE__ */ y.jsx(
             Q0,
             {
-              mainDictionaryClassification: M,
+              mainDictionaryClassification: x,
               recursiveMode: o
             }
           ) })
@@ -24861,8 +24865,8 @@ function X0() {
   ] });
 }
 function Z0() {
-  const [n, e] = te(null);
-  return X(() => {
+  const [n, e] = Z(null);
+  return ee(() => {
     const t = new lm(Jw);
     e(t);
   }, []), n ? /* @__PURE__ */ y.jsx(Du, { theme: Qw, children: /* @__PURE__ */ y.jsx(X0, {}) }) : /* @__PURE__ */ y.jsx("div", { children: "Loading..." });
