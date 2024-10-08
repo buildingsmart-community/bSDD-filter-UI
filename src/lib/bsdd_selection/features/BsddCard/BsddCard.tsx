@@ -30,7 +30,7 @@ function BsddCard({ item: ifcEntity, index, setCardColor: setCategoryColor }: Bs
   const { t } = useTranslation();
   const activeDictionaries = useAppSelector(selectActiveDictionaries);
   const mainDictionary = useAppSelector(selectMainDictionary);
-  const { bsddSearchClick, bsddSelect } = useApiFunctions();
+  const { bsddSearch, bsddSelect } = useApiFunctions();
 
   const [cardColor, setCardColor] = useState<Color>('grey');
   const [activeClassificationStatuses, setActiveClassificationStatuses] = useState<ClassificationStatus[]>([]);
@@ -92,7 +92,7 @@ function BsddCard({ item: ifcEntity, index, setCardColor: setCategoryColor }: Bs
       <Tooltip label={t('attachToType')}>
         <ActionIcon
           radius="xl"
-          onClick={() => bsddSearchClick(ifcEntity)}
+          onClick={() => bsddSearch(ifcEntity)}
           disabled={!mainDictionary?.ifcClassification?.location}
         >
           <IconPencil size={20} />

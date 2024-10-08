@@ -5,8 +5,6 @@ import { useTranslation } from 'react-i18next';
 
 import { useAppDispatch, useAppSelector } from '../common/app/hooks';
 import { BsddApi } from '../common/BsddApi/BsddApi';
-import { RequestParams } from '../common/BsddApi/BsddApiBase';
-import { headers } from '../common/BsddApi/BsddApiWrapper';
 import {
   fetchClasses,
   searchInDictionary,

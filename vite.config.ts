@@ -8,31 +8,36 @@ import { defineConfig } from 'vite';
 export default defineConfig(({ mode }) => {
   return {
     root: './',
-    base: './',
+    // base: './',
     server: {
       port: 3000,
     },
     build: {
       target: 'esnext',
-      external: ['react', 'react-dom', 'bsdd_selection', 'bsdd_search'],
+      external: ['react', 'react-dom'],
       outDir: './dist',
-      lib: {
-        entry: {
-          'bsdd_selection/module_bsdd_selection': 'src/lib/bsdd_selection/main.tsx',
-          'bsdd_search/module_bsdd_search': 'src/lib/bsdd_search/main.tsx',
-          'bsdd_selection/main_bsdd_selection': 'src/mainBsddSelection.tsx',
-          'bsdd_search/main_bsdd_search': 'src/mainBsddSearch.tsx',
-          main: 'src/main.tsx',
-        },
-        name: 'bSDD',
-        fileName: (format) => `[name]-${format}.js`,
-      },
+      // lib: {
+      //   entry: {
+      //     'bsdd_selection/module_bsdd_selection': 'src/lib/bsdd_selection/main.tsx',
+      //     'bsdd_search/module_bsdd_search': 'src/lib/bsdd_search/main.tsx',
+      //   },
+      //   name: 'bSDD',
+      //   fileName: (format) => `[name]-${format}.js`,
+      // },
       rollupOptions: {
         input: {
-          bsdd_selection_app: 'src/mainBsddSelection.tsx',
-          bsdd_search_app: 'src/mainBsddSearch.tsx',
-          main_app: 'src/main.tsx',
+          bsdd_selection: 'bsdd_selection/index.html',
+          bsdd_search: 'bsdd_search/index.html',
+          main: 'index.html',
+          // bsdd_selection_app: 'src/mainBsddSelection.tsx',
+          // bsdd_search_app: 'src/mainBsddSearch.tsx',
+          // main_app: 'src/main.tsx',
         },
+        // output: {
+        //   entryFileNames: '[name].js',
+        //   chunkFileNames: '[name].js',
+        //   assetFileNames: '[name].[ext]',
+        // },
       },
     },
     plugins: [react()],

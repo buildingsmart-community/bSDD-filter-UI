@@ -14,13 +14,6 @@ function CheckboxIcon({ indeterminate, ...others }: CheckboxIconProps) {
 }
 
 const theme = createTheme({
-  spacing: {
-    xs: '4px',
-    sm: '8px',
-    md: '12px',
-    lg: '16px',
-    xl: '20px',
-  },
   components: {
     Checkbox: Checkbox.extend({
       defaultProps: {

@@ -1,7 +1,6 @@
-import { BsddSettings } from '../ifc/bsddBridgeData';
+import { BsddSettings } from '../../../src/lib/common/IfcData/bsddBridgeData';
 
 const defaultSettings: BsddSettings = {
-  bsddApiEnvironment: 'production',
   mainDictionary: {
     ifcClassification: {
       type: 'IfcClassification',

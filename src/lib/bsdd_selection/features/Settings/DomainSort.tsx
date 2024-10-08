@@ -29,7 +29,7 @@ function DomainSort({ id, localSettings, setLocalSettings, setUnsavedChanges }: 
   };
 
   // Drag and drop order filter dictionaries list
-  const items = filterDictionaries.map((item, index) => (
+  const items = filterDictionaries?.map((item, index) => (
     <Draggable key={item.ifcClassification.location} index={index} draggableId={item.ifcClassification.location}>
       {(provided, snapshot) => (
         <div

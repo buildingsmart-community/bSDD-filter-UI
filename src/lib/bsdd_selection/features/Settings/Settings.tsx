@@ -2,6 +2,7 @@ import { Accordion, Button, Group, Tabs } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../common/app/hooks';
+import { CefSharpWindow } from '../../../common/bsddBridge/useCefSharpBridge';
 import { BsddSettings } from '../../../common/IfcData/bsddBridgeData';
 import { setSettings } from '../../../common/slices/settingsSlice';
 import AppInfo from './AppInfo';
@@ -9,6 +10,8 @@ import DomainSelection from './DomainSelection';
 import DomainSort from './DomainSort';
 import GeneralSettings from './GeneralSettings';
 import ParameterMapping from './ParameterMapping';
+
+declare let window: CefSharpWindow;
 
 function Settings() {
   const dispatch = useAppDispatch();

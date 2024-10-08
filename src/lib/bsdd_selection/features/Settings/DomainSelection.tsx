@@ -111,7 +111,7 @@ function DomainSelection({
   const localFilterDictionaryValues = useMemo(() => {
     return (
       localSettings?.filterDictionaries
-        .filter((item) => item.ifcClassification && item.ifcClassification.location)
+        ?.filter((item) => item.ifcClassification && item.ifcClassification.location)
         .map(getComboboxItem)
         .flat() || []
     );

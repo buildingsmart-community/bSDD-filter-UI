@@ -10,7 +10,7 @@ import { BsddSelectionProps } from '../BsddSelectionProps';
 import Selection from '../features/Selection/Selection';
 import Settings from '../features/Settings/Settings';
 
-function HomePage({ initialData }: BsddSelectionProps) {
+function BsddSelection({ initialData }: BsddSelectionProps) {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const bsddDictionariesLoaded = useAppSelector(selectBsddDictionariesLoaded);
@@ -24,12 +24,13 @@ function HomePage({ initialData }: BsddSelectionProps) {
     }
   }, [bsddDictionariesLoaded]);
 
-  useEffect(() => {
-    if (!loading && ifcData) {
-      dispatch(setValidatedIfcData(ifcData));
-      setIfcData(null);
-    }
-  }, [loading, ifcData, dispatch]);
+  // useEffect(() => {
+  //   console.log('ifcData', ifcData);
+  //   if (!loading && ifcData) {
+  //     dispatch(setValidatedIfcData(ifcData));
+  //     setIfcData(null);
+  //   }
+  // }, [loading, ifcData, dispatch]);
 
   // Load initial ifcData when present, otherwise set empty array and await push from backend
   useEffect(() => {
@@ -43,11 +44,11 @@ function HomePage({ initialData }: BsddSelectionProps) {
 
   // Backend bridge API functions
 
-  // @ts-ignore
-  window.updateSelection = (selectedIfcEntities: IfcEntity[]) => {
-    console.log('updateSelection', selectedIfcEntities);
-    setIfcData(selectedIfcEntities);
-  };
+  // // @ts-ignore
+  // window.updateSelection = (selectedIfcEntities: IfcEntity[]) => {
+  //   console.log('updateSelection', selectedIfcEntities);
+  //   setIfcData(selectedIfcEntities);
+  // };
 
   return (
     <Container>
@@ -63,4 +64,4 @@ function HomePage({ initialData }: BsddSelectionProps) {
   );
 }
 
-export default HomePage;
+export default BsddSelection;

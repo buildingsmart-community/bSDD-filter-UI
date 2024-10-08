@@ -1,4 +1,4 @@
-import { BsddBridgeData } from './lib/common/IfcData/bsddBridgeData';
+import { BsddBridgeData } from '../lib/common/IfcData/bsddBridgeData';
 
 // eslint-disable-next-line import/prefer-default-export
 export const mockData: BsddBridgeData = {

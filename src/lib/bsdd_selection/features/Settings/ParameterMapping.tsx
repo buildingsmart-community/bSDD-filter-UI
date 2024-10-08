@@ -23,7 +23,7 @@ function ParameterMapping({
   const [mappableDictionaries, setMappableDictionaries] = useState<BsddDictionary[]>([]);
 
   useEffect(() => {
-    const dictionaries = [mainDictionary, ...filterDictionaries].filter(Boolean) as BsddDictionary[];
+    const dictionaries = [mainDictionary, ...(filterDictionaries || [])].filter(Boolean) as BsddDictionary[];
     const dictionaryMap = new Map(dictionaries.map((item) => [item.ifcClassification.location, item]));
     const uniqueDictionaries = Array.from(dictionaryMap.values());
 

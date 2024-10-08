@@ -1,8 +1,8 @@
-import App from './App';
+import BsddSearch from './BsddSearch';
 import { BsddSearchProps } from './BsddSearchProps';
 
-function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
-  return <App selectedIfcEntity={selectedIfcEntity} />;
+function Main({ selectedIfcEntity }: BsddSearchProps) {
+  return <BsddSearch selectedIfcEntity={selectedIfcEntity} />;
 }
 
-export default BsddSearch;
+export default Main;

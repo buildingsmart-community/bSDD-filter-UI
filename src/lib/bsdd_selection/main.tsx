@@ -1,8 +1,8 @@
-import App from './App';
 import { BsddSelectionProps } from './BsddSelectionProps';
+import BsddSelection from './pages/Home.page';
 
-function BsddSelection({ initialData = undefined }: BsddSelectionProps) {
-  return <App initialData={initialData} />;
+function Main({ initialData = undefined }: BsddSelectionProps) {
+  return <BsddSelection initialData={initialData} />;
 }
 
-export default BsddSelection;
+export default Main;

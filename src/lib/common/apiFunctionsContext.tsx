@@ -1,10 +1,13 @@
-import React, { createContext, ReactNode, useContext } from 'react';
+import { createContext, ReactNode, useContext } from 'react';
+
+import { IfcEntity } from './IfcData/ifc';
 
 interface ApiFunctionsContextType {
-  loadSettings?: () => Promise<any>;
-  bsddSearchClick?: (ifcProduct: any) => void;
+  loadSettings?: () => Promise<string>;
+  loadBridgeData?: () => Promise<string>;
+  bsddSearch?: (ifcProduct: any) => void;
   bsddSelect?: (ifcProduct: any) => void;
-  bsddSearchSave?: (ifcEntityJson: string) => Promise<string>;
+  bsddSearchSave?: (ifcEntity: IfcEntity) => Promise<string>;
   bsddSearchCancel?: () => void;
 }
 
@@ -30,7 +33,8 @@ export const useApiFunctions = (): Required<ApiFunctionsContextType> => {
   }
   return {
     loadSettings: context.loadSettings ?? notImplemented('bsddSearchLoadSettings'),
-    bsddSearchClick: context.bsddSearchClick ?? notImplemented('bsddSearchClick'),
+    loadBridgeData: context.loadBridgeData ?? notImplemented('bsddSearchLoadBridgeData'),
+    bsddSearch: context.bsddSearch ?? notImplemented('bsddSearch'),
     bsddSelect: context.bsddSelect ?? notImplemented('bsddSelect'),
     bsddSearchSave: context.bsddSearchSave ?? notImplemented('bsddSearchSave'),
     bsddSearchCancel: context.bsddSearchCancel ?? notImplemented('bsddSearchCancel'),

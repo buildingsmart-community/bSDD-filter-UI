@@ -1,23 +1,9 @@
-import { MantineProvider } from '@mantine/core';
-import React from 'react';
-
 import BsddSearch from './lib/bsdd_search/main';
 import { ApiFunctionsProvider } from './lib/common/apiFunctionsContext';
+import useCefSharpBridge from './lib/common/bsddBridge/useCefSharpBridge';
 
-function BsddSelectionLoader() {
-  const save = window.bsddBridge?.save;
-  const cancel = window.bsddBridge?.cancel;
-  const loadSettings = window.bsddBridge?.loadSettings;
-
-  if (!save || !cancel || !loadSettings) {
-    return <div>Loading...</div>;
-  }
-
-  const apiFunctions = {
-    bsddSearchSave: save,
-    bsddSearchCancel: cancel,
-    loadSettings,
-  };
+function BsddSearchLoader() {
+  const apiFunctions = useCefSharpBridge();
 
   return (
     <ApiFunctionsProvider value={apiFunctions}>
@@ -26,4 +12,4 @@ function BsddSelectionLoader() {
   );
 }
 
-export default BsddSelectionLoader;
+export default BsddSearchLoader;

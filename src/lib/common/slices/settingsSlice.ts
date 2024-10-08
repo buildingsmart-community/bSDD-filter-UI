@@ -47,6 +47,15 @@ const settingsSlice = createSlice({
           payload: { mainDictionary, ifcDictionary, filterDictionaries, language, includeTestDictionaries },
         }: PayloadAction<BsddSettings>,
       ) => {
+        // Log the entire payload
+        console.log('setSettings, received payload:', {
+          mainDictionary,
+          ifcDictionary,
+          filterDictionaries,
+          language,
+          includeTestDictionaries,
+        });
+
         if (JSON.stringify(state.mainDictionary) !== JSON.stringify(mainDictionary)) {
           state.mainDictionary = mainDictionary;
         }
@@ -78,7 +87,9 @@ export const selectActiveDictionaries = createSelector(
   (state: RootState) => state.settings.ifcDictionary,
   (state: RootState) => state.settings.filterDictionaries,
   (mainDictionary, ifcDictionary, filterDictionaries) => {
-    const dictionaries = [mainDictionary, ifcDictionary, ...filterDictionaries].filter(Boolean) as BsddDictionary[];
+    const dictionaries = [mainDictionary, ifcDictionary, ...(filterDictionaries || [])].filter(
+      Boolean,
+    ) as BsddDictionary[];
     const dictionaryMap = new Map(dictionaries.map((item) => [item.ifcClassification.location, item]));
     return Array.from(dictionaryMap.values());
   },

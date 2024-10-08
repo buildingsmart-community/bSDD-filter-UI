@@ -2,13 +2,11 @@ import { Accordion, Alert, Button, Container, Group, Space, TextInput, Title } f
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { mockData } from '../../mockData';
 import { useApiFunctions } from '../common/apiFunctionsContext';
 import { useAppDispatch, useAppSelector } from '../common/app/hooks';
 import { BsddApi } from '../common/BsddApi/BsddApi';
 import { bsddEnvironments } from '../common/BsddApi/BsddApiEnvironments';
-import { defaultEnvironment, isProduction } from '../common/env';
-import { BsddBridgeData, BsddSettings } from '../common/IfcData/bsddBridgeData';
+import { defaultEnvironment } from '../common/env';
 import { IfcEntity, IfcPropertySet } from '../common/IfcData/ifc';
 import {
   fetchAndStoreDictionaryClasses,
@@ -19,14 +17,13 @@ import {
   updateDictionaries,
   updateMainDictionaryClassificationUri,
 } from '../common/slices/bsddSlice';
-import { selectLoadedIfcEntity, setLoadedIfcEntities } from '../common/slices/ifcDataSlice';
+import { selectLoadedIfcEntity } from '../common/slices/ifcDataSlice';
 import { selectIfcEntity, setIfcEntity } from '../common/slices/ifcEntitySlice';
 import {
   selectActiveDictionaryUris,
   selectIncludeTestDictionaries,
   selectLanguage,
   selectMainDictionary,
-  setSettings,
 } from '../common/slices/settingsSlice';
 import Apply from './Apply';
 import { BsddSearchProps } from './BsddSearchProps';
@@ -83,9 +80,7 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
 
   const callback = useCallback(
     (ifcProduct: IfcEntity) => {
-      const ifcEntityJson = JSON.stringify(ifcProduct);
-
-      bsddSearchSave(ifcEntityJson).then((actualResult) => {
+      bsddSearchSave(ifcProduct).then((actualResult) => {
         console.log('Sent iFC data back to host', actualResult);
       });
     },

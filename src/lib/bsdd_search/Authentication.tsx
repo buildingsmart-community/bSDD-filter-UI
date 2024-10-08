@@ -2,7 +2,7 @@ import { useMsal } from '@azure/msal-react';
 import { Switch, Tooltip } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 
-import { loginRequest } from './authConfig';
+import { loginRequest } from '../common/BsddApi/authConfig';
 
 interface Props {
   setAccessToken: (value: string) => void;
