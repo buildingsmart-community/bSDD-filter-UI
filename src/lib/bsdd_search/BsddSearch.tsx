@@ -16,6 +16,7 @@ import {
   selectMainDictionaryClassificationUri,
   updateDictionaries,
   updateMainDictionaryClassificationUri,
+  updatePropertyNaturalLanguageNames,
 } from '../common/slices/bsddSlice';
 import { selectLoadedIfcEntity } from '../common/slices/ifcDataSlice';
 import { selectIfcEntity, setIfcEntity } from '../common/slices/ifcEntitySlice';
@@ -86,6 +87,12 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
     },
     [bsddSearchSave],
   );
+
+  useEffect(() => {
+    if (!mainDictionaryClassification || !propertySetsOpened) return;
+    const classProperties = mainDictionaryClassification.classProperties || [];
+    dispatch(updatePropertyNaturalLanguageNames({ classProperties, languageCode }));
+  }, [mainDictionaryClassification, propertySetsOpened, languageCode, dispatch]);
 
   useEffect(() => {
     if (!loadedIfcEntity || !mainDictionary) return;

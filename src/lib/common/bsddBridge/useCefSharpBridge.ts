@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
 
+import { mockData } from '../../../mocks/mockData';
 import { useAppDispatch } from '../app/hooks';
 import { BsddBridgeData, BsddSettings } from '../IfcData/bsddBridgeData';
 import { IfcEntity } from '../IfcData/ifc';
+import defaultSettings from '../settings/defaultSettings';
 import { setValidatedIfcData } from '../slices/ifcDataSlice';
 import { setIfcEntity } from '../slices/ifcEntitySlice';
 import { setSettings } from '../slices/settingsSlice';
@@ -23,7 +25,8 @@ const useCefSharpBridge = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    let cefSharpCheckInterval: NodeJS.Timeout;
+    let cefSharpCheckInterval: ReturnType<typeof setInterval>;
+    let cefSharpTimeout: ReturnType<typeof setTimeout>;
 
     const initializeCefSharpBridge = async () => {
       try {
@@ -62,6 +65,7 @@ const useCefSharpBridge = () => {
           console.log('CefSharp connection and global functions are set up successfully.');
         } else {
           console.error('Failed to bind the bsddBridge object.');
+          dispatch(setSettings(defaultSettings));
         }
       } catch (error) {
         console.error('Error setting up CefSharp connection:', error);
@@ -71,6 +75,7 @@ const useCefSharpBridge = () => {
     const checkCefSharpAvailability = () => {
       if (window.CefSharp) {
         clearInterval(cefSharpCheckInterval);
+        clearTimeout(cefSharpTimeout);
         initializeCefSharpBridge();
       } else {
         console.log('Waiting for CefSharp to be available...');
@@ -80,8 +85,17 @@ const useCefSharpBridge = () => {
     // Start checking for CefSharp availability
     cefSharpCheckInterval = setInterval(checkCefSharpAvailability, 100); // Check every 100ms
 
-    // Cleanup interval on component unmount
-    return () => clearInterval(cefSharpCheckInterval);
+    cefSharpTimeout = setTimeout(() => {
+      clearInterval(cefSharpCheckInterval);
+      console.log('CefSharp not available, loading default settings.');
+      dispatch(setSettings(defaultSettings));
+      dispatch(setValidatedIfcData(mockData?.ifcData || []));
+    }, 1000); // 1 seconds
+
+    return () => {
+      clearInterval(cefSharpCheckInterval);
+      clearTimeout(cefSharpTimeout);
+    };
   }, [dispatch]);
 
   const bsddSearch = (ifcEntity: IfcEntity) => {
