@@ -8,7 +8,7 @@ import { defineConfig } from 'vite';
 export default defineConfig(({ mode }) => {
   return {
     root: './',
-    // base: './',
+    base: '../',
     server: {
       port: 3000,
     },
