@@ -16,9 +16,5 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "references": [{ "path": "./tsconfig.node.json" }],
-  "exclude": [
-    "vite.config.search.ts",
-    "vite.config.selection.ts"
-  ]
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

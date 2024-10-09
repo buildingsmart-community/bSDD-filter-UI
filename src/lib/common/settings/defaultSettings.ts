@@ -1,4 +1,4 @@
-import { BsddSettings } from '../../../src/lib/common/IfcData/bsddBridgeData';
+import { BsddSettings } from '../IfcData/bsddBridgeData';
 
 const defaultSettings: BsddSettings = {
   mainDictionary: {
@@ -9,7 +9,7 @@ const defaultSettings: BsddSettings = {
       editionDate: '0001-01-01T00:00:00',
       name: 'Basis bouwproducten O&E',
       description: '',
-      location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
+      location: 'https://identifier.buildingsmart.org/uri/digibase/basis_bouwproducten_oene/0.1',
     },
     parameterMapping: 'Description',
   },

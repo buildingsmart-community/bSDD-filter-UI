@@ -29,8 +29,6 @@ jobs:
       name: github-pages
       url: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'https://buildingsmart-community.github.io/bSDD-filter-UI/main/' || startsWith(github.ref, 'refs/tags/') && format('https://buildingsmart-community.github.io/bSDD-filter-UI/{0}', github.ref_name) || 'https://buildingsmart-community.github.io/bSDD-filter-UI/' }}
     runs-on: ubuntu-latest
-    env:
-      VITE_APP_VERSION: ${{ github.ref_name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
