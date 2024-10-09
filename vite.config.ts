@@ -6,11 +6,15 @@ import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
+  const base = process.env.BASE_PATH || './';
+
   return {
     root: './',
-    base: '../',
+    base,
     server: {
       port: 3000,
+      // open: '/bsdd_selection/index.html',
+      open: '/bsdd_search/index.html',
     },
     build: {
       target: 'esnext',

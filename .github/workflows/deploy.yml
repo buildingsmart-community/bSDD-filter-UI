@@ -42,6 +42,8 @@ jobs:
         run: corepack enable
 
       - name: Install dependencies and build
+        env:
+          BASE_PATH: '/${{ github.ref_name }}/'
         run: |
           yarn install
           yarn run build
