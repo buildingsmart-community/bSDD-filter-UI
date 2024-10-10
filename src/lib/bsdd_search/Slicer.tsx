@@ -123,7 +123,7 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
               )
             }
             label={label}
-            value={search}
+            value={value ? `${value.label} (${value.value})` : search}
             onChange={(event) => {
               if (!disabled) {
                 setValue(null);
