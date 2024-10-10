@@ -118,7 +118,7 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
               const dictionaryOption: Option = {
                 label: dictionaryAssociation.name || '',
                 value: dictionaryAssociation.identification || '',
-                uri: dictionaryUri,
+                uri: dictionaryAssociation.location || '',
               };
               newSelectedIfcClassificationReferences.set(dictionaryUri, dictionaryOption);
             }
