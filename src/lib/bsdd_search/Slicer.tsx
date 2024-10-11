@@ -28,11 +28,15 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
   const combobox = useCombobox({
     onDropdownClose: () => {
       combobox.resetSelectedOption();
-      combobox.focusTarget();
+      if (combobox.focusTarget) {
+        combobox.focusTarget();
+      }
     },
 
     onDropdownOpen: () => {
-      combobox.focusSearchInput();
+      if (combobox.focusSearchInput) {
+        combobox.focusSearchInput();
+      }
     },
   });
 
