@@ -81,7 +81,7 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
 
   const callback = useCallback(
     (ifcProduct: IfcEntity) => {
-      bsddSearchSave(ifcProduct).then((actualResult) => {
+      bsddSearchSave([ifcProduct]).then((actualResult) => {
         console.log('Sent iFC data back to host', actualResult);
       });
     },

@@ -7,7 +7,7 @@ interface ApiFunctionsContextType {
   loadBridgeData?: () => Promise<string>;
   bsddSearch?: (ifcProduct: any) => void;
   bsddSelect?: (ifcProduct: any) => void;
-  bsddSearchSave?: (ifcEntity: IfcEntity) => Promise<string>;
+  bsddSearchSave?: (ifcEntities: IfcEntity[]) => Promise<string>;
   bsddSearchCancel?: () => void;
 }
 

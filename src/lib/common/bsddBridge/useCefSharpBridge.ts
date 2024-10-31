@@ -116,10 +116,10 @@ const useCefSharpBridge = () => {
     }
   };
 
-  const bsddSearchSave = (ifcEntity: IfcEntity) => {
-    const ifcEntityJson = JSON.stringify(ifcEntity);
+  const bsddSearchSave = (ifcEntities: IfcEntity[]) => {
+    const ifcEntitiesJson = JSON.stringify(ifcEntities);
     if (window?.bsddBridge?.save) {
-      return window.bsddBridge.save(ifcEntityJson);
+      return window.bsddBridge.save(ifcEntitiesJson);
     }
     console.error('bsddBridge or save method is not available.');
     return Promise.resolve('error');
