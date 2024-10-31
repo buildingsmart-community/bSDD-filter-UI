@@ -1,4 +1,4 @@
-import { Autocomplete, CloseButton } from '@mantine/core';
+import { Autocomplete, CloseButton, ComboboxItem, OptionsFilter } from '@mantine/core';
 import { useDebouncedValue } from '@mantine/hooks';
 import { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +16,7 @@ import { selectMainDictionary } from '../common/slices/settingsSlice';
 interface Option {
   label: string;
   value: string;
+  synonyms?: string[];
 }
 
 interface Props {
@@ -60,10 +61,22 @@ function Search({ api, defaultSelection }: Props) {
     }
   }, [defaultSelection, defaultSet, searchOptions]);
 
-  const handleOnChange = useCallback((value: string) => {
-    setSearchValue(value);
-    setHighlightedIndex(-1); // Reset highlighted index to -1 on change
-  }, []);
+  const handleOnChange = useCallback(
+    (value: string) => {
+      setSearchValue(value);
+      setHighlightedIndex(-1); // Reset highlighted index to -1 on change
+
+      // Filter searchOptions to include options that match the synonym
+      const filteredOptions = searchOptions.filter(
+        (option) =>
+          option.label.toLowerCase().includes(value.toLowerCase().trim()) ||
+          option.synonyms?.some((synonym) => synonym.toLowerCase().includes(value.toLowerCase().trim())),
+      );
+
+      setSearchOptions(filteredOptions);
+    },
+    [searchOptions],
+  );
 
   const handleOptionSubmit = useCallback(
     (value: string) => {
@@ -135,6 +148,7 @@ function Search({ api, defaultSelection }: Props) {
                   ({
                     value: c.uri,
                     label: c.name,
+                    synonyms: c.synonyms || [], // Include synonyms if available
                   } as Option),
               ),
           );
@@ -161,6 +175,27 @@ function Search({ api, defaultSelection }: Props) {
     setSelected(undefined);
   }, [handleOnChange]);
 
+  /**
+   * Custom filter function for the Autocomplete component.
+   * Filters options based on the search value against the option's label and synonyms.
+   *
+   * @param {Object} params - The parameters for the filter function.
+   * @param {Option[]} params.options - The array of options to filter.
+   * @param {string} params.search - The current search query.
+   * @returns {Option[]} - The filtered array of options.
+   */
+  const optionsFilter: OptionsFilter = ({ options, search }) => {
+    const splittedSearch = search.toLowerCase().trim().split(' ');
+    return (options as Option[]).filter((option) => {
+      const words = option.label.toLowerCase().trim().split(' ');
+      const synonyms = option.synonyms?.map((synonym) => synonym.toLowerCase().trim().split(' ')).flat() || [];
+      return splittedSearch.every(
+        (searchWord) =>
+          words.some((word) => word.includes(searchWord)) || synonyms.some((synonym) => synonym.includes(searchWord)),
+      );
+    });
+  };
+
   return (
     <Autocomplete
       label={`${t('searchMainDictionaryLabel')} ${mainDictionary ? mainDictionary.ifcClassification.name : ''}`}
@@ -169,6 +204,7 @@ function Search({ api, defaultSelection }: Props) {
       value={searchValue}
       onChange={handleOnChange}
       onOptionSubmit={handleOptionSubmit}
+      filter={optionsFilter}
       onKeyDown={handleKeyDown}
       ref={inputRef}
       style={{ width: '100%' }}
