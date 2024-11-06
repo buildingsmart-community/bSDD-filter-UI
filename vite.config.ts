@@ -13,8 +13,8 @@ export default defineConfig(({ mode }) => {
     base,
     server: {
       port: 3000,
-      // open: '/bsdd_selection/index.html',
-      open: '/bsdd_search/index.html',
+      open: '/bsdd_selection/index.html',
+      // open: '/bsdd_search/index.html',
     },
     build: {
       target: 'esnext',
@@ -32,6 +32,7 @@ export default defineConfig(({ mode }) => {
         input: {
           bsdd_selection: 'bsdd_selection/index.html',
           bsdd_search: 'bsdd_search/index.html',
+          bsdd_search_settings: 'bsdd_search_settings/index.html',
           main: 'index.html',
           // bsdd_selection_app: 'src/mainBsddSelection.tsx',
           // bsdd_search_app: 'src/mainBsddSearch.tsx',
