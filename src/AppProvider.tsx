@@ -3,15 +3,17 @@ import '@mantine/core/styles.css';
 // import { PublicClientApplication } from '@azure/msal-browser';
 import { MantineProvider } from '@mantine/core';
 import { StrictMode } from 'react';
-import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 
-import BsddSelectionLoader from './BsddSelectionLoader';
 import { store } from './lib/common/app/store';
 // import { msalConfig } from './lib/common/BsddApi/authConfig';
 import { theme } from './lib/common/theme/theme';
 
-function Main() {
+interface AppLoaderProps {
+  children: React.ReactNode;
+}
+
+function AppLoader({ children }: AppLoaderProps) {
   // const [msalInstance, setMsalInstance] = useState<PublicClientApplication | null>(null);
 
   // useEffect(() => {
@@ -26,12 +28,10 @@ function Main() {
   return (
     <Provider store={store}>
       <MantineProvider theme={theme}>
-        <StrictMode>
-          <BsddSelectionLoader />
-        </StrictMode>
+        <StrictMode>{children}</StrictMode>
       </MantineProvider>
     </Provider>
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(<Main />);
+export default AppLoader;

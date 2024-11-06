@@ -14,6 +14,7 @@
     "classSearchInstruction": "上の検索ボックスで分類を選択してください。",
     "noDescription": "説明なし",
     "linkTabTitle": "リンク",
+    "searchTabTitle": "検索",
     "settingsTabTitle": "設定",
     "language": "言語",
     "searchMainDictionaryLabel": "クラスを検索",

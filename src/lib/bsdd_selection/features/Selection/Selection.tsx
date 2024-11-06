@@ -56,47 +56,41 @@ function Selection({ loading }: SelectionProps) {
   const icon = <IconInfoCircle />;
 
   return (
-    <Tabs.Panel value="link">
-      <Box pos="relative" style={{ height: '100vh' }}>
-        <LoadingOverlay visible={loading || !ifcEntities} />
-        {ifcEntities && categoryCollapseList.length === 0 ? (
-          <Alert title="No entities selected..." icon={icon} mt="xl">
-            {t('entitySelectionInstruction')}
-            <Space h="md" />
-            {t('needHelp')}{' '}
-            <a
-              href="https://github.com/buildingsmart-community/bSDD-Revit-plugin/wiki"
-              target="_blank"
-              rel="noreferrer"
-            >
-              {t('checkDocumentation')}
-            </a>
-          </Alert>
-        ) : (
-          <Box>
-            <Select
-              my="md"
-              label={t('groupBy')}
-              placeholder="Select a key"
-              data={[
-                { value: 'type', label: 'Entity' },
-                { value: 'name', label: 'Name' },
-                { value: 'description', label: 'Description' },
-                { value: 'objectType', label: 'ObjectType' },
-                { value: 'predefinedType', label: 'PredefinedType' },
-              ]}
-              value={groupByKey}
-              onChange={(value) => {
-                if (value) {
-                  setGroupByKey(value as keyof IfcEntity);
-                }
-              }}
-            />
-            <Accordion chevronPosition="left">{categoryCollapseList}</Accordion>
-          </Box>
-        )}
-      </Box>
-    </Tabs.Panel>
+    <Box pos="relative" style={{ height: '100vh' }}>
+      <LoadingOverlay visible={loading || !ifcEntities} />
+      {ifcEntities && categoryCollapseList.length === 0 ? (
+        <Alert title="No entities selected..." icon={icon} mt="xl">
+          {t('entitySelectionInstruction')}
+          <Space h="md" />
+          {t('needHelp')}{' '}
+          <a href="https://github.com/buildingsmart-community/bSDD-Revit-plugin/wiki" target="_blank" rel="noreferrer">
+            {t('checkDocumentation')}
+          </a>
+        </Alert>
+      ) : (
+        <Box>
+          <Select
+            my="md"
+            label={t('groupBy')}
+            placeholder="Select a key"
+            data={[
+              { value: 'type', label: 'Entity' },
+              { value: 'name', label: 'Name' },
+              { value: 'description', label: 'Description' },
+              { value: 'objectType', label: 'ObjectType' },
+              { value: 'predefinedType', label: 'PredefinedType' },
+            ]}
+            value={groupByKey}
+            onChange={(value) => {
+              if (value) {
+                setGroupByKey(value as keyof IfcEntity);
+              }
+            }}
+          />
+          <Accordion chevronPosition="left">{categoryCollapseList}</Accordion>
+        </Box>
+      )}
+    </Box>
   );
 }
 

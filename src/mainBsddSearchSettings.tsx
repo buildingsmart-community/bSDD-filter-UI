@@ -3,12 +3,12 @@ import '@mantine/core/styles.css';
 import ReactDOM from 'react-dom/client';
 
 import AppProvider from './AppProvider';
-import BsddSearchLoader from './BsddSearchLoader';
+import BsddSearchSettingsLoader from './BsddSearchSettingsLoader';
 
 function Main() {
   return (
     <AppProvider>
-      <BsddSearchLoader />
+      <BsddSearchSettingsLoader />
     </AppProvider>
   );
 }
