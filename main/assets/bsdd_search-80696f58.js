@@ -1,1 +1,0 @@
-import{u as n,j as e,A as o,c as s,a as t}from"./useCefSharpBridge-ae3874c8.js";import{M as a}from"./main-56bd3d75.js";function i(){const r=n();return e.jsx(o,{value:r,children:e.jsx(a,{})})}function c(){return e.jsx(t,{children:e.jsx(i,{})})}s.createRoot(document.getElementById("root")).render(e.jsx(c,{}));
