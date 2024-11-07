@@ -9,12 +9,9 @@ import { bsddEnvironments } from '../common/BsddApi/BsddApiEnvironments';
 import { defaultEnvironment } from '../common/env';
 import { IfcEntity, IfcPropertySet } from '../common/IfcData/ifc';
 import {
-  fetchAndStoreDictionaryClasses,
-  fetchDictionaries,
   fetchMainDictionaryClassification,
   selectMainDictionaryClassification,
   selectMainDictionaryClassificationUri,
-  updateDictionaries,
   updateMainDictionaryClassificationUri,
   updatePropertyNaturalLanguageNames,
 } from '../common/slices/bsddSlice';
@@ -115,14 +112,6 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
       }
     });
   }, [mainDictionary, loadedIfcEntity, dispatch]);
-
-  useEffect(() => {
-    if (includeTestDictionaries !== null) {
-      dispatch(updateDictionaries(activeDictionaryLocations));
-      dispatch(fetchDictionaries(includeTestDictionaries));
-      dispatch(fetchAndStoreDictionaryClasses(activeDictionaryLocations));
-    }
-  }, [includeTestDictionaries, dispatch, activeDictionaryLocations, languageCode]);
 
   useEffect(() => {
     if (mainDictionaryClassificationUri) {

@@ -103,6 +103,7 @@ export const selectActiveDictionariesMap = createSelector(selectActiveDictionari
 });
 
 export const selectMainDictionary = (state: RootState) => state.settings.mainDictionary;
+export const selectIfcDictionary = (state: RootState) => state.settings.ifcDictionary;
 export const selectFilterDictionaries = (state: RootState) => state.settings.filterDictionaries;
 export const selectLanguage = (state: RootState) => state.settings.language;
 export const selectIncludeTestDictionaries = (state: RootState) => state.settings.includeTestDictionaries;

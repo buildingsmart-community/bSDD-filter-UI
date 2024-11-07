@@ -4,10 +4,10 @@ import { t } from 'i18next';
 import BsddSearch from './lib/bsdd_search/main';
 import Settings from './lib/bsdd_settings/SettingsComponent';
 import { ApiFunctionsProvider } from './lib/common/apiFunctionsContext';
-import useCefSharpBridge from './lib/common/bsddBridge/useCefSharpBridge';
+import useBrowserBridge from './lib/common/bsddBridge/useBrowserBridge';
 
 function BsddSearchSettingsLoader() {
-  const { bsddSearchSave, bsddSearchCancel } = useCefSharpBridge();
+  const { bsddSearchSave, bsddSearchCancel } = useBrowserBridge();
 
   const apiFunctions = {
     bsddSearchSave,

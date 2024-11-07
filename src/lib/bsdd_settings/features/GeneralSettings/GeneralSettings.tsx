@@ -44,7 +44,11 @@ function GeneralSettings({ id, localSettings, setLocalSettings, setUnsavedChange
         </Text>
       </Accordion.Control>
       <Accordion.Panel>
-        <LanguageSelect localSettings={localSettings} setLocalSettings={setLocalSettings} setUnsavedChanges={setUnsavedChanges} />{' '}
+        <LanguageSelect
+          localSettings={localSettings}
+          setLocalSettings={setLocalSettings}
+          setUnsavedChanges={setUnsavedChanges}
+        />{' '}
         <Space h="xs" />
         <Checkbox
           label={t('ShowPreview')}

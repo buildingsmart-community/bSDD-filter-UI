@@ -199,26 +199,26 @@ export const fetchDictionaryClasses = createAsyncThunk(
   },
 );
 
-export const fetchAndStoreDictionaryClasses = createAsyncThunk(
-  'bsdd/fetchAndStoreAllDictionaryClasses',
-  async (dictionaryUris: string[], { dispatch, rejectWithValue }) => {
-    if (!dictionaryUris || dictionaryUris.length === 0) {
-      return rejectWithValue('No dictionary URIs provided');
-    }
+// export const fetchAndStoreDictionaryClasses = createAsyncThunk(
+//   'bsdd/fetchAndStoreAllDictionaryClasses',
+//   async (dictionaryUris: string[], { dispatch, rejectWithValue }) => {
+//     if (!dictionaryUris || dictionaryUris.length === 0) {
+//       return rejectWithValue('No dictionary URIs provided');
+//     }
 
-    try {
-      await Promise.all(dictionaryUris.map((uri) => dispatch(fetchDictionaryClasses(uri))));
-      return 'Successfully fetched and stored all dictionary classes';
-    } catch (error) {
-      return rejectWithValue('Failed to fetch dictionary classes');
-    }
-  },
-);
+//     try {
+//       await Promise.all(dictionaryUris.map((uri) => dispatch(fetchDictionaryClasses(uri))));
+//       return 'Successfully fetched and stored all dictionary classes';
+//     } catch (error) {
+//       return rejectWithValue('Failed to fetch dictionary classes');
+//     }
+//   },
+// );
 
-export const updateDictionaries = createAsyncThunk(
-  'bsdd/updateDictionaries',
-  async (activeDictionaryLocations: string[]) => activeDictionaryLocations,
-);
+// export const updateDictionaries = createAsyncThunk(
+//   'bsdd/updateDictionaries',
+//   async (activeDictionaryLocations: string[]) => activeDictionaryLocations,
+// );
 
 // Workaround for bSDD not supporting translated property names on the class endpoint
 export const updatePropertyNaturalLanguageNames = createAsyncThunk(
