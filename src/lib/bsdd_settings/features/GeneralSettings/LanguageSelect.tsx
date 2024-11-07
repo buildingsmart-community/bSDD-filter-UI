@@ -5,8 +5,8 @@ import { languages } from '../../../common/i18n';
 import { BsddSettings } from '../../../common/IfcData/bsddBridgeData';
 
 interface LanguageSelectProps {
-  settings: BsddSettings | undefined;
-  setSettings: (settings: BsddSettings) => void;
+  localSettings: BsddSettings | undefined;
+  setLocalSettings: (settings: BsddSettings) => void;
   setUnsavedChanges: (unsavedChanges: boolean) => void;
 }
 
@@ -17,13 +17,13 @@ function getLanguageOptions(): ComboboxItem[] {
   }));
 }
 
-function LanguageSelect({ settings, setSettings, setUnsavedChanges }: LanguageSelectProps) {
+function LanguageSelect({ localSettings, setLocalSettings, setUnsavedChanges }: LanguageSelectProps) {
   const { t, i18n } = useTranslation();
 
   const changeLanguage = (language: string | null) => {
-    if (!language || !settings) return;
+    if (!language || !localSettings) return;
     i18n.changeLanguage(language);
-    setSettings({ ...settings, language });
+    setLocalSettings({ ...localSettings, language });
     setUnsavedChanges(true);
   };
 

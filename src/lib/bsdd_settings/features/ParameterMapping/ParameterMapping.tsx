@@ -13,12 +13,12 @@ interface ParameterMappingProps {
 
 function ParameterMapping({
   id,
-  localSettings: settings,
-  setLocalSettings: setSettings,
+  localSettings,
+  setLocalSettings,
   setUnsavedChanges,
 }: ParameterMappingProps) {
   const { t } = useTranslation();
-  const { mainDictionary, filterDictionaries } = settings;
+  const { mainDictionary, filterDictionaries } = localSettings;
 
   const [mappableDictionaries, setMappableDictionaries] = useState<BsddDictionary[]>([]);
 
@@ -31,8 +31,8 @@ function ParameterMapping({
   }, [mainDictionary, filterDictionaries]);
 
   const handleInputChange = (dictionaryUri: string | undefined, newParameterMapping: string) => {
-    if (!settings) return;
-    const newSettings = { ...settings };
+    if (!localSettings) return;
+    const newSettings = { ...localSettings };
     if (newSettings.mainDictionary?.ifcClassification.location === dictionaryUri) {
       const newMainDictionary: BsddDictionary = {
         ...(newSettings.mainDictionary as BsddDictionary),
@@ -47,7 +47,7 @@ function ParameterMapping({
         return dictionary;
       });
     }
-    setSettings(newSettings);
+    setLocalSettings(newSettings);
     setUnsavedChanges(true);
   };
 

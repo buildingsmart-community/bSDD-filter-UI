@@ -17,7 +17,7 @@ function BsddSearchSettingsLoader() {
   return (
     <ApiFunctionsProvider value={apiFunctions}>
       <Container>
-        <Tabs defaultValue="link">
+        <Tabs defaultValue="search">
           <Tabs.List grow>
             <Tabs.Tab value="search">{t('searchTabTitle')}</Tabs.Tab>
             <Tabs.Tab value="settings">{t('settingsTabTitle')}</Tabs.Tab>
