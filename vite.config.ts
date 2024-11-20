@@ -52,7 +52,7 @@ export default defineConfig(({ mode }) => {
     test: {
       globals: true,
       environment: 'jsdom',
-      setupFiles: './src/setupTests.ts',
+      // setupFiles: './src/setupTests.ts',
     },
     define: {
       // Catch for 'Uncaught ReferenceError: process is not defined'
