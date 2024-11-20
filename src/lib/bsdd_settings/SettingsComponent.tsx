@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../common/app/hooks';
 import { CefSharpWindow } from '../common/bsddBridge/useCefSharpBridge';
 import { BsddSettings } from '../common/IfcData/bsddBridgeData';
-import { setSettings } from '../common/slices/settingsSlice';
+import { setSettingsWithValidation } from '../common/slices/settingsSlice';
 import AppInfo from './features/AppInfo/AppInfo';
 import DomainSelection from './features/DictionarySelection/DictionarySelection';
 import DomainSort from './features/DictionarySort/DictionarySort';
@@ -28,7 +28,7 @@ function Settings() {
   const handleSave = () => {
     console.log('Saving', localSettings);
     if (!localSettings) return;
-    dispatch(setSettings(localSettings));
+    dispatch(setSettingsWithValidation(localSettings));
 
     if (typeof window?.bsddBridge?.saveSettings === 'function') {
       window.bsddBridge.saveSettings(JSON.stringify(localSettings));

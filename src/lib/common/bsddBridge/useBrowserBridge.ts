@@ -4,7 +4,7 @@ import { BsddDictionary, BsddSettings } from '../IfcData/bsddBridgeData';
 import { IfcEntity } from '../IfcData/ifc';
 import defaultSettings from '../settings/defaultSettings';
 import {
-  setSettings,
+  setSettingsWithValidation,
   selectMainDictionary,
   selectFilterDictionaries,
   selectLanguage,
@@ -44,7 +44,7 @@ const useBrowserBridge = () => {
       });
 
       if (!hasQueryParams) {
-        dispatch(setSettings(defaultSettings));
+        dispatch(setSettingsWithValidation(defaultSettings));
       } else {
         const settings: BsddSettings = {
           mainDictionary: query.mainDictionary
@@ -75,7 +75,7 @@ const useBrowserBridge = () => {
           language: query.language || 'en-GB',
           includeTestDictionaries: query.includeTestDictionaries || false,
         };
-        dispatch(setSettings(settings));
+        dispatch(setSettingsWithValidation(settings));
       }
     }
   }, [query, dispatch]);

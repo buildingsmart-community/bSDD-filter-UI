@@ -7,7 +7,7 @@ import { IfcEntity } from '../IfcData/ifc';
 import defaultSettings from '../settings/defaultSettings';
 import { setValidatedIfcData } from '../slices/ifcDataSlice';
 import { setIfcEntity } from '../slices/ifcEntitySlice';
-import { setSettings } from '../slices/settingsSlice';
+import { setSettingsWithValidation } from '../slices/settingsSlice';
 import { BsddBridge } from './BsddBridgeInterface';
 
 export interface CefSharpWindow extends Window {
@@ -41,7 +41,7 @@ const useCefSharpBridge = () => {
             console.log('CefSharp bsddBridgeData:', bsddBridgeData);
             const { ifcData, settings } = bsddBridgeData;
             if (settings) {
-              dispatch(setSettings(settings));
+              dispatch(setSettingsWithValidation(settings));
               console.log('CefSharp settings:', settings);
             }
             if (ifcData?.length > 0) {
@@ -58,14 +58,14 @@ const useCefSharpBridge = () => {
           };
 
           window.updateSettings = async (settings: BsddSettings) => {
-            dispatch(setSettings(settings));
+            dispatch(setSettingsWithValidation(settings));
             console.log('CefSharp updateSettings:', settings);
           };
 
           console.log('CefSharp connection and global functions are set up successfully.');
         } else {
           console.error('Failed to bind the bsddBridge object.');
-          dispatch(setSettings(defaultSettings));
+          dispatch(setSettingsWithValidation(defaultSettings));
         }
       } catch (error) {
         console.error('Error setting up CefSharp connection:', error);
@@ -88,7 +88,7 @@ const useCefSharpBridge = () => {
     cefSharpTimeout = setTimeout(() => {
       clearInterval(cefSharpCheckInterval);
       console.log('CefSharp not available, loading default settings.');
-      dispatch(setSettings(defaultSettings));
+      dispatch(setSettingsWithValidation(defaultSettings));
       dispatch(setValidatedIfcData(mockData?.ifcData || []));
     }, 1000); // 1 seconds
 

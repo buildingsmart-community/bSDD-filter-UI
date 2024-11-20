@@ -1,9 +1,9 @@
-import { createAction, createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import type { RootState } from '../app/store';
-import i18n from '../i18n';
+import type { AppDispatch, RootState } from '../app/store';
 import { BsddDictionary, BsddSettings } from '../IfcData/bsddBridgeData';
 import { validateIfcClassification } from '../IfcData/ifcValidators';
+import i18n from '../i18n';
 
 const initialState: BsddSettings = {
   mainDictionary: null,
@@ -13,66 +13,59 @@ const initialState: BsddSettings = {
   includeTestDictionaries: undefined,
 };
 
-const handleSetLanguage = (state: BsddSettings, action: PayloadAction<string>) => {
-  state.language = action.payload;
-  i18n.changeLanguage(action.payload);
-};
-
-export const setSettings = createAction<BsddSettings>('settings/setSettings');
-
 const settingsSlice = createSlice({
   name: 'settings',
   initialState,
   reducers: {
-    setMainDictionary: (state, { payload }: PayloadAction<BsddDictionary>) => {
+    setMainDictionary(state, { payload }: PayloadAction<BsddDictionary>) {
       state.mainDictionary = payload;
     },
-    setIfcDictionary: (state, { payload }: PayloadAction<BsddDictionary>) => {
+    setIfcDictionary(state, { payload }: PayloadAction<BsddDictionary>) {
       state.ifcDictionary = payload;
     },
-    setFilterDictionaries: (state, { payload }: PayloadAction<BsddDictionary[]>) => {
-      state.filterDictionaries = payload;
+    setFilterDictionaries(state, action: PayloadAction<BsddDictionary[]>) {
+      state.filterDictionaries = action.payload;
     },
-    setLanguage: handleSetLanguage,
-    setIncludeTestDictionaries: (state, action: PayloadAction<boolean | undefined>) => {
+    setLanguage(state, action: PayloadAction<string>) {
+      state.language = action.payload;
+      i18n.changeLanguage(action.payload);
+    },
+    setIncludeTestDictionaries(state, action: PayloadAction<boolean | undefined>) {
       state.includeTestDictionaries = action.payload;
+    },
+    setSettings(state: BsddSettings, action: PayloadAction<BsddSettings>) {
+      const { mainDictionary, ifcDictionary, filterDictionaries, language, includeTestDictionaries } = action.payload;
+
+      console.log('setSettings, received payload:', {
+        mainDictionary,
+        ifcDictionary,
+        filterDictionaries,
+        language,
+        includeTestDictionaries,
+      });
+
+      if (JSON.stringify(state.mainDictionary) !== JSON.stringify(mainDictionary)) {
+        state.mainDictionary = mainDictionary;
+      }
+      if (JSON.stringify(state.ifcDictionary) !== JSON.stringify(ifcDictionary)) {
+        state.ifcDictionary = ifcDictionary;
+      }
+      if (JSON.stringify(state.filterDictionaries) !== JSON.stringify(filterDictionaries)) {
+        state.filterDictionaries = filterDictionaries;
+      }
+      if (JSON.stringify(state.language) !== JSON.stringify(language)) {
+        state.language = language;
+        i18n.changeLanguage(language);
+      }
+      if (JSON.stringify(state.includeTestDictionaries) !== JSON.stringify(includeTestDictionaries)) {
+        state.includeTestDictionaries = includeTestDictionaries;
+      }
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(
-      setSettings,
-      (
-        state,
-        {
-          payload: { mainDictionary, ifcDictionary, filterDictionaries, language, includeTestDictionaries },
-        }: PayloadAction<BsddSettings>,
-      ) => {
-        // Log the entire payload
-        console.log('setSettings, received payload:', {
-          mainDictionary,
-          ifcDictionary,
-          filterDictionaries,
-          language,
-          includeTestDictionaries,
-        });
-
-        if (JSON.stringify(state.mainDictionary) !== JSON.stringify(mainDictionary)) {
-          state.mainDictionary = mainDictionary;
-        }
-        if (JSON.stringify(state.ifcDictionary) !== JSON.stringify(ifcDictionary)) {
-          state.ifcDictionary = ifcDictionary;
-        }
-        if (JSON.stringify(state.filterDictionaries) !== JSON.stringify(filterDictionaries)) {
-          state.filterDictionaries = filterDictionaries;
-        }
-        if (JSON.stringify(state.language) !== JSON.stringify(language)) {
-          handleSetLanguage(state, { payload: language, type: 'setLanguage' });
-        }
-        if (JSON.stringify(state.includeTestDictionaries) !== JSON.stringify(includeTestDictionaries)) {
-          state.includeTestDictionaries = includeTestDictionaries;
-        }
-      },
-    );
+    builder.addCase(setSettingsWithValidation.fulfilled, (state, action: PayloadAction<BsddSettings>) => {
+      settingsSlice.caseReducers.setSettings(state, action);
+    });
   },
 });
 
@@ -106,7 +99,8 @@ export const selectMainDictionary = (state: RootState) => state.settings.mainDic
 export const selectIfcDictionary = (state: RootState) => state.settings.ifcDictionary;
 export const selectFilterDictionaries = (state: RootState) => state.settings.filterDictionaries;
 export const selectLanguage = (state: RootState) => state.settings.language;
-export const selectIncludeTestDictionaries = (state: RootState) => state.settings.includeTestDictionaries;
+export const selectIncludeTestDictionaries = (state: RootState) =>
+  (state.settings as BsddSettings).includeTestDictionaries;
 export const selectSettings = (state: RootState) => state.settings;
 
 export const selectActiveDictionaryUris = createSelector(selectActiveDictionaries, (activeDictionaries) =>
@@ -117,26 +111,37 @@ export const selectMainDictionaryUri = createSelector(selectMainDictionary, (mai
   mainDictionary ? mainDictionary.ifcClassification.location : null,
 );
 
-export const { setMainDictionary, setFilterDictionaries, setLanguage, setIncludeTestDictionaries } =
+export const { setMainDictionary, setIfcDictionary, setFilterDictionaries, setLanguage, setIncludeTestDictionaries } =
   settingsSlice.actions;
 
 export const setSettingsWithValidation = createAsyncThunk(
   'settings/setSettingsWithValidation',
   async (settings: BsddSettings, { dispatch, getState }) => {
     const state = getState() as RootState;
-    const validatedMainDictionary = validateIfcClassification(state, settings.mainDictionary);
-    console.log('validatedMainDictionary', validatedMainDictionary);
-    console.log('settings.mainDictionary', settings.mainDictionary);
-    const validatedFilterDictionaries = settings.filterDictionaries
-      .map((dictionary) => validateIfcClassification(state, dictionary))
-      .filter((dictionary): dictionary is BsddDictionary => dictionary !== null);
+    const appDispatch = dispatch as AppDispatch;
+
+    const validatedMainDictionary = settings.mainDictionary
+      ? await validateIfcClassification(state, appDispatch, settings.mainDictionary)
+      : null;
+
+    const validatedIfcDictionary = settings.ifcDictionary
+      ? await validateIfcClassification(state, appDispatch, settings.ifcDictionary)
+      : null;
+
+    const validatedFilterDictionaries = await Promise.all(
+      settings.filterDictionaries.map(async (dictionary) => {
+        return await validateIfcClassification(state, appDispatch, dictionary);
+      }),
+    ).then((results) => results.filter((dictionary): dictionary is BsddDictionary => dictionary !== null));
 
     const updatedSettings = {
       ...settings,
       mainDictionary: validatedMainDictionary,
+      ifcDictionary: validatedIfcDictionary,
       filterDictionaries: validatedFilterDictionaries,
     };
-    dispatch(setSettings(updatedSettings));
+
+    return updatedSettings;
   },
 );
 

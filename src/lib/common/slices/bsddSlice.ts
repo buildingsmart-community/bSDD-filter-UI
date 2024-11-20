@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import type { RootState } from '../app/store';
+import type { AppDispatch, RootState } from '../app/store';
 import { BsddApi } from '../BsddApi/BsddApi';
 import {
   ClassContractV1,
@@ -279,6 +279,82 @@ export const searchInDictionary = createAsyncThunk(
   },
 );
 
+/**
+ * Fetches a dictionary from the BSDD API based on the provided location URI.
+ *
+ * @param location - The location URI of the dictionary to retrieve.
+ * @param getState - A function to get the current state.
+ * @param dispatch - The dispatch function to dispatch actions.
+ * @param rejectWithValue - A function to reject the promise with a value.
+ * @returns A promise that resolves to an object containing the location and the fetched dictionary.
+ */
+export const fetchDictionary = createAsyncThunk(
+  'bsdd/fetchDictionary',
+  async (location: string, { getState, dispatch, rejectWithValue }) => {
+    if (!bsddApi) {
+      throw new Error('BsddApi is not initialized');
+    }
+    const state = getState() as RootState;
+    const { language, includeTestDictionaries } = state.settings;
+
+    const params: RequestParams = {
+      headers,
+    };
+
+    const queryParameters = {
+      Uri: location,
+      IncludeTestDictionaries: includeTestDictionaries,
+      languageCode: language,
+    };
+
+    try {
+      const response = await bsddApi.api.dictionaryV1List(queryParameters, params);
+      if (response.status !== 200) {
+        console.error(`API request failed with status ${response.status}`);
+
+        return rejectWithValue(`API request failed with status ${response.status}`);
+      }
+      const dictionaries = response.data.dictionaries;
+      if (!dictionaries || dictionaries.length === 0) {
+        return rejectWithValue('No dictionaries found for the given location');
+      }
+      const dictionary = dictionaries[0];
+      return { location, dictionary };
+    } catch (err) {
+      console.error('Error fetching dictionary:', err);
+      return rejectWithValue('Error fetching dictionary');
+    }
+  },
+);
+
+/**
+ * Retrieves a dictionary from the state or fetches it from the API if not present in the state.
+ *
+ * @param state - The RootState object.
+ * @param dispatch - The AppDispatch function.
+ * @param location - The location URI of the dictionary to retrieve.
+ * @returns A promise that resolves to a DictionaryContractV1 object or null if the dictionary could not be retrieved.
+ */
+export const getDictionary = async (
+  state: RootState,
+  dispatch: AppDispatch,
+  location: string,
+): Promise<DictionaryContractV1 | null> => {
+  const dictionary = selectDictionary(state, location);
+
+  if (dictionary) {
+    return dictionary;
+  } else {
+    const result = await dispatch(fetchDictionary(location));
+    if (fetchDictionary.fulfilled.match(result)) {
+      return result.payload.dictionary;
+    } else {
+      console.error(`Failed to fetch dictionary for location: ${location}`);
+      return null;
+    }
+  }
+};
+
 const bsddSlice = createSlice({
   name: 'bsdd',
   initialState,
@@ -299,6 +375,16 @@ const bsddSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(fetchDictionary.pending, (state, action) => {
+        const location = action.meta.arg;
+      })
+      .addCase(fetchDictionary.fulfilled, (state, action) => {
+        const { location, dictionary } = action.payload;
+        state.dictionaries[location] = dictionary;
+      })
+      .addCase(fetchDictionary.rejected, (state, action) => {
+        console.error('fetch dictionary failed', action.error);
+      })
       .addCase(
         updatePropertyNaturalLanguageNames.fulfilled,
         (state, action: PayloadAction<{ languageCode: string; propertyNames: { [propertyUri: string]: string } }>) => {

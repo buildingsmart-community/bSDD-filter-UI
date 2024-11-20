@@ -29,22 +29,30 @@ function DomainSort({ id, localSettings, setLocalSettings, setUnsavedChanges }: 
   };
 
   // Drag and drop order filter dictionaries list
-  const items = filterDictionaries?.map((item, index) => (
-    <Draggable key={item.ifcClassification.location} index={index} draggableId={item.ifcClassification.location}>
-      {(provided, snapshot) => (
-        <div
-          className={cx(classes.item, { [classes.itemDragging]: snapshot.isDragging })}
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-        >
-          <div {...provided.dragHandleProps} className={classes.dragHandle}>
-            <IconGripVertical style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
-          </div>
-          <Text className={classes.uri}>{item.ifcClassification.location}</Text>
-        </div>
-      )}
-    </Draggable>
-  ));
+  const items = filterDictionaries
+    ?.map((item, index) => {
+      const key = item.ifcClassification?.location;
+      if (!key) {
+        return null;
+      }
+      return (
+        <Draggable key={key} index={index} draggableId={key}>
+          {(provided, snapshot) => (
+            <div
+              className={cx(classes.item, { [classes.itemDragging]: snapshot.isDragging })}
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+            >
+              <div {...provided.dragHandleProps} className={classes.dragHandle}>
+                <IconGripVertical style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
+              </div>
+              <Text className={classes.uri}>{key}</Text>
+            </div>
+          )}
+        </Draggable>
+      );
+    })
+    .filter(Boolean);
 
   return (
     <Accordion.Item key={id} value={id.toString()}>
@@ -59,7 +67,7 @@ function DomainSort({ id, localSettings, setLocalSettings, setUnsavedChanges }: 
           <Droppable droppableId="dnd-list" direction="vertical">
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
-                {items}
+                {items.length > 0 ? items : <div key="empty" />}
                 {provided.placeholder}
               </div>
             )}

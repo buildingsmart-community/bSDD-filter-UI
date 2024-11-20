@@ -1,9 +1,8 @@
 import { ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 
-import type { RootState } from '../app/store';
+import type { AppDispatch, RootState } from '../app/store';
 import { ClassListItemContractV1, DictionaryClassesResponseContractV1 } from '../BsddApi/BsddApiBase';
-import { fetchDictionaryClasses, selectDictionary, selectDictionaryClasses } from '../slices/bsddSlice';
-// import { selectActiveDictionaries } from '../slices/settingsSlice';
+import { fetchDictionaryClasses, getDictionary, selectDictionary, selectDictionaryClasses } from '../slices/bsddSlice';
 import { BsddDictionary } from './bsddBridgeData';
 import { IfcClassificationReference } from './ifc';
 import { convertBsddDictionaryToIfcClassification } from './ifcBsddConverters';
@@ -257,12 +256,15 @@ export async function patchIfcClassificationReference(
  * @param bsddDictionary - The BsddDictionary object to validate.
  * @returns A new BsddDictionary object or null.
  */
-export function validateIfcClassification(
+export async function validateIfcClassification(
   state: RootState,
+  dispatch: AppDispatch,
   bsddDictionary: BsddDictionary | null,
-): BsddDictionary | null {
+): Promise<BsddDictionary | null> {
   if (!bsddDictionary?.ifcClassification.location) return null;
-  const dictionary = selectDictionary(state, bsddDictionary.ifcClassification.location);
+  const dictionary = await getDictionary(state, dispatch, bsddDictionary.ifcClassification.location);
+  if (!dictionary) return null;
+
   const ifcClassification = convertBsddDictionaryToIfcClassification(dictionary);
 
   return {
