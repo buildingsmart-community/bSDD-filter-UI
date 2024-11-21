@@ -3,13 +3,16 @@
   "version": "0.3.10",
   "description": "bSDD Search React Component",
   "type": "module",
-  "main": "./dist/react-bsdd-search.umd.js",
-  "module": "./dist/react-bsdd-search.js",
+  "main": "dist/bsdd-main.js",
+  "module": "dist/bsdd-main.js",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "exports": {
-    ".": {
-      "import": "./dist/react-bsdd-search.js",
-      "require": "./dist/react-bsdd-search.umd.js"
-    }
+    "./bsdd_search": "./dist/bsdd-bsdd_search.js",
+    "./bsdd_selection": "./dist/bsdd-bsdd_selection.js",
+    "./bsdd_settings": "./dist/bsdd-bsdd_settings.js"
   },
   "repository": {
     "type": "git",
@@ -21,7 +24,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "generate-api": "swagger-typescript-api --path https://api.swaggerhub.com/apis/buildingSMART/Dictionaries/v1/swagger.json --output ./common/src/BsddApi/ --name BsddApiBase.ts --api-class-name BsddApiBase"
+    "generate-api": "swagger-typescript-api --path https://api.swaggerhub.com/apis/buildingSMART/Dictionaries/v1/swagger.json --output ./src/lib/common/BsddApi/ --name BsddApiBase.ts --api-class-name BsddApiBase"
   },
   "peerDependencies": {
     "react": "^18.0.0",

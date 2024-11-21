@@ -3,6 +3,7 @@
 /// <reference types="vite/client" />
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -21,12 +22,10 @@ export default defineConfig(({ mode }) => {
       external: ['react', 'react-dom'],
       outDir: './dist',
       // lib: {
-      //   entry: {
-      //     'bsdd_selection/module_bsdd_selection': 'src/lib/bsdd_selection/main.tsx',
-      //     'bsdd_search/module_bsdd_search': 'src/lib/bsdd_search/main.tsx',
-      //   },
+      //   entry: 'src/lib/index.ts',
       //   name: 'bSDD',
       //   fileName: (format) => `[name]-${format}.js`,
+      //   formats: ['es'],
       // },
       rollupOptions: {
         input: {
@@ -34,18 +33,25 @@ export default defineConfig(({ mode }) => {
           bsdd_search: 'bsdd_search/index.html',
           bsdd_search_settings: 'bsdd_search_settings/index.html',
           main: 'index.html',
-          // bsdd_selection_app: 'src/mainBsddSelection.tsx',
-          // bsdd_search_app: 'src/mainBsddSearch.tsx',
-          // main_app: 'src/main.tsx',
         },
         // output: {
         //   entryFileNames: '[name].js',
         //   chunkFileNames: '[name].js',
         //   assetFileNames: '[name].[ext]',
+        //   manualChunks: undefined,
         // },
       },
     },
-    plugins: [react()],
+    plugins: [
+      react(),
+      dts(
+        {
+        include: ['src/lib/**/*'],
+        outDir: 'dist',
+        entryRoot: 'src/lib',
+      }
+    ),
+    ],
     preview: {
       open: true,
     },
