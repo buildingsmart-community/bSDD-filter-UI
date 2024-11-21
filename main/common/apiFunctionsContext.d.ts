@@ -4,7 +4,7 @@ import { BsddBridgeData } from './IfcData/bsddBridgeData';
 interface ApiFunctionsContextType {
     loadSettings?: () => Promise<string>;
     loadBridgeData?: () => Promise<string>;
-    bsddSearch?: (bsddBridgeData: BsddBridgeData) => void;
+    bsddSearch?: (ifcEntities: IfcEntity[]) => void;
     bsddSelect?: (ifcEntities: IfcEntity[]) => void;
     bsddSearchSave?: (bsddBridgeData: BsddBridgeData) => Promise<string>;
     bsddSearchCancel?: () => void;
