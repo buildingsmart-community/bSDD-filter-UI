@@ -1,8 +1,8 @@
 import { Container, Tabs } from '@mantine/core';
 import { t } from 'i18next';
 
-import BsddSearch from './lib/bsdd_search/main';
-import Settings from './lib/bsdd_settings/SettingsComponent';
+import BsddSearch from './lib/BsddSearch';
+import Settings from './lib/BsddSettings/SettingsComponent';
 import { ApiFunctionsProvider } from './lib/common/apiFunctionsContext';
 import useBrowserBridge from './lib/common/bsddBridge/useBrowserBridge';
 

@@ -1,4 +1,4 @@
-import BsddSearch from './lib/bsdd_search/main';
+import BsddSearch from './lib/BsddSearch';
 import { ApiFunctionsProvider } from './lib/common/apiFunctionsContext';
 import useCefSharpBridge from './lib/common/bsddBridge/useCefSharpBridge';
 

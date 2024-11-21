@@ -67,6 +67,7 @@
     "swagger-typescript-api": "^13.0.3",
     "tslib": "^2.5.0",
     "typescript": "^5.0.4",
+    "vite-plugin-dts": "^4.3.0",
     "vitest": "^0.28.4"
   },
   "dependencies": {

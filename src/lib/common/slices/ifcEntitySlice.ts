@@ -3,7 +3,7 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
 import { Association, IfcClassificationReference, IfcEntity, IfcPropertySet } from '../IfcData/ifc';
 
-interface EntitiesState {
+export interface EntitiesState {
   type?: string;
   name?: string;
   description?: string;

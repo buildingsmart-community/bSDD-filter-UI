@@ -3,9 +3,9 @@ import { useDisclosure } from '@mantine/hooks';
 import { t } from 'i18next';
 import { useState } from 'react';
 
-import BsddSearch from './lib/bsdd_search/main';
-import BsddSelection from './lib/bsdd_selection/main';
-import Settings from './lib/bsdd_settings/SettingsComponent';
+import BsddSearch from './lib/BsddSearch';
+import BsddSelection from './lib/BsddSelection';
+import Settings from './lib/BsddSettings/SettingsComponent';
 import { ApiFunctionsProvider } from './lib/common/apiFunctionsContext';
 import useCefSharpBridge from './lib/common/bsddBridge/useCefSharpBridge';
 import { IfcEntity } from './lib/common/IfcData/ifc';

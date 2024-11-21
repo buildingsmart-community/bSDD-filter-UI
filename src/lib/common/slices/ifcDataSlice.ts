@@ -4,11 +4,11 @@ import type { RootState } from '../app/store';
 import { Association, IfcClassification, IfcClassificationReference, IfcEntity } from '../IfcData/ifc';
 import { patchIfcClassificationReference } from '../IfcData/ifcValidators';
 
-interface EntitiesState {
+export interface IfcDataState {
   loadedIfcEntities: IfcEntity[];
 }
 
-const initialState: EntitiesState = {
+const initialState: IfcDataState = {
   loadedIfcEntities: [],
 };
 

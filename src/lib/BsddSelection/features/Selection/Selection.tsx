@@ -43,7 +43,7 @@ function groupEntitiesBy(array: IfcEntity[], property: keyof IfcEntity) {
 function Selection({ loading }: SelectionProps) {
   const { t } = useTranslation();
   const ifcEntities = useAppSelector(selectIfcEntities);
-  const [groupByKey, setGroupByKey] = useState<keyof IfcEntity>('objectType');
+  const [groupByKey, setGroupByKey] = useState<keyof IfcEntity>('type');
 
   const categoryCollapseList = useMemo(() => {
     if (!ifcEntities) return [];

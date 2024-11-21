@@ -1,8 +1,8 @@
 import { Container, Tabs } from '@mantine/core';
 import { t } from 'i18next';
 
-import BsddSelection from './lib/bsdd_selection/main';
-import Settings from './lib/bsdd_settings/SettingsComponent';
+import BsddSelection from './lib/BsddSelection';
+import Settings from './lib/BsddSettings/SettingsComponent';
 import { ApiFunctionsProvider } from './lib/common/apiFunctionsContext';
 import useCefSharpBridge from './lib/common/bsddBridge/useCefSharpBridge';
 

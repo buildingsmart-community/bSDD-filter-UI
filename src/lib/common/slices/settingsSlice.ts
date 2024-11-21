@@ -107,7 +107,7 @@ export const selectActiveDictionaryUris = createSelector(selectActiveDictionarie
   activeDictionaries.map((dictionary) => dictionary.ifcClassification.location),
 );
 
-export const selectMainDictionaryUri = createSelector(selectMainDictionary, (mainDictionary) =>
+export const selectMainDictionaryUri = createSelector(selectMainDictionary, (mainDictionary: BsddDictionary | null) =>
   mainDictionary ? mainDictionary.ifcClassification.location : null,
 );
 
