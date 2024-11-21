@@ -1,5 +1,5 @@
 export interface BsddBridge {
-  bsddSearch?: (bsddBridgeDataJson: string) => void;
+  bsddSearch?: (ifcEntitiesJson: string) => void;
   bsddSelect?: (ifcEntitiesJson: string) => void;
   save?: (bsddBridgeDataJson: string) => Promise<string>;
   cancel?: () => void;

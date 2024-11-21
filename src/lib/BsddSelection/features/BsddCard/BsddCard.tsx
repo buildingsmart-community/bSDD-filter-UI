@@ -68,7 +68,7 @@ function BsddCard({ item: ifcEntity, index, setCardColor: setCategoryColor }: Bs
   }, [ifcEntity, activeDictionaries]);
 
   function handleBsddSearch(ifcEntity: IfcEntity) {
-    bsddSelect([ifcEntity]);
+    bsddSearch([ifcEntity]);
   }
 
   function handleBsddSelect(ifcEntity: IfcEntity) {
