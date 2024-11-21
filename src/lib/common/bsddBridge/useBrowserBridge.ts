@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { BsddDictionary, BsddSettings } from '../IfcData/bsddBridgeData';
+import { BsddBridgeData, BsddDictionary, BsddSettings } from '../IfcData/bsddBridgeData';
 import { IfcEntity } from '../IfcData/ifc';
 import defaultSettings from '../settings/defaultSettings';
 import {
@@ -105,16 +105,16 @@ const useBrowserBridge = () => {
     }
   }, [mainDictionary, ifcDictionary, filterDictionaries, language, includeTestDictionaries, setQuery, query]);
 
-  const bsddSearch = (ifcEntity: IfcEntity) => {
-    console.log('bsddSearch called with:', ifcEntity);
+  const bsddSearch = (bsddBridgeData: BsddBridgeData) => {
+    console.log('bsddSearch called with:', bsddBridgeData);
   };
 
-  const bsddSelect = (ifcEntity: IfcEntity) => {
-    console.log('bsddSelect called with:', ifcEntity);
+  const bsddSelect = (ifcEntities: IfcEntity[]) => {
+    console.log('bsddSelect called with:', ifcEntities);
   };
 
-  const bsddSearchSave = (ifcEntities: IfcEntity[]) => {
-    console.log('bsddSearchSave called with:', ifcEntities);
+  const bsddSearchSave = (bsddBridgeData: BsddBridgeData) => {
+    console.log('bsddSearchSave called with:', bsddBridgeData);
     return Promise.resolve('success');
   };
 

@@ -11,6 +11,7 @@ const initialState: BsddSettings = {
   filterDictionaries: [],
   language: 'en-GB',
   includeTestDictionaries: undefined,
+  // propertyIsInstanceMap: {},
 };
 
 const settingsSlice = createSlice({
@@ -33,6 +34,9 @@ const settingsSlice = createSlice({
     setIncludeTestDictionaries(state, action: PayloadAction<boolean | undefined>) {
       state.includeTestDictionaries = action.payload;
     },
+    // setPropertyIsInstanceMap(state, action: PayloadAction<Record<string, boolean>>) {
+    //   state.propertyIsInstanceMap = action.payload;
+    // },
     setSettings(state: BsddSettings, action: PayloadAction<BsddSettings>) {
       const { mainDictionary, ifcDictionary, filterDictionaries, language, includeTestDictionaries } = action.payload;
 
@@ -101,6 +105,7 @@ export const selectFilterDictionaries = (state: RootState) => state.settings.fil
 export const selectLanguage = (state: RootState) => state.settings.language;
 export const selectIncludeTestDictionaries = (state: RootState) =>
   (state.settings as BsddSettings).includeTestDictionaries;
+// export const selectPropertyIsInstanceMap = (state: RootState) => state.settings.propertyIsInstanceMap;
 export const selectSettings = (state: RootState) => state.settings;
 
 export const selectActiveDictionaryUris = createSelector(selectActiveDictionaries, (activeDictionaries) =>
@@ -111,8 +116,14 @@ export const selectMainDictionaryUri = createSelector(selectMainDictionary, (mai
   mainDictionary ? mainDictionary.ifcClassification.location : null,
 );
 
-export const { setMainDictionary, setIfcDictionary, setFilterDictionaries, setLanguage, setIncludeTestDictionaries } =
-  settingsSlice.actions;
+export const {
+  setMainDictionary,
+  setIfcDictionary,
+  setFilterDictionaries,
+  setLanguage,
+  setIncludeTestDictionaries,
+  // setPropertyIsInstanceMap,
+} = settingsSlice.actions;
 
 export const setSettingsWithValidation = createAsyncThunk(
   'settings/setSettingsWithValidation',

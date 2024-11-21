@@ -10,24 +10,27 @@ import { ApiFunctionsProvider } from './lib/common/apiFunctionsContext';
 import useCefSharpBridge from './lib/common/bsddBridge/useCefSharpBridge';
 import { IfcEntity } from './lib/common/IfcData/ifc';
 import { mockData } from './mocks/mockData';
+import { BsddBridgeData } from './lib/common/IfcData/bsddBridgeData';
 
 function BsddCombinedLoader() {
   const [opened, { open, close }] = useDisclosure(false);
   const [selectedIfcEntity, setSelectedIfcEntity] = useState<IfcEntity | undefined>(mockData.ifcData[0]);
   const { bsddSearchSave, bsddSearchCancel } = useCefSharpBridge();
 
-  function bsddSearch(ifcProduct: IfcEntity) {
-    console.log('Open bsddSearch called with:', ifcProduct);
-
-    setSelectedIfcEntity(ifcProduct);
+  function bsddSearch(bsddBridgeData: BsddBridgeData) {
+    console.log('Open bsddSearch called with:', bsddBridgeData);
+    const { ifcData } = bsddBridgeData;
+    if (ifcData?.length > 0) {
+      setSelectedIfcEntity(ifcData[0]);
+    }
 
     open();
   }
 
-  function bsddSelect(ifcProduct: IfcEntity) {
-    const ifcEntityJson = JSON.stringify(ifcProduct);
+  function bsddSelect(ifcEntities: IfcEntity[]) {
+    const ifcEntitiesJson = JSON.stringify(ifcEntities);
 
-    console.log('bsddSelect called with:', ifcEntityJson);
+    console.log('bsddSelect called with:', ifcEntitiesJson);
   }
 
   const apiFunctions = {

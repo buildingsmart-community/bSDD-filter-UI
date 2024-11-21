@@ -8,9 +8,10 @@ import { useTranslation } from 'react-i18next';
 import { useApiFunctions } from '../../../common/apiFunctionsContext';
 import { useAppSelector } from '../../../common/app/hooks';
 import { IfcEntity } from '../../../common/IfcData/ifc';
-import { selectActiveDictionaries, selectMainDictionary } from '../../../common/slices/settingsSlice';
+import { selectActiveDictionaries, selectMainDictionary, selectSettings } from '../../../common/slices/settingsSlice';
 import getClassUriFromDictionary, { ClassificationStatus } from '../../../common/tools/checkIfcClassification';
 import { Color, colorMap } from '../../../common/tools/colors';
+import { BsddBridgeData } from '../../../common/IfcData/bsddBridgeData';
 
 interface BsddCardProps {
   item: IfcEntity;
@@ -30,6 +31,7 @@ function BsddCard({ item: ifcEntity, index, setCardColor: setCategoryColor }: Bs
   const { t } = useTranslation();
   const activeDictionaries = useAppSelector(selectActiveDictionaries);
   const mainDictionary = useAppSelector(selectMainDictionary);
+  const settings = useAppSelector(selectSettings);
   const { bsddSearch, bsddSelect } = useApiFunctions();
 
   const [cardColor, setCardColor] = useState<Color>('grey');
@@ -65,6 +67,19 @@ function BsddCard({ item: ifcEntity, index, setCardColor: setCategoryColor }: Bs
     );
   }, [ifcEntity, activeDictionaries]);
 
+  function handleBsddSearch(ifcEntity: IfcEntity) {
+    const bridgeData: BsddBridgeData = {
+      ifcData: [ifcEntity],
+      settings: settings,
+      propertyIsInstanceMap: {},
+    };
+    bsddSearch(bridgeData);
+  }
+
+  function handleBsddSelect(ifcEntity: IfcEntity) {
+    bsddSelect([ifcEntity]);
+  }
+
   return (
     <Group mt="xs" justify="space-between" className="flexGroup">
       <ColorSwatch size="1.5em" color={colorMap[cardColor]} />
@@ -92,14 +107,14 @@ function BsddCard({ item: ifcEntity, index, setCardColor: setCategoryColor }: Bs
       <Tooltip label={t('attachToType')}>
         <ActionIcon
           radius="xl"
-          onClick={() => bsddSearch(ifcEntity)}
+          onClick={() => handleBsddSearch(ifcEntity)}
           disabled={!mainDictionary?.ifcClassification?.location}
         >
           <IconPencil size={20} />
         </ActionIcon>
       </Tooltip>
       <Tooltip label={t('selectObjects')}>
-        <ActionIcon radius="xl" onClick={() => bsddSelect(ifcEntity)}>
+        <ActionIcon radius="xl" onClick={() => handleBsddSelect(ifcEntity)}>
           <IconPointer size={20} />
         </ActionIcon>
       </Tooltip>

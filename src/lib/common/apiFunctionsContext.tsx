@@ -1,13 +1,14 @@
 import { createContext, ReactNode, useContext } from 'react';
 
 import { IfcEntity } from './IfcData/ifc';
+import { BsddBridgeData } from './IfcData/bsddBridgeData';
 
 interface ApiFunctionsContextType {
   loadSettings?: () => Promise<string>;
   loadBridgeData?: () => Promise<string>;
-  bsddSearch?: (ifcProduct: any) => void;
-  bsddSelect?: (ifcProduct: any) => void;
-  bsddSearchSave?: (ifcEntities: IfcEntity[]) => Promise<string>;
+  bsddSearch?: (bsddBridgeData: BsddBridgeData) => void;
+  bsddSelect?: (ifcEntities: IfcEntity[]) => void;
+  bsddSearchSave?: (bsddBridgeData: BsddBridgeData) => Promise<string>;
   bsddSearchCancel?: () => void;
 }
 

@@ -22,12 +22,14 @@ import {
   selectIncludeTestDictionaries,
   selectLanguage,
   selectMainDictionary,
+  selectSettings,
 } from '../common/slices/settingsSlice';
 import Apply from './Apply';
 import { BsddSearchProps } from './BsddSearchProps';
 import Classifications from './Classifications';
 import PropertySets from './PropertySets';
 import Search from './Search';
+import { BsddBridgeData } from '../common/IfcData/bsddBridgeData';
 
 export interface Option {
   label: string;
@@ -58,11 +60,11 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
   const mainDictionary = useAppSelector(selectMainDictionary);
   const languageCode = useAppSelector(selectLanguage);
 
-  const includeTestDictionaries = useAppSelector(selectIncludeTestDictionaries);
   const activeDictionaryLocations = useAppSelector(selectActiveDictionaryUris);
   const ifcEntity = useAppSelector(selectIfcEntity);
   const loadedIfcEntity = useAppSelector(selectLoadedIfcEntity);
   const mainDictionaryClassificationUri = useAppSelector(selectMainDictionaryClassificationUri);
+  const settings = useAppSelector(selectSettings);
 
   const [height, setHeight] = useState(minHeight); // Initial height
   const [panelHeight, setPanelHeight] = useState('auto'); // Initial height of the Accordion Panel
@@ -76,9 +78,17 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
     }
   }, [dispatch, selectedIfcEntity]);
 
+  function createBridgeData(ifcEntity: IfcEntity): BsddBridgeData {
+    return {
+      ifcData: [ifcEntity],
+      settings,
+      propertyIsInstanceMap: {},
+    };
+  }
+
   const callback = useCallback(
     (ifcProduct: IfcEntity) => {
-      bsddSearchSave([ifcProduct]).then((actualResult) => {
+      bsddSearchSave(createBridgeData(ifcProduct)).then((actualResult) => {
         console.log('Sent iFC data back to host', actualResult);
       });
     },

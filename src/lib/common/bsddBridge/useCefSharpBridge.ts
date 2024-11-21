@@ -39,7 +39,7 @@ const useCefSharpBridge = () => {
             console.log('CefSharp loadBridgeData.');
             const bsddBridgeData: BsddBridgeData = JSON.parse(BridgeDataJson);
             console.log('CefSharp bsddBridgeData:', bsddBridgeData);
-            const { ifcData, settings } = bsddBridgeData;
+            const { ifcData, settings, propertyIsInstanceMap } = bsddBridgeData;
             if (settings) {
               dispatch(setSettingsWithValidation(settings));
               console.log('CefSharp settings:', settings);
@@ -49,6 +49,10 @@ const useCefSharpBridge = () => {
               dispatch(setIfcEntity(ifcData[0]));
               console.log('CefSharp initial IFC entities:', ifcData);
             }
+            // if (propertyIsInstanceMap) {
+            //   dispatch(setPropertyIsInstanceMap(propertyIsInstanceMap));
+            //   console.log('CefSharp propertyIsInstanceMap:', propertyIsInstanceMap);
+            // }
           });
 
           // Define global functions that can be called from the CefSharp backend
@@ -98,8 +102,8 @@ const useCefSharpBridge = () => {
     };
   }, [dispatch]);
 
-  const bsddSearch = (ifcEntity: IfcEntity) => {
-    const ifcEntityJson = JSON.stringify(ifcEntity);
+  const bsddSearch = (bsddBridgeData: BsddBridgeData) => {
+    const ifcEntityJson = JSON.stringify(bsddBridgeData);
     if (window?.bsddBridge?.bsddSearch) {
       window.bsddBridge.bsddSearch(ifcEntityJson);
     } else {
@@ -107,7 +111,7 @@ const useCefSharpBridge = () => {
     }
   };
 
-  const bsddSelect = (ifcEntity: IfcEntity) => {
+  const bsddSelect = (ifcEntity: IfcEntity[]) => {
     const ifcEntityJson = JSON.stringify(ifcEntity);
     if (window?.bsddBridge?.bsddSelect) {
       window.bsddBridge.bsddSelect(ifcEntityJson);
@@ -116,8 +120,8 @@ const useCefSharpBridge = () => {
     }
   };
 
-  const bsddSearchSave = (ifcEntities: IfcEntity[]) => {
-    const ifcEntitiesJson = JSON.stringify(ifcEntities);
+  const bsddSearchSave = (bsddBridgeData: BsddBridgeData) => {
+    const ifcEntitiesJson = JSON.stringify(bsddBridgeData);
     if (window?.bsddBridge?.save) {
       return window.bsddBridge.save(ifcEntitiesJson);
     }
