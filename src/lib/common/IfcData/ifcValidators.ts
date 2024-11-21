@@ -249,14 +249,14 @@ export async function patchIfcClassificationReference(
 }
 
 /**
- * Validates the IFC classification. If valid, returns a new object with parameterMapping and IfcClassification.
+ * Validates the bsddDictionary IfcClassification. If valid, returns a new object with parameterMapping and IfcClassification.
  * If the bsddDictionary or the ifcClassification location is null, returns null.
  *
  * @param state - The RootState object.
  * @param bsddDictionary - The BsddDictionary object to validate.
  * @returns A new BsddDictionary object or null.
  */
-export async function validateIfcClassification(
+export async function validateDictionary(
   state: RootState,
   dispatch: AppDispatch,
   bsddDictionary: BsddDictionary | null,

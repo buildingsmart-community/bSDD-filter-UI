@@ -2,7 +2,7 @@ import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@r
 
 import type { AppDispatch, RootState } from '../app/store';
 import { BsddDictionary, BsddSettings } from '../IfcData/bsddBridgeData';
-import { validateIfcClassification } from '../IfcData/ifcValidators';
+import { validateDictionary } from '../IfcData/ifcValidators';
 import i18n from '../i18n';
 
 const initialState: BsddSettings = {
@@ -132,16 +132,16 @@ export const setSettingsWithValidation = createAsyncThunk(
     const appDispatch = dispatch as AppDispatch;
 
     const validatedMainDictionary = settings.mainDictionary
-      ? await validateIfcClassification(state, appDispatch, settings.mainDictionary)
+      ? await validateDictionary(state, appDispatch, settings.mainDictionary)
       : null;
 
     const validatedIfcDictionary = settings.ifcDictionary
-      ? await validateIfcClassification(state, appDispatch, settings.ifcDictionary)
+      ? await validateDictionary(state, appDispatch, settings.ifcDictionary)
       : null;
 
     const validatedFilterDictionaries = await Promise.all(
       settings.filterDictionaries.map(async (dictionary) => {
-        return await validateIfcClassification(state, appDispatch, dictionary);
+        return await validateDictionary(state, appDispatch, dictionary);
       }),
     ).then((results) => results.filter((dictionary): dictionary is BsddDictionary => dictionary !== null));
 
