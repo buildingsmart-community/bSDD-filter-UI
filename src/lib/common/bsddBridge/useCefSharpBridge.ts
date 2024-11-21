@@ -102,8 +102,8 @@ const useCefSharpBridge = () => {
     };
   }, [dispatch]);
 
-  const bsddSearch = (bsddBridgeData: BsddBridgeData) => {
-    const ifcEntityJson = JSON.stringify(bsddBridgeData);
+  const bsddSearch = (ifcEntities: IfcEntity[]) => {
+    const ifcEntityJson = JSON.stringify(ifcEntities);
     if (window?.bsddBridge?.bsddSearch) {
       window.bsddBridge.bsddSearch(ifcEntityJson);
     } else {
@@ -111,8 +111,8 @@ const useCefSharpBridge = () => {
     }
   };
 
-  const bsddSelect = (ifcEntity: IfcEntity[]) => {
-    const ifcEntityJson = JSON.stringify(ifcEntity);
+  const bsddSelect = (ifcEntities: IfcEntity[]) => {
+    const ifcEntityJson = JSON.stringify(ifcEntities);
     if (window?.bsddBridge?.bsddSelect) {
       window.bsddBridge.bsddSelect(ifcEntityJson);
     } else {

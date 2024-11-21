@@ -105,8 +105,8 @@ const useBrowserBridge = () => {
     }
   }, [mainDictionary, ifcDictionary, filterDictionaries, language, includeTestDictionaries, setQuery, query]);
 
-  const bsddSearch = (bsddBridgeData: BsddBridgeData) => {
-    console.log('bsddSearch called with:', bsddBridgeData);
+  const bsddSearch = (ifcEntities: IfcEntity[]) => {
+    console.log('bsddSearch called with:', ifcEntities);
   };
 
   const bsddSelect = (ifcEntities: IfcEntity[]) => {

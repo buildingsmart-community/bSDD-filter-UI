@@ -17,11 +17,10 @@ function BsddCombinedLoader() {
   const [selectedIfcEntity, setSelectedIfcEntity] = useState<IfcEntity | undefined>(mockData.ifcData[0]);
   const { bsddSearchSave, bsddSearchCancel } = useCefSharpBridge();
 
-  function bsddSearch(bsddBridgeData: BsddBridgeData) {
-    console.log('Open bsddSearch called with:', bsddBridgeData);
-    const { ifcData } = bsddBridgeData;
-    if (ifcData?.length > 0) {
-      setSelectedIfcEntity(ifcData[0]);
+  function bsddSearch(ifcEntities: IfcEntity[]) {
+    console.log('Open bsddSearch called with:', ifcEntities);
+    if (ifcEntities?.length > 0) {
+      setSelectedIfcEntity(ifcEntities[0]);
     }
 
     open();
