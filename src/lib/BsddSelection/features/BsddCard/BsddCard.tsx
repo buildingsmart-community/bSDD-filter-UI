@@ -68,12 +68,7 @@ function BsddCard({ item: ifcEntity, index, setCardColor: setCategoryColor }: Bs
   }, [ifcEntity, activeDictionaries]);
 
   function handleBsddSearch(ifcEntity: IfcEntity) {
-    const bridgeData: BsddBridgeData = {
-      ifcData: [ifcEntity],
-      settings: settings,
-      propertyIsInstanceMap: {},
-    };
-    bsddSearch(bridgeData);
+    bsddSelect([ifcEntity]);
   }
 
   function handleBsddSelect(ifcEntity: IfcEntity) {
