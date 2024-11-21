@@ -6,10 +6,14 @@ import { patchIfcClassificationReference } from '../IfcData/ifcValidators';
 
 export interface IfcDataState {
   loadedIfcEntities: IfcEntity[];
+  savedPropertyIsInstanceMap: Record<string, boolean>;
+  propertyIsInstanceMap: Record<string, boolean>;
 }
 
 const initialState: IfcDataState = {
   loadedIfcEntities: [],
+  savedPropertyIsInstanceMap: {},
+  propertyIsInstanceMap: {},
 };
 
 const ifcDataSlice = createSlice({
@@ -19,12 +23,20 @@ const ifcDataSlice = createSlice({
     setLoadedIfcEntities: (state, action: PayloadAction<IfcEntity[]>) => {
       state.loadedIfcEntities = action.payload;
     },
+    setSavedPropertyIsInstanceMap(state, action: PayloadAction<Record<string, boolean>>) {
+      state.savedPropertyIsInstanceMap = action.payload;
+      state.propertyIsInstanceMap = action.payload;
+    },
+    setPropertyIsInstance(state, action: PayloadAction<{ propertyName: string; value: boolean }>) {
+      state.propertyIsInstanceMap[action.payload.propertyName] = action.payload.value;
+    },
   },
 });
 
-export const { setLoadedIfcEntities } = ifcDataSlice.actions;
+export const { setLoadedIfcEntities, setSavedPropertyIsInstanceMap, setPropertyIsInstance } = ifcDataSlice.actions;
 
 export const selectIfcEntities = (state: RootState) => state.ifcData.loadedIfcEntities;
+export const selectPropertyIsInstanceMap = (state: RootState) => state.ifcData.propertyIsInstanceMap;
 
 /**
  * Converts an IFC entity name to its corresponding IfcTypeProduct name, even if it is an IfcProduct.

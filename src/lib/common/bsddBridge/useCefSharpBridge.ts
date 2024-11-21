@@ -5,7 +5,7 @@ import { useAppDispatch } from '../app/hooks';
 import { BsddBridgeData, BsddSettings } from '../IfcData/bsddBridgeData';
 import { IfcEntity } from '../IfcData/ifc';
 import defaultSettings from '../settings/defaultSettings';
-import { setValidatedIfcData } from '../slices/ifcDataSlice';
+import { setSavedPropertyIsInstanceMap, setValidatedIfcData } from '../slices/ifcDataSlice';
 import { setIfcEntity } from '../slices/ifcEntitySlice';
 import { setSettingsWithValidation } from '../slices/settingsSlice';
 import { BsddBridge } from './BsddBridgeInterface';
@@ -49,10 +49,10 @@ const useCefSharpBridge = () => {
               dispatch(setIfcEntity(ifcData[0]));
               console.log('CefSharp initial IFC entities:', ifcData);
             }
-            // if (propertyIsInstanceMap) {
-            //   dispatch(setPropertyIsInstanceMap(propertyIsInstanceMap));
-            //   console.log('CefSharp propertyIsInstanceMap:', propertyIsInstanceMap);
-            // }
+            if (propertyIsInstanceMap) {
+              dispatch(setSavedPropertyIsInstanceMap(propertyIsInstanceMap));
+              console.log('CefSharp propertyIsInstanceMap:', propertyIsInstanceMap);
+            }
           });
 
           // Define global functions that can be called from the CefSharp backend

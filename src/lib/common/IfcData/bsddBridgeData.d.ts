@@ -18,7 +18,6 @@ export interface BsddSettings {
   filterDictionaries: BsddDictionary[]; // Uri[]
   language: string;
   includeTestDictionaries: boolean | undefined;
-  // propertyIsInstanceMap: Record<string, boolean>;
 }
 
 export interface BsddBridgeData {

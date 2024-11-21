@@ -11,7 +11,6 @@ const initialState: BsddSettings = {
   filterDictionaries: [],
   language: 'en-GB',
   includeTestDictionaries: undefined,
-  // propertyIsInstanceMap: {},
 };
 
 const settingsSlice = createSlice({
@@ -34,9 +33,6 @@ const settingsSlice = createSlice({
     setIncludeTestDictionaries(state, action: PayloadAction<boolean | undefined>) {
       state.includeTestDictionaries = action.payload;
     },
-    // setPropertyIsInstanceMap(state, action: PayloadAction<Record<string, boolean>>) {
-    //   state.propertyIsInstanceMap = action.payload;
-    // },
     setSettings(state: BsddSettings, action: PayloadAction<BsddSettings>) {
       const { mainDictionary, ifcDictionary, filterDictionaries, language, includeTestDictionaries } = action.payload;
 
@@ -122,7 +118,6 @@ export const {
   setFilterDictionaries,
   setLanguage,
   setIncludeTestDictionaries,
-  // setPropertyIsInstanceMap,
 } = settingsSlice.actions;
 
 export const setSettingsWithValidation = createAsyncThunk(

@@ -1,17 +1,18 @@
-import { Select, TextInput } from '@mantine/core';
+import { Checkbox, Group, rem, Select, Switch, TextInput, Tooltip, useMantineTheme } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
-import { useAppDispatch, useAppSelector } from '../common/app/hooks';
+import { useAppDispatch, useAppSelector } from '../../../common/app/hooks';
 import {
   IfcProperty,
   IfcPropertyEnumeratedValue,
   IfcPropertySet,
   IfcPropertySingleValue,
   IfcValue,
-} from '../common/IfcData/ifc';
-import { getInputDescription } from '../common/tools/utils';
-import { selectIsDefinedBy, setIsDefinedBy } from '../common/slices/ifcEntitySlice';
-import Check from './Checkbox';
+} from '../../../common/IfcData/ifc';
+import { getInputDescription } from '../../../common/tools/utils';
+import { selectIsDefinedBy, setIsDefinedBy } from '../../../common/slices/ifcEntitySlice';
+import Check from '../../Checkbox';
+import { setPropertyIsInstance } from '../../../common/slices/ifcDataSlice';
 
 interface PropertyProps {
   propertySet: IfcPropertySet;
@@ -49,6 +50,8 @@ const updatePropertySets = (
 function Property({ propertySet, property, property_natural_language_name }: PropertyProps) {
   const dispatch = useAppDispatch();
   const propertySets = useAppSelector(selectIsDefinedBy);
+  const propertyIsInstanceMap = useAppSelector((state) => state.ifcData.propertyIsInstanceMap);
+  const savedPropertyIsInstanceMap = useAppSelector((state) => state.ifcData.savedPropertyIsInstanceMap);
   const [input, setInput] = useState<any>();
 
   useEffect(() => {
@@ -134,6 +137,26 @@ function Property({ propertySet, property, property_natural_language_name }: Pro
     }
   }, [property, propertySet, setInput, property_natural_language_name, dispatch, propertySets]);
 
-  return input;
+  const isSwitchDisabled = savedPropertyIsInstanceMap.hasOwnProperty(property.name);
+  const checked = propertyIsInstanceMap[property.name] || false;
+
+  return (
+    <Group>
+      <div style={{ flex: 1 }}>{input}</div>
+      <Tooltip label="Set as instance property" withArrow>
+        <Checkbox
+          style={{ marginTop: '2rem' }}
+          disabled={isSwitchDisabled}
+          checked={checked}
+          onChange={(event) => {
+            if (!isSwitchDisabled) {
+              dispatch(setPropertyIsInstance({ propertyName: property.name, value: event.currentTarget.checked }));
+            }
+          }}
+        />
+      </Tooltip>
+    </Group>
+  );
 }
+
 export default Property;

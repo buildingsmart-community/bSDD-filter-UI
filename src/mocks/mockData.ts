@@ -38,6 +38,12 @@ export const mockData: BsddBridgeData = {
     language: 'en-GB',
     includeTestDictionaries: true,
   },
+  propertyIsInstanceMap: {
+    'IsExternal': false,
+    'Bouwnummer': true,
+    'FireRating': true,
+    'ObjectType': false,
+  },
   ifcData: [
     {
       type: 'IfcObject',

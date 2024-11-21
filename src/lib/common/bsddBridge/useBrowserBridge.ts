@@ -12,6 +12,8 @@ import {
   selectIfcDictionary,
 } from '../slices/settingsSlice';
 import { useQueryParams, StringParam, ArrayParam, BooleanParam, withDefault } from 'use-query-params';
+import { setSavedPropertyIsInstanceMap } from '../slices/ifcDataSlice';
+import { mockData } from '../../../mocks/mockData';
 
 const useBrowserBridge = () => {
   const dispatch = useAppDispatch();
@@ -76,6 +78,9 @@ const useBrowserBridge = () => {
           includeTestDictionaries: query.includeTestDictionaries || false,
         };
         dispatch(setSettingsWithValidation(settings));
+      }
+      if (mockData.propertyIsInstanceMap) {
+        dispatch(setSavedPropertyIsInstanceMap(mockData.propertyIsInstanceMap));
       }
     }
   }, [query, dispatch]);

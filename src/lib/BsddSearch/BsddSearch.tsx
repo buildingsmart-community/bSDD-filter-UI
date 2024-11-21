@@ -15,7 +15,7 @@ import {
   updateMainDictionaryClassificationUri,
   updatePropertyNaturalLanguageNames,
 } from '../common/slices/bsddSlice';
-import { selectLoadedIfcEntity } from '../common/slices/ifcDataSlice';
+import { selectLoadedIfcEntity, selectPropertyIsInstanceMap } from '../common/slices/ifcDataSlice';
 import { selectIfcEntity, setIfcEntity } from '../common/slices/ifcEntitySlice';
 import {
   selectActiveDictionaryUris,
@@ -65,6 +65,7 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
   const loadedIfcEntity = useAppSelector(selectLoadedIfcEntity);
   const mainDictionaryClassificationUri = useAppSelector(selectMainDictionaryClassificationUri);
   const settings = useAppSelector(selectSettings);
+  const propertyIsInstanceMap = useAppSelector(selectPropertyIsInstanceMap);
 
   const [height, setHeight] = useState(minHeight); // Initial height
   const [panelHeight, setPanelHeight] = useState('auto'); // Initial height of the Accordion Panel
@@ -82,7 +83,7 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
     return {
       ifcData: [ifcEntity],
       settings,
-      propertyIsInstanceMap: {},
+      propertyIsInstanceMap: propertyIsInstanceMap,
     };
   }
 

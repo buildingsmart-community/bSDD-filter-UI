@@ -16,7 +16,7 @@ import { selectLoadedIfcEntity } from '../common/slices/ifcDataSlice';
 import { selectIsDefinedBy, setIsDefinedBy } from '../common/slices/ifcEntitySlice';
 import { selectLanguage } from '../common/slices/settingsSlice';
 import type { PropertySetMap } from './BsddSearch';
-import Property from './Property';
+import Property from './features/Property/Property';
 
 const valueTypeMapping: { [key: string]: string } = {
   Boolean: 'IfcBoolean',
