@@ -79,7 +79,7 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
     }
   }, [dispatch, selectedIfcEntity]);
 
-  function createBridgeData(ifcEntity: IfcEntity): BsddBridgeData {
+  function createBridgeData(ifcEntity: IfcEntity, propertyIsInstanceMap: Record<string, boolean>): BsddBridgeData {
     return {
       ifcData: [ifcEntity],
       settings,
@@ -89,11 +89,12 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
 
   const callback = useCallback(
     (ifcProduct: IfcEntity) => {
-      bsddSearchSave(createBridgeData(ifcProduct)).then((actualResult) => {
+      console.log('Sending bsddSearchSave data back to host', ifcProduct);
+      bsddSearchSave(createBridgeData(ifcProduct, propertyIsInstanceMap)).then((actualResult) => {
         console.log('Sent iFC data back to host', actualResult);
       });
     },
-    [bsddSearchSave],
+    [bsddSearchSave, propertyIsInstanceMap],
   );
 
   useEffect(() => {

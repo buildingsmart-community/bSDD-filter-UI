@@ -122,6 +122,7 @@ const useCefSharpBridge = () => {
 
   const bsddSearchSave = (bsddBridgeData: BsddBridgeData) => {
     const ifcEntitiesJson = JSON.stringify(bsddBridgeData);
+    console.log('bsddBridge save:', ifcEntitiesJson);
     if (window?.bsddBridge?.save) {
       return window.bsddBridge.save(ifcEntitiesJson);
     }
