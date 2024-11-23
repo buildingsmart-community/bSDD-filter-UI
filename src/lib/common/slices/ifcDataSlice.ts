@@ -74,15 +74,23 @@ function ifcEntityToBsddClass(type: string | undefined, predefinedType: string |
  * Creates an IfcClassificationReference object based on the provided parameters.
  * @param ifcEntity - The IfcEntity object.
  * @param referencedSource - The IfcClassification object or undefined.
- * @returns The created IfcClassificationReference object.
+ * @returns The created IfcClassificationReference object or null if the entity type is not defined.
  */
 function bsddIfcClassification(
   ifcEntity: IfcEntity,
-  referencedSource: IfcClassification | undefined,
-): IfcClassificationReference {
+  referencedSource?: IfcClassification,
+): IfcClassificationReference | null {
+  if (!ifcEntity.type) {
+    return null;
+  }
+
+  const identification = ifcEntityToBsddClass(ifcEntity.type, ifcEntity.predefinedType);
+  const location = referencedSource?.location ? `${referencedSource.location}/class/${identification}` : undefined;
+
   return {
     type: 'IfcClassificationReference',
-    identification: ifcEntityToBsddClass(ifcEntity.type, ifcEntity.predefinedType),
+    identification,
+    location,
     referencedSource,
   };
 }
@@ -113,7 +121,7 @@ async function processAssociations(
 }
 
 /**
- * Sets the validated IFC data by chanking and fixing the associations of each IFC entity.
+ * Sets the validated IFC data by checking and fixing the associations of each IFC entity.
  *
  * @param ifcEntities - The array of IFC entities to be validated.
  * @param dispatch - The Redux dispatch function.
@@ -130,11 +138,13 @@ export const setValidatedIfcData = createAsyncThunk(
         if (ifcEntity.type) {
           ifcEntity.type = ifcEntityAsType(ifcEntity.type);
         }
-
-        const associations: Association[] = [
-          ...(ifcEntity.hasAssociations || []),
-          bsddIfcClassification(ifcEntity, state.settings.ifcDictionary?.ifcClassification),
-        ];
+        let associations: Association[];
+        const ifcClass = bsddIfcClassification(ifcEntity, state.settings.ifcDictionary?.ifcClassification);
+        if (ifcClass) {
+          associations = [ifcClass, ...(ifcEntity.hasAssociations || [])];
+        } else {
+          associations = [...(ifcEntity.hasAssociations || [])];
+        }
 
         const processedAssociations = await processAssociations(associations, dispatch, state);
 

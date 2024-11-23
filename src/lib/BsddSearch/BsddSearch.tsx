@@ -1,4 +1,4 @@
-import { Accordion, Alert, Button, Container, Group, Space, TextInput, Title } from '@mantine/core';
+import { Accordion, Alert, Box, Button, Container, Group, Space, TextInput, Title } from '@mantine/core';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -19,7 +19,6 @@ import { selectLoadedIfcEntity, selectPropertyIsInstanceMap } from '../common/sl
 import { selectIfcEntity, setIfcEntity } from '../common/slices/ifcEntitySlice';
 import {
   selectActiveDictionaryUris,
-  selectIncludeTestDictionaries,
   selectLanguage,
   selectMainDictionary,
   selectSettings,
@@ -49,7 +48,7 @@ const minHeight = 60.7969;
 let startY = 0;
 let startHeight = 0;
 
-function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
+function BsddSearch({ selectedIfcEntities }: BsddSearchProps) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { bsddSearchSave, bsddSearchCancel } = useApiFunctions();
@@ -74,10 +73,10 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
   const mainDictionaryClassification = useAppSelector(selectMainDictionaryClassification);
 
   useEffect(() => {
-    if (selectedIfcEntity) {
-      dispatch(setIfcEntity(selectedIfcEntity));
+    if (selectedIfcEntities) {
+      dispatch(setIfcEntity(selectedIfcEntities));
     }
-  }, [dispatch, selectedIfcEntity]);
+  }, [dispatch, selectedIfcEntities]);
 
   function createBridgeData(ifcEntity: IfcEntity, propertyIsInstanceMap: Record<string, boolean>): BsddBridgeData {
     return {
@@ -157,7 +156,7 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
   };
 
   return (
-    <Container>
+    <Box>
       <TextInput type="hidden" name="ifcType" id="ifcType" value="" />
       <TextInput type="hidden" name="name" id="name" value="" />
       <TextInput type="hidden" name="material" id="material" value="" />
@@ -204,7 +203,7 @@ function BsddSearch({ selectedIfcEntity }: BsddSearchProps) {
           </a>
         </Alert>
       )}
-    </Container>
+    </Box>
   );
 }
 

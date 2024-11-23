@@ -31,28 +31,30 @@ function checkIfcClassificationUri(
 }
 
 /**
- * Retrieves the classification URI for the given IFC entity from the provided bSDD dictionary, if it is associated with a classification.
+ * Retrieves a map of classification URIs for the given IFC entity from the provided list of bSDD dictionaries, if they are associated with a classification.
  *
  * @param ifcEntity - The IFC entity to check for classification associations.
- * @param bsddDictionary - The bSDD dictionary containing the classification dictionary.
- * @returns The URI of the classification dictionary if found, otherwise null.
+ * @param bsddDictionaries - The list of bSDD dictionaries containing the classification dictionaries.
+ * @returns A map of URIs of the classification dictionaries if found, otherwise null for each dictionary.
  */
-function getClassUriFromDictionary(ifcEntity: IfcEntity, bsddDictionary: BsddDictionary): ClassificationStatus {
+export function getClassUrisFromDictionaries(
+  ifcEntity: IfcEntity,
+  bsddDictionaries: BsddDictionary[],
+): Record<string, ClassificationStatus> {
   const associations = ifcEntity.hasAssociations;
-  if (!associations) {
-    return null;
-  }
+  const result: Record<string, ClassificationStatus> = {};
 
-  const foundAssociation = associations.find(
-    (association) =>
-      isIfcClassificationReference(association) &&
-      checkIfcClassificationUri(
-        bsddDictionary.ifcClassification?.location as string,
-        association as IfcClassificationReference,
-      ),
-  );
+  bsddDictionaries.forEach((bsddDictionary) => {
+    const { ifcClassification } = bsddDictionary;
+    const location = ifcClassification?.location || '';
+    const foundAssociation = associations?.find(
+      (association) =>
+        isIfcClassificationReference(association) &&
+        checkIfcClassificationUri(location, association as IfcClassificationReference),
+    );
 
-  return foundAssociation ? (bsddDictionary.ifcClassification?.location as ClassificationStatus) : null;
+    result[location] = foundAssociation ? (foundAssociation as IfcClassificationReference).location || null : null;
+  });
+
+  return result;
 }
-
-export default getClassUriFromDictionary;
