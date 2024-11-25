@@ -6,7 +6,7 @@ import { CefSharpWindow } from '../common/bsddBridge/useCefSharpBridge';
 import { BsddSettings } from '../common/IfcData/bsddBridgeData';
 import { setSettingsWithValidation } from '../common/slices/settingsSlice';
 import AppInfo from './features/AppInfo/AppInfo';
-import DomainSelection from './features/DictionarySelection/DictionarySelection';
+import DictionarySelection from './features/DictionarySelection/DictionarySelection';
 import DomainSort from './features/DictionarySort/DictionarySort';
 import GeneralSettings from './features/GeneralSettings/GeneralSettings';
 import ParameterMapping from './features/ParameterMapping/ParameterMapping';
@@ -59,7 +59,7 @@ function Settings({ activeTab }: SettingsProps) {
           setUnsavedChanges={setUnsavedChanges}
           activeTab={activeTab}
         />
-        <DomainSelection
+        <DictionarySelection
           id={2}
           localSettings={localSettings}
           setLocalSettings={setLocalSettings}

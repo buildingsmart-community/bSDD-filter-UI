@@ -4,17 +4,17 @@ import { MouseEventHandler, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
-import { useAppDispatch, useAppSelector } from '../common/app/hooks';
-import { IfcClassification, IfcClassificationReference } from '../common/IfcData/ifc';
+import { useAppDispatch, useAppSelector } from '../../../common/app/hooks';
+import { IfcClassification, IfcClassificationReference } from '../../../common/IfcData/ifc';
 import {
   fetchDictionaryClasses,
   selectBsddDictionaries,
   selectGroupedClasses,
   selectMainDictionaryClassification,
-} from '../common/slices/bsddSlice';
-import { selectHasAssociationsMap, setHasAssociations } from '../common/slices/ifcEntitySlice';
-import { selectActiveDictionariesMap, selectMainDictionaryUri } from '../common/slices/settingsSlice';
-import Slicer from './Slicer';
+} from '../../../common/slices/bsddSlice';
+import { selectHasAssociationsMap, setHasAssociations } from '../../../common/slices/ifcEntitySlice';
+import { selectActiveDictionariesMap, selectMainDictionaryUri } from '../../../common/slices/settingsSlice';
+import Slicer from '../../Slicer';
 
 interface ClassificationsProps {
   height: number;
@@ -170,24 +170,50 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
 
   return (
     <Paper style={{ height: `${height}px`, position: 'relative' }}>
-      {Array.from(activeDictionariesMap.entries()).map(([dictionaryUri, dictionary]) => (
-        <Slicer
-          key={dictionaryUri}
-          height={height}
-          label={dictionary.name}
-          options={optionsMap.get(dictionaryUri) || []}
-          value={selectedIfcClassificationReferences.get(dictionaryUri) || null}
-          setValue={(newValue) => {
-            const newValues = new Map(selectedIfcClassificationReferences);
-            newValues.set(dictionaryUri, newValue);
-            setSelectedIfcClassificationReferences(newValues);
-          }}
-          placeholder={t('classifications.searchClassesPlaceholder')}
-          disabled={
-            dictionaryUri === mainDictionaryClassification?.dictionaryUri || optionsMap.get(dictionaryUri)?.length === 1
-          }
-        />
-      ))}
+      {Array.from(activeDictionariesMap.entries()).map(([dictionaryUri, dictionary]) => {
+        const isMainDictionary = dictionaryUri === mainDictionaryUri;
+        const isIfcDictionary = dictionaryUri === mainDictionaryClassification?.dictionaryUri;
+
+        if (isMainDictionary) {
+          return (
+            <Slicer
+              key={dictionaryUri}
+              height={height}
+              label={dictionary.name}
+              options={optionsMap.get(dictionaryUri) || []}
+              value={selectedIfcClassificationReferences.get(dictionaryUri) || null}
+              setValue={(newValue) => {
+                const newValues = new Map(selectedIfcClassificationReferences);
+                newValues.set(dictionaryUri, newValue);
+                setSelectedIfcClassificationReferences(newValues);
+              }}
+              placeholder={t('classifications.searchClassesPlaceholder')}
+              disabled={optionsMap.get(dictionaryUri)?.length === 1}
+            />
+          );
+        }
+
+        if (isIfcDictionary) {
+          return null;
+        }
+
+        return (
+          <Slicer
+            key={dictionaryUri}
+            height={height}
+            label={dictionary.name}
+            options={optionsMap.get(dictionaryUri) || []}
+            value={selectedIfcClassificationReferences.get(dictionaryUri) || null}
+            setValue={(newValue) => {
+              const newValues = new Map(selectedIfcClassificationReferences);
+              newValues.set(dictionaryUri, newValue);
+              setSelectedIfcClassificationReferences(newValues);
+            }}
+            placeholder={t('classifications.searchClassesPlaceholder')}
+            disabled={optionsMap.get(dictionaryUri)?.length === 1}
+          />
+        );
+      })}
       <Box onMouseDown={handleMouseDown} style={{ marginTop: '4px' }}>
         <Tooltip label={t('classifications.dragResize')} withArrow>
           <Button fullWidth variant="subtle" size="sm" color="gray" aria-label={t('classifications.dragResize')}>

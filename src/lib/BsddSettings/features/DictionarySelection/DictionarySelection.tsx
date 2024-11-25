@@ -9,7 +9,7 @@ import { BsddDictionary, BsddSettings } from '../../../common/IfcData/bsddBridge
 import { convertBsddDictionaryToIfcClassification } from '../../../common/IfcData/ifcBsddConverters';
 import { selectBsddDictionaries } from '../../../common/slices/bsddSlice';
 
-interface DomainSelectionProps {
+interface DictionarySelectionProps {
   id: number;
   localSettings: BsddSettings;
   setLocalSettings: (settings: BsddSettings) => void;
@@ -87,13 +87,13 @@ const selectFilterDictionaryOptions = createSelector(selectBsddDictionaryOptions
   bsddDictionaryOptions.filter((option) => !option.value.startsWith(IFC_DICTIONARY_URL)),
 );
 
-function DomainSelection({
+function DictionarySelection({
   id,
   localSettings,
   setLocalSettings,
   setUnsavedChanges,
   setIsLoading,
-}: DomainSelectionProps) {
+}: DictionarySelectionProps) {
   const { t } = useTranslation();
   const bsddDictionaries = useAppSelector(selectBsddDictionaries);
   const bsddDictionaryOptions = useAppSelector(selectBsddDictionaryOptions);
@@ -119,21 +119,26 @@ function DomainSelection({
 
   const changeMainDictionaryOption = useCallback(
     (selectedMainDictionaryUris: string[]) => {
-      const selectedMainDictionaryUri = selectedMainDictionaryUris[0];
+      const latestSelectedUri = selectedMainDictionaryUris[selectedMainDictionaryUris.length - 1];
       const selectedMainDictionary =
-        findDictionaryByUri(Object.values(bsddDictionaries), selectedMainDictionaryUri) || null;
-
+        findDictionaryByUri(Object.values(bsddDictionaries), latestSelectedUri) || null;
+  
       const newMainDictionary = convertToBsddDictionary(
         selectedMainDictionary,
         localSettings.mainDictionary ? [localSettings.mainDictionary] : [],
       );
       const newFilterDictionaries = localSettings.filterDictionaries.filter(
-        (dictionary) => dictionary.ifcClassification.location !== selectedMainDictionaryUri,
+        (dictionary) => dictionary.ifcClassification.location !== latestSelectedUri,
       );
-
+  
+      const newIfcDictionary = latestSelectedUri.includes(IFC_DICTIONARY_URL)
+        ? newMainDictionary
+        : localSettings.ifcDictionary;
+  
       setLocalSettings({
         ...localSettings,
         mainDictionary: newMainDictionary || null,
+        ifcDictionary: newIfcDictionary || null,
         filterDictionaries: newFilterDictionaries,
       } as BsddSettings);
       setUnsavedChanges(true);
@@ -143,10 +148,10 @@ function DomainSelection({
 
   const changeIfcDictionaryOption = useCallback(
     (selectedIfcDictionaryUris: string[]) => {
-      const selectedIfcDictionaryUri = selectedIfcDictionaryUris[0];
+      const latestSelectedUri = selectedIfcDictionaryUris[selectedIfcDictionaryUris.length - 1];
       const selectedIfcDictionary =
-        findDictionaryByUri(Object.values(bsddDictionaries), selectedIfcDictionaryUri) || null;
-
+        findDictionaryByUri(Object.values(bsddDictionaries), latestSelectedUri) || null;
+  
       const parameterMapping: string = localSettings.ifcDictionary?.parameterMapping || DEFAULT_IFC_PARAMETER;
       const newIfcDictionary = convertToBsddDictionary(
         selectedIfcDictionary,
@@ -154,9 +159,9 @@ function DomainSelection({
         parameterMapping,
       );
       const newFilterDictionaries = localSettings.filterDictionaries.filter(
-        (dictionary) => dictionary.ifcClassification.location !== selectedIfcDictionaryUri,
+        (dictionary) => dictionary.ifcClassification.location !== latestSelectedUri,
       );
-
+  
       setLocalSettings({
         ...localSettings,
         ifcDictionary: newIfcDictionary || null,
@@ -225,8 +230,7 @@ function DomainSelection({
           value={localMainDictionaryValues.map((item) => item.value)}
           onChange={changeMainDictionaryOption}
           placeholder="Select main dictionary"
-          data={bsddFilterDictionaryOptions}
-          maxValues={1}
+          data={bsddDictionaryOptions}
           searchable
           clearable
         />
@@ -239,7 +243,6 @@ function DomainSelection({
           onChange={changeIfcDictionaryOption}
           placeholder="Select filter dictionaries"
           data={bsddIfcDictionaryOptions}
-          maxValues={1}
           searchable
           clearable
         />
@@ -260,4 +263,4 @@ function DomainSelection({
   );
 }
 
-export default DomainSelection;
+export default DictionarySelection;

@@ -1,4 +1,4 @@
-import { Checkbox, Input } from '@mantine/core';
+import { Checkbox, Input, Tooltip } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -8,9 +8,10 @@ interface CheckProps {
   value: true | false | undefined;
   setValue: (value: true | false | undefined) => void;
   disabled: boolean;
+  inputContainer?: (children: React.ReactNode) => React.ReactNode;
 }
 
-function Check({ label, description, value, setValue, disabled }: CheckProps) {
+function Check({ label, description, value, setValue, disabled, inputContainer }: CheckProps) {
   const { t } = useTranslation();
   const [checked, setChecked] = useState<boolean>(false);
   const [indeterminate, setIndeterminate] = useState<boolean>(true);
@@ -40,16 +41,20 @@ function Check({ label, description, value, setValue, disabled }: CheckProps) {
     }
   }, [value]);
 
+  const checkboxElement = (
+    <Checkbox
+      description={getDescription()}
+      checked={checked}
+      indeterminate={indeterminate}
+      type="checkbox"
+      onChange={(e) => handleOnChange(e)}
+      disabled={disabled}
+    />
+  );
+
   return (
     <Input.Wrapper label={label} description={description}>
-      <Checkbox
-        description={getDescription()}
-        checked={checked}
-        indeterminate={indeterminate}
-        type="checkbox"
-        onChange={(e) => handleOnChange(e)}
-        disabled={disabled}
-      />
+      {inputContainer ? inputContainer(checkboxElement) : checkboxElement}
     </Input.Wrapper>
   );
 }
