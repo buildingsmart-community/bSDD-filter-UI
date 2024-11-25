@@ -398,7 +398,10 @@ function Selection({ loading }: SelectionProps) {
         enableRowVirtualization={true}
         enableColumnResizing={true}
         enableBatchRowSelection={true}
-        positionToolbarAlertBanner="none" 
+        enableColumnFilters={false}
+        enableDensityToggle={false}
+        enableHiding={false}
+        positionToolbarAlertBanner="bottom"
         initialState={{
           density: 'xs',
           columnVisibility: {
