@@ -26,7 +26,7 @@ import {
 } from '../common/slices/settingsSlice';
 import Apply from './Apply';
 import { BsddSearchProps } from './BsddSearchProps';
-import Classifications from './Classifications';
+import Classifications from './features/Classifications/Classifications';
 import PropertySets from './features/PropertySets/PropertySets';
 import Search from './Search';
 import { BsddBridgeData } from '../common/IfcData/bsddBridgeData';

@@ -131,9 +131,14 @@ function DictionarySelection({
         (dictionary) => dictionary.ifcClassification.location !== latestSelectedUri,
       );
   
+      const newIfcDictionary = latestSelectedUri.includes(IFC_DICTIONARY_URL)
+        ? newMainDictionary
+        : localSettings.ifcDictionary;
+  
       setLocalSettings({
         ...localSettings,
         mainDictionary: newMainDictionary || null,
+        ifcDictionary: newIfcDictionary || null,
         filterDictionaries: newFilterDictionaries,
       } as BsddSettings);
       setUnsavedChanges(true);
@@ -225,7 +230,7 @@ function DictionarySelection({
           value={localMainDictionaryValues.map((item) => item.value)}
           onChange={changeMainDictionaryOption}
           placeholder="Select main dictionary"
-          data={bsddFilterDictionaryOptions}
+          data={bsddDictionaryOptions}
           searchable
           clearable
         />
