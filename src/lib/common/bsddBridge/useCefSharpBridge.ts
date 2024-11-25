@@ -10,6 +10,7 @@ import { setIfcEntity } from '../slices/ifcEntitySlice';
 import { setSettingsWithValidation } from '../slices/settingsSlice';
 import { selectActiveDictionaries } from '../slices/settingsSlice';
 import { BsddBridge } from './BsddBridgeInterface';
+import mergeIfcEntities from '../tools/mergeIfcEntities';
 
 export interface CefSharpWindow extends Window {
   CefSharp?: {
@@ -49,7 +50,9 @@ const useCefSharpBridge = () => {
 
           // Call the loadBridgeData function on the bridge object
           const BridgeDataJson = await window.bsddBridge.loadBridgeData();
+          console.log('CefSharp loadBridgeData.');
           const bsddBridgeData: BsddBridgeData = JSON.parse(BridgeDataJson);
+          console.log('CefSharp bsddBridgeData:', bsddBridgeData);
           const { ifcData, settings, propertyIsInstanceMap } = bsddBridgeData;
 
           if (settings) {
@@ -58,8 +61,10 @@ const useCefSharpBridge = () => {
           }
 
           if (ifcData?.length > 0) {
+            const mergedIfcEntity = mergeIfcEntities(ifcData);
+            console.log('CefSharp mergedIfcEntity:', mergedIfcEntity);
             await dispatch(setValidatedIfcData(ifcData));
-            dispatch(setIfcEntity(ifcData[0]));
+            if (mergedIfcEntity) dispatch(setIfcEntity(mergedIfcEntity));
             console.log('CefSharp initial IFC entities:', ifcData);
           }
 
