@@ -73,8 +73,8 @@ function BsddSearch({ selectedIfcEntities }: BsddSearchProps) {
   const mainDictionaryClassification = useAppSelector(selectMainDictionaryClassification);
 
   useEffect(() => {
-    if (selectedIfcEntities) {
-      dispatch(setIfcEntity(selectedIfcEntities));
+    if (selectedIfcEntities && selectedIfcEntities.length > 0) {
+      dispatch(setIfcEntity(selectedIfcEntities[0]));
     }
   }, [dispatch, selectedIfcEntities]);
 
