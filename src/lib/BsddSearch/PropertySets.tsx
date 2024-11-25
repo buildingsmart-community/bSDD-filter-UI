@@ -345,7 +345,7 @@ function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertyS
                         <Property
                           propertySet={propertySet}
                           property={property}
-                          property_natural_language_name={specification}
+                          propertyNaturalLanguageName={specification}
                         />
                       );
                     }),
