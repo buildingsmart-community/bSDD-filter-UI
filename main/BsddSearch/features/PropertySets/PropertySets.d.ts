@@ -1,4 +1,4 @@
-import { ClassContractV1 } from '../common/BsddApi/BsddApiBase';
+import { ClassContractV1 } from '../../../common/BsddApi/BsddApiBase';
 interface PropertySetsProps {
     mainDictionaryClassification: ClassContractV1 | null;
     recursiveMode: boolean;

@@ -48,7 +48,13 @@ declare const _default: {
     "needHelp": "Aveți nevoie de ajutor?",
     "checkDocumentation": "Consultați documentația noastră",
     "appInfoLabel": "Informații despre aplicație",
-    "appInfoInstruction": "Informații despre acest plugin"
+    "appInfoInstruction": "Informații despre acest plugin",
+    "bsddSearch": {
+      "property": {
+        "tooltipEditInstance": "Nu se poate edita proprietățile instanței pentru tipuri",
+        "setAsInstanceCheckboxTooltip": "Setați ca proprietate de instanță"
+      }
+    }
   }
 };
 

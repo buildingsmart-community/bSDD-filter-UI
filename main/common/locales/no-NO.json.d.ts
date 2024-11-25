@@ -48,7 +48,13 @@ declare const _default: {
     "needHelp": "Trenger du hjelp?",
     "checkDocumentation": "Sjekk vår dokumentasjon",
     "appInfoLabel": "Appinformasjon",
-    "appInfoInstruction": "Informasjon om denne pluginen"
+    "appInfoInstruction": "Informasjon om denne pluginen",
+    "bsddSearch": {
+      "property": {
+        "tooltipEditInstance": "Redigering av instansegenskaper for typer er ikke mulig",
+        "setAsInstanceCheckboxTooltip": "Sett som instansegenskap"
+      }
+    }
   }
 };
 

@@ -48,7 +48,13 @@ declare const _default: {
     "needHelp": "Potřebujete pomoc?",
     "checkDocumentation": "Podívejte se na naši dokumentaci",
     "appInfoLabel": "Informace o aplikaci",
-    "appInfoInstruction": "Informace o tomto pluginu"
+    "appInfoInstruction": "Informace o tomto pluginu",
+    "bsddSearch": {
+      "property": {
+        "tooltipEditInstance": "Úprava instančních vlastností pro typy není možná",
+        "setAsInstanceCheckboxTooltip": "Nastavit jako instanční vlastnost"
+      }
+    }
   }
 };
 

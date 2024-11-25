@@ -48,7 +48,13 @@ declare const _default: {
     "needHelp": "Tarvitsetko apua?",
     "checkDocumentation": "Tutustu dokumentaatioomme",
     "appInfoLabel": "Sovelluksen tiedot",
-    "appInfoInstruction": "Tietoa tästä lisäosasta"
+    "appInfoInstruction": "Tietoa tästä lisäosasta",
+    "bsddSearch": {
+      "property": {
+        "tooltipEditInstance": "Instanssiominaisuuksien muokkaaminen tyypeille ei ole mahdollista",
+        "setAsInstanceCheckboxTooltip": "Aseta instanssiominaisuutena"
+      }
+    }
   }
 };
 

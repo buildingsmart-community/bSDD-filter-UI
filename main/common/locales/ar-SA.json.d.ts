@@ -48,7 +48,13 @@ declare const _default: {
     "needHelp": "تحتاج مساعدة؟",
     "checkDocumentation": "تحقق من وثائقنا",
     "appInfoLabel": "معلومات التطبيق",
-    "appInfoInstruction": "معلومات حول هذا المكون الإضافي"
+    "appInfoInstruction": "معلومات حول هذا المكون الإضافي",
+    "bsddSearch": {
+      "property": {
+        "tooltipEditInstance": "لا يمكن تحرير خصائص النسخة للأنواع",
+        "setAsInstanceCheckboxTooltip": "تعيين كخاصية النسخة"
+      }
+    }
   }
 };
 

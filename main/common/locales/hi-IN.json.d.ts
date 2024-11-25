@@ -48,7 +48,13 @@ declare const _default: {
     "needHelp": "मदद चाहिए?",
     "checkDocumentation": "हमारे दस्तावेज़ देखें",
     "appInfoLabel": "ऐप जानकारी",
-    "appInfoInstruction": "इस प्लगइन के बारे में जानकारी"
+    "appInfoInstruction": "इस प्लगइन के बारे में जानकारी",
+    "bsddSearch": {
+      "property": {
+        "tooltipEditInstance": "प्रकारों के लिए इंस्टेंस गुणों को संपादित करना संभव नहीं है",
+        "setAsInstanceCheckboxTooltip": "इंस्टेंस गुण के रूप में सेट करें"
+      }
+    }
   }
 };
 

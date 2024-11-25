@@ -48,7 +48,13 @@ declare const _default: {
     "needHelp": "Þarftu hjálp?",
     "checkDocumentation": "Skoðaðu skjöl okkar",
     "appInfoLabel": "Upplýsingar um forrit",
-    "appInfoInstruction": "Upplýsingar um þetta viðbót"
+    "appInfoInstruction": "Upplýsingar um þetta viðbót",
+    "bsddSearch": {
+      "property": {
+        "tooltipEditInstance": "Ekki er hægt að breyta eiginleikum tilviks fyrir gerðir",
+        "setAsInstanceCheckboxTooltip": "Setja sem eiginleika tilviks"
+      }
+    }
   }
 };
 

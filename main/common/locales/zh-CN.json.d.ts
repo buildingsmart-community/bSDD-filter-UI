@@ -47,7 +47,13 @@ declare const _default: {
     "needHelp": "需要帮助？",
     "checkDocumentation": "查看我们的文档",
     "appInfoLabel": "应用信息",
-    "appInfoInstruction": "关于此插件的信息"
+    "appInfoInstruction": "关于此插件的信息",
+    "bsddSearch": {
+      "property": {
+        "tooltipEditInstance": "无法编辑类型的实例属性",
+        "setAsInstanceCheckboxTooltip": "设置为实例属性"
+      }
+    }
   }
 };
 

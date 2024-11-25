@@ -47,7 +47,13 @@ declare const _default: {
     "needHelp": "Yardıma mı ihtiyacınız var?",
     "checkDocumentation": "Belgelerimize göz atın",
     "appInfoLabel": "Uygulama bilgisi",
-    "appInfoInstruction": "Bu eklenti hakkında bilgi"
+    "appInfoInstruction": "Bu eklenti hakkında bilgi",
+    "bsddSearch": {
+      "property": {
+        "tooltipEditInstance": "Türler için örnek özellikleri düzenlemek mümkün değil",
+        "setAsInstanceCheckboxTooltip": "Örnek özellik olarak ayarla"
+      }
+    }
   }
 };
 

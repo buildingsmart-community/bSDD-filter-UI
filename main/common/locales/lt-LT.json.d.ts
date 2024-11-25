@@ -48,7 +48,13 @@ declare const _default: {
     "needHelp": "Reikia pagalbos?",
     "checkDocumentation": "Peržiūrėkite mūsų dokumentaciją",
     "appInfoLabel": "Programos informacija",
-    "appInfoInstruction": "Informacija apie šį papildinį"
+    "appInfoInstruction": "Informacija apie šį papildinį",
+    "bsddSearch": {
+      "property": {
+        "tooltipEditInstance": "Negalima redaguoti tipo egzemplioriaus savybių",
+        "setAsInstanceCheckboxTooltip": "Nustatyti kaip tipo egzemplioriaus savybę"
+      }
+    }
   }
 };
 

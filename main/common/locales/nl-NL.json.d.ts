@@ -48,7 +48,13 @@ declare const _default: {
     "needHelp": "Hulp nodig?",
     "checkDocumentation": "Bekijk onze documentatie",
     "appInfoLabel": "App info",
-    "appInfoInstruction": "Informatie over deze plugin"
+    "appInfoInstruction": "Informatie over deze plugin",
+    "bsddSearch": {
+      "property": {
+        "tooltipEditInstance": "Het bewerken van instantie eigenschappen voor typen is niet mogelijk",
+        "setAsInstanceCheckboxTooltip": "Instellen als instantie eigenschap"
+      }
+    }
   }
 };
 

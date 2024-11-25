@@ -48,7 +48,13 @@ declare const _default: {
     "needHelp": "Potrebujete pomoč?",
     "checkDocumentation": "Preverite našo dokumentacijo",
     "appInfoLabel": "Informacije o aplikaciji",
-    "appInfoInstruction": "Informacije o tem dodatku"
+    "appInfoInstruction": "Informacije o tem dodatku",
+    "bsddSearch": {
+      "property": {
+        "tooltipEditInstance": "Urejanje primerkov lastnosti za vrste ni mogoče",
+        "setAsInstanceCheckboxTooltip": "Nastavi kot primer lastnosti"
+      }
+    }
   }
 };
 

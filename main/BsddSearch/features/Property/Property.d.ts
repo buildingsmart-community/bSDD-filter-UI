@@ -2,7 +2,7 @@ import { IfcProperty, IfcPropertyEnumeratedValue, IfcPropertySet, IfcPropertySin
 interface PropertyProps {
     propertySet: IfcPropertySet;
     property: IfcProperty | IfcPropertyEnumeratedValue | IfcPropertySingleValue;
-    property_natural_language_name: string;
+    propertyNaturalLanguageName: string;
 }
-declare function Property({ propertySet, property, property_natural_language_name }: PropertyProps): import("react/jsx-runtime").JSX.Element;
+declare function Property({ propertySet, property, propertyNaturalLanguageName }: PropertyProps): import("react/jsx-runtime").JSX.Element;
 export default Property;

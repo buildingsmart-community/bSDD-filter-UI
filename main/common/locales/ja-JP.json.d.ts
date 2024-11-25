@@ -48,7 +48,13 @@ declare const _default: {
     "needHelp": "助けが必要ですか？",
     "checkDocumentation": "ドキュメントを確認してください",
     "appInfoLabel": "アプリ情報",
-    "appInfoInstruction": "このプラグインに関する情報"
+    "appInfoInstruction": "このプラグインに関する情報",
+    "bsddSearch": {
+      "property": {
+        "tooltipEditInstance": "タイプのインスタンスプロパティを編集することはできません",
+        "setAsInstanceCheckboxTooltip": "インスタンスプロパティとして設定"
+      }
+    }
   }
 };
 

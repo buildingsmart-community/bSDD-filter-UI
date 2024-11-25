@@ -48,7 +48,13 @@ declare const _default: {
     "needHelp": "도움이 필요하십니까?",
     "checkDocumentation": "문서를 확인하세요",
     "appInfoLabel": "앱 정보",
-    "appInfoInstruction": "이 플러그인에 대한 정보"
+    "appInfoInstruction": "이 플러그인에 대한 정보",
+    "bsddSearch": {
+      "property": {
+        "tooltipEditInstance": "유형의 인스턴스 속성을 편집할 수 없습니다",
+        "setAsInstanceCheckboxTooltip": "인스턴스 속성으로 설정"
+      }
+    }
   }
 };
 

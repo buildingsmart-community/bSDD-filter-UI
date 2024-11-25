@@ -48,7 +48,13 @@ declare const _default: {
     "needHelp": "Trebate pomoć?",
     "checkDocumentation": "Pogledajte našu dokumentaciju",
     "appInfoLabel": "Informacije o aplikaciji",
-    "appInfoInstruction": "Informacije o ovom dodatku"
+    "appInfoInstruction": "Informacije o ovom dodatku",
+    "bsddSearch": {
+      "property": {
+        "tooltipEditInstance": "Uređivanje instanci svojstava za tipove nije moguće",
+        "setAsInstanceCheckboxTooltip": "Postavi kao instancu svojstva"
+      }
+    }
   }
 };
 

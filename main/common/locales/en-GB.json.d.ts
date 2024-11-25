@@ -48,7 +48,13 @@ declare const _default: {
     "needHelp": "Need help?",
     "checkDocumentation": "Check out our documentation",
     "appInfoLabel": "App info",
-    "appInfoInstruction": "Information about this plugin"
+    "appInfoInstruction": "Information about this plugin",
+    "bsddSearch": {
+      "property": {
+        "inputTooltipEditInstance": "Editing instance properties for types is not possible",
+        "setAsInstanceCheckboxTooltip": "Set as instance property"
+      }
+    }
   }
 };
 
