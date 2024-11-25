@@ -27,7 +27,7 @@ import {
 import Apply from './Apply';
 import { BsddSearchProps } from './BsddSearchProps';
 import Classifications from './Classifications';
-import PropertySets from './PropertySets';
+import PropertySets from './features/PropertySets/PropertySets';
 import Search from './Search';
 import { BsddBridgeData } from '../common/IfcData/bsddBridgeData';
 

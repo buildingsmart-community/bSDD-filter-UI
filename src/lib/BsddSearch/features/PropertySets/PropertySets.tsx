@@ -1,8 +1,8 @@
 import { Accordion, Stack } from '@mantine/core';
 import { Children, useEffect, useState } from 'react';
 
-import { useAppDispatch, useAppSelector } from '../common/app/hooks';
-import { ClassContractV1, ClassPropertyContractV1 } from '../common/BsddApi/BsddApiBase';
+import { useAppDispatch, useAppSelector } from '../../../common/app/hooks';
+import { ClassContractV1, ClassPropertyContractV1 } from '../../../common/BsddApi/BsddApiBase';
 import {
   IfcEntity,
   IfcProperty,
@@ -10,13 +10,13 @@ import {
   IfcPropertySet,
   IfcPropertySingleValue,
   IfcValue,
-} from '../common/IfcData/ifc';
-import { selectPropertyNamesByLanguage } from '../common/slices/bsddSlice';
-import { selectLoadedIfcEntity } from '../common/slices/ifcDataSlice';
-import { selectIsDefinedBy, setIsDefinedBy } from '../common/slices/ifcEntitySlice';
-import { selectLanguage } from '../common/slices/settingsSlice';
-import type { PropertySetMap } from './BsddSearch';
-import Property from './features/Property/Property';
+} from '../../../common/IfcData/ifc';
+import { selectPropertyNamesByLanguage } from '../../../common/slices/bsddSlice';
+import { selectLoadedIfcEntity } from '../../../common/slices/ifcDataSlice';
+import { selectIsDefinedBy, setIsDefinedBy } from '../../../common/slices/ifcEntitySlice';
+import { selectLanguage } from '../../../common/slices/settingsSlice';
+import type { PropertySetMap } from '../../BsddSearch';
+import Property from '../Property/Property';
 
 const valueTypeMapping: { [key: string]: string } = {
   Boolean: 'IfcBoolean',

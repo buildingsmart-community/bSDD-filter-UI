@@ -55,12 +55,13 @@ function Property({ propertySet, property, propertyNaturalLanguageName }: Proper
   const savedPropertyIsInstanceMap = useAppSelector((state) => state.ifcData.savedPropertyIsInstanceMap);
   const [input, setInput] = useState<any>();
 
+  const instanceEnabled = propertySet.name !== 'Attributes';
   const isSwitchDisabled = savedPropertyIsInstanceMap.hasOwnProperty(property.name);
   const isChecked = propertyIsInstanceMap[property.name] || false;
   const isInputDisabled = isSwitchDisabled || isChecked;
 
   const inputContainer = (children: React.ReactNode) =>
-    isInputDisabled ? (
+    instanceEnabled && isInputDisabled ? (
       <Tooltip label={t('bsddSearch.property.tooltipEditInstance')} withArrow>
         {children}
       </Tooltip>
@@ -73,31 +74,28 @@ function Property({ propertySet, property, propertyNaturalLanguageName }: Proper
       case 'IfcPropertySingleValue': {
         if (property.nominalValue.type === 'IfcBoolean') {
           setInput(
-            <Tooltip label={t('bsddSearch.property.tooltipEditInstance')} withArrow disabled={!isInputDisabled}>
-              <div>
-                <Check
-                  label={propertyNaturalLanguageName}
-                  description={getInputDescription(propertyNaturalLanguageName, property.name)}
-                  disabled={isInputDisabled}
-                  value={property.nominalValue.value}
-                  setValue={(value: true | false | undefined) => {
-                    if (propertySets && propertySet.name) {
-                      const newValue = {
-                        nominalValue: { ...property.nominalValue, value },
-                      };
+            <Check
+              label={propertyNaturalLanguageName}
+              description={getInputDescription(propertyNaturalLanguageName, property.name)}
+              disabled={isInputDisabled}
+              inputContainer={inputContainer}
+              value={property.nominalValue.value}
+              setValue={(value: true | false | undefined) => {
+                if (propertySets && propertySet.name) {
+                  const newValue = {
+                    nominalValue: { ...property.nominalValue, value },
+                  };
 
-                      const updatedPropertySets = updatePropertySets(
-                        propertySets,
-                        propertySet.name,
-                        property.name,
-                        newValue,
-                      );
-                      dispatch(setIsDefinedBy(Object.values(updatedPropertySets)));
-                    }
-                  }}
-                />
-              </div>
-            </Tooltip>,
+                  const updatedPropertySets = updatePropertySets(
+                    propertySets,
+                    propertySet.name,
+                    property.name,
+                    newValue,
+                  );
+                  dispatch(setIsDefinedBy(Object.values(updatedPropertySets)));
+                }
+              }}
+            />,
           );
         } else {
           setInput(
@@ -173,18 +171,20 @@ function Property({ propertySet, property, propertyNaturalLanguageName }: Proper
   return (
     <Group>
       <div style={{ flex: 1 }}>{input}</div>
-      <Tooltip label={t('bsddSearch.property.setAsInstanceCheckboxTooltip')} withArrow>
-        <Checkbox
-          style={{ marginTop: '2rem' }}
-          disabled={isSwitchDisabled}
-          checked={isChecked}
-          onChange={(event) => {
-            if (!isSwitchDisabled) {
-              dispatch(setPropertyIsInstance({ propertyName: property.name, value: event.currentTarget.checked }));
-            }
-          }}
-        />
-      </Tooltip>
+      {instanceEnabled && (
+        <Tooltip label={t('bsddSearch.property.setAsInstanceCheckboxTooltip')} withArrow>
+          <Checkbox
+            style={{ marginTop: '2rem' }}
+            disabled={isSwitchDisabled}
+            checked={isChecked}
+            onChange={(event) => {
+              if (!isSwitchDisabled) {
+                dispatch(setPropertyIsInstance({ propertyName: property.name, value: event.currentTarget.checked }));
+              }
+            }}
+          />
+        </Tooltip>
+      )}
     </Group>
   );
 }
