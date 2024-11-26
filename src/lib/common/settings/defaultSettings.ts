@@ -4,7 +4,7 @@ const defaultSettings: BsddSettings = {
   mainDictionary: {
     ifcClassification: {
       type: 'IfcClassification',
-      source: 'VolkerWessels BVGO',
+      source: 'digibase',
       edition: '0.1',
       editionDate: '0001-01-01T00:00:00',
       name: 'Basis bouwproducten O&E',

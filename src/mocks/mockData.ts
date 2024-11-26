@@ -6,12 +6,12 @@ export const mockData: BsddBridgeData = {
     mainDictionary: {
       ifcClassification: {
         type: 'IfcClassification',
-        source: 'digibase',
+        source: 'volkerwesselsbvgo',
         edition: '0.1',
         editionDate: '0001-01-01T00:00:00',
-        name: 'VolkerWessels Bouw & vastgoed',
+        name: 'Basis bouwproducten O&E',
         description: '',
-        location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/volkerwesselsbv/0.1',
+        location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
       },
       parameterMapping: 'Description',
     },
@@ -40,15 +40,17 @@ export const mockData: BsddBridgeData = {
   },
   propertyIsInstanceMap: {
     'IsExternal': false,
-    'Bouwnummer': true,
+    'Omvang/Bouwnummer': true,
     'FireRating': true,
     'ObjectType': false,
+    'ILS O&E/Kleur': true,
   },
   ifcData: [
     {
       type: 'IfcObject',
       name: 'NLRS_00_SI_nulpunt_vws - nulpunt',
       description: 'Project nulpunt',
+      objectType: 'Project nulpunt',
       tag: '307327',
       hasAssociations: [
         {
@@ -111,6 +113,7 @@ export const mockData: BsddBridgeData = {
       type: 'IfcWasteTerminal',
       name: 'NLRS_52_PF_bakgoot_gen_vws - bakgoot',
       description: 'bakgoot',
+      objectType: 'bakgoot',
       tag: '798190',
       hasAssociations: [
         {
@@ -129,6 +132,7 @@ export const mockData: BsddBridgeData = {
       type: 'IfcWasteTerminal',
       name: 'NLRS_52_PF_LB_bakgoot_beugel_B44_gen_vws - N47_VWS_beugel_bakgoot_B44',
       description: 'beugel bakgoot',
+      objectType: 'beugel bakgoot',
       tag: '798257',
       hasAssociations: [
         {
@@ -157,6 +161,7 @@ export const mockData: BsddBridgeData = {
       type: 'IfcWasteTerminal',
       name: 'NLRS_52_PF_LB_bakgoot_goot_gen_vws - N47_VWS_bakgoot',
       description: 'bakgoot',
+      objectType: 'bakgoot',
       tag: '798256',
       hasAssociations: [
         {
@@ -184,6 +189,7 @@ export const mockData: BsddBridgeData = {
     {
       name: 'NLRS_52_PF_FB_bakgoot_hwa_gen_vws - N47_VWS_hwa_bakgoot',
       description: 'hwa bakgoot',
+      objectType: 'hwa bakgoot',
       tag: '798259',
       hasAssociations: [
         {
@@ -211,6 +217,7 @@ export const mockData: BsddBridgeData = {
     {
       name: 'NLRS_52_PF_LB_bakgoot_eindstuk_gen_vws - N47_VWS_eindstuk_bakgoot',
       description: 'bakgoot eindstuk',
+      objectType: 'bakgoot eindstuk',
       tag: '798258',
       hasAssociations: [
         {
@@ -239,17 +246,19 @@ export const mockData: BsddBridgeData = {
       type: 'IfcWall',
       name: 'gevelafwerking_baksteen - NLRS_21_WA_TLB_metselwerk waalformaat_gen_vws',
       description: 'gevelafwerking_baksteen',
+      objectType: 'metselwerk',
       tag: '692064',
       hasAssociations: [
         {
-          identification: 'gevelafwerking_baksteen',
+          identification: 'metselwerk',
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
             location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
           },
           type: 'IfcClassificationReference',
-          name: 'gevelafwerking_baksteen',
+          name: 'metselwerk',
+          location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0/class/metselwerk',
         },
         {
           identification: '21.12',
@@ -267,6 +276,7 @@ export const mockData: BsddBridgeData = {
       type: 'IfcWall',
       name: 'Basic Wall - NLRS_21_WA_TLB_beton prefab 100mm_gen_vws',
       description: 'beton prefab 150mm',
+      objectType: 'beton prefab 150mm',
       tag: '692066',
       hasAssociations: [
         {
@@ -285,6 +295,7 @@ export const mockData: BsddBridgeData = {
       type: 'IfcWall',
       name: 'Basic Wall - NLRS_21_WA_TLB_isolatie 131mm_gen_vws',
       description: 'isolatie Mupan Ultra Xs 138mm',
+      objectType: 'isolatie Mupan Ultra Xs 138mm',
       tag: '692068',
       hasAssociations: [
         {

@@ -48,6 +48,14 @@ const updatePropertySets = (
   });
 };
 
+const getIsInstance = (propertyIsInstanceMap: any, propertySetName: string, propertyName: string) => {
+  const propertyKey = `${propertySetName}/${propertyName}`;
+  if (propertyIsInstanceMap.hasOwnProperty(propertyKey)) {
+    return propertyIsInstanceMap[propertyKey];
+  }
+  return propertyIsInstanceMap[propertyName] || false;
+};
+
 function Property({ propertySet, property, propertyNaturalLanguageName }: PropertyProps) {
   const dispatch = useAppDispatch();
   const propertySets = useAppSelector(selectIsDefinedBy);
@@ -56,8 +64,10 @@ function Property({ propertySet, property, propertyNaturalLanguageName }: Proper
   const [input, setInput] = useState<any>();
 
   const instanceEnabled = propertySet.name !== 'Attributes';
-  const isSwitchDisabled = savedPropertyIsInstanceMap.hasOwnProperty(property.name);
-  const isInstance = propertyIsInstanceMap[property.name] || false;
+  const propertyKey = `${propertySet.name}/${property.name}`;
+  const isSwitchDisabled =
+    savedPropertyIsInstanceMap.hasOwnProperty(propertyKey) || savedPropertyIsInstanceMap.hasOwnProperty(property.name);
+  const isInstance = getIsInstance(propertyIsInstanceMap, propertySet.name || '', property.name);
 
   const inputContainer = (children: React.ReactNode) =>
     instanceEnabled && isInstance ? (
@@ -178,7 +188,7 @@ function Property({ propertySet, property, propertyNaturalLanguageName }: Proper
             checked={isInstance}
             onChange={(event) => {
               if (!isSwitchDisabled) {
-                dispatch(setPropertyIsInstance({ propertyName: property.name, value: event.currentTarget.checked }));
+                dispatch(setPropertyIsInstance({ propertyName: propertyKey, value: event.currentTarget.checked }));
               }
             }}
           />
