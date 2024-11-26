@@ -48,6 +48,14 @@ const updatePropertySets = (
   });
 };
 
+const getIsInstance = (propertyIsInstanceMap: any, propertySetName: string, propertyName: string) => {
+  const propertyKey = `${propertySetName}/${propertyName}`;
+  if (propertyIsInstanceMap.hasOwnProperty(propertyKey)) {
+    return propertyIsInstanceMap[propertyKey];
+  }
+  return propertyIsInstanceMap[propertyName] || false;
+};
+
 function Property({ propertySet, property, propertyNaturalLanguageName }: PropertyProps) {
   const dispatch = useAppDispatch();
   const propertySets = useAppSelector(selectIsDefinedBy);
@@ -56,12 +64,13 @@ function Property({ propertySet, property, propertyNaturalLanguageName }: Proper
   const [input, setInput] = useState<any>();
 
   const instanceEnabled = propertySet.name !== 'Attributes';
-  const isSwitchDisabled = savedPropertyIsInstanceMap.hasOwnProperty(property.name);
-  const isChecked = propertyIsInstanceMap[property.name] || false;
-  const isInputDisabled = isSwitchDisabled || isChecked;
+  const propertyKey = `${propertySet.name}/${property.name}`;
+  const isSwitchDisabled =
+    savedPropertyIsInstanceMap.hasOwnProperty(propertyKey) || savedPropertyIsInstanceMap.hasOwnProperty(property.name);
+  const isInstance = getIsInstance(propertyIsInstanceMap, propertySet.name || '', property.name);
 
   const inputContainer = (children: React.ReactNode) =>
-    instanceEnabled && isInputDisabled ? (
+    instanceEnabled && isInstance ? (
       <Tooltip label={t('bsddSearch.property.tooltipEditInstance')} withArrow>
         {children}
       </Tooltip>
@@ -77,7 +86,7 @@ function Property({ propertySet, property, propertyNaturalLanguageName }: Proper
             <Check
               label={propertyNaturalLanguageName}
               description={getInputDescription(propertyNaturalLanguageName, property.name)}
-              disabled={isInputDisabled}
+              disabled={isInstance}
               inputContainer={inputContainer}
               value={property.nominalValue.value}
               setValue={(value: true | false | undefined) => {
@@ -104,7 +113,7 @@ function Property({ propertySet, property, propertyNaturalLanguageName }: Proper
               description={getInputDescription(propertyNaturalLanguageName, property.name)}
               placeholder={property.nominalValue.value}
               value={property.nominalValue.value || ''}
-              disabled={isInputDisabled}
+              disabled={isInstance}
               inputContainer={inputContainer}
               onChange={(e) => {
                 if (propertySets && propertySet.name) {
@@ -134,7 +143,7 @@ function Property({ propertySet, property, propertyNaturalLanguageName }: Proper
             description={getInputDescription(propertyNaturalLanguageName, property.name)}
             value={value}
             inputContainer={inputContainer}
-            disabled={isInputDisabled || property.enumerationReference?.enumerationValues?.length === 1}
+            disabled={isInstance || property.enumerationReference?.enumerationValues?.length === 1}
             onChange={(e) => {
               if (propertySets && propertySet.name) {
                 const foundValue = enumerationValues.find((element) => element.value === e);
@@ -159,14 +168,14 @@ function Property({ propertySet, property, propertyNaturalLanguageName }: Proper
           <TextInput
             placeholder={property.name}
             value="{ifcProperty.nominalValue}"
-            disabled={isInputDisabled}
+            disabled={isInstance}
             inputContainer={inputContainer}
           />,
         );
         break;
       }
     }
-  }, [property, propertySet, setInput, propertyNaturalLanguageName, dispatch, propertySets, isInputDisabled]);
+  }, [property, propertySet, setInput, propertyNaturalLanguageName, dispatch, propertySets, isInstance]);
 
   return (
     <Group>
@@ -176,10 +185,10 @@ function Property({ propertySet, property, propertyNaturalLanguageName }: Proper
           <Checkbox
             style={{ marginTop: '2rem' }}
             disabled={isSwitchDisabled}
-            checked={isChecked}
+            checked={isInstance}
             onChange={(event) => {
               if (!isSwitchDisabled) {
-                dispatch(setPropertyIsInstance({ propertyName: property.name, value: event.currentTarget.checked }));
+                dispatch(setPropertyIsInstance({ propertyName: propertyKey, value: event.currentTarget.checked }));
               }
             }}
           />

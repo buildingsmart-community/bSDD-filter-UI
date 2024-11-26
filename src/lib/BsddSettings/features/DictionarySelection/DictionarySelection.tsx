@@ -120,9 +120,8 @@ function DictionarySelection({
   const changeMainDictionaryOption = useCallback(
     (selectedMainDictionaryUris: string[]) => {
       const latestSelectedUri = selectedMainDictionaryUris[selectedMainDictionaryUris.length - 1];
-      const selectedMainDictionary =
-        findDictionaryByUri(Object.values(bsddDictionaries), latestSelectedUri) || null;
-  
+      const selectedMainDictionary = findDictionaryByUri(Object.values(bsddDictionaries), latestSelectedUri) || null;
+
       const newMainDictionary = convertToBsddDictionary(
         selectedMainDictionary,
         localSettings.mainDictionary ? [localSettings.mainDictionary] : [],
@@ -130,11 +129,12 @@ function DictionarySelection({
       const newFilterDictionaries = localSettings.filterDictionaries.filter(
         (dictionary) => dictionary.ifcClassification.location !== latestSelectedUri,
       );
-  
-      const newIfcDictionary = latestSelectedUri.includes(IFC_DICTIONARY_URL)
-        ? newMainDictionary
-        : localSettings.ifcDictionary;
-  
+
+      const newIfcDictionary =
+        latestSelectedUri && latestSelectedUri.includes(IFC_DICTIONARY_URL)
+          ? newMainDictionary
+          : localSettings.ifcDictionary;
+
       setLocalSettings({
         ...localSettings,
         mainDictionary: newMainDictionary || null,
@@ -149,9 +149,8 @@ function DictionarySelection({
   const changeIfcDictionaryOption = useCallback(
     (selectedIfcDictionaryUris: string[]) => {
       const latestSelectedUri = selectedIfcDictionaryUris[selectedIfcDictionaryUris.length - 1];
-      const selectedIfcDictionary =
-        findDictionaryByUri(Object.values(bsddDictionaries), latestSelectedUri) || null;
-  
+      const selectedIfcDictionary = findDictionaryByUri(Object.values(bsddDictionaries), latestSelectedUri) || null;
+
       const parameterMapping: string = localSettings.ifcDictionary?.parameterMapping || DEFAULT_IFC_PARAMETER;
       const newIfcDictionary = convertToBsddDictionary(
         selectedIfcDictionary,
@@ -161,7 +160,7 @@ function DictionarySelection({
       const newFilterDictionaries = localSettings.filterDictionaries.filter(
         (dictionary) => dictionary.ifcClassification.location !== latestSelectedUri,
       );
-  
+
       setLocalSettings({
         ...localSettings,
         ifcDictionary: newIfcDictionary || null,
