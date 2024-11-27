@@ -3,10 +3,11 @@ export interface IfcJsonEntity {
 }
 
 export interface IfcEntity extends IfcJsonEntity {
+  globalId?: string; // IfcGloballyUniqueId
   name?: string; // IfcLabel
   description?: string; // IfcText
   objectType?: string; // IfcLabel
-  tag?: string; // IfcLabel
+  tag?: any; // IfcLabel
   predefinedType?: string; // Enumeration
   isDefinedBy?: IfcPropertySet[]; // (!) IfcRelDefines: RelatedObjects	 : 	SET [1:?] OF IfcObject;
   hasAssociations?: Association[];
@@ -53,6 +54,7 @@ interface IfcMaterial {
   type: 'IfcMaterial';
   name?: string; // IfcLabel
   description?: string; // IfcText
+  category?: string; // IfcLabel
 }
 
 export type Association = IfcClassificationReference | IfcMaterial;
