@@ -1,0 +1,1 @@
+import{j as r,A as o,c as n,a as s}from"./mergeIfcEntities-d775b9f7.js";import{B as t}from"./BsddSearch-f2a05cec.js";import{u as a}from"./useCefSharpBridge-139da5e5.js";function i(){const e=a();return r.jsx(o,{value:e,children:r.jsx(t,{})})}function c(){return r.jsx(s,{children:r.jsx(i,{})})}n.createRoot(document.getElementById("root")).render(r.jsx(c,{}));
