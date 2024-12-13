@@ -5,12 +5,12 @@ import { useAppDispatch } from '../app/hooks';
 import { BsddBridgeData, BsddSettings } from '../IfcData/bsddBridgeData';
 import { IfcEntity } from '../IfcData/ifc';
 import defaultSettings from '../settings/defaultSettings';
-import { setSavedPropertyIsInstanceMap, setValidatedIfcData } from '../slices/ifcDataSlice';
+import { setSavedPropertyIsInstanceMap, setValidatedIfcData, setValidatedSelectedIfcEntities } from '../slices/ifcDataSlice';
 import { setIfcEntity } from '../slices/ifcEntitySlice';
 import { setSettingsWithValidation } from '../slices/settingsSlice';
 import { selectActiveDictionaries } from '../slices/settingsSlice';
 import { BsddBridge } from './BsddBridgeInterface';
-import mergeIfcEntities from '../tools/mergeIfcEntities';
+import {mergeIfcEntities} from '../tools/mergeIfcEntities';
 
 export interface CefSharpWindow extends Window {
   CefSharp?: {
@@ -18,6 +18,7 @@ export interface CefSharpWindow extends Window {
   };
   bsddBridge: BsddBridge;
   updateSelection?: (selection: IfcEntity[]) => void;
+  updateEditSelection?: (selection: IfcEntity[]) => void;
   updateSettings?: (settings: BsddSettings) => void;
 }
 
@@ -42,7 +43,10 @@ const useCefSharpBridge = () => {
             dispatch(setValidatedIfcData(selection));
             console.log('CefSharp updateSelection:', selection);
           };
-
+          window.updateEditSelection = async (selection: IfcEntity[]) => {
+            dispatch(setValidatedSelectedIfcEntities(selection));
+            console.log('CefSharp updateEditSelection:', selection);
+          };
           window.updateSettings = async (settings: BsddSettings) => {
             dispatch(setSettingsWithValidation(settings));
             console.log('CefSharp updateSettings:', settings);
@@ -62,10 +66,8 @@ const useCefSharpBridge = () => {
 
           if (ifcData?.length > 0) {
             const mergedIfcEntity = mergeIfcEntities(ifcData);
-            console.log('CefSharp mergedIfcEntity:', mergedIfcEntity);
-            await dispatch(setValidatedIfcData(ifcData));
+            await dispatch(setValidatedSelectedIfcEntities(ifcData));
             if (mergedIfcEntity) dispatch(setIfcEntity(mergedIfcEntity));
-            console.log('CefSharp initial IFC entities:', ifcData);
           }
 
           if (propertyIsInstanceMap) {
@@ -108,11 +110,6 @@ const useCefSharpBridge = () => {
       clearTimeout(cefSharpTimeout);
     };
   }, [dispatch]);
-
-  useEffect(() => {
-    // Re-run setValidatedIfcData when activeDictionaries change
-    dispatch(setValidatedIfcData(mockData?.ifcData || []));
-  }, [dispatch, activeDictionaries]);
 
   const bsddSearch = (ifcEntities: IfcEntity[]) => {
     const ifcEntityJson = JSON.stringify(ifcEntities);

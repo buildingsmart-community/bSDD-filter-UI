@@ -1,5 +1,5 @@
-import { Accordion, Alert, Box, Button, Container, Group, Space, TextInput, Title } from '@mantine/core';
-import { useCallback, useEffect, useState } from 'react';
+import { Accordion, Alert, Box, Button, Group, Space, TextInput, Title } from '@mantine/core';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useApiFunctions } from '../common/apiFunctionsContext';
@@ -15,20 +15,14 @@ import {
   updateMainDictionaryClassificationUri,
   updatePropertyNaturalLanguageNames,
 } from '../common/slices/bsddSlice';
-import { selectLoadedIfcEntity, selectPropertyIsInstanceMap } from '../common/slices/ifcDataSlice';
-import { selectIfcEntity, setIfcEntity } from '../common/slices/ifcEntitySlice';
-import {
-  selectActiveDictionaryUris,
-  selectLanguage,
-  selectMainDictionary,
-  selectSettings,
-} from '../common/slices/settingsSlice';
+import { selectLoadedIfcEntity, selectSelectedIfcEntities } from '../common/slices/ifcDataSlice';
+import { setIfcEntity } from '../common/slices/ifcEntitySlice';
+import { selectActiveDictionaryUris, selectLanguage, selectMainDictionary } from '../common/slices/settingsSlice';
 import Apply from './Apply';
-import { BsddSearchProps } from './BsddSearchProps';
 import Classifications from './features/Classifications/Classifications';
 import PropertySets from './features/PropertySets/PropertySets';
 import Search from './Search';
-import { BsddBridgeData } from '../common/IfcData/bsddBridgeData';
+import { mergeIfcEntities } from '../common/tools/mergeIfcEntities';
 
 export interface Option {
   label: string;
@@ -48,23 +42,22 @@ const minHeight = 60.7969;
 let startY = 0;
 let startHeight = 0;
 
-function BsddSearch({ selectedIfcEntities }: BsddSearchProps) {
+function BsddSearch() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+
   const { bsddSearchSave, bsddSearchCancel } = useApiFunctions();
+
+  const mainDictionary = useAppSelector(selectMainDictionary);
+  const languageCode = useAppSelector(selectLanguage);
+  const activeDictionaryLocations = useAppSelector(selectActiveDictionaryUris);
+  const loadedIfcEntity = useAppSelector(selectLoadedIfcEntity);
+  const mainDictionaryClassificationUri = useAppSelector(selectMainDictionaryClassificationUri);
+  const selectedIfcEntities = useAppSelector(selectSelectedIfcEntities);
 
   const [defaultSearch, setDefaultSearch] = useState<Option | undefined>();
   const [recursiveMode, setRecursiveMode] = useState<boolean>(false);
   const [api, setApi] = useState<BsddApi<unknown>>(new BsddApi(bsddEnvironments[defaultEnvironment]));
-  const mainDictionary = useAppSelector(selectMainDictionary);
-  const languageCode = useAppSelector(selectLanguage);
-
-  const activeDictionaryLocations = useAppSelector(selectActiveDictionaryUris);
-  const ifcEntity = useAppSelector(selectIfcEntity);
-  const loadedIfcEntity = useAppSelector(selectLoadedIfcEntity);
-  const mainDictionaryClassificationUri = useAppSelector(selectMainDictionaryClassificationUri);
-  const settings = useAppSelector(selectSettings);
-  const propertyIsInstanceMap = useAppSelector(selectPropertyIsInstanceMap);
 
   const [height, setHeight] = useState(minHeight); // Initial height
   const [panelHeight, setPanelHeight] = useState('auto'); // Initial height of the Accordion Panel
@@ -74,27 +67,13 @@ function BsddSearch({ selectedIfcEntities }: BsddSearchProps) {
 
   useEffect(() => {
     if (selectedIfcEntities && selectedIfcEntities.length > 0) {
-      dispatch(setIfcEntity(selectedIfcEntities[0]));
+      const mergedIfcEntity = mergeIfcEntities(selectedIfcEntities);
+      if (mergedIfcEntity) {
+        console.log('Setting mergedIfcEntity', mergedIfcEntity);
+        dispatch(setIfcEntity(mergedIfcEntity));
+      }
     }
   }, [dispatch, selectedIfcEntities]);
-
-  function createBridgeData(ifcEntity: IfcEntity, propertyIsInstanceMap: Record<string, boolean>): BsddBridgeData {
-    return {
-      ifcData: [ifcEntity],
-      settings,
-      propertyIsInstanceMap: propertyIsInstanceMap,
-    };
-  }
-
-  const callback = useCallback(
-    (ifcProduct: IfcEntity) => {
-      console.log('Sending bsddSearchSave data back to host', ifcProduct);
-      bsddSearchSave(createBridgeData(ifcProduct, propertyIsInstanceMap)).then((actualResult) => {
-        console.log('Sent iFC data back to host', actualResult);
-      });
-    },
-    [bsddSearchSave, propertyIsInstanceMap],
-  );
 
   useEffect(() => {
     if (!mainDictionaryClassification || !propertySetsOpened) return;
@@ -187,7 +166,7 @@ function BsddSearch({ selectedIfcEntities }: BsddSearchProps) {
             </Accordion.Item>
           </Accordion>
           <Group my="sm" justify="center">
-            <Apply callback={callback} ifcEntity={ifcEntity} />
+            <Apply bsddSearchSave={bsddSearchSave} />
             <Button fullWidth variant="light" color="gray" onClick={bsddSearchCancel}>
               {t('cancel')}
             </Button>

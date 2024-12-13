@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../../common/app/hooks';
 import { IfcEntity } from '../../../common/IfcData/ifc';
-import { selectIfcEntities } from '../../../common/slices/ifcDataSlice';
+import { selectLoadedIfcEntities } from '../../../common/slices/ifcDataSlice';
 import { MantineReactTable, MRT_ColumnDef, MRT_Row } from 'mantine-react-table';
 import { Color, colorMap } from '../../../common/tools/colors';
 import '../../../common/theme/styles.css';
@@ -289,7 +289,7 @@ const renderSubRowHoverCard = (row: MRT_Row<GroupRowEntity>, activeDictionaries:
 
 function Selection({ loading }: SelectionProps) {
   const { t } = useTranslation();
-  const ifcEntities = useAppSelector(selectIfcEntities);
+  const ifcEntities = useAppSelector(selectLoadedIfcEntities);
   const activeDictionaries = useAppSelector(selectActiveDictionaries);
   const { bsddSearch, bsddSelect } = useApiFunctions();
 
@@ -411,11 +411,11 @@ function Selection({ loading }: SelectionProps) {
             predefinedType: false, // groupByKey == 'predefinedType',
           },
         }}
-        mantineTableBodyRowProps={( table ) => ({
-          style: (theme)=>({
-            backgroundColor: table.row.getIsSelected() ?  theme.colors.blue[0] : undefined,
-          }
-        )})}
+        mantineTableBodyRowProps={(table) => ({
+          style: (theme) => ({
+            backgroundColor: table.row.getIsSelected() ? theme.colors.blue[0] : undefined,
+          }),
+        })}
         positionExpandColumn="first"
         renderTopToolbarCustomActions={(table) => (
           <Box
@@ -425,11 +425,11 @@ function Selection({ loading }: SelectionProps) {
               flexWrap: 'wrap',
             }}
           >
-            <Button leftSection={<IconPointer />} onClick={handleSelectEntities(table.table.getState().rowSelection)}>
-              {t('selectEntities')}
-            </Button>
             <Button leftSection={<IconPencil />} onClick={handleEditEntities(table.table.getState().rowSelection)}>
               {t('editEntities')}
+            </Button>
+            <Button leftSection={<IconPointer />} onClick={handleSelectEntities(table.table.getState().rowSelection)}>
+              {t('selectEntities')}
             </Button>
             <Select
               placeholder="Select a key"

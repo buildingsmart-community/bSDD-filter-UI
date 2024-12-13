@@ -1,29 +1,42 @@
 import { Container, Modal, Paper, Space, Tabs } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { t } from 'i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import BsddSearch from './lib/BsddSearch';
 import BsddSelection from './lib/BsddSelection';
 import Settings from './lib/BsddSettings/SettingsComponent';
 import { ApiFunctionsProvider } from './lib/common/apiFunctionsContext';
-import useCefSharpBridge from './lib/common/bsddBridge/useCefSharpBridge';
 import { IfcEntity } from './lib/common/IfcData/ifc';
 import { mockData } from './mocks/mockData';
+import {
+  setSavedPropertyIsInstanceMap,
+  setSelectedIfcEntities,
+} from './lib/common/slices/ifcDataSlice';
+import useBrowserBridge from './lib/common/bsddBridge/useBrowserBridge';
+import { useAppDispatch } from './lib/common/app/hooks';
 
 const defaultTab = 'link';
 
 function BsddCombinedLoader() {
+  const dispatch = useAppDispatch();
+
   const [opened, { open, close }] = useDisclosure(false);
-  const [selectedIfcEntities, setSelectedIfcEntities] = useState<IfcEntity[] | undefined>(mockData.ifcData);
-  const { bsddSearchSave, bsddSearchCancel } = useCefSharpBridge();
+  const { bsddSearchSave, bsddSearchCancel } = useBrowserBridge();
   const [activeTab, setActiveTab] = useState(defaultTab);
+
+  useEffect(() => {
+    if (mockData.propertyIsInstanceMap) {
+      console.log('Setting savedPropertyIsInstanceMap:', mockData.propertyIsInstanceMap);
+      setSavedPropertyIsInstanceMap(mockData.propertyIsInstanceMap);
+    }
+  }, [mockData.propertyIsInstanceMap]);
 
   function bsddSearch(ifcEntities: IfcEntity[]) {
     console.log('Open bsddSearch called with:', ifcEntities);
-    
+
     if (ifcEntities?.length > 0) {
-      setSelectedIfcEntities(ifcEntities);
+      dispatch(setSelectedIfcEntities(ifcEntities));
     }
 
     open();
@@ -63,7 +76,7 @@ function BsddCombinedLoader() {
         </Tabs>
       </Container>
       <Modal opened={opened} onClose={close} title="Select bSDD class" centered size="100vw">
-        <BsddSearch selectedIfcEntities={selectedIfcEntities} />
+        <BsddSearch />
       </Modal>
     </ApiFunctionsProvider>
   );

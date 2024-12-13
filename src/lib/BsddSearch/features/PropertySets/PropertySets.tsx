@@ -13,7 +13,7 @@ import {
 } from '../../../common/IfcData/ifc';
 import { selectPropertyNamesByLanguage } from '../../../common/slices/bsddSlice';
 import { selectLoadedIfcEntity } from '../../../common/slices/ifcDataSlice';
-import { selectIsDefinedBy, setIsDefinedBy } from '../../../common/slices/ifcEntitySlice';
+import { selectIsDefinedByIncludingAttributes, setIsDefinedBy } from '../../../common/slices/ifcEntitySlice';
 import { selectLanguage } from '../../../common/slices/settingsSlice';
 import type { PropertySetMap } from '../../BsddSearch';
 import Property from '../Property/Property';
@@ -263,7 +263,7 @@ function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertyS
   const dispatch = useAppDispatch();
 
   const loadedIfcEntity = useAppSelector(selectLoadedIfcEntity);
-  const propertySets = useAppSelector(selectIsDefinedBy);
+  const propertySets = useAppSelector(selectIsDefinedByIncludingAttributes);
   const propertyNamesByLanguage = useAppSelector(selectPropertyNamesByLanguage);
   const languageCode = useAppSelector(selectLanguage);
   const [propertyNaturalLanguageNamesMap, setPropertyNaturalLanguageNamesMap] = useState<Record<string, string>>({});
