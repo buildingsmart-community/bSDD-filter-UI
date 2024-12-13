@@ -58,13 +58,6 @@ export declare const fetchDictionaries: import('@reduxjs/toolkit').AsyncThunk<{
     fulfilledMeta?: unknown;
     rejectedMeta?: unknown;
 }>;
-/**
- * Fetches classes for a given dictionary uri.
- *
- * @param location - The dictionary uri for which to fetch the dictionary classes.
- * @param options - Additional options for the async thunk.
- * @returns A promise that resolves to an array of fetched dictionary classes.
- */
 export declare const fetchDictionaryClasses: import('@reduxjs/toolkit').AsyncThunk<ClassListItemContractV1[], string, {
     state?: unknown;
     dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
@@ -84,6 +77,16 @@ export declare const updatePropertyNaturalLanguageNames: import('@reduxjs/toolki
     classProperties: ClassPropertyContractV1[];
     languageCode: string;
 }, {
+    state?: unknown;
+    dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
+    extra?: unknown;
+    rejectValue?: unknown;
+    serializedErrorType?: unknown;
+    pendingMeta?: unknown;
+    fulfilledMeta?: unknown;
+    rejectedMeta?: unknown;
+}>;
+export declare const fetchClasses: import('@reduxjs/toolkit').AsyncThunk<void, string[], {
     state?: unknown;
     dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
     extra?: unknown;
@@ -134,25 +137,6 @@ export declare const fetchDictionary: import('@reduxjs/toolkit').AsyncThunk<{
  * @returns A promise that resolves to a DictionaryContractV1 object or null if the dictionary could not be retrieved.
  */
 export declare const getDictionary: (state: RootState, dispatch: AppDispatch, location: string) => Promise<DictionaryContractV1 | null>;
-/**
- * Fetches a classes from the bsddApi without any relationships and properties
- *
- * @param relatedClassUris - An array of class URIs to fetch.
- * @param getState - A function to get the current state.
- * @param dispatch - A function to dispatch actions.
- * @returns A promise that resolves to an object containing the fetched classes.
- * @throws An error if there is an HTTP error or a bSDD API error.
- */
-export declare const fetchClasses: import('@reduxjs/toolkit').AsyncThunk<void, string[], {
-    state?: unknown;
-    dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
-    extra?: unknown;
-    rejectValue?: unknown;
-    serializedErrorType?: unknown;
-    pendingMeta?: unknown;
-    fulfilledMeta?: unknown;
-    rejectedMeta?: unknown;
-}>;
 export declare const selectMainDictionaryClassification: (state: RootState) => ClassContractV1 | null;
 export declare const selectMainDictionaryClassificationUri: (state: RootState) => string | null;
 export declare const selectDictionary: (state: RootState, uri: string) => DictionaryContractV1;
@@ -180,7 +164,7 @@ export declare const selectGroupedClasses: ((state: {
     settings: import('../IfcData/bsddBridgeData').BsddSettings;
     ifcData: import('./ifcDataSlice').IfcDataState;
     bsdd: BsddState;
-    ifcEntity: import('./ifcEntitySlice').EntitiesState;
+    ifcEntity: import('./ifcEntitySlice').EntityState;
 }) => {
     [key: string]: ClassContractV1[];
 }) & {
@@ -240,4 +224,9 @@ export declare const updateMainDictionaryClassificationUri: import('@reduxjs/too
     fulfilledMeta?: unknown;
     rejectedMeta?: unknown;
 }>;
+export declare const useDictionary: (uri: string) => {
+    dictionary: DictionaryContractV1;
+    loading: boolean;
+    error: string | null;
+};
 export declare const bsddReducer: import('@reduxjs/toolkit').Reducer<BsddState>;

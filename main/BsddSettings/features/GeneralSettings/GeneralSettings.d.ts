@@ -4,6 +4,7 @@ interface GeneralSettingsProps {
     localSettings: BsddSettings;
     setLocalSettings: (settings: BsddSettings) => void;
     setUnsavedChanges: (unsavedChanges: boolean) => void;
+    activeTab: boolean;
 }
-declare function GeneralSettings({ id, localSettings, setLocalSettings, setUnsavedChanges }: GeneralSettingsProps): import("react/jsx-runtime").JSX.Element;
+declare function GeneralSettings({ id, localSettings, setLocalSettings, setUnsavedChanges, activeTab }: GeneralSettingsProps): import("react/jsx-runtime").JSX.Element;
 export default GeneralSettings;

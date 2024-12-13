@@ -1,7 +1,6 @@
-import { IfcEntity } from '../common/IfcData/ifc';
+import { BsddBridgeData } from '../common/IfcData/bsddBridgeData';
 interface ApplyProps {
-    callback: (value: any) => void;
-    ifcEntity: IfcEntity | undefined;
+    bsddSearchSave: (bsddBridgeData: BsddBridgeData) => Promise<string>;
 }
-declare function Apply({ callback, ifcEntity }: ApplyProps): import("react/jsx-runtime").JSX.Element;
+declare function Apply({ bsddSearchSave }: ApplyProps): import("react/jsx-runtime").JSX.Element;
 export default Apply;

@@ -10,7 +10,7 @@ export declare const selectActiveDictionaries: ((state: {
     settings: BsddSettings;
     ifcData: import('./ifcDataSlice').IfcDataState;
     bsdd: import('./bsddSlice').BsddState;
-    ifcEntity: import('./ifcEntitySlice').EntitiesState;
+    ifcEntity: import('./ifcEntitySlice').EntityState;
 }) => BsddDictionary[]) & {
     clearCache: () => void;
     resultsCount: () => number;
@@ -36,7 +36,7 @@ export declare const selectActiveDictionariesMap: ((state: {
     settings: BsddSettings;
     ifcData: import('./ifcDataSlice').IfcDataState;
     bsdd: import('./bsddSlice').BsddState;
-    ifcEntity: import('./ifcEntitySlice').EntitiesState;
+    ifcEntity: import('./ifcEntitySlice').EntityState;
 }) => Map<string, import('../IfcData/ifc').IfcClassification>) & {
     clearCache: () => void;
     resultsCount: () => number;
@@ -53,7 +53,7 @@ export declare const selectActiveDictionariesMap: ((state: {
         settings: BsddSettings;
         ifcData: import('./ifcDataSlice').IfcDataState;
         bsdd: import('./bsddSlice').BsddState;
-        ifcEntity: import('./ifcEntitySlice').EntitiesState;
+        ifcEntity: import('./ifcEntitySlice').EntityState;
     }) => BsddDictionary[]) & {
         clearCache: () => void;
         resultsCount: () => number;
@@ -93,7 +93,7 @@ export declare const selectActiveDictionaryUris: ((state: {
     settings: BsddSettings;
     ifcData: import('./ifcDataSlice').IfcDataState;
     bsdd: import('./bsddSlice').BsddState;
-    ifcEntity: import('./ifcEntitySlice').EntitiesState;
+    ifcEntity: import('./ifcEntitySlice').EntityState;
 }) => string[]) & {
     clearCache: () => void;
     resultsCount: () => number;
@@ -110,7 +110,7 @@ export declare const selectActiveDictionaryUris: ((state: {
         settings: BsddSettings;
         ifcData: import('./ifcDataSlice').IfcDataState;
         bsdd: import('./bsddSlice').BsddState;
-        ifcEntity: import('./ifcEntitySlice').EntitiesState;
+        ifcEntity: import('./ifcEntitySlice').EntityState;
     }) => BsddDictionary[]) & {
         clearCache: () => void;
         resultsCount: () => number;
@@ -144,7 +144,7 @@ export declare const selectMainDictionaryUri: ((state: {
     settings: BsddSettings;
     ifcData: import('./ifcDataSlice').IfcDataState;
     bsdd: import('./bsddSlice').BsddState;
-    ifcEntity: import('./ifcEntitySlice').EntitiesState;
+    ifcEntity: import('./ifcEntitySlice').EntityState;
 }) => string | null) & {
     clearCache: () => void;
     resultsCount: () => number;

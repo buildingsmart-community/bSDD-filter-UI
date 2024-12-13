@@ -1,7 +1,7 @@
 import { ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 import { AppDispatch, RootState } from '../app/store';
 import { BsddDictionary } from './bsddBridgeData';
-import { IfcClassificationReference } from './ifc';
+import { IfcClassificationReference, IfcEntity } from './ifc';
 type ValidationState = 'valid' | 'invalid' | 'fixed';
 type ValidationResult = {
     ifcClassificationReference: IfcClassificationReference;
@@ -25,4 +25,13 @@ export declare function patchIfcClassificationReference(ifcClassificationReferen
  * @returns A new BsddDictionary object or null.
  */
 export declare function validateDictionary(state: RootState, dispatch: AppDispatch, bsddDictionary: BsddDictionary | null): Promise<BsddDictionary | null>;
+/**
+ * Validates the IFC data by checking and fixing the associations of each IFC entity.
+ *
+ * @param ifcEntities - The array of IFC entities to be validated.
+ * @param state - The current state of the Redux store.
+ * @param dispatch - The Redux dispatch function.
+ * @returns A Promise that resolves to an array of validated IFC entities.
+ */
+export declare const validateIfcData: (ifcEntities: IfcEntity[], state: RootState, dispatch: ThunkDispatch<unknown, unknown, UnknownAction>) => Promise<IfcEntity[]>;
 export {};

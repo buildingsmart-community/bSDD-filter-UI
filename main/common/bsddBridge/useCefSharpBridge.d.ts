@@ -7,6 +7,7 @@ export interface CefSharpWindow extends Window {
     };
     bsddBridge: BsddBridge;
     updateSelection?: (selection: IfcEntity[]) => void;
+    updateEditSelection?: (selection: IfcEntity[]) => void;
     updateSettings?: (settings: BsddSettings) => void;
 }
 declare const useCefSharpBridge: () => {
