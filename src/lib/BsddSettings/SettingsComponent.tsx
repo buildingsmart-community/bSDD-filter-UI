@@ -13,7 +13,11 @@ import ParameterMapping from './features/ParameterMapping/ParameterMapping';
 
 declare let window: CefSharpWindow;
 
-function Settings() {
+interface SettingsProps {
+  activeTab: boolean;
+}
+
+function Settings({ activeTab }: SettingsProps) {
   const dispatch = useAppDispatch();
   const globalSettings = useAppSelector((state) => state.settings);
 
@@ -53,6 +57,7 @@ function Settings() {
           localSettings={localSettings}
           setLocalSettings={setLocalSettings}
           setUnsavedChanges={setUnsavedChanges}
+          activeTab={activeTab}
         />
         <DictionarySelection
           id={2}

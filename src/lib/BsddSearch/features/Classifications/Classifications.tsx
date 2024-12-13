@@ -15,6 +15,7 @@ import {
 import { selectHasAssociationsMap, setHasAssociations } from '../../../common/slices/ifcEntitySlice';
 import { selectActiveDictionariesMap, selectMainDictionaryUri } from '../../../common/slices/settingsSlice';
 import Slicer from '../../Slicer';
+import { DictionaryContractV1 } from '../../../common/BsddApi/BsddApiBase';
 
 interface ClassificationsProps {
   height: number;
@@ -26,6 +27,60 @@ interface Option {
   value: string;
   uri: string;
 }
+
+/**
+ * Converts a selected classification reference option to an IfcClassificationReference object.
+ *
+ * @param dictionaryUri - The URI of the dictionary.
+ * @param option - The selected classification reference option.
+ * @param dictionaries - The dictionaries object from the state.
+ * @returns An IfcClassificationReference object or null if the option or dictionary is invalid.
+ */
+const convertToIfcClassificationReference = (
+  dictionaryUri: string,
+  option: Option | null,
+  dictionaries: Record<string, DictionaryContractV1>,
+): IfcClassificationReference | null => {
+  if (!option || !option.value) return null;
+
+  const dictionary = dictionaries[dictionaryUri];
+  if (!dictionary) return null;
+
+  return {
+    type: 'IfcClassificationReference',
+    name: option.label,
+    location: option.uri,
+    identification: option.value,
+    referencedSource: {
+      type: 'IfcClassification',
+      name: dictionary.name,
+      location: dictionary.uri,
+      edition: dictionary.version,
+      editionDate: dictionary.releaseDate,
+    } as IfcClassification,
+  } as IfcClassificationReference;
+};
+
+/**
+ * Fetches bSDD classes and updates the classification references in the state.
+ *
+ * @param selectedIfcClassificationReferences - The selected IFC classification references.
+ * @param dictionaries - The dictionaries object from the state.
+ * @param dispatch - The Redux dispatch function.
+ */
+const fetchBsddClasses = (
+  selectedIfcClassificationReferences: Map<string, Option | null>,
+  dictionaries: Record<string, DictionaryContractV1>,
+  dispatch: any,
+) => {
+  const newClassificationReferences = Array.from(selectedIfcClassificationReferences.entries())
+    .map(([dictionaryUri, option]) => convertToIfcClassificationReference(dictionaryUri, option, dictionaries))
+    .filter((ref): ref is IfcClassificationReference => ref !== null);
+
+  if (newClassificationReferences.length > 0) {
+    dispatch(setHasAssociations(newClassificationReferences));
+  }
+};
 
 function Classifications({ height, handleMouseDown }: ClassificationsProps) {
   const dispatch = useAppDispatch();
@@ -139,33 +194,7 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
   ]);
 
   useEffect(() => {
-    const fetchBsddClasses = () => {
-      const newClassificationReferences = Array.from(selectedIfcClassificationReferences.entries())
-        .map(([dictionaryUri, option]) => {
-          if (!option || !option.value) return null;
-          const dictionary = dictionaries[dictionaryUri];
-          return {
-            type: 'IfcClassificationReference',
-            name: option.label,
-            location: option.uri,
-            identification: option.value,
-            referencedSource: {
-              type: 'IfcClassification',
-              name: dictionary.name,
-              location: dictionary.uri,
-              edition: dictionary.version,
-              editionDate: dictionary.releaseDate,
-            } as IfcClassification,
-          } as IfcClassificationReference;
-        })
-        .filter((ref): ref is IfcClassificationReference => ref !== null);
-
-      if (newClassificationReferences.length > 0) {
-        dispatch(setHasAssociations(newClassificationReferences));
-      }
-    };
-
-    fetchBsddClasses();
+    fetchBsddClasses(selectedIfcClassificationReferences, dictionaries, dispatch);
   }, [dictionaries, dispatch, selectedIfcClassificationReferences]);
 
   return (

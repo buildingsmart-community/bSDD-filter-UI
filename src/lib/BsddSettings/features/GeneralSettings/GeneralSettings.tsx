@@ -13,9 +13,10 @@ interface GeneralSettingsProps {
   localSettings: BsddSettings;
   setLocalSettings: (settings: BsddSettings) => void;
   setUnsavedChanges: (unsavedChanges: boolean) => void;
+  activeTab: boolean;
 }
 
-function GeneralSettings({ id, localSettings, setLocalSettings, setUnsavedChanges }: GeneralSettingsProps) {
+function GeneralSettings({ id, localSettings, setLocalSettings, setUnsavedChanges, activeTab }: GeneralSettingsProps) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const includeTestDictionaries = useAppSelector(selectIncludeTestDictionaries);
@@ -24,6 +25,7 @@ function GeneralSettings({ id, localSettings, setLocalSettings, setUnsavedChange
 
   // Update dictionary selection list when parameters change
   useEffect(() => {
+    if (!activeTab) return;
     if (includeTestDictionaries === undefined) return;
 
     if (prevIncludeTestDictionariesRef.current === includeTestDictionaries) {
@@ -33,7 +35,7 @@ function GeneralSettings({ id, localSettings, setLocalSettings, setUnsavedChange
     dispatch(fetchDictionaries(includeTestDictionaries));
 
     prevIncludeTestDictionariesRef.current = includeTestDictionaries;
-  }, [dispatch, includeTestDictionaries]);
+  }, [dispatch, includeTestDictionaries, activeTab]);
 
   return (
     <Accordion.Item key={id} value={id.toString()}>

@@ -1,4 +1,5 @@
 import '@mantine/core/styles.css';
+import 'mantine-react-table/styles.css';
 
 // import { PublicClientApplication } from '@azure/msal-browser';
 import { MantineProvider } from '@mantine/core';

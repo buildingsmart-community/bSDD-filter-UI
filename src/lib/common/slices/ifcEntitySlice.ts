@@ -3,7 +3,7 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../app/store';
 import { Association, IfcClassificationReference, IfcEntity, IfcPropertySet } from '../IfcData/ifc';
 
-export interface EntitiesState {
+export interface EntityState {
   type?: string;
   name?: string;
   description?: string;
@@ -14,7 +14,7 @@ export interface EntitiesState {
   hasAssociations?: Association[];
 }
 
-const initialState: EntitiesState = {
+const initialState: EntityState = {
   type: undefined,
   name: undefined,
   description: undefined,
@@ -26,7 +26,7 @@ const initialState: EntitiesState = {
 };
 
 function updateObjectTypeAndPredefinedType(
-  state: EntitiesState,
+  state: EntityState,
   objectType: string | undefined,
   predefinedType: string | undefined,
 ) {
@@ -35,8 +35,10 @@ function updateObjectTypeAndPredefinedType(
   if (!objectType) {
     state.objectType = '';
     if (!predefinedType || predefinedType === 'USERDEFINED') {
+      state.objectType = objectType;
       state.predefinedType = 'NOTDEFINED';
     } else {
+      state.objectType = objectType;
       state.predefinedType = predefinedType;
     }
   } else if (!predefinedType || predefinedType === 'NOTDEFINED') {
@@ -46,39 +48,57 @@ function updateObjectTypeAndPredefinedType(
   }
 }
 
-function updateIsDefinedBy(state: EntitiesState, isDefinedBy: IfcPropertySet[] | undefined) {
-  state.isDefinedBy = isDefinedBy || [];
-
+/**
+ * Updates the `isDefinedBy` state and updates `objectType` and `predefinedType` based on the 'Attributes' property set
+ *
+ * @param state - The current state of the entity.
+ * @param isDefinedBy - The array of IfcPropertySet to update the state with.
+ */
+function updateIsDefinedBy(state: EntityState, isDefinedBy: IfcPropertySet[] | undefined) {
   if (!isDefinedBy) {
+    state.isDefinedBy = [];
     return;
   }
 
-  // Find 'Attributes' within isDefinedBy and set state.objectType and state.predefinedType
-  const attributesPropertySet = isDefinedBy.find((propertySet) => propertySet.name === 'Attributes');
+  let attributesPropertySet: IfcPropertySet | undefined;
+
+  // Filter out 'Attributes' property set from isDefinedBy and find 'Attributes' property set
+  state.isDefinedBy = isDefinedBy.filter((propertySet) => {
+    if (propertySet.name === 'Attributes') {
+      attributesPropertySet = propertySet;
+      return false;
+    }
+    return true;
+  });
+
+  // Set state.objectType and state.predefinedType based on 'Attributes' property set
   if (attributesPropertySet) {
     const objectTypeProperty = attributesPropertySet.hasProperties.find((property) => property.name === 'ObjectType');
-    if (objectTypeProperty) {
-      if (objectTypeProperty.type === 'IfcPropertySingleValue') {
-        state.objectType = objectTypeProperty.nominalValue?.value;
-      } else if (objectTypeProperty.type === 'IfcPropertyEnumeratedValue') {
-        state.objectType = objectTypeProperty.enumerationValues?.[0]?.value;
-      }
-    }
-
     const predefinedTypeProperty = attributesPropertySet.hasProperties.find(
       (property) => property.name === 'PredefinedType',
     );
-    if (predefinedTypeProperty) {
-      if (predefinedTypeProperty.type === 'IfcPropertySingleValue') {
+
+    switch (objectTypeProperty?.type) {
+      case 'IfcPropertySingleValue':
+        state.objectType = objectTypeProperty.nominalValue?.value;
+        break;
+      case 'IfcPropertyEnumeratedValue':
+        state.objectType = objectTypeProperty.enumerationValues?.[0]?.value;
+        break;
+    }
+
+    switch (predefinedTypeProperty?.type) {
+      case 'IfcPropertySingleValue':
         state.predefinedType = predefinedTypeProperty.nominalValue?.value;
-      } else if (predefinedTypeProperty.type === 'IfcPropertyEnumeratedValue') {
+        break;
+      case 'IfcPropertyEnumeratedValue':
         state.predefinedType = predefinedTypeProperty.enumerationValues?.[0]?.value;
-      }
+        break;
     }
   }
 }
 
-function updateHasAssociations(state: EntitiesState, hasAssociations: Association[] | undefined) {
+function updateHasAssociations(state: EntityState, hasAssociations: Association[] | undefined) {
   const currentAssociationsJSON = JSON.stringify(state.hasAssociations);
   const newAssociationsJSON = JSON.stringify(hasAssociations);
 
@@ -133,8 +153,47 @@ export const selectName = (state: RootState) => state.ifcEntity.name;
 export const selectDescription = (state: RootState) => state.ifcEntity.description;
 export const selectTag = (state: RootState) => state.ifcEntity.tag;
 export const selectPredefinedType = (state: RootState) => state.ifcEntity.predefinedType;
-export const selectIsDefinedBy = (state: RootState) => state.ifcEntity.isDefinedBy;
 export const selectHasAssociations = (state: RootState) => state.ifcEntity.hasAssociations;
+export const selectIsDefinedBy = (state: RootState) => state.ifcEntity.isDefinedBy;
+
+const extractAndMergeAttributes = (
+  ifcEntity: IfcEntity,
+  propertySets: IfcPropertySet[] | undefined,
+): IfcPropertySet[] => {
+  const attributesPropertySet: IfcPropertySet = {
+    name: 'Attributes',
+    type: 'IfcPropertySet',
+    hasProperties: [
+      {
+        name: 'Description',
+        type: 'IfcPropertySingleValue',
+        nominalValue: { type: 'IfcText', value: ifcEntity.description || '' },
+      },
+      {
+        name: 'ObjectType',
+        type: 'IfcPropertySingleValue',
+        nominalValue: { type: 'IfcText', value: ifcEntity.objectType || '' },
+      },
+      { name: 'Name', type: 'IfcPropertySingleValue', nominalValue: { type: 'IfcText', value: ifcEntity.name || '' } },
+      {
+        name: 'PredefinedType',
+        type: 'IfcPropertySingleValue',
+        nominalValue: { type: 'IfcText', value: ifcEntity.predefinedType || '' },
+      },
+    ],
+  };
+
+  const updatedPropertySets = propertySets ? [...propertySets, attributesPropertySet] : [attributesPropertySet];
+
+  return updatedPropertySets;
+};
+
+export const selectIsDefinedByIncludingAttributes = createSelector(
+  [selectIfcEntity, selectIsDefinedBy],
+  (ifcEntity, propertySets) => {
+    return extractAndMergeAttributes(ifcEntity, propertySets);
+  },
+);
 
 export const selectHasAssociationsMap = createSelector(
   selectHasAssociations,
@@ -160,7 +219,15 @@ export const selectHasAssociationsMap = createSelector(
   },
 );
 
-export const { setIfcEntity, setName, setDescription, setTag, setPredefinedType, setIsDefinedBy, setHasAssociations } =
-  ifcEntitySlice.actions;
+export const {
+  setIfcEntity,
+  setName,
+  setDescription,
+  setObjectType,
+  setTag,
+  setPredefinedType,
+  setIsDefinedBy,
+  setHasAssociations,
+} = ifcEntitySlice.actions;
 
 export const ifcEntityReducer = ifcEntitySlice.reducer;
