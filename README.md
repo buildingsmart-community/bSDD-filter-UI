@@ -1,90 +1,145 @@
 # Introduction
-This project is part of an opensource development of a series of consistent bSDD plugins and bSDD web UI.
+This project is part of an open-source development of a series of consistent bSDD plugins and bSDD web UI.
 
 Subprojects:
--	Web UI https://github.com/buildingsmart-community/bSDD-filter-UI
--	Revit Plugin https://github.com/buildingsmart-community/bSDD-Revit-plugin
--	Sketchup bSDD plugin https://github.com/DigiBase-VolkerWessels/SketchUp-bsDD-plugin
--	Trimble Connect bSDD plugin (Not available yet)
+- Web UI: https://github.com/buildingsmart-community/bSDD-filter-UI
+- Revit Plugin: https://github.com/buildingsmart-community/bSDD-Revit-plugin
+- Sketchup bSDD plugin: https://github.com/DigiBase-VolkerWessels/SketchUp-bsDD-plugin
+- Trimble Connect bSDD plugin (Not available yet)
 
-This project is initiated by Dutch contractors VolkerWessels and Heijmans. By starting this opensource development we believe we can help the industry structuring data. Proper usage of the buildingSMART Data Dictionary helps in getting consistent information in objects. Good information is the basis for further automation. 
-The idea of our development is that we inspire our industry to include bSDD in their processes and softwareproducts natively.
+This project is initiated by Dutch contractors VolkerWessels and Heijmans. By starting this open-source development, we believe we can help the industry structure data. Proper usage of the buildingSMART Data Dictionary helps in getting consistent information in objects. Good information is the basis for further automation. The idea of our development is to inspire our industry to include bSDD in their processes and software products natively.
 
 # API
 ## Selection Component API
-Functions called from UI
-* window.bsddBridge.loadSettings
-* window.bsddBridge.bsddSearch
-* window.bsddBridge.bsddSelect
-* window.bsddBridge.saveSettings
+Functions called from UI:
+* `window.bsddBridge.loadSettings`
+* `window.bsddBridge.bsddSearch`
+* `window.bsddBridge.bsddSelect`
+* `window.bsddBridge.saveSettings`
  
 Functions provided by UI:
-* window.updateSelection
-* window.updateSettings
+* `window.updateSelection`
+* `window.updateSettings`
 
 ## Search Component API
-Functions called from UI
-* window.bsddBridge.save
-* window.bsddBridge.cancel
-* window.bsddBridge.loadSettings 
+Functions called from UI:
+* `window.bsddBridge.save`
+* `window.bsddBridge.cancel`
+* `window.bsddBridge.loadSettings`
 
 # bSDD Search Component for React
 
-## Live demo
-https://bim-tools.github.io/react-bsdd-search/
+## Live demo of the search UI
+https://buildingsmart-community.github.io/bSDD-filter-UI/main/bsdd_search_settings/
 
-![](https://github.com/BIM-Tools/react-bsdd-search/raw/master/docs/bSDD-search-component.png)
+## Live demo of the combined UI
+https://buildingsmart-community.github.io/bSDD-filter-UI/main/
 
 ## Usage
 
-HTML template, make sure you include a link to bootstrap 5 css.
+### Dependencies
+To use the bSDD web UI components, you need to have the following dependencies installed in your project:
+- React 18 or higher
+- ReactDOM 18 or higher
+- @mantine/core
+- @mantine/hooks
+- @reduxjs/toolkit
+- react-redux
+- react-router-dom
+- use-query-params
+- mantine-react-table
+- clsx
+- dayjs
+- i18next
+- react-i18next
+- react-select
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>bSDD React App</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
-      crossorigin="anonymous"
-    />
-  </head>
-  <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-  </body>
-</html>
+You can install these dependencies using yarn:
+
+```bash
+yarn add react react-dom @mantine/core @mantine/hooks @reduxjs/toolkit react-redux react-router-dom use-query-params mantine-react-table clsx dayjs i18next react-i18next react-select
 ```
 
-Main react javascript file
+### Entry Points for Different Client Applications
 
-```javascript
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import { BsddSearch } from 'react-bsdd-search'
+#### Revit and Tekla (CefSharp)
+For Revit and Tekla applications using CefSharp, the entry point is designed to integrate with the host application's settings and data. The `useCefSharpBridge` hook is used to communicate with the host application.
 
-function callback(data) {
-  console.log(data)
-  alert(JSON.stringify(data, null, 2))
+#### Standalone Search Page with Settings
+For a standalone search page with settings, use the `BsddSearchSettingsLoader` component. This component provides a search interface along with settings management.
+
+#### Standalone Selection Page with Settings
+For a standalone selection page with settings, use the `BsddSelectionSettingsLoader` component. This component provides a selection interface along with settings management.
+
+#### Combined Page for Single Window Applications (e.g., Trimble Connect)
+For applications where only a single window can be used, such as Trimble Connect, use the `BsddCombinedLoader` component. This component combines both search and selection interfaces along with settings management.
+
+## Example Usage
+
+### Revit and Tekla (CefSharp)
+```tsx
+import { useCefSharpBridge } from './lib/common/bsddBridge/useCefSharpBridge';
+
+function App() {
+  const apiFunctions = useCefSharpBridge();
+
+  return (
+    <ApiFunctionsProvider value={apiFunctions}>
+      <BsddSearch />
+    </ApiFunctionsProvider>
+  );
 }
 
-const config = {
-  defaultDomains: [
-    {
-      value: 'https://identifier.buildingsmart.org/uri/digibase/volkerwesselsbv-0.1',
-      label: 'VolkerWessels Bouw & Vastgoed',
-    },
-  ],
-}
-
-const root = ReactDOM.createRoot(document.getElementById('root'))
-root.render(
-  <React.StrictMode>
-    <BsddSearch callback={callback} config={config} />
-  </React.StrictMode>,
-)
+export default App;
 ```
 
+### Standalone Search Page with Settings
+```tsx
+import BsddSearchSettingsLoader from './BsddSearchSettingsLoader';
+
+function Main() {
+  return (
+    <AppProvider>
+      <BsddSearchSettingsLoader />
+    </AppProvider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(<Main />);
+```
+
+### Standalone Selection Page with Settings
+```tsx
+import BsddSelectionSettingsLoader from './BsddSelectionSettingsLoader';
+
+function Main() {
+  return (
+    <AppProvider>
+      <BsddSelectionSettingsLoader />
+    </AppProvider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(<Main />);
+```
+
+### Combined Page for Single Window Applications (e.g., Trimble Connect)
+```tsx
+import BsddCombinedLoader from './BsddCombinedLoader';
+
+function Main() {
+  return (
+    <AppProvider>
+      <BsddCombinedLoader />
+    </AppProvider>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(<Main />);
+```
+
+## Contributing
+We welcome contributions from the community. Please feel free to open issues or submit pull requests.
+
+## License
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
