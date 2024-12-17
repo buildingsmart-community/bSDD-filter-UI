@@ -1,5 +1,4 @@
 import { Select, TextInput } from '@mantine/core';
-import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../common/app/hooks';
 import {
   IfcProperty,
@@ -16,7 +15,6 @@ import {
   setObjectType,
 } from '../../../common/slices/ifcEntitySlice';
 import Check from '../../Checkbox';
-import { t } from 'i18next';
 
 interface PropertyInputProps {
   propertySet: IfcPropertySet;
@@ -62,43 +60,45 @@ const PropertyInput = ({
 }: PropertyInputProps) => {
   const dispatch = useAppDispatch();
   const propertySets = useAppSelector(selectIsDefinedBy);
-  const [inputValue, setInputValue] = useState<any>('');
 
-  useEffect(() => {
-    if ('nominalValue' in property) {
-      setInputValue(property.nominalValue?.value || '');
-    } else if ('enumerationValues' in property) {
-      setInputValue(property.enumerationValues?.[0]?.value || '');
-    }
-  }, [property]);
+  const defaultValue: string | number | undefined =
+    property.type === 'IfcPropertySingleValue'
+      ? property.nominalValue?.value || undefined
+      : property.type === 'IfcPropertyEnumeratedValue'
+      ? property.enumerationValues?.[0]?.value || undefined
+      : undefined;
 
-  const handleBlur = () => {
+  const handleBlur = (value: any) => {
     if (propertySets && propertySet.name) {
       if (propertySet.name !== 'Attributes') {
         let newValue;
         if ('nominalValue' in property) {
           newValue = {
-            nominalValue: { ...property.nominalValue, value: inputValue },
+            nominalValue: { ...property.nominalValue, value },
           };
         } else if ('enumerationValues' in property) {
           newValue = {
-            enumerationValues: [{ ...property.enumerationValues?.[0], value: inputValue }],
+            enumerationValues: [{ value }],
           };
         } else {
           newValue = {
-            value: inputValue,
+            value,
           };
         }
         const updatedPropertySets = updatePropertySets(propertySets, propertySet.name, property.name, newValue);
         dispatch(setIsDefinedBy(Object.values(updatedPropertySets)));
       } else {
         if (property.name === 'ObjectType') {
-          dispatch(setObjectType(inputValue));
+          dispatch(setObjectType(value));
         } else if (property.name === 'Description') {
-          dispatch(setDescription(inputValue));
+          dispatch(setDescription(value));
         }
       }
     }
+  };
+
+  const handleChange = (value: any) => {
+    handleBlur(value);
   };
 
   switch (property.type) {
@@ -110,8 +110,8 @@ const PropertyInput = ({
             description={getInputDescription(propertyNaturalLanguageName, property.name)}
             disabled={isInstance}
             inputContainer={inputContainer}
-            value={inputValue}
-            setValue={(value: true | false | undefined) => setInputValue(value)}
+            value={property.nominalValue?.value ?? false}
+            setValue={(value: true | false | undefined) => handleChange(value)}
           />
         );
       } else {
@@ -119,18 +119,18 @@ const PropertyInput = ({
           <TextInput
             label={propertyNaturalLanguageName}
             description={getInputDescription(propertyNaturalLanguageName, property.name)}
-            placeholder={property.nominalValue?.value}
-            value={inputValue}
+            placeholder={property.nominalValue?.value ?? ''}
+            value={property.nominalValue?.value ?? ''}
             disabled={isInstance}
             inputContainer={inputContainer}
-            onChange={(e) => setInputValue(e.target.value)}
-            onBlur={handleBlur}
+            onChange={(e) => handleChange(e.target.value)}
+            onBlur={(e) => handleBlur(e.target.value)}
           />
         );
       }
     }
     case 'IfcPropertyEnumeratedValue': {
-      const value = property.enumerationValues?.[0]?.value;
+      const value = property.enumerationValues?.[0]?.value ?? '';
       const enumerationValues = property.enumerationReference?.enumerationValues || [];
       return (
         <Select
@@ -139,8 +139,8 @@ const PropertyInput = ({
           value={value}
           inputContainer={inputContainer}
           disabled={isInstance || property.enumerationReference?.enumerationValues?.length === 1}
-          onChange={(e) => setInputValue(e)}
-          onBlur={handleBlur}
+          clearable={true}
+          onChange={(e) => handleChange(e)}
           data={enumerationValues.map((ifcValue: IfcValue) => ({
             value: ifcValue.value,
             label: ifcValue.value,
@@ -152,11 +152,11 @@ const PropertyInput = ({
       return (
         <TextInput
           placeholder={property.name}
-          value={inputValue}
+          defaultValue={defaultValue}
           disabled={isInstance}
           inputContainer={inputContainer}
-          onChange={(e) => setInputValue(e.target.value)}
-          onBlur={handleBlur}
+          onChange={(e) => handleChange(e.target.value)}
+          onBlur={(e) => handleBlur(e.target.value)}
         />
       );
     }

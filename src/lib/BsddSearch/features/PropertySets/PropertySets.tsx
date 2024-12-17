@@ -146,7 +146,7 @@ function getEnumerationValuesFromProperty(
     // Add IfcPropertySingleValue fallback for software that does not support IfcPropertyEnumeratedValue
     if ('nominalValue' in property && property.nominalValue) {
       const foundValue = allowedEnumerationValues.find(
-        (allowedValue) => allowedValue.value === property.nominalValue.value,
+        (allowedValue) => allowedValue.value === property.nominalValue?.value,
       );
       return foundValue ? [foundValue] : [];
     }
