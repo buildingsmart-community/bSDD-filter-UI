@@ -204,8 +204,9 @@ const updateAssociations = (
  *
  * @param sourcePropertySet - The source property set containing properties to update.
  * @param targetPropertySet - The target property set to be updated.
+ * @returns A new IfcPropertySet object with updated properties.
  */
-const updateProperties = (sourcePropertySet: IfcPropertySet, targetPropertySet: IfcPropertySet): void => {
+const updateProperties = (sourcePropertySet: IfcPropertySet, targetPropertySet: IfcPropertySet): IfcPropertySet => {
   const targetPropertiesMap = new Map<string, IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue>();
 
   targetPropertySet.hasProperties.forEach((property) => {
@@ -218,7 +219,10 @@ const updateProperties = (sourcePropertySet: IfcPropertySet, targetPropertySet: 
     }
   });
 
-  targetPropertySet.hasProperties = Array.from(targetPropertiesMap.values());
+  return {
+    ...targetPropertySet,
+    hasProperties: Array.from(targetPropertiesMap.values()),
+  };
 };
 
 /**
@@ -240,7 +244,8 @@ const updatePropertySets = (
   sourcePropertySetMap.forEach((sourcePropertySet, name) => {
     const targetPropertySet = targetPropertySetsMap.get(name);
     if (targetPropertySet) {
-      updateProperties(sourcePropertySet, targetPropertySet);
+      const updatedPropertySet = updateProperties(sourcePropertySet, targetPropertySet);
+      targetPropertySetsMap.set(name, updatedPropertySet);
     } else {
       targetPropertySetsMap.set(name, sourcePropertySet);
     }
