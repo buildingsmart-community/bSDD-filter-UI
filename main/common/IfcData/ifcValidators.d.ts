@@ -26,7 +26,7 @@ export declare function patchIfcClassificationReference(ifcClassificationReferen
  */
 export declare function validateDictionary(state: RootState, dispatch: AppDispatch, bsddDictionary: BsddDictionary | null): Promise<BsddDictionary | null>;
 /**
- * Validates the IFC data by checking and fixing the associations of each IFC entity.
+ * Validates the IFC data by checking and fixing the associations and property sets of each IFC entity.
  *
  * @param ifcEntities - The array of IFC entities to be validated.
  * @param state - The current state of the Redux store.
