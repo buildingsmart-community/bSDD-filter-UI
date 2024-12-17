@@ -25,7 +25,7 @@ export async function getBsddClass(
   if (classCache[uri]) {
     return classCache[uri];
   }
-  const response = await bsddApi.api.classV1List({
+  const response = await bsddApi.api.classGet({
     Uri: uri,
     IncludeClassProperties: true,
     IncludeChildClassReferences: true,
@@ -51,7 +51,7 @@ export async function getBsddDictionary(bsddEnvironmentUri: string, uri: string)
   if (dictionaryCache[uri]) {
     return dictionaryCache[uri];
   }
-  const response = await bsddApi.api.dictionaryV1List({ Uri: uri });
+  const response = await bsddApi.api.dictionaryGet({ Uri: uri });
   if (!response.ok) {
     throw new Error(`HTTP error! status: ${response.status}`);
   }

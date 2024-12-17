@@ -4,7 +4,7 @@ import type { AppDispatch, RootState } from '../app/store';
 import { BsddApi } from '../BsddApi/BsddApi';
 import {
   ClassContractV1,
-  ClassListItemContractV1,
+  ClassListItemContractV1Classes,
   ClassPropertyContractV1,
   DictionaryContractV1,
   RequestParams,
@@ -23,7 +23,7 @@ export interface BsddState {
   classes: { [key: string]: ClassContractV1 };
   propertyNamesByLanguage: { [languageCode: string]: { [propertyUri: string]: string } };
   dictionaries: { [key: string]: DictionaryContractV1 };
-  dictionaryClasses: { [key: string]: ClassListItemContractV1[] };
+  dictionaryClasses: { [key: string]: ClassListItemContractV1Classes[] };
   dictionariesLoaded: boolean;
   groupedClassRelations: { [key: string]: ClassContractV1[] };
   searchResult: SearchInDictionaryResponseContractV1 | null;
@@ -34,7 +34,7 @@ export interface BsddState {
 const apiBaseUrl = import.meta.env.VITE_BSDD_ENVIRONMENT;
 const bsddApi = new BsddApi(apiBaseUrl);
 
-const fetchPromisesCache: Partial<Record<string, Promise<ClassListItemContractV1[]>>> = {};
+const fetchPromisesCache: Partial<Record<string, Promise<ClassListItemContractV1Classes[]>>> = {};
 
 const initialState: BsddState = {
   mainDictionaryClassification: null,
@@ -98,7 +98,7 @@ export const fetchDictionaries = createAsyncThunk<
 
   try {
     const fetchPage = async (pageOffset: number) => {
-      const response = await bsddApi.api.dictionaryV1List({
+      const response = await bsddApi.api.dictionaryGet({
         IncludeTestDictionaries: includeTest,
         Limit: limit,
         Offset: pageOffset,
@@ -146,7 +146,7 @@ export const fetchDictionaryClasses = createAsyncThunk(
     }
 
     const fetchPromise = (async () => {
-      const classes: ClassListItemContractV1[] = [];
+      const classes: ClassListItemContractV1Classes[] = [];
       let offset = 0;
 
       const initialData = await fetchDictionaryClassData(location, offset, languageCode);
@@ -185,7 +185,7 @@ export const updatePropertyNaturalLanguageNames = createAsyncThunk(
     const fetchPropertyDetails = async (property: ClassPropertyContractV1) => {
       if (property.propertyUri) {
         try {
-          const response = await bsddApi.api.propertyV4List(
+          const response = await bsddApi.api.propertyGet(
             {
               uri: property.propertyUri,
               languageCode,
@@ -220,7 +220,7 @@ export const updatePropertyNaturalLanguageNames = createAsyncThunk(
 );
 
 async function fetchDictionaryClassData(location: string, offset: number, languageCode: string | undefined) {
-  const response = await bsddApi.api.dictionaryV1ClassesList(
+  const response = await bsddApi.api.dictionaryClassesGetWithClasses(
     {
       Uri: location,
       UseNestedClasses: false,
@@ -252,7 +252,7 @@ export const fetchClasses = createAsyncThunk(
         return;
       }
 
-      const response = await bsddApi.api.classV1List({
+      const response = await bsddApi.api.classGet({
         Uri: relatedClassUri,
         languageCode,
       });
@@ -280,7 +280,7 @@ export const searchInDictionary = createAsyncThunk(
         headers,
       };
 
-      const response = await bsddApi.api.searchInDictionaryV1List(queryParameters, params);
+      const response = await bsddApi.api.searchInDictionaryGet(queryParameters, params);
       console.log('search in dictionary response', response.data);
       return response.data;
     } catch (error) {
@@ -319,7 +319,7 @@ export const fetchDictionary = createAsyncThunk(
     };
 
     try {
-      const response = await bsddApi.api.dictionaryV1List(queryParameters, params);
+      const response = await bsddApi.api.dictionaryGet(queryParameters, params);
       if (response.status !== 200) {
         console.error(`API request failed with status ${response.status}`);
 
@@ -380,7 +380,7 @@ const bsddSlice = createSlice({
     setClasses: (state, action: PayloadAction<{ [key: string]: ClassContractV1 }>) => {
       state.classes = action.payload;
     },
-    addDictionaryClasses: (state, action: PayloadAction<{ uri: string; data: ClassListItemContractV1[] }>) => {
+    addDictionaryClasses: (state, action: PayloadAction<{ uri: string; data: ClassListItemContractV1Classes[] }>) => {
       state.dictionaryClasses[action.payload.uri] = action.payload.data;
     },
   },
@@ -485,7 +485,7 @@ export const fetchMainDictionaryClassification = createAsyncThunk(
     };
 
     try {
-      const response = await bsddApi.api.classV1List(queryParameters, params);
+      const response = await bsddApi.api.classGet(queryParameters, params);
       if (response.status !== 200) {
         console.error(`API request failed with status ${response.status}`);
         return null;
