@@ -12,7 +12,7 @@ import {
   selectIfcDictionary,
 } from '../slices/settingsSlice';
 import { useQueryParams, StringParam, ArrayParam, BooleanParam, withDefault } from 'use-query-params';
-import { setSavedPropertyIsInstanceMap } from '../slices/ifcDataSlice';
+import { setSavedPropertyIsInstanceMap, setValidatedIfcData } from '../slices/ifcDataSlice';
 import { mockData } from '../../../mocks/mockData';
 
 const useBrowserBridge = () => {
@@ -79,8 +79,12 @@ const useBrowserBridge = () => {
         };
         dispatch(setSettingsWithValidation(settings));
       }
+
       if (mockData.propertyIsInstanceMap) {
         dispatch(setSavedPropertyIsInstanceMap(mockData.propertyIsInstanceMap));
+      }
+      if (mockData.ifcData) {
+        dispatch(setValidatedIfcData(mockData.ifcData));
       }
     }
   }, [query, dispatch]);

@@ -62,6 +62,21 @@ export interface SearchResult {
   };
 }
 
+const TRANSLATABLE_ATTRIBUTES: ClassPropertyContractV1[] = [
+  {
+    name: 'Name',
+    propertyUri: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/prop/Name',
+  },
+  {
+    name: 'Description',
+    propertyUri: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/prop/Description',
+  },
+  {
+    name: 'ObjectType',
+    propertyUri: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/prop/ObjectType',
+  },
+];
+
 /**
  * Fetches dictionaries from the bSDD API.
  *
@@ -195,7 +210,9 @@ export const updatePropertyNaturalLanguageNames = createAsyncThunk(
       }
     };
 
-    const propertyFetchPromises = classProperties.map(fetchPropertyDetails);
+    const properties = [...TRANSLATABLE_ATTRIBUTES, ...classProperties];
+
+    const propertyFetchPromises = properties.map(fetchPropertyDetails);
     await Promise.all(propertyFetchPromises);
 
     return { languageCode, propertyNames };
@@ -417,7 +434,8 @@ export const selectMainDictionaryClassification = (state: RootState) => state.bs
 export const selectMainDictionaryClassificationUri = (state: RootState) => state.bsdd.mainDictionaryClassificationUri;
 export const selectDictionary = (state: RootState, uri: string) => {
   return state.bsdd?.dictionaries?.[uri] ?? null;
-};export const selectDictionaryClasses = (state: RootState, location: string) => state.bsdd.dictionaryClasses[location];
+};
+export const selectDictionaryClasses = (state: RootState, location: string) => state.bsdd.dictionaryClasses[location];
 export const selectBsddDictionaries = (state: RootState) => state.bsdd.dictionaries;
 export const selectBsddDictionariesLoaded = (state: RootState) => state.bsdd.dictionariesLoaded;
 export const selectdictionaryClasses = (state: RootState) => state.bsdd.dictionaryClasses;

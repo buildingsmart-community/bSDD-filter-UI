@@ -4,7 +4,16 @@ import type { AppDispatch, RootState } from '../app/store';
 import { ClassListItemContractV1, DictionaryClassesResponseContractV1 } from '../BsddApi/BsddApiBase';
 import { fetchDictionaryClasses, getDictionary, selectDictionary, selectDictionaryClasses } from '../slices/bsddSlice';
 import { BsddDictionary } from './bsddBridgeData';
-import { Association, IfcClassification, IfcClassificationReference, IfcEntity } from './ifc';
+import {
+  Association,
+  IfcClassification,
+  IfcClassificationReference,
+  IfcEntity,
+  IfcProperty,
+  IfcPropertyEnumeratedValue,
+  IfcPropertySet,
+  IfcPropertySingleValue,
+} from './ifc';
 import { convertBsddDictionaryToIfcClassification } from './ifcBsddConverters';
 
 type ValidationState = 'valid' | 'invalid' | 'fixed';
@@ -251,7 +260,15 @@ function bsddIfcClassification(
   };
 }
 
-// Helper function to process associations
+/**
+ * Processes a list of associations, validating and potentially modifying them.
+ * 
+ * @param associations - The list of associations to process.
+ * @param dispatch - The dispatch function for triggering actions.
+ * @param state - The current state of the application.
+ * @returns A promise that resolves to a list of processed associations, 
+ *          with invalid associations filtered out.
+ */
 async function processAssociations(
   associations: Association[],
   dispatch: any,
@@ -277,7 +294,55 @@ async function processAssociations(
 }
 
 /**
- * Validates the IFC data by checking and fixing the associations of each IFC entity.
+ * Merges properties from multiple IfcPropertySet objects into a single array of unique properties.
+ * 
+ * @param propertySets - An array of IfcPropertySet objects containing properties to be merged.
+ * @returns An array of unique properties, which can be of type IfcProperty, IfcPropertySingleValue, or IfcPropertyEnumeratedValue.
+ */
+const mergeProperties = (
+  propertySets: IfcPropertySet[],
+): (IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue)[] => {
+  const propertyMap: Map<string, IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue> = new Map();
+
+  for (const propertySet of propertySets) {
+    for (const prop of propertySet.hasProperties) {
+      if (!propertyMap.has(prop.name)) {
+        propertyMap.set(prop.name, prop);
+      }
+    }
+  }
+
+  return Array.from(propertyMap.values());
+};
+
+/**
+ * Merges an array of IfcPropertySet objects into a single array of unique IfcPropertySet objects.
+ *
+ * @param propertySets - An array of IfcPropertySet objects to be merged.
+ * @returns An array of merged IfcPropertySet objects with unique names.
+ */
+const mergePropertySets = (propertySets: IfcPropertySet[]): IfcPropertySet[] => {
+  const propertySetMap: Map<string, IfcPropertySet> = new Map();
+
+  for (const ps of propertySets) {
+    const key = ps.name || '';
+    if (!propertySetMap.has(key)) {
+      propertySetMap.set(key, {
+        type: 'IfcPropertySet',
+        name: ps.name,
+        hasProperties: mergeProperties([ps]),
+      });
+    } else {
+      const existingSet = propertySetMap.get(key)!;
+      existingSet.hasProperties = mergeProperties([existingSet, ps]);
+    }
+  }
+
+  return Array.from(propertySetMap.values());
+};
+
+/**
+ * Validates the IFC data by checking and fixing the associations and property sets of each IFC entity.
  *
  * @param ifcEntities - The array of IFC entities to be validated.
  * @param state - The current state of the Redux store.
@@ -304,7 +369,9 @@ export const validateIfcData = async (
 
       const processedAssociations = await processAssociations(associations, dispatch, state);
 
-      return { ...ifcEntity, hasAssociations: processedAssociations };
+      const mergedPropertySets = ifcEntity.isDefinedBy ? mergePropertySets(ifcEntity.isDefinedBy) : undefined;
+
+      return { ...ifcEntity, hasAssociations: processedAssociations, isDefinedBy: mergedPropertySets };
     }),
   );
 

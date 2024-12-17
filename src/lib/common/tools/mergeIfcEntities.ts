@@ -1,4 +1,3 @@
-import { deepMerge } from '@mantine/core';
 import {
   IfcEntity,
   IfcPropertySet,
@@ -48,18 +47,17 @@ const mergeProperties = (setsWithName: IfcPropertySet[]): IfcProperty[] => {
 const mergePropertySets = (propertySets: IfcPropertySet[]): IfcPropertySet[] => {
   const propertySetMap: Map<string, IfcPropertySet[]> = new Map();
 
-  propertySets.forEach((ps) => {
-    if (ps && ps.name) {
-      if (!propertySetMap.has(ps.name)) {
-        propertySetMap.set(ps.name, []);
-      }
-      propertySetMap.get(ps.name)!.push(ps);
+  propertySets.forEach((propertySet) => {
+    const key = propertySet.name || '';
+    if (!propertySetMap.has(key)) {
+      propertySetMap.set(key, []);
     }
+    propertySetMap.get(key)!.push(propertySet);
   });
 
   return Array.from(propertySetMap.entries()).map(([name, propertySets]) => ({
     type: 'IfcPropertySet',
-    name,
+    name: name,
     hasProperties: mergeProperties(propertySets),
   }));
 };
@@ -130,21 +128,20 @@ export const mergeIfcEntities = (ifcEntities: IfcEntity[]): IfcEntity | null => 
 };
 
 /**
- * Creates a map of attribute names and their corresponding values from the given IFC entity.
+ * Creates an object of attribute names and their corresponding values from the given IFC entity.
  *
  * @param sourceEntity - The IFC entity from which to extract the attributes.
- * @returns A map where the keys are attribute names and the values are the corresponding attribute values.
+ * @returns An object where the keys are attribute names and the values are the corresponding attribute values.
  */
-const getAttributesMap = (sourceEntity: IfcEntity): Map<string, string> => {
+const getAttributes = (sourceEntity: IfcEntity): { [key: string]: string } => {
   return IFC_ENTITY_STRING_ATTRIBUTES.reduce((acc, prop) => {
     const value = sourceEntity[prop];
     if (value !== undefined && value !== '...') {
-      acc.set(prop, value);
+      acc[prop] = value;
     }
     return acc;
-  }, new Map<string, string>());
+  }, {} as { [key: string]: string });
 };
-
 /**
  * Creates a map of associations based on their location if they are of type 'IfcClassificationReference'.
  *
@@ -174,9 +171,8 @@ const getPropertySetsMap = (propertySets: IfcPropertySet[] | undefined): Map<str
   if (!propertySets) return null;
 
   return propertySets.reduce((acc, propertySet) => {
-    if (propertySet.name) {
-      acc.set(propertySet.name, propertySet);
-    }
+    const key = propertySet.name || '';
+    acc.set(key, propertySet);
     return acc;
   }, new Map<string, IfcPropertySet>());
 };
@@ -214,7 +210,8 @@ const updateProperties = (sourcePropertySet: IfcPropertySet, targetPropertySet: 
   });
 
   sourcePropertySet.hasProperties.forEach((sourceProperty) => {
-    if ((sourceProperty as IfcPropertySingleValue).nominalValue !== '...') {
+    const sourceValue = (sourceProperty as IfcPropertySingleValue).nominalValue;
+    if (sourceValue !== '...') {
       targetPropertiesMap.set(sourceProperty.name, sourceProperty);
     }
   });
@@ -264,12 +261,12 @@ export const updateEntitiesWithIfcEntity = (sourceEntity: IfcEntity, targetEntit
   // TODO: only return properties and classifications where the source is different from the target, AND present in source
   // because we only have to return actual changes
 
-  const sourceAttributesMap = getAttributesMap(sourceEntity);
+  const sourceAttributes = getAttributes(sourceEntity);
   const sourceAssociationsMap = getAssociationsMap(sourceEntity.hasAssociations);
   const sourcePropertySetsMap = getPropertySetsMap(sourceEntity.isDefinedBy);
 
   const updatedEntities = targetEntities.map((targetEntity) => {
-    const updatedEntity = { ...targetEntity, ...sourceAttributesMap };
+    const updatedEntity = { ...targetEntity, ...sourceAttributes };
 
     if (sourceAssociationsMap) {
       updatedEntity.hasAssociations = updateAssociations(sourceAssociationsMap, targetEntity.hasAssociations);

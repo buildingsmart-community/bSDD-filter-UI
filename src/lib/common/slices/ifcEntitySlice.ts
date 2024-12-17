@@ -43,8 +43,10 @@ function updateObjectTypeAndPredefinedType(
     }
   } else if (!predefinedType || predefinedType === 'NOTDEFINED') {
     state.predefinedType = 'USERDEFINED';
+    state.objectType = objectType;
   } else {
     state.predefinedType = predefinedType;
+    state.objectType = objectType;
   }
 }
 
