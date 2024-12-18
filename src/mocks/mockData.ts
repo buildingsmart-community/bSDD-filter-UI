@@ -28,9 +28,9 @@ export const mockData: BsddBridgeData = {
       {
         ifcClassification: {
           type: 'IfcClassification',
-          location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+          location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           editionDate: '0001-01-01T00:00:00',
-          name: 'DigiBase Demo NL-SfB tabel 1',
+          name: 'volkerwesselsbvgo Demo NL-SfB tabel 1',
         },
         parameterMapping: 'Assembly Code',
       },
@@ -39,6 +39,7 @@ export const mockData: BsddBridgeData = {
     includeTestDictionaries: true,
   },
   propertyIsInstanceMap: {
+    'Attributes/Name': true,
     'IsExternal': false,
     'Omvang/Bouwnummer': true,
     'FireRating': true,
@@ -68,7 +69,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '0.0',
@@ -127,6 +128,23 @@ export const mockData: BsddBridgeData = {
           name: 'bakgoot',
         },
       ],
+      isDefinedBy: [
+        {
+          type: 'IfcPropertySet',
+          name: 'Pset_ManufacturerTypeInformation',
+          hasProperties: [
+            {
+              type: 'IfcPropertySingleValue',
+              name: 'ModelReference',
+              specification: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/prop/ModelReference',
+              nominalValue: {
+                type: 'IfcText',
+                value: 'A',
+              },
+            }
+          ],
+        },
+      ],
     },
     {
       type: 'IfcWasteTerminal',
@@ -150,7 +168,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '52.10',
@@ -179,7 +197,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '52.10',
@@ -207,7 +225,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '52.10',
@@ -235,7 +253,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '52.10',
@@ -265,7 +283,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '21.12',
@@ -331,7 +349,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '31',
@@ -359,7 +377,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '31',
@@ -387,7 +405,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '31',
@@ -415,7 +433,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '31',
@@ -562,7 +580,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '31.20',
@@ -590,7 +608,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '31.31',
@@ -606,7 +624,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '31.25',
@@ -633,7 +651,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '31.20',
@@ -660,7 +678,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '31.20',
@@ -758,7 +776,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '27.22',
@@ -774,7 +792,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '27.22',
@@ -808,7 +826,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '21.21',
@@ -854,7 +872,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '22.20',
@@ -882,7 +900,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '22.20',
@@ -910,7 +928,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/nlsfb/12.2021',
+            location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
           },
           type: 'IfcClassificationReference',
           name: '32.31',

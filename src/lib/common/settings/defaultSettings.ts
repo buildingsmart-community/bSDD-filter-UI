@@ -4,12 +4,9 @@ const defaultSettings: BsddSettings = {
   mainDictionary: {
     ifcClassification: {
       type: 'IfcClassification',
-      source: 'digibase',
-      edition: '0.1',
+      location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3.0',
       editionDate: '0001-01-01T00:00:00',
-      name: 'Basis bouwproducten O&E',
-      description: '',
-      location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
+      name: 'IFC',
     },
     parameterMapping: 'Description',
   },
@@ -26,7 +23,7 @@ const defaultSettings: BsddSettings = {
     {
       ifcClassification: {
         type: 'IfcClassification',
-        location: 'https://identifier.buildingsmart.org/uri/nlsfb/nlsfb2005/2.2',
+        location: 'https://data.ketenstandaard.nl/publications/nlsfb/2021',
         editionDate: '0001-01-01T00:00:00',
         name: 'NL-SfB 2005',
       },
