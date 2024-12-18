@@ -15,7 +15,7 @@ import {
   updateMainDictionaryClassificationUri,
   updatePropertyNaturalLanguageNames,
 } from '../common/slices/bsddSlice';
-import { selectLoadedIfcEntity, selectSelectedIfcEntities } from '../common/slices/ifcDataSlice';
+import { selectMergedIfcEntity, selectSelectedIfcEntities } from '../common/slices/ifcDataSlice';
 import { setIfcEntity } from '../common/slices/ifcEntitySlice';
 import { selectActiveDictionaryUris, selectLanguage, selectMainDictionary } from '../common/slices/settingsSlice';
 import Apply from './Apply';
@@ -51,7 +51,7 @@ function BsddSearch() {
   const mainDictionary = useAppSelector(selectMainDictionary);
   const languageCode = useAppSelector(selectLanguage);
   const activeDictionaryLocations = useAppSelector(selectActiveDictionaryUris);
-  const loadedIfcEntity = useAppSelector(selectLoadedIfcEntity);
+  const selectedMergedIfcEntity = useAppSelector(selectMergedIfcEntity);
   const mainDictionaryClassificationUri = useAppSelector(selectMainDictionaryClassificationUri);
   const selectedIfcEntities = useAppSelector(selectSelectedIfcEntities);
 
@@ -82,10 +82,10 @@ function BsddSearch() {
   }, [mainDictionaryClassification, propertySetsOpened, languageCode, dispatch]);
 
   useEffect(() => {
-    if (!loadedIfcEntity || !mainDictionary) return;
+    if (!selectedMergedIfcEntity || !mainDictionary) return;
     const newActiveClassificationUri = mainDictionary.ifcClassification.location;
 
-    loadedIfcEntity.hasAssociations?.forEach((association) => {
+    selectedMergedIfcEntity.hasAssociations?.forEach((association) => {
       if (association.type === 'IfcClassificationReference') {
         const classificationReference = association;
         if (classificationReference.referencedSource?.location) {
@@ -101,7 +101,7 @@ function BsddSearch() {
         }
       }
     });
-  }, [mainDictionary, loadedIfcEntity, dispatch]);
+  }, [mainDictionary, selectedMergedIfcEntity, dispatch]);
 
   useEffect(() => {
     if (mainDictionaryClassificationUri) {

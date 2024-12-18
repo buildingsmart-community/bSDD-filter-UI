@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../app/store';
-import { Association, IfcClassification, IfcClassificationReference, IfcEntity } from '../IfcData/ifc';
-import { patchIfcClassificationReference, validateIfcData } from '../IfcData/ifcValidators';
+import { IfcEntity } from '../IfcData/ifc';
+import { validateIfcData } from '../IfcData/ifcValidators';
+import { mergeIfcEntities } from '../tools/mergeIfcEntities';
 
 export interface IfcDataState {
   loadedIfcEntities: IfcEntity[];
@@ -75,9 +76,12 @@ export const setValidatedSelectedIfcEntities = createAsyncThunk(
   },
 );
 
-export const selectLoadedIfcEntity = createSelector(
-  (state: RootState) => state.ifcData.loadedIfcEntities,
-  (ifcEntities) => ifcEntities[0],
+/**
+ * Selector to get the merged IfcEntity from selectedIfcEntities.
+ */
+export const selectMergedIfcEntity = createSelector(
+  (state: RootState) => state.ifcData.selectedIfcEntities,
+  (selectedIfcEntities) => mergeIfcEntities(selectedIfcEntities),
 );
 
 export const selectLoadedIfcEntities = (state: RootState) => state.ifcData.loadedIfcEntities;

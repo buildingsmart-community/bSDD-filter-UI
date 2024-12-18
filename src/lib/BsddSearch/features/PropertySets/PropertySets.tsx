@@ -12,7 +12,7 @@ import {
   IfcValue,
 } from '../../../common/IfcData/ifc';
 import { selectPropertyNamesByLanguage } from '../../../common/slices/bsddSlice';
-import { selectLoadedIfcEntity } from '../../../common/slices/ifcDataSlice';
+import { selectMergedIfcEntity } from '../../../common/slices/ifcDataSlice';
 import { selectIsDefinedByIncludingAttributes, setIsDefinedBy } from '../../../common/slices/ifcEntitySlice';
 import { selectLanguage } from '../../../common/slices/settingsSlice';
 import type { PropertySetMap } from '../../BsddSearch';
@@ -262,7 +262,7 @@ function GetIfcProperty(
 function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertySetsProps) {
   const dispatch = useAppDispatch();
 
-  const loadedIfcEntity = useAppSelector(selectLoadedIfcEntity);
+  const selectedMergedIfcEntity = useAppSelector(selectMergedIfcEntity);
   const propertySets = useAppSelector(selectIsDefinedByIncludingAttributes);
   const propertyNamesByLanguage = useAppSelector(selectPropertyNamesByLanguage);
   const languageCode = useAppSelector(selectLanguage);
@@ -286,14 +286,16 @@ function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertyS
           };
         }
 
-        newPropertySets[propertySetName].hasProperties.push(
-          GetIfcProperty(classProperty, propertySetName, loadedIfcEntity),
-        );
+        if (selectedMergedIfcEntity) {
+          newPropertySets[propertySetName].hasProperties.push(
+            GetIfcProperty(classProperty, propertySetName, selectedMergedIfcEntity),
+          );
+        }
       });
     });
 
     dispatch(setIsDefinedBy(Object.values(newPropertySets)));
-  }, [dispatch, loadedIfcEntity, mainDictionaryClassification]);
+  }, [dispatch, selectedMergedIfcEntity, mainDictionaryClassification]);
 
   useEffect(() => {
     if (!mainDictionaryClassification) return;
@@ -321,7 +323,7 @@ function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertyS
     });
 
     setPropertyNaturalLanguageNamesMap(newPropertyNaturalLanguageNames);
-  }, [mainDictionaryClassification, recursiveMode, loadedIfcEntity, propertyNamesByLanguage, languageCode]);
+  }, [mainDictionaryClassification, recursiveMode, selectedMergedIfcEntity, propertyNamesByLanguage, languageCode]);
 
   return (
     <div>
