@@ -205,20 +205,28 @@ const updateAssociations = (
 const updateProperties = (sourcePropertySet: IfcPropertySet, targetPropertySet: IfcPropertySet): IfcPropertySet => {
   const targetPropertiesMap = new Map<string, IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue>();
 
-  targetPropertySet.hasProperties.forEach((property) => {
+  for (const property of targetPropertySet.hasProperties) {
     targetPropertiesMap.set(property.name, property);
-  });
+  }
 
-  sourcePropertySet.hasProperties.forEach((sourceProperty) => {
+  for (const sourceProperty of sourcePropertySet.hasProperties) {
     const sourceValue = (sourceProperty as IfcPropertySingleValue).nominalValue;
     if (sourceValue !== '...') {
       targetPropertiesMap.set(sourceProperty.name, sourceProperty);
     }
-  });
+  }
+
+  const filteredProperties = [];
+  for (const property of targetPropertiesMap.values()) {
+    const value = (property as IfcPropertySingleValue).nominalValue;
+    if (value !== undefined && value !== null) {
+      filteredProperties.push(property);
+    }
+  }
 
   return {
     ...targetPropertySet,
-    hasProperties: Array.from(targetPropertiesMap.values()),
+    hasProperties: filteredProperties,
   };
 };
 
@@ -247,7 +255,8 @@ const updatePropertySets = (
       targetPropertySetsMap.set(name, sourcePropertySet);
     }
   });
-  return Array.from(targetPropertySetsMap.values());
+
+  return Array.from(targetPropertySetsMap.values()).filter((propertySet) => propertySet.hasProperties.length > 0);
 };
 
 /**
