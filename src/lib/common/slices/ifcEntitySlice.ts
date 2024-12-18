@@ -2,6 +2,7 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../app/store';
 import { Association, IfcClassificationReference, IfcEntity, IfcPropertySet } from '../IfcData/ifc';
+import { getIfcClassAndPredefinedType } from '../IfcData/ifcBsddConverters';
 
 export interface EntityState {
   type?: string;
@@ -151,7 +152,60 @@ const ifcEntitySlice = createSlice({
   },
 });
 
-export const selectIfcEntity = (state: RootState) => state.ifcEntity as IfcEntity;
+export const selectIfcEntity = createSelector(
+  (state: RootState) => state.ifcEntity,
+  (ifcEntityInput: IfcEntity | undefined): IfcEntity => {
+    const baseIfc: IfcEntity = ifcEntityInput
+      ? { ...JSON.parse(JSON.stringify(ifcEntityInput)) }
+      : { hasAssociations: [], isDefinedBy: [] };
+
+    baseIfc.isDefinedBy =
+      ifcEntityInput?.isDefinedBy
+        ?.map((propertySet) => ({
+          ...propertySet,
+          hasProperties: propertySet.hasProperties.filter((property) => {
+            if (property.type === 'IfcPropertySingleValue') {
+              return (
+                property.nominalValue !== null &&
+                property.nominalValue.value !== null &&
+                property.nominalValue.value !== '...'
+              );
+            }
+            if (property.type === 'IfcPropertyEnumeratedValue') {
+              return property.enumerationValues !== null;
+            }
+            return true;
+          }),
+        }))
+        .filter((propertySet) => propertySet.hasProperties.length > 0) || [];
+
+    baseIfc.hasAssociations = [];
+
+    ifcEntityInput?.hasAssociations?.forEach((association) => {
+      if (
+        association.type === 'IfcClassificationReference' &&
+        association?.referencedSource?.location?.includes('https://identifier.buildingsmart.org/uri/buildingsmart/ifc/')
+      ) {
+        const { type, predefinedType } = getIfcClassAndPredefinedType(association.identification);
+        if (type) {
+          baseIfc.type = type;
+        }
+
+        if (predefinedType) {
+          baseIfc.predefinedType = predefinedType;
+        }
+        if (!baseIfc.predefinedType) {
+          baseIfc.predefinedType = 'NOTDEFINED';
+        }
+      } else {
+        baseIfc.hasAssociations?.push(association);
+      }
+    });
+
+    return baseIfc;
+  },
+);
+
 export const selectName = (state: RootState) => state.ifcEntity.name;
 export const selectDescription = (state: RootState) => state.ifcEntity.description;
 export const selectTag = (state: RootState) => state.ifcEntity.tag;

@@ -154,6 +154,7 @@ function getEnumerationValuesFromProperty(
 
   return [];
 }
+
 /**
  * Creates an instance of IfcPropertyEnumeratedValue based on the selected bSDD class property and selected IfcEntity.
  *
@@ -181,26 +182,16 @@ function createIfcPropertyEnumeratedValue(
       name, // TODO get the right property enum name
       enumerationValues: allowedEnumerationValues,
     },
-    enumerationValues: allowedEnumerationValues,
   };
 
   if (classificationProperty.propertyUri) {
     ifcProperty.specification = classificationProperty.propertyUri;
   }
 
-  const enumerationValues = classificationProperty.predefinedValue
+  ifcProperty.enumerationValues = classificationProperty.predefinedValue
     ? [GetIfcPropertyValue(classificationProperty.dataType, classificationProperty.predefinedValue)]
-    : getEnumerationValuesFromProperty(
-        classificationProperty.dataType,
-        ifcEntity,
-        propertySetName,
-        name,
-        allowedEnumerationValues,
-      );
+    : null;
 
-  if (enumerationValues.length > 0) {
-    ifcProperty.enumerationValues = enumerationValues;
-  }
   return ifcProperty;
 }
 

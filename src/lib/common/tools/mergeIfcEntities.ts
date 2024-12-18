@@ -8,6 +8,7 @@ import {
   IfcClassificationReference,
 } from '../IfcData/ifc';
 
+const ATTRIBUTES: (keyof IfcEntity)[] = ['type', 'name', 'description', 'objectType', 'tag', 'predefinedType'] as const;
 const IFC_ENTITY_STRING_ATTRIBUTES = ['name', 'description', 'objectType', 'tag'] as const;
 
 const mergeStringProperties = (values: (string | undefined)[]): string | undefined => {
@@ -267,26 +268,20 @@ const updatePropertySets = (
  * @returns An array of updated IFC entities.
  */
 export const updateEntitiesWithIfcEntity = (sourceEntity: IfcEntity, targetEntities: IfcEntity[]): IfcEntity[] => {
-  // TODO: only return properties and classifications where the source is different from the target, AND present in source
-  // because we only have to return actual changes
+  const attributesToOverwrite: Partial<IfcEntity> = {};
 
-  const sourceAttributes = getAttributes(sourceEntity);
-  const sourceAssociationsMap = getAssociationsMap(sourceEntity.hasAssociations);
-  const sourcePropertySetsMap = getPropertySetsMap(sourceEntity.isDefinedBy);
-
-  const updatedEntities = targetEntities.map((targetEntity) => {
-    const updatedEntity = { ...targetEntity, ...sourceAttributes };
-
-    if (sourceAssociationsMap) {
-      updatedEntity.hasAssociations = updateAssociations(sourceAssociationsMap, targetEntity.hasAssociations);
+  ATTRIBUTES.forEach((attribute) => {
+    if (sourceEntity[attribute] && sourceEntity[attribute] !== '...') {
+      attributesToOverwrite[attribute] = sourceEntity[attribute];
     }
+  });
 
-    if (sourcePropertySetsMap) {
-      updatedEntity.isDefinedBy = updatePropertySets(sourcePropertySetsMap, targetEntity.isDefinedBy);
-    }
+  return targetEntities.map((targetEntity) => {
+    const updatedEntity: IfcEntity = { ...targetEntity, ...attributesToOverwrite };
+
+    updatedEntity.isDefinedBy = sourceEntity.isDefinedBy;
+    updatedEntity.hasAssociations = sourceEntity.hasAssociations;
 
     return updatedEntity;
   });
-
-  return updatedEntities;
 };

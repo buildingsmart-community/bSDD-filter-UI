@@ -4,10 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../common/app/hooks';
 import { ClassContractV1, DictionaryContractV1 } from '../common/BsddApi/BsddApiBase';
 import { IfcClassification, IfcClassificationReference, IfcEntity } from '../common/IfcData/ifc';
-import {
-  convertBsddDictionaryToIfcClassification,
-  getIfcClassAndPredefinedType,
-} from '../common/IfcData/ifcBsddConverters';
+import { convertBsddDictionaryToIfcClassification } from '../common/IfcData/ifcBsddConverters';
 import { selectBsddDictionaries } from '../common/slices/bsddSlice';
 import { selectIfcEntity } from '../common/slices/ifcEntitySlice';
 import { BsddBridgeData } from '../common/IfcData/bsddBridgeData';
@@ -18,39 +15,6 @@ import { updateEntitiesWithIfcEntity } from '../common/tools/mergeIfcEntities';
 
 interface ApplyProps {
   bsddSearchSave: (bsddBridgeData: BsddBridgeData) => Promise<string>;
-}
-
-function createIfcEntity(ifcEntityInput: IfcEntity | undefined): IfcEntity {
-  const baseIfc: IfcEntity = ifcEntityInput
-    ? { ...JSON.parse(JSON.stringify(ifcEntityInput)) }
-    : { hasAssociations: [], isDefinedBy: [] };
-
-  baseIfc.isDefinedBy = ifcEntityInput?.isDefinedBy || [];
-
-  baseIfc.hasAssociations = [];
-
-  ifcEntityInput?.hasAssociations?.forEach((association) => {
-    if (
-      association.type === 'IfcClassificationReference' &&
-      association?.referencedSource?.location?.includes('https://identifier.buildingsmart.org/uri/buildingsmart/ifc/')
-    ) {
-      const { type, predefinedType } = getIfcClassAndPredefinedType(association.identification);
-      if (type) {
-        baseIfc.type = type;
-      }
-
-      if (predefinedType) {
-        baseIfc.predefinedType = predefinedType;
-      }
-      if (!baseIfc.predefinedType) {
-        baseIfc.predefinedType = 'NOTDEFINED';
-      }
-    } else {
-      baseIfc.hasAssociations?.push(association);
-    }
-  });
-
-  return baseIfc;
 }
 
 function Apply({ bsddSearchSave }: ApplyProps) {
@@ -113,9 +77,8 @@ function Apply({ bsddSearchSave }: ApplyProps) {
   }
 
   const handleOnChange = () => {
-    const newIfcEntity = createIfcEntity(ifcEntity);
-    console.log(newIfcEntity);
-    callback(newIfcEntity);
+    console.log(ifcEntity);
+    callback(ifcEntity);
   };
 
   return (

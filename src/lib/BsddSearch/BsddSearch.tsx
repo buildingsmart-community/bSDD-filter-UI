@@ -65,15 +65,6 @@ function BsddSearch() {
 
   const mainDictionaryClassification = useAppSelector(selectMainDictionaryClassification);
 
-  useEffect(() => {
-    if (selectedIfcEntities && selectedIfcEntities.length > 0) {
-      const mergedIfcEntity = mergeIfcEntities(selectedIfcEntities);
-      if (mergedIfcEntity) {
-        console.log('Setting mergedIfcEntity', mergedIfcEntity);
-        dispatch(setIfcEntity(mergedIfcEntity));
-      }
-    }
-  }, [dispatch, selectedIfcEntities]);
 
   useEffect(() => {
     if (!mainDictionaryClassification || !propertySetsOpened) return;

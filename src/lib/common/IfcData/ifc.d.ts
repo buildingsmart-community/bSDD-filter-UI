@@ -121,7 +121,7 @@ export interface IfcPropertySingleValue extends IfcSimpleProperty {
 
 export interface IfcPropertyEnumeratedValue extends IfcSimpleProperty {
   type: 'IfcPropertyEnumeratedValue';
-  enumerationValues?: IfcValue[]; // LIST [1:?] OF IfcValue
+  enumerationValues?: IfcValue[] | null; // LIST [1:?] OF IfcValue
   enumerationReference?: IfcPropertyEnumeration; // IfcPropertyEnumeration
 }
 
