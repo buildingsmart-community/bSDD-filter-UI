@@ -114,13 +114,14 @@ const ifcEntitySlice = createSlice({
   initialState,
   reducers: {
     setIfcEntity: (state, action: PayloadAction<IfcEntity>) => {
-      state.type = action.payload.type;
-      state.name = action.payload.name;
-      state.description = action.payload.description;
-      updateObjectTypeAndPredefinedType(state, action.payload.objectType, action.payload.predefinedType);
+      const ifcEntity = action.payload;
+      state.type = ifcEntity.type;
+      state.name = ifcEntity.name;
+      state.description = ifcEntity.description;
+      updateObjectTypeAndPredefinedType(state, ifcEntity.objectType, ifcEntity.predefinedType);
       state.tag = action.payload.tag;
-      updateIsDefinedBy(state, action.payload.isDefinedBy);
-      updateHasAssociations(state, action.payload.hasAssociations);
+      updateIsDefinedBy(state, ifcEntity.isDefinedBy);
+      updateHasAssociations(state, ifcEntity.hasAssociations);
     },
     setType: (state, action: PayloadAction<string>) => {
       state.type = action.payload;
@@ -169,19 +170,16 @@ const extractAndMergeAttributes = (
       {
         name: 'Description',
         type: 'IfcPropertySingleValue',
+        specification: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/prop/Description',
         nominalValue: { type: 'IfcText', value: ifcEntity.description || '' },
       },
       {
         name: 'ObjectType',
         type: 'IfcPropertySingleValue',
+        specification: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/prop/ObjectType',
         nominalValue: { type: 'IfcText', value: ifcEntity.objectType || '' },
       },
       { name: 'Name', type: 'IfcPropertySingleValue', nominalValue: { type: 'IfcText', value: ifcEntity.name || '' } },
-      {
-        name: 'PredefinedType',
-        type: 'IfcPropertySingleValue',
-        nominalValue: { type: 'IfcText', value: ifcEntity.predefinedType || '' },
-      },
     ],
   };
 

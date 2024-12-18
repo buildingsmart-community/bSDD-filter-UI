@@ -10,7 +10,7 @@ import { setPropertyIsInstance } from '../../../common/slices/ifcDataSlice';
 import { t } from 'i18next';
 import PropertyInput from './PropertyInput';
 
-const ALLOWED_ATTRIBUTES = ['Name', 'Description', 'ObjectType', 'PredefinedType'];
+const ALLOWED_ATTRIBUTES = ['Name', 'Description', 'ObjectType'];
 
 interface PropertyProps {
   propertySet: IfcPropertySet;

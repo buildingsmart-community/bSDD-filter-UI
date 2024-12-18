@@ -8,7 +8,7 @@ import {
   IfcClassificationReference,
 } from '../IfcData/ifc';
 
-const IFC_ENTITY_STRING_ATTRIBUTES = ['name', 'description', 'objectType', 'tag', 'predefinedType'] as const;
+const IFC_ENTITY_STRING_ATTRIBUTES = ['name', 'description', 'objectType', 'tag'] as const;
 
 const mergeStringProperties = (values: (string | undefined)[]): string | undefined => {
   const normalizedValues = values.map((value) => (value === undefined ? '' : value));
