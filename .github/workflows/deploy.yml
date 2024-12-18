@@ -44,6 +44,7 @@ jobs:
       - name: Install dependencies and build
         env:
           BASE_PATH: '/bSDD-filter-UI/${{ github.ref_name }}/'
+          VITE_APP_VERSION: ${{ github.ref == 'refs/heads/main' && env.VITE_APP_VERSION || github.ref_name }}
         run: |
           yarn install
           yarn run build
