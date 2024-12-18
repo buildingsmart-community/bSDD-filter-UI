@@ -84,7 +84,7 @@ function Settings({ activeTab }: SettingsProps) {
           fullWidth
           loading={isLoading}
           onClick={handleSave}
-          disabled={!unsavedChanges || !localSettings?.mainDictionary?.ifcClassification?.location}
+          disabled={!unsavedChanges}
           variant={isLoading ? 'light' : 'filled'}
           loaderProps={{ type: 'dots' }}
         >
