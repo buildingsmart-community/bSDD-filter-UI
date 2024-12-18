@@ -58,15 +58,18 @@ function convertToBsddDictionary(
   };
 }
 
-const selectBsddDictionaryOptions = createSelector(selectBsddDictionaries, (bsddDictionaries) =>
-  Object.values(bsddDictionaries).map(
-    (item) =>
-      ({
-        value: item.uri,
-        label: `${item.name} (${item.version})`,
-      } as ComboboxItem),
-  ),
-);
+const selectBsddDictionaryOptions = createSelector(selectBsddDictionaries, (bsddDictionaries) => {
+  const uniqueOptionsMap = new Map<string, ComboboxItem>();
+
+  Object.values(bsddDictionaries).forEach((item) => {
+    uniqueOptionsMap.set(item.uri, {
+      value: item.uri,
+      label: `${item.name} (${item.version})`,
+    } as ComboboxItem);
+  });
+
+  return Array.from(uniqueOptionsMap.values());
+});
 
 const getComboboxItem = (item: any): ComboboxItem[] => {
   return item && item.ifcClassification && item.ifcClassification.location
