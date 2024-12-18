@@ -61,6 +61,9 @@ const PropertyInput = ({
   const dispatch = useAppDispatch();
   const propertySets = useAppSelector(selectIsDefinedBy);
 
+  const label = propertyNaturalLanguageName?.trim() ? propertyNaturalLanguageName : property.name;
+  const description = getInputDescription(label, property.name);
+
   const defaultValue: string | number | undefined =
     property.type === 'IfcPropertySingleValue'
       ? property.nominalValue?.value || undefined
@@ -106,8 +109,8 @@ const PropertyInput = ({
       if (property.nominalValue?.type === 'IfcBoolean') {
         return (
           <Check
-            label={propertyNaturalLanguageName}
-            description={getInputDescription(propertyNaturalLanguageName, property.name)}
+            label={label}
+            description={description}
             disabled={isInstance}
             inputContainer={inputContainer}
             value={property.nominalValue?.value ?? false}
@@ -117,8 +120,8 @@ const PropertyInput = ({
       } else {
         return (
           <TextInput
-            label={propertyNaturalLanguageName}
-            description={getInputDescription(propertyNaturalLanguageName, property.name)}
+            label={label}
+            description={description}
             placeholder={property.nominalValue?.value ?? ''}
             value={property.nominalValue?.value ?? ''}
             disabled={isInstance}
@@ -134,8 +137,8 @@ const PropertyInput = ({
       const enumerationValues = property.enumerationReference?.enumerationValues || [];
       return (
         <Select
-          label={propertyNaturalLanguageName}
-          description={getInputDescription(propertyNaturalLanguageName, property.name)}
+          label={label}
+          description={description}
           value={value}
           inputContainer={inputContainer}
           disabled={isInstance || property.enumerationReference?.enumerationValues?.length === 1}
