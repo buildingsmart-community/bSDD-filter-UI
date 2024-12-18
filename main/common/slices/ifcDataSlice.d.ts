@@ -46,23 +46,26 @@ export declare const setValidatedSelectedIfcEntities: import('@reduxjs/toolkit')
     fulfilledMeta?: unknown;
     rejectedMeta?: unknown;
 }>;
-export declare const selectLoadedIfcEntity: ((state: {
+/**
+ * Selector to get the merged IfcEntity from selectedIfcEntities.
+ */
+export declare const selectMergedIfcEntity: ((state: {
     settings: import('../IfcData/bsddBridgeData').BsddSettings;
     ifcData: IfcDataState;
     bsdd: import('./bsddSlice').BsddState;
     ifcEntity: import('./ifcEntitySlice').EntityState;
-}) => IfcEntity) & {
+}) => IfcEntity | null) & {
     clearCache: () => void;
     resultsCount: () => number;
     resetResultsCount: () => void;
 } & {
-    resultFunc: (resultFuncArgs_0: IfcEntity[]) => IfcEntity;
-    memoizedResultFunc: ((resultFuncArgs_0: IfcEntity[]) => IfcEntity) & {
+    resultFunc: (resultFuncArgs_0: IfcEntity[]) => IfcEntity | null;
+    memoizedResultFunc: ((resultFuncArgs_0: IfcEntity[]) => IfcEntity | null) & {
         clearCache: () => void;
         resultsCount: () => number;
         resetResultsCount: () => void;
     };
-    lastResult: () => IfcEntity;
+    lastResult: () => IfcEntity | null;
     dependencies: [(state: RootState) => IfcEntity[]];
     recomputations: () => number;
     resetRecomputations: () => void;
