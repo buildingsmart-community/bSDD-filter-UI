@@ -10,7 +10,32 @@ export interface EntityState {
     isDefinedBy?: IfcPropertySet[];
     hasAssociations?: Association[];
 }
-export declare const selectIfcEntity: (state: RootState) => IfcEntity;
+export declare const selectIfcEntity: ((state: {
+    settings: import('../IfcData/bsddBridgeData').BsddSettings;
+    ifcData: import('./ifcDataSlice').IfcDataState;
+    bsdd: import('./bsddSlice').BsddState;
+    ifcEntity: EntityState;
+}) => IfcEntity) & {
+    clearCache: () => void;
+    resultsCount: () => number;
+    resetResultsCount: () => void;
+} & {
+    resultFunc: (resultFuncArgs_0: EntityState) => IfcEntity;
+    memoizedResultFunc: ((resultFuncArgs_0: EntityState) => IfcEntity) & {
+        clearCache: () => void;
+        resultsCount: () => number;
+        resetResultsCount: () => void;
+    };
+    lastResult: () => IfcEntity;
+    dependencies: [(state: RootState) => EntityState];
+    recomputations: () => number;
+    resetRecomputations: () => void;
+    dependencyRecomputations: () => number;
+    resetDependencyRecomputations: () => void;
+} & {
+    memoize: typeof import('reselect').weakMapMemoize;
+    argsMemoize: typeof import('reselect').weakMapMemoize;
+};
 export declare const selectName: (state: RootState) => string | undefined;
 export declare const selectDescription: (state: RootState) => string | undefined;
 export declare const selectTag: (state: RootState) => string | undefined;
@@ -34,7 +59,32 @@ export declare const selectIsDefinedByIncludingAttributes: ((state: {
         resetResultsCount: () => void;
     };
     lastResult: () => IfcPropertySet[];
-    dependencies: [(state: RootState) => IfcEntity, (state: RootState) => IfcPropertySet[] | undefined];
+    dependencies: [((state: {
+        settings: import('../IfcData/bsddBridgeData').BsddSettings;
+        ifcData: import('./ifcDataSlice').IfcDataState;
+        bsdd: import('./bsddSlice').BsddState;
+        ifcEntity: EntityState;
+    }) => IfcEntity) & {
+        clearCache: () => void;
+        resultsCount: () => number;
+        resetResultsCount: () => void;
+    } & {
+        resultFunc: (resultFuncArgs_0: EntityState) => IfcEntity;
+        memoizedResultFunc: ((resultFuncArgs_0: EntityState) => IfcEntity) & {
+            clearCache: () => void;
+            resultsCount: () => number;
+            resetResultsCount: () => void;
+        };
+        lastResult: () => IfcEntity;
+        dependencies: [(state: RootState) => EntityState];
+        recomputations: () => number;
+        resetRecomputations: () => void;
+        dependencyRecomputations: () => number;
+        resetDependencyRecomputations: () => void;
+    } & {
+        memoize: typeof import('reselect').weakMapMemoize;
+        argsMemoize: typeof import('reselect').weakMapMemoize;
+    }, (state: RootState) => IfcPropertySet[] | undefined];
     recomputations: () => number;
     resetRecomputations: () => void;
     dependencyRecomputations: () => number;
