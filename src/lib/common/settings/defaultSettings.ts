@@ -4,9 +4,9 @@ const defaultSettings: BsddSettings = {
   mainDictionary: {
     ifcClassification: {
       type: 'IfcClassification',
-      location: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3.0',
+      location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
       editionDate: '0001-01-01T00:00:00',
-      name: 'IFC',
+      name: 'Basis bouwproducten O&E',
     },
     parameterMapping: 'Description',
   },
