@@ -188,9 +188,13 @@ function createIfcPropertyEnumeratedValue(
     ifcProperty.specification = classificationProperty.propertyUri;
   }
 
-  ifcProperty.enumerationValues = classificationProperty.predefinedValue
-    ? [GetIfcPropertyValue(classificationProperty.dataType, classificationProperty.predefinedValue)]
-    : null;
+  if (classificationProperty.allowedValues && classificationProperty.allowedValues.length === 1) {
+      ifcProperty.enumerationValues = [GetIfcPropertyValue(classificationProperty.dataType, classificationProperty.allowedValues[0].value)];
+  } else {
+      ifcProperty.enumerationValues = classificationProperty.predefinedValue
+          ? [GetIfcPropertyValue(classificationProperty.dataType, classificationProperty.predefinedValue)]
+          : null;
+  }
 
   return ifcProperty;
 }

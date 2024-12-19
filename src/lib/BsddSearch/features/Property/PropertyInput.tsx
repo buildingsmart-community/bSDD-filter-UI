@@ -135,14 +135,15 @@ const PropertyInput = ({
     case 'IfcPropertyEnumeratedValue': {
       const value = property.enumerationValues?.[0]?.value ?? '';
       const enumerationValues = property.enumerationReference?.enumerationValues || [];
+      const isReadOnly = enumerationValues.length === 1;
       return (
         <Select
           label={label}
           description={description}
           value={value}
           inputContainer={inputContainer}
-          disabled={isInstance || property.enumerationReference?.enumerationValues?.length === 1}
-          clearable={true}
+          disabled={isInstance || isReadOnly}
+          clearable={!isReadOnly}
           onChange={(e) => handleChange(e)}
           data={enumerationValues.map((ifcValue: IfcValue) => ({
             value: ifcValue.value,
