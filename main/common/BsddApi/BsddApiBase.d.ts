@@ -92,15 +92,31 @@ export interface ClassContractV1 {
     childClassReferences?: ClassReferenceContractV1[] | null;
     /** List of relations of other classes to this class (only filled if requested) */
     reverseClassRelations?: ClassReverseRelationContractV1[] | null;
+    /** List of parents of this class till root */
+    hierarchy?: HierarchyItemContractV1[] | null;
 }
-export interface ClassListItemContractV1 {
+export interface ClassListItemContractV1Classes {
     uri?: string | null;
     code?: string | null;
     name?: string | null;
     classType?: string | null;
     referenceCode?: string | null;
     parentClassCode?: string | null;
-    children?: ClassListItemContractV1[] | null;
+    /** Description of the class, max 101 characters long */
+    descriptionPart?: string | null;
+    children?: ClassListItemContractV1Classes[] | null;
+}
+export interface ClassPropertiesContractV1 {
+    /** @format int32 */
+    totalCount?: number;
+    /** @format int32 */
+    offset?: number;
+    /** @format int32 */
+    count?: number;
+    /** Uri of the class */
+    classUri?: string | null;
+    /** List of the properties of this class */
+    classProperties?: ClassPropertyItemContractV1[] | null;
 }
 export interface ClassPropertyContractV1 {
     /**
@@ -247,7 +263,174 @@ export interface ClassPropertyContractV1 {
     /** List of QUDT unit codes to select from */
     qudtCodes?: string[] | null;
 }
+export interface ClassPropertyItemContractV1 {
+    /**
+     * Name of the property
+     * @minLength 1
+     */
+    name: string;
+    /**
+     * Uri of the property
+     * @minLength 1
+     */
+    uri: string;
+    /**
+     * Plain language description of the property.
+     * If at Property level no description has been given but a "Definition" is available, then "Definition" is returned as description
+     */
+    description?: string | null;
+    /** Definition of the property. */
+    definition?: string | null;
+    /** Format for expressing the value of the property */
+    dataType?: string | null;
+    /**
+     * Dimension of the physical quantity in format "L M T I Θ N J", for example "-2 1 0 0 0 0 0".
+     * With
+     *   L   Length
+     *   M   Mass
+     *   T   Time
+     *   I   Electric current
+     *   Θ   Thermodynamic Temperature
+     *   N   Amount of substance
+     *   J   Luminous intensity
+     */
+    dimension?: string | null;
+    /**
+     * The Length value of the dimension
+     * @format int32
+     */
+    dimensionLength?: number | null;
+    /**
+     * The Mass value of the dimension
+     * @format int32
+     */
+    dimensionMass?: number | null;
+    /**
+     * The Time value of the dimension
+     * @format int32
+     */
+    dimensionTime?: number | null;
+    /**
+     * The Electric current value of the dimension
+     * @format int32
+     */
+    dimensionElectricCurrent?: number | null;
+    /**
+     * The Thermodynamic temperature value of the dimension
+     * @format int32
+     */
+    dimensionThermodynamicTemperature?: number | null;
+    /**
+     * The Amount of substance value of the dimension
+     * @format int32
+     */
+    dimensionAmountOfSubstance?: number | null;
+    /**
+     * The Luminous intensity value of the dimension
+     * @format int32
+     */
+    dimensionLuminousIntensity?: number | null;
+    /**
+     * List of codes of the properties which are parameters of the function for a dynamic property.
+     * Only applicable for dynamic properties (IsDynamic)
+     */
+    dynamicParameterPropertyCodes?: string[] | null;
+    /** Illustrate possible use or values of the Property */
+    example?: string | null;
+    /** True if the value of this property is dependent on other properties (as provided in DynamicParameterPropertyCodes) */
+    isDynamic?: boolean | null;
+    /** Indicates if this property is required for the class */
+    isRequired?: boolean | null;
+    /** Indicates if the value of the property can be changed by the user */
+    isWritable?: boolean | null;
+    /**
+     * Maximum value of the property, exclusive
+     * This value does not need to be the same as the MaxExclusive in the Property contract
+     * because this value can be overruled at Class-Property level to define a more strict value.
+     * @format double
+     */
+    maxExclusive?: number | null;
+    /**
+     * Maximum value of the property, inclusive
+     * This value does not need to be the same as the MaxInclusive in the Property contract
+     * because this value can be overruled at Class-Property level to define a more strict value.
+     * @format double
+     */
+    maxInclusive?: number | null;
+    /**
+     * Minimum value of the property, exclusive
+     * This value does not need to be the same as the MinExclusive in the Property contract
+     * because this value can be overruled at Class-Property level to define a more strict value.
+     * @format double
+     */
+    minExclusive?: number | null;
+    /**
+     * Minimum value of the property, inclusive
+     * This value does not need to be the same as the MinInclusive in the Property contract
+     * because this value can be overruled at Class-Property level to define a more strict value.
+     * @format double
+     */
+    minInclusive?: number | null;
+    /**
+     * An XML Schema Regular expression for the property value.
+     * See for explanation: https://www.regular-expressions.info/xml.html.
+     * This value does not need to be the same as the Pattern in the Property contract
+     * because this value can be overruled at Class-Property level to define a more strict value.
+     */
+    pattern?: string | null;
+    /** The quantity in plain text */
+    physicalQuantity?: string | null;
+    /**
+     * List of allowed values
+     * This list does not need to be the same as the list of AllowedValues in the Property contract
+     * because this list can be overruled at Class-Property level to define a more strict list.
+     */
+    allowedValues?: ClassPropertyValueItemContractV1[] | null;
+    /** Predefined value: if the class can have only one value for this property, this is it */
+    predefinedValue?: string | null;
+    /** Code of the property, only applicable if property is of the same dictionary as the class. */
+    propertyCode?: string | null;
+    /** Name of the Dictionary this property belongs to */
+    propertyDictionaryName?: string | null;
+    /** Uri of the Dictionary this property belongs to */
+    propertyDictionaryUri?: string | null;
+    /** Unique identification of the property */
+    propertyUri?: string | null;
+    /**
+     * Name of the Property Set
+     * @minLength 1
+     */
+    propertySet: string;
+    /** Status of the property: Preview, Active or Inactive */
+    propertyStatus?: string | null;
+    /** Indicates kind of value: Single, Range (2 values expected), List (multiple values expected), Complex (use in combination with "ConnectedProperties"), ComplexList */
+    propertyValueKind?: string | null;
+    /** Symbol of the property */
+    symbol?: string | null;
+    /** List of units to select from */
+    units?: string[] | null;
+    /** List of QUDT unit codes to select from */
+    qudtCodes?: string[] | null;
+}
 export interface ClassPropertyValueContractV1 {
+    /** Globally unique identification of the value */
+    uri?: string | null;
+    /** Identification of the value */
+    code?: string | null;
+    /**
+     * Allowed value of the property
+     * @minLength 1
+     */
+    value: string;
+    /** Description of the value */
+    description?: string | null;
+    /**
+     * Sort number of value within the list of values for the Property
+     * @format int32
+     */
+    sortNumber?: number | null;
+}
+export interface ClassPropertyValueItemContractV1 {
     /** Globally unique identification of the value */
     uri?: string | null;
     /** Identification of the value */
@@ -290,6 +473,40 @@ export interface ClassRelationContractV1 {
      * @format double
      */
     fraction?: number | null;
+}
+export interface ClassRelationItemContractV1 {
+    /**
+     * Can be one of: HasReference, IsEqualTo, IsSynonymOf, IsParentOf, IsChildOf, HasPart
+     * @minLength 1
+     */
+    relationType: string;
+    /**
+     * URI of the related class
+     * @minLength 1
+     */
+    classUri: string;
+    /** Name of the related class */
+    className?: string | null;
+    /**
+     * Optional provision of a fraction of the total amount (e.g. volume or weight) that applies to the class relations of one relation type
+     * @format double
+     */
+    fraction?: number | null;
+    /** The URI of the dictionary that contains the reverse related class. This URI can be used to retrieve the dictionary */
+    dictionaryUri?: string | null;
+}
+export interface ClassRelationsContractV1 {
+    /** @format int32 */
+    totalCount?: number;
+    /** @format int32 */
+    offset?: number;
+    /** @format int32 */
+    count?: number;
+    /** Uri of the class */
+    classUri?: string | null;
+    areReversedRelations?: boolean;
+    /** List of the relations of this class */
+    classRelations?: ClassRelationItemContractV1[] | null;
 }
 export interface ClassReverseRelationContractV1 {
     /**
@@ -943,11 +1160,17 @@ export interface ClassificationSearchResultContractV2 {
     definition?: string | null;
     synonyms?: string[] | null;
 }
+export interface CodeNameDto {
+    code?: string | null;
+    name?: string | null;
+}
 export interface CountryContractV1 {
     code?: string | null;
     name?: string | null;
 }
-export interface DictionaryClassesResponseContractV1 {
+export interface DictionaryClassesResponseContractV1Classes {
+    /** @minLength 1 */
+    code: string;
     /** @minLength 1 */
     uri: string;
     /** @minLength 1 */
@@ -958,14 +1181,17 @@ export interface DictionaryClassesResponseContractV1 {
     organizationCodeOwner: string;
     /** @minLength 1 */
     organizationNameOwner: string;
+    changeRequestEmail?: string | null;
     /**
      * The default language for this domain
      * @minLength 1
      */
     defaultLanguageCode: string;
+    isLatestVersion: boolean;
+    isVerified: boolean;
     /** Name or short description of the license under which you can use this data */
     license?: string | null;
-    /** URL where you can find more details about the license */
+    /** URL where you can find more details about the license or default link to info about licensing */
     licenseUrl?: string | null;
     /** Name or short description of the quality assurance procedure used while creating and maintaining the domain data */
     qualityAssuranceProcedure?: string | null;
@@ -985,7 +1211,7 @@ export interface DictionaryClassesResponseContractV1 {
      * @format date-time
      */
     lastUpdatedUtc?: string;
-    classes?: ClassListItemContractV1[] | null;
+    classes?: ClassListItemContractV1Classes[] | null;
     /**
      * Total number of classes within the dictionary.
      * @format int32
@@ -1001,6 +1227,8 @@ export interface DictionaryClassesResponseContractV1 {
 }
 export interface DictionaryContractV1 {
     /** @minLength 1 */
+    code: string;
+    /** @minLength 1 */
     uri: string;
     /** @minLength 1 */
     name: string;
@@ -1010,14 +1238,17 @@ export interface DictionaryContractV1 {
     organizationCodeOwner: string;
     /** @minLength 1 */
     organizationNameOwner: string;
+    changeRequestEmail?: string | null;
     /**
      * The default language for this domain
      * @minLength 1
      */
     defaultLanguageCode: string;
+    isLatestVersion: boolean;
+    isVerified: boolean;
     /** Name or short description of the license under which you can use this data */
     license?: string | null;
-    /** URL where you can find more details about the license */
+    /** URL where you can find more details about the license or default link to info about licensing */
     licenseUrl?: string | null;
     /** Name or short description of the quality assurance procedure used while creating and maintaining the domain data */
     qualityAssuranceProcedure?: string | null;
@@ -1037,8 +1268,12 @@ export interface DictionaryContractV1 {
      * @format date-time
      */
     lastUpdatedUtc?: string;
+    /** List of (partly) available languages for this dictionary */
+    availableLanguages?: CodeNameDto[] | null;
 }
 export interface DictionaryPropertiesResponseContractV1 {
+    /** @minLength 1 */
+    code: string;
     /** @minLength 1 */
     uri: string;
     /** @minLength 1 */
@@ -1049,14 +1284,17 @@ export interface DictionaryPropertiesResponseContractV1 {
     organizationCodeOwner: string;
     /** @minLength 1 */
     organizationNameOwner: string;
+    changeRequestEmail?: string | null;
     /**
      * The default language for this domain
      * @minLength 1
      */
     defaultLanguageCode: string;
+    isLatestVersion: boolean;
+    isVerified: boolean;
     /** Name or short description of the license under which you can use this data */
     license?: string | null;
-    /** URL where you can find more details about the license */
+    /** URL where you can find more details about the license or default link to info about licensing */
     licenseUrl?: string | null;
     /** Name or short description of the quality assurance procedure used while creating and maintaining the domain data */
     qualityAssuranceProcedure?: string | null;
@@ -1119,7 +1357,7 @@ export interface DomainContractV2 {
     defaultLanguageCode: string;
     /** Name or short description of the license under which you can use this data */
     license?: string | null;
-    /** URL where you can find more details about the license */
+    /** URL where you can find more details about the license or default link to info about licensing */
     licenseUrl?: string | null;
     /** Name or short description of the quality assurance procedure used while creating and maintaining the domain data */
     qualityAssuranceProcedure?: string | null;
@@ -1157,7 +1395,7 @@ export interface DomainContractV3 {
     defaultLanguageCode: string;
     /** Name or short description of the license under which you can use this data */
     license?: string | null;
-    /** URL where you can find more details about the license */
+    /** URL where you can find more details about the license or default link to info about licensing */
     licenseUrl?: string | null;
     /** Name or short description of the quality assurance procedure used while creating and maintaining the domain data */
     qualityAssuranceProcedure?: string | null;
@@ -1203,7 +1441,7 @@ export interface DomainWithClassificationsContractV2 {
     defaultLanguageCode: string;
     /** Name or short description of the license under which you can use this data */
     license?: string | null;
-    /** URL where you can find more details about the license */
+    /** URL where you can find more details about the license or default link to info about licensing */
     licenseUrl?: string | null;
     /** Name or short description of the quality assurance procedure used while creating and maintaining the domain data */
     qualityAssuranceProcedure?: string | null;
@@ -1242,7 +1480,7 @@ export interface DomainWithClassificationsContractV3 {
     defaultLanguageCode: string;
     /** Name or short description of the license under which you can use this data */
     license?: string | null;
-    /** URL where you can find more details about the license */
+    /** URL where you can find more details about the license or default link to info about licensing */
     licenseUrl?: string | null;
     /** Name or short description of the quality assurance procedure used while creating and maintaining the domain data */
     qualityAssuranceProcedure?: string | null;
@@ -1265,10 +1503,27 @@ export interface DomainWithClassificationsContractV3 {
     classifications?: ClassificationListItemContractV3[] | null;
     materials?: ClassificationListItemContractV3[] | null;
 }
+export interface HierarchyItemContractV1 {
+    /** @format int32 */
+    level: number;
+    /** @minLength 1 */
+    name: string;
+    /** @minLength 1 */
+    code: string;
+    /** @minLength 1 */
+    uri: string;
+}
+/** @format int32 */
+export declare enum InternalExternalOptionV1 {
+    Value0 = 0,
+    Value1 = 1,
+    Value2 = 2
+}
 export interface LanguageContractV1 {
     /** @minLength 1 */
     isoCode: string;
-    name?: string | null;
+    /** @minLength 1 */
+    name: string;
 }
 export interface MaterialClassificationRelationContractV1 {
     name?: string | null;
@@ -1799,6 +2054,20 @@ export interface MaterialSearchResultContractV1 {
     synonyms?: string[] | null;
     relatedClassifications?: MaterialClassificationRelationContractV1[] | null;
 }
+export interface PopularDictionariesResponseContractV1 {
+    popularDictionaries?: PopularDictionaryContractV1[] | null;
+}
+export interface PopularDictionaryContractV1 {
+    /** @minLength 1 */
+    uri: string;
+    /** @minLength 1 */
+    name: string;
+    /** @minLength 1 */
+    organizationName: string;
+}
+export interface PrivateDictionaryAccessContractV1 {
+    emailAddressOrDomain?: string | null;
+}
 export interface ProblemDetails {
     type?: string | null;
     title?: string | null;
@@ -1823,6 +2092,39 @@ export interface PropertyClassContractV4 {
     /** Description of the class */
     description?: string | null;
     propertySet?: string | null;
+}
+export interface PropertyClassItemContractV1 {
+    /**
+     * Name of the class
+     * @minLength 1
+     */
+    name: string;
+    /**
+     * Uri of the class
+     * @minLength 1
+     */
+    uri: string;
+    /** Description of the class */
+    description?: string | null;
+    /** Uri of the dictionary where the class is defined */
+    dictionaryUri?: string | null;
+    /**
+     * The Pset the property belongs to within the class
+     * @minLength 1
+     */
+    propertySet: string;
+}
+export interface PropertyClassesContractV1 {
+    /** @format int32 */
+    totalCount?: number;
+    /** @format int32 */
+    offset?: number;
+    /** @format int32 */
+    count?: number;
+    /** Uri of the property */
+    propertyUri?: string | null;
+    /** List of classes having this property */
+    propertyClasses?: PropertyClassItemContractV1[] | null;
 }
 export interface PropertyContractV2 {
     /** Namespace URI of the domain */
@@ -2367,6 +2669,8 @@ export interface PropertyListItemContractV1 {
     uri?: string | null;
     code?: string | null;
     name?: string | null;
+    /** Description of the class, max 101 characters long */
+    descriptionPart?: string | null;
 }
 export interface PropertyRelationContractV2 {
     /** The relation with the other property: e.g. HasReference, IsEqualTo */
@@ -2395,6 +2699,35 @@ export interface PropertyRelationContractV4 {
     relatedPropertyUri?: string | null;
     /** Name of the related property */
     relatedPropertyName?: string | null;
+}
+export interface PropertyRelationItemContractV1 {
+    /**
+     * Can be one of: HasReference, IsEqualTo, IsSimilarTo, IsParentOf
+     * @minLength 1
+     */
+    relationType: string;
+    /**
+     * URI of the related property
+     * @minLength 1
+     */
+    propertyUri: string;
+    /** Name of the related property */
+    propertyName?: string | null;
+    /** The URI of the dictionary that contains the related property. This URI can be used to retrieve the dictionary */
+    dictionaryUri?: string | null;
+}
+export interface PropertyRelationsContractV1 {
+    /** @format int32 */
+    totalCount?: number;
+    /** @format int32 */
+    offset?: number;
+    /** @format int32 */
+    count?: number;
+    /** Uri of the property */
+    propertyUri?: string | null;
+    areReversedRelations?: boolean;
+    /** List of the relations of this property */
+    propertyRelations?: PropertyRelationItemContractV1[] | null;
 }
 export interface PropertyValueContractV1 {
     /** Globally unique identification of the value (if present) */
@@ -2517,6 +2850,21 @@ export interface TextSearchResponseClassContractV1 {
     parentClassName?: string | null;
     relatedIfcEntityNames?: string[] | null;
 }
+export interface TextSearchResponseClassContractV2 {
+    /** Unique identification of the dictionary the class belongs to */
+    dictionaryUri?: string | null;
+    name?: string | null;
+    code?: string | null;
+    /** Code that can be used for dictionary specific purposes */
+    referenceCode?: string | null;
+    /** Unique identification of the class */
+    uri?: string | null;
+    /** Type of the class */
+    classType?: string | null;
+    description?: string | null;
+    parentClassName?: string | null;
+    relatedIfcEntityNames?: string[] | null;
+}
 export interface TextSearchResponseClassificationContractV5 {
     /** Unique identification of the domain the classification belongs to */
     domainNamespaceUri?: string | null;
@@ -2563,6 +2911,20 @@ export interface TextSearchResponseContractV1 {
     /** List of Properties found */
     properties?: TextSearchResponsePropertyContractV1[] | null;
 }
+export interface TextSearchResponseContractV2 {
+    /** @format int32 */
+    totalCount?: number;
+    /** @format int32 */
+    offset?: number;
+    /** @format int32 */
+    count?: number;
+    /** The list of Classes found */
+    classes?: TextSearchResponseClassContractV2[] | null;
+    /** The list of Dictionaries with found results */
+    dictionaries?: TextSearchResponseDictionaryContractV2[] | null;
+    /** List of Properties found */
+    properties?: TextSearchResponsePropertyContractV2[] | null;
+}
 export interface TextSearchResponseContractV5 {
     /** The list of Classifications found */
     classifications?: TextSearchResponseClassificationContractV5[] | null;
@@ -2582,6 +2944,23 @@ export interface TextSearchResponseContractV6 {
 export interface TextSearchResponseDictionaryContractV1 {
     uri?: string | null;
     name?: string | null;
+}
+export interface TextSearchResponseDictionaryContractV2 {
+    /** @minLength 1 */
+    uri: string;
+    /** @minLength 1 */
+    organizationName: string;
+    /** @minLength 1 */
+    code: string;
+    /** @minLength 1 */
+    name: string;
+    /** @minLength 1 */
+    version: string;
+    /** @minLength 1 */
+    status: string;
+    languages: LanguageContractV1[];
+    isLatestVersion: boolean;
+    isVerified: boolean;
 }
 export interface TextSearchResponseDomainContractV5 {
     namespaceUri?: string | null;
@@ -2608,6 +2987,13 @@ export interface TextSearchResponsePropertyContractV1 {
     dictionaryUri?: string | null;
     dictionaryName?: string | null;
     uri?: string | null;
+    name?: string | null;
+    description?: string | null;
+}
+export interface TextSearchResponsePropertyContractV2 {
+    dictionaryUri?: string | null;
+    uri?: string | null;
+    code?: string | null;
     name?: string | null;
     description?: string | null;
 }
@@ -2650,7 +3036,38 @@ export interface UploadImportFileResultV1 {
     /** Informational messages */
     informationalMessages?: UploadImportFileResultItemV1[] | null;
 }
+export interface UploadImportFileResultV2 {
+    /**
+     * Indicates if the file will be validated in the background.
+     * Large files (>= 15 MB) will be validated in the background. You receive the results by e-mail.
+     */
+    isValidatedAsync?: boolean;
+    /**
+     * Indicates if the file will be imported.
+     * Warnings are allowed, import will continue but may lead to undesired values in the database.
+     * Only applicable for small files (smaller than 15 MB).
+     */
+    isOk?: boolean | null;
+    /**
+     * The list of errors found.
+     * It may happen that if you fix one error new errors will be discovered.
+     */
+    errors?: UploadImportFileResultItemV2[] | null;
+    /**
+     * List of warnings.
+     * It is best to have no warnings at all to avoid inconsistent or incorrect values in the database
+     */
+    warnings?: UploadImportFileResultItemV2[] | null;
+    /** Informational messages */
+    informationalMessages?: UploadImportFileResultItemV2[] | null;
+}
 export interface UploadImportFileResultItemV1 {
+    /** The attribute the message applies to */
+    attribute?: string | null;
+    /** The message */
+    message?: string | null;
+}
+export interface UploadImportFileResultItemV2 {
     /** The attribute the message applies to */
     attribute?: string | null;
     /** The message */
@@ -2726,45 +3143,103 @@ export declare class HttpClient<SecurityDataType = unknown> {
 export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
     api: {
         /**
-     * No description
-     *
-     * @tags Class
-     * @name ClassV1List
-     * @summary Get Class details - this API replaces api/Classification
-    Changes:
-    - now returns Material as well
-    - "Classification" has been renamed to "Class"
-    - "Domain" has been renamed to "Dictionary"
-    - "NamespaceUri" has been renamed to "Uri"
-     * @request GET:/api/Class/v1
-     */
-        classV1List: (query: {
+         * No description
+         *
+         * @tags Class
+         * @name ClassGet
+         * @summary Get class details
+         * @request GET:/api/Class/v1
+         */
+        classGet: (query: {
             /** URI of the class, e.g. https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/class/apple */
             Uri: string;
-            /** Use this option to include properties of the class. By default it is set to false */
+            /** Use this option to include properties of the class. By default, it is set to false */
             IncludeClassProperties?: boolean;
-            /** Use this option to include references to child classes. By default it is set to false */
+            /** Use this option to include references to child classes. By default, it is set to false */
             IncludeChildClassReferences?: boolean;
-            /** Use this option to include loading relations of the class. By default it is set to false */
+            /** Use this option to include loading relations of the class. By default, it is set to false */
             IncludeClassRelations?: boolean;
-            /** Use this option to include loading reverse relations of the class, i.e. classes having a relation with this class. By default it is set to false */
+            /** Use this option to include loading reverse relations of the class, i.e. classes having a relation with this class. By default, it is set to false */
             IncludeReverseRelations?: boolean;
-            /** When including reverse relations, you can specify which dictionaries to include. By default all dictionaries are included */
+            /** When including reverse relations, you can specify which dictionaries to include. By default, all dictionaries are included */
             ReverseRelationDictionaryUris?: string[];
             /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary */
             languageCode?: string;
         }, params?: RequestParams) => Promise<HttpResponse<ClassContractV1, any>>;
         /**
-     * No description
-     *
-     * @tags Dictionary
-     * @name DictionaryV1List
-     * @summary Get list of available Dictionaries. This one replaces /api/Domain. Changes:
-    - "Domain" has been renamed to "Dictionary"
-    - "NamespaceUri" has been renamed to "Uri"
-     * @request GET:/api/Dictionary/v1
-     */
-        dictionaryV1List: (query?: {
+         * No description
+         *
+         * @tags Class
+         * @name ClassRelationsGet
+         * @summary Get class relations or reverse relations (paginated)
+         * @request GET:/api/Class/Relations/v1
+         */
+        classRelationsGet: (query: {
+            /** URI of the class, e.g. https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/class/apple */
+            ClassUri: string;
+            /** Get either the forward or the reverse relations */
+            GetReverseRelations: boolean;
+            /**
+             * Optional: Search text to filter the relations.
+             * Search is done in the class name only.
+             */
+            SearchText?: string;
+            /**
+             * Zero-based offset of the first item to be returned. Default is 0.
+             * @format int32
+             */
+            Offset?: number;
+            /**
+             * Limit number of items to be returned. The default and maximum number of items returned is 1000. When Offset is specified, then the default limit is 100.
+             * @format int32
+             */
+            Limit?: number;
+            /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary */
+            languageCode?: string;
+        }, params?: RequestParams) => Promise<HttpResponse<ClassRelationsContractV1, any>>;
+        /**
+         * No description
+         *
+         * @tags Class
+         * @name ClassPropertiesGet
+         * @summary Get class properties (paginated)
+         * @request GET:/api/Class/Properties/v1
+         */
+        classPropertiesGet: (query: {
+            /** URI of the class, e.g. https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/class/apple */
+            ClassUri: string;
+            /** Optional: Property set to filter the properties */
+            PropertySet?: string;
+            /** Optional: Property code to filter the properties */
+            PropertyCode?: string;
+            /**
+             * Optional: Search text to filter the properties.
+             * Search is done in the property name, property description and property code.
+             * Cannot be used together with PropertySet or PropertyCode.
+             */
+            SearchText?: string;
+            /**
+             * Zero-based offset of the first item to be returned. Default is 0.
+             * @format int32
+             */
+            Offset?: number;
+            /**
+             * Limit number of items to be returned. The default and maximum number of items returned is 1000. When Offset is specified, then the default limit is 100.
+             * @format int32
+             */
+            Limit?: number;
+            /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary */
+            languageCode?: string;
+        }, params?: RequestParams) => Promise<HttpResponse<ClassPropertiesContractV1, any>>;
+        /**
+         * No description
+         *
+         * @tags Dictionary
+         * @name DictionaryGet
+         * @summary Get list of available Dictionaries with optional filtering.
+         * @request GET:/api/Dictionary/v1
+         */
+        dictionaryGet: (query?: {
             /**
              * Optional parameter to filter by first part of URI. Use this one to get details of just one dictionary version
              * or, if you leave out the version number at the end, get all the versions of a dictionary.
@@ -2782,21 +3257,46 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
              */
             Offset?: number;
             /**
-             * Limit number of items to be returned. If you enter an offset then default limit is 100. The maximum number of items returned is 1000.
+             * Limit number of items to be returned. The default and maximum number of items returned is 1000. When Offset is specified, then the default limit is 100.
              * @format int32
              */
             Limit?: number;
         }, params?: RequestParams) => Promise<HttpResponse<DictionaryResponseContractV1, any>>;
         /**
-     * No description
-     *
-     * @tags Dictionary
-     * @name DictionaryV1ClassesList
-     * @summary Get Dictionary with tree of classes.
-    This one replaces /api/Domain. See https://github.com/buildingSMART/bSDD/blob/master/Documentation/API%20version%20history.md for changes.
-     * @request GET:/api/Dictionary/v1/Classes
-     */
-        dictionaryV1ClassesList: (query: {
+         * No description
+         *
+         * @tags Dictionary
+         * @name DictionaryGetWithProperties
+         * @summary Get Dictionary with its properties
+         * @request GET:/api/Dictionary/v1/Properties
+         */
+        dictionaryGetWithProperties: (query: {
+            /** The URI of the dictionary. The option "latest" is supported, e.g. https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/latest */
+            Uri: string;
+            /** Optional filter text. */
+            SearchText?: string;
+            /**
+             * Zero-based offset of the first item to be returned. Default is 0.
+             * @format int32
+             */
+            Offset?: number;
+            /**
+             * Limit number of items to be returned. The default and maximum number of items returned is 1000. When Offset is specified, then the default limit is 100.
+             * @format int32
+             */
+            Limit?: number;
+            /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary */
+            languageCode?: string;
+        }, params?: RequestParams) => Promise<HttpResponse<DictionaryPropertiesResponseContractV1, any>>;
+        /**
+         * No description
+         *
+         * @tags Dictionary
+         * @name DictionaryClassesGetWithClasses
+         * @summary Get Dictionary with (tree of) classes
+         * @request GET:/api/Dictionary/v1/Classes
+         */
+        dictionaryClassesGetWithClasses: (query: {
             /** The URI of the dictionary. The option "latest" is supported, e.g. https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/latest */
             Uri: string;
             /**
@@ -2807,66 +3307,85 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
             /** Optional filter on class type. Possible values are "Class", "GroupOfProperties", "AlternativeUse" and "Material". */
             ClassType?: string;
             /**
-             * Zero-based offset of the first item to be returned. Default is 0.
-             * @format int32
+             * Optional filter text.
+             * Ignored when UseNestedClasses = true
              */
-            Offset?: number;
+            SearchText?: string;
             /**
-             * Limit number of items to be returned. If you enter an offset then default limit is 100. The maximum number of items returned is 1000.
-             * @format int32
+             * Optional filter on related IFC entity. It accepts an IFC entity code (e.g. IfcWall) or uri (e.g. https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/class/IfcWall).
+             * When a code is supplied, finding matching classes ignores the IFC version.
+             * Ignored when UseNestedClasses = true
              */
-            Limit?: number;
-            /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary */
-            languageCode?: string;
-        }, params?: RequestParams) => Promise<HttpResponse<DictionaryClassesResponseContractV1, any>>;
-        /**
-         * No description
-         *
-         * @tags Dictionary
-         * @name DictionaryV1PropertiesList
-         * @summary Get Dictionary with its properties
-         * @request GET:/api/Dictionary/v1/Properties
-         */
-        dictionaryV1PropertiesList: (query: {
-            /** The URI of the dictionary. The option "latest" is supported, e.g. https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/latest */
-            Uri: string;
+            RelatedIfcEntity?: string;
             /**
              * Zero-based offset of the first item to be returned. Default is 0.
              * @format int32
              */
             Offset?: number;
             /**
-             * Limit number of items to be returned. If you enter an offset then default limit is 100. The maximum number of items returned is 1000.
+             * Limit number of items to be returned. The default and maximum number of items returned is 1000. When Offset is specified, then the default limit is 100.
              * @format int32
              */
             Limit?: number;
             /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary */
             languageCode?: string;
-        }, params?: RequestParams) => Promise<HttpResponse<DictionaryPropertiesResponseContractV1, any>>;
+        }, params?: RequestParams) => Promise<HttpResponse<DictionaryClassesResponseContractV1Classes, any>>;
         /**
      * No description
      *
      * @tags Dictionary
-     * @name DictionaryDownloadSketchupV1Create
+     * @name DictionaryDownloadSketchup
      * @summary Download a file with an export of a dictionary in format supported by Sketchup.
     This API replaces /api/RequestExportFile/preview
      * @request POST:/api/DictionaryDownload/sketchup/v1
      * @secure
      */
-        dictionaryDownloadSketchupV1Create: (query: {
+        dictionaryDownloadSketchup: (query: {
             /** The uri of the dictionary to be downloaded, including version number, e.g. https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1. You can replace the version number by "latest" to automatically get the latest (active) version of the dictionary */
             DictionaryUri: string;
         }, params?: RequestParams) => Promise<HttpResponse<File, void | ProblemDetails>>;
         /**
+     * No description
+     *
+     * @tags Dictionary Update
+     * @name UploadImportFilePost
+     * @summary Upload a bSDD import model json file, see https://github.com/buildingSMART/bSDD/tree/master/Model/Import%20Model for more information.
+    Validation will be done asynchronously for large files (>= 15 MB). Validation results will be sent by e-mail.
+     * @request POST:/api/UploadImportFile/v2
+     * @secure
+     */
+        uploadImportFilePost: (data: {
+            /**
+             * Code of the organization owning the dictionary.
+             * If you do not know the code, contact us (see e-mail address on top of this page)
+             */
+            OrganizationCode: string;
+            /**
+             * The bsdd import file in json format
+             * @format binary
+             */
+            FormFile: File;
+            /**
+             * Set to true if you only want to validate the file. Even when there are no validation errors the file wil not be imported.
+             * The validation result will not be send via e-mail.
+             */
+            ValidateOnly?: boolean;
+            /**
+             * Set to true if you are just testing your file. Data will be stored in the database, you can retrieve it via the API, but you can't set status to Active.
+             * Dictionary will be deleted after 60 days of last upload.
+             */
+            IsTest?: boolean;
+        }, params?: RequestParams) => Promise<HttpResponse<UploadImportFileResultV2, any>>;
+        /**
          * No description
          *
          * @tags Dictionary Update
-         * @name UploadImportFileV1Create
+         * @name UploadImportFileV1Post
          * @summary Upload a bSDD import model json file, see https://github.com/buildingSMART/bSDD/tree/master/Model/Import%20Model for more information
          * @request POST:/api/UploadImportFile/v1
          * @secure
          */
-        uploadImportFileV1Create: (data: {
+        uploadImportFileV1Post: (data: {
             /**
              * Code of the organization owning the dictionary.
              * If you do not know the code, contact us (see e-mail address on top of this page)
@@ -2892,46 +3411,77 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
          * No description
          *
          * @tags Dictionary Update
-         * @name DictionaryV1Update
+         * @name DictionaryUpdateStatus
          * @summary Update the status of a Dictionary
          * @request PUT:/api/Dictionary/v1/{organizationCode}/{code}/{version}
          * @secure
          */
-        dictionaryV1Update: (organizationCode: string, code: string, version: string, data: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        dictionaryUpdateStatus: (organizationCode: string, code: string, version: string, data: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
         /**
          * No description
          *
          * @tags Dictionary Update
-         * @name DictionaryV1Delete
+         * @name DictionaryUpdateDeleteVersion
          * @summary Delete a dictionary version
          * @request DELETE:/api/Dictionary/v1/{organizationCode}/{code}/{version}
          * @secure
          */
-        dictionaryV1Delete: (organizationCode: string, code: string, version: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        dictionaryUpdateDeleteVersion: (organizationCode: string, code: string, version: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
         /**
          * No description
          *
          * @tags Dictionary Update
-         * @name DictionaryV1Delete2
+         * @name DictionaryUpdateDelete
          * @summary Delete all versions of a dictionary
          * @request DELETE:/api/Dictionary/v1/{organizationCode}/{code}
-         * @originalName dictionaryV1Delete
-         * @duplicate
          * @secure
          */
-        dictionaryV1Delete2: (organizationCode: string, code: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        dictionaryUpdateDelete: (organizationCode: string, code: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        /**
+         * No description
+         *
+         * @tags PopularDictionary
+         * @name PopularDictionaryGet
+         * @summary Get list of popular Dictionaries
+         * @request GET:/api/Dictionary/Popular/v1
+         */
+        popularDictionaryGet: (params?: RequestParams) => Promise<HttpResponse<PopularDictionariesResponseContractV1, any>>;
+        /**
+         * No description
+         *
+         * @tags Private dictionary specific APIs
+         * @name OrganizationManagePrivateAccessAdd
+         * @summary Add access for e-mail domain or user
+         * @request POST:/api/Organization/v1/{organizationCode}/{dictionaryCode}/PrivateAccess
+         * @secure
+         */
+        organizationManagePrivateAccessAdd: (organizationCode: string, dictionaryCode: string, data: PrivateDictionaryAccessContractV1, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        /**
+         * No description
+         *
+         * @tags Private dictionary specific APIs
+         * @name OrganizationManagePrivateAccessDelete
+         * @summary Delete access for e-mail domain or user
+         * @request DELETE:/api/Organization/v1/{organizationCode}/{dictionaryCode}/PrivateAccess
+         * @secure
+         */
+        organizationManagePrivateAccessDelete: (organizationCode: string, dictionaryCode: string, data: PrivateDictionaryAccessContractV1, params?: RequestParams) => Promise<HttpResponse<void, any>>;
         /**
          * No description
          *
          * @tags Property
-         * @name PropertyV4List
+         * @name PropertyGet
          * @summary Get Property details
          * @request GET:/api/Property/v4
          */
-        propertyV4List: (query: {
+        propertyGet: (query: {
             /** URI of the property, e.g. https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/prop/color */
             uri: string;
-            /** Set to true to get list of classes where property is used (only classes of the same dictionary as the property). Maximum number of class properties returned is 2000 */
+            /**
+             * Set to true to get list of classes where property is used (only classes of the same dictionary as the property).
+             *             Maximum number of class properties returned is 2000. In the next version of the API this option probably will be removed.
+             *             Preferred way to get the classes is by using api/Property/Classes/v1
+             */
             includeClasses?: boolean;
             /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary */
             languageCode?: string;
@@ -2940,11 +3490,65 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
          * No description
          *
          * @tags Property
-         * @name PropertyValueV2List
+         * @name PropertyRelationsGet
+         * @summary Get property relations or reverse relations (paginated)
+         * @request GET:/api/Property/Relations/v1
+         */
+        propertyRelationsGet: (query: {
+            /** URI of the property, e.g. https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/prop/height */
+            PropertyUri: string;
+            /** Get either the forward or the reverse relations */
+            GetReverseRelations: boolean;
+            /**
+             * Zero-based offset of the first item to be returned. Default is 0.
+             * @format int32
+             */
+            Offset?: number;
+            /**
+             * Limit number of items to be returned. The default and maximum number of items returned is 1000. When Offset is specified, then the default limit is 100.
+             * @format int32
+             */
+            Limit?: number;
+            /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary */
+            languageCode?: string;
+        }, params?: RequestParams) => Promise<HttpResponse<PropertyRelationsContractV1, any>>;
+        /**
+         * No description
+         *
+         * @tags Property
+         * @name PropertyClassesGet
+         * @summary Get list of classes that uses the property (paginated)
+         * @request GET:/api/Property/Classes/v1
+         */
+        propertyClassesGet: (query: {
+            /** URI of the property, e.g. https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/prop/height */
+            PropertyUri: string;
+            /** Option to get only classes of same dictionary as the property (internal, default), only classes of other dictionaries (external) or all classes (all) */
+            InternalExternal?: InternalExternalOptionV1;
+            /** Search text to filter classes */
+            SearchText?: string;
+            /**
+             * Zero-based offset of the first item to be returned. Default is 0.
+             * @format int32
+             */
+            Offset?: number;
+            /**
+             * Limit number of items to be returned. The default and maximum number of items returned is 1000. When Offset is specified, then the default limit is 100.
+             * @format int32
+             */
+            Limit?: number;
+            /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the dictionary */
+            languageCode?: string;
+        }, params?: RequestParams) => Promise<HttpResponse<PropertyClassesContractV1, any>>;
+        /**
+         * No description
+         *
+         * @tags Property
+         * @name PropertyValueGet
          * @summary Get Property Value details
          * @request GET:/api/PropertyValue/v2
          */
-        propertyValueV2List: (query: {
+        propertyValueGet: (query: {
             /** URI of the property value, e.g. https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/1.1/prop/color/value/red */
             uri: string;
             /** Language Code */
@@ -2954,12 +3558,44 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
      * @description The details can be requested per Class via the Class API
      *
      * @tags Search
-     * @name TextSearchV1List
-     * @summary Search the bSDD database using free text, get list of Classes and/or Properties matching the text.
-    Pagination options are for Classes and Properties combined. So if result consists of 10 classes and 5 properties, TotalCount will be 15. Classes will be listed first, so if you then use Offset=10 and Limit=5, you will get the 5 properties.
+     * @name TextSearchGet
+     * @summary Search bSDD using free text, get list of Classes and/or Properties.
+    Pagination options for Classes and Properties are combined. If result contains 10 classes and 5 properties, TotalCount will be 15. Classes will be listed first. Use Offset=10 and Limit=5, to get the 5 properties only.
+     * @request GET:/api/TextSearch/v2
+     */
+        textSearchGet: (query: {
+            /** The text to search for, minimum 2 characters (case and accent insensitive) */
+            SearchText: string;
+            /** Type filter: can be "Class", "Property", "Material", "GroupOfProperties" of a semicolon separated list of these. Empty means all */
+            TypeFilter?: string;
+            /** List of dictionaries to filter on */
+            DictionaryUris?: string[];
+            OnlyLatestVersion?: boolean;
+            OnlyVerified?: boolean;
+            IncludeInactive?: boolean;
+            IncludePreview?: boolean;
+            IncludeSearchDescriptions?: boolean;
+            /**
+             * Zero-based offset of the first item to be returned. Default is 0.
+             * @format int32
+             */
+            Offset?: number;
+            /**
+             * Limit number of items to be returned. The default and maximum number of items returned is 1000. When Offset is specified, then the default limit is 100.
+             * @format int32
+             */
+            Limit?: number;
+        }, params?: RequestParams) => Promise<HttpResponse<TextSearchResponseContractV2, any>>;
+        /**
+     * @description The details can be requested per Class via the Class API
+     *
+     * @tags Search
+     * @name TextSearchV1Get
+     * @summary Search bSDD using free text, get list of Classes and/or Properties.
+    Pagination options for Classes and Properties are combined. If result contains 10 classes and 5 properties, TotalCount will be 15. Classes will be listed first. Use Offset=10 and Limit=5, to get the 5 properties only.
      * @request GET:/api/TextSearch/v1
      */
-        textSearchV1List: (query: {
+        textSearchV1Get: (query: {
             /** The text to search for, minimum 2 characters (case and accent insensitive) */
             SearchText: string;
             /** Type filter: must be "All", "Classes" or "Properties" */
@@ -2972,7 +3608,7 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
              */
             Offset?: number;
             /**
-             * Limit number of items to be returned. If you enter an offset then default limit is 100. The maximum number of items returned is 1000.
+             * Limit number of items to be returned. The default and maximum number of items returned is 1000. When Offset is specified, then the default limit is 100.
              * @format int32
              */
             Limit?: number;
@@ -2981,13 +3617,13 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
      * @description The details can be requested per Class via the Class API
      *
      * @tags Search
-     * @name SearchInDictionaryV1List
+     * @name SearchInDictionaryGet
      * @summary Search the bSDD database, get list of Classes without details.
     This version uses new naming and returns one Dictionary instead of a list with always one Dictionary.
     This API replaces /api/SearchList.
      * @request GET:/api/SearchInDictionary/v1
      */
-        searchInDictionaryV1List: (query: {
+        searchInDictionaryGet: (query: {
             /** The uri of the Dictionary to filter on (required). The "latest" option is supported, e.g. https://identifier.buildingsmart.org/uri/bs-agri/fruitvegs/latest */
             DictionaryUri: string;
             /** The text to search for (case and accent insensitive) */
@@ -3007,24 +3643,20 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
              */
             Offset?: number;
             /**
-             * Limit number of items to be returned. If you enter an offset then default limit is 100. The maximum number of items returned is 1000.
+             * Limit number of items to be returned. The default and maximum number of items returned is 1000. When Offset is specified, then the default limit is 100.
              * @format int32
              */
             Limit?: number;
         }, params?: RequestParams) => Promise<HttpResponse<SearchInDictionaryResponseContractV1, any>>;
         /**
-     * No description
-     *
-     * @tags Search
-     * @name ClassSearchV1List
-     * @summary Search the bSDD database using free text, get list of Classes matching the text and optional additional filters.
-    Changes with obsolete api/ClassificationSearch:
-    - "Classification" has been renamed to "Class"
-    - "Domain" has been renamed to "Dictionary"
-    - "NamespaceUri" has been renamed to "Uri"
-     * @request GET:/api/Class/Search/v1
-     */
-        classSearchV1List: (query: {
+         * No description
+         *
+         * @tags Search
+         * @name ClassSearchGet
+         * @summary Search bSDD using free text. Get list of Classes matching the text and optional additional filters.
+         * @request GET:/api/Class/Search/v1
+         */
+        classSearchGet: (query: {
             /** The text to search for, minimum 3 characters (case and accent insensitive) */
             SearchText: string;
             /**
@@ -3043,7 +3675,7 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
              */
             Offset?: number;
             /**
-             * Limit number of items to be returned. If you enter an offset then default limit is 100. The maximum number of items returned is 1000.
+             * Limit number of items to be returned. The default and maximum number of items returned is 1000. When Offset is specified, then the default limit is 100.
              * @format int32
              */
             Limit?: number;
@@ -3052,48 +3684,57 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
          * No description
          *
          * @tags z Lookup data
-         * @name UnitV1List
+         * @name UnitGet
          * @summary Get list of all units
          * @request GET:/api/Unit/v1
          */
-        unitV1List: (params?: RequestParams) => Promise<HttpResponse<UnitContractV1[], any>>;
+        unitGet: (params?: RequestParams) => Promise<HttpResponse<UnitContractV1[], any>>;
         /**
          * No description
          *
          * @tags z Lookup data
-         * @name ReferenceDocumentV1List
+         * @name ReferenceDocumentGet
          * @summary Get list of all ReferenceDocuments
          * @request GET:/api/ReferenceDocument/v1
          */
-        referenceDocumentV1List: (params?: RequestParams) => Promise<HttpResponse<ReferenceDocumentContractV1[], any>>;
+        referenceDocumentGet: (params?: RequestParams) => Promise<HttpResponse<ReferenceDocumentContractV1[], any>>;
         /**
          * No description
          *
          * @tags z Lookup data
-         * @name LanguageV1List
+         * @name LanguageGet
          * @summary Get list of available Languages
          * @request GET:/api/Language/v1
          */
-        languageV1List: (params?: RequestParams) => Promise<HttpResponse<LanguageContractV1[], any>>;
+        languageGet: (params?: RequestParams) => Promise<HttpResponse<LanguageContractV1[], any>>;
         /**
          * No description
          *
          * @tags z Lookup data
-         * @name CountryV1List
+         * @name CountryGet
          * @summary Get list of all Countries
          * @request GET:/api/Country/v1
          */
-        countryV1List: (params?: RequestParams) => Promise<HttpResponse<CountryContractV1[], any>>;
+        countryGet: (params?: RequestParams) => Promise<HttpResponse<CountryContractV1[], any>>;
+        /**
+         * No description
+         *
+         * @tags z Other
+         * @name HealthGet
+         * @summary Basic check you can use to see if the bSDD API is up and running
+         * @request GET:/api/Health
+         */
+        healthGet: (params?: RequestParams) => Promise<HttpResponse<void, any>>;
         /**
          * @description The details can be requested per Classification via the Classification API
          *
          * @tags zz Obsolete APIs
-         * @name TextSearchListOpenV6List
+         * @name TextSearchListGet
          * @summary Search the bSDD database using free text, get list of Classifications and/or Properties matching the text.
          * @request GET:/api/TextSearchListOpen/v6
          * @deprecated
          */
-        textSearchListOpenV6List: (query: {
+        textSearchListGet: (query: {
             /** The text to search for, minimum 3 characters (case and accent insensitive) */
             SearchText: string;
             /** Type filter: must be "All", "Classifications", "Materials" or "Properties" */
@@ -3105,12 +3746,12 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
          * @description The details can be requested per Classification via the Classification API
          *
          * @tags zz Obsolete APIs
-         * @name TextSearchListOpenV5List
+         * @name TextSearchListV5Get
          * @summary Search the bSDD database using free text, get list of Classifications and/or Properties matching the text.
          * @request GET:/api/TextSearchListOpen/v5
          * @deprecated
          */
-        textSearchListOpenV5List: (query: {
+        textSearchListV5Get: (query: {
             /** The text to search for, minimum 3 characters (case and accent insensitive) */
             SearchText: string;
             /** Type filter: must be "All", "Classifications" or "Properties" */
@@ -3122,14 +3763,14 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
      * @description The details can be requested per Classification via the Classification API
      *
      * @tags zz Obsolete APIs
-     * @name SearchListV2List
+     * @name SearchListGet
      * @summary Secured version of the "Search List API".
     Search the bSDD database, get list of Classifications without details.
      * @request GET:/api/SearchList/v2
      * @deprecated
      * @secure
      */
-        searchListV2List: (query: {
+        searchListGet: (query: {
             /** The namespace uri of the Domain to filter on (required) */
             DomainNamespaceUri: string;
             /** The text to search for (case and accent insensitive) */
@@ -3148,12 +3789,12 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
          * @description The details can be requested per Classification via the Classification API
          *
          * @tags zz Obsolete APIs
-         * @name SearchListOpenV2List
+         * @name SearchListGetOpen
          * @summary Search the bSDD database, get list of Classifications without details.
          * @request GET:/api/SearchListOpen/v2
          * @deprecated
          */
-        searchListOpenV2List: (query: {
+        searchListGetOpen: (query: {
             /** The namespace uri of the Domain to filter on (required) */
             DomainNamespaceUri: string;
             /** The text to search for (case and accent insensitive) */
@@ -3169,39 +3810,16 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
             RelatedIfcEntity?: string;
         }, params?: RequestParams) => Promise<HttpResponse<SearchResultContractV2, any>>;
         /**
-     * No description
-     *
-     * @tags zz Obsolete APIs
-     * @name RequestExportFilePreviewCreate
-     * @summary PREVIEW
-    Request a file with an export of a domain.
-    Only format "Sketchup" is supported. You get an export in xsd format with limited content.
-    OBSOLETE: pls use /api/DictionaryDownload/sketchup/v1
-     * @request POST:/api/RequestExportFile/preview
-     * @deprecated
-     * @secure
-     */
-        requestExportFilePreviewCreate: (query: {
-            /** The namespace uri of the domain to be downloaded */
-            DomainNamespaceUri: string;
-            /**
-             * Select the Export Format you want the result in.
-             * Only support format is Sketchup
-             * Field can be left empty
-             */
-            ExportFormat?: string;
-        }, params?: RequestParams) => Promise<HttpResponse<File, void | ProblemDetails>>;
-        /**
          * No description
          *
          * @tags zz Obsolete APIs
-         * @name PropertyV3List
+         * @name PropertyV3Get
          * @summary Get Property details
          * @request GET:/api/Property/v3
          * @deprecated
          */
-        propertyV3List: (query: {
-            /** Namespace URI of the property, e.g. http://identifier.buildingsmart.org/uri/buildingsmart/ifc-4.3/prop/AirConditioning */
+        propertyV3Get: (query: {
+            /** Namespace URI of the property, e.g. https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/prop/AirConditioning */
             namespaceUri: string;
             /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the domain */
             languageCode?: string;
@@ -3210,12 +3828,12 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
          * No description
          *
          * @tags zz Obsolete APIs
-         * @name PropertyV2List
+         * @name PropertyV2Get
          * @summary Get Property details
          * @request GET:/api/Property/v2
          * @deprecated
          */
-        propertyV2List: (query: {
+        propertyV2Get: (query: {
             /** Namespace URI of the property, e.g. https://identifier.buildingsmart.org/uri/buildingsmart/ifc-4.3/prop/AirConditioning */
             namespaceUri: string;
             /** Specify language (case sensitive). For those items the text is not available in the requested language, the text will be returned in the default language of the domain */
@@ -3225,12 +3843,12 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
          * No description
          *
          * @tags zz Obsolete APIs
-         * @name PropertyValueV1List
+         * @name PropertyValueV1Get
          * @summary Get Property Value details
          * @request GET:/api/PropertyValue/v1
          * @deprecated
          */
-        propertyValueV1List: (query: {
+        propertyValueV1Get: (query: {
             /** Namespace URI of the property value */
             namespaceUri: string;
             /** Language Code */
@@ -3240,12 +3858,12 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
          * No description
          *
          * @tags zz Obsolete APIs
-         * @name MaterialV2List
+         * @name MaterialGet
          * @summary Get Material details
          * @request GET:/api/Material/v2
          * @deprecated
          */
-        materialV2List: (query: {
+        materialGet: (query: {
             /** Namespace URI of the material */
             namespaceUri: string;
             /** Language Code the result will be returned in. For items the translation is not available, the default language of the domain will be returned */
@@ -3257,12 +3875,12 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
          * No description
          *
          * @tags zz Obsolete APIs
-         * @name MaterialV1List
+         * @name MaterialV1Get
          * @summary Get Material details
          * @request GET:/api/Material/v1
          * @deprecated
          */
-        materialV1List: (query: {
+        materialV1Get: (query: {
             /** Namespace URI of the material */
             namespaceUri: string;
             /** Language Code the result will be returned in. For items the translation is not available, the default language of the domain will be returned */
@@ -3274,12 +3892,12 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
          * @description This is a preview version! Contracts may change. The details can be requested per Material via the Material API
          *
          * @tags zz Obsolete APIs
-         * @name MaterialSearchOpenPreviewList
+         * @name MaterialSearchGet
          * @summary Search the bSDD database, get list of Materials without details.
          * @request GET:/api/Material/SearchOpen/preview
          * @deprecated
          */
-        materialSearchOpenPreviewList: (query: {
+        materialSearchGet: (query: {
             /** The namespace uri of the Domain to filter on (required) */
             DomainNamespaceUri: string;
             /** The text to search for materials (case and accent insensitive) */
@@ -3296,12 +3914,12 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
          * No description
          *
          * @tags zz Obsolete APIs
-         * @name DomainV3List
+         * @name DomainGet
          * @summary Get list of available Domains
          * @request GET:/api/Domain/v3
          * @deprecated
          */
-        domainV3List: (query?: {
+        domainGet: (query?: {
             /**
              * Optional parameter to filter by first part of namespace URI. Use this one to get details of just one domain version
              *             or, if you leave out the version number at the end, get all the versions of a domain.
@@ -3312,12 +3930,12 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
          * No description
          *
          * @tags zz Obsolete APIs
-         * @name DomainV3ClassificationsList
+         * @name DomainWithClassificationTree
          * @summary Get Domain with the classification and/or material tree
          * @request GET:/api/Domain/v3/Classifications
          * @deprecated
          */
-        domainV3ClassificationsList: (query: {
+        domainWithClassificationTree: (query: {
             /** Required parameter to select the domain. */
             namespaceUri: string;
             /** Set to true if you want a tree of classifications, set to false to get a flat list of classifications */
@@ -3329,47 +3947,45 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
          * No description
          *
          * @tags zz Obsolete APIs
-         * @name DomainV3Update
+         * @name DomainUpdateStatus
          * @summary UpdateDomainStatus
          * @request PUT:/api/Domain/v3/{organizationCode}/{code}/{version}
          * @deprecated
          * @secure
          */
-        domainV3Update: (organizationCode: string, code: string, version: string, data: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        domainUpdateStatus: (organizationCode: string, code: string, version: string, data: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
         /**
          * No description
          *
          * @tags zz Obsolete APIs
-         * @name DomainV3Delete
+         * @name DomainUpdateDeleteVersion
          * @summary Delete domain version
          * @request DELETE:/api/Domain/v3/{organizationCode}/{code}/{version}
          * @deprecated
          * @secure
          */
-        domainV3Delete: (organizationCode: string, code: string, version: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        domainUpdateDeleteVersion: (organizationCode: string, code: string, version: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
         /**
          * No description
          *
          * @tags zz Obsolete APIs
-         * @name DomainV3Delete2
+         * @name DomainUpdateDelete
          * @summary Delete all versions of domain
          * @request DELETE:/api/Domain/v3/{organizationCode}/{code}
          * @deprecated
-         * @originalName domainV3Delete
-         * @duplicate
          * @secure
          */
-        domainV3Delete2: (organizationCode: string, code: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
+        domainUpdateDelete: (organizationCode: string, code: string, params?: RequestParams) => Promise<HttpResponse<void, any>>;
         /**
          * No description
          *
          * @tags zz Obsolete APIs
-         * @name DomainV2List
+         * @name DomainV2Get
          * @summary Get list of available Domains
          * @request GET:/api/Domain/v2
          * @deprecated
          */
-        domainV2List: (query?: {
+        domainV2Get: (query?: {
             /**
              * Optional parameter to filter by first part of namespace URI. Use this one to get details of just one domain version
              *             or, if you leave out the version number at the end, get all the versions of a domain.
@@ -3380,12 +3996,12 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
          * No description
          *
          * @tags zz Obsolete APIs
-         * @name DomainV2ClassificationsList
+         * @name DomainWithClassificationTreeV2
          * @summary Get Domain with the classification tree
          * @request GET:/api/Domain/v2/Classifications
          * @deprecated
          */
-        domainV2ClassificationsList: (query: {
+        domainWithClassificationTreeV2: (query: {
             /** Required parameter to select the domain. */
             namespaceUri: string;
             /** Set to true if you want a tree of classifications, set to false to get a flat list of classifications */
@@ -3397,12 +4013,12 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
          * No description
          *
          * @tags zz Obsolete APIs
-         * @name ClassificationV4List
+         * @name ClassificationGet
          * @summary Get Classification details - please use api/Class/v1 instead
          * @request GET:/api/Classification/v4
          * @deprecated
          */
-        classificationV4List: (query: {
+        classificationGet: (query: {
             /** Namespace URI of the classification, e.g. https://identifier.buildingsmart.org/uri/buildingsmart/ifc-4.3/class/ifcwall */
             namespaceUri: string;
             /** Use this option to include references to child classifications */
@@ -3414,12 +4030,12 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
          * No description
          *
          * @tags zz Obsolete APIs
-         * @name ClassificationV3List
+         * @name ClassificationV3Get
          * @summary Get Classification details - please use api/Class/v1 instead
          * @request GET:/api/Classification/v3
          * @deprecated
          */
-        classificationV3List: (query: {
+        classificationV3Get: (query: {
             /** Namespace URI of the classification, e.g. https://identifier.buildingsmart.org/uri/buildingsmart/ifc-4.3/class/ifcwall */
             namespaceUri: string;
             /** Use this option to include references to child classifications */
@@ -3431,12 +4047,12 @@ export declare class BsddApiBase<SecurityDataType extends unknown> extends HttpC
          * No description
          *
          * @tags zz Obsolete APIs
-         * @name ClassificationSearchOpenV1List
+         * @name ClassificationSearchGet
          * @summary Search the bSDD database using free text - please use api/Class/Search/v1 instead
          * @request GET:/api/ClassificationSearchOpen/v1
          * @deprecated
          */
-        classificationSearchOpenV1List: (query: {
+        classificationSearchGet: (query: {
             /** The text to search for, minimum 3 characters (case and accent insensitive) */
             SearchText: string;
             /**
