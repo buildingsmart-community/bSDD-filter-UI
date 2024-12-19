@@ -1,4 +1,4 @@
-import { ClassContractV1, DictionaryClassesResponseContractV1, DictionaryContractV1 } from '../BsddApi/BsddApiBase';
+import { ClassContractV1, DictionaryClassesResponseContractV1Classes, DictionaryContractV1 } from '../BsddApi/BsddApiBase';
 import { IfcClassification, IfcEntity } from './ifc';
 
 /**
@@ -7,7 +7,7 @@ import { IfcClassification, IfcEntity } from './ifc';
  * @returns The converted IfcClassification object.
  */
 export function convertBsddDictionaryToIfcClassification(
-  bsddDictionary: DictionaryContractV1 | DictionaryClassesResponseContractV1,
+  bsddDictionary: DictionaryContractV1 | DictionaryClassesResponseContractV1Classes,
 ): IfcClassification {
   return {
     type: 'IfcClassification',

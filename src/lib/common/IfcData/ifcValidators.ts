@@ -1,7 +1,7 @@
 import { ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
 
 import type { AppDispatch, RootState } from '../app/store';
-import { ClassListItemContractV1, DictionaryClassesResponseContractV1 } from '../BsddApi/BsddApiBase';
+import { ClassListItemContractV1Classes, DictionaryClassesResponseContractV1Classes } from '../BsddApi/BsddApiBase';
 import { fetchDictionaryClasses, getDictionary, selectDictionary, selectDictionaryClasses } from '../slices/bsddSlice';
 import { BsddDictionary } from './bsddBridgeData';
 import {
@@ -29,13 +29,13 @@ type ValidationResult = {
  * @param {IfcClassificationReference['referencedSource']} referencedSource - The referenced source from the IfcClassificationReference.
  * @param {RootState} state - The current state of the Redux store.
  * @param {AppDispatch} dispatch - The dispatch function from Redux.
- * @returns {Promise<ClassListItemContractV1[] | null>} - The fetched classes or null if fetching fails.
+ * @returns {Promise<ClassListItemContractV1Classes[] | null>} - The fetched classes or null if fetching fails.
  */
 const fetchBsddClasses = async (
   ifcClassificationReference: IfcClassificationReference,
   state: RootState,
   dispatch: ThunkDispatch<unknown, unknown, UnknownAction>,
-): Promise<ClassListItemContractV1[] | null> => {
+): Promise<ClassListItemContractV1Classes[] | null> => {
   const { referencedSource } = ifcClassificationReference;
 
   const location = referencedSource?.location ?? ifcClassificationReference.location; // hacky catch to search for IfcClassification.location in referencedSource.location if it is missing
@@ -46,7 +46,7 @@ const fetchBsddClasses = async (
 
   const result = await dispatch(fetchDictionaryClasses(location));
   if (result.payload) {
-    return result.payload as ClassListItemContractV1[];
+    return result.payload as ClassListItemContractV1Classes[];
   }
   console.error('Failed to fetch dictionary classes');
   return null;
@@ -54,14 +54,14 @@ const fetchBsddClasses = async (
 
 /**
  * Finds a bsddClass from the classes based on the IfcClassificationReference.
- * @param {ClassListItemContractV1[] | null} classes - The classes to search in.
+ * @param {ClassListItemContractV1Classes[] | null} classes - The classes to search in.
  * @param {IfcClassificationReference} ifcReference - The IfcClassificationReference to match.
- * @returns {ClassListItemContractV1 | null} - The found bsddClass or null if no match is found.
+ * @returns {ClassListItemContractV1Classes | null} - The found bsddClass or null if no match is found.
  */
 const findBsddClass = (
-  classes: ClassListItemContractV1[] | null,
+  classes: ClassListItemContractV1Classes[] | null,
   ifcReference: IfcClassificationReference,
-): ClassListItemContractV1 | null => {
+): ClassListItemContractV1Classes | null => {
   if (!classes) return null;
 
   let bsddClass =
@@ -86,8 +86,8 @@ const findBsddClass = (
  */
 function findMatchedClass(
   ifcClassificationReference: IfcClassificationReference,
-  classes: ClassListItemContractV1[],
-): ClassListItemContractV1 | undefined {
+  classes: ClassListItemContractV1Classes[],
+): ClassListItemContractV1Classes | undefined {
   if (ifcClassificationReference.identification) {
     return classes.find(
       (dictionaryClass) =>
