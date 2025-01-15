@@ -222,13 +222,18 @@ function createIfcPropertySingleValue(
     specification: classificationProperty.propertyUri || '',
   };
 
-  const nominalValue = classificationProperty.predefinedValue
-    ? GetIfcPropertyValue(classificationProperty.dataType, classificationProperty.predefinedValue)
-    : getNominalValueFromProperty(classificationProperty.dataType, ifcEntity, propertySetName, name);
+  let nominalValue: any = null;
+
+  if (classificationProperty.predefinedValue) {
+    nominalValue = GetIfcPropertyValue(classificationProperty.dataType, classificationProperty.predefinedValue);
+  } else if (ifcEntity) {
+    nominalValue = getNominalValueFromProperty(classificationProperty.dataType, ifcEntity, propertySetName, name);
+  }
 
   if (nominalValue !== null) {
     ifcProperty.nominalValue = nominalValue;
   }
+
   return ifcProperty;
 }
 
