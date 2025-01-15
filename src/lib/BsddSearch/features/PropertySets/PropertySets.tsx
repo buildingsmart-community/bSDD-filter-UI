@@ -168,7 +168,7 @@ function createIfcPropertyEnumeratedValue(
   classificationProperty: ClassPropertyContractV1,
   name: string,
   propertySetName: string,
-  ifcEntity: IfcEntity,
+  ifcEntity: IfcEntity | null,
 ): IfcPropertyEnumeratedValue {
   const allowedEnumerationValues: IfcValue[] =
     classificationProperty.allowedValues?.map((allowedValue) =>
@@ -189,11 +189,13 @@ function createIfcPropertyEnumeratedValue(
   }
 
   if (classificationProperty.allowedValues && classificationProperty.allowedValues.length === 1) {
-      ifcProperty.enumerationValues = [GetIfcPropertyValue(classificationProperty.dataType, classificationProperty.allowedValues[0].value)];
+    ifcProperty.enumerationValues = [
+      GetIfcPropertyValue(classificationProperty.dataType, classificationProperty.allowedValues[0].value),
+    ];
   } else {
-      ifcProperty.enumerationValues = classificationProperty.predefinedValue
-          ? [GetIfcPropertyValue(classificationProperty.dataType, classificationProperty.predefinedValue)]
-          : null;
+    ifcProperty.enumerationValues = classificationProperty.predefinedValue
+      ? [GetIfcPropertyValue(classificationProperty.dataType, classificationProperty.predefinedValue)]
+      : null;
   }
 
   return ifcProperty;
@@ -212,7 +214,7 @@ function createIfcPropertySingleValue(
   classificationProperty: ClassPropertyContractV1,
   name: string,
   propertySetName: string,
-  ifcEntity: IfcEntity,
+  ifcEntity: IfcEntity | null,
 ): IfcPropertySingleValue {
   const ifcProperty: IfcPropertySingleValue = {
     type: 'IfcPropertySingleValue',
@@ -240,7 +242,7 @@ function createIfcPropertySingleValue(
 function GetIfcProperty(
   classificationProperty: ClassPropertyContractV1,
   propertySetName: string,
-  ifcEntity: IfcEntity,
+  ifcEntity: IfcEntity | null,
 ): IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue {
   const { propertyCode } = classificationProperty;
   const name = propertyCode || 'unknown';
@@ -262,6 +264,7 @@ function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertyS
   const propertyNamesByLanguage = useAppSelector(selectPropertyNamesByLanguage);
   const languageCode = useAppSelector(selectLanguage);
   const [propertyNaturalLanguageNamesMap, setPropertyNaturalLanguageNamesMap] = useState<Record<string, string>>({});
+  const [mergedIfcPropertySets, setMergedIfcPropertySets] = useState<IfcPropertySet[] | null>(null);
 
   useEffect(() => {
     if (!mainDictionaryClassification) return;
@@ -281,15 +284,14 @@ function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertyS
           };
         }
 
-        if (selectedMergedIfcEntity) {
-          newPropertySets[propertySetName].hasProperties.push(
-            GetIfcProperty(classProperty, propertySetName, selectedMergedIfcEntity),
-          );
-        }
+        newPropertySets[propertySetName].hasProperties.push(
+          GetIfcProperty(classProperty, propertySetName, selectedMergedIfcEntity),
+        );
       });
     });
 
     dispatch(setIsDefinedBy(Object.values(newPropertySets)));
+    setMergedIfcPropertySets(Object.values(newPropertySets));
   }, [dispatch, selectedMergedIfcEntity, mainDictionaryClassification]);
 
   useEffect(() => {
@@ -323,7 +325,7 @@ function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertyS
   return (
     <div>
       {Children.toArray(
-        propertySets?.map((propertySet, index) => (
+        mergedIfcPropertySets?.map((propertySet, index) => (
           <Accordion variant="contained" radius="xs">
             <Accordion.Item
               key={propertySet.name || 'Unknown'}
