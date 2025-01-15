@@ -224,7 +224,7 @@ async function fetchDictionaryClassData(location: string, offset: number, langua
     {
       Uri: location,
       UseNestedClasses: false,
-      ClassType: 'Class',
+      // ClassType: 'Class', // Allow selection of materials
       Offset: offset,
       Limit: CLASS_ITEM_PAGE_SIZE,
       languageCode,
