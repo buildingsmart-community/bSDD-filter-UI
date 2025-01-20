@@ -48,6 +48,58 @@ export const mockData: BsddBridgeData = {
   },
   ifcData: [
     {
+      type: 'IfcStair',
+      name: 'betontrap 5001',
+      description: 'betontrap',
+      objectType: 'betontrap',
+      tag: '6546876',
+      hasAssociations: [
+        {
+          identification: 'betontrap',
+          referencedSource: {
+            type: 'IfcClassification',
+            editionDate: '0001-01-01T00:00:00',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+          },
+          type: 'IfcClassificationReference',
+          name: 'betontrap',
+        },
+      ],
+      isDefinedBy: [
+        {
+          type: 'IfcPropertySet',
+          name: 'Pset_ConcreteElementGeneral',
+          hasProperties: [
+            {
+              type: 'IfcPropertyEnumeratedValue',
+              name: 'ExposureClass',
+              enumerationValues: [
+                {
+                  type: 'IfcText',
+                  value: 'XC1',
+                },
+              ],
+            }
+          ],
+        },
+        {
+          type: 'IfcPropertySet',
+          name: 'Pset_StairCommon',
+          hasProperties: [
+            {
+              type: 'IfcPropertySingleValue',
+              name: 'LoadBearing',
+              nominalValue: 
+                {
+                  type: 'IfcBoolean',
+                  value: true,
+                },
+            }
+          ],
+        },
+      ],
+    },
+    {
       type: 'IfcObject',
       name: 'NLRS_00_SI_nulpunt_vws - nulpunt',
       description: 'Project nulpunt',

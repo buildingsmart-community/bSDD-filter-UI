@@ -115,7 +115,7 @@ export interface IfcSimpleProperty extends IfcProperty {
 
 export interface IfcPropertySingleValue extends IfcSimpleProperty {
   type: 'IfcPropertySingleValue';
-  nominalValue?: any; // IfcValue
+  nominalValue?: IfcValue | null;
   unit?: any; // IfcUnit
 }
 
