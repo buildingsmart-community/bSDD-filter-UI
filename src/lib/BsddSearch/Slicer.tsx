@@ -1,12 +1,12 @@
 import { CheckIcon, CloseButton, Combobox, Group, InputBase, Paper, Text, useCombobox } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 interface Option {
   label: string;
   value: string;
   uri: string;
 }
+
 interface SlicerProps {
   height: number;
   options: Option[];
@@ -82,7 +82,7 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
   };
 
   const comboboxOptions = renderedOptions.map((item) => (
-    <Combobox.Option value={item.value} key={item.value} active={value?.value === item.value}>
+    <Combobox.Option key={item.value} value={item.value} active={value?.value === item.value}>
       <Group gap="sm">
         {value?.value === item.value ? <CheckIcon size={12} /> : null}
         <Text fz="sm" opacity={disabled ? 0.6 : 1.0}>

@@ -38,7 +38,10 @@ interface PropertySetsProps {
  * @param predefinedValue - The predefined value of the property.
  * @returns The IfcValue object containing the type and value.
  */
-function GetIfcPropertyValue(dataType: string | undefined | null, predefinedValue?: string | boolean | null): IfcValue {
+function createIfcPropertyValue(
+  dataType: string | undefined | null,
+  predefinedValue?: string | boolean | null,
+): IfcValue {
   const type = dataType ? valueTypeMapping[dataType] || 'default' : 'default';
 
   let value: any;
@@ -60,6 +63,13 @@ function GetIfcPropertyValue(dataType: string | undefined | null, predefinedValu
   };
 
   return ifcValue;
+}
+
+function validateIfcPropertyValue(dataType: string | undefined | null, value: IfcValue): IfcValue {
+  if (dataType && dataType === value?.type) {
+    return value;
+  }
+  return createIfcPropertyValue(dataType, value?.value);
 }
 
 /**
@@ -103,44 +113,33 @@ function getPropertyFromSet(
  * @param name - The name of the property.
  * @returns The nominal value of the property, or a default value if not found.
  */
-function getNominalValueFromProperty(
-  dataType: string | null | undefined,
-  ifcEntity: IfcEntity,
-  propertySetName: string,
-  name: string,
-): IfcValue {
-  const property = getPropertyFromSet(ifcEntity, propertySetName, name) as IfcPropertySingleValue;
+function getNominalValueFromProperty(dataType: string | null | undefined, property: IfcPropertySingleValue): IfcValue {
   const value: string | boolean | null = property?.nominalValue?.value ?? null;
-  return GetIfcPropertyValue(dataType, value);
+  return createIfcPropertyValue(dataType, value);
 }
 
 /**
- * Retrieves the set enumeration values that are valid from a specific property in a property set of an IfcEntity.
+ * Retrieves the first valid enumeration value from a specific property in a property set of an IfcEntity.
  *
  * @param dataType - The data type of the property.
- * @param ifcEntity - The IfcEntity object.
- * @param propertySetName - The name of the property set.
- * @param name - The name of the property.
+ * @param property - The property object.
  * @param allowedEnumerationValues - The array of allowed enumeration values.
- * @returns An array of IfcValue objects representing the allowed enumeration values.
+ * @returns The first valid IfcValue object representing the allowed enumeration value, or null if not found.
  */
-function getEnumerationValuesFromProperty(
+function getEnumerationValueFromProperty(
   dataType: string | null | undefined,
-  ifcEntity: IfcEntity,
-  propertySetName: string,
-  name: string,
+  property: IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue,
   allowedEnumerationValues: IfcValue[],
-): IfcValue[] {
-  const property = getPropertyFromSet(ifcEntity, propertySetName, name);
-
+): IfcValue | null {
   if (property) {
     // Also check dataType?
     if (property.type === 'IfcPropertyEnumeratedValue') {
-      return allowedEnumerationValues.filter((allowedValue) =>
+      const foundValue = allowedEnumerationValues.find((allowedValue) =>
         property.enumerationValues
           ? property.enumerationValues.some((value) => value.value === allowedValue.value)
           : false,
       );
+      return foundValue ? validateIfcPropertyValue(dataType, foundValue) : null;
     }
 
     // Add IfcPropertySingleValue fallback for software that does not support IfcPropertyEnumeratedValue
@@ -148,11 +147,11 @@ function getEnumerationValuesFromProperty(
       const foundValue = allowedEnumerationValues.find(
         (allowedValue) => allowedValue.value === property.nominalValue?.value,
       );
-      return foundValue ? [foundValue] : [];
+      return foundValue ? validateIfcPropertyValue(dataType, foundValue) : null;
     }
   }
 
-  return [];
+  return null;
 }
 
 /**
@@ -172,8 +171,9 @@ function createIfcPropertyEnumeratedValue(
 ): IfcPropertyEnumeratedValue {
   const allowedEnumerationValues: IfcValue[] =
     classificationProperty.allowedValues?.map((allowedValue) =>
-      GetIfcPropertyValue(classificationProperty.dataType, allowedValue.value),
+      createIfcPropertyValue(classificationProperty.dataType, allowedValue.value),
     ) || [];
+
   const ifcProperty: IfcPropertyEnumeratedValue = {
     type: 'IfcPropertyEnumeratedValue',
     name,
@@ -188,14 +188,23 @@ function createIfcPropertyEnumeratedValue(
     ifcProperty.specification = classificationProperty.propertyUri;
   }
 
-  if (classificationProperty.allowedValues && classificationProperty.allowedValues.length === 1) {
-    ifcProperty.enumerationValues = [
-      GetIfcPropertyValue(classificationProperty.dataType, classificationProperty.allowedValues[0].value),
-    ];
-  } else {
-    ifcProperty.enumerationValues = classificationProperty.predefinedValue
-      ? [GetIfcPropertyValue(classificationProperty.dataType, classificationProperty.predefinedValue)]
-      : null;
+  let value: IfcValue | null = null;
+  let allowedValues: any[] = [];
+  if (classificationProperty.allowedValues) {
+    allowedValues = classificationProperty.allowedValues;
+  } else if (classificationProperty.predefinedValue) {
+    allowedValues = [classificationProperty.predefinedValue];
+  }
+
+  if (allowedValues.length === 1) {
+    value = validateIfcPropertyValue(classificationProperty.dataType, allowedValues[0]);
+  } else if (ifcEntity) {
+    const property = getPropertyFromSet(ifcEntity, propertySetName, name) as IfcPropertySingleValue;
+    value = getEnumerationValueFromProperty(classificationProperty.dataType, property, allowedEnumerationValues);
+  }
+
+  if (value !== null) {
+    ifcProperty.enumerationValues = [value];
   }
 
   return ifcProperty;
@@ -219,19 +228,23 @@ function createIfcPropertySingleValue(
   const ifcProperty: IfcPropertySingleValue = {
     type: 'IfcPropertySingleValue',
     name,
-    specification: classificationProperty.propertyUri || '',
   };
 
-  let nominalValue: any = null;
-
-  if (classificationProperty.predefinedValue) {
-    nominalValue = GetIfcPropertyValue(classificationProperty.dataType, classificationProperty.predefinedValue);
-  } else if (ifcEntity) {
-    nominalValue = getNominalValueFromProperty(classificationProperty.dataType, ifcEntity, propertySetName, name);
+  if (classificationProperty.propertyUri) {
+    ifcProperty.specification = classificationProperty.propertyUri;
   }
 
-  if (nominalValue !== null) {
-    ifcProperty.nominalValue = nominalValue;
+  let value: IfcValue | null = null;
+
+  if (classificationProperty.predefinedValue) {
+    value = createIfcPropertyValue(classificationProperty.dataType, classificationProperty.predefinedValue);
+  } else if (ifcEntity) {
+    const property = getPropertyFromSet(ifcEntity, propertySetName, name) as IfcPropertySingleValue;
+    value = getNominalValueFromProperty(classificationProperty.dataType, property);
+  }
+
+  if (value !== null) {
+    ifcProperty.nominalValue = value;
   }
 
   return ifcProperty;

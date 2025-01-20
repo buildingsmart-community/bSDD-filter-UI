@@ -211,7 +211,7 @@ const updateProperties = (sourcePropertySet: IfcPropertySet, targetPropertySet: 
   }
 
   for (const sourceProperty of sourcePropertySet.hasProperties) {
-    const sourceValue = (sourceProperty as IfcPropertySingleValue).nominalValue;
+    const sourceValue = (sourceProperty as IfcPropertySingleValue).nominalValue?.value;
     if (sourceValue !== '...') {
       targetPropertiesMap.set(sourceProperty.name, sourceProperty);
     }
