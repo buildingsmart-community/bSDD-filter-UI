@@ -34,18 +34,11 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
     },
 
     onDropdownOpen: () => {
-      if (combobox.focusSearchInput) {
+      if (combobox.focusSearchInput && combobox.searchRef.current) {
         combobox.focusSearchInput();
       }
     },
   });
-
-  // useEffect(() => {
-  //   if (options.length === 1 && value !== options[0]) {
-  //     setValue(options[0]);
-  //     setSearch(options[0].label);
-  //   }
-  // }, [options, setValue, value, setSearch]);
 
   useEffect(() => {
     setSearch(value?.label || '');
@@ -143,7 +136,6 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
             onBlur={() => combobox.closeDropdown()}
             placeholder={disabled ? '' : placeholder}
             disabled={disabled}
-            // rightSectionPointerEvents="none"
           />
         </Combobox.Target>
         {height < 80 ? (
