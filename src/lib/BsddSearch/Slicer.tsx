@@ -66,9 +66,15 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
     if (isAtBottom) {
       setRenderedOptions((prevRenderedOptions) => {
         const nextIndex = prevRenderedOptions.length;
-        const moreOptions = options
-          .filter((item) => item?.label.toLowerCase().includes(search.toLowerCase().trim()))
-          .slice(nextIndex, nextIndex + RENDER_MORE_LIMIT);
+        const optionsToShow =
+          value === null
+            ? options.filter(
+                (item) =>
+                  item?.label.toLowerCase().includes(search.toLowerCase().trim()) ||
+                  item?.value.toString().toLowerCase().includes(search.toLowerCase().trim()),
+              )
+            : options;
+        const moreOptions = optionsToShow.slice(nextIndex, nextIndex + RENDER_MORE_LIMIT);
         return [...prevRenderedOptions, ...moreOptions];
       });
     }
