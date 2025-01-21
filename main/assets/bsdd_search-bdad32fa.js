@@ -1,1 +1,0 @@
-import{j as r,A as o,c as n,a as s}from"./defaultSettings-e233099a.js";import{B as t}from"./BsddSearch-43cb1f75.js";import{u as a}from"./useCefSharpBridge-4524c441.js";function i(){const e=a();return r.jsx(o,{value:e,children:r.jsx(t,{})})}function c(){return r.jsx(s,{children:r.jsx(i,{})})}n.createRoot(document.getElementById("root")).render(r.jsx(c,{}));
