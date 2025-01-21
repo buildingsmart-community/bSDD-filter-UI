@@ -1,5 +1,5 @@
 import { AppDispatch, RootState } from '../app/store';
-import { ClassContractV1, ClassListItemContractV1, ClassPropertyContractV1, DictionaryContractV1, SearchInDictionaryResponseContractV1 } from '../BsddApi/BsddApiBase';
+import { ClassContractV1, ClassListItemContractV1Classes, ClassPropertyContractV1, DictionaryContractV1, SearchInDictionaryResponseContractV1 } from '../BsddApi/BsddApiBase';
 export interface BsddState {
     mainDictionaryClassification: ClassContractV1 | null;
     mainDictionaryClassificationUri: string | null;
@@ -15,7 +15,7 @@ export interface BsddState {
         [key: string]: DictionaryContractV1;
     };
     dictionaryClasses: {
-        [key: string]: ClassListItemContractV1[];
+        [key: string]: ClassListItemContractV1Classes[];
     };
     dictionariesLoaded: boolean;
     groupedClassRelations: {
@@ -58,7 +58,7 @@ export declare const fetchDictionaries: import('@reduxjs/toolkit').AsyncThunk<{
     fulfilledMeta?: unknown;
     rejectedMeta?: unknown;
 }>;
-export declare const fetchDictionaryClasses: import('@reduxjs/toolkit').AsyncThunk<ClassListItemContractV1[], string, {
+export declare const fetchDictionaryClasses: import('@reduxjs/toolkit').AsyncThunk<ClassListItemContractV1Classes[], string, {
     state?: unknown;
     dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
     extra?: unknown;
@@ -140,13 +140,13 @@ export declare const getDictionary: (state: RootState, dispatch: AppDispatch, lo
 export declare const selectMainDictionaryClassification: (state: RootState) => ClassContractV1 | null;
 export declare const selectMainDictionaryClassificationUri: (state: RootState) => string | null;
 export declare const selectDictionary: (state: RootState, uri: string) => DictionaryContractV1;
-export declare const selectDictionaryClasses: (state: RootState, location: string) => ClassListItemContractV1[];
+export declare const selectDictionaryClasses: (state: RootState, location: string) => ClassListItemContractV1Classes[];
 export declare const selectBsddDictionaries: (state: RootState) => {
     [key: string]: DictionaryContractV1;
 };
 export declare const selectBsddDictionariesLoaded: (state: RootState) => boolean;
 export declare const selectdictionaryClasses: (state: RootState) => {
-    [key: string]: ClassListItemContractV1[];
+    [key: string]: ClassListItemContractV1Classes[];
 };
 export declare const selectGroupedClassRelations: (state: RootState) => {
     [key: string]: ClassContractV1[];
@@ -202,7 +202,7 @@ export declare const selectGroupedClasses: ((state: {
 };
 export declare const resetState: import('@reduxjs/toolkit').ActionCreatorWithoutPayload<"bsdd/resetState">, setMainDictionaryClassification: import('@reduxjs/toolkit').ActionCreatorWithPayload<ClassContractV1 | null, "bsdd/setMainDictionaryClassification">, setMainDictionaryClassificationUri: import('@reduxjs/toolkit').ActionCreatorWithPayload<string | null, "bsdd/setMainDictionaryClassificationUri">, addDictionaryClasses: import('@reduxjs/toolkit').ActionCreatorWithPayload<{
     uri: string;
-    data: ClassListItemContractV1[];
+    data: ClassListItemContractV1Classes[];
 }, "bsdd/addDictionaryClasses">;
 export declare const fetchMainDictionaryClassification: import('@reduxjs/toolkit').AsyncThunk<ClassContractV1 | null, string, {
     state?: unknown;
