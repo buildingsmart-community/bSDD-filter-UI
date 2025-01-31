@@ -1,6 +1,6 @@
 import './styles.css';
 
-import { Checkbox, createTheme, MantineTheme } from '@mantine/core';
+import { Checkbox, createTheme, MantineTheme, MantineThemeOverride } from '@mantine/core';
 import { IconCheck, IconDots } from '@tabler/icons-react';
 
 type CheckboxIconProps = {
@@ -13,7 +13,7 @@ function CheckboxIcon({ indeterminate, ...others }: CheckboxIconProps) {
   return indeterminate ? <IconDots {...others} /> : <IconCheck {...others} />;
 }
 
-const theme = createTheme({
+const theme: MantineThemeOverride = createTheme({
   components: {
     Checkbox: Checkbox.extend({
       defaultProps: {
