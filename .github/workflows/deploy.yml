@@ -31,13 +31,18 @@ jobs:
   security-check:
     runs-on: ubuntu-latest
     steps:
+      - name: Print event payload for debugging
+        run: cat $GITHUB_EVENT_PATH
+
       - name: Check if PR is from a trusted organization member
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           PR_AUTHOR=$(jq -r .pull_request.user.login "$GITHUB_EVENT_PATH")
           echo "PR Author: $PR_AUTHOR"
-          ORG_MEMBERS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/orgs/buildingsmart-community/members" | jq -r '.[].login')
+          ORG_MEMBERS_RESPONSE=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/orgs/buildingsmart-community/members")
+          echo "Organization Members Response: $ORG_MEMBERS_RESPONSE"
+          ORG_MEMBERS=$(echo "$ORG_MEMBERS_RESPONSE" | jq -r '.[].login')
           echo "Organization Members: $ORG_MEMBERS"
           if echo "$ORG_MEMBERS" | grep -q "$PR_AUTHOR"; then
             echo "User is a trusted organization member."
