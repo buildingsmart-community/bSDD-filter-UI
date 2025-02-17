@@ -2,10 +2,14 @@
 name: Deploy bSDD-filter-UI to GitHub Pages
 
 on:
-  # The workflow triggers on pushes to the main branch and on creation of any tag
+  # The workflow triggers on pushes to the main branch, creation of any tag, and pull requests
   push:
     branches: ["main"]
     tags: ["*"]
+  pull_request:
+    branches: ["main"]
+  pull_request_target:
+    types: [closed]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -23,11 +27,29 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Deploy job with two steps: one for main branch, one for release tags
+  # Security check job to ensure the PR is from a trusted organization member
+  security-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if PR is from a trusted organization member
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_AUTHOR=$(jq -r .pull_request.user.login "$GITHUB_EVENT_PATH")
+          ORG_MEMBERS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" "https://api.github.com/orgs/buildingsmart-community/members" | jq -r '.[].login')
+          if echo "$ORG_MEMBERS" | grep -q "$PR_AUTHOR"; then
+            echo "User is a trusted organization member."
+          else
+            echo "User is not a trusted organization member. Exiting."
+            exit 1
+          fi
+
+  # Deploy job with three steps: one for main branch, one for release tags, and one for pull requests
   deploy:
+    needs: security-check
     environment:
       name: github-pages
-      url: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'https://buildingsmart-community.github.io/bSDD-filter-UI/main/' || startsWith(github.ref, 'refs/tags/') && format('https://buildingsmart-community.github.io/bSDD-filter-UI/{0}', github.ref_name) || 'https://buildingsmart-community.github.io/bSDD-filter-UI/' }}
+      url: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'https://buildingsmart-community.github.io/bSDD-filter-UI/main/' || startsWith(github.ref, 'refs/tags/') && format('https://buildingsmart-community.github.io/bSDD-filter-UI/{0}', github.ref_name) || github.event_name == 'pull_request' && format('https://buildingsmart-community.github.io/bSDD-filter-UI/pr-{0}/', github.event.number) || 'https://buildingsmart-community.github.io/bSDD-filter-UI/' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -43,15 +65,15 @@ jobs:
 
       - name: Install dependencies and build
         env:
-          BASE_PATH: '/bSDD-filter-UI/${{ github.ref_name }}/'
-          VITE_APP_VERSION: ${{ github.ref == 'refs/heads/main' && env.VITE_APP_VERSION || github.ref_name }}
+          BASE_PATH: ${{ format('/bSDD-filter-UI/{0}/', github.ref_name) }}
+          VITE_APP_VERSION: ${{ github.ref == 'refs/heads/main' && github.ref_name || github.ref_name }}
         run: |
           yarn install
           yarn run build
 
       - name: Deploy to GitHub Pages (main)
         if: github.ref == 'refs/heads/main'
-        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: dist
@@ -60,7 +82,7 @@ jobs:
 
       - name: Deploy to GitHub Pages (latest release)
         if: startsWith(github.ref, 'refs/tags/')
-        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: dist
@@ -69,9 +91,40 @@ jobs:
 
       - name: Deploy to GitHub Pages (specific release)
         if: startsWith(github.ref, 'refs/tags/')
-        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: dist
           target-folder: ${{ github.ref_name }}
           clean: true
+
+      - name: Deploy to GitHub Pages (pull request)
+        if: github.event_name == 'pull_request'
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist
+          target-folder: pr-${{ github.event.number }}
+          clean: true
+
+  cleanup:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+
+      - name: Remove PR folder
+        run: |
+          rm -rf pr-${{ github.event.pull_request.number }}
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          if git status --porcelain | grep .; then
+            git add .
+            git commit -m "Remove PR #${{ github.event.pull_request.number }} deployment"
+            git push
+          else
+            echo "No changes to commit."
+          fi
