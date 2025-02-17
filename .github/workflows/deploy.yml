@@ -28,6 +28,8 @@ jobs:
   # Security check: Ensure PR is from a trusted contributor
   security-check:
     runs-on: ubuntu-latest
+    outputs:
+      trusted: ${{ steps.check-author.outputs.trusted }}
     steps:
       - name: Check if PR author is a collaborator
         id: check-author
@@ -43,14 +45,16 @@ jobs:
 
           if [ "$IS_COLLABORATOR" -eq 204 ]; then
             echo "trusted=true" >> $GITHUB_ENV
+            echo "::set-output name=trusted::true"
           else
             echo "trusted=false" >> $GITHUB_ENV
+            echo "::set-output name=trusted::false"
           fi
 
   # Deploy job with three steps: one for main branch, one for release tags, and one for pull requests
   deploy:
     needs: [security-check]
-    if: env.trusted == 'true' || github.event_name == 'push'
+    if: needs.security-check.outputs.trusted == 'true' || github.event_name == 'push'
     environment:
       name: github-pages
       url: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && 'https://buildingsmart-community.github.io/bSDD-filter-UI/main/' || startsWith(github.ref, 'refs/tags/') && format('https://buildingsmart-community.github.io/bSDD-filter-UI/{0}', github.ref_name) || github.event_name == 'pull_request_target' && format('https://buildingsmart-community.github.io/bSDD-filter-UI/pr-{0}/', github.event.number) || 'https://buildingsmart-community.github.io/bSDD-filter-UI/' }}
