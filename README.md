@@ -1,7 +1,6 @@
 # Introduction
 This project is part of an open-source development of a series of consistent bSDD plugins and bSDD web UI.
 
-
 Subprojects:
 - Web UI: https://github.com/buildingsmart-community/bSDD-filter-UI
 - Revit Plugin: https://github.com/buildingsmart-community/bSDD-Revit-plugin
