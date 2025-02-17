@@ -29,7 +29,6 @@ concurrency:
 jobs:
   # Security check job to ensure the PR is from a trusted organization member
   security-check:
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Check if PR is from a trusted organization member
