@@ -262,11 +262,11 @@ function bsddIfcClassification(
 
 /**
  * Processes a list of associations, validating and potentially modifying them.
- * 
+ *
  * @param associations - The list of associations to process.
  * @param dispatch - The dispatch function for triggering actions.
  * @param state - The current state of the application.
- * @returns A promise that resolves to a list of processed associations, 
+ * @returns A promise that resolves to a list of processed associations,
  *          with invalid associations filtered out.
  */
 async function processAssociations(
@@ -295,7 +295,7 @@ async function processAssociations(
 
 /**
  * Merges properties from multiple IfcPropertySet objects into a single array of unique properties.
- * 
+ *
  * @param propertySets - An array of IfcPropertySet objects containing properties to be merged.
  * @returns An array of unique properties, which can be of type IfcProperty, IfcPropertySingleValue, or IfcPropertyEnumeratedValue.
  */
@@ -359,16 +359,17 @@ export const validateIfcData = async (
       if (ifcEntity.type) {
         ifcEntity.type = ifcEntityAsType(ifcEntity.type);
       }
-      let associations: Association[];
-      const ifcClass = bsddIfcClassification(ifcEntity, state.settings.ifcDictionary?.ifcClassification);
-      if (ifcClass) {
-        associations = [ifcClass, ...(ifcEntity.hasAssociations || [])];
-      } else {
-        associations = [...(ifcEntity.hasAssociations || [])];
-      }
+      // let associations: Association[];
+      // const ifcClass = bsddIfcClassification(ifcEntity, state.settings.ifcDictionary?.ifcClassification);
+      // if (ifcClass) {
+      //   associations = [ifcClass, ...(ifcEntity.hasAssociations || [])];
+      // } else {
+      // associations = [...(ifcEntity.hasAssociations || [])];
+      // }
+      // console.log('validateIfcDataAssociations', associations);
+      const associations: Association[] = [...(ifcEntity.hasAssociations || [])];
 
       const processedAssociations = await processAssociations(associations, dispatch, state);
-
       const mergedPropertySets = ifcEntity.isDefinedBy ? mergePropertySets(ifcEntity.isDefinedBy) : undefined;
 
       return { ...ifcEntity, hasAssociations: processedAssociations, isDefinedBy: mergedPropertySets };

@@ -7,14 +7,11 @@ import BsddSearch from './lib/BsddSearch';
 import BsddSelection from './lib/BsddSelection';
 import Settings from './lib/BsddSettings/SettingsComponent';
 import { ApiFunctionsProvider } from './lib/common/apiFunctionsContext';
-import { IfcEntity } from './lib/common/IfcData/ifc';
-import { mockData } from './mocks/mockData';
-import {
-  setSavedPropertyIsInstanceMap,
-  setSelectedIfcEntities,
-} from './lib/common/slices/ifcDataSlice';
-import useBrowserBridge from './lib/common/bsddBridge/useBrowserBridge';
 import { useAppDispatch } from './lib/common/app/hooks';
+import useBrowserBridge from './lib/common/bsddBridge/useBrowserBridge';
+import { IfcEntity } from './lib/common/IfcData/ifc';
+import { setSavedPropertyIsInstanceMap, setSelectedIfcEntities } from './lib/common/slices/ifcDataSlice';
+import { mockData } from './mocks/mockData';
 
 const defaultTab = 'link';
 
@@ -24,6 +21,7 @@ function BsddCombinedLoader() {
   const [opened, { open, close }] = useDisclosure(false);
   const { bsddSearchSave, bsddSearchCancel } = useBrowserBridge();
   const [activeTab, setActiveTab] = useState(defaultTab);
+  const [searchKey, setSearchKey] = useState<keyof IfcEntity | undefined>();
 
   useEffect(() => {
     if (mockData.propertyIsInstanceMap) {
@@ -32,7 +30,8 @@ function BsddCombinedLoader() {
     }
   }, [mockData.propertyIsInstanceMap]);
 
-  function bsddSearch(ifcEntities: IfcEntity[]) {
+  function bsddSearch(ifcEntities: IfcEntity[], sortKey: keyof IfcEntity | undefined) {
+    setSearchKey(sortKey);
     console.log('Open bsddSearch called with:', ifcEntities);
 
     if (ifcEntities?.length > 0) {
@@ -76,7 +75,7 @@ function BsddCombinedLoader() {
         </Tabs>
       </Container>
       <Modal opened={opened} onClose={close} title="Select bSDD class" centered size="100vw">
-        <BsddSearch />
+        <BsddSearch searchKey={searchKey} />
       </Modal>
     </ApiFunctionsProvider>
   );

@@ -1,11 +1,11 @@
 import {
-  IfcEntity,
-  IfcPropertySet,
   Association,
-  IfcProperty,
-  IfcPropertySingleValue,
-  IfcPropertyEnumeratedValue,
   IfcClassificationReference,
+  IfcEntity,
+  IfcProperty,
+  IfcPropertyEnumeratedValue,
+  IfcPropertySet,
+  IfcPropertySingleValue,
 } from '../IfcData/ifc';
 
 const ATTRIBUTES: (keyof IfcEntity)[] = ['type', 'name', 'description', 'objectType', 'tag', 'predefinedType'] as const;
@@ -58,7 +58,7 @@ const mergePropertySets = (propertySets: IfcPropertySet[]): IfcPropertySet[] => 
 
   return Array.from(propertySetMap.entries()).map(([name, propertySets]) => ({
     type: 'IfcPropertySet',
-    name: name,
+    name,
     hasProperties: mergeProperties(propertySets),
   }));
 };
@@ -110,12 +110,15 @@ const mergeAssociations = (associations: Association[]): Association[] => {
 export const mergeIfcEntities = (ifcEntities: IfcEntity[]): IfcEntity | null => {
   if (ifcEntities.length === 0) return null;
 
-  const mergedIfcEntity: IfcEntity = IFC_ENTITY_STRING_ATTRIBUTES.reduce((acc, prop) => {
-    const inputValues = ifcEntities.map((entity) => entity[prop] || undefined);
-    const mergedValue = mergeStringProperties(inputValues);
-    acc[prop] = mergedValue;
-    return acc;
-  }, {} as Record<(typeof IFC_ENTITY_STRING_ATTRIBUTES)[number], string | undefined>);
+  const mergedIfcEntity: IfcEntity = IFC_ENTITY_STRING_ATTRIBUTES.reduce(
+    (acc, prop) => {
+      const inputValues = ifcEntities.map((entity) => entity[prop] || undefined);
+      const mergedValue = mergeStringProperties(inputValues);
+      acc[prop] = mergedValue;
+      return acc;
+    },
+    {} as Record<(typeof IFC_ENTITY_STRING_ATTRIBUTES)[number], string | undefined>,
+  );
 
   mergedIfcEntity.isDefinedBy = ifcEntities.some((entity) => entity.isDefinedBy)
     ? mergePropertySets(ifcEntities.flatMap((entity) => entity.isDefinedBy || []))
@@ -135,14 +138,18 @@ export const mergeIfcEntities = (ifcEntities: IfcEntity[]): IfcEntity | null => 
  * @returns An object where the keys are attribute names and the values are the corresponding attribute values.
  */
 const getAttributes = (sourceEntity: IfcEntity): { [key: string]: string } => {
-  return IFC_ENTITY_STRING_ATTRIBUTES.reduce((acc, prop) => {
-    const value = sourceEntity[prop];
-    if (value !== undefined && value !== '...') {
-      acc[prop] = value;
-    }
-    return acc;
-  }, {} as { [key: string]: string });
+  return IFC_ENTITY_STRING_ATTRIBUTES.reduce(
+    (acc, prop) => {
+      const value = sourceEntity[prop];
+      if (value !== undefined && value !== '...') {
+        acc[prop] = value;
+      }
+      return acc;
+    },
+    {} as { [key: string]: string },
+  );
 };
+
 /**
  * Creates a map of associations based on their location if they are of type 'IfcClassificationReference'.
  *
@@ -206,29 +213,59 @@ const updateAssociations = (
 const updateProperties = (sourcePropertySet: IfcPropertySet, targetPropertySet: IfcPropertySet): IfcPropertySet => {
   const targetPropertiesMap = new Map<string, IfcProperty | IfcPropertySingleValue | IfcPropertyEnumeratedValue>();
 
-  for (const property of targetPropertySet.hasProperties) {
+  // Build the targetPropertiesMap and update it with properties from the sourcePropertySet
+  targetPropertySet.hasProperties.forEach((property) => {
     targetPropertiesMap.set(property.name, property);
-  }
+  });
 
-  for (const sourceProperty of sourcePropertySet.hasProperties) {
+  sourcePropertySet.hasProperties.forEach((sourceProperty) => {
     const sourceValue = (sourceProperty as IfcPropertySingleValue).nominalValue?.value;
-    if (sourceValue !== '...') {
+    if (sourceValue && sourceValue !== '...') {
       targetPropertiesMap.set(sourceProperty.name, sourceProperty);
     }
-  }
+  });
 
-  const filteredProperties = [];
-  for (const property of targetPropertiesMap.values()) {
+  // Build the filteredProperties array
+  const filteredProperties = Array.from(targetPropertiesMap.values()).filter((property) => {
     const value = (property as IfcPropertySingleValue).nominalValue;
-    if (value !== undefined && value !== null) {
-      filteredProperties.push(property);
-    }
-  }
+    return (
+      (value !== undefined && value !== null) ||
+      ((property as IfcPropertyEnumeratedValue).enumerationValues?.length ?? 0) > 0
+    );
+  });
 
   return {
     ...targetPropertySet,
     hasProperties: filteredProperties,
   };
+};
+
+/**
+ * Cleans the property sets by removing incorrect values.
+ *
+ * @param propertySets - An array of IfcPropertySet objects to be cleaned.
+ * @returns A new array of cleaned IfcPropertySet objects.
+ */
+const cleanPropertySets = (propertySets: IfcPropertySet[]): IfcPropertySet[] => {
+  return propertySets
+    .map((propertySet) => {
+      const cleanedProperties = propertySet.hasProperties.filter((property) => {
+        switch (property.type) {
+          case 'IfcPropertySingleValue':
+            return property.nominalValue?.value !== null || property.nominalValue?.value !== '...';
+          case 'IfcPropertyEnumeratedValue':
+            return (property as IfcPropertyEnumeratedValue).enumerationValues || false;
+          default:
+            return false;
+        }
+      });
+
+      return {
+        ...propertySet,
+        hasProperties: cleanedProperties,
+      };
+    })
+    .filter((propertySet) => propertySet.hasProperties.length > 0);
 };
 
 /**
@@ -279,7 +316,7 @@ export const updateEntitiesWithIfcEntity = (sourceEntity: IfcEntity, targetEntit
   return targetEntities.map((targetEntity) => {
     const updatedEntity: IfcEntity = { ...targetEntity, ...attributesToOverwrite };
 
-    updatedEntity.isDefinedBy = sourceEntity.isDefinedBy;
+    updatedEntity.isDefinedBy = cleanPropertySets(sourceEntity.isDefinedBy || []);
     updatedEntity.hasAssociations = sourceEntity.hasAssociations;
 
     return updatedEntity;

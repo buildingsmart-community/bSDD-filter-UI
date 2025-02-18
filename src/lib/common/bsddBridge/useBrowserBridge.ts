@@ -1,19 +1,20 @@
 import { useEffect, useMemo, useRef } from 'react';
+import { ArrayParam, BooleanParam, StringParam, useQueryParams, withDefault } from 'use-query-params';
+
+import { mockData } from '../../../mocks/mockData';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { BsddBridgeData, BsddDictionary, BsddSettings } from '../IfcData/bsddBridgeData';
 import { IfcEntity } from '../IfcData/ifc';
 import defaultSettings from '../settings/defaultSettings';
-import {
-  setSettingsWithValidation,
-  selectMainDictionary,
-  selectFilterDictionaries,
-  selectLanguage,
-  selectIncludeTestDictionaries,
-  selectIfcDictionary,
-} from '../slices/settingsSlice';
-import { useQueryParams, StringParam, ArrayParam, BooleanParam, withDefault } from 'use-query-params';
 import { setSavedPropertyIsInstanceMap, setValidatedIfcData } from '../slices/ifcDataSlice';
-import { mockData } from '../../../mocks/mockData';
+import {
+  selectFilterDictionaries,
+  selectIfcDictionary,
+  selectIncludeTestDictionaries,
+  selectLanguage,
+  selectMainDictionary,
+  setSettingsWithValidation,
+} from '../slices/settingsSlice';
 
 const useBrowserBridge = () => {
   const dispatch = useAppDispatch();
@@ -33,69 +34,70 @@ const useBrowserBridge = () => {
 
   const initialLoad = useRef(true);
 
+  const setSettings = async () => {
+    const hasQueryParams = Object.values(query).some((param) => {
+      if (Array.isArray(param)) {
+        return param.length > 0;
+      }
+      return param !== undefined && param !== null && param !== '';
+    });
+
+    if (!hasQueryParams) {
+      await dispatch(setSettingsWithValidation(defaultSettings));
+    } else {
+      const settings: BsddSettings = {
+        mainDictionary: query.mainDictionary
+          ? ({
+              ifcClassification: {
+                type: 'IfcClassification',
+                location: query.mainDictionary,
+              },
+            } as BsddDictionary)
+          : null,
+        ifcDictionary: query.ifcDictionary
+          ? ({
+              ifcClassification: {
+                type: 'IfcClassification',
+                location: query.ifcDictionary,
+              },
+            } as BsddDictionary)
+          : null,
+        filterDictionaries: query.filterDictionaries.map(
+          (location) =>
+            ({
+              ifcClassification: {
+                type: 'IfcClassification',
+                location,
+              },
+            }) as BsddDictionary,
+        ),
+        language: query.language || 'en-GB',
+        includeTestDictionaries: query.includeTestDictionaries || false,
+      };
+      await dispatch(setSettingsWithValidation(settings));
+    }
+
+    if (mockData.propertyIsInstanceMap) {
+      await dispatch(setSavedPropertyIsInstanceMap(mockData.propertyIsInstanceMap));
+    }
+  };
+
   // Read query parameters on page load and update settings state
   useEffect(() => {
-    if (initialLoad.current) {
-      initialLoad.current = false;
-
-      const hasQueryParams = Object.values(query).some((param) => {
-        if (Array.isArray(param)) {
-          return param.length > 0;
-        }
-        return param !== undefined && param !== null && param !== '';
-      });
-
-      if (!hasQueryParams) {
-        dispatch(setSettingsWithValidation(defaultSettings));
-      } else {
-        const settings: BsddSettings = {
-          mainDictionary: query.mainDictionary
-            ? ({
-                ifcClassification: {
-                  type: 'IfcClassification',
-                  location: query.mainDictionary,
-                },
-              } as BsddDictionary)
-            : null,
-          ifcDictionary: query.ifcDictionary
-            ? ({
-                ifcClassification: {
-                  type: 'IfcClassification',
-                  location: query.ifcDictionary,
-                },
-              } as BsddDictionary)
-            : null,
-          filterDictionaries: query.filterDictionaries.map(
-            (location) =>
-              ({
-                ifcClassification: {
-                  type: 'IfcClassification',
-                  location,
-                },
-              } as BsddDictionary),
-          ),
-          language: query.language || 'en-GB',
-          includeTestDictionaries: query.includeTestDictionaries || false,
-        };
-        dispatch(setSettingsWithValidation(settings));
-      }
-
-      if (mockData.propertyIsInstanceMap) {
-        dispatch(setSavedPropertyIsInstanceMap(mockData.propertyIsInstanceMap));
-      }
+    setSettings().then(() => {
       if (mockData.ifcData) {
         dispatch(setValidatedIfcData(mockData.ifcData));
       }
-    }
-  }, [query, dispatch]);
+    });
+  }, []);
 
   const settings: BsddSettings = useMemo(() => {
     return {
-      mainDictionary: mainDictionary,
-      ifcDictionary: ifcDictionary,
-      filterDictionaries: filterDictionaries,
-      language: language,
-      includeTestDictionaries: includeTestDictionaries,
+      mainDictionary,
+      ifcDictionary,
+      filterDictionaries,
+      language,
+      includeTestDictionaries,
     };
   }, [mainDictionary, ifcDictionary, filterDictionaries, language, includeTestDictionaries]);
 

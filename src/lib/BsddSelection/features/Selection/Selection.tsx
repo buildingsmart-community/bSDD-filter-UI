@@ -1,19 +1,20 @@
-import { Box, ColorSwatch, Group, Select, Text, Button, Tooltip, HoverCard, Space } from '@mantine/core';
-import { IconPointer, IconPencil } from '@tabler/icons-react';
+import '../../../common/theme/styles.css';
+import '@mantine/core/styles.css';
+
+import { Box, Button, ColorSwatch, Group, HoverCard, Select, Space, Text, Tooltip } from '@mantine/core';
+import { IconPencil, IconPointer } from '@tabler/icons-react';
+import { MantineReactTable, MRT_ColumnDef, MRT_Row, MRT_RowSelectionState } from 'mantine-react-table';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { useApiFunctions } from '../../../common/apiFunctionsContext';
 import { useAppSelector } from '../../../common/app/hooks';
+import { BsddDictionary } from '../../../common/IfcData/bsddBridgeData';
 import { IfcEntity } from '../../../common/IfcData/ifc';
 import { selectLoadedIfcEntities } from '../../../common/slices/ifcDataSlice';
-import { MantineReactTable, MRT_ColumnDef, MRT_Row } from 'mantine-react-table';
+import { selectActiveDictionaries, selectMainDictionary } from '../../../common/slices/settingsSlice';
+import { ClassificationStatus, getClassUrisFromDictionaries } from '../../../common/tools/checkIfcClassification';
 import { Color, colorMap } from '../../../common/tools/colors';
-import '../../../common/theme/styles.css';
-import { selectActiveDictionaries } from '../../../common/slices/settingsSlice';
-import { getClassUrisFromDictionaries, ClassificationStatus } from '../../../common/tools/checkIfcClassification';
-import { BsddDictionary } from '../../../common/IfcData/bsddBridgeData';
-import { RowSelectionState } from '@tanstack/table-core';
-import { useApiFunctions } from '../../../common/apiFunctionsContext';
-import '@mantine/core/styles.css';
 
 interface SelectionProps {
   loading: boolean;
@@ -52,11 +53,11 @@ const calculateSubRowColor = (activeDictionaryValues: Record<string, Classificat
   const values = Object.values(activeDictionaryValues);
   if (values.every((value) => value !== null)) {
     return 'green';
-  } else if (values.some((value) => value !== null)) {
-    return 'orange';
-  } else {
-    return 'red';
   }
+  if (values.some((value) => value !== null)) {
+    return 'orange';
+  }
+  return 'red';
 };
 
 /**
@@ -70,13 +71,14 @@ const calculateGroupRowColor = (subRows: SubRowEntity[]): Color => {
   const colors = subRows.map((subRow) => subRow.color);
   if (colors.includes('orange') || (colors.includes('red') && colors.includes('green'))) {
     return 'orange';
-  } else if (colors.every((color) => color === 'red')) {
-    return 'red';
-  } else if (colors.every((color) => color === 'green')) {
-    return 'green';
-  } else {
-    return 'grey';
   }
+  if (colors.every((color) => color === 'red')) {
+    return 'red';
+  }
+  if (colors.every((color) => color === 'green')) {
+    return 'green';
+  }
+  return 'grey';
 };
 
 /**
@@ -89,11 +91,11 @@ const mergeColors = (colorMap: Record<string, Color>): Color => {
   const colors = Object.values(colorMap);
   if (colors.every((color) => color === 'red')) {
     return 'red';
-  } else if (colors.every((color) => color === 'green')) {
-    return 'green';
-  } else {
-    return 'orange';
   }
+  if (colors.every((color) => color === 'green')) {
+    return 'green';
+  }
+  return 'orange';
 };
 
 /**
@@ -137,34 +139,37 @@ function groupEntitiesBy(
   const groupIndexMap: Record<string, number> = {};
   let groupCounter = 0;
 
-  const grouped = ifcEntities.reduce((acc, ifcEntity, index) => {
-    const activeDictionaryValues = getClassUrisFromDictionaries(ifcEntity, activeDictionaries);
-    const key = ifcEntity[property];
-    const groupName = key === undefined || typeof key !== 'string' ? '' : key;
+  const grouped = ifcEntities.reduce(
+    (acc, ifcEntity, index) => {
+      const activeDictionaryValues = getClassUrisFromDictionaries(ifcEntity, activeDictionaries);
+      const key = ifcEntity[property];
+      const groupName = key === undefined || typeof key !== 'string' ? '' : key;
 
-    if (!acc[groupName]) {
-      acc[groupName] = {
-        color: 'grey',
-        groupName,
-        type: '',
-        name: groupName || '',
-        description: '',
-        objectType: '',
-        predefinedType: '',
-        isExpanded: false,
-        subRows: [],
-        dictionaryValues: activeDictionaryValues,
-      };
-      groupIndexMap[groupName] = groupCounter++;
-    }
+      if (!acc[groupName]) {
+        acc[groupName] = {
+          color: 'grey',
+          groupName,
+          type: '',
+          name: groupName || '',
+          description: '',
+          objectType: '',
+          predefinedType: '',
+          isExpanded: false,
+          subRows: [],
+          dictionaryValues: activeDictionaryValues,
+        };
+        groupIndexMap[groupName] = groupCounter++;
+      }
 
-    const groupIndex = groupIndexMap[groupName];
-    const subRowIndex = acc[groupName].subRows.length;
-    entityIndexMap[`${groupIndex}.${subRowIndex}`] = index;
+      const groupIndex = groupIndexMap[groupName];
+      const subRowIndex = acc[groupName].subRows.length;
+      entityIndexMap[`${groupIndex}.${subRowIndex}`] = index;
 
-    acc[groupName].subRows.push(IfcEntityToRowEntity(ifcEntity, activeDictionaryValues));
-    return acc;
-  }, {} as Record<string, GroupRowEntity>);
+      acc[groupName].subRows.push(IfcEntityToRowEntity(ifcEntity, activeDictionaryValues));
+      return acc;
+    },
+    {} as Record<string, GroupRowEntity>,
+  );
 
   const groupedEntities = Object.values(grouped).map((group) => ({
     ...group,
@@ -277,19 +282,23 @@ const renderGroupRowHoverCard = (subRows: SubRowEntity[], activeDictionaries: Bs
  * @returns {JSX.Element} The rendered hover card component.
  */
 const renderSubRowHoverCard = (row: MRT_Row<GroupRowEntity>, activeDictionaries: BsddDictionary[], label: string) => {
-  const dictionaryValues = row.original.dictionaryValues;
-  const dictionaryColors = activeDictionaries.reduce((acc, dictionary, dictionaryIndex) => {
-    const dictionaryKey = dictionary.ifcClassification.location || dictionaryIndex.toString();
-    const dictionaryValue = dictionaryValues ? dictionaryValues[dictionaryKey] : null;
-    acc[dictionaryKey] = dictionaryValue !== null ? 'green' : 'red';
-    return acc;
-  }, {} as Record<string, Color>);
+  const { dictionaryValues } = row.original;
+  const dictionaryColors = activeDictionaries.reduce(
+    (acc, dictionary, dictionaryIndex) => {
+      const dictionaryKey = dictionary.ifcClassification.location || dictionaryIndex.toString();
+      const dictionaryValue = dictionaryValues ? dictionaryValues[dictionaryKey] : null;
+      acc[dictionaryKey] = dictionaryValue !== null ? 'green' : 'red';
+      return acc;
+    },
+    {} as Record<string, Color>,
+  );
   return renderHoverCard(colorMap[row.original.color] || 'grey', activeDictionaries, dictionaryColors, label);
 };
 
 function Selection({ loading }: SelectionProps) {
   const { t } = useTranslation();
   const ifcEntities = useAppSelector(selectLoadedIfcEntities);
+  const mainDictionary = useAppSelector(selectMainDictionary);
   const activeDictionaries = useAppSelector(selectActiveDictionaries);
   const { bsddSearch, bsddSelect } = useApiFunctions();
 
@@ -308,8 +317,8 @@ function Selection({ loading }: SelectionProps) {
         accessorKey: 'color',
         header: '',
         Cell: ({ row }) => {
-          const subRows = row.original.subRows;
-          const dictionaryValues = row.original.dictionaryValues;
+          const { subRows } = row.original;
+          const { dictionaryValues } = row.original;
           const label = t('dictionaryValidationSummaryLabel');
 
           if (Array.isArray(subRows) && subRows.length > 0) {
@@ -365,7 +374,7 @@ function Selection({ loading }: SelectionProps) {
     [t, activeDictionaries],
   );
 
-  const getSelectedEntities = (rowSelection: RowSelectionState) => {
+  const getSelectedEntities = (rowSelection: MRT_RowSelectionState) => {
     return Object.keys(rowSelection)
       .filter((rowId) => entityIndexMap.hasOwnProperty(rowId)) // Filter out items not found in the map
       .map((rowId) => {
@@ -374,16 +383,16 @@ function Selection({ loading }: SelectionProps) {
       });
   };
 
-  const handleSelectEntities = (rowSelection: RowSelectionState) => () => {
+  const handleSelectEntities = (rowSelection: MRT_RowSelectionState) => () => {
     const selectedEntities = getSelectedEntities(rowSelection);
     console.log('Selected Entities:', selectedEntities);
     bsddSelect(selectedEntities);
   };
 
-  const handleEditEntities = (rowSelection: RowSelectionState) => () => {
+  const handleEditEntities = (rowSelection: MRT_RowSelectionState) => () => {
     const selectedEntities = getSelectedEntities(rowSelection);
     console.log('Edit Entities:', selectedEntities);
-    bsddSearch(selectedEntities);
+    bsddSearch(selectedEntities, groupByKey);
   };
 
   return (
@@ -395,9 +404,9 @@ function Selection({ loading }: SelectionProps) {
         enableFullScreenToggle={false}
         enablePagination={false}
         enableRowSelection
-        enableRowVirtualization={true}
-        enableColumnResizing={true}
-        enableBatchRowSelection={true}
+        enableRowVirtualization
+        enableColumnResizing
+        enableBatchRowSelection
         enableColumnFilters={false}
         enableDensityToggle={false}
         enableHiding={false}
@@ -425,7 +434,11 @@ function Selection({ loading }: SelectionProps) {
               flexWrap: 'wrap',
             }}
           >
-            <Button leftSection={<IconPencil />} onClick={handleEditEntities(table.table.getState().rowSelection)}>
+            <Button
+              leftSection={<IconPencil />}
+              onClick={handleEditEntities(table.table.getState().rowSelection)}
+              disabled={!mainDictionary}
+            >
               {t('editEntities')}
             </Button>
             <Button leftSection={<IconPointer />} onClick={handleSelectEntities(table.table.getState().rowSelection)}>

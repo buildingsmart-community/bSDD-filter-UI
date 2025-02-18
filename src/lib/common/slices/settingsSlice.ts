@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { AppDispatch, RootState } from '../app/store';
+import i18n from '../i18n';
 import { BsddDictionary, BsddSettings } from '../IfcData/bsddBridgeData';
 import { validateDictionary } from '../IfcData/ifcValidators';
-import i18n from '../i18n';
 
 const initialState: BsddSettings = {
   mainDictionary: null,
@@ -35,14 +35,6 @@ const settingsSlice = createSlice({
     },
     setSettings(state: BsddSettings, action: PayloadAction<BsddSettings>) {
       const { mainDictionary, ifcDictionary, filterDictionaries, language, includeTestDictionaries } = action.payload;
-
-      console.log('setSettings, received payload:', {
-        mainDictionary,
-        ifcDictionary,
-        filterDictionaries,
-        language,
-        includeTestDictionaries,
-      });
 
       if (JSON.stringify(state.mainDictionary) !== JSON.stringify(mainDictionary)) {
         state.mainDictionary = mainDictionary;
@@ -112,13 +104,8 @@ export const selectMainDictionaryUri = createSelector(selectMainDictionary, (mai
   mainDictionary ? mainDictionary.ifcClassification.location : null,
 );
 
-export const {
-  setMainDictionary,
-  setIfcDictionary,
-  setFilterDictionaries,
-  setLanguage,
-  setIncludeTestDictionaries,
-} = settingsSlice.actions;
+export const { setMainDictionary, setIfcDictionary, setFilterDictionaries, setLanguage, setIncludeTestDictionaries } =
+  settingsSlice.actions;
 
 export const setSettingsWithValidation = createAsyncThunk(
   'settings/setSettingsWithValidation',
@@ -136,7 +123,7 @@ export const setSettingsWithValidation = createAsyncThunk(
 
     const validatedFilterDictionaries = await Promise.all(
       settings.filterDictionaries.map(async (dictionary) => {
-        return await validateDictionary(state, appDispatch, dictionary);
+        return validateDictionary(state, appDispatch, dictionary);
       }),
     ).then((results) => results.filter((dictionary): dictionary is BsddDictionary => dictionary !== null));
 
