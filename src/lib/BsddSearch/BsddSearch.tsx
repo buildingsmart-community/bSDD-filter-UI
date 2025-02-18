@@ -5,24 +5,25 @@ import { useTranslation } from 'react-i18next';
 import { useApiFunctions } from '../common/apiFunctionsContext';
 import { useAppDispatch, useAppSelector } from '../common/app/hooks';
 import { BsddApi } from '../common/BsddApi/BsddApi';
+import { ClassContractV1 } from '../common/BsddApi/BsddApiBase';
 import { bsddEnvironments } from '../common/BsddApi/BsddApiEnvironments';
 import { defaultEnvironment } from '../common/env';
+import { BsddDictionary } from '../common/IfcData/bsddBridgeData';
 import { IfcEntity, IfcPropertySet } from '../common/IfcData/ifc';
 import {
-  fetchMainDictionaryClassification,
+  selectFilterDictionaryClassifications,
+  selectIfcDictionaryClassification,
   selectMainDictionaryClassification,
   selectMainDictionaryClassificationUri,
   updateMainDictionaryClassificationUri,
   updatePropertyNaturalLanguageNames,
 } from '../common/slices/bsddSlice';
-import { selectMergedIfcEntity, selectSelectedIfcEntities } from '../common/slices/ifcDataSlice';
-import { setIfcEntity } from '../common/slices/ifcEntitySlice';
+import { selectMergedIfcEntity } from '../common/slices/ifcDataSlice';
 import { selectActiveDictionaryUris, selectLanguage, selectMainDictionary } from '../common/slices/settingsSlice';
 import Apply from './Apply';
 import Classifications from './features/Classifications/Classifications';
 import PropertySets from './features/PropertySets/PropertySets';
 import Search from './Search';
-import { mergeIfcEntities } from '../common/tools/mergeIfcEntities';
 
 export interface Option {
   label: string;
@@ -36,13 +37,60 @@ export interface BsddConfig {
   ifcEntity?: IfcEntity;
 }
 
+interface BsddSearchProps {
+  searchKey?: keyof IfcEntity;
+}
+
 export type PropertySetMap = Record<string, IfcPropertySet>;
 
 const minHeight = 60.7969;
 let startY = 0;
 let startHeight = 0;
 
-function BsddSearch() {
+const getDefaultSearchOption = (
+  selectedMergedIfcEntity: IfcEntity | null,
+  mainDictionary: BsddDictionary | null,
+  searchKey: keyof IfcEntity,
+  dispatch: any,
+): Option | undefined => {
+  if (!selectedMergedIfcEntity || !mainDictionary) return undefined;
+
+  const newActiveClassificationUri = mainDictionary.ifcClassification.location;
+
+  let defaultSearchOption: Option | undefined;
+
+  selectedMergedIfcEntity.hasAssociations?.forEach((association) => {
+    if (association.type === 'IfcClassificationReference') {
+      const classificationReference = association;
+      if (classificationReference.referencedSource?.location === newActiveClassificationUri) {
+        if (classificationReference.location) {
+          dispatch(updateMainDictionaryClassificationUri(classificationReference.location));
+        }
+        defaultSearchOption = {
+          label: classificationReference.name,
+          value: classificationReference.location,
+        } as Option;
+      }
+    }
+  });
+
+  if (
+    !defaultSearchOption &&
+    searchKey &&
+    selectedMergedIfcEntity[searchKey] &&
+    selectedMergedIfcEntity[searchKey] !== '' &&
+    selectedMergedIfcEntity[searchKey] !== '...'
+  ) {
+    defaultSearchOption = {
+      label: selectedMergedIfcEntity[searchKey] as string,
+      value: selectedMergedIfcEntity[searchKey] as string,
+    } as Option;
+  }
+
+  return defaultSearchOption;
+};
+
+function BsddSearch({ searchKey = 'objectType' }: BsddSearchProps) {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -53,18 +101,17 @@ function BsddSearch() {
   const activeDictionaryLocations = useAppSelector(selectActiveDictionaryUris);
   const selectedMergedIfcEntity = useAppSelector(selectMergedIfcEntity);
   const mainDictionaryClassificationUri = useAppSelector(selectMainDictionaryClassificationUri);
-  const selectedIfcEntities = useAppSelector(selectSelectedIfcEntities);
+  const mainDictionaryClassification = useAppSelector(selectMainDictionaryClassification);
+  const ifcDictionaryClassification = useAppSelector(selectIfcDictionaryClassification);
+  const filterDictionaryClassifications = useAppSelector(selectFilterDictionaryClassifications);
 
   const [defaultSearch, setDefaultSearch] = useState<Option | undefined>();
+  const [activeClassifications, setActiveClassifications] = useState<ClassContractV1[]>([]);
   const [recursiveMode, setRecursiveMode] = useState<boolean>(false);
-  const [api, setApi] = useState<BsddApi<unknown>>(new BsddApi(bsddEnvironments[defaultEnvironment]));
 
   const [height, setHeight] = useState(minHeight); // Initial height
   const [panelHeight, setPanelHeight] = useState('auto'); // Initial height of the Accordion Panel
   const [propertySetsOpened, setPropertySetsOpened] = useState<boolean>(false);
-
-  const mainDictionaryClassification = useAppSelector(selectMainDictionaryClassification);
-
 
   useEffect(() => {
     if (!mainDictionaryClassification || !propertySetsOpened) return;
@@ -73,32 +120,19 @@ function BsddSearch() {
   }, [mainDictionaryClassification, propertySetsOpened, languageCode, dispatch]);
 
   useEffect(() => {
-    if (!selectedMergedIfcEntity || !mainDictionary) return;
-    const newActiveClassificationUri = mainDictionary.ifcClassification.location;
-
-    selectedMergedIfcEntity.hasAssociations?.forEach((association) => {
-      if (association.type === 'IfcClassificationReference') {
-        const classificationReference = association;
-        if (classificationReference.referencedSource?.location) {
-          if (classificationReference.referencedSource.location === newActiveClassificationUri) {
-            if (classificationReference.location) {
-              dispatch(updateMainDictionaryClassificationUri(classificationReference.location));
-            }
-            setDefaultSearch({
-              label: classificationReference.name,
-              value: classificationReference.location,
-            } as Option);
-          }
-        }
-      }
-    });
-  }, [mainDictionary, selectedMergedIfcEntity, dispatch]);
+    const defaultSearchOption = getDefaultSearchOption(selectedMergedIfcEntity, mainDictionary, searchKey, dispatch);
+    setDefaultSearch(defaultSearchOption);
+  }, [mainDictionary, selectedMergedIfcEntity, dispatch, searchKey]);
 
   useEffect(() => {
-    if (mainDictionaryClassificationUri) {
-      dispatch(fetchMainDictionaryClassification(mainDictionaryClassificationUri));
-    }
-  }, [mainDictionaryClassificationUri, dispatch]);
+    const classifications = [
+      mainDictionaryClassification,
+      ifcDictionaryClassification,
+      ...filterDictionaryClassifications,
+    ].filter((classification) => classification !== null);
+
+    setActiveClassifications(classifications);
+  }, [mainDictionaryClassification, filterDictionaryClassifications, ifcDictionaryClassification]);
 
   useEffect(() => {
     setPanelHeight(`${height * activeDictionaryLocations.length + 48}px`);
@@ -131,7 +165,7 @@ function BsddSearch() {
       <TextInput type="hidden" name="name" id="name" value="" />
       <TextInput type="hidden" name="material" id="material" value="" />
       <Group mx="md" mt="lg" mb="sm">
-        <Search api={api} defaultSelection={defaultSearch} />
+        <Search defaultSelection={defaultSearch} />
       </Group>
       {mainDictionaryClassificationUri ? (
         <>
@@ -149,10 +183,7 @@ function BsddSearch() {
                 <Title order={5}>{t('propertysetsLabel')}</Title>
               </Accordion.Control>
               <Accordion.Panel>
-                <PropertySets
-                  mainDictionaryClassification={mainDictionaryClassification}
-                  recursiveMode={recursiveMode}
-                />
+                <PropertySets activeClassifications={activeClassifications} recursiveMode={recursiveMode} />
               </Accordion.Panel>
             </Accordion.Item>
           </Accordion>

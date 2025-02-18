@@ -1,20 +1,41 @@
 import { Button } from '@mantine/core';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../common/app/hooks';
 import { ClassContractV1, DictionaryContractV1 } from '../common/BsddApi/BsddApiBase';
+import { BsddBridgeData, BsddSettings } from '../common/IfcData/bsddBridgeData';
 import { IfcClassification, IfcClassificationReference, IfcEntity } from '../common/IfcData/ifc';
 import { convertBsddDictionaryToIfcClassification } from '../common/IfcData/ifcBsddConverters';
 import { selectBsddDictionaries } from '../common/slices/bsddSlice';
-import { selectIfcEntity } from '../common/slices/ifcEntitySlice';
-import { BsddBridgeData } from '../common/IfcData/bsddBridgeData';
 import { selectPropertyIsInstanceMap, selectSelectedIfcEntities } from '../common/slices/ifcDataSlice';
-import { useCallback } from 'react';
+import { selectIfcEntity } from '../common/slices/ifcEntitySlice';
 import { selectSettings } from '../common/slices/settingsSlice';
 import { updateEntitiesWithIfcEntity } from '../common/tools/mergeIfcEntities';
 
 interface ApplyProps {
   bsddSearchSave: (bsddBridgeData: BsddBridgeData) => Promise<string>;
+}
+
+function createBridgeData(
+  ifcEntity: IfcEntity,
+  propertyIsInstanceMap: Record<string, boolean>,
+  settings: BsddSettings,
+  selectedIfcEntities: IfcEntity[],
+): BsddBridgeData {
+  console.log('Creating bsddSearchSave data', selectedIfcEntities);
+  if (!selectedIfcEntities) {
+    return {
+      ifcData: [],
+      settings,
+      propertyIsInstanceMap,
+    };
+  }
+  return {
+    ifcData: updateEntitiesWithIfcEntity(ifcEntity, selectedIfcEntities),
+    settings,
+    propertyIsInstanceMap,
+  };
 }
 
 function Apply({ bsddSearchSave }: ApplyProps) {
@@ -26,30 +47,16 @@ function Apply({ bsddSearchSave }: ApplyProps) {
   const propertyIsInstanceMap = useAppSelector(selectPropertyIsInstanceMap);
   const selectedIfcEntities = useAppSelector(selectSelectedIfcEntities);
 
-  function createBridgeData(ifcEntity: IfcEntity, propertyIsInstanceMap: Record<string, boolean>): BsddBridgeData {
-    console.log('Creating bsddSearchSave data', selectedIfcEntities);
-    if (!selectedIfcEntities) {
-      return {
-        ifcData: [],
-        settings,
-        propertyIsInstanceMap: propertyIsInstanceMap,
-      };
-    }
-    return {
-      ifcData: updateEntitiesWithIfcEntity(ifcEntity, selectedIfcEntities),
-      settings,
-      propertyIsInstanceMap: propertyIsInstanceMap,
-    };
-  }
-
   const callback = useCallback(
     (ifcProduct: IfcEntity) => {
       console.log('Sending bsddSearchSave data back to host', ifcProduct);
-      bsddSearchSave(createBridgeData(ifcProduct, propertyIsInstanceMap)).then((actualResult) => {
-        console.log('Sent iFC data back to host', actualResult);
-      });
+      bsddSearchSave(createBridgeData(ifcProduct, propertyIsInstanceMap, settings, selectedIfcEntities)).then(
+        (actualResult) => {
+          console.log('Sent iFC data back to host', actualResult);
+        },
+      );
     },
-    [bsddSearchSave, propertyIsInstanceMap],
+    [bsddSearchSave, propertyIsInstanceMap, selectedIfcEntities, settings],
   );
 
   function getIfcClassification(domainNamespaceUri: string): IfcClassification | null {

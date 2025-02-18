@@ -28,7 +28,7 @@ const valueTypeMapping: { [key: string]: string } = {
 };
 
 interface PropertySetsProps {
-  mainDictionaryClassification: ClassContractV1 | null;
+  activeClassifications: ClassContractV1[];
   recursiveMode: boolean;
 }
 
@@ -274,7 +274,7 @@ function GetIfcProperty(
   return property;
 }
 
-function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertySetsProps) {
+function PropertySets({ activeClassifications: activeDictionaryLocations, recursiveMode }: PropertySetsProps) {
   const dispatch = useAppDispatch();
 
   const selectedMergedIfcEntity = useAppSelector(selectMergedIfcEntity);
@@ -282,12 +282,12 @@ function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertyS
   const propertyNamesByLanguage = useAppSelector(selectPropertyNamesByLanguage);
   const languageCode = useAppSelector(selectLanguage);
   const [propertyNaturalLanguageNamesMap, setPropertyNaturalLanguageNamesMap] = useState<Record<string, string>>({});
-  const [mergedIfcPropertySets, setMergedIfcPropertySets] = useState<IfcPropertySet[] | null>(null);
+  const [mergedIfcPropertySets, setMergedIfcPropertySets] = useState<IfcPropertySet[]>([]);
 
   useEffect(() => {
-    if (!mainDictionaryClassification) return;
+    if (activeDictionaryLocations.length === 0) return;
     const newPropertySets: PropertySetMap = {};
-    const propertyClassifications = [mainDictionaryClassification]; // recursiveMode ? classifications : classifications.slice(0, 1);
+    const propertyClassifications = activeDictionaryLocations; // recursiveMode ? classifications : classifications.slice(0, 1);
 
     propertyClassifications.forEach((classification) => {
       classification.classProperties?.forEach((classProperty: ClassPropertyContractV1) => {
@@ -310,12 +310,12 @@ function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertyS
 
     dispatch(setIsDefinedBy(Object.values(newPropertySets)));
     setMergedIfcPropertySets(Object.values(newPropertySets));
-  }, [dispatch, selectedMergedIfcEntity, mainDictionaryClassification]);
+  }, [dispatch, selectedMergedIfcEntity, activeDictionaryLocations]);
 
   useEffect(() => {
-    if (!mainDictionaryClassification) return;
+    if (activeDictionaryLocations.length === 0) return;
     const newPropertyNaturalLanguageNames: Record<string, string> = {};
-    const propertyClassifications = [mainDictionaryClassification]; // recursiveMode ? classifications : classifications.slice(0, 1);
+    const propertyClassifications = activeDictionaryLocations; // recursiveMode ? classifications : classifications.slice(0, 1);
 
     propertyClassifications.forEach((classification) => {
       classification.classProperties?.forEach((classProperty: ClassPropertyContractV1) => {
@@ -338,12 +338,12 @@ function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertyS
     });
 
     setPropertyNaturalLanguageNamesMap(newPropertyNaturalLanguageNames);
-  }, [mainDictionaryClassification, recursiveMode, selectedMergedIfcEntity, propertyNamesByLanguage, languageCode]);
+  }, [activeDictionaryLocations, recursiveMode, selectedMergedIfcEntity, propertyNamesByLanguage, languageCode]);
 
   return (
     <div>
       {Children.toArray(
-        mergedIfcPropertySets?.map((propertySet, index) => (
+        mergedIfcPropertySets.map((propertySet, index) => (
           <Accordion variant="contained" radius="xs">
             <Accordion.Item
               key={propertySet.name || 'Unknown'}

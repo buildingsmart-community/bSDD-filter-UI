@@ -14,15 +14,15 @@ interface SlicerProps {
   value: Option | null;
   setValue: (newValue: Option | null) => void;
   placeholder: string | undefined;
-  disabled?: boolean;
 }
 
 const INITIAL_RENDER_LIMIT = 25;
 const RENDER_MORE_LIMIT = 25;
 
-function Slicer({ height, options, label, value, setValue, placeholder = 'Search values', disabled }: SlicerProps) {
+function Slicer({ height, options, label, value, setValue, placeholder = 'Search values' }: SlicerProps) {
   const [search, setSearch] = useState('');
   const [renderedOptions, setRenderedOptions] = useState(options.slice(0, INITIAL_RENDER_LIMIT));
+  const [disabled, setDisabled] = useState(options.length === 1);
   const optionsContainerRef = useRef(null);
 
   const combobox = useCombobox({
@@ -43,6 +43,10 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
   useEffect(() => {
     setSearch(value?.label || '');
   }, [value]);
+
+  useEffect(() => {
+    setDisabled(options.length === 1);
+  }, [options]);
 
   useEffect(() => {
     // filter options based on search string, if no value is selected show all options

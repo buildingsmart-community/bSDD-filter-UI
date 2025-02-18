@@ -13,8 +13,9 @@ export default defineConfig(({ mode }) => {
     root: './',
     base,
     server: {
-      port: 3000,
-      open: '/bsdd_selection/index.html',
+      // port: 3000,
+      open: '/index.html',
+      // open: '/bsdd_selection/index.html',
       // open: '/bsdd_search/index.html',
     },
     build: {

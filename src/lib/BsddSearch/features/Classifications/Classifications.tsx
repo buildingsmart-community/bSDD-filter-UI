@@ -1,21 +1,24 @@
-import { ActionIcon, Box, Button, Center, Paper, Tooltip } from '@mantine/core';
-import { IconArrowDown, IconGripHorizontal, IconGripVertical } from '@tabler/icons-react';
+import { Box, Button, Paper, Tooltip } from '@mantine/core';
+import { IconGripHorizontal } from '@tabler/icons-react';
 import { MouseEventHandler, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 import { useAppDispatch, useAppSelector } from '../../../common/app/hooks';
+import { DictionaryContractV1 } from '../../../common/BsddApi/BsddApiBase';
 import { IfcClassification, IfcClassificationReference } from '../../../common/IfcData/ifc';
 import {
   fetchDictionaryClasses,
   selectBsddDictionaries,
   selectGroupedClasses,
   selectMainDictionaryClassification,
+  selectMainDictionaryClassificationUri,
+  updateFilterDictionaryClassificationUris,
+  updateMainDictionaryClassificationUri,
 } from '../../../common/slices/bsddSlice';
 import { selectHasAssociationsMap, setHasAssociations } from '../../../common/slices/ifcEntitySlice';
 import { selectActiveDictionariesMap, selectMainDictionaryUri } from '../../../common/slices/settingsSlice';
 import Slicer from '../../Slicer';
-import { DictionaryContractV1 } from '../../../common/BsddApi/BsddApiBase';
 
 interface ClassificationsProps {
   height: number;
@@ -95,6 +98,7 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
   const dictionaries = useSelector(selectBsddDictionaries);
   const groupedClassRelations = useSelector(selectGroupedClasses);
   const mainDictionaryClassification = useSelector(selectMainDictionaryClassification);
+  const mainDictionaryClassificationUri = useSelector(selectMainDictionaryClassificationUri);
   const mainDictionaryUri = useSelector(selectMainDictionaryUri);
 
   useEffect(() => {
@@ -118,7 +122,7 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
         let options: Option[] = [];
         const classRelationGroup = groupedClassRelations[dictionaryUri];
 
-        const classRelationsUris = mainDictionaryClassification?.classRelations?.map(
+        const classRelationsUris = await mainDictionaryClassification?.classRelations?.map(
           (relation) => relation.relatedClassUri,
         );
 
@@ -143,7 +147,7 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
                     value: fetchedClass.code as string,
                     label: fetchedClass.name || '',
                     uri: fetchedClass.uri,
-                  } as Option),
+                  }) as Option,
               ) ?? [];
           } catch (error) {
             console.error('Failed to fetch dictionary classes for', dictionaryUri, error);
@@ -212,12 +216,15 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
               options={optionsMap.get(dictionaryUri) || []}
               value={selectedIfcClassificationReferences.get(dictionaryUri) || null}
               setValue={(newValue) => {
-                const newValues = new Map(selectedIfcClassificationReferences);
-                newValues.set(dictionaryUri, newValue);
-                setSelectedIfcClassificationReferences(newValues);
+                if (newValue?.uri && newValue?.uri !== mainDictionaryClassificationUri) {
+                  const newValues = new Map(selectedIfcClassificationReferences);
+                  newValues.set(dictionaryUri, newValue);
+                  setSelectedIfcClassificationReferences(newValues);
+
+                  dispatch(updateMainDictionaryClassificationUri(newValue.uri));
+                }
               }}
               placeholder={t('classifications.searchClassesPlaceholder')}
-              disabled={optionsMap.get(dictionaryUri)?.length === 1}
             />
           );
         }
@@ -237,9 +244,14 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
               const newValues = new Map(selectedIfcClassificationReferences);
               newValues.set(dictionaryUri, newValue);
               setSelectedIfcClassificationReferences(newValues);
+
+              // Dispatch the action to update filter dictionaries
+              const newUris = Array.from(newValues.values())
+                .filter((option) => option !== null && option.uri !== mainDictionaryClassificationUri)
+                .map((option) => option!.uri);
+              dispatch(updateFilterDictionaryClassificationUris(newUris));
             }}
             placeholder={t('classifications.searchClassesPlaceholder')}
-            disabled={optionsMap.get(dictionaryUri)?.length === 1}
           />
         );
       })}

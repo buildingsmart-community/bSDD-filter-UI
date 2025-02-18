@@ -1,4 +1,7 @@
-import { Checkbox, Group, Tooltip, Select, TextInput } from '@mantine/core';
+import { Checkbox, Group, Select, TextInput, Tooltip } from '@mantine/core';
+import { t } from 'i18next';
+import { useEffect, useState } from 'react';
+
 import { useAppDispatch, useAppSelector } from '../../../common/app/hooks';
 import {
   IfcProperty,
@@ -8,15 +11,13 @@ import {
   IfcValue,
 } from '../../../common/IfcData/ifc';
 import { setPropertyIsInstance } from '../../../common/slices/ifcDataSlice';
-import { t } from 'i18next';
-import { useEffect, useState } from 'react';
-import { getInputDescription } from '../../../common/tools/utils';
 import {
   selectIsDefinedBy,
   setDescription,
   setIsDefinedBy,
   setObjectType,
 } from '../../../common/slices/ifcEntitySlice';
+import { getInputDescription } from '../../../common/tools/utils';
 import Check from '../../Checkbox';
 
 const ALLOWED_ATTRIBUTES = ['Name', 'Description', 'ObjectType'];
@@ -93,8 +94,8 @@ const getDefaultValue = (
   return isSingleValueProperty(property)
     ? getSingleValue(property as IfcPropertySingleValue).value
     : isEnumeratedValueProperty(property)
-    ? getFirstEnumerationValue(property as IfcPropertyEnumeratedValue).value
-    : undefined;
+      ? getFirstEnumerationValue(property as IfcPropertyEnumeratedValue).value
+      : undefined;
 };
 
 function Property({ propertySet, property, propertyNaturalLanguageName }: PropertyProps) {
@@ -107,7 +108,7 @@ function Property({ propertySet, property, propertyNaturalLanguageName }: Proper
   const isSwitchDisabled =
     savedPropertyIsInstanceMap.hasOwnProperty(propertyKey) || savedPropertyIsInstanceMap.hasOwnProperty(property.name);
   const isInstance = getIsInstance(propertyIsInstanceMap, propertySet.name || '', property.name);
-  const [currentValue, setCurrentValue] = useState<any>();
+  const [currentValue, setCurrentValue] = useState<any>('');
 
   const label = propertyNaturalLanguageName?.trim() ? propertyNaturalLanguageName : property.name;
   const description = getInputDescription(label, property.name);
@@ -116,7 +117,9 @@ function Property({ propertySet, property, propertyNaturalLanguageName }: Proper
     if (property.type === 'IfcPropertySingleValue') {
       const nominalValueType = property.nominalValue?.type || '';
       setCurrentValue(
-        nominalValueType === 'IfcBoolean' ? property.nominalValue?.value ?? false : property.nominalValue?.value ?? '',
+        nominalValueType === 'IfcBoolean'
+          ? (property.nominalValue?.value ?? false)
+          : (property.nominalValue?.value ?? ''),
       );
     } else if (property.type === 'IfcPropertyEnumeratedValue') {
       const firstEnumerationValue = (property as IfcPropertyEnumeratedValue).enumerationValues?.[0];
@@ -169,19 +172,19 @@ function Property({ propertySet, property, propertyNaturalLanguageName }: Proper
               setValue={(value: true | false | undefined) => handleChange(value)}
             />
           );
-        } else {
-          return (
-            <TextInput
-              label={label}
-              description={description}
-              placeholder={property.nominalValue?.value ?? ''}
-              value={currentValue}
-              disabled={isInstance}
-              onChange={(e) => handleChange(e.target.value)}
-              onBlur={(e) => handleBlur(e.target.value)}
-            />
-          );
         }
+        return (
+          <TextInput
+            label={label}
+            description={description}
+            placeholder={property.nominalValue?.value ?? ''}
+            value={currentValue || ''}
+            disabled={isInstance}
+            onChange={(e) => handleChange(e.target.value)}
+            onBlur={(e) => handleBlur(e.target.value)}
+          />
+        );
+
       case 'IfcPropertyEnumeratedValue':
         const enumerationValues = property.enumerationReference?.enumerationValues || [];
         const isReadOnly = enumerationValues.length === 1;
@@ -189,7 +192,7 @@ function Property({ propertySet, property, propertyNaturalLanguageName }: Proper
           <Select
             label={label}
             description={description}
-            value={currentValue}
+            value={currentValue || ''}
             disabled={isInstance || isReadOnly}
             clearable={!isReadOnly}
             onChange={(e) => handleChange(e)}
@@ -203,7 +206,7 @@ function Property({ propertySet, property, propertyNaturalLanguageName }: Proper
         return (
           <TextInput
             placeholder={property.name}
-            defaultValue={getDefaultValue(property)}
+            value={currentValue || ''}
             disabled={isInstance}
             onChange={(e) => handleChange(e.target.value)}
             onBlur={(e) => handleBlur(e.target.value)}
