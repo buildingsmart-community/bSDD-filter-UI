@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
-import { IfcEntity } from './IfcData/ifc';
 import { BsddBridgeData } from './IfcData/bsddBridgeData';
+import { IfcEntity } from './IfcData/ifc';
 interface ApiFunctionsContextType {
     loadSettings?: () => Promise<string>;
     loadBridgeData?: () => Promise<string>;
-    bsddSearch?: (ifcEntities: IfcEntity[]) => void;
+    bsddSearch?: (ifcEntities: IfcEntity[], searchKey: keyof IfcEntity | undefined) => void;
     bsddSelect?: (ifcEntities: IfcEntity[]) => void;
     bsddSearchSave?: (bsddBridgeData: BsddBridgeData) => Promise<string>;
     bsddSearchCancel?: () => void;

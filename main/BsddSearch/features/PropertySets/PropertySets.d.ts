@@ -1,7 +1,7 @@
 import { ClassContractV1 } from '../../../common/BsddApi/BsddApiBase';
 interface PropertySetsProps {
-    mainDictionaryClassification: ClassContractV1 | null;
+    activeClassifications: ClassContractV1[];
     recursiveMode: boolean;
 }
-declare function PropertySets({ mainDictionaryClassification, recursiveMode }: PropertySetsProps): import("react/jsx-runtime").JSX.Element;
+declare function PropertySets({ activeClassifications: activeDictionaryLocations, recursiveMode }: PropertySetsProps): import("react/jsx-runtime").JSX.Element;
 export default PropertySets;

@@ -3,6 +3,10 @@ import { ClassContractV1, ClassListItemContractV1Classes, ClassPropertyContractV
 export interface BsddState {
     mainDictionaryClassification: ClassContractV1 | null;
     mainDictionaryClassificationUri: string | null;
+    ifcDictionaryClassification: ClassContractV1 | null;
+    ifcDictionaryClassificationUri: string;
+    filterDictionaryClassifications: ClassContractV1[];
+    filterDictionaryClassificationUris: string[];
     classes: {
         [key: string]: ClassContractV1;
     };
@@ -24,6 +28,8 @@ export interface BsddState {
     searchResult: SearchInDictionaryResponseContractV1 | null;
     searchInDictionaryLoading: boolean;
     searchInDictionaryResults: any;
+    loading: boolean;
+    error: string | null | undefined;
 }
 export type FetchAllDictionaryParameters = {
     bsddApiEnvironment: string;
@@ -128,17 +134,22 @@ export declare const fetchDictionary: import('@reduxjs/toolkit').AsyncThunk<{
     fulfilledMeta?: unknown;
     rejectedMeta?: unknown;
 }>;
-/**
- * Retrieves a dictionary from the state or fetches it from the API if not present in the state.
- *
- * @param state - The RootState object.
- * @param dispatch - The AppDispatch function.
- * @param location - The location URI of the dictionary to retrieve.
- * @returns A promise that resolves to a DictionaryContractV1 object or null if the dictionary could not be retrieved.
- */
-export declare const getDictionary: (state: RootState, dispatch: AppDispatch, location: string) => Promise<DictionaryContractV1 | null>;
+export declare const fetchClassDetails: import('@reduxjs/toolkit').AsyncThunk<ClassContractV1[], string[], {
+    state?: unknown;
+    dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
+    extra?: unknown;
+    rejectValue?: unknown;
+    serializedErrorType?: unknown;
+    pendingMeta?: unknown;
+    fulfilledMeta?: unknown;
+    rejectedMeta?: unknown;
+}>;
 export declare const selectMainDictionaryClassification: (state: RootState) => ClassContractV1 | null;
 export declare const selectMainDictionaryClassificationUri: (state: RootState) => string | null;
+export declare const selectIfcDictionaryClassification: (state: RootState) => ClassContractV1 | null;
+export declare const selectIfcDictionaryClassificationUri: (state: RootState) => string;
+export declare const selectFilterDictionaryClassifications: (state: RootState) => ClassContractV1[];
+export declare const selectFilterDictionaryClassificationUris: (state: RootState) => string[];
 export declare const selectDictionary: (state: RootState, uri: string) => DictionaryContractV1;
 export declare const selectDictionaryClasses: (state: RootState, location: string) => ClassListItemContractV1Classes[];
 export declare const selectBsddDictionaries: (state: RootState) => {
@@ -160,6 +171,15 @@ export declare const selectPropertyNamesByLanguage: (state: RootState) => {
     };
 };
 export declare const selectSearchResult: (state: RootState) => SearchInDictionaryResponseContractV1 | null;
+/**
+ * Retrieves a dictionary from the state or fetches it from the API if not present in the state.
+ *
+ * @param state - The RootState object.
+ * @param dispatch - The AppDispatch function.
+ * @param location - The location URI of the dictionary to retrieve.
+ * @returns A promise that resolves to a DictionaryContractV1 object or null if the dictionary could not be retrieved.
+ */
+export declare const getDictionary: (state: RootState, dispatch: AppDispatch, location: string) => Promise<DictionaryContractV1 | null>;
 export declare const selectGroupedClasses: ((state: {
     settings: import('../IfcData/bsddBridgeData').BsddSettings;
     ifcData: import('./ifcDataSlice').IfcDataState;
@@ -200,11 +220,11 @@ export declare const selectGroupedClasses: ((state: {
     memoize: typeof import('reselect').weakMapMemoize;
     argsMemoize: typeof import('reselect').weakMapMemoize;
 };
-export declare const resetState: import('@reduxjs/toolkit').ActionCreatorWithoutPayload<"bsdd/resetState">, setMainDictionaryClassification: import('@reduxjs/toolkit').ActionCreatorWithPayload<ClassContractV1 | null, "bsdd/setMainDictionaryClassification">, setMainDictionaryClassificationUri: import('@reduxjs/toolkit').ActionCreatorWithPayload<string | null, "bsdd/setMainDictionaryClassificationUri">, addDictionaryClasses: import('@reduxjs/toolkit').ActionCreatorWithPayload<{
+export declare const resetState: import('@reduxjs/toolkit').ActionCreatorWithoutPayload<"bsdd/resetState">, setMainDictionaryClassification: import('@reduxjs/toolkit').ActionCreatorWithPayload<ClassContractV1 | null, "bsdd/setMainDictionaryClassification">, setMainDictionaryClassificationUri: import('@reduxjs/toolkit').ActionCreatorWithPayload<string, "bsdd/setMainDictionaryClassificationUri">, addDictionaryClasses: import('@reduxjs/toolkit').ActionCreatorWithPayload<{
     uri: string;
     data: ClassListItemContractV1Classes[];
 }, "bsdd/addDictionaryClasses">;
-export declare const fetchMainDictionaryClassification: import('@reduxjs/toolkit').AsyncThunk<ClassContractV1 | null, string, {
+export declare const updateMainDictionaryClassificationUri: import('@reduxjs/toolkit').AsyncThunk<void, string | null, {
     state?: unknown;
     dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
     extra?: unknown;
@@ -214,7 +234,7 @@ export declare const fetchMainDictionaryClassification: import('@reduxjs/toolkit
     fulfilledMeta?: unknown;
     rejectedMeta?: unknown;
 }>;
-export declare const updateMainDictionaryClassificationUri: import('@reduxjs/toolkit').AsyncThunk<void, string | null, {
+export declare const updateFilterDictionaryClassificationUris: import('@reduxjs/toolkit').AsyncThunk<void, string[], {
     state?: unknown;
     dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
     extra?: unknown;
