@@ -564,7 +564,7 @@ export const updateMainDictionaryClassificationUri = createAsyncThunk(
   'bsdd/updateMainDictionaryClassificationUri',
   async (uri: string | null, { dispatch, getState }) => {
     const state = getState() as RootState;
-    if (uri !== state.bsdd.mainDictionaryClassificationUri) {
+    if (uri && uri !== state.bsdd.mainDictionaryClassificationUri) {
       dispatch(bsddSlice.actions.setMainDictionaryClassificationUri(uri));
       if (uri === null) {
         dispatch(bsddSlice.actions.setMainDictionaryClassification(null));
