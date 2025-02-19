@@ -57,6 +57,7 @@ function BsddCombinedLoader() {
   return (
     <ApiFunctionsProvider value={apiFunctions}>
       <Container>
+        <h1>test</h1>
         <Tabs defaultValue={defaultTab} onChange={(value) => setActiveTab(value ?? defaultTab)}>
           <Tabs.List grow>
             <Tabs.Tab value="link">{t('linkTabTitle')}</Tabs.Tab>
