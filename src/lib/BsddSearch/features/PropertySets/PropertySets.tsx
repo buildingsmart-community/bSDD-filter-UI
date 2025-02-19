@@ -241,6 +241,8 @@ function createIfcPropertySingleValue(
   } else if (ifcEntity) {
     const property = getPropertyFromSet(ifcEntity, propertySetName, name) as IfcPropertySingleValue;
     value = getNominalValueFromProperty(classificationProperty.dataType, property);
+  } else {
+    value = createIfcPropertyValue(classificationProperty.dataType, null);
   }
 
   if (value !== null) {
@@ -355,14 +357,14 @@ function PropertySets({ activeClassifications: activeDictionaryLocations, recurs
                 <Stack>
                   {Children.toArray(
                     propertySet.hasProperties.map((property) => {
-                      const specification = property.specification
+                      const propertyNaturalLanguageName = property.specification
                         ? propertyNaturalLanguageNamesMap[property.specification]
                         : '';
                       return (
                         <Property
                           propertySet={propertySet}
                           property={property}
-                          propertyNaturalLanguageName={specification}
+                          propertyNaturalLanguageName={propertyNaturalLanguageName}
                         />
                       );
                     }),
