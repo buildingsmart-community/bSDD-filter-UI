@@ -26,6 +26,14 @@ export declare function patchIfcClassificationReference(ifcClassificationReferen
  */
 export declare function validateDictionary(state: RootState, dispatch: AppDispatch, bsddDictionary: BsddDictionary | null): Promise<BsddDictionary | null>;
 /**
+ * Converts the given `type` and `predefinedType` into the bSDD IFC dictionary code.
+ *
+ * @param type - The type of the entity.
+ * @param predefinedType - The predefined type of the entity.
+ * @returns The concatenated string of `type` and `predefinedType`.
+ */
+export declare function ifcEntityToBsddClass(type: string | undefined, predefinedType: string | undefined): string;
+/**
  * Validates the IFC data by checking and fixing the associations and property sets of each IFC entity.
  *
  * @param ifcEntities - The array of IFC entities to be validated.
