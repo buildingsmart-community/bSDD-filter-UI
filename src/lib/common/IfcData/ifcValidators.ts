@@ -230,7 +230,7 @@ function ifcEntityAsInstance(ifcEntity: string) {
  * @param predefinedType - The predefined type of the entity.
  * @returns The concatenated string of `type` and `predefinedType`.
  */
-function ifcEntityToBsddClass(type: string | undefined, predefinedType: string | undefined): string {
+export function ifcEntityToBsddClass(type: string | undefined, predefinedType: string | undefined): string {
   const validPredefinedType = predefinedType !== 'NOTDEFINED' && predefinedType !== 'USERDEFINED' ? predefinedType : '';
   return (type ?? '') + (validPredefinedType ?? '');
 }

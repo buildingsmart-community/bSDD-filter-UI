@@ -3,7 +3,7 @@ import '@mantine/core/styles.css';
 
 import { Box, Button, ColorSwatch, Group, HoverCard, Select, Space, Text, Tooltip } from '@mantine/core';
 import { IconPencil, IconPointer } from '@tabler/icons-react';
-import { MantineReactTable, MRT_ColumnDef, MRT_Row, MRT_RowSelectionState } from 'mantine-react-table';
+import { MantineReactTable, MRT_Cell, MRT_ColumnDef, MRT_Row, MRT_RowSelectionState } from 'mantine-react-table';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -134,6 +134,7 @@ function groupEntitiesBy(
   ifcEntities: IfcEntity[],
   property: keyof IfcEntity,
   activeDictionaries: BsddDictionary[],
+  ifcDictionaryUri?: string,
 ): { groupedEntities: GroupRowEntity[]; entityIndexMap: Record<string, number> } {
   const entityIndexMap: Record<string, number> = {};
   const groupIndexMap: Record<string, number> = {};
@@ -141,7 +142,7 @@ function groupEntitiesBy(
 
   const grouped = ifcEntities.reduce(
     (acc, ifcEntity, index) => {
-      const activeDictionaryValues = getClassUrisFromDictionaries(ifcEntity, activeDictionaries);
+      const activeDictionaryValues = getClassUrisFromDictionaries(ifcEntity, activeDictionaries, ifcDictionaryUri);
       const key = ifcEntity[property];
       const groupName = key === undefined || typeof key !== 'string' ? '' : key;
 
@@ -295,9 +296,31 @@ const renderSubRowHoverCard = (row: MRT_Row<GroupRowEntity>, activeDictionaries:
   return renderHoverCard(colorMap[row.original.color] || 'grey', activeDictionaries, dictionaryColors, label);
 };
 
+/**
+ * CellComponent is a functional component that renders a cell within a table row.
+ * It displays the cell value inside a tooltip and adds indentation based on the row's depth.
+ *
+ * @param {object} props - The properties object.
+ * @param {MRT_Cell<GroupRowEntity, unknown>} props.cell - The cell object containing the cell data.
+ * @param {MRT_Row<GroupRowEntity>} props.row - The row object containing the row data.
+ *
+ * @returns {JSX.Element} The rendered cell component.
+ */
+function CellComponent({ cell, row }: { cell: MRT_Cell<GroupRowEntity, unknown>; row: MRT_Row<GroupRowEntity> }) {
+  return (
+    <>
+      {row.depth > 0 && <Space w={row.depth * 16} />}
+      <Tooltip label={cell.getValue<string>()} withArrow>
+        <Text className="truncate">{cell.getValue<string>()}</Text>
+      </Tooltip>
+    </>
+  );
+}
+
 function Selection({ loading }: SelectionProps) {
   const { t } = useTranslation();
   const ifcEntities = useAppSelector(selectLoadedIfcEntities);
+  const ifcDictionaryUri = useAppSelector((state) => state.settings.ifcDictionary?.ifcClassification.location);
   const mainDictionary = useAppSelector(selectMainDictionary);
   const activeDictionaries = useAppSelector(selectActiveDictionaries);
   const { bsddSearch, bsddSelect } = useApiFunctions();
@@ -306,10 +329,10 @@ function Selection({ loading }: SelectionProps) {
   const [entityIndexMap, setEntityIndexMap] = useState<Record<string, number>>({});
 
   const groupedEntities = useMemo(() => {
-    const { groupedEntities, entityIndexMap } = groupEntitiesBy(ifcEntities, groupByKey, activeDictionaries);
-    setEntityIndexMap(entityIndexMap);
-    return groupedEntities;
-  }, [ifcEntities, groupByKey, activeDictionaries]);
+    const result = groupEntitiesBy(ifcEntities, groupByKey, activeDictionaries, ifcDictionaryUri);
+    setEntityIndexMap(result.entityIndexMap);
+    return result.groupedEntities;
+  }, [ifcEntities, groupByKey, activeDictionaries, ifcDictionaryUri]);
 
   const columns = useMemo<MRT_ColumnDef<GroupRowEntity>[]>(
     () => [
@@ -318,7 +341,6 @@ function Selection({ loading }: SelectionProps) {
         header: '',
         Cell: ({ row }) => {
           const { subRows } = row.original;
-          const { dictionaryValues } = row.original;
           const label = t('dictionaryValidationSummaryLabel');
 
           if (Array.isArray(subRows) && subRows.length > 0) {
@@ -337,14 +359,7 @@ function Selection({ loading }: SelectionProps) {
         header: t('Name'),
         grow: true,
         filterFn: 'includesString',
-        Cell: ({ cell, row }) => (
-          <>
-            {row.depth > 0 && <Space w={row.depth * 16} />}
-            <Tooltip label={cell.getValue<string>()} withArrow>
-              <Text className="truncate">{cell.getValue<string>()}</Text>
-            </Tooltip>
-          </>
-        ),
+        Cell: CellComponent,
       },
       {
         accessorKey: 'type',

@@ -1,5 +1,6 @@
 import { BsddDictionary, URI } from '../IfcData/bsddBridgeData';
 import { Association, IfcClassification, IfcClassificationReference, IfcEntity } from '../IfcData/ifc';
+import { ifcEntityToBsddClass } from '../IfcData/ifcValidators';
 
 export type ClassificationStatus = URI | null;
 
@@ -31,29 +32,38 @@ function checkIfcClassificationUri(
 }
 
 /**
- * Retrieves a map of classification URIs for the given IFC entity from the provided list of bSDD dictionaries, if they are associated with a classification.
- *
- * @param ifcEntity - The IFC entity to check for classification associations.
- * @param bsddDictionaries - The list of bSDD dictionaries containing the classification dictionaries.
- * @returns A map of URIs of the classification dictionaries if found, otherwise null for each dictionary.
+ * Generates a classification URI for the given IFC entity.
+ * @param ifcDictionaryUri The URI of the IFC dictionary.
+ * @param ifcEntity The IFC entity.
+ * @returns The generated classification URI.
  */
+function constructIfcEntityIdentifier(ifcDictionaryUri: string, ifcEntity: IfcEntity): string {
+  const identification = ifcEntityToBsddClass(ifcEntity.type, ifcEntity.predefinedType);
+  return `${ifcDictionaryUri}/class/${identification}`;
+}
+
 export function getClassUrisFromDictionaries(
   ifcEntity: IfcEntity,
   bsddDictionaries: BsddDictionary[],
+  ifcDictionaryUri?: string,
 ): Record<string, ClassificationStatus> {
-  const associations = ifcEntity.hasAssociations;
+  const associations = ifcEntity.hasAssociations || [];
   const result: Record<string, ClassificationStatus> = {};
 
   bsddDictionaries.forEach((bsddDictionary) => {
-    const { ifcClassification } = bsddDictionary;
-    const location = ifcClassification?.location || '';
-    const foundAssociation = associations?.find(
-      (association) =>
-        isIfcClassificationReference(association) &&
-        checkIfcClassificationUri(location, association as IfcClassificationReference),
-    );
+    const location = bsddDictionary.ifcClassification?.location || '';
 
-    result[location] = foundAssociation ? (foundAssociation as IfcClassificationReference).location || null : null;
+    if (ifcDictionaryUri && location === ifcDictionaryUri) {
+      result[ifcDictionaryUri] = constructIfcEntityIdentifier(ifcDictionaryUri, ifcEntity);
+    } else {
+      const foundAssociation = associations.some(
+        (association) =>
+          isIfcClassificationReference(association) &&
+          checkIfcClassificationUri(location, association as IfcClassificationReference),
+      );
+
+      result[location] = foundAssociation ? location : null;
+    }
   });
 
   return result;
