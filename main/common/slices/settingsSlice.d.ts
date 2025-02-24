@@ -89,6 +89,58 @@ export declare const selectFilterDictionaries: (state: RootState) => BsddDiction
 export declare const selectLanguage: (state: RootState) => string;
 export declare const selectIncludeTestDictionaries: (state: RootState) => boolean | undefined;
 export declare const selectSettings: (state: RootState) => BsddSettings;
+export declare const selectMainDictionaryUri: ((state: {
+    settings: BsddSettings;
+    ifcData: import('./ifcDataSlice').IfcDataState;
+    bsdd: import('./bsddSlice').BsddState;
+    ifcEntity: import('./ifcEntitySlice').EntityState;
+}) => string | undefined) & {
+    clearCache: () => void;
+    resultsCount: () => number;
+    resetResultsCount: () => void;
+} & {
+    resultFunc: (resultFuncArgs_0: BsddDictionary | null) => string | undefined;
+    memoizedResultFunc: ((resultFuncArgs_0: BsddDictionary | null) => string | undefined) & {
+        clearCache: () => void;
+        resultsCount: () => number;
+        resetResultsCount: () => void;
+    };
+    lastResult: () => string | undefined;
+    dependencies: [(state: RootState) => BsddDictionary | null];
+    recomputations: () => number;
+    resetRecomputations: () => void;
+    dependencyRecomputations: () => number;
+    resetDependencyRecomputations: () => void;
+} & {
+    memoize: typeof import('reselect').weakMapMemoize;
+    argsMemoize: typeof import('reselect').weakMapMemoize;
+};
+export declare const selectIfcDictionaryUri: ((state: {
+    settings: BsddSettings;
+    ifcData: import('./ifcDataSlice').IfcDataState;
+    bsdd: import('./bsddSlice').BsddState;
+    ifcEntity: import('./ifcEntitySlice').EntityState;
+}) => string | undefined) & {
+    clearCache: () => void;
+    resultsCount: () => number;
+    resetResultsCount: () => void;
+} & {
+    resultFunc: (resultFuncArgs_0: BsddDictionary | null) => string | undefined;
+    memoizedResultFunc: ((resultFuncArgs_0: BsddDictionary | null) => string | undefined) & {
+        clearCache: () => void;
+        resultsCount: () => number;
+        resetResultsCount: () => void;
+    };
+    lastResult: () => string | undefined;
+    dependencies: [(state: RootState) => BsddDictionary | null];
+    recomputations: () => number;
+    resetRecomputations: () => void;
+    dependencyRecomputations: () => number;
+    resetDependencyRecomputations: () => void;
+} & {
+    memoize: typeof import('reselect').weakMapMemoize;
+    argsMemoize: typeof import('reselect').weakMapMemoize;
+};
 export declare const selectActiveDictionaryUris: ((state: {
     settings: BsddSettings;
     ifcData: import('./ifcDataSlice').IfcDataState;
@@ -132,32 +184,6 @@ export declare const selectActiveDictionaryUris: ((state: {
         memoize: typeof import('reselect').weakMapMemoize;
         argsMemoize: typeof import('reselect').weakMapMemoize;
     }];
-    recomputations: () => number;
-    resetRecomputations: () => void;
-    dependencyRecomputations: () => number;
-    resetDependencyRecomputations: () => void;
-} & {
-    memoize: typeof import('reselect').weakMapMemoize;
-    argsMemoize: typeof import('reselect').weakMapMemoize;
-};
-export declare const selectMainDictionaryUri: ((state: {
-    settings: BsddSettings;
-    ifcData: import('./ifcDataSlice').IfcDataState;
-    bsdd: import('./bsddSlice').BsddState;
-    ifcEntity: import('./ifcEntitySlice').EntityState;
-}) => string | null) & {
-    clearCache: () => void;
-    resultsCount: () => number;
-    resetResultsCount: () => void;
-} & {
-    resultFunc: (resultFuncArgs_0: BsddDictionary | null) => string | null;
-    memoizedResultFunc: ((resultFuncArgs_0: BsddDictionary | null) => string | null) & {
-        clearCache: () => void;
-        resultsCount: () => number;
-        resetResultsCount: () => void;
-    };
-    lastResult: () => string | null;
-    dependencies: [(state: RootState) => BsddDictionary | null];
     recomputations: () => number;
     resetRecomputations: () => void;
     dependencyRecomputations: () => number;
