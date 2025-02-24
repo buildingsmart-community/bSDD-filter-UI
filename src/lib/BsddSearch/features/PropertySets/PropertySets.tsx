@@ -14,7 +14,7 @@ import {
 import { selectPropertyNamesByLanguage } from '../../../common/slices/bsddSlice';
 import { selectMergedIfcEntity } from '../../../common/slices/ifcDataSlice';
 import { selectIsDefinedByIncludingAttributes, setIsDefinedBy } from '../../../common/slices/ifcEntitySlice';
-import { selectLanguage } from '../../../common/slices/settingsSlice';
+import { selectIfcDictionary, selectIfcDictionaryUri, selectLanguage } from '../../../common/slices/settingsSlice';
 import type { PropertySetMap } from '../../BsddSearch';
 import Property from '../Property/Property';
 
@@ -280,9 +280,9 @@ function PropertySets({ activeClassifications: activeDictionaryLocations, recurs
   const dispatch = useAppDispatch();
 
   const selectedMergedIfcEntity = useAppSelector(selectMergedIfcEntity);
-  const propertySets = useAppSelector(selectIsDefinedByIncludingAttributes);
   const propertyNamesByLanguage = useAppSelector(selectPropertyNamesByLanguage);
   const languageCode = useAppSelector(selectLanguage);
+  const ifcDictionaryUri = useAppSelector(selectIfcDictionaryUri);
   const [propertyNaturalLanguageNamesMap, setPropertyNaturalLanguageNamesMap] = useState<Record<string, string>>({});
   const [mergedIfcPropertySets, setMergedIfcPropertySets] = useState<IfcPropertySet[]>([]);
 
@@ -292,6 +292,9 @@ function PropertySets({ activeClassifications: activeDictionaryLocations, recurs
     const propertyClassifications = activeDictionaryLocations; // recursiveMode ? classifications : classifications.slice(0, 1);
 
     propertyClassifications.forEach((classification) => {
+      if (classification.dictionaryUri === ifcDictionaryUri) {
+        return; // Skip the IFC dictionary as we only add explicitly added IFC properties
+      }
       classification.classProperties?.forEach((classProperty: ClassPropertyContractV1) => {
         if (!classProperty || !classProperty.propertySet) return;
         const propertySetName = classProperty.propertySet || classification.name;
@@ -312,7 +315,7 @@ function PropertySets({ activeClassifications: activeDictionaryLocations, recurs
 
     dispatch(setIsDefinedBy(Object.values(newPropertySets)));
     setMergedIfcPropertySets(Object.values(newPropertySets));
-  }, [dispatch, selectedMergedIfcEntity, activeDictionaryLocations]);
+  }, [dispatch, selectedMergedIfcEntity, activeDictionaryLocations, ifcDictionaryUri]);
 
   useEffect(() => {
     if (activeDictionaryLocations.length === 0) return;

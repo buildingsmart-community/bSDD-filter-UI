@@ -165,7 +165,7 @@ export const selectIfcEntity = createSelector(
           ...propertySet,
           hasProperties: propertySet.hasProperties.filter((property) => {
             if (property.type === 'IfcPropertySingleValue') {
-              const nominalValue = property.nominalValue;
+              const { nominalValue } = property;
               return nominalValue && nominalValue.value !== null && nominalValue.value !== '...';
             }
             if (property.type === 'IfcPropertyEnumeratedValue') {

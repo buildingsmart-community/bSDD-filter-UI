@@ -96,12 +96,18 @@ export const selectIncludeTestDictionaries = (state: RootState) =>
 // export const selectPropertyIsInstanceMap = (state: RootState) => state.settings.propertyIsInstanceMap;
 export const selectSettings = (state: RootState) => state.settings;
 
-export const selectActiveDictionaryUris = createSelector(selectActiveDictionaries, (activeDictionaries) =>
-  activeDictionaries.map((dictionary) => dictionary.ifcClassification.location),
+export const selectMainDictionaryUri = createSelector(
+  (state: RootState) => state.settings.mainDictionary,
+  (mainDictionary) => mainDictionary?.ifcClassification.location,
 );
 
-export const selectMainDictionaryUri = createSelector(selectMainDictionary, (mainDictionary: BsddDictionary | null) =>
-  mainDictionary ? mainDictionary.ifcClassification.location : null,
+export const selectIfcDictionaryUri = createSelector(
+  (state: RootState) => state.settings.ifcDictionary,
+  (ifcDictionary) => ifcDictionary?.ifcClassification.location,
+);
+
+export const selectActiveDictionaryUris = createSelector(selectActiveDictionaries, (activeDictionaries) =>
+  activeDictionaries.map((dictionary) => dictionary.ifcClassification.location),
 );
 
 export const { setMainDictionary, setIfcDictionary, setFilterDictionaries, setLanguage, setIncludeTestDictionaries } =

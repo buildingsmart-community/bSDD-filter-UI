@@ -12,7 +12,11 @@ import { useAppSelector } from '../../../common/app/hooks';
 import { BsddDictionary } from '../../../common/IfcData/bsddBridgeData';
 import { IfcEntity } from '../../../common/IfcData/ifc';
 import { selectLoadedIfcEntities } from '../../../common/slices/ifcDataSlice';
-import { selectActiveDictionaries, selectMainDictionary } from '../../../common/slices/settingsSlice';
+import {
+  selectActiveDictionaries,
+  selectIfcDictionaryUri,
+  selectMainDictionary,
+} from '../../../common/slices/settingsSlice';
 import { ClassificationStatus, getClassUrisFromDictionaries } from '../../../common/tools/checkIfcClassification';
 import { Color, colorMap } from '../../../common/tools/colors';
 
@@ -320,7 +324,7 @@ function CellComponent({ cell, row }: { cell: MRT_Cell<GroupRowEntity, unknown>;
 function Selection({ loading }: SelectionProps) {
   const { t } = useTranslation();
   const ifcEntities = useAppSelector(selectLoadedIfcEntities);
-  const ifcDictionaryUri = useAppSelector((state) => state.settings.ifcDictionary?.ifcClassification.location);
+  const ifcDictionaryUri = useAppSelector(selectIfcDictionaryUri);
   const mainDictionary = useAppSelector(selectMainDictionary);
   const activeDictionaries = useAppSelector(selectActiveDictionaries);
   const { bsddSearch, bsddSelect } = useApiFunctions();
