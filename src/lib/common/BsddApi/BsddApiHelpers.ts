@@ -1,71 +1,8 @@
-import { defaultEnvironment } from '../env';
-import { BsddApi } from './BsddApi';
-import { ClassContractV1, DictionaryContractV1 } from './BsddApiBase';
-import { bsddEnvironments } from './BsddApiEnvironments';
-
-let bsddApiBaseUri: string = bsddEnvironments[defaultEnvironment];
-let bsddApi: BsddApi<unknown> = new BsddApi(bsddApiBaseUri);
-
-let classCache: { [key: string]: ClassContractV1 } = {};
-let dictionaryCache: { [key: string]: DictionaryContractV1 } = {};
-
-// Function to get data from API with caching
-export async function getBsddClass(
-  bsddEnvironmentUri: string,
-  uri: string,
-  // languageCode: string | null,
-): Promise<ClassContractV1> {
-  // reset cache if environment changes
-  if (bsddApiBaseUri !== bsddEnvironmentUri) {
-    bsddApiBaseUri = bsddEnvironmentUri;
-    bsddApi = new BsddApi(bsddApiBaseUri);
-    classCache = {};
-  }
-
-  if (classCache[uri]) {
-    return classCache[uri];
-  }
-  const response = await bsddApi.api.classGet({
-    Uri: uri,
-    IncludeClassProperties: true,
-    IncludeChildClassReferences: true,
-    IncludeClassRelations: true,
-    IncludeReverseRelations: true,
-    // languageCode: languageCode || undefined,
-  });
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  const { data } = response;
-  classCache[uri] = data;
-  return data;
-}
-
-export async function getBsddDictionary(bsddEnvironmentUri: string, uri: string): Promise<DictionaryContractV1> {
-  // reset cache if environment changes
-  if (bsddApiBaseUri !== bsddEnvironmentUri) {
-    bsddApiBaseUri = bsddEnvironmentUri;
-    bsddApi = new BsddApi(bsddApiBaseUri);
-    dictionaryCache = {};
-  }
-
-  if (dictionaryCache[uri]) {
-    return dictionaryCache[uri];
-  }
-  const response = await bsddApi.api.dictionaryGet({ Uri: uri });
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-  const data = response.data.dictionaries;
-  if (!data || data.length === 0) {
-    throw new Error(`No dictionary found for uri: ${uri}`);
-  }
-  [dictionaryCache[uri]] = data;
-  return data[0];
-}
+import { ClassContractV1 } from './BsddApiBase';
 
 /**
- * Retrieves the URIs of applicable classifications based on the provided dictionary classification.
+ * Retrieves the URIs of applicable classifications for showing properties based on the provided dictionary classification.
+ * Only returns classifications that are parents of the dictionary classification.
  *
  * @param {ClassContractV1 | null} dictionaryClassification - The dictionary classification object.
  * @returns {string[]} An array of URIs representing the applicable classifications.
@@ -88,10 +25,11 @@ export function getPropertyClassificationUris(dictionaryClassification: ClassCon
 }
 
 /**
- * Retrieves the URIs of applicable classifications based on the provided dictionary classification.
+ * Retrieves the URIs of applicable slicer classifications based on the provided dictionary classification.
  *
  * @param {ClassContractV1 | null} dictionaryClassification - The dictionary classification object.
- * @returns {string[]} An array of URIs representing the applicable classifications.
+ * @param {string | undefined} ifcDictionaryUri - The URI of the IFC dictionary.
+ * @returns {string[]} An array of URIs representing the applicable slicer classifications.
  */
 export function getSlicerClassificationUris(
   dictionaryClassification: ClassContractV1 | null,
@@ -113,6 +51,5 @@ export function getSlicerClassificationUris(
   const filteredClassificationUris = Array.from(
     new Set([...relatedIfcEntityUris, ...classRelationUris, ...reverseClassRelationUris]),
   );
-  console.log('filteredClassificationUris', filteredClassificationUris);
   return filteredClassificationUris;
 }
