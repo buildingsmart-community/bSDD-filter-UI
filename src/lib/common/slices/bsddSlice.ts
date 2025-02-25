@@ -12,6 +12,7 @@ import {
   RequestParams,
   SearchInDictionaryResponseContractV1,
 } from '../BsddApi/BsddApiBase';
+import { getSlicerClassificationUris } from '../BsddApi/BsddApiHelpers';
 import { headers } from '../BsddApi/BsddApiWrapper';
 
 const CLASS_ITEM_PAGE_SIZE = 1000;
@@ -258,7 +259,8 @@ export const fetchClasses = createAsyncThunk(
     const state = getState() as RootState;
     const languageCode = state.settings.language;
 
-    const classesAccumulator: { [key: string]: ClassContractV1 } = { ...state.bsdd.classes };
+    const classesAccumulator: { [key: string]: ClassContractV1 } = {};
+    // const classesAccumulator: { [key: string]: ClassContractV1 } = { ...state.bsdd.classes };
 
     const fetchClass = async (relatedClassUri: string) => {
       if (classesAccumulator[relatedClassUri]) {
@@ -367,8 +369,9 @@ export const fetchClassDetails = createAsyncThunk(
     const fetchClassDetail = async (uri: string) => {
       const queryParameters = {
         Uri: uri,
-        IncludeClassRelations: true,
         IncludeClassProperties: true,
+        IncludeClassRelations: true,
+        IncludeReverseRelations: true,
         languageCode,
       };
 
@@ -564,6 +567,7 @@ export const updateMainDictionaryClassificationUri = createAsyncThunk(
   'bsdd/updateMainDictionaryClassificationUri',
   async (uri: string | null, { dispatch, getState }) => {
     const state = getState() as RootState;
+    const ifcDictionaryUri = state.bsdd.ifcDictionaryClassificationUri;
     if (uri && uri !== state.bsdd.mainDictionaryClassificationUri) {
       dispatch(bsddSlice.actions.setMainDictionaryClassificationUri(uri));
       if (uri === null) {
@@ -576,12 +580,9 @@ export const updateMainDictionaryClassificationUri = createAsyncThunk(
               const mainDictionaryClassification = results[0];
               dispatch(bsddSlice.actions.setMainDictionaryClassification(mainDictionaryClassification));
 
-              if (mainDictionaryClassification?.classRelations) {
-                const relatedClassUris = mainDictionaryClassification.classRelations.map(
-                  (relation) => relation.relatedClassUri,
-                );
-                relatedClassUris.push(mainDictionaryClassification.uri);
-                dispatch(fetchClasses(relatedClassUris));
+              const classRelationUris = getSlicerClassificationUris(mainDictionaryClassification, ifcDictionaryUri);
+              if (classRelationUris.length > 0) {
+                dispatch(fetchClasses(classRelationUris));
               }
             }
           }
