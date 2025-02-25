@@ -360,7 +360,7 @@ export const fetchClassDetails = createAsyncThunk(
       throw new Error('BsddApi is not initialized');
     }
     const state = getState() as RootState;
-    const languageCode = state.settings.language;
+    const { settings } = state;
 
     const params: RequestParams = {
       headers,
@@ -372,7 +372,8 @@ export const fetchClassDetails = createAsyncThunk(
         IncludeClassProperties: true,
         IncludeClassRelations: true,
         IncludeReverseRelations: true,
-        languageCode,
+        ReverseRelationDictionaryUris: settings.filterDictionaries.map((d) => d.ifcClassification.location),
+        languageCode: settings.language,
       };
 
       try {
