@@ -2,10 +2,10 @@ import { Box, Button, Paper, Tooltip } from '@mantine/core';
 import { IconGripHorizontal } from '@tabler/icons-react';
 import { MouseEventHandler, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
 
 import { useAppDispatch, useAppSelector } from '../../../common/app/hooks';
 import { DictionaryContractV1 } from '../../../common/BsddApi/BsddApiBase';
+import { getSlicerClassificationUris } from '../../../common/BsddApi/BsddApiHelpers';
 import { IfcClassification, IfcClassificationReference } from '../../../common/IfcData/ifc';
 import {
   fetchDictionaryClasses,
@@ -17,7 +17,11 @@ import {
   updateMainDictionaryClassificationUri,
 } from '../../../common/slices/bsddSlice';
 import { selectHasAssociationsMap, setHasAssociations } from '../../../common/slices/ifcEntitySlice';
-import { selectActiveDictionariesMap, selectMainDictionaryUri } from '../../../common/slices/settingsSlice';
+import {
+  selectActiveDictionariesMap,
+  selectIfcDictionaryUri,
+  selectMainDictionaryUri,
+} from '../../../common/slices/settingsSlice';
 import Slicer from '../../Slicer';
 
 interface ClassificationsProps {
@@ -95,11 +99,12 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
   >(new Map());
   const activeDictionariesMap = useAppSelector(selectActiveDictionariesMap);
   const hasAssociations = useAppSelector(selectHasAssociationsMap);
-  const dictionaries = useSelector(selectBsddDictionaries);
-  const groupedClassRelations = useSelector(selectGroupedClasses);
-  const mainDictionaryClassification = useSelector(selectMainDictionaryClassification);
-  const mainDictionaryClassificationUri = useSelector(selectMainDictionaryClassificationUri);
-  const mainDictionaryUri = useSelector(selectMainDictionaryUri);
+  const dictionaries = useAppSelector(selectBsddDictionaries);
+  const groupedClassRelations = useAppSelector(selectGroupedClasses);
+  const mainDictionaryClassification = useAppSelector(selectMainDictionaryClassification);
+  const mainDictionaryClassificationUri = useAppSelector(selectMainDictionaryClassificationUri);
+  const mainDictionaryUri = useAppSelector(selectMainDictionaryUri);
+  const ifcDictionaryUri = useAppSelector(selectIfcDictionaryUri);
 
   useEffect(() => {
     const updateOptionsMap = async () => {
@@ -122,12 +127,10 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
         let options: Option[] = [];
         const classRelationGroup = groupedClassRelations[dictionaryUri];
 
-        const classRelationsUris = await mainDictionaryClassification?.classRelations?.map(
-          (relation) => relation.relatedClassUri,
-        );
+        const classRelationUris = getSlicerClassificationUris(mainDictionaryClassification, ifcDictionaryUri);
 
         const filteredGroup = classRelationGroup?.filter((classRelation) => {
-          return classRelationsUris?.includes(classRelation.uri);
+          return classRelationUris.includes(classRelation.uri);
         });
 
         if (filteredGroup && filteredGroup.length > 0) {
@@ -195,6 +198,7 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
     hasAssociations,
     mainDictionaryClassification,
     mainDictionaryUri,
+    ifcDictionaryUri,
   ]);
 
   useEffect(() => {

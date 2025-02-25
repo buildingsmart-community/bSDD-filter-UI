@@ -166,7 +166,10 @@ export async function patchIfcClassificationReference(
 
   const bsddDictionary = selectDictionary(state, newIfcClassificationReference.referencedSource.location);
   if (!bsddDictionary) {
-    return handleError('Failed to find a matching dictionary for the matched class', newIfcClassificationReference);
+    return handleError(
+      `Failed to find a matching dictionary for the matched class: ${newIfcClassificationReference?.location}`,
+      newIfcClassificationReference,
+    );
   }
 
   newIfcClassificationReference.referencedSource = convertBsddDictionaryToIfcClassification(bsddDictionary);

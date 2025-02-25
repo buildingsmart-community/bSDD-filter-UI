@@ -3,6 +3,7 @@ import { Children, useEffect, useState } from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../common/app/hooks';
 import { ClassContractV1, ClassPropertyContractV1 } from '../../../common/BsddApi/BsddApiBase';
+import { getPropertyClassificationUris } from '../../../common/BsddApi/BsddApiHelpers';
 import {
   IfcEntity,
   IfcProperty,
@@ -11,10 +12,14 @@ import {
   IfcPropertySingleValue,
   IfcValue,
 } from '../../../common/IfcData/ifc';
-import { selectPropertyNamesByLanguage } from '../../../common/slices/bsddSlice';
+import {
+  selectMainDictionaryClassification,
+  selectMainDictionaryClassificationUri,
+  selectPropertyNamesByLanguage,
+} from '../../../common/slices/bsddSlice';
 import { selectMergedIfcEntity } from '../../../common/slices/ifcDataSlice';
-import { selectIsDefinedByIncludingAttributes, setIsDefinedBy } from '../../../common/slices/ifcEntitySlice';
-import { selectIfcDictionary, selectIfcDictionaryUri, selectLanguage } from '../../../common/slices/settingsSlice';
+import { setIsDefinedBy } from '../../../common/slices/ifcEntitySlice';
+import { selectIfcDictionaryUri, selectLanguage } from '../../../common/slices/settingsSlice';
 import type { PropertySetMap } from '../../BsddSearch';
 import Property from '../Property/Property';
 
@@ -282,6 +287,8 @@ function PropertySets({ activeClassifications: activeDictionaryLocations, recurs
   const selectedMergedIfcEntity = useAppSelector(selectMergedIfcEntity);
   const propertyNamesByLanguage = useAppSelector(selectPropertyNamesByLanguage);
   const languageCode = useAppSelector(selectLanguage);
+  const mainDictionaryClassification = useAppSelector(selectMainDictionaryClassification);
+  const mainDictionaryClassificationUri = useAppSelector(selectMainDictionaryClassificationUri);
   const ifcDictionaryUri = useAppSelector(selectIfcDictionaryUri);
   const [propertyNaturalLanguageNamesMap, setPropertyNaturalLanguageNamesMap] = useState<Record<string, string>>({});
   const [mergedIfcPropertySets, setMergedIfcPropertySets] = useState<IfcPropertySet[]>([]);
@@ -291,31 +298,45 @@ function PropertySets({ activeClassifications: activeDictionaryLocations, recurs
     const newPropertySets: PropertySetMap = {};
     const propertyClassifications = activeDictionaryLocations; // recursiveMode ? classifications : classifications.slice(0, 1);
 
+    const applicableClassificationUris = getPropertyClassificationUris(mainDictionaryClassification);
+
     propertyClassifications.forEach((classification) => {
-      if (classification.dictionaryUri === ifcDictionaryUri) {
+      if (classification.dictionaryUri === ifcDictionaryUri && classification.uri !== mainDictionaryClassificationUri) {
         return; // Skip the IFC dictionary as we only add explicitly added IFC properties
       }
-      classification.classProperties?.forEach((classProperty: ClassPropertyContractV1) => {
-        if (!classProperty || !classProperty.propertySet) return;
-        const propertySetName = classProperty.propertySet || classification.name;
+      if (
+        classification.uri === mainDictionaryClassificationUri ||
+        applicableClassificationUris.includes(classification.uri)
+      ) {
+        classification.classProperties?.forEach((classProperty: ClassPropertyContractV1) => {
+          if (!classProperty || !classProperty.propertySet) return;
+          const propertySetName = classProperty.propertySet || classification.name;
 
-        if (!newPropertySets[propertySetName]) {
-          newPropertySets[propertySetName] = {
-            type: 'IfcPropertySet',
-            name: propertySetName,
-            hasProperties: [],
-          };
-        }
+          if (!newPropertySets[propertySetName]) {
+            newPropertySets[propertySetName] = {
+              type: 'IfcPropertySet',
+              name: propertySetName,
+              hasProperties: [],
+            };
+          }
 
-        newPropertySets[propertySetName].hasProperties.push(
-          GetIfcProperty(classProperty, propertySetName, selectedMergedIfcEntity),
-        );
-      });
+          newPropertySets[propertySetName].hasProperties.push(
+            GetIfcProperty(classProperty, propertySetName, selectedMergedIfcEntity),
+          );
+        });
+      }
     });
 
     dispatch(setIsDefinedBy(Object.values(newPropertySets)));
     setMergedIfcPropertySets(Object.values(newPropertySets));
-  }, [dispatch, selectedMergedIfcEntity, activeDictionaryLocations, ifcDictionaryUri]);
+  }, [
+    dispatch,
+    selectedMergedIfcEntity,
+    activeDictionaryLocations,
+    ifcDictionaryUri,
+    mainDictionaryClassification,
+    mainDictionaryClassificationUri,
+  ]);
 
   useEffect(() => {
     if (activeDictionaryLocations.length === 0) return;
