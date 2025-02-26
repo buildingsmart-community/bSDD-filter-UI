@@ -57,7 +57,7 @@ export declare const fetchDictionaries: import('@reduxjs/toolkit').AsyncThunk<{
 }, boolean | undefined, {
     rejectValue: string;
     state?: unknown;
-    dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction> | undefined;
+    dispatch?: import('redux-thunk').ThunkDispatch<unknown, unknown, import('redux').UnknownAction> | undefined;
     extra?: unknown;
     serializedErrorType?: unknown;
     pendingMeta?: unknown;
@@ -66,7 +66,7 @@ export declare const fetchDictionaries: import('@reduxjs/toolkit').AsyncThunk<{
 }>;
 export declare const fetchDictionaryClasses: import('@reduxjs/toolkit').AsyncThunk<ClassListItemContractV1Classes[], string, {
     state?: unknown;
-    dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
+    dispatch?: import('redux-thunk').ThunkDispatch<unknown, unknown, import('redux').UnknownAction>;
     extra?: unknown;
     rejectValue?: unknown;
     serializedErrorType?: unknown;
@@ -84,7 +84,7 @@ export declare const updatePropertyNaturalLanguageNames: import('@reduxjs/toolki
     languageCode: string;
 }, {
     state?: unknown;
-    dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
+    dispatch?: import('redux-thunk').ThunkDispatch<unknown, unknown, import('redux').UnknownAction>;
     extra?: unknown;
     rejectValue?: unknown;
     serializedErrorType?: unknown;
@@ -94,7 +94,7 @@ export declare const updatePropertyNaturalLanguageNames: import('@reduxjs/toolki
 }>;
 export declare const fetchClasses: import('@reduxjs/toolkit').AsyncThunk<void, string[], {
     state?: unknown;
-    dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
+    dispatch?: import('redux-thunk').ThunkDispatch<unknown, unknown, import('redux').UnknownAction>;
     extra?: unknown;
     rejectValue?: unknown;
     serializedErrorType?: unknown;
@@ -104,7 +104,7 @@ export declare const fetchClasses: import('@reduxjs/toolkit').AsyncThunk<void, s
 }>;
 export declare const searchInDictionary: import('@reduxjs/toolkit').AsyncThunk<SearchInDictionaryResponseContractV1, any, {
     state?: unknown;
-    dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
+    dispatch?: import('redux-thunk').ThunkDispatch<unknown, unknown, import('redux').UnknownAction>;
     extra?: unknown;
     rejectValue?: unknown;
     serializedErrorType?: unknown;
@@ -126,7 +126,7 @@ export declare const fetchDictionary: import('@reduxjs/toolkit').AsyncThunk<{
     dictionary: DictionaryContractV1;
 }, string, {
     state?: unknown;
-    dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
+    dispatch?: import('redux-thunk').ThunkDispatch<unknown, unknown, import('redux').UnknownAction>;
     extra?: unknown;
     rejectValue?: unknown;
     serializedErrorType?: unknown;
@@ -136,7 +136,7 @@ export declare const fetchDictionary: import('@reduxjs/toolkit').AsyncThunk<{
 }>;
 export declare const fetchClassDetails: import('@reduxjs/toolkit').AsyncThunk<ClassContractV1[], string[], {
     state?: unknown;
-    dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
+    dispatch?: import('redux-thunk').ThunkDispatch<unknown, unknown, import('redux').UnknownAction>;
     extra?: unknown;
     rejectValue?: unknown;
     serializedErrorType?: unknown;
@@ -226,7 +226,7 @@ export declare const resetState: import('@reduxjs/toolkit').ActionCreatorWithout
 }, "bsdd/addDictionaryClasses">;
 export declare const updateMainDictionaryClassificationUri: import('@reduxjs/toolkit').AsyncThunk<void, string | null, {
     state?: unknown;
-    dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
+    dispatch?: import('redux-thunk').ThunkDispatch<unknown, unknown, import('redux').UnknownAction>;
     extra?: unknown;
     rejectValue?: unknown;
     serializedErrorType?: unknown;
@@ -236,7 +236,7 @@ export declare const updateMainDictionaryClassificationUri: import('@reduxjs/too
 }>;
 export declare const updateFilterDictionaryClassificationUris: import('@reduxjs/toolkit').AsyncThunk<void, string[], {
     state?: unknown;
-    dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
+    dispatch?: import('redux-thunk').ThunkDispatch<unknown, unknown, import('redux').UnknownAction>;
     extra?: unknown;
     rejectValue?: unknown;
     serializedErrorType?: unknown;
@@ -249,4 +249,4 @@ export declare const useDictionary: (uri: string) => {
     loading: boolean;
     error: string | null;
 };
-export declare const bsddReducer: import('@reduxjs/toolkit').Reducer<BsddState>;
+export declare const bsddReducer: import('redux').Reducer<BsddState>;

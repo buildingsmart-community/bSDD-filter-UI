@@ -20,7 +20,7 @@ export declare const setLoadedIfcEntities: import('@reduxjs/toolkit').ActionCrea
  */
 export declare const setValidatedIfcData: import('@reduxjs/toolkit').AsyncThunk<void, IfcEntity[], {
     state?: unknown;
-    dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
+    dispatch?: import('redux-thunk').ThunkDispatch<unknown, unknown, import('redux').UnknownAction>;
     extra?: unknown;
     rejectValue?: unknown;
     serializedErrorType?: unknown;
@@ -38,7 +38,7 @@ export declare const setValidatedIfcData: import('@reduxjs/toolkit').AsyncThunk<
  */
 export declare const setValidatedSelectedIfcEntities: import('@reduxjs/toolkit').AsyncThunk<void, IfcEntity[], {
     state?: unknown;
-    dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
+    dispatch?: import('redux-thunk').ThunkDispatch<unknown, unknown, import('redux').UnknownAction>;
     extra?: unknown;
     rejectValue?: unknown;
     serializedErrorType?: unknown;
@@ -78,4 +78,4 @@ export declare const selectMergedIfcEntity: ((state: {
 export declare const selectLoadedIfcEntities: (state: RootState) => IfcEntity[];
 export declare const selectSelectedIfcEntities: (state: RootState) => IfcEntity[];
 export declare const selectPropertyIsInstanceMap: (state: RootState) => Record<string, boolean>;
-export declare const ifcDataReducer: import('@reduxjs/toolkit').Reducer<IfcDataState>;
+export declare const ifcDataReducer: import('redux').Reducer<IfcDataState>;

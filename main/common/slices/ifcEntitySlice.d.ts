@@ -128,4 +128,4 @@ export declare const selectHasAssociationsMap: ((state: {
     argsMemoize: typeof import('reselect').weakMapMemoize;
 };
 export declare const setIfcEntity: import('@reduxjs/toolkit').ActionCreatorWithPayload<IfcEntity, "ifcEntity/setIfcEntity">, setName: import('@reduxjs/toolkit').ActionCreatorWithPayload<string, "ifcEntity/setName">, setDescription: import('@reduxjs/toolkit').ActionCreatorWithPayload<string, "ifcEntity/setDescription">, setObjectType: import('@reduxjs/toolkit').ActionCreatorWithPayload<string, "ifcEntity/setObjectType">, setTag: import('@reduxjs/toolkit').ActionCreatorWithPayload<string, "ifcEntity/setTag">, setPredefinedType: import('@reduxjs/toolkit').ActionCreatorWithPayload<string, "ifcEntity/setPredefinedType">, setIsDefinedBy: import('@reduxjs/toolkit').ActionCreatorWithPayload<IfcPropertySet[], "ifcEntity/setIsDefinedBy">, setHasAssociations: import('@reduxjs/toolkit').ActionCreatorWithPayload<Association[], "ifcEntity/setHasAssociations">;
-export declare const ifcEntityReducer: import('@reduxjs/toolkit').Reducer<EntityState>;
+export declare const ifcEntityReducer: import('redux').Reducer<EntityState>;

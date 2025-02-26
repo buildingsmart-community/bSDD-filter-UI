@@ -201,7 +201,7 @@ export declare const setSettingsWithValidation: import('@reduxjs/toolkit').Async
     includeTestDictionaries: boolean | undefined;
 }, BsddSettings, {
     state?: unknown;
-    dispatch?: import('@reduxjs/toolkit').ThunkDispatch<unknown, unknown, import('@reduxjs/toolkit').UnknownAction>;
+    dispatch?: import('redux-thunk').ThunkDispatch<unknown, unknown, import('redux').UnknownAction>;
     extra?: unknown;
     rejectValue?: unknown;
     serializedErrorType?: unknown;
@@ -209,4 +209,4 @@ export declare const setSettingsWithValidation: import('@reduxjs/toolkit').Async
     fulfilledMeta?: unknown;
     rejectedMeta?: unknown;
 }>;
-export declare const settingsReducer: import('@reduxjs/toolkit').Reducer<BsddSettings>;
+export declare const settingsReducer: import('redux').Reducer<BsddSettings>;
