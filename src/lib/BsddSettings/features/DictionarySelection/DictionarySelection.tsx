@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useAppSelector } from '../../../common/app/hooks';
 import { DictionaryContractV1 } from '../../../common/BsddApi/BsddApiBase';
+import { DraggableMultiSelect } from '../../../common/components/DraggableMultiSelect/DraggableMultiSelect';
 import { BsddDictionary, BsddSettings } from '../../../common/IfcData/bsddBridgeData';
 import { convertBsddDictionaryToIfcClassification } from '../../../common/IfcData/ifcBsddConverters';
 import { selectBsddDictionaries } from '../../../common/slices/bsddSlice';
@@ -41,7 +42,7 @@ function findDictionaryByUri(dictionaries: DictionaryContractV1[], uri: string |
  * @returns {BsddDictionary | null} The converted BsddDictionary object or null if the dictionary is null.
  */
 function convertToBsddDictionary(
-  dictionary: DictionaryContractV1 | null,
+  dictionary: DictionaryContractV1 | null | undefined,
   previousSelections: BsddDictionary[],
   parameterMapping = '',
 ): BsddDictionary | null {
@@ -176,8 +177,8 @@ function DictionarySelection({
 
   const changeFilterDictionaries = useCallback(
     (selectedFilterDictionaryUris: string[]) => {
-      const newFilterDictionaries: BsddDictionary[] = Object.values(bsddDictionaries)
-        .filter((item) => selectedFilterDictionaryUris.includes(item.uri))
+      const newFilterDictionaries: BsddDictionary[] = selectedFilterDictionaryUris
+        .map((uri) => findDictionaryByUri(Object.values(bsddDictionaries), uri))
         .map((item) => convertToBsddDictionary(item, localSettings?.filterDictionaries || []))
         .filter(
           (item) =>
@@ -192,12 +193,13 @@ function DictionarySelection({
       const newMainDictionary = getNewDictionary(localMainDictionaryValues, localSettings?.mainDictionary);
       const newIfcDictionary = getNewDictionary(localIfcDictionaryValues, localSettings?.ifcDictionary);
 
-      setLocalSettings({
+      const newLocalSettings = {
         ...localSettings,
-        mainDictionary: newMainDictionary || null,
-        ifcDictionary: newIfcDictionary || null,
+        mainDictionary: newMainDictionary,
+        ifcDictionary: newIfcDictionary,
         filterDictionaries: newFilterDictionaries,
-      } as BsddSettings);
+      } as BsddSettings;
+      setLocalSettings(newLocalSettings);
       setUnsavedChanges(true);
     },
     [
@@ -249,7 +251,7 @@ function DictionarySelection({
           clearable
         />
         <Space h="xs" />
-        <MultiSelect
+        <DraggableMultiSelect
           key="filterDictionaries-select"
           id="filterDictionaries"
           label={t('selectFilterDictionaries')}

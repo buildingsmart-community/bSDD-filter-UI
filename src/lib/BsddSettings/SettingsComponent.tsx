@@ -7,7 +7,6 @@ import { BsddSettings } from '../common/IfcData/bsddBridgeData';
 import { setSettingsWithValidation } from '../common/slices/settingsSlice';
 import AppInfo from './features/AppInfo/AppInfo';
 import DictionarySelection from './features/DictionarySelection/DictionarySelection';
-import DomainSort from './features/DictionarySort/DictionarySort';
 import GeneralSettings from './features/GeneralSettings/GeneralSettings';
 import ParameterMapping from './features/ParameterMapping/ParameterMapping';
 
@@ -68,12 +67,6 @@ function Settings({ activeTab }: SettingsProps) {
         />
         <ParameterMapping
           id={3}
-          localSettings={localSettings}
-          setLocalSettings={setLocalSettings}
-          setUnsavedChanges={setUnsavedChanges}
-        />
-        <DomainSort
-          id={4}
           localSettings={localSettings}
           setLocalSettings={setLocalSettings}
           setUnsavedChanges={setUnsavedChanges}
