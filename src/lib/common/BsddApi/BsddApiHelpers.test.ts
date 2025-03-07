@@ -43,7 +43,7 @@ describe('BsddApiHelpers', () => {
 
   describe('getSlicerClassificationUris', () => {
     it('should return an empty array if dictionaryClassification is null', () => {
-      const result = getSlicerClassificationUris(null, undefined);
+      const result = getSlicerClassificationUris(null, null);
       expect(result).toEqual([]);
     });
 

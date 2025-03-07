@@ -138,7 +138,7 @@ function groupEntitiesBy(
   ifcEntities: IfcEntity[],
   property: keyof IfcEntity,
   activeDictionaries: BsddDictionary[],
-  ifcDictionaryUri?: string,
+  ifcDictionaryUri?: string | null,
 ): { groupedEntities: GroupRowEntity[]; entityIndexMap: Record<string, number> } {
   const entityIndexMap: Record<string, number> = {};
   const groupIndexMap: Record<string, number> = {};

@@ -33,7 +33,7 @@ export function getPropertyClassificationUris(dictionaryClassification: ClassCon
  */
 export function getSlicerClassificationUris(
   dictionaryClassification: ClassContractV1 | null,
-  ifcDictionaryUri: string | undefined,
+  ifcDictionaryUri: string | null | undefined,
 ): string[] {
   if (!dictionaryClassification) return [];
 

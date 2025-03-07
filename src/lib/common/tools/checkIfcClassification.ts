@@ -45,7 +45,7 @@ function constructIfcEntityIdentifier(ifcDictionaryUri: string, ifcEntity: IfcEn
 export function getClassUrisFromDictionaries(
   ifcEntity: IfcEntity,
   bsddDictionaries: BsddDictionary[],
-  ifcDictionaryUri?: string,
+  ifcDictionaryUri?: string | null,
 ): Record<string, ClassificationStatus> {
   const associations = ifcEntity.hasAssociations || [];
   const result: Record<string, ClassificationStatus> = {};

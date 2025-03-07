@@ -17,13 +17,12 @@ import { headers } from '../BsddApi/BsddApiWrapper';
 
 const CLASS_ITEM_PAGE_SIZE = 1000;
 const DICTIONARIES_PAGE_SIZE = 1000;
-const DEFAULT_IFC_DICTIONARY_URI = 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3';
 
 export interface BsddState {
   mainDictionaryClassification: ClassContractV1 | null;
   mainDictionaryClassificationUri: string | null;
   ifcDictionaryClassification: ClassContractV1 | null;
-  ifcDictionaryClassificationUri: string;
+  ifcDictionaryClassificationUri: string | null;
   filterDictionaryClassifications: ClassContractV1[];
   filterDictionaryClassificationUris: string[];
   classes: { [key: string]: ClassContractV1 };
@@ -48,7 +47,7 @@ const initialState: BsddState = {
   mainDictionaryClassification: null,
   mainDictionaryClassificationUri: null,
   ifcDictionaryClassification: null,
-  ifcDictionaryClassificationUri: DEFAULT_IFC_DICTIONARY_URI,
+  ifcDictionaryClassificationUri: null,
   filterDictionaryClassifications: [],
   filterDictionaryClassificationUris: [],
   classes: {},
