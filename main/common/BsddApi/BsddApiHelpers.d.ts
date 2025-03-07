@@ -14,4 +14,4 @@ export declare function getPropertyClassificationUris(dictionaryClassification: 
  * @param {string | undefined} ifcDictionaryUri - The URI of the IFC dictionary.
  * @returns {string[]} An array of URIs representing the applicable slicer classifications.
  */
-export declare function getSlicerClassificationUris(dictionaryClassification: ClassContractV1 | null, ifcDictionaryUri: string | undefined): string[];
+export declare function getSlicerClassificationUris(dictionaryClassification: ClassContractV1 | null, ifcDictionaryUri: string | null | undefined): string[];

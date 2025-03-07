@@ -4,7 +4,7 @@ export interface BsddState {
     mainDictionaryClassification: ClassContractV1 | null;
     mainDictionaryClassificationUri: string | null;
     ifcDictionaryClassification: ClassContractV1 | null;
-    ifcDictionaryClassificationUri: string;
+    ifcDictionaryClassificationUri: string | null;
     filterDictionaryClassifications: ClassContractV1[];
     filterDictionaryClassificationUris: string[];
     classes: {
@@ -147,7 +147,7 @@ export declare const fetchClassDetails: import('@reduxjs/toolkit').AsyncThunk<Cl
 export declare const selectMainDictionaryClassification: (state: RootState) => ClassContractV1 | null;
 export declare const selectMainDictionaryClassificationUri: (state: RootState) => string | null;
 export declare const selectIfcDictionaryClassification: (state: RootState) => ClassContractV1 | null;
-export declare const selectIfcDictionaryClassificationUri: (state: RootState) => string;
+export declare const selectIfcDictionaryClassificationUri: (state: RootState) => string | null;
 export declare const selectFilterDictionaryClassifications: (state: RootState) => ClassContractV1[];
 export declare const selectFilterDictionaryClassificationUris: (state: RootState) => string[];
 export declare const selectDictionary: (state: RootState, uri: string) => DictionaryContractV1;
