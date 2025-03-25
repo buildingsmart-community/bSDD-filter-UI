@@ -2,7 +2,7 @@ import { Container, Paper, Space, Tabs } from '@mantine/core';
 import { t } from 'i18next';
 
 import BsddSelection from './lib/BsddSelection';
-import IdsImporter from './lib/IdsImporter';
+import IdsImporter from './lib/IdsSelection';
 import Settings from './lib/BsddSettings/SettingsComponent';
 import { ApiFunctionsProvider } from './lib/common/apiFunctionsContext';
 import useCefSharpBridge from './lib/common/bsddBridge/useCefSharpBridge';
