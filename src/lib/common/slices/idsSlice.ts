@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IdsClass } from '../../IdsSelection/types/types';
 
 export interface IdsState {
-  idsFile: File | null;
+  idsFile: IdsClass | null;
 }
 
 const initialState : IdsState = {
@@ -12,14 +13,14 @@ const idsSlice = createSlice({
   name: 'ids',
   initialState,
   reducers: {
-    setFile(state, action: PayloadAction<File | null>) {
+    setIds(state, action: PayloadAction<IdsClass | null>) {
       state.idsFile = action.payload;
     },
-    clearFile(state) {
+    clearIds(state) {
       state.idsFile = null;
     },
   },
 });
 
-export const { setFile, clearFile } = idsSlice.actions;
+export const { setIds: setIds, clearIds: clearIds } = idsSlice.actions;
 export const idsReducer = idsSlice.reducer;
