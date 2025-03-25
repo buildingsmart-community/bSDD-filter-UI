@@ -1,6 +1,7 @@
 // store.ts
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
 
+import { idsReducer } from '../slices/idsSlice';
 import { bsddReducer } from '../slices/bsddSlice';
 import { ifcDataReducer } from '../slices/ifcDataSlice';
 import { ifcEntityReducer } from '../slices/ifcEntitySlice';
@@ -11,6 +12,7 @@ export const store = configureStore({
     settings: settingsReducer,
     ifcData: ifcDataReducer,
     bsdd: bsddReducer,
+    ids: idsReducer,
     ifcEntity: ifcEntityReducer,
   },
 });
