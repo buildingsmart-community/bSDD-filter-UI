@@ -1,9 +1,9 @@
 import { FileInput } from '@mantine/core';
+import { X2jOptions, XMLParser } from "fast-xml-parser";
+import { useState } from 'react';
 import { useAppDispatch } from '../../../common/app/hooks';
 import { setIds, clearIds } from '../../../common/slices/idsSlice';
-import { useState } from 'react';
-import { X2jOptions, XMLParser } from "fast-xml-parser";
-import { IdsClass } from "../../types/types";
+import type { IdsClass } from "../../types/types";
 
 function Importer() {
   const dispatch = useAppDispatch();
