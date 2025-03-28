@@ -19,6 +19,7 @@ import { mockData } from '../../../mocks/mockData';
 import { bsddReducer } from './bsddSlice';
 import { ifcDataReducer } from './ifcDataSlice';
 import { ifcEntityReducer } from './ifcEntitySlice';
+import { idsReducer } from './idsSlice';
 
 const initialState: BsddSettings = {
   mainDictionary: null,
@@ -33,6 +34,7 @@ const store = configureStore({
     settings: settingsReducer,
     ifcData: ifcDataReducer,
     bsdd: bsddReducer,
+    ids: idsReducer,
     ifcEntity: ifcEntityReducer,
   },
 });

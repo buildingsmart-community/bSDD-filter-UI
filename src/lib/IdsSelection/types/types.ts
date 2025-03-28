@@ -18,6 +18,8 @@ export interface IdsEntityClass {
 }
 
 export interface IdsApplicabilityClass {
+  _minOccurs: string;
+  _maxOccurs: string;
   entity: IdsEntityClass;
 }
 
@@ -26,6 +28,8 @@ export interface IdsEnumerationClass {
 }
 
 export interface IdsPropertyClass {
+  _instructions: string;
+  _dataType: string;
   propertySet: IdsSimpleValue;
   baseName: IdsSimpleValue;
   value?: {
@@ -36,6 +40,8 @@ export interface IdsPropertyClass {
 }
 
 export interface IdsSpecificationClass {
+  _name: string;
+  _description: string;
   applicability: IdsApplicabilityClass;
   requirements: {
     property: IdsPropertyClass[];
