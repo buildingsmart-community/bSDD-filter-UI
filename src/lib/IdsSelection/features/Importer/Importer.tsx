@@ -30,13 +30,22 @@ function Importer() {
     
     reader.onload = () => {
       if (typeof reader.result === 'string') {
-        const ids = parser.parse(reader.result) as IdsClass;
-        dispatch(setIds(ids));
+        try{
+          const ids = parser.parse(reader.result) as IdsClass;
+          dispatch(setIds(ids));
+        }
+        catch(e){
+          var errorMessage = 'Parsing failed for file';
+          setErrorMessage(errorMessage);
+          console.error(errorMessage + ':', e);
+        }
       }
     };
   
     reader.onerror = (error) => {
-      console.error('Error reading file:', error);
+      var errorMessage = 'Error reading file';
+      setErrorMessage(errorMessage);
+      console.error(errorMessage + ':', error);
     };
   
     reader.readAsText(file, 'UTF-8');

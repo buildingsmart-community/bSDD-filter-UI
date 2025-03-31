@@ -56,3 +56,8 @@ export interface IdsClass {
     };
   }
 }
+
+export interface IdsNotification {
+  message: string;
+  properties: string[] | undefined;
+}
