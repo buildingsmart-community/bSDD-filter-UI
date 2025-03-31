@@ -1,5 +1,7 @@
+import { Alert } from '@mantine/core';
 import { ThunkDispatch, UnknownAction } from '@reduxjs/toolkit';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAppSelector, useAppDispatch } from '../common/app/hooks';
 import {
   selectMainDictionary,
@@ -43,6 +45,7 @@ const fetchBsddClasses = async (
 };
 
 function IdsComponent() {
+  const { t } = useTranslation();
   const ids = useAppSelector((state) => state.ids.idsFile);
   const state = useAppSelector((state) => state);
   const mainDictionary = useAppSelector(selectMainDictionary);
@@ -64,6 +67,11 @@ function IdsComponent() {
     <Importer/>
       {ids && mainDictionary && (
         <Validator />
+      )}
+      {!mainDictionary && (
+        <Alert mx="md" mt="xl">
+          {t('idsNoBsddDomainSelected', "Nog geen bSDD domein geselecteerd")}
+        </Alert>
       )}
     </div>
   );
