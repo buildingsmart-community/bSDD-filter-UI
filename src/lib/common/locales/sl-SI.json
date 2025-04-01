@@ -56,6 +56,24 @@
         "tooltipEditInstance": "Urejanje primerkov lastnosti za vrste ni mogoče",
         "setAsInstanceCheckboxTooltip": "Nastavi kot primer lastnosti"
       }
+    },
+    "idsComponent": {
+      "noBsddDomainSelected": "Ni izbran bSDD domen",
+      "importer": {
+        "importFile": "Uvozi datoteko",
+        "parsingFailed": "Analiza datoteke ni uspela",
+        "readingFileFailed": "Napaka pri branju datoteke",
+        "invalidFileType": "Izbran neveljaven tip datoteke. Datoteka mora imeti končnico '.ids'."
+      },
+      "validator": {
+        "dataTypeMismatch": "bSDD tip podatkov ne ustreza IDS",
+        "dataTypeMismatchForProperties": "Tip podatkov se ne ujema za lastnosti",
+        "couldNotFindSpecification": "Ni mogoče najti definirane IDS specifikacije v bSDD za",
+        "missingBsddProperty": "bSDD manjka lastnost, definirana v IDS",
+        "couldNotFindProperty": "Ni mogoče najti definirane IDS lastnosti v bSDD za",
+        "bsddMissingProperties": "bSDD manjka lastnosti, definirane v IDS",
+        "matchFound": "Najdena ujemajoča se IDS specifikacija z bSDD za"
+      }
     }
   }
 }

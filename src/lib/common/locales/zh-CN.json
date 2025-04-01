@@ -55,6 +55,24 @@
         "tooltipEditInstance": "无法编辑类型的实例属性",
         "setAsInstanceCheckboxTooltip": "设置为实例属性"
       }
+    },
+    "idsComponent": {
+      "noBsddDomainSelected": "未选择bSDD域",
+      "importer": {
+        "importFile": "导入文件",
+        "parsingFailed": "文件解析失败",
+        "readingFileFailed": "读取文件错误",
+        "invalidFileType": "选择了无效的文件类型。文件必须具有“.ids”扩展名。"
+      },
+      "validator": {
+        "dataTypeMismatch": "bSDD数据类型与IDS不匹配",
+        "dataTypeMismatchForProperties": "属性的数据类型不匹配",
+        "couldNotFindSpecification": "在bSDD中未找到定义的IDS规范",
+        "missingBsddProperty": "bSDD缺少在IDS中定义的属性",
+        "couldNotFindProperty": "在bSDD中未找到定义的IDS属性",
+        "bsddMissingProperties": "bSDD缺少在IDS中定义的属性",
+        "matchFound": "找到与bSDD匹配的IDS规范"
+      }
     }
   }
 }

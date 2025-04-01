@@ -56,6 +56,24 @@
         "tooltipEditInstance": "Das Bearbeiten von Instanzeigenschaften für Typen ist nicht möglich",
         "setAsInstanceCheckboxTooltip": "Als Instanzeigenschaft festlegen"
       }
+    },
+    "idsComponent": {
+    "noBsddDomainSelected": "Kein bSDD-Domain ausgewählt",
+      "importer": {
+        "importFile": "Datei importieren",
+        "parsingFailed": "Parsing der Datei fehlgeschlagen",
+        "readingFileFailed": "Fehler beim Lesen der Datei",
+        "invalidFileType": "Ungültiger Dateityp ausgewählt. Die Datei muss die Endung '.ids' haben."
+      },
+      "validator": {
+        "dataTypeMismatch": "bSDD-Datentyp stimmt nicht mit IDS überein",
+        "dataTypeMismatchForProperties": "Datentyp stimmt nicht für Eigenschaften überein",
+        "couldNotFindSpecification": "Definierte IDS-Spezifikation in bSDD nicht gefunden für",
+        "missingBsddProperty": "bSDD fehlt die in IDS definierte Eigenschaft",
+        "couldNotFindProperty": "Definierte IDS-Eigenschaft in bSDD nicht gefunden für",
+        "bsddMissingProperties": "bSDD fehlen die in IDS definierten Eigenschaften",
+        "matchFound": "IDS-Spezifikation mit bSDD abgeglichen für"
+      }
     }
   }
 }

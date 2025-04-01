@@ -56,6 +56,24 @@
         "tooltipEditInstance": "لا يمكن تحرير خصائص النسخة للأنواع",
         "setAsInstanceCheckboxTooltip": "تعيين كخاصية النسخة"
       }
+    },
+    "idsComponent": {
+      "noBsddDomainSelected": "لم يتم تحديد نطاق bSDD",
+      "importer": {
+        "importFile": "استيراد الملف",
+        "parsingFailed": "فشل تحليل الملف",
+        "readingFileFailed": "خطأ في قراءة الملف",
+        "invalidFileType": "نوع ملف غير صالح. يجب أن يكون للملف الامتداد '.ids'."
+      },
+      "validator": {
+        "dataTypeMismatch": "عدم تطابق نوع البيانات في bSDD مقارنة بـ IDS",
+        "dataTypeMismatchForProperties": "عدم تطابق نوع البيانات للخصائص",
+        "couldNotFindSpecification": "تعذر العثور على مواصفة IDS المحددة في bSDD لـ",
+        "missingBsddProperty": "bSDD يفتقد الخاصية المحددة في IDS",
+        "couldNotFindProperty": "تعذر العثور على خاصية IDS المحددة في bSDD لـ",
+        "bsddMissingProperties": "bSDD يفتقد الخصائص المحددة في IDS",
+        "matchFound": "تمت مطابقة مواصفة IDS مع bSDD لـ"
+      }
     }
   }
 }

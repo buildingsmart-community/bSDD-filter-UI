@@ -56,6 +56,24 @@
         "tooltipEditInstance": "Uređivanje instanci svojstava za tipove nije moguće",
         "setAsInstanceCheckboxTooltip": "Postavi kao instancu svojstva"
       }
+    },
+    "idsComponent": {
+      "noBsddDomainSelected": "Nema odabranog bSDD domena",
+      "importer": {
+        "importFile": "Uvezi fajl",
+        "parsingFailed": "Neuspešno parsiranje fajla",
+        "readingFileFailed": "Greška pri čitanju fajla",
+        "invalidFileType": "Izabran nevažeći tip fajla. Fajl treba da ima '.ids' ekstenziju."
+      },
+      "validator": {
+        "dataTypeMismatch": "bSDD tip podataka se ne poklapa sa IDS",
+        "dataTypeMismatchForProperties": "Tip podataka se ne poklapa za osobine",
+        "couldNotFindSpecification": "Nije moguće pronaći definisanu IDS specifikaciju u bSDD za",
+        "missingBsddProperty": "bSDD nedostaje svojstvo definisano u IDS",
+        "couldNotFindProperty": "Nije moguće pronaći definisanu IDS osobinu u bSDD za",
+        "bsddMissingProperties": "bSDD nedostaju osobine definisane u IDS",
+        "matchFound": "Pronađena je odgovarajuća IDS specifikacija sa bSDD za"
+      }
     }
   }
 }

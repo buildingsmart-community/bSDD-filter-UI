@@ -56,6 +56,24 @@
         "tooltipEditInstance": "Redigering av instansattribut för typer är inte möjligt",
         "setAsInstanceCheckboxTooltip": "Ange som instansattribut"
       }
+    },
+    "idsComponent": {
+      "noBsddDomainSelected": "Ingen bSDD-domän vald",
+      "importer": {
+        "importFile": "Importera fil",
+        "parsingFailed": "Felkod vid parsing av fil",
+        "readingFileFailed": "Fel vid läsning av fil",
+        "invalidFileType": "Ogiltig filtyp vald. Filen måste ha '.ids' som filändelse."
+      },
+      "validator": {
+        "dataTypeMismatch": "bSDD datatyp stämmer inte överens med IDS",
+        "dataTypeMismatchForProperties": "Datatyp stämmer inte överens för egenskaper",
+        "couldNotFindSpecification": "Det gick inte att hitta definierad IDS-specifikation i bSDD för",
+        "missingBsddProperty": "bSDD saknar den egenskap som är definierad i IDS",
+        "couldNotFindProperty": "Det gick inte att hitta definierad IDS-egenskap i bSDD för",
+        "bsddMissingProperties": "bSDD saknar egenskaper definierade i IDS",
+        "matchFound": "Matchande IDS-specifikation hittad med bSDD för"
+      }
     }
   }
 }

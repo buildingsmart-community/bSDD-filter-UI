@@ -56,6 +56,24 @@
         "tooltipEditInstance": "No es posible editar propiedades de instancia para tipos",
         "setAsInstanceCheckboxTooltip": "Establecer como propiedad de instancia"
       }
+    },
+    "idsComponent": {
+      "noBsddDomainSelected": "No se ha seleccionado un dominio bSDD",
+      "importer": {
+        "importFile": "Importar archivo",
+        "parsingFailed": "Error al analizar el archivo",
+        "readingFileFailed": "Error al leer el archivo",
+        "invalidFileType": "Tipo de archivo no válido. El archivo debe tener la extensión '.ids'."
+      },
+      "validator": {
+        "dataTypeMismatch": "El tipo de datos de bSDD no coincide con IDS",
+        "dataTypeMismatchForProperties": "El tipo de datos no coincide para las propiedades",
+        "couldNotFindSpecification": "No se pudo encontrar la especificación IDS definida en bSDD para",
+        "missingBsddProperty": "Falta la propiedad definida en IDS en bSDD",
+        "couldNotFindProperty": "No se pudo encontrar la propiedad IDS definida en bSDD para",
+        "bsddMissingProperties": "Faltan las propiedades definidas en IDS en bSDD",
+        "matchFound": "Se ha encontrado una coincidencia entre la especificación IDS y bSDD para"
+      }
     }
   }
 }

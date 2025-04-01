@@ -56,6 +56,24 @@
         "tooltipEditInstance": "Het bewerken van instantie eigenschappen voor typen is niet mogelijk",
         "setAsInstanceCheckboxTooltip": "Instellen als instantie eigenschap"
       }
+    },
+    "idsComponent": {
+      "noBsddDomainSelected": "Geen bSDD-domein geselecteerd",
+      "importer": {
+        "importFile": "Bestand importeren",
+        "parsingFailed": "Parsing mislukt voor bestand",
+        "readingFileFailed": "Fout bij het lezen van bestand",
+        "invalidFileType": "Ongeldig bestandstype geselecteerd. Bestand moet de extensie '.ids' hebben."
+      },
+      "validator": {
+        "dataTypeMismatch": "bSDD dataType komt niet overeen met IDS",
+        "dataTypeMismatchForProperties": "DataType komt niet overeen voor eigenschappen",
+        "couldNotFindSpecification": "Kan de gedefinieerde IDS-specificatie niet vinden in bSDD voor",
+        "missingBsddProperty": "bSDD mist de eigenschap die in de IDS is gedefinieerd",
+        "couldNotFindProperty": "Kan de gedefinieerde IDS-eigenschap niet vinden in bSDD voor",
+        "bsddMissingProperties": "bSDD mist de eigenschappen die in de IDS zijn gedefinieerd",
+        "matchFound": "IDS-specificatie gekoppeld aan bSDD voor"
+      }
     }
   }
 }

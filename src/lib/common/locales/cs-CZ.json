@@ -56,6 +56,24 @@
         "tooltipEditInstance": "Úprava instančních vlastností pro typy není možná",
         "setAsInstanceCheckboxTooltip": "Nastavit jako instanční vlastnost"
       }
+    },
+    "idsComponent": {
+      "noBsddDomainSelected": "Nebyla vybrána žádná doména bSDD",
+      "importer": {
+        "importFile": "Importovat soubor",
+        "parsingFailed": "Selhalo zpracování souboru",
+        "readingFileFailed": "Chyba při čtení souboru",
+        "invalidFileType": "Neplatný typ souboru. Soubor by měl mít příponu '.ids'."
+      },
+      "validator": {
+        "dataTypeMismatch": "Neshoda datového typu bSDD ve srovnání s IDS",
+        "dataTypeMismatchForProperties": "Neshoda datového typu pro vlastnosti",
+        "couldNotFindSpecification": "Nelze najít definovanou specifikaci IDS v bSDD pro",
+        "missingBsddProperty": "bSDD postrádá vlastnost definovanou v IDS",
+        "couldNotFindProperty": "Nelze najít definovanou vlastnost IDS v bSDD pro",
+        "bsddMissingProperties": "bSDD postrádá vlastnosti definované v IDS",
+        "matchFound": "IDS specifikace byla spárována s bSDD pro"
+      }
     }
   }
 }

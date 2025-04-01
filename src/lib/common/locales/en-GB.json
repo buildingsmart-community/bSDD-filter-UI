@@ -56,6 +56,24 @@
         "inputTooltipEditInstance": "Editing instance properties for types is not possible",
         "setAsInstanceCheckboxTooltip": "Set as instance property"
       }
+    },
+    "idsComponent": {
+      "noBsddDomainSelected": "No bSDD domain selected",
+      "importer": {
+        "importFile": "Import file",
+        "parsingFailed": "Parsing failed for file",
+        "readingFileFailed": "Error reading file",
+        "invalidFileType": "Invalid filetype selected. File should have the '.ids' extension."
+      },
+      "validator": {
+        "dataTypeMismatch": "bSDD dataType mismatch compared to IDS",
+        "dataTypeMismatchForProperties": "DataType mismatch for properties",
+        "couldNotFindSpecification": "Could not find defined IDS specification in bSDD for",
+        "missingBsddProperty": "bSDD is missing the property defined in the IDS",
+        "couldNotFindProperty": "Could not find defined IDS propertyn in bSDD for",
+        "bsddMissingProperties": "bSDD is missing the properties defined in the IDS",
+        "matchFound": "Matched IDS specification with bSDD for"
+      }
     }
   }
 }

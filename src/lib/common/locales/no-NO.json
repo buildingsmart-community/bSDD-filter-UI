@@ -56,6 +56,24 @@
         "tooltipEditInstance": "Redigering av instansegenskaper for typer er ikke mulig",
         "setAsInstanceCheckboxTooltip": "Sett som instansegenskap"
       }
+    },
+    "idsComponent": {
+      "noBsddDomainSelected": "Ingen bSDD-domene valgt",
+      "importer": {
+        "importFile": "Importer fil",
+        "parsingFailed": "Parsing av filen mislyktes",
+        "readingFileFailed": "Feil ved lesing av fil",
+        "invalidFileType": "Ugyldig filtype valgt. Filen må ha '.ids'-utvidelsen."
+      },
+      "validator": {
+        "dataTypeMismatch": "bSDD datatyper samsvarer ikke med IDS",
+        "dataTypeMismatchForProperties": "Datatypene samsvarer ikke for egenskaper",
+        "couldNotFindSpecification": "Fant ikke definert IDS-spesifikasjon i bSDD for",
+        "missingBsddProperty": "bSDD mangler egenskap definert i IDS",
+        "couldNotFindProperty": "Fant ikke definert IDS-egenskap i bSDD for",
+        "bsddMissingProperties": "bSDD mangler egenskaper definert i IDS",
+        "matchFound": "Fant matchende IDS-spesifikasjon med bSDD for"
+      }
     }
   }
 }

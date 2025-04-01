@@ -1,11 +1,13 @@
 import { FileInput } from '@mantine/core';
 import { X2jOptions, XMLParser } from "fast-xml-parser";
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../../common/app/hooks';
 import { setIds, clearIds } from '../../../common/slices/idsSlice';
 import type { IdsClass } from "../../types/types";
 
 function Importer() {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const [errorMessage, setErrorMessage] = useState<string | null>();
@@ -35,7 +37,7 @@ function Importer() {
           dispatch(setIds(ids));
         }
         catch(e){
-          var errorMessage = 'Parsing failed for file';
+          var errorMessage = t('idsComponent.importer.parsingFailed');
           setErrorMessage(errorMessage);
           console.error(errorMessage + ':', e);
         }
@@ -43,7 +45,7 @@ function Importer() {
     };
   
     reader.onerror = (error) => {
-      var errorMessage = 'Error reading file';
+      var errorMessage = t('idsComponent.importer.readingFileFailed');
       setErrorMessage(errorMessage);
       console.error(errorMessage + ':', error);
     };
@@ -60,7 +62,8 @@ function Importer() {
         readFileContents(selectedFile);
       }
       else{
-        setErrorMessage("Invalid file selected. File should have '.ids' extension.");
+        var errorMessage = t('idsComponent.importer.invalidFileType');
+        setErrorMessage(errorMessage);
         dispatch(clearIds());
         setFile(null);
       }
@@ -77,7 +80,7 @@ function Importer() {
         clearable
         onChange={handleFileChange}
         value={file}
-        placeholder="Importeer bestand"
+        placeholder={t('idsComponent.importer.importFile')}
         accept=".ids"
         error={errorMessage}
       />

@@ -56,6 +56,24 @@
         "tooltipEditInstance": "Negalima redaguoti tipo egzemplioriaus savybių",
         "setAsInstanceCheckboxTooltip": "Nustatyti kaip tipo egzemplioriaus savybę"
       }
+    },
+    "idsComponent": {
+      "noBsddDomainSelected": "Nėra pasirinktas bSDD domenas",
+      "importer": {
+        "importFile": "Importuoti failą",
+        "parsingFailed": "Nepavyko apdoroti failo",
+        "readingFileFailed": "Klaida skaitant failą",
+        "invalidFileType": "Pasirinktas neteisingas failo tipas. Failas turi turėti '.ids' plėtinį."
+      },
+      "validator": {
+        "dataTypeMismatch": "bSDD duomenų tipas nesutampa su IDS",
+        "dataTypeMismatchForProperties": "Duomenų tipas nesutampa savybėms",
+        "couldNotFindSpecification": "Nepavyko rasti apibrėžtos IDS specifikacijos bSDD",
+        "missingBsddProperty": "bSDD trūksta savybės, apibrėžtos IDS",
+        "couldNotFindProperty": "Nepavyko rasti apibrėžtos IDS savybės bSDD",
+        "bsddMissingProperties": "bSDD trūksta savybių, apibrėžtų IDS",
+        "matchFound": "Rasta atitikmenų IDS specifikacijai su bSDD"
+      }
     }
   }
 }
