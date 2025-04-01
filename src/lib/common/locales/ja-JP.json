@@ -56,6 +56,24 @@
         "tooltipEditInstance": "タイプのインスタンスプロパティを編集することはできません",
         "setAsInstanceCheckboxTooltip": "インスタンスプロパティとして設定"
       }
+    },
+    "idsComponent": {
+      "noBsddDomainSelected": "bSDDドメインが選択されていません",
+      "importer": {
+        "importFile": "ファイルをインポート",
+        "parsingFailed": "ファイルの解析に失敗しました",
+        "readingFileFailed": "ファイルの読み取りエラー",
+        "invalidFileType": "無効なファイルタイプが選択されました。ファイルは「.ids」拡張子を持つ必要があります。"
+      },
+      "validator": {
+        "dataTypeMismatch": "bSDDのデータ型がIDSと一致しません",
+        "dataTypeMismatchForProperties": "プロパティのデータ型が一致しません",
+        "couldNotFindSpecification": "bSDDで定義されたIDS仕様が見つかりません",
+        "missingBsddProperty": "bSDDにIDSで定義されたプロパティがありません",
+        "couldNotFindProperty": "bSDDで定義されたIDSプロパティが見つかりません",
+        "bsddMissingProperties": "bSDDにIDSで定義されたプロパティが不足しています",
+        "matchFound": "bSDDと一致するIDS仕様が見つかりました"
+      }
     }
   }
 }

@@ -56,6 +56,24 @@
         "tooltipEditInstance": "유형의 인스턴스 속성을 편집할 수 없습니다",
         "setAsInstanceCheckboxTooltip": "인스턴스 속성으로 설정"
       }
+    },
+    "idsComponent": {
+      "noBsddDomainSelected": "bSDD 도메인이 선택되지 않았습니다",
+      "importer": {
+        "importFile": "파일 가져오기",
+        "parsingFailed": "파일 분석 실패",
+        "readingFileFailed": "파일 읽기 오류",
+        "invalidFileType": "유효하지 않은 파일 유형이 선택되었습니다. 파일은 '.ids' 확장자를 가져야 합니다."
+      },
+      "validator": {
+        "dataTypeMismatch": "bSDD 데이터 유형이 IDS와 일치하지 않습니다",
+        "dataTypeMismatchForProperties": "속성에 대한 데이터 유형 불일치",
+        "couldNotFindSpecification": "bSDD에서 정의된 IDS 사양을 찾을 수 없습니다",
+        "missingBsddProperty": "bSDD에 IDS에서 정의된 속성이 없습니다",
+        "couldNotFindProperty": "bSDD에서 정의된 IDS 속성을 찾을 수 없습니다",
+        "bsddMissingProperties": "bSDD에 IDS에서 정의된 속성이 없습니다",
+        "matchFound": "IDS 사양과 bSDD가 일치합니다"
+      }
     }
   }
 }

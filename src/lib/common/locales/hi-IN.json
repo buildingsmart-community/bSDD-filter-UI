@@ -56,6 +56,24 @@
         "tooltipEditInstance": "प्रकारों के लिए इंस्टेंस गुणों को संपादित करना संभव नहीं है",
         "setAsInstanceCheckboxTooltip": "इंस्टेंस गुण के रूप में सेट करें"
       }
+    },
+    "idsComponent": {
+      "noBsddDomainSelected": "कोई bSDD डोमेन चयनित नहीं है",
+      "importer": {
+        "importFile": "फाइल आयात करें",
+        "parsingFailed": "फाइल का पार्सिंग विफल हो गया",
+        "readingFileFailed": "फाइल पढ़ने में त्रुटि",
+        "invalidFileType": "अमान्य फ़ाइल प्रकार चयनित। फ़ाइल का विस्तार '.ids' होना चाहिए।"
+      },
+      "validator": {
+        "dataTypeMismatch": "bSDD डेटा प्रकार IDS से मेल नहीं खाता",
+        "dataTypeMismatchForProperties": "गुणों के लिए डेटा प्रकार मेल नहीं खाते",
+        "couldNotFindSpecification": "bSDD में निर्दिष्ट IDS विनिर्देश नहीं मिला",
+        "missingBsddProperty": "bSDD में IDS में परिभाषित गुण की कमी है",
+        "couldNotFindProperty": "bSDD में निर्दिष्ट IDS गुण नहीं मिला",
+        "bsddMissingProperties": "bSDD में IDS में परिभाषित गुणों की कमी है",
+        "matchFound": "IDS विनिर्देश bSDD से मेल खाता है"
+      }
     }
   }
 }

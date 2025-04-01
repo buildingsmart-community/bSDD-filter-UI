@@ -40,7 +40,6 @@ const fetchBsddClasses = async (
     }
   })
 
-  console.error('Failed to fetch dictionary classes');
   return;
 };
 
@@ -70,7 +69,7 @@ function IdsComponent() {
       )}
       {!mainDictionary && (
         <Alert mx="md" mt="xl">
-          {t('idsNoBsddDomainSelected', "Nog geen bSDD domein geselecteerd")}
+          {t('idsComponent.noBsddDomainSelected')}
         </Alert>
       )}
     </div>

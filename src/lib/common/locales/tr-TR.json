@@ -55,6 +55,24 @@
         "tooltipEditInstance": "Türler için örnek özellikleri düzenlemek mümkün değil",
         "setAsInstanceCheckboxTooltip": "Örnek özellik olarak ayarla"
       }
+    },
+    "idsComponent": {
+      "noBsddDomainSelected": "Hiçbir bSDD alanı seçilmedi",
+      "importer": {
+        "importFile": "Dosya içe aktar",
+        "parsingFailed": "Dosya ayrıştırılamadı",
+        "readingFileFailed": "Dosya okuma hatası",
+        "invalidFileType": "Geçersiz dosya türü seçildi. Dosyanın '.ids' uzantısına sahip olması gerekir."
+      },
+      "validator": {
+        "dataTypeMismatch": "bSDD veri türü IDS ile uyumsuz",
+        "dataTypeMismatchForProperties": "Özellikler için veri türü uyumsuz",
+        "couldNotFindSpecification": "bSDD'de tanımlı IDS spesifikasyonu bulunamadı",
+        "missingBsddProperty": "bSDD, IDS'de tanımlanan özelliği eksik",
+        "couldNotFindProperty": "bSDD'de tanımlı IDS özelliği bulunamadı",
+        "bsddMissingProperties": "bSDD, IDS'de tanımlanan özelliklere sahip değil",
+        "matchFound": "IDS spesifikasyonu bSDD ile eşleşti"
+      }
     }
   }
 }

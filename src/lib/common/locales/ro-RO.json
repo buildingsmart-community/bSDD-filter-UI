@@ -56,6 +56,24 @@
         "tooltipEditInstance": "Nu se poate edita proprietățile instanței pentru tipuri",
         "setAsInstanceCheckboxTooltip": "Setați ca proprietate de instanță"
       }
+    },
+    "idsComponent": {
+      "noBsddDomainSelected": "Niciun domeniu bSDD selectat",
+      "importer": {
+        "importFile": "Importă fișierul",
+        "parsingFailed": "Eșec la procesarea fișierului",
+        "readingFileFailed": "Eroare la citirea fișierului",
+        "invalidFileType": "Tip de fișier invalid selectat. Fișierul trebuie să aibă extensia '.ids'."
+      },
+      "validator": {
+        "dataTypeMismatch": "Tipul de date bSDD nu corespunde cu IDS",
+        "dataTypeMismatchForProperties": "Tipul de date nu corespunde pentru proprietăți",
+        "couldNotFindSpecification": "Nu s-a găsit specificația IDS definită în bSDD pentru",
+        "missingBsddProperty": "bSDD lipsește proprietatea definită în IDS",
+        "couldNotFindProperty": "Nu s-a găsit proprietatea IDS definită în bSDD pentru",
+        "bsddMissingProperties": "bSDD lipsește proprietățile definite în IDS",
+        "matchFound": "Specificația IDS se potrivește cu bSDD pentru"
+      }
     }
   }
 }

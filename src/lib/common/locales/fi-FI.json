@@ -56,6 +56,24 @@
         "tooltipEditInstance": "Instanssiominaisuuksien muokkaaminen tyypeille ei ole mahdollista",
         "setAsInstanceCheckboxTooltip": "Aseta instanssiominaisuutena"
       }
+    },
+    "idsComponent": {
+      "noBsddDomainSelected": "bSDD-verkkotunnusta ei valittu",
+      "importer": {
+        "importFile": "Tuo tiedosto",
+        "parsingFailed": "Tiedoston jäsentäminen epäonnistui",
+        "readingFileFailed": "Virhe tiedoston lukemisessa",
+        "invalidFileType": "Virheellinen tiedostotyyppi valittu. Tiedoston tulee olla '.ids'-päätteinen."
+      },
+      "validator": {
+        "dataTypeMismatch": "bSDD:n tietotyyppi ei vastaa IDS:ää",
+        "dataTypeMismatchForProperties": "Tietotyyppi ei vastaa ominaisuuksille",
+        "couldNotFindSpecification": "Määriteltyä IDS-määritystä ei löytynyt bSDD:stä kohteelle",
+        "missingBsddProperty": "bSDD:stä puuttuu IDS:ssä määritelty ominaisuus",
+        "couldNotFindProperty": "Määriteltyä IDS-ominaisuutta ei löytynyt bSDD:stä kohteelle",
+        "bsddMissingProperties": "bSDD:stä puuttuvat IDS:ssä määritellyt ominaisuudet",
+        "matchFound": "IDS-määritys vastaa bSDD:tä kohteelle"
+      }
     }
   }
 }

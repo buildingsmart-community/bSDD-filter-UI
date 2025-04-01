@@ -56,6 +56,24 @@
         "tooltipEditInstance": "Ekki er hægt að breyta eiginleikum tilviks fyrir gerðir",
         "setAsInstanceCheckboxTooltip": "Setja sem eiginleika tilviks"
       }
+    },
+    "idsComponent": {
+      "noBsddDomainSelected": "Enginn bSDD lén valinn",
+      "importer": {
+        "importFile": "Flytja inn skrá",
+        "parsingFailed": "Mikilvæg uppsetning mistókst fyrir skrá",
+        "readingFileFailed": "Villa við að lesa skrá",
+        "invalidFileType": "Ógildur skráartími valinn. Skráin ætti að hafa '.ids' útvíkkan."
+      },
+      "validator": {
+        "dataTypeMismatch": "bSDD gögnategund ekki í samræmi við IDS",
+        "dataTypeMismatchForProperties": "Gögnategund ekki í samræmi fyrir eiginleika",
+        "couldNotFindSpecification": "Ekki fannst skilgreind IDS sérsnið í bSDD fyrir",
+        "missingBsddProperty": "bSDD vantar eiginleika sem eru skilgreindir í IDS",
+        "couldNotFindProperty": "Ekki fannst skilgreind IDS eiginleiki í bSDD fyrir",
+        "bsddMissingProperties": "bSDD vantar eiginleika sem eru skilgreindir í IDS",
+        "matchFound": "IDS sérsnið hefur verið parað með bSDD fyrir"
+      }
     }
   }
 }
