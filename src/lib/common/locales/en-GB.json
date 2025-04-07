@@ -70,7 +70,7 @@
         "dataTypeMismatchForProperties": "DataType mismatch for properties",
         "couldNotFindSpecification": "Could not find defined IDS specification in bSDD for",
         "missingBsddProperty": "bSDD is missing the property defined in the IDS",
-        "couldNotFindProperty": "Could not find defined IDS propertyn in bSDD for",
+        "couldNotFindProperty": "Could not find defined IDS property in bSDD for",
         "bsddMissingProperties": "bSDD is missing the properties defined in the IDS",
         "matchFound": "Matched IDS specification with bSDD for"
       }

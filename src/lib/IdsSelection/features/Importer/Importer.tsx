@@ -34,6 +34,13 @@ function Importer() {
       if (typeof reader.result === 'string') {
         try{
           const ids = parser.parse(reader.result) as IdsClass;
+          if(!ids.ids ||
+             !ids.ids.info ||
+            (!ids.ids.specifications || !ids.ids.specifications.specification || ids.ids.specifications.specification.length === 0) ||
+            (!ids.ids.specifications.specification.every(spec => spec.applicability && spec.requirements))
+          ){
+            throw "Invalid IDS";
+          }
           dispatch(setIds(ids));
         }
         catch(e){
