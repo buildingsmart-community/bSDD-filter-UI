@@ -58,7 +58,7 @@
       }
     },
     "idsComponent": {
-      "noBsddDomainSelected": "No bSDD domain selected",
+      "noBsddDomainSelected": "No main dictionary selected",
       "importer": {
         "importFile": "Import file",
         "parsingFailed": "Parsing failed for file",
