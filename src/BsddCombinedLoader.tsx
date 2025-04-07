@@ -8,6 +8,7 @@ import BsddSelection from './lib/BsddSelection';
 import IdsImporter from './lib/IdsSelection';
 import Settings from './lib/BsddSettings/SettingsComponent';
 import { ApiFunctionsProvider } from './lib/common/apiFunctionsContext';
+import useCefSharpBridge from './lib/common/bsddBridge/useCefSharpBridge';
 import { useAppDispatch } from './lib/common/app/hooks';
 import useBrowserBridge from './lib/common/bsddBridge/useBrowserBridge';
 import { IfcEntity } from './lib/common/IfcData/ifc';
@@ -48,12 +49,13 @@ function BsddCombinedLoader() {
     console.log('bsddSelect called with:', ifcEntitiesJson);
   }
 
-  const apiFunctions = {
-    bsddSearch,
-    bsddSelect,
-    bsddSearchSave,
-    bsddSearchCancel,
-  };
+  // const apiFunctions = {
+  //   bsddSearch,
+  //   bsddSelect,
+  //   bsddSearchSave,
+  //   bsddSearchCancel,
+  // };
+  const apiFunctions = useCefSharpBridge();
 
   return (
     <ApiFunctionsProvider value={apiFunctions}>
