@@ -128,7 +128,7 @@ function Validator() {
               ? "green"
               : "orange"
             : "red",
-          messages: propertyMessage === undefined
+          messages: propertyMessage === undefined || !hasMatch
             ? []
             : [propertyMessage],
           name : idsPropertyName,
