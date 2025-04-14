@@ -35,8 +35,8 @@ export interface IdsPropertyClass {
   value?: {
     xs_restriction: {
       xs_enumeration: IdsEnumerationClass[];
-    }
-  }
+    };
+  };
 }
 
 export interface IdsSpecificationClass {
@@ -52,9 +52,9 @@ export interface IdsClass {
   ids: {
     info: IdsInfoClass;
     specifications: {
-      specification: IdsSpecificationClass [];
+      specification: IdsSpecificationClass[];
     };
-  }
+  };
 }
 
 export interface IdsNotification {
