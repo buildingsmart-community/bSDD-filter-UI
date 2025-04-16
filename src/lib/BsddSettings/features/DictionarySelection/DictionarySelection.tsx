@@ -1,4 +1,4 @@
-import { Accordion, ComboboxItem, MultiSelect, Space, Text, Title } from '@mantine/core';
+import { Accordion, ComboboxItem, Select, Space, Text, Title } from '@mantine/core';
 import { createSelector } from '@reduxjs/toolkit';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -72,15 +72,13 @@ const selectBsddDictionaryOptions = createSelector(selectBsddDictionaries, (bsdd
   return Array.from(uniqueOptionsMap.values());
 });
 
-const getComboboxItem = (item: any): ComboboxItem[] => {
+const getComboboxItem = (item: BsddDictionary | null): ComboboxItem | null => {
   return item && item.ifcClassification && item.ifcClassification.location
-    ? [
-        {
-          value: item.ifcClassification.location,
-          label: item.ifcClassification.name || '',
-        },
-      ]
-    : [];
+    ? {
+        value: item.ifcClassification.location,
+        label: item.ifcClassification.name || '',
+      }
+    : null;
 };
 
 const selectIfcDictionaryOptions = createSelector(selectBsddDictionaryOptions, (bsddDictionaryOptions) =>
@@ -104,11 +102,11 @@ function DictionarySelection({
   const bsddIfcDictionaryOptions = useAppSelector(selectIfcDictionaryOptions);
   const bsddFilterDictionaryOptions = useAppSelector(selectFilterDictionaryOptions);
 
-  const localMainDictionaryValues = useMemo(() => {
+  const localMainDictionaryValue = useMemo(() => {
     return getComboboxItem(localSettings?.mainDictionary);
   }, [localSettings?.mainDictionary]);
 
-  const localIfcDictionaryValues = useMemo(() => {
+  const localIfcDictionaryValue = useMemo(() => {
     return getComboboxItem(localSettings?.ifcDictionary);
   }, [localSettings?.ifcDictionary]);
 
@@ -116,14 +114,13 @@ function DictionarySelection({
     return (
       localSettings?.filterDictionaries
         ?.filter((item) => item.ifcClassification && item.ifcClassification.location)
-        .map(getComboboxItem)
-        .flat() || []
+        .map(getComboboxItem) || []
     );
   }, [localSettings?.filterDictionaries]);
 
   const changeMainDictionaryOption = useCallback(
-    (selectedMainDictionaryUris: string[]) => {
-      const latestSelectedUri = selectedMainDictionaryUris[selectedMainDictionaryUris.length - 1];
+    (selectedMainDictionaryUri: string | null) => {
+      const latestSelectedUri = selectedMainDictionaryUri;
       const selectedMainDictionary = findDictionaryByUri(Object.values(bsddDictionaries), latestSelectedUri) || null;
 
       const newMainDictionary = convertToBsddDictionary(
@@ -151,8 +148,8 @@ function DictionarySelection({
   );
 
   const changeIfcDictionaryOption = useCallback(
-    (selectedIfcDictionaryUris: string[]) => {
-      const latestSelectedUri = selectedIfcDictionaryUris[selectedIfcDictionaryUris.length - 1];
+    (selectedIfcDictionaryUri: string | null) => {
+      const latestSelectedUri = selectedIfcDictionaryUri;
       const selectedIfcDictionary = findDictionaryByUri(Object.values(bsddDictionaries), latestSelectedUri) || null;
 
       const parameterMapping: string = localSettings.ifcDictionary?.parameterMapping || DEFAULT_IFC_PARAMETER;
@@ -187,11 +184,13 @@ function DictionarySelection({
             item.ifcClassification.location !== localSettings?.ifcDictionary?.ifcClassification.location,
         ) as BsddDictionary[];
 
-      const getNewDictionary = (dictionaryValues: ComboboxItem[], dictionary: BsddDictionary | null | undefined) =>
-        dictionaryValues && selectedFilterDictionaryUris.includes(dictionaryValues[0]?.value) ? null : dictionary;
+      const getNewDictionary = (
+        dictionaryValues: ComboboxItem | null,
+        dictionary: BsddDictionary | null | undefined,
+      ) => (dictionaryValues && selectedFilterDictionaryUris.includes(dictionaryValues?.value) ? null : dictionary);
 
-      const newMainDictionary = getNewDictionary(localMainDictionaryValues, localSettings?.mainDictionary);
-      const newIfcDictionary = getNewDictionary(localIfcDictionaryValues, localSettings?.ifcDictionary);
+      const newMainDictionary = getNewDictionary(localMainDictionaryValue, localSettings?.mainDictionary);
+      const newIfcDictionary = getNewDictionary(localIfcDictionaryValue, localSettings?.ifcDictionary);
 
       const newLocalSettings = {
         ...localSettings,
@@ -204,9 +203,9 @@ function DictionarySelection({
     },
     [
       bsddDictionaries,
-      localMainDictionaryValues,
+      localMainDictionaryValue,
       localSettings,
-      localIfcDictionaryValues,
+      localIfcDictionaryValue,
       setLocalSettings,
       setUnsavedChanges,
     ],
@@ -227,11 +226,11 @@ function DictionarySelection({
         </Text>
       </Accordion.Control>
       <Accordion.Panel>
-        <MultiSelect
+        <Select
           key="mainDictionary-select"
           id="mainDictionary"
           label={t('selectMainDictionary')}
-          value={localMainDictionaryValues.map((item) => item.value)}
+          value={localMainDictionaryValue?.value}
           onChange={changeMainDictionaryOption}
           placeholder="Select main dictionary"
           data={bsddDictionaryOptions}
@@ -239,11 +238,11 @@ function DictionarySelection({
           clearable
         />
         <Space h="xs" />
-        <MultiSelect
+        <Select
           key="ifcDictionary-select"
           id="ifcDictionary"
           label={t('selectIfcDictionary')}
-          value={localIfcDictionaryValues.map((item) => item.value)}
+          value={localIfcDictionaryValue?.value}
           onChange={changeIfcDictionaryOption}
           placeholder="Select filter dictionaries"
           data={bsddIfcDictionaryOptions}
@@ -255,7 +254,13 @@ function DictionarySelection({
           key="filterDictionaries-select"
           id="filterDictionaries"
           label={t('selectFilterDictionaries')}
-          value={localFilterDictionaryValues.map((item) => item.value)}
+          value={
+            localFilterDictionaryValues
+              ? localFilterDictionaryValues
+                  .map((item) => item?.value)
+                  .filter((item) => item !== null && item !== undefined)
+              : []
+          }
           onChange={changeFilterDictionaries}
           placeholder="Select filter dictionaries"
           data={bsddFilterDictionaryOptions}
