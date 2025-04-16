@@ -49,7 +49,7 @@ declare const _default: {
     "entitySelectionInstruction": "패널 상단의 드롭다운을 사용하여 엔터티를 선택합니다.",
     "needHelp": "도움이 필요하십니까?",
     "checkDocumentation": "문서를 확인하세요",
-    "appInfoLabel": "앱 정보",
+    "appInfoLabel": "정보 및 문서",
     "appInfoInstruction": "이 플러그인에 대한 정보",
     "bsddSearch": {
       "property": {

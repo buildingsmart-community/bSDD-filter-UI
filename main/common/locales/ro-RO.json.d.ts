@@ -49,7 +49,7 @@ declare const _default: {
     "entitySelectionInstruction": "Selectați entități utilizând meniul derulant din partea de sus a panoului.",
     "needHelp": "Aveți nevoie de ajutor?",
     "checkDocumentation": "Consultați documentația noastră",
-    "appInfoLabel": "Informații despre aplicație",
+    "appInfoLabel": "Informații și documentație",
     "appInfoInstruction": "Informații despre acest plugin",
     "bsddSearch": {
       "property": {

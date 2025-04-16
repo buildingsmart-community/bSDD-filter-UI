@@ -49,7 +49,7 @@ declare const _default: {
     "entitySelectionInstruction": "حدد الكيانات باستخدام القائمة المنسدلة في أعلى اللوحة.",
     "needHelp": "تحتاج مساعدة؟",
     "checkDocumentation": "تحقق من وثائقنا",
-    "appInfoLabel": "معلومات التطبيق",
+    "appInfoLabel": "معلومات ووثائق",
     "appInfoInstruction": "معلومات حول هذا المكون الإضافي",
     "bsddSearch": {
       "property": {

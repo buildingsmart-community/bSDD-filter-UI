@@ -49,7 +49,7 @@ declare const _default: {
     "entitySelectionInstruction": "पैनल के शीर्ष पर ड्रॉपडाउन का उपयोग करके संस्थाओं का चयन करें।",
     "needHelp": "मदद चाहिए?",
     "checkDocumentation": "हमारे दस्तावेज़ देखें",
-    "appInfoLabel": "ऐप जानकारी",
+    "appInfoLabel": "जानकारी और दस्तावेज़",
     "appInfoInstruction": "इस प्लगइन के बारे में जानकारी",
     "bsddSearch": {
       "property": {

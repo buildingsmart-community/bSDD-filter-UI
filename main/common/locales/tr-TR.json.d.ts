@@ -48,7 +48,7 @@ declare const _default: {
     "entitySelectionInstruction": "Panelin üst kısmındaki açılır menüyü kullanarak varlıkları seçin.",
     "needHelp": "Yardıma mı ihtiyacınız var?",
     "checkDocumentation": "Belgelerimize göz atın",
-    "appInfoLabel": "Uygulama bilgisi",
+    "appInfoLabel": "Bilgi ve dokümantasyon",
     "appInfoInstruction": "Bu eklenti hakkında bilgi",
     "bsddSearch": {
       "property": {

@@ -49,7 +49,7 @@ declare const _default: {
     "entitySelectionInstruction": "Seleccione entidades utilizando el menú desplegable en la parte superior del panel.",
     "needHelp": "¿Necesitas ayuda?",
     "checkDocumentation": "Consulte nuestra documentación",
-    "appInfoLabel": "Información de la aplicación",
+    "appInfoLabel": "Información y documentación",
     "appInfoInstruction": "Información sobre este complemento",
     "bsddSearch": {
       "property": {

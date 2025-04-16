@@ -49,7 +49,7 @@ declare const _default: {
     "entitySelectionInstruction": "Odaberite entitete pomoću padajućeg izbornika na vrhu panela.",
     "needHelp": "Trebate pomoć?",
     "checkDocumentation": "Pogledajte našu dokumentaciju",
-    "appInfoLabel": "Informacije o aplikaciji",
+    "appInfoLabel": "Informacije i dokumentacija",
     "appInfoInstruction": "Informacije o ovom dodatku",
     "bsddSearch": {
       "property": {

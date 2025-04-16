@@ -49,7 +49,7 @@ declare const _default: {
     "entitySelectionInstruction": "Veldu einingar með því að nota fellivalmyndina efst á spjaldinu.",
     "needHelp": "Þarftu hjálp?",
     "checkDocumentation": "Skoðaðu skjöl okkar",
-    "appInfoLabel": "Upplýsingar um forrit",
+    "appInfoLabel": "Upplýsingar og skjöl",
     "appInfoInstruction": "Upplýsingar um þetta viðbót",
     "bsddSearch": {
       "property": {

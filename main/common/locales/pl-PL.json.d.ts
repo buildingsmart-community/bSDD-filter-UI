@@ -49,7 +49,7 @@ declare const _default: {
     "entitySelectionInstruction": "Wybierz jednostki za pomocą menu rozwijanego u góry panelu.",
     "needHelp": "Potrzebujesz pomocy?",
     "checkDocumentation": "Sprawdź naszą dokumentację",
-    "appInfoLabel": "Informacje o aplikacji",
+    "appInfoLabel": "Informacje i dokumentacja",
     "appInfoInstruction": "Informacje o tej wtyczce",
     "bsddSearch": {
       "property": {

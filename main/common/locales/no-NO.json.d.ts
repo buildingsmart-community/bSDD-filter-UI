@@ -49,7 +49,7 @@ declare const _default: {
     "entitySelectionInstruction": "Velg enheter ved å bruke rullegardinmenyen øverst i panelet.",
     "needHelp": "Trenger du hjelp?",
     "checkDocumentation": "Sjekk vår dokumentasjon",
-    "appInfoLabel": "Appinformasjon",
+    "appInfoLabel": "Informasjon og dokumentasjon",
     "appInfoInstruction": "Informasjon om denne pluginen",
     "bsddSearch": {
       "property": {

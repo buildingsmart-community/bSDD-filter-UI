@@ -49,7 +49,7 @@ declare const _default: {
     "entitySelectionInstruction": "Wählen Sie Entitäten über das Dropdown-Menü oben im Panel aus.",
     "needHelp": "Brauchen Sie Hilfe?",
     "checkDocumentation": "Schauen Sie sich unsere Dokumentation an",
-    "appInfoLabel": "App-Informationen",
+    "appInfoLabel": "Informationen und Dokumentation",
     "appInfoInstruction": "Informationen über dieses Plugin",
     "bsddSearch": {
       "property": {

@@ -48,7 +48,7 @@ declare const _default: {
     "entitySelectionInstruction": "使用面板顶部的下拉菜单选择实体。",
     "needHelp": "需要帮助？",
     "checkDocumentation": "查看我们的文档",
-    "appInfoLabel": "应用信息",
+    "appInfoLabel": "信息和文档",
     "appInfoInstruction": "关于此插件的信息",
     "bsddSearch": {
       "property": {

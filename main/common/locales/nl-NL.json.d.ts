@@ -49,7 +49,7 @@ declare const _default: {
     "entitySelectionInstruction": "Selecteer objecten in de dropdown bovenaan in het paneel.",
     "needHelp": "Hulp nodig?",
     "checkDocumentation": "Bekijk onze documentatie",
-    "appInfoLabel": "App info",
+    "appInfoLabel": "Informatie en documentatie",
     "appInfoInstruction": "Informatie over deze plugin",
     "bsddSearch": {
       "property": {

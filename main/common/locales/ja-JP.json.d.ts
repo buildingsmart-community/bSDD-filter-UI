@@ -49,7 +49,7 @@ declare const _default: {
     "entitySelectionInstruction": "パネルの上部にあるドロップダウンを使用してエンティティを選択します。",
     "needHelp": "助けが必要ですか？",
     "checkDocumentation": "ドキュメントを確認してください",
-    "appInfoLabel": "アプリ情報",
+    "appInfoLabel": "情報とドキュメント",
     "appInfoInstruction": "このプラグインに関する情報",
     "bsddSearch": {
       "property": {

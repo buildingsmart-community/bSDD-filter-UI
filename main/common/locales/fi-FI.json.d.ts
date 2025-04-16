@@ -49,7 +49,7 @@ declare const _default: {
     "entitySelectionInstruction": "Valitse objektit käyttämällä paneelin yläosassa olevaa pudotusvalikkoa.",
     "needHelp": "Tarvitsetko apua?",
     "checkDocumentation": "Tutustu dokumentaatioomme",
-    "appInfoLabel": "Sovelluksen tiedot",
+    "appInfoLabel": "Tiedot ja dokumentaatio",
     "appInfoInstruction": "Tietoa tästä lisäosasta",
     "bsddSearch": {
       "property": {

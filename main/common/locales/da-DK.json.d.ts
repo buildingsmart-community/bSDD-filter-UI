@@ -49,7 +49,7 @@ declare const _default: {
     "entitySelectionInstruction": "Vælg enheder ved hjælp af rullemenuen øverst i panelet.",
     "needHelp": "Brug for hjælp?",
     "checkDocumentation": "Tjek vores dokumentation",
-    "appInfoLabel": "App-info",
+    "appInfoLabel": "Information og dokumentation",
     "appInfoInstruction": "Information om dette plugin",
     "bsddSearch": {
       "property": {

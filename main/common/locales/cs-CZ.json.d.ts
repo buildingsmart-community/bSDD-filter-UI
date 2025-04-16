@@ -49,7 +49,7 @@ declare const _default: {
     "entitySelectionInstruction": "Vyberte entity pomocí rozbalovací nabídky v horní části panelu.",
     "needHelp": "Potřebujete pomoc?",
     "checkDocumentation": "Podívejte se na naši dokumentaci",
-    "appInfoLabel": "Informace o aplikaci",
+    "appInfoLabel": "Informace a dokumentace",
     "appInfoInstruction": "Informace o tomto pluginu",
     "bsddSearch": {
       "property": {

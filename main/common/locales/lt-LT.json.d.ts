@@ -49,7 +49,7 @@ declare const _default: {
     "entitySelectionInstruction": "Pasirinkite objektus naudodami išskleidžiamąjį meniu viršuje.",
     "needHelp": "Reikia pagalbos?",
     "checkDocumentation": "Peržiūrėkite mūsų dokumentaciją",
-    "appInfoLabel": "Programos informacija",
+    "appInfoLabel": "Informacija ir dokumentacija",
     "appInfoInstruction": "Informacija apie šį papildinį",
     "bsddSearch": {
       "property": {
