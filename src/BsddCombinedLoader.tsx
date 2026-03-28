@@ -7,16 +7,16 @@ import BsddSearch from './lib/BsddSearch';
 import BsddSelection from './lib/BsddSelection';
 import Settings from './lib/BsddSettings/SettingsComponent';
 import { ApiFunctionsProvider } from './lib/common/apiFunctionsContext';
-import { useAppDispatch } from './lib/common/app/hooks';
 import useBrowserBridge from './lib/common/bsddBridge/useBrowserBridge';
 import { IfcEntity } from './lib/common/IfcData/ifc';
-import { setSavedPropertyIsInstanceMap, setSelectedIfcEntities } from './lib/common/slices/ifcDataSlice';
+import { useIfcDataStore } from './lib/stores/ifcDataStore';
 import { mockData } from './mocks/mockData';
 
 const defaultTab = 'link';
 
 function BsddCombinedLoader() {
-  const dispatch = useAppDispatch();
+  const setSelectedIfcEntities = useIfcDataStore((s) => s.setSelectedIfcEntities);
+  const setSavedPropertyIsInstanceMap = useIfcDataStore((s) => s.setSavedPropertyIsInstanceMap);
 
   const [opened, { open, close }] = useDisclosure(false);
   const { bsddSearchSave, bsddSearchCancel } = useBrowserBridge();
@@ -25,26 +25,20 @@ function BsddCombinedLoader() {
 
   useEffect(() => {
     if (mockData.propertyIsInstanceMap) {
-      console.log('Setting savedPropertyIsInstanceMap:', mockData.propertyIsInstanceMap);
       setSavedPropertyIsInstanceMap(mockData.propertyIsInstanceMap);
     }
-  }, [mockData.propertyIsInstanceMap]);
+  }, [setSavedPropertyIsInstanceMap]);
 
   function bsddSearch(ifcEntities: IfcEntity[], sortKey: keyof IfcEntity | undefined) {
     setSearchKey(sortKey);
-    console.log('Open bsddSearch called with:', ifcEntities);
-
     if (ifcEntities?.length > 0) {
-      dispatch(setSelectedIfcEntities(ifcEntities));
+      setSelectedIfcEntities(ifcEntities);
     }
-
     open();
   }
 
   function bsddSelect(ifcEntities: IfcEntity[]) {
-    const ifcEntitiesJson = JSON.stringify(ifcEntities);
-
-    console.log('bsddSelect called with:', ifcEntitiesJson);
+    console.log('bsddSelect called with:', JSON.stringify(ifcEntities));
   }
 
   const apiFunctions = {

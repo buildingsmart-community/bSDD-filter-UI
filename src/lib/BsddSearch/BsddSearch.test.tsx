@@ -14,10 +14,8 @@ const config = {
   ],
 };
 
-test('Render BsddSearch', () => {
-  it('renders without crashing', () => {
-    render(<BsddSearch />);
-  });
+test('renders without crashing', () => {
+  render(<BsddSearch />);
 });
 
 // Testcases:

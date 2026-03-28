@@ -392,12 +392,10 @@ export const DraggableMultiSelect = factory<MultiSelectFactory>((_props, ref) =>
             description={description}
             label={label}
             error={error}
-            multiline
             withErrorStyles={withErrorStyles}
             __stylesApiProps={{
               ...props,
               rightSectionPointerEvents: rightSectionPointerEvents || (_clearable ? 'all' : 'none'),
-              multiline: true,
             }}
             pointer={!searchable}
             onClick={() => {
