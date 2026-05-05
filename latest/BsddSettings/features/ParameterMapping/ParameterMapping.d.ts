@@ -5,5 +5,5 @@ interface ParameterMappingProps {
     setLocalSettings: (settings: BsddSettings) => void;
     setUnsavedChanges: (unsavedChanges: boolean) => void;
 }
-declare function ParameterMapping({ id, localSettings, setLocalSettings, setUnsavedChanges, }: ParameterMappingProps): import("react/jsx-runtime").JSX.Element;
+declare function ParameterMapping({ id, localSettings, setLocalSettings, setUnsavedChanges }: ParameterMappingProps): import("react/jsx-runtime").JSX.Element;
 export default ParameterMapping;

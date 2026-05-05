@@ -3,12 +3,13 @@ import { IfcEntity } from '../common/IfcData/ifc';
 /**
  * Single bridge between the host application and the bSDD library.
  *
- * Mirrors the IFC.On-Track.nl host-app pattern: the host owns auth, persistence
- * and host-IPC; the library calls back into the host through this context.
+ * The host (C# Revit/Tekla plugin) only handles IFC-JSON and settings; it has
+ * no concept of bSDD authentication. Auth runs inside the browser page via MSAL
+ * (`src/auth/`), and the token is stored in the browser cache (IndexedDB/cookies).
+ * Demo loaders read it via `useAuthToken()` and pass it in as `accessToken`.
  *
- * `accessToken` is supplied by the host (e.g. via `useAuthToken()`); library-
- * internal hooks read it from here so consumers don't have to thread it through
- * every component.
+ * `accessToken` is optional — library consumers that bring their own auth system
+ * can also supply it here directly.
  */
 export interface BsddBridgeCallbacks {
     onSave?: (data: BsddBridgeData) => Promise<string>;

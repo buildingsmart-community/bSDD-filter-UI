@@ -18,5 +18,5 @@ interface SlicerProps {
     /** Forces the slicer into a disabled/loading state */
     loading?: boolean;
 }
-declare function Slicer({ height, options, label, value, setValue, placeholder, onSearch, isSearching, loading }: SlicerProps): import("react/jsx-runtime").JSX.Element;
+declare function Slicer({ height, options, label, value, setValue, placeholder, onSearch, isSearching, loading, }: SlicerProps): import("react/jsx-runtime").JSX.Element;
 export default Slicer;
