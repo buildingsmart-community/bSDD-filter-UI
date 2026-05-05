@@ -1,0 +1,31 @@
+import { default as i18n } from 'i18next';
+/** Friendly label per locale; the keys are the full set of supported BCP-47 codes. */
+export declare const languages: {
+    'en-GB': string;
+    'nl-NL': string;
+    'ar-SA': string;
+    'zh-CN': string;
+    'hr-HR': string;
+    'cs-CZ': string;
+    'da-DK': string;
+    'fi-FI': string;
+    'fr-FR': string;
+    'de-DE': string;
+    'hi-IN': string;
+    'is-IS': string;
+    'it-IT': string;
+    'ja-JP': string;
+    'ko-KR': string;
+    'lt-LT': string;
+    'no-NO': string;
+    'pl-PL': string;
+    'pt-PT': string;
+    'pt-BR': string;
+    'ro-RO': string;
+    'sr-SP': string;
+    'sl-SI': string;
+    'es-ES': string;
+    'sv-SE': string;
+    'tr-TR': string;
+};
+export default i18n;
