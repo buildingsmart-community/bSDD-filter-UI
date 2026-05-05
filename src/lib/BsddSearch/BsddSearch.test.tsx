@@ -1,30 +1,35 @@
+import { MantineProvider } from '@mantine/core';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render } from '@testing-library/react';
+import { ReactNode } from 'react';
+
+import { BsddBridgeContext } from '../providers/BsddBridgeContext';
 import BsddSearch from './BsddSearch';
 
-function callback(data: any) {
-  alert(data);
+const noop = async () => '';
+
+function renderWithProviders(ui: ReactNode) {
+  const client = new QueryClient({ defaultOptions: { queries: { retry: false, gcTime: 0 } } });
+  return render(
+    <QueryClientProvider client={client}>
+      <MantineProvider>
+        <BsddBridgeContext.Provider
+          value={{
+            onSave: noop,
+            onCancel: () => {},
+            onSearch: () => {},
+            onSelect: () => {},
+            loadSettings: noop,
+            loadBridgeData: noop,
+          }}
+        >
+          {ui}
+        </BsddBridgeContext.Provider>
+      </MantineProvider>
+    </QueryClientProvider>,
+  );
 }
 
-const config = {
-  defaultDomains: [
-    {
-      value: 'https://identifier.buildingsmart.org/uri/digibase/volkerwesselsbv-0.1',
-      label: 'VolkerWessels Bouw & Vastgoed',
-    },
-  ],
-};
-
-test('Render BsddSearch', () => {
-  it('renders without crashing', () => {
-    render(<BsddSearch />);
-  });
+test('renders without crashing', () => {
+  renderWithProviders(<BsddSearch />);
 });
-
-// Testcases:
-// - missing config
-// - missing baseUrl
-// - missing defaultDomains
-// - single defaultDomain
-// - multiple defaultDomains
-// - recursive_mode true/false
-export {};

@@ -1,5 +1,5 @@
 {
-  "translation": {  
+  "translation": {
     "appTitle": "bSDD Administrador de datos BIM",
     "updateSelection": "Actualizar selección",
     "apply": "Aplicar",
@@ -56,6 +56,13 @@
         "tooltipEditInstance": "No es posible editar propiedades de instancia para tipos",
         "setAsInstanceCheckboxTooltip": "Establecer como propiedad de instancia"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "Sign in for faster API",
+      "authenticatedViaBsdd": "buildingSMART account",
+      "authError": "Authentication error",
+      "logout": "Sign out",
+      "user": "User"
     }
   }
 }

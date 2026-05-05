@@ -56,6 +56,13 @@
         "tooltipEditInstance": "タイプのインスタンスプロパティを編集することはできません",
         "setAsInstanceCheckboxTooltip": "インスタンスプロパティとして設定"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "Sign in for faster API",
+      "authenticatedViaBsdd": "buildingSMART account",
+      "authError": "Authentication error",
+      "logout": "Sign out",
+      "user": "User"
     }
   }
 }

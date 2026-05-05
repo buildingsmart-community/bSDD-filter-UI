@@ -56,6 +56,13 @@
         "tooltipEditInstance": "प्रकारों के लिए इंस्टेंस गुणों को संपादित करना संभव नहीं है",
         "setAsInstanceCheckboxTooltip": "इंस्टेंस गुण के रूप में सेट करें"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "तेज़ API के लिए साइन इन करें",
+      "authenticatedViaBsdd": "buildingSMART खाता",
+      "authError": "प्रमाणीकरण त्रुटि",
+      "logout": "साइन आउट",
+      "user": "उपयोगकर्ता"
     }
   }
 }

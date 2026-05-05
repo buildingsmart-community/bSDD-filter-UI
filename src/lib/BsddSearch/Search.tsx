@@ -3,14 +3,8 @@ import { useDebouncedValue } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useAppDispatch, useAppSelector } from '../common/app/hooks';
-import {
-  fetchClasses,
-  searchInDictionary,
-  selectSearchResult,
-  updateMainDictionaryClassificationUri,
-} from '../common/slices/bsddSlice';
-import { selectMainDictionary } from '../common/slices/settingsSlice';
+import { useSearchInDictionary } from '../api/hooks/useSearchInDictionary';
+import { useSettingsStore } from '../stores/settingsStore';
 
 interface Option {
   label: string;
@@ -19,18 +13,20 @@ interface Option {
 
 interface Props {
   defaultSelection: Option | undefined;
+  onClassificationSelect: (uri: string | null) => void;
 }
 
-function Search({ defaultSelection }: Props) {
-  const dispatch = useAppDispatch();
+function Search({ defaultSelection, onClassificationSelect }: Props) {
   const { t } = useTranslation();
-  const mainDictionary = useAppSelector(selectMainDictionary);
-  const searchResult = useAppSelector(selectSearchResult);
+  const mainDictionary = useSettingsStore((s) => s.mainDictionary);
 
   const [search, setSearch] = useState(defaultSelection?.label || '');
   const [debouncedSearch] = useDebouncedValue(search, 300);
   const [options, setOptions] = useState<Option[]>([]);
   const [selected, setSelected] = useState<Option | null>(defaultSelection || null);
+
+  const dictionaryUri = mainDictionary?.ifcClassification.location;
+  const { data: searchResult } = useSearchInDictionary(dictionaryUri, debouncedSearch);
 
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -41,21 +37,7 @@ function Search({ defaultSelection }: Props) {
     if (defaultSelection) {
       setSearch(defaultSelection.label);
     }
-  }, [defaultSelection, dispatch]);
-
-  // Fetch search options based on debounced search value
-  useEffect(() => {
-    if (mainDictionary) {
-      const queryParameters = {
-        SearchText: debouncedSearch,
-        DictionaryUri: mainDictionary.ifcClassification.location,
-      };
-
-      dispatch(searchInDictionary(queryParameters));
-    } else {
-      dispatch(fetchClasses([]));
-    }
-  }, [dispatch, debouncedSearch, mainDictionary]);
+  }, [defaultSelection]);
 
   useEffect(() => {
     if (searchResult?.count && searchResult.dictionary?.classes) {
@@ -69,20 +51,20 @@ function Search({ defaultSelection }: Props) {
         const singleOption = filteredOptions[0];
         setSelected(singleOption);
         setSearch(singleOption.label);
-        dispatch(updateMainDictionaryClassificationUri(singleOption.value));
+        onClassificationSelect(singleOption.value);
       }
     } else {
       setOptions([]);
     }
-  }, [searchResult, dispatch]);
+  }, [searchResult, onClassificationSelect]);
 
   useEffect(() => {
     if (selected) {
-      dispatch(updateMainDictionaryClassificationUri(selected.value));
+      onClassificationSelect(selected.value);
     } else {
-      dispatch(updateMainDictionaryClassificationUri(null));
+      onClassificationSelect(null);
     }
-  }, [dispatch, selected]);
+  }, [selected, onClassificationSelect]);
 
   return (
     <Combobox
@@ -113,7 +95,7 @@ function Search({ defaultSelection }: Props) {
                   event.stopPropagation();
                   setSelected(null);
                   setSearch('');
-                  dispatch(updateMainDictionaryClassificationUri(null));
+                  onClassificationSelect(null);
                   combobox.openDropdown();
                 }}
                 aria-label="Clear selection"

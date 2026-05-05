@@ -1,9 +1,8 @@
 import { Accordion, Stack } from '@mantine/core';
-import { Children, useEffect, useState } from 'react';
+import { Children, useEffect, useMemo, useState } from 'react';
 
-import { useAppDispatch, useAppSelector } from '../../../common/app/hooks';
-import { ClassContractV1, ClassPropertyContractV1 } from '../../../common/BsddApi/BsddApiBase';
-import { getPropertyClassificationUris } from '../../../common/BsddApi/BsddApiHelpers';
+import type { ClassContractV1, ClassPropertyContractV1, ClassPropertyValueContractV1 } from '../../../../../shared/bsdd-api/generated/types.gen';
+import { getPropertyClassificationUris } from '../../../common/tools/bsddClassHelpers';
 import {
   IfcEntity,
   IfcProperty,
@@ -12,14 +11,11 @@ import {
   IfcPropertySingleValue,
   IfcValue,
 } from '../../../common/IfcData/ifc';
-import {
-  selectMainDictionaryClassification,
-  selectMainDictionaryClassificationUri,
-  selectPropertyNamesByLanguage,
-} from '../../../common/slices/bsddSlice';
-import { selectMergedIfcEntity } from '../../../common/slices/ifcDataSlice';
-import { setIsDefinedBy } from '../../../common/slices/ifcEntitySlice';
-import { selectIfcDictionaryUri, selectLanguage } from '../../../common/slices/settingsSlice';
+import { mergeIfcEntities } from '../../../common/tools/mergeIfcEntities';
+import { usePropertyNames } from '../../../api/hooks/usePropertyNames';
+import { useBsddBridge } from '../../../providers/BsddBridgeContext';
+import { useIfcDataStore } from '../../../stores/ifcDataStore';
+import { useSettingsStore } from '../../../stores/settingsStore';
 import type { PropertySetMap } from '../../BsddSearch';
 import Property from '../Property/Property';
 
@@ -35,6 +31,7 @@ const valueTypeMapping: { [key: string]: string } = {
 interface PropertySetsProps {
   activeClassifications: ClassContractV1[];
   recursiveMode: boolean;
+  mainClassificationUri: string | null;
 }
 
 /**
@@ -162,11 +159,11 @@ function getEnumerationValueFromProperty(
 /**
  * Creates an instance of IfcPropertyEnumeratedValue based on the selected bSDD class property and selected IfcEntity.
  *
- * @param {ClassPropertyContractV1} classificationProperty - The classification property.
- * @param {string} name - The name of the property.
- * @param {string} propertySetName - The name of the property set.
- * @param {IfcEntity} ifcEntity - The selected IfcEntity object.
- * @returns {IfcPropertyEnumeratedValue} - The created IfcPropertyEnumeratedValue object.
+ * @param classificationProperty - The classification property.
+ * @param name - The name of the property.
+ * @param propertySetName - The name of the property set.
+ * @param ifcEntity - The selected IfcEntity object.
+ * @returns The created IfcPropertyEnumeratedValue object.
  */
 function createIfcPropertyEnumeratedValue(
   classificationProperty: ClassPropertyContractV1,
@@ -175,7 +172,7 @@ function createIfcPropertyEnumeratedValue(
   ifcEntity: IfcEntity | null,
 ): IfcPropertyEnumeratedValue {
   const allowedEnumerationValues: IfcValue[] =
-    classificationProperty.allowedValues?.map((allowedValue) =>
+    classificationProperty.allowedValues?.map((allowedValue: ClassPropertyValueContractV1) =>
       createIfcPropertyValue(classificationProperty.dataType, allowedValue.value),
     ) || [];
 
@@ -218,11 +215,11 @@ function createIfcPropertyEnumeratedValue(
 /**
  * Creates an instance of IfcPropertySingleValue based on the selected bSDD class property and selected IfcEntity.
  *
- * @param {ClassPropertyContractV1} classificationProperty - The classification property.
- * @param {string} name - The name of the property.
- * @param {string} propertySetName - The name of the property set.
- * @param {IfcEntity} ifcEntity - The IfcEntity object.
- * @returns {IfcPropertySingleValue} The created IfcPropertySingleValue object.
+ * @param classificationProperty - The classification property.
+ * @param name - The name of the property.
+ * @param propertySetName - The name of the property set.
+ * @param ifcEntity - The IfcEntity object.
+ * @returns The created IfcPropertySingleValue object.
  */
 function createIfcPropertySingleValue(
   classificationProperty: ClassPropertyContractV1,
@@ -259,6 +256,7 @@ function createIfcPropertySingleValue(
 
 /**
  * Retrieves the appropriate IFC property based on the classification property, property set name, and IFC entity.
+ *
  * @param classificationProperty - The classification property.
  * @param propertySetName - The name of the property set.
  * @param ifcEntity - The IFC entity.
@@ -281,31 +279,41 @@ function GetIfcProperty(
   return property;
 }
 
-function PropertySets({ activeClassifications: activeDictionaryLocations, recursiveMode }: PropertySetsProps) {
-  const dispatch = useAppDispatch();
+function PropertySets({ activeClassifications, recursiveMode, mainClassificationUri }: PropertySetsProps) {
+  // mergeIfcEntities returns a fresh object; subscribe to the input array (stable
+  // by reference until state changes) and derive via useMemo.
+  const selectedIfcEntities = useIfcDataStore((s) => s.selectedIfcEntities);
+  const selectedMergedIfcEntity = useMemo(() => mergeIfcEntities(selectedIfcEntities), [selectedIfcEntities]);
+  const setIsDefinedBy = useIfcDataStore((s) => s.setIsDefinedBy);
+  const languageCode = useSettingsStore((s) => s.language);
+  const ifcDictionaryUri = useSettingsStore((s) => s.ifcDictionary?.ifcClassification.location);
+  const { accessToken } = useBsddBridge();
 
-  const selectedMergedIfcEntity = useAppSelector(selectMergedIfcEntity);
-  const propertyNamesByLanguage = useAppSelector(selectPropertyNamesByLanguage);
-  const languageCode = useAppSelector(selectLanguage);
-  const mainDictionaryClassification = useAppSelector(selectMainDictionaryClassification);
-  const mainDictionaryClassificationUri = useAppSelector(selectMainDictionaryClassificationUri);
-  const ifcDictionaryUri = useAppSelector(selectIfcDictionaryUri);
+  const mainDictionaryClassification = activeClassifications[0] ?? null;
+
+  // Collect all class properties for translation
+  const allClassProperties = useMemo(
+    () => activeClassifications.flatMap((c) => c.classProperties || []),
+    [activeClassifications],
+  );
+  const { data: propertyNamesMap } = usePropertyNames(allClassProperties, languageCode, accessToken);
+
   const [propertyNaturalLanguageNamesMap, setPropertyNaturalLanguageNamesMap] = useState<Record<string, string>>({});
   const [mergedIfcPropertySets, setMergedIfcPropertySets] = useState<IfcPropertySet[]>([]);
 
   useEffect(() => {
-    if (activeDictionaryLocations.length === 0) return;
+    if (activeClassifications.length === 0) return;
     const newPropertySets: PropertySetMap = {};
-    const propertyClassifications = activeDictionaryLocations; // recursiveMode ? classifications : classifications.slice(0, 1);
+    const propertyClassifications = activeClassifications;
 
     const applicableClassificationUris = getPropertyClassificationUris(mainDictionaryClassification);
 
     propertyClassifications.forEach((classification) => {
-      if (classification.dictionaryUri === ifcDictionaryUri && classification.uri !== mainDictionaryClassificationUri) {
+      if (classification.dictionaryUri === ifcDictionaryUri && classification.uri !== mainClassificationUri) {
         return; // Skip the IFC dictionary as we only add explicitly added IFC properties
       }
       if (
-        classification.uri === mainDictionaryClassificationUri ||
+        classification.uri === mainClassificationUri ||
         applicableClassificationUris.includes(classification.uri)
       ) {
         classification.classProperties?.forEach((classProperty: ClassPropertyContractV1) => {
@@ -327,35 +335,30 @@ function PropertySets({ activeClassifications: activeDictionaryLocations, recurs
       }
     });
 
-    dispatch(setIsDefinedBy(Object.values(newPropertySets)));
+    setIsDefinedBy(Object.values(newPropertySets));
     setMergedIfcPropertySets(Object.values(newPropertySets));
   }, [
-    dispatch,
+    setIsDefinedBy,
     selectedMergedIfcEntity,
-    activeDictionaryLocations,
+    activeClassifications,
     ifcDictionaryUri,
     mainDictionaryClassification,
-    mainDictionaryClassificationUri,
+    mainClassificationUri,
   ]);
 
   useEffect(() => {
-    if (activeDictionaryLocations.length === 0) return;
+    if (activeClassifications.length === 0) return;
     const newPropertyNaturalLanguageNames: Record<string, string> = {};
-    const propertyClassifications = activeDictionaryLocations; // recursiveMode ? classifications : classifications.slice(0, 1);
+    const propertyClassifications = activeClassifications;
 
     propertyClassifications.forEach((classification) => {
       classification.classProperties?.forEach((classProperty: ClassPropertyContractV1) => {
         if (!classProperty) return;
 
         if (classProperty.propertyUri) {
-          if (
-            languageCode &&
-            propertyNamesByLanguage &&
-            propertyNamesByLanguage[languageCode] &&
-            propertyNamesByLanguage[languageCode][classProperty.propertyUri]
-          ) {
+          if (propertyNamesMap && propertyNamesMap[classProperty.propertyUri]) {
             newPropertyNaturalLanguageNames[classProperty.propertyUri] =
-              propertyNamesByLanguage[languageCode][classProperty.propertyUri] || '';
+              propertyNamesMap[classProperty.propertyUri] || '';
           } else {
             newPropertyNaturalLanguageNames[classProperty.propertyUri] = classProperty.name;
           }
@@ -364,7 +367,7 @@ function PropertySets({ activeClassifications: activeDictionaryLocations, recurs
     });
 
     setPropertyNaturalLanguageNamesMap(newPropertyNaturalLanguageNames);
-  }, [activeDictionaryLocations, recursiveMode, selectedMergedIfcEntity, propertyNamesByLanguage, languageCode]);
+  }, [activeClassifications, recursiveMode, selectedMergedIfcEntity, propertyNamesMap, languageCode]);
 
   return (
     <div>

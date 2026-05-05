@@ -1,10 +1,14 @@
 import { Accordion, Button, Group } from '@mantine/core';
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { del } from 'idb-keyval';
+import { useShallow } from 'zustand/react/shallow';
 
-import { useAppDispatch, useAppSelector } from '../common/app/hooks';
+import { validateSettings } from '../api/validation/validateIfcData';
 import { CefSharpWindow } from '../common/bsddBridge/useCefSharpBridge';
 import { BsddSettings } from '../common/IfcData/bsddBridgeData';
-import { setSettingsWithValidation } from '../common/slices/settingsSlice';
+import { selectSettings, useSettingsStore } from '../stores/settingsStore';
 import AppInfo from './features/AppInfo/AppInfo';
 import DictionarySelection from './features/DictionarySelection/DictionarySelection';
 import GeneralSettings from './features/GeneralSettings/GeneralSettings';
@@ -17,8 +21,10 @@ interface SettingsProps {
 }
 
 function Settings({ activeTab }: SettingsProps) {
-  const dispatch = useAppDispatch();
-  const globalSettings = useAppSelector((state) => state.settings);
+  const queryClient = useQueryClient();
+  const { t } = useTranslation();
+  const setSettings = useSettingsStore((s) => s.setSettings);
+  const globalSettings = useSettingsStore(useShallow(selectSettings));
 
   const [localSettings, setLocalSettings] = useState<BsddSettings>(globalSettings);
   const [unsavedChanges, setUnsavedChanges] = useState<boolean>(false);
@@ -28,10 +34,12 @@ function Settings({ activeTab }: SettingsProps) {
     setLocalSettings(globalSettings);
   }, [globalSettings]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     console.log('Saving', localSettings);
     if (!localSettings) return;
-    dispatch(setSettingsWithValidation(localSettings));
+
+    const validated = await validateSettings(queryClient, localSettings);
+    setSettings(validated);
 
     if (typeof window?.bsddBridge?.saveSettings === 'function') {
       window.bsddBridge.saveSettings(JSON.stringify(localSettings));
@@ -45,6 +53,12 @@ function Settings({ activeTab }: SettingsProps) {
   const handleCancel = () => {
     setLocalSettings(globalSettings);
     setUnsavedChanges(false);
+  };
+
+  const handleResetCache = async () => {
+    queryClient.clear();
+    await del('bsdd-query-cache');
+    window.location.reload();
   };
 
   return (
@@ -85,6 +99,9 @@ function Settings({ activeTab }: SettingsProps) {
         </Button>
         <Button fullWidth variant="light" onClick={handleCancel} disabled={!unsavedChanges}>
           Cancel
+        </Button>
+        <Button fullWidth variant="subtle" color="red" onClick={handleResetCache}>
+          {t('resetCache')}
         </Button>
       </Group>
     </>

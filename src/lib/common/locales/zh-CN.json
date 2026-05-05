@@ -55,6 +55,13 @@
         "tooltipEditInstance": "无法编辑类型的实例属性",
         "setAsInstanceCheckboxTooltip": "设置为实例属性"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "Sign in for faster API",
+      "authenticatedViaBsdd": "buildingSMART account",
+      "authError": "Authentication error",
+      "logout": "Sign out",
+      "user": "User"
     }
   }
 }

@@ -1,14 +1,19 @@
+import { useMemo } from 'react';
+
+import { useAuthToken } from './auth/useAuthToken';
 import BsddSearch from './lib/BsddSearch';
-import { ApiFunctionsProvider } from './lib/common/apiFunctionsContext';
 import useCefSharpBridge from './lib/common/bsddBridge/useCefSharpBridge';
+import { BsddBridgeContext } from './lib/providers/BsddBridgeContext';
 
 function BsddSearchLoader() {
-  const apiFunctions = useCefSharpBridge();
+  const callbacks = useCefSharpBridge();
+  const accessToken = useAuthToken();
+  const bridge = useMemo(() => ({ ...callbacks, accessToken }), [callbacks, accessToken]);
 
   return (
-    <ApiFunctionsProvider value={apiFunctions}>
+    <BsddBridgeContext.Provider value={bridge}>
       <BsddSearch />
-    </ApiFunctionsProvider>
+    </BsddBridgeContext.Provider>
   );
 }
 

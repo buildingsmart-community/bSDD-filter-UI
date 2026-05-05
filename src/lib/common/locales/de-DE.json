@@ -56,6 +56,13 @@
         "tooltipEditInstance": "Das Bearbeiten von Instanzeigenschaften für Typen ist nicht möglich",
         "setAsInstanceCheckboxTooltip": "Als Instanzeigenschaft festlegen"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "Anmelden für schnellere API",
+      "authenticatedViaBsdd": "buildingSMART-Konto",
+      "authError": "Authentifizierungsfehler",
+      "logout": "Abmelden",
+      "user": "Benutzer"
     }
   }
 }

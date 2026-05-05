@@ -291,7 +291,6 @@ export const DraggableMultiSelect = factory<MultiSelectFactory>((_props, ref) =>
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          key={`${item}-${index}`}
           withRemoveButton={!readOnly && !optionsLockup[item]?.disabled}
           onRemove={() => {
             setValue(_value.filter((i) => item !== i));
@@ -392,12 +391,10 @@ export const DraggableMultiSelect = factory<MultiSelectFactory>((_props, ref) =>
             description={description}
             label={label}
             error={error}
-            multiline
             withErrorStyles={withErrorStyles}
             __stylesApiProps={{
               ...props,
               rightSectionPointerEvents: rightSectionPointerEvents || (_clearable ? 'all' : 'none'),
-              multiline: true,
             }}
             pointer={!searchable}
             onClick={() => {

@@ -56,6 +56,13 @@
         "tooltipEditInstance": "Negalima redaguoti tipo egzemplioriaus savybių",
         "setAsInstanceCheckboxTooltip": "Nustatyti kaip tipo egzemplioriaus savybę"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "Prisijunkite greitesnei API",
+      "authenticatedViaBsdd": "buildingSMART paskyra",
+      "authError": "Autentifikacijos klaida",
+      "logout": "Atsijungti",
+      "user": "Vartotojas"
     }
   }
 }

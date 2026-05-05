@@ -6,7 +6,7 @@
     "save": "Uložit",
     "cancel": "Zrušit",
     "groupBy": "Seskupit",
-    "checkbox":{
+    "checkbox": {
       "true": "Ano",
       "false": "Ne",
       "indeterminate": "Nespecifikováno"
@@ -56,6 +56,13 @@
         "tooltipEditInstance": "Úprava instančních vlastností pro typy není možná",
         "setAsInstanceCheckboxTooltip": "Nastavit jako instanční vlastnost"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "Přihlásit se pro rychlejší API",
+      "authenticatedViaBsdd": "Účet buildingSMART",
+      "authError": "Chyba ověření",
+      "logout": "Odhlásit se",
+      "user": "Uživatel"
     }
   }
 }

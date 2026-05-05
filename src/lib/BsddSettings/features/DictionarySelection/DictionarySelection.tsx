@@ -1,14 +1,13 @@
 import { Accordion, ComboboxItem, MultiSelect, Space, Text, Title } from '@mantine/core';
-import { createSelector } from '@reduxjs/toolkit';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useAppSelector } from '../../../common/app/hooks';
-import { DictionaryContractV1 } from '../../../common/BsddApi/BsddApiBase';
+import type { DictionaryContractV1 } from '../../../../../shared/bsdd-api/generated/types.gen';
 import { DraggableMultiSelect } from '../../../common/components/DraggableMultiSelect/DraggableMultiSelect';
 import { BsddDictionary, BsddSettings } from '../../../common/IfcData/bsddBridgeData';
 import { convertBsddDictionaryToIfcClassification } from '../../../common/IfcData/ifcBsddConverters';
-import { selectBsddDictionaries } from '../../../common/slices/bsddSlice';
+import { useDictionaries } from '../../../api/hooks/useDictionaries';
+import { useBsddBridge } from '../../../providers/BsddBridgeContext';
 
 interface DictionarySelectionProps {
   id: number;
@@ -21,26 +20,10 @@ interface DictionarySelectionProps {
 const IFC_DICTIONARY_URL = 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/';
 const DEFAULT_IFC_PARAMETER = 'Export Type to IFC As';
 
-/**
- * Finds a dictionary in the given array of dictionaries based on the provided URI.
- *
- * @param dictionaries - The array of dictionaries to search.
- * @param uri - The URI of the dictionary to find.
- * @returns The dictionary object if found, or undefined if not found.
- */
 function findDictionaryByUri(dictionaries: DictionaryContractV1[], uri: string | null) {
   return Object.values(dictionaries).find((item) => item.uri === uri);
 }
 
-/**
- * Converts a dictionary object to a BsddDictionary object.
- * If the dictionary is null, returns null.
- * If the dictionary is not found in the previousSelections array, creates a new BsddDictionary object.
- *
- * @param {DictionaryContractV1 | null} dictionary - The dictionary object to convert.
- * @param {BsddDictionary[]} previousSelections - The array of previously selected dictionaries.
- * @returns {BsddDictionary | null} The converted BsddDictionary object or null if the dictionary is null.
- */
 function convertToBsddDictionary(
   dictionary: DictionaryContractV1 | null | undefined,
   previousSelections: BsddDictionary[],
@@ -50,7 +33,6 @@ function convertToBsddDictionary(
 
   const previousSelection = previousSelections.find((item) => item.ifcClassification.location === dictionary.uri);
 
-  // If the dictionary was previously selected, return it as is to preserve its parameterMapping
   if (previousSelection) return previousSelection;
 
   return {
@@ -58,19 +40,6 @@ function convertToBsddDictionary(
     parameterMapping,
   };
 }
-
-const selectBsddDictionaryOptions = createSelector(selectBsddDictionaries, (bsddDictionaries) => {
-  const uniqueOptionsMap = new Map<string, ComboboxItem>();
-
-  Object.values(bsddDictionaries).forEach((item) => {
-    uniqueOptionsMap.set(item.uri, {
-      value: item.uri,
-      label: `${item.name} (${item.version})`,
-    } as ComboboxItem);
-  });
-
-  return Array.from(uniqueOptionsMap.values());
-});
 
 const getComboboxItem = (item: any): ComboboxItem[] => {
   return item && item.ifcClassification && item.ifcClassification.location
@@ -83,14 +52,6 @@ const getComboboxItem = (item: any): ComboboxItem[] => {
     : [];
 };
 
-const selectIfcDictionaryOptions = createSelector(selectBsddDictionaryOptions, (bsddDictionaryOptions) =>
-  bsddDictionaryOptions.filter((option) => option.value.startsWith(IFC_DICTIONARY_URL)),
-);
-
-const selectFilterDictionaryOptions = createSelector(selectBsddDictionaryOptions, (bsddDictionaryOptions) =>
-  bsddDictionaryOptions.filter((option) => !option.value.startsWith(IFC_DICTIONARY_URL)),
-);
-
 function DictionarySelection({
   id,
   localSettings,
@@ -99,10 +60,34 @@ function DictionarySelection({
   setIsLoading,
 }: DictionarySelectionProps) {
   const { t } = useTranslation();
-  const bsddDictionaries = useAppSelector(selectBsddDictionaries);
-  const bsddDictionaryOptions = useAppSelector(selectBsddDictionaryOptions);
-  const bsddIfcDictionaryOptions = useAppSelector(selectIfcDictionaryOptions);
-  const bsddFilterDictionaryOptions = useAppSelector(selectFilterDictionaryOptions);
+
+  const { accessToken } = useBsddBridge();
+  // Use localSettings.includeTestDictionaries for live preview while editing
+  const { data: bsddDictionaries = {} } = useDictionaries(
+    localSettings.includeTestDictionaries ?? false,
+    accessToken,
+  );
+
+  const bsddDictionaryOptions = useMemo(() => {
+    const uniqueOptionsMap = new Map<string, ComboboxItem>();
+    Object.values(bsddDictionaries).forEach((item) => {
+      uniqueOptionsMap.set(item.uri, {
+        value: item.uri,
+        label: `${item.name} (${item.version})`,
+      } as ComboboxItem);
+    });
+    return Array.from(uniqueOptionsMap.values());
+  }, [bsddDictionaries]);
+
+  const bsddIfcDictionaryOptions = useMemo(
+    () => bsddDictionaryOptions.filter((option) => option.value.startsWith(IFC_DICTIONARY_URL)),
+    [bsddDictionaryOptions],
+  );
+
+  const bsddFilterDictionaryOptions = useMemo(
+    () => bsddDictionaryOptions.filter((option) => !option.value.startsWith(IFC_DICTIONARY_URL)),
+    [bsddDictionaryOptions],
+  );
 
   const localMainDictionaryValues = useMemo(() => {
     return getComboboxItem(localSettings?.mainDictionary);
@@ -212,7 +197,7 @@ function DictionarySelection({
     ],
   );
 
-  // Set filter dictionary options for use in select
+  // Set loading to false when dictionary options are available
   useEffect(() => {
     if (bsddDictionaryOptions.length === 0) return;
     setIsLoading(false);

@@ -1,5 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-/// <reference types="vitest" />
 /// <reference types="vite/client" />
 import react from '@vitejs/plugin-react-swc';
 import { defineConfig } from 'vite';
@@ -13,21 +11,21 @@ export default defineConfig(({ mode }) => {
     root: './',
     base,
     server: {
-      // port: 3000,
       open: '/index.html',
-      // open: '/bsdd_selection/index.html',
-      // open: '/bsdd_search/index.html',
+      proxy: {
+        // Route bSDD API calls through proxy to bypass localhost CORS restriction.
+        // The production bSDD API (api.bsdd.buildingsmart.org) does not allow
+        // localhost in its CORS whitelist. The test environment does.
+        '/bsdd-api': {
+          target: 'https://api.bsdd.buildingsmart.org',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/bsdd-api/, ''),
+        },
+      },
     },
     build: {
       target: 'esnext',
-      external: ['react', 'react-dom'],
       outDir: './dist',
-      // lib: {
-      //   entry: 'src/lib/index.ts',
-      //   name: 'bSDD',
-      //   fileName: (format) => `[name]-${format}.js`,
-      //   formats: ['es'],
-      // },
       rollupOptions: {
         input: {
           bsdd_selection: 'bsdd_selection/index.html',
@@ -35,23 +33,15 @@ export default defineConfig(({ mode }) => {
           bsdd_search_settings: 'bsdd_search_settings/index.html',
           main: 'index.html',
         },
-        // output: {
-        //   entryFileNames: '[name].js',
-        //   chunkFileNames: '[name].js',
-        //   assetFileNames: '[name].[ext]',
-        //   manualChunks: undefined,
-        // },
       },
     },
     plugins: [
       react(),
-      dts(
-        {
+      dts({
         include: ['src/lib/**/*'],
         outDir: 'dist',
         entryRoot: 'src/lib',
-      }
-    ),
+      }),
     ],
     preview: {
       open: true,
@@ -59,10 +49,9 @@ export default defineConfig(({ mode }) => {
     test: {
       globals: true,
       environment: 'jsdom',
-      // setupFiles: './src/setupTests.ts',
+      setupFiles: ['./src/test/setup.ts'],
     },
     define: {
-      // Catch for 'Uncaught ReferenceError: process is not defined'
       'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`,
       'process.env.APP_MODE': JSON.stringify(mode),
     },

@@ -3,20 +3,16 @@ import '@mantine/core/styles.css';
 
 import { Box, Button, ColorSwatch, Group, HoverCard, Select, Space, Text, Tooltip } from '@mantine/core';
 import { IconPencil, IconPointer } from '@tabler/icons-react';
-import { MantineReactTable, MRT_Cell, MRT_ColumnDef, MRT_Row, MRT_RowSelectionState } from 'mantine-react-table';
+import { MantineReactTable, MRT_Cell, MRT_ColumnDef, MRT_Row, MRT_RowSelectionState, MRT_ToggleGlobalFilterButton } from 'mantine-react-table';
 import { useMemo, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { useTranslation } from 'react-i18next';
 
-import { useApiFunctions } from '../../../common/apiFunctionsContext';
-import { useAppSelector } from '../../../common/app/hooks';
+import { useBsddBridge } from '../../../providers/BsddBridgeContext';
 import { BsddDictionary } from '../../../common/IfcData/bsddBridgeData';
 import { IfcEntity } from '../../../common/IfcData/ifc';
-import { selectLoadedIfcEntities } from '../../../common/slices/ifcDataSlice';
-import {
-  selectActiveDictionaries,
-  selectIfcDictionaryUri,
-  selectMainDictionary,
-} from '../../../common/slices/settingsSlice';
+import { useIfcDataStore } from '../../../stores/ifcDataStore';
+import { selectActiveDictionaries, selectIfcDictionaryUri, useSettingsStore } from '../../../stores/settingsStore';
 import { ClassificationStatus, getClassUrisFromDictionaries } from '../../../common/tools/checkIfcClassification';
 import { Color, colorMap } from '../../../common/tools/colors';
 
@@ -67,9 +63,8 @@ const calculateSubRowColor = (activeDictionaryValues: Record<string, Classificat
 /**
  * Calculates the color for a group row based on the colors of its sub-rows.
  *
- * @param {SubRowEntity[]} subRows - An array of sub-row entities, each containing a color property.
- * @returns {Color} - The calculated color for the group row.
- *
+ * @param subRows - An array of sub-row entities, each containing a color property.
+ * @returns The calculated color for the group row.
  */
 const calculateGroupRowColor = (subRows: SubRowEntity[]): Color => {
   const colors = subRows.map((subRow) => subRow.color);
@@ -215,7 +210,7 @@ const getMergedDictionaryColors = (
 };
 
 /**
- * Renders a color swatch with hover card that displays and a list of dictionaries with their respective colors.
+ * Renders a color swatch with hover card that displays a list of dictionaries with their respective colors.
  *
  * @param color - The color to be displayed in the main color swatch.
  * @param dictionaries - An array of `BsddDictionary` objects to be displayed in the hover card dropdown.
@@ -261,10 +256,10 @@ const renderHoverCard = (
 /**
  * Renders a hover card for a group row with color-coded dictionary values.
  *
- * @param {SubRowEntity[]} subRows - The sub-rows associated with the group row.
- * @param {BsddDictionary[]} activeDictionaries - The active dictionaries used for the group row.
- * @param {string} label - The label for the group row.
- * @returns {JSX.Element} The rendered hover card component.
+ * @param subRows - The sub-rows associated with the group row.
+ * @param activeDictionaries - The active dictionaries used for the group row.
+ * @param label - The label for the group row.
+ * @returns The rendered hover card component.
  */
 const renderGroupRowHoverCard = (subRows: SubRowEntity[], activeDictionaries: BsddDictionary[], label: string) => {
   const activeDictionaryColors = getMergedDictionaryColors(subRows, activeDictionaries);
@@ -284,7 +279,7 @@ const renderGroupRowHoverCard = (subRows: SubRowEntity[], activeDictionaries: Bs
  * @param row - The row data containing the original dictionary values.
  * @param activeDictionaries - The list of active dictionaries to be used for color coding.
  * @param label - The label to be displayed on the hover card.
- * @returns {JSX.Element} The rendered hover card component.
+ * @returns The rendered hover card component.
  */
 const renderSubRowHoverCard = (row: MRT_Row<GroupRowEntity>, activeDictionaries: BsddDictionary[], label: string) => {
   const { dictionaryValues } = row.original;
@@ -301,14 +296,11 @@ const renderSubRowHoverCard = (row: MRT_Row<GroupRowEntity>, activeDictionaries:
 };
 
 /**
- * CellComponent is a functional component that renders a cell within a table row.
- * It displays the cell value inside a tooltip and adds indentation based on the row's depth.
+ * Renders a cell within a table row with a tooltip and depth-based indentation.
  *
- * @param {object} props - The properties object.
- * @param {MRT_Cell<GroupRowEntity, unknown>} props.cell - The cell object containing the cell data.
- * @param {MRT_Row<GroupRowEntity>} props.row - The row object containing the row data.
- *
- * @returns {JSX.Element} The rendered cell component.
+ * @param cell - The cell object containing the cell data.
+ * @param row - The row object containing the row data.
+ * @returns The rendered cell component.
  */
 function CellComponent({ cell, row }: { cell: MRT_Cell<GroupRowEntity, unknown>; row: MRT_Row<GroupRowEntity> }) {
   return (
@@ -323,19 +315,17 @@ function CellComponent({ cell, row }: { cell: MRT_Cell<GroupRowEntity, unknown>;
 
 function Selection({ loading }: SelectionProps) {
   const { t } = useTranslation();
-  const ifcEntities = useAppSelector(selectLoadedIfcEntities);
-  const ifcDictionaryUri = useAppSelector(selectIfcDictionaryUri);
-  const mainDictionary = useAppSelector(selectMainDictionary);
-  const activeDictionaries = useAppSelector(selectActiveDictionaries);
-  const { bsddSearch, bsddSelect } = useApiFunctions();
+  const ifcEntities = useIfcDataStore((s) => s.loadedIfcEntities);
+  const ifcDictionaryUri = useSettingsStore(selectIfcDictionaryUri);
+  const mainDictionary = useSettingsStore((s) => s.mainDictionary);
+  const activeDictionaries = useSettingsStore(useShallow(selectActiveDictionaries));
+  const { onSearch, onSelect } = useBsddBridge();
 
   const [groupByKey, setGroupByKey] = useState<keyof IfcEntity>('objectType');
-  const [entityIndexMap, setEntityIndexMap] = useState<Record<string, number>>({});
 
-  const groupedEntities = useMemo(() => {
+  const { groupedEntities, entityIndexMap } = useMemo(() => {
     const result = groupEntitiesBy(ifcEntities, groupByKey, activeDictionaries, ifcDictionaryUri);
-    setEntityIndexMap(result.entityIndexMap);
-    return result.groupedEntities;
+    return { groupedEntities: result.groupedEntities, entityIndexMap: result.entityIndexMap };
   }, [ifcEntities, groupByKey, activeDictionaries, ifcDictionaryUri]);
 
   const columns = useMemo<MRT_ColumnDef<GroupRowEntity>[]>(
@@ -405,13 +395,13 @@ function Selection({ loading }: SelectionProps) {
   const handleSelectEntities = (rowSelection: MRT_RowSelectionState) => () => {
     const selectedEntities = getSelectedEntities(rowSelection);
     console.log('Selected Entities:', selectedEntities);
-    bsddSelect(selectedEntities);
+    onSelect(selectedEntities);
   };
 
   const handleEditEntities = (rowSelection: MRT_RowSelectionState) => () => {
     const selectedEntities = getSelectedEntities(rowSelection);
     console.log('Edit Entities:', selectedEntities);
-    bsddSearch(selectedEntities, groupByKey);
+    onSearch(selectedEntities, groupByKey);
   };
 
   return (
@@ -430,13 +420,14 @@ function Selection({ loading }: SelectionProps) {
         enableDensityToggle={false}
         enableHiding={false}
         positionToolbarAlertBanner="bottom"
+        state={{ isLoading: loading }}
         initialState={{
           density: 'xs',
           columnVisibility: {
-            type: false, // groupByKey == 'type',
-            description: false, // groupByKey == 'description',
-            objectType: false, // groupByKey == 'objectType',
-            predefinedType: false, // groupByKey == 'predefinedType',
+            type: false,
+            description: false,
+            objectType: false,
+            predefinedType: false,
           },
         }}
         mantineTableBodyRowProps={(table) => ({
@@ -445,6 +436,11 @@ function Selection({ loading }: SelectionProps) {
           }),
         })}
         positionExpandColumn="first"
+        renderToolbarInternalActions={({ table }) => (
+          <Group gap={4} wrap="nowrap">
+            <MRT_ToggleGlobalFilterButton table={table} />
+          </Group>
+        )}
         renderTopToolbarCustomActions={(table) => (
           <Box
             style={{
