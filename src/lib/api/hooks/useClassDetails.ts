@@ -10,8 +10,7 @@ export function useClassDetails(
   accessToken?: string,
 ) {
   return useQuery({
-    // filterDictionaryUris excluded from key — same class data regardless of filter
-    queryKey: bsddKeys.classDetails(uri!, language),
+    queryKey: bsddKeys.classDetails(uri!, language, filterDictionaryUris),
     queryFn: () =>
       fetchClassDetail(uri!, language, {
         includeClassProperties: true,

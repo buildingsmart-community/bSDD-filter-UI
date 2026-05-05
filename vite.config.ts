@@ -33,7 +33,6 @@ export default defineConfig(({ mode }) => {
           bsdd_search_settings: 'bsdd_search_settings/index.html',
           main: 'index.html',
         },
-        external: ['react', 'react-dom'],
       },
     },
     plugins: [

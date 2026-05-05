@@ -11,6 +11,7 @@ import i18n from '../common/i18n';
 import { BsddBridgeData, BsddSettings } from '../common/IfcData/bsddBridgeData';
 import { IfcEntity } from '../common/IfcData/ifc';
 import { theme } from '../common/theme/theme';
+import defaultSettings from '../common/settings/defaultSettings';
 import { useSettingsStore } from '../stores/settingsStore';
 import { BsddBridgeCallbacks, BsddBridgeContext } from './BsddBridgeContext';
 import UrlSyncManager from './UrlSyncManager';
@@ -67,9 +68,9 @@ export function BsddProvider({
 
   useI18nLanguageSubscription();
 
-  // Initialise settings from props once.
+  // Initialise settings from props once — merge with defaults so required fields are never undefined.
   useEffect(() => {
-    if (settings) useSettingsStore.getState().setSettings(settings as BsddSettings);
+    if (settings) useSettingsStore.getState().setSettings({ ...defaultSettings, ...settings });
   }, [settings]);
 
   // External-locale override (e.g. host's UI language).

@@ -25,13 +25,18 @@ async function main() {
   let msalInstance: PublicClientApplication | undefined;
 
   if (isBsddAuthConfigured()) {
-    // MSAL v5 requires initialize() before MsalProvider renders
-    msalInstance = new PublicClientApplication(msalConfig);
-    await msalInstance.initialize();
-    // Consume any redirect response (required for redirect flow)
-    await msalInstance.handleRedirectPromise().catch((err) => {
-      console.error('[bSDD MSAL] redirect error:', err);
-    });
+    try {
+      // MSAL v5 requires initialize() before MsalProvider renders
+      msalInstance = new PublicClientApplication(msalConfig);
+      await msalInstance.initialize();
+      // Consume any redirect response (required for redirect flow)
+      await msalInstance.handleRedirectPromise().catch((err) => {
+        console.error('[bSDD MSAL] redirect error:', err);
+      });
+    } catch (err) {
+      console.error('[bSDD MSAL] initialization failed, continuing without auth:', err);
+      msalInstance = undefined;
+    }
   }
 
   ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
