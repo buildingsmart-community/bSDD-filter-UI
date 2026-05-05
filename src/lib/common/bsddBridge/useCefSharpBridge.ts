@@ -118,6 +118,7 @@ const useCefSharpBridge = () => {
         const language = useSettingsStore.getState().language;
         const validatedEntities = await validateIfcData(mockData.ifcData, queryClient, language);
         setLoadedIfcEntities(validatedEntities);
+        setLoadingEntities(false);
       } else {
         setLoadingEntities(false);
       }

@@ -23,12 +23,22 @@ function UrlSyncManager() {
     const languageParam = params.get('language');
     const includeTestParam = params.get('includeTestDictionaries');
 
-    // Only apply if URL has params (otherwise keep persisted settings)
-    if (mainDictionaryParam || languageParam) {
+    const safeJsonParse = <T,>(value: string | null, fallback: T): T => {
+      if (!value) return fallback;
+      try {
+        return JSON.parse(value) as T;
+      } catch {
+        console.warn('UrlSyncManager: failed to parse URL param:', value);
+        return fallback;
+      }
+    };
+
+    // Only apply if URL has any supported param (otherwise keep persisted settings)
+    if (mainDictionaryParam || ifcDictionaryParam || filterDictionariesParam || languageParam || includeTestParam) {
       setSettings({
-        mainDictionary: mainDictionaryParam ? JSON.parse(mainDictionaryParam) : null,
-        ifcDictionary: ifcDictionaryParam ? JSON.parse(ifcDictionaryParam) : null,
-        filterDictionaries: filterDictionariesParam ? JSON.parse(filterDictionariesParam) : [],
+        mainDictionary: safeJsonParse(mainDictionaryParam, null),
+        ifcDictionary: safeJsonParse(ifcDictionaryParam, null),
+        filterDictionaries: safeJsonParse(filterDictionariesParam, []),
         language: languageParam || 'en-GB',
         includeTestDictionaries: includeTestParam === 'true' ? true : includeTestParam === 'false' ? false : undefined,
       });

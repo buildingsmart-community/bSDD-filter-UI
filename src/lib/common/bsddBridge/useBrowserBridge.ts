@@ -66,6 +66,7 @@ const useBrowserBridge = () => {
         const language = validatedSettings.language || 'en-GB';
         const validatedEntities = await validateIfcData(mockData.ifcData, queryClient, language);
         setLoadedIfcEntities(validatedEntities);
+        setLoadingEntities(false);
       } else {
         setLoadingEntities(false);
       }

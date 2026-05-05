@@ -30,7 +30,7 @@ function AppLoader({ children, msalInstance }: AppLoaderProps) {
       <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
         <MantineProvider theme={theme}>
           <Suspense fallback={null}>{children}</Suspense>
-          <ReactQueryDevtools initialIsOpen={false} />
+          {import.meta.env.DEV && <ReactQueryDevtools initialIsOpen={false} />}
         </MantineProvider>
       </PersistQueryClientProvider>
     </StrictMode>

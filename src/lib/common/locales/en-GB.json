@@ -12,6 +12,8 @@
       "false": "no",
       "indeterminate": "indeterminate"
     },
+    "searching": "Searching...",
+    "nothingFound": "Nothing found...",
     "classSearchInstruction": "Select a classification in the search box above.",
     "noDescription": "No description",
     "linkTabTitle": "Link",

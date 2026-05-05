@@ -285,7 +285,7 @@ export const DraggableMultiSelect = factory<MultiSelectFactory>((_props, ref) =>
   };
 
   const values = _value.map((item, index) => (
-    <Draggable key={`${item}-${index}`} draggableId={`${item}-${index}`} index={index}>
+    <Draggable key={item} draggableId={item} index={index}>
       {(provided, snapshot) => (
         <Pill
           ref={provided.innerRef}

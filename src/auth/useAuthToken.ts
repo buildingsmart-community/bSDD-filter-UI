@@ -12,10 +12,10 @@ import { useAuth } from './useAuth';
  * // Pass to API calls: { headers: { Authorization: `Bearer ${token}` } }
  */
 export function useAuthToken(): string | undefined {
-  const { isAuthenticated, isConfigured, getAccessToken } = useAuth();
+  const { isAuthenticated, isConfigured, getAccessToken, user } = useAuth();
 
   const { data: token } = useQuery({
-    queryKey: ['bsdd', 'auth', 'accessToken'],
+    queryKey: ['bsdd', 'auth', 'accessToken', user?.homeAccountId ?? null],
     queryFn: async () => {
       const t = await getAccessToken();
       return t ?? undefined;

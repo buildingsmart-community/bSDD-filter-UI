@@ -1,5 +1,6 @@
 import { CheckIcon, CloseButton, Combobox, Group, InputBase, Loader, Paper, Text, useCombobox } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface Option {
   label: string;
@@ -28,6 +29,7 @@ const RENDER_MORE_LIMIT = 25;
 const SEARCH_DEBOUNCE_MS = 300;
 
 function Slicer({ height, options, label, value, setValue, placeholder = 'Search values', onSearch, isSearching, loading }: SlicerProps) {
+  const { t } = useTranslation();
   const [search, setSearch] = useState('');
   const [renderedOptions, setRenderedOptions] = useState(options.slice(0, INITIAL_RENDER_LIMIT));
   const [disabled, setDisabled] = useState(loading || options.length === 1);
@@ -129,11 +131,11 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
   ));
 
   const optionsContent = isSearching ? (
-    <Combobox.Empty><Group gap="xs"><Loader size="xs" />Searching...</Group></Combobox.Empty>
+    <Combobox.Empty><Group gap="xs"><Loader size="xs" />{t('searching')}</Group></Combobox.Empty>
   ) : comboboxOptions.length > 0 ? (
     comboboxOptions
   ) : (
-    <Combobox.Empty>Nothing found...</Combobox.Empty>
+    <Combobox.Empty>{t('nothingFound')}</Combobox.Empty>
   );
 
   return (
