@@ -1,4 +1,17 @@
 export { default as BsddSearch } from './BsddSearch';
 export { default as BsddSelection } from './BsddSelection';
 export { default as BsddSettings } from './BsddSettings';
-export type { EntityState as EntitiesState } from '../lib/common/slices/ifcEntitySlice';
+export { BsddProvider } from './providers/BsddProvider';
+export type { BsddProviderProps } from './providers/BsddProvider';
+export { useBsddBridge } from './providers/BsddBridgeContext';
+export type { BsddBridgeCallbacks } from './providers/BsddBridgeContext';
+export { useSettingsStore } from './stores/settingsStore';
+export { useIfcDataStore } from './stores/ifcDataStore';
+export type { EntityState } from './stores/ifcDataStore';
+export { useDictionaries, useDictionary } from './api/hooks/useDictionaries';
+export { useDictionaryClasses } from './api/hooks/useDictionaryClasses';
+export { useClassDetails, useClasses } from './api/hooks/useClassDetails';
+export { useSearchInDictionary } from './api/hooks/useSearchInDictionary';
+export { usePropertyNames } from './api/hooks/usePropertyNames';
+export type { BsddSettings as BsddSettingsType, BsddDictionary, BsddBridgeData } from './common/IfcData/bsddBridgeData';
+export type { IfcEntity, IfcClassification, IfcClassificationReference, IfcPropertySet } from './common/IfcData/ifc';

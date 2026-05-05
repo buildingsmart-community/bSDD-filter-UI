@@ -4,6 +4,7 @@ interface Option {
 }
 interface Props {
     defaultSelection: Option | undefined;
+    onClassificationSelect: (uri: string | null) => void;
 }
-declare function Search({ defaultSelection }: Props): import("react/jsx-runtime").JSX.Element;
+declare function Search({ defaultSelection, onClassificationSelect }: Props): import("react/jsx-runtime").JSX.Element;
 export default Search;

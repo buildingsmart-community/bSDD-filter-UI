@@ -1,6 +1,7 @@
 declare const _default: {
   "translation": {
     "appTitle": "bSDD BIM data manager",
+    "resetCache": "Reset cache",
     "updateSelection": "Update selection",
     "apply": "Assign",
     "save": "Save",
@@ -11,6 +12,8 @@ declare const _default: {
       "false": "no",
       "indeterminate": "indeterminate"
     },
+    "searching": "Searching...",
+    "nothingFound": "Nothing found...",
     "classSearchInstruction": "Select a classification in the search box above.",
     "noDescription": "No description",
     "linkTabTitle": "Link",
@@ -51,6 +54,13 @@ declare const _default: {
     "checkDocumentation": "Check out our documentation",
     "appInfoLabel": "Information and documentation",
     "appInfoInstruction": "Information about this plugin",
+    "auth": {
+      "loginForFasterApi": "Sign in for faster API",
+      "authenticatedViaBsdd": "buildingSMART account",
+      "authError": "Authentication error",
+      "logout": "Sign out",
+      "user": "User"
+    },
     "bsddSearch": {
       "property": {
         "inputTooltipEditInstance": "Editing instance properties for types is not possible",

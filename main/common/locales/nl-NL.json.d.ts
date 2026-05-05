@@ -1,6 +1,7 @@
 declare const _default: {
   "translation": {
     "appTitle": "bSDD BIM data verrijking",
+    "resetCache": "Cache wissen",
     "updateSelection": "Update selectie",
     "apply": "Toewijzen",
     "save": "Opslaan",
@@ -56,8 +57,16 @@ declare const _default: {
         "tooltipEditInstance": "Het bewerken van instantie eigenschappen voor typen is niet mogelijk",
         "setAsInstanceCheckboxTooltip": "Instellen als instantie eigenschap"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "Inloggen voor snellere API",
+      "authenticatedViaBsdd": "buildingSMART account",
+      "authError": "Authenticatiefout",
+      "logout": "Uitloggen",
+      "user": "Gebruiker"
     }
   }
-};
+}
+;
 
 export default _default;

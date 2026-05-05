@@ -1,0 +1,1 @@
+export declare function useDictionaryClasses(uri: string | undefined | null, language: string, accessToken?: string): import('@tanstack/react-query').UseQueryResult<import('../fetchers/dictionaries').ClassListItemContractV1Classes[], Error>;

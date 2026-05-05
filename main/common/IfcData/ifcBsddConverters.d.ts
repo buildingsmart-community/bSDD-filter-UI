@@ -1,4 +1,4 @@
-import { DictionaryClassesResponseContractV1Classes, DictionaryContractV1 } from '../BsddApi/BsddApiBase';
+import { DictionaryClassesResponseContractV1Classes, DictionaryContractV1 } from '../../../../shared/bsdd-api/generated/types.gen';
 import { IfcClassification } from './ifc';
 /**
  * Converts a BSDD dictionary to an IfcClassification object.
