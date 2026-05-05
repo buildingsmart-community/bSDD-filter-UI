@@ -26,9 +26,12 @@ export const setBsddAccessToken = (token: string | undefined): void => {
 // Inject Authorization header on every request when a token is available.
 // This applies to all endpoints — even public read endpoints benefit from
 // authentication because bSDD grants higher rate limits to identified users.
-client.interceptors.request.use((request) => {
+// Exported for unit testing only — call via the interceptor, not directly.
+export const _authInterceptor = (request: Request): Request => {
   if (!_accessToken) return request;
   const headers = new Headers(request.headers);
   headers.set('Authorization', `Bearer ${_accessToken}`);
   return new Request(request, { headers });
-});
+};
+
+client.interceptors.request.use(_authInterceptor);

@@ -1,8 +1,9 @@
 import { Container, Group, Tabs } from '@mantine/core';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAuthToken } from './auth/useAuthToken';
+import { setBsddAccessToken } from './lib/api/bsddApiInstance';
 import { AuthButton } from './components/AuthButton';
 import BsddSearch from './lib/BsddSearch';
 import Settings from './lib/BsddSettings/SettingsComponent';
@@ -16,6 +17,10 @@ function BsddSearchSettingsLoader() {
   const { onSave, onCancel } = useBrowserBridge();
   const accessToken = useAuthToken();
   const [activeTab, setActiveTab] = useState(defaultTab);
+
+  useEffect(() => {
+    setBsddAccessToken(accessToken);
+  }, [accessToken]);
 
   const bridge = useMemo(() => ({ onSave, onCancel, accessToken }), [onSave, onCancel, accessToken]);
 

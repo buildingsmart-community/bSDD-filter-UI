@@ -321,7 +321,7 @@ function Classifications({
     <Paper style={{ height: `${height}px`, position: 'relative' }}>
       {Array.from(activeDictionariesMap.entries()).map(([dictionaryUri, dictionary]) => {
         const isMainDictionary = dictionaryUri === mainDictionaryUri;
-        const isIfcDictionary = dictionaryUri === mainDictionaryClassification?.dictionaryUri;
+        const isIfcDictionary = dictionaryUri === ifcDictionaryUri;
         const isMainLoading = !!mainClassificationUri && !mainDictionaryClassification;
 
         if (isMainDictionary) {

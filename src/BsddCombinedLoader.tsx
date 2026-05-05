@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useAuthToken } from './auth/useAuthToken';
 import { AuthButton } from './components/AuthButton';
+import { setBsddAccessToken } from './lib/api/bsddApiInstance';
 import BsddSearch from './lib/BsddSearch';
 import BsddSelection from './lib/BsddSelection';
 import Settings from './lib/BsddSettings/SettingsComponent';
@@ -26,6 +27,10 @@ function BsddCombinedLoader() {
   const accessToken = useAuthToken();
   const [activeTab, setActiveTab] = useState(defaultTab);
   const [searchKey, setSearchKey] = useState<keyof IfcEntity | undefined>();
+
+  useEffect(() => {
+    setBsddAccessToken(accessToken);
+  }, [accessToken]);
 
   useEffect(() => {
     if (mockData.propertyIsInstanceMap) {
