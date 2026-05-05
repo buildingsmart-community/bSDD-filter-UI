@@ -4,7 +4,7 @@ import { ClassPropertyContractV1 } from '../../../../shared/bsdd-api/generated/t
  * individually cached and re-used across different classes.
  * Returns a merged map of { [propertyUri]: name }.
  */
-export declare function usePropertyNames(classProperties: ClassPropertyContractV1[], language: string, accessToken?: string): {
+export declare function usePropertyNames(classProperties: ClassPropertyContractV1[], language: string): {
     data: Record<string, string>;
     isLoading: boolean;
 };

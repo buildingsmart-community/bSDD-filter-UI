@@ -5,4 +5,4 @@ export declare function searchInDictionary(queryParameters: {
     Offset?: number;
     Limit?: number;
     languageCode?: string;
-}, accessToken?: string): Promise<SearchInDictionaryResponseContractV1>;
+}): Promise<SearchInDictionaryResponseContractV1>;

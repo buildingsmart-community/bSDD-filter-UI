@@ -3,3 +3,5 @@ export { classGet, dictionaryGet, dictionaryClassesGetWithClasses, searchInDicti
 export declare const apiHeaders: {
     'X-User-Agent': string;
 };
+export declare const setBsddAccessToken: (token: string | undefined) => void;
+export declare const _authInterceptor: (request: Request) => Request;

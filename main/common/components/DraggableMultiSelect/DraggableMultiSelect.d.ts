@@ -1,4 +1,4 @@
-import { ___BaseInputProps, ___InputStylesNames, BoxProps, ComboboxItem, ComboboxLikeProps, ComboboxLikeRenderOptionInput, ComboboxLikeStylesNames, ElementProps, Factory, InputClearButtonProps, MantineColor, ScrollAreaProps, StylesApiProps } from '@mantine/core';
+import { BoxProps, ComboboxItem, ComboboxLikeProps, ComboboxLikeRenderOptionInput, ComboboxLikeStylesNames, ElementProps, Factory, InputClearButtonProps, MantineColor, ScrollAreaProps, StylesApiProps, ___BaseInputProps, ___InputStylesNames } from '@mantine/core';
 export type MultiSelectStylesNames = __InputStylesNames | ComboboxLikeStylesNames | 'pill' | 'pillsList' | 'inputField';
 export interface MultiSelectProps extends BoxProps, __BaseInputProps, ComboboxLikeProps, StylesApiProps<MultiSelectFactory>, ElementProps<'input', 'size' | 'value' | 'defaultValue' | 'onChange'> {
     /** Controlled component value */
