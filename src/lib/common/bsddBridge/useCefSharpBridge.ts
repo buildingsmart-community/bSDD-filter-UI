@@ -5,12 +5,12 @@ import { mockData } from '../../../mocks/mockData';
 import { validateIfcData, validateSettings } from '../../api/validation/validateIfcData';
 import { useIfcDataStore } from '../../stores/ifcDataStore';
 import { useSettingsStore } from '../../stores/settingsStore';
-import { BsddBridgeData, BsddSettings } from '../IfcData/bsddBridgeData';
-import { IfcEntity } from '../IfcData/ifc';
+import type { BsddBridgeData, BsddSettings } from '../IfcData/bsddBridgeData';
+import type { IfcEntity } from '../IfcData/ifc';
+import { applyDisplayScale } from '../hooks/useDisplayScale';
 import defaultSettings from '../settings/defaultSettings';
 import { mergeIfcEntities } from '../tools/mergeIfcEntities';
-import { BsddBridge } from './BsddBridgeInterface';
-import { applyDisplayScale } from '../hooks/useDisplayScale';
+import type { BsddBridge } from './BsddBridgeInterface';
 
 export interface CefSharpWindow extends Window {
   CefSharp?: {
@@ -128,7 +128,15 @@ const useCefSharpBridge = () => {
       clearInterval(cefSharpCheckInterval);
       clearTimeout(cefSharpTimeout);
     };
-  }, [queryClient, setSettings, setLoadedIfcEntities, setLoadingEntities, setSelectedIfcEntities, setSavedPropertyIsInstanceMap, setIfcEntity]);
+  }, [
+    queryClient,
+    setSettings,
+    setLoadedIfcEntities,
+    setLoadingEntities,
+    setSelectedIfcEntities,
+    setSavedPropertyIsInstanceMap,
+    setIfcEntity,
+  ]);
 
   const onSearch = (ifcEntities: IfcEntity[]) => {
     const ifcEntityJson = JSON.stringify(ifcEntities);

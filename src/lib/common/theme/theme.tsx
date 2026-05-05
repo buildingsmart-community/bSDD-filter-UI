@@ -1,11 +1,6 @@
 import './styles.css';
 
-import {
-  Checkbox,
-  createTheme,
-  MantineTheme,
-  MantineThemeOverride,
-} from '@mantine/core';
+import { Checkbox, type MantineTheme, type MantineThemeOverride, createTheme } from '@mantine/core';
 import { IconCheck, IconDots } from '@tabler/icons-react';
 
 type CheckboxIconProps = {

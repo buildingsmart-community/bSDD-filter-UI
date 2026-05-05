@@ -2,15 +2,15 @@ import { Checkbox, Group, Select, TextInput, Tooltip } from '@mantine/core';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 
-import {
+import type {
   IfcProperty,
   IfcPropertyEnumeratedValue,
   IfcPropertySet,
   IfcPropertySingleValue,
   IfcValue,
 } from '../../../common/IfcData/ifc';
-import { useIfcDataStore } from '../../../stores/ifcDataStore';
 import { getInputDescription } from '../../../common/tools/utils';
+import { useIfcDataStore } from '../../../stores/ifcDataStore';
 import Check from '../../Checkbox';
 
 const ALLOWED_ATTRIBUTES = ['Name', 'Description', 'ObjectType'];

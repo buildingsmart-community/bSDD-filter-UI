@@ -12,16 +12,16 @@ import { bsddKeys } from '../queryKeys';
 export function usePropertyNames(
   classProperties: ClassPropertyContractV1[],
   language: string,
-  accessToken?: string,
 ): { data: Record<string, string>; isLoading: boolean } {
-  const propsWithUri = classProperties.filter((p): p is ClassPropertyContractV1 & { propertyUri: string } =>
-    typeof p.propertyUri === 'string' && p.propertyUri.length > 0,
+  const propsWithUri = classProperties.filter(
+    (p): p is ClassPropertyContractV1 & { propertyUri: string } =>
+      typeof p.propertyUri === 'string' && p.propertyUri.length > 0,
   );
 
   const results = useQueries({
     queries: propsWithUri.map((p) => ({
       queryKey: bsddKeys.propertyName(p.propertyUri, language),
-      queryFn: () => fetchPropertyName(p, language, accessToken),
+      queryFn: () => fetchPropertyName(p, language),
       staleTime: 1000 * 60 * 60,
       gcTime: 1000 * 60 * 60 * 24,
     })),

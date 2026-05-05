@@ -1,8 +1,9 @@
 import { Container, Group, Paper, Space, Tabs } from '@mantine/core';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAuthToken } from './auth/useAuthToken';
+import { setBsddAccessToken } from './lib/api/bsddApiInstance';
 import { AuthButton } from './components/AuthButton';
 import BsddSelection from './lib/BsddSelection';
 import Settings from './lib/BsddSettings/SettingsComponent';
@@ -16,6 +17,10 @@ function BsddSelectionLoader() {
   const callbacks = useCefSharpBridge();
   const accessToken = useAuthToken();
   const [activeTab, setActiveTab] = useState(defaultTab);
+
+  useEffect(() => {
+    setBsddAccessToken(accessToken);
+  }, [accessToken]);
 
   const bridge = useMemo(() => ({ ...callbacks, accessToken }), [callbacks, accessToken]);
 

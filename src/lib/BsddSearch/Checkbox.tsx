@@ -1,5 +1,6 @@
-import { Checkbox, Input, Tooltip } from '@mantine/core';
-import React, { useEffect, useState } from 'react';
+import { Checkbox, Input } from '@mantine/core';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface CheckProps {

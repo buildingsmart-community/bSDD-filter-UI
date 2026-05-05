@@ -1,4 +1,4 @@
-import { BsddBridgeData } from '../lib/common/IfcData/bsddBridgeData';
+import type { BsddBridgeData } from '../lib/common/IfcData/bsddBridgeData';
 
 // eslint-disable-next-line import/prefer-default-export
 export const mockData: BsddBridgeData = {
@@ -40,10 +40,10 @@ export const mockData: BsddBridgeData = {
   },
   propertyIsInstanceMap: {
     'Attributes/Name': true,
-    'IsExternal': false,
+    IsExternal: false,
     'Omvang/Bouwnummer': true,
-    'FireRating': true,
-    'ObjectType': false,
+    FireRating: true,
+    ObjectType: false,
     'ILS O&E/Kleur': true,
   },
   ifcData: [
@@ -59,7 +59,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'betontrap',
@@ -79,7 +79,7 @@ export const mockData: BsddBridgeData = {
                   value: 'XC1',
                 },
               ],
-            }
+            },
           ],
         },
         {
@@ -89,12 +89,11 @@ export const mockData: BsddBridgeData = {
             {
               type: 'IfcPropertySingleValue',
               name: 'LoadBearing',
-              nominalValue: 
-                {
-                  type: 'IfcBoolean',
-                  value: true,
-                },
-            }
+              nominalValue: {
+                type: 'IfcBoolean',
+                value: true,
+              },
+            },
           ],
         },
       ],
@@ -111,7 +110,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'Project nulpunt',
@@ -174,7 +173,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'bakgoot',
@@ -193,7 +192,7 @@ export const mockData: BsddBridgeData = {
                 type: 'IfcText',
                 value: 'A',
               },
-            }
+            },
           ],
         },
       ],
@@ -210,7 +209,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'beugel bakgoot',
@@ -239,7 +238,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'bakgoot',
@@ -267,7 +266,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'hwa bakgoot',
@@ -295,7 +294,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'bakgoot eindstuk',
@@ -324,11 +323,12 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'metselwerk',
-          location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0/class/metselwerk',
+          location:
+            'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1/class/metselwerk',
         },
         {
           identification: '21.12',
@@ -354,7 +354,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'beton prefab 150mm',
@@ -373,7 +373,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'isolatie Mupan Ultra Xs 138mm',
@@ -391,7 +391,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'gevel-sparingsmaker spouwwand',
@@ -419,7 +419,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'gevel-sparingsmaker bladsparing',
@@ -447,7 +447,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'gevel-sparingsmaker bladsparing',
@@ -475,7 +475,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'gevel-sparingsmaker bladsparing',
@@ -503,7 +503,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'gevelsparingsmaker omkadering bladsparing buiten',
@@ -520,7 +520,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'ISR leeg',
@@ -537,7 +537,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: '? ',
@@ -554,7 +554,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: '? ',
@@ -571,7 +571,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: '? ',
@@ -588,7 +588,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: '? ',
@@ -605,7 +605,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: '? ',
@@ -622,7 +622,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: '? ',
@@ -650,7 +650,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'JA01-00',
@@ -693,7 +693,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'draairichting raamkozijn',
@@ -720,7 +720,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'isolerend glas',
@@ -747,7 +747,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'kanaalplaatvloer 200mm',
@@ -764,7 +764,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'dakpannen en panlatten 74mm',
@@ -782,7 +782,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'knieschot',
@@ -800,7 +800,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'muurplaat',
@@ -818,7 +818,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'muurplaat',
@@ -861,7 +861,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'cementdekvloer 70mm',
@@ -896,7 +896,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'dak_hout_scharnierkap',
@@ -914,7 +914,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'wand_hout_HSB_opbouw_ntb',
@@ -942,7 +942,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'wand_gips_metalstud',
@@ -970,7 +970,7 @@ export const mockData: BsddBridgeData = {
           referencedSource: {
             type: 'IfcClassification',
             editionDate: '0001-01-01T00:00:00',
-            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basisbouwproducten/0.8.0',
+            location: 'https://identifier.buildingsmart.org/uri/volkerwesselsbvgo/basis_bouwproducten_oene/0.1',
           },
           type: 'IfcClassificationReference',
           name: 'deurkozijn_staal_bovenlicht_deurblad',

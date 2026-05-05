@@ -33,6 +33,6 @@
     }
   },
   "files": {
-    "ignore": ["node_modules", "dist", "src/lib/common/BsddApi/BsddApiBase.ts"]
+    "ignore": ["node_modules", "dist"]
   }
 }

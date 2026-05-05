@@ -1,10 +1,11 @@
-[data-mantine-color-scheme='light'] .checkBox {
-  --_checkbox-bd-color: var(--checkbox-color);}
-.mantine-Checkbox-root{
+[data-mantine-color-scheme="light"] .checkBox {
+  --_checkbox-bd-color: var(--checkbox-color);
+}
+.mantine-Checkbox-root {
   margin-top: calc(var(--mantine-spacing-xs) / 2);
 }
-.mantine-InputWrapper-description{
-  margin-left: calc(var(--mantine-spacing-xs) );
+.mantine-InputWrapper-description {
+  margin-left: calc(var(--mantine-spacing-xs));
 }
 .truncate {
   white-space: nowrap;
@@ -21,6 +22,6 @@
   overflow: hidden;
   min-width: 0;
 }
-.mantine-Accordion-label{
+.mantine-Accordion-label {
   font-weight: 500;
 }

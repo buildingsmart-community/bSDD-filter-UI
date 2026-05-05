@@ -1,4 +1,4 @@
-import { BsddSettings } from '../IfcData/bsddBridgeData';
+import type { BsddSettings } from '../IfcData/bsddBridgeData';
 
 const defaultSettings: BsddSettings = {
   mainDictionary: {

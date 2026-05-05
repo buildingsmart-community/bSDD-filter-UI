@@ -3,18 +3,25 @@ import '@mantine/core/styles.css';
 
 import { Box, Button, ColorSwatch, Group, HoverCard, Select, Space, Text, Tooltip } from '@mantine/core';
 import { IconPencil, IconPointer } from '@tabler/icons-react';
-import { MantineReactTable, MRT_Cell, MRT_ColumnDef, MRT_Row, MRT_RowSelectionState, MRT_ToggleGlobalFilterButton } from 'mantine-react-table';
+import {
+  type MRT_Cell,
+  type MRT_ColumnDef,
+  type MRT_Row,
+  type MRT_RowSelectionState,
+  MRT_ToggleGlobalFilterButton,
+  MantineReactTable,
+} from 'mantine-react-table';
 import { useMemo, useState } from 'react';
-import { useShallow } from 'zustand/react/shallow';
 import { useTranslation } from 'react-i18next';
+import { useShallow } from 'zustand/react/shallow';
 
+import type { BsddDictionary } from '../../../common/IfcData/bsddBridgeData';
+import type { IfcEntity } from '../../../common/IfcData/ifc';
+import { type ClassificationStatus, getClassUrisFromDictionaries } from '../../../common/tools/checkIfcClassification';
+import { type Color, colorMap } from '../../../common/tools/colors';
 import { useBsddBridge } from '../../../providers/BsddBridgeContext';
-import { BsddDictionary } from '../../../common/IfcData/bsddBridgeData';
-import { IfcEntity } from '../../../common/IfcData/ifc';
 import { useIfcDataStore } from '../../../stores/ifcDataStore';
 import { selectActiveDictionaries, selectIfcDictionaryUri, useSettingsStore } from '../../../stores/settingsStore';
-import { ClassificationStatus, getClassUrisFromDictionaries } from '../../../common/tools/checkIfcClassification';
-import { Color, colorMap } from '../../../common/tools/colors';
 
 interface SelectionProps {
   loading: boolean;

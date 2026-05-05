@@ -3,11 +3,11 @@ import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useShallow } from 'zustand/react/shallow';
 
-import { BsddBridgeData } from '../common/IfcData/bsddBridgeData';
-import { IfcEntity } from '../common/IfcData/ifc';
+import type { BsddBridgeData } from '../common/IfcData/bsddBridgeData';
+import type { IfcEntity } from '../common/IfcData/ifc';
+import { updateEntitiesWithIfcEntity } from '../common/tools/mergeIfcEntities';
 import { selectIfcEntity, useIfcDataStore } from '../stores/ifcDataStore';
 import { selectSettings, useSettingsStore } from '../stores/settingsStore';
-import { updateEntitiesWithIfcEntity } from '../common/tools/mergeIfcEntities';
 
 interface ApplyProps {
   onSave: (bsddBridgeData: BsddBridgeData) => Promise<string>;

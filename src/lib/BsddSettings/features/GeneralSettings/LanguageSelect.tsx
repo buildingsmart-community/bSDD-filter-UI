@@ -1,8 +1,8 @@
-import { ComboboxItem, Select } from '@mantine/core';
+import { type ComboboxItem, Select } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
+import type { BsddSettings } from '../../../common/IfcData/bsddBridgeData';
 import { languages } from '../../../common/i18n';
-import { BsddSettings } from '../../../common/IfcData/bsddBridgeData';
 
 interface LanguageSelectProps {
   localSettings: BsddSettings | undefined;

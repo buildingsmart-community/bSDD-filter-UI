@@ -29,4 +29,3 @@ export function applyDisplayScale(scale?: number): () => void {
     document.documentElement.style.zoom = original;
   };
 }
-

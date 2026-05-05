@@ -5,8 +5,8 @@ import { mockData } from '../../../mocks/mockData';
 import { validateIfcData, validateSettings } from '../../api/validation/validateIfcData';
 import { useIfcDataStore } from '../../stores/ifcDataStore';
 import { useSettingsStore } from '../../stores/settingsStore';
-import { BsddBridgeData, BsddDictionary, BsddSettings } from '../IfcData/bsddBridgeData';
-import { IfcEntity } from '../IfcData/ifc';
+import type { BsddBridgeData, BsddDictionary, BsddSettings } from '../IfcData/bsddBridgeData';
+import type { IfcEntity } from '../IfcData/ifc';
 import defaultSettings from '../settings/defaultSettings';
 
 const useBrowserBridge = () => {
@@ -43,10 +43,7 @@ const useBrowserBridge = () => {
             : null,
           filterDictionaries: (params.get('filterDictionaries')?.split(',') || [])
             .filter(Boolean)
-            .map(
-              (location) =>
-                ({ ifcClassification: { type: 'IfcClassification', location } }) as BsddDictionary,
-            ),
+            .map((location) => ({ ifcClassification: { type: 'IfcClassification', location } }) as BsddDictionary),
           language: params.get('language') || 'en-GB',
           includeTestDictionaries: params.get('includeTestDictionaries') === 'true',
         };

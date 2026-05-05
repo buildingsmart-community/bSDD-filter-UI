@@ -1,13 +1,12 @@
-import { QueryClient } from '@tanstack/react-query';
+import type { QueryClient } from '@tanstack/react-query';
 
 import type {
   ClassListItemContractV1Classes,
   DictionaryContractV1,
 } from '../../../../shared/bsdd-api/generated/types.gen';
-import { BsddDictionary } from '../../common/IfcData/bsddBridgeData';
-import {
+import type { BsddDictionary } from '../../common/IfcData/bsddBridgeData';
+import type {
   Association,
-  IfcClassification,
   IfcClassificationReference,
   IfcEntity,
   IfcProperty,
@@ -43,10 +42,7 @@ async function ensureDictionaryClasses(
   }
 }
 
-async function ensureDictionary(
-  queryClient: QueryClient,
-  location: string,
-): Promise<DictionaryContractV1 | null> {
+async function ensureDictionary(queryClient: QueryClient, location: string): Promise<DictionaryContractV1 | null> {
   try {
     return await queryClient.ensureQueryData({
       queryKey: bsddKeys.dictionary(location),
@@ -87,8 +83,7 @@ export async function patchIfcClassificationReference(
     return { ifcClassificationReference, validationState: 'valid', message: 'Location is already set' };
   }
 
-  const location =
-    ifcClassificationReference.referencedSource?.location ?? ifcClassificationReference.location;
+  const location = ifcClassificationReference.referencedSource?.location ?? ifcClassificationReference.location;
   if (!location) {
     return handleError(
       'Cannot patch IfcClassificationReference: missing referencedSource or its location',
@@ -226,9 +221,9 @@ export async function validateSettings(
   const [validatedMainDictionary, validatedIfcDictionary, validatedFilterDictionaries] = await Promise.all([
     settings.mainDictionary ? validateDictionary(queryClient, settings.mainDictionary) : null,
     settings.ifcDictionary ? validateDictionary(queryClient, settings.ifcDictionary) : null,
-    Promise.all(
-      settings.filterDictionaries.map((d) => validateDictionary(queryClient, d)),
-    ).then((results) => results.filter((d): d is BsddDictionary => d !== null)),
+    Promise.all(settings.filterDictionaries.map((d) => validateDictionary(queryClient, d))).then((results) =>
+      results.filter((d): d is BsddDictionary => d !== null),
+    ),
   ]);
 
   return {

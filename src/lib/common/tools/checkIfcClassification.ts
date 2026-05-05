@@ -1,6 +1,6 @@
-import { BsddDictionary, URI } from '../IfcData/bsddBridgeData';
-import { Association, IfcClassification, IfcClassificationReference, IfcEntity } from '../IfcData/ifc';
 import { ifcEntityToBsddClass } from '../../api/validation/validateIfcData';
+import type { BsddDictionary, URI } from '../IfcData/bsddBridgeData';
+import type { Association, IfcClassification, IfcClassificationReference, IfcEntity } from '../IfcData/ifc';
 
 export type ClassificationStatus = URI | null;
 

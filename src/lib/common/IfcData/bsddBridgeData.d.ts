@@ -1,4 +1,4 @@
-import { IfcClassification, IfcEntity } from './ifc';
+import type { IfcClassification, IfcEntity } from './ifc';
 
 // bSDD API environments:
 // - test: 'https://test.bsdd.buildingsmart.org'

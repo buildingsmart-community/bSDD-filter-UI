@@ -3,30 +3,28 @@
 // Modified version of Mantine MultiSelect adding drag and drop
 
 import {
-  __BaseInputProps,
-  __InputStylesNames,
-  BoxProps,
+  type BoxProps,
   Combobox,
-  ComboboxItem,
-  ComboboxLikeProps,
-  ComboboxLikeRenderOptionInput,
-  ComboboxLikeStylesNames,
-  ElementProps,
-  em,
-  extractStyleProps,
-  Factory,
-  factory,
-  getOptionsLockup,
-  getParsedComboboxData,
+  type ComboboxItem,
+  type ComboboxLikeProps,
+  type ComboboxLikeRenderOptionInput,
+  type ComboboxLikeStylesNames,
+  type ElementProps,
+  type Factory,
   InputBase,
-  InputClearButtonProps,
-  MantineColor,
+  type InputClearButtonProps,
+  type MantineColor,
   OptionsDropdown,
   Pill,
   PillsInput,
-  rem,
-  ScrollAreaProps,
-  StylesApiProps,
+  type ScrollAreaProps,
+  type StylesApiProps,
+  type __BaseInputProps,
+  type __InputStylesNames,
+  extractStyleProps,
+  factory,
+  getOptionsLockup,
+  getParsedComboboxData,
   useCombobox,
   useProps,
   useResolvedStylesApi,
@@ -35,9 +33,9 @@ import {
 import { useId, useUncontrolled } from '@mantine/hooks';
 import { useEffect, useState } from 'react';
 
-import { filterPickedValues } from './filter-picked-values';
-import { DragDropContext, Draggable, Droppable, DropResult } from '@hello-pangea/dnd';
+import { DragDropContext, Draggable, type DropResult, Droppable } from '@hello-pangea/dnd';
 import { IconGripVertical } from '@tabler/icons-react';
+import { filterPickedValues } from './filter-picked-values';
 
 export type MultiSelectStylesNames = __InputStylesNames | ComboboxLikeStylesNames | 'pill' | 'pillsList' | 'inputField';
 
@@ -118,7 +116,7 @@ export type MultiSelectFactory = Factory<{
 }>;
 
 const defaultProps: Partial<MultiSelectProps> = {
-  maxValues: Infinity,
+  maxValues: Number.POSITIVE_INFINITY,
   withCheckIcon: true,
   checkIconPosition: 'left',
   hiddenInputValuesDivider: ',',

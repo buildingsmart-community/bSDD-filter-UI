@@ -23,8 +23,7 @@ export function createBsddQueryClient() {
           if (isClientError(error)) return false;
           return error instanceof BsddRateLimitError ? failureCount < 6 : failureCount < 2;
         },
-        retryDelay: (_: number, error: unknown) =>
-          error instanceof BsddRateLimitError ? error.retryAfterMs : 1_000,
+        retryDelay: (_: number, error: unknown) => (error instanceof BsddRateLimitError ? error.retryAfterMs : 1_000),
       },
     },
   });
