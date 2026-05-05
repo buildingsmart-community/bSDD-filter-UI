@@ -7,11 +7,7 @@ vi.mock('../fetchers/dictionaries', () => ({
 }));
 
 import { fetchAllDictionaryClasses, fetchDictionaryByUri } from '../fetchers/dictionaries';
-import {
-  ifcEntityToBsddClass,
-  patchIfcClassificationReference,
-  validateIfcData,
-} from './validateIfcData';
+import { ifcEntityToBsddClass, patchIfcClassificationReference, validateIfcData } from './validateIfcData';
 
 const fetchClasses = fetchAllDictionaryClasses as unknown as ReturnType<typeof vi.fn>;
 const fetchDictionary = fetchDictionaryByUri as unknown as ReturnType<typeof vi.fn>;
@@ -56,9 +52,7 @@ describe('patchIfcClassificationReference', () => {
   });
 
   it('fixes a reference by matching identification against fetched classes and re-resolving the dictionary', async () => {
-    fetchClasses.mockResolvedValue([
-      { code: 'WALL01', name: 'Wall A', uri: 'https://example.org/class/wall01' },
-    ]);
+    fetchClasses.mockResolvedValue([{ code: 'WALL01', name: 'Wall A', uri: 'https://example.org/class/wall01' }]);
     fetchDictionary.mockResolvedValue({
       uri: 'https://example.org/dict',
       name: 'Test dict',

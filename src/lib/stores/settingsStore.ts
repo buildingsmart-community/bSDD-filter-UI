@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import { BsddDictionary, BsddSettings } from '../common/IfcData/bsddBridgeData';
+import type { BsddDictionary, BsddSettings } from '../common/IfcData/bsddBridgeData';
 
 // Note: this store is the single source of truth for `language`. i18next is
 // subscribed to it inside `BsddProvider` (see `useI18nLanguageSubscription`),

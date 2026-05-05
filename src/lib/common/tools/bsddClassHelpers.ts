@@ -30,9 +30,7 @@ export function getSlicerClassificationUris(
   if (!dictionaryClassification) return [];
 
   const relatedIfcEntityUris = ifcDictionaryUri
-    ? (dictionaryClassification.relatedIfcEntityNames ?? []).map(
-        (name) => `${ifcDictionaryUri}/class/${name}`,
-      )
+    ? (dictionaryClassification.relatedIfcEntityNames ?? []).map((name) => `${ifcDictionaryUri}/class/${name}`)
     : [];
 
   const classRelationUris = (dictionaryClassification.classRelations ?? []).map((r) => r.relatedClassUri);

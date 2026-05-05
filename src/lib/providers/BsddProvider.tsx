@@ -3,17 +3,18 @@ import 'mantine-react-table/styles.css';
 
 import { MantineProvider } from '@mantine/core';
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
-import { ReactNode, Suspense, useEffect, useMemo } from 'react';
+import { type ReactNode, Suspense, useEffect, useMemo } from 'react';
 
-import { createBsddQueryClient } from '../api/queryClient';
+import { setBsddAccessToken } from '../api/bsddApiInstance';
 import { bsddPersister } from '../api/persister';
+import { createBsddQueryClient } from '../api/queryClient';
+import type { BsddBridgeData, BsddSettings } from '../common/IfcData/bsddBridgeData';
+import type { IfcEntity } from '../common/IfcData/ifc';
 import i18n from '../common/i18n';
-import { BsddBridgeData, BsddSettings } from '../common/IfcData/bsddBridgeData';
-import { IfcEntity } from '../common/IfcData/ifc';
-import { theme } from '../common/theme/theme';
 import defaultSettings from '../common/settings/defaultSettings';
+import { theme } from '../common/theme/theme';
 import { useSettingsStore } from '../stores/settingsStore';
-import { BsddBridgeCallbacks, BsddBridgeContext } from './BsddBridgeContext';
+import { type BsddBridgeCallbacks, BsddBridgeContext } from './BsddBridgeContext';
 import UrlSyncManager from './UrlSyncManager';
 
 export interface BsddProviderProps {
@@ -77,6 +78,12 @@ export function BsddProvider({
   useEffect(() => {
     if (locale) useSettingsStore.getState().setLanguage(locale);
   }, [locale]);
+
+  // Keep the transport interceptor in sync with the current token.
+  useEffect(() => {
+    setBsddAccessToken(accessToken);
+    return () => setBsddAccessToken(undefined);
+  }, [accessToken]);
 
   const bridgeCallbacks = useMemo<BsddBridgeCallbacks>(
     () => ({ onSave, onCancel, onSearch, onSelect, loadSettings, loadBridgeData, accessToken }),

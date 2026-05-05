@@ -1,21 +1,47 @@
 // Purpose: Entry point for bSDD search+settings panel
 import '@mantine/core/styles.css';
+import 'mantine-react-table/styles.css';
 
+import { PublicClientApplication } from '@azure/msal-browser';
+import { MsalProvider } from '@azure/msal-react';
+import { StrictMode } from 'react';
 import ReactDOM from 'react-dom/client';
 
-import AppProvider from './AppProvider';
 import BsddSearchSettingsLoader from './BsddSearchSettingsLoader';
+import { isBsddAuthConfigured, msalConfig } from './auth/authConfig';
 import { applyDisplayScale } from './lib/common/hooks/useDisplayScale';
+import { BsddProvider } from './lib/providers/BsddProvider';
 
-const urlScale = parseFloat(new URLSearchParams(window.location.search).get('scale') ?? '');
-applyDisplayScale(Number.isFinite(urlScale) ? urlScale : undefined);
+async function main() {
+  const urlScale = Number.parseFloat(new URLSearchParams(window.location.search).get('scale') ?? '');
+  applyDisplayScale(Number.isFinite(urlScale) ? urlScale : undefined);
 
-function Main() {
-  return (
-    <AppProvider>
-      <BsddSearchSettingsLoader />
-    </AppProvider>
+  let msalInstance: PublicClientApplication | undefined;
+
+  if (isBsddAuthConfigured()) {
+    try {
+      msalInstance = new PublicClientApplication(msalConfig);
+      await msalInstance.initialize();
+      await msalInstance.handleRedirectPromise().catch((err) => {
+        console.error('[bSDD MSAL] redirect error:', err);
+      });
+    } catch (err) {
+      console.error('[bSDD MSAL] initialization failed, continuing without auth:', err);
+      msalInstance = undefined;
+    }
+  }
+
+  const content = (
+    <StrictMode>
+      <BsddProvider>
+        <BsddSearchSettingsLoader />
+      </BsddProvider>
+    </StrictMode>
+  );
+
+  ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
+    msalInstance ? <MsalProvider instance={msalInstance}>{content}</MsalProvider> : content,
   );
 }
 
-ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(<Main />);
+main();

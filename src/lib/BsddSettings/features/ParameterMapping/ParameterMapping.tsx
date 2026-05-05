@@ -2,7 +2,7 @@ import { Accordion, Text, TextInput, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { BsddDictionary, BsddSettings } from '../../../common/IfcData/bsddBridgeData';
+import type { BsddDictionary, BsddSettings } from '../../../common/IfcData/bsddBridgeData';
 
 interface ParameterMappingProps {
   id: number;
@@ -11,12 +11,7 @@ interface ParameterMappingProps {
   setUnsavedChanges: (unsavedChanges: boolean) => void;
 }
 
-function ParameterMapping({
-  id,
-  localSettings,
-  setLocalSettings,
-  setUnsavedChanges,
-}: ParameterMappingProps) {
+function ParameterMapping({ id, localSettings, setLocalSettings, setUnsavedChanges }: ParameterMappingProps) {
   const { t } = useTranslation();
   const { mainDictionary, filterDictionaries } = localSettings;
 

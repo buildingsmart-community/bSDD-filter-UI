@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react';
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { BsddBridgeContext, useBsddBridge } from './BsddBridgeContext';

@@ -28,7 +28,17 @@ const INITIAL_RENDER_LIMIT = 25;
 const RENDER_MORE_LIMIT = 25;
 const SEARCH_DEBOUNCE_MS = 300;
 
-function Slicer({ height, options, label, value, setValue, placeholder = 'Search values', onSearch, isSearching, loading }: SlicerProps) {
+function Slicer({
+  height,
+  options,
+  label,
+  value,
+  setValue,
+  placeholder = 'Search values',
+  onSearch,
+  isSearching,
+  loading,
+}: SlicerProps) {
   const { t } = useTranslation();
   const [search, setSearch] = useState('');
   const [renderedOptions, setRenderedOptions] = useState(options.slice(0, INITIAL_RENDER_LIMIT));
@@ -131,7 +141,12 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
   ));
 
   const optionsContent = isSearching ? (
-    <Combobox.Empty><Group gap="xs"><Loader size="xs" />{t('searching')}</Group></Combobox.Empty>
+    <Combobox.Empty>
+      <Group gap="xs">
+        <Loader size="xs" />
+        {t('searching')}
+      </Group>
+    </Combobox.Empty>
   ) : comboboxOptions.length > 0 ? (
     comboboxOptions
   ) : (
@@ -196,9 +211,7 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
             ref={optionsContainerRef}
             onScroll={handleScroll}
           >
-            <Combobox.Options>
-              {optionsContent}
-            </Combobox.Options>
+            <Combobox.Options>{optionsContent}</Combobox.Options>
           </Combobox.Dropdown>
         ) : (
           <Paper
@@ -214,9 +227,7 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
             ref={optionsContainerRef}
             onScroll={handleScroll}
           >
-            <Combobox.Options>
-              {optionsContent}
-            </Combobox.Options>
+            <Combobox.Options>{optionsContent}</Combobox.Options>
           </Paper>
         )}
       </Combobox>

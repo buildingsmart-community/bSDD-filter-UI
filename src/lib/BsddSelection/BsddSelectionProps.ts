@@ -1,5 +1,4 @@
-import { BsddBridgeData } from '../common/IfcData/bsddBridgeData';
-import { IfcEntity } from '../common/IfcData/ifc';
+import type { BsddBridgeData } from '../common/IfcData/bsddBridgeData';
 
 export interface BsddSelectionProps {
   // eslint-disable-next-line react/require-default-props

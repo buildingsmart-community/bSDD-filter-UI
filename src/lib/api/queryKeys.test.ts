@@ -16,9 +16,7 @@ describe('bsddKeys', () => {
 
   it('produces stable keys for identical inputs', () => {
     expect(bsddKeys.dictionary('https://x')).toEqual(bsddKeys.dictionary('https://x'));
-    expect(bsddKeys.classDetails('https://x', 'en')).toEqual(
-      bsddKeys.classDetails('https://x', 'en'),
-    );
+    expect(bsddKeys.classDetails('https://x', 'en')).toEqual(bsddKeys.classDetails('https://x', 'en'));
   });
 
   it('differentiates by inputs', () => {

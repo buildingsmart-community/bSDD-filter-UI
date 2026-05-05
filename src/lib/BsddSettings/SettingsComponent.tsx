@@ -1,13 +1,13 @@
 import { Accordion, Button, Group } from '@mantine/core';
 import { useQueryClient } from '@tanstack/react-query';
+import { del } from 'idb-keyval';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { del } from 'idb-keyval';
 import { useShallow } from 'zustand/react/shallow';
 
 import { validateSettings } from '../api/validation/validateIfcData';
-import { CefSharpWindow } from '../common/bsddBridge/useCefSharpBridge';
-import { BsddSettings } from '../common/IfcData/bsddBridgeData';
+import type { BsddSettings } from '../common/IfcData/bsddBridgeData';
+import type { CefSharpWindow } from '../common/bsddBridge/useCefSharpBridge';
 import { selectSettings, useSettingsStore } from '../stores/settingsStore';
 import AppInfo from './features/AppInfo/AppInfo';
 import DictionarySelection from './features/DictionarySelection/DictionarySelection';

@@ -1,9 +1,9 @@
-// Purpose: Hook for bSDD / buildingSMART authentication via MSAL
-import { useState, useCallback } from 'react';
-import { useMsal } from '@azure/msal-react';
 import { InteractionStatus } from '@azure/msal-browser';
-import { isBsddAuthConfigured, loginRequest } from './authConfig';
 import type { AccountInfo } from '@azure/msal-browser';
+import { useMsal } from '@azure/msal-react';
+// Purpose: Hook for bSDD / buildingSMART authentication via MSAL
+import { useCallback, useState } from 'react';
+import { isBsddAuthConfigured, loginRequest } from './authConfig';
 
 interface UseAuthResult {
   isAuthenticated: boolean;

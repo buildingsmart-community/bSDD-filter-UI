@@ -105,10 +105,7 @@ describe('settingsStore selectors', () => {
     const state = useSettingsStore.getState();
     expect(selectMainDictionaryUri(state)).toBe('https://example.org/main');
     expect(selectIfcDictionaryUri(state)).toBe('https://example.org/ifc');
-    expect(selectActiveDictionaryUris(state).sort()).toEqual([
-      'https://example.org/ifc',
-      'https://example.org/main',
-    ]);
+    expect(selectActiveDictionaryUris(state).sort()).toEqual(['https://example.org/ifc', 'https://example.org/main']);
   });
 
   it('selectSettings returns a plain settings snapshot', () => {

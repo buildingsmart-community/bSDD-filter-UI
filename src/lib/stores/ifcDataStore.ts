@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import {
+import type {
   Association,
   IfcClassificationReference,
   IfcEntity,
@@ -8,7 +8,6 @@ import {
   IfcPropertySingleValue,
 } from '../common/IfcData/ifc';
 import { getIfcClassAndPredefinedType } from '../common/IfcData/ifcBsddConverters';
-import { mergeIfcEntities } from '../common/tools/mergeIfcEntities';
 
 export interface EntityState {
   type?: string;
@@ -137,9 +136,11 @@ export const useIfcDataStore = create<IfcDataState>()((set) => ({
         entity.objectType,
         entity.predefinedType,
       );
-      const { propertySets, objectType: attrObjectType, predefinedType: attrPredefinedType } = processIsDefinedBy(
-        entity.isDefinedBy,
-      );
+      const {
+        propertySets,
+        objectType: attrObjectType,
+        predefinedType: attrPredefinedType,
+      } = processIsDefinedBy(entity.isDefinedBy);
 
       return {
         currentEntity: {
@@ -159,7 +160,10 @@ export const useIfcDataStore = create<IfcDataState>()((set) => ({
   setDescription: (desc) => set((state) => ({ currentEntity: { ...state.currentEntity, description: desc } })),
   setObjectType: (type) =>
     set((state) => {
-      const { objectType, predefinedType } = updateObjectTypeAndPredefinedType(type, state.currentEntity.predefinedType);
+      const { objectType, predefinedType } = updateObjectTypeAndPredefinedType(
+        type,
+        state.currentEntity.predefinedType,
+      );
       return { currentEntity: { ...state.currentEntity, objectType, predefinedType } };
     }),
   setTag: (tag) => set((state) => ({ currentEntity: { ...state.currentEntity, tag } })),
@@ -250,19 +254,16 @@ export const selectHasAssociationsMap = (state: IfcDataState): { [key: string]: 
     (a) => a && a.type === 'IfcClassificationReference',
   ) as IfcClassificationReference[];
 
-  return (classificationReferences || []).reduce<{ [key: string]: IfcClassificationReference[] }>(
-    (acc, ref) => {
-      const location = ref?.referencedSource?.location;
-      if (location) {
-        if (!acc[location]) {
-          acc[location] = [];
-        }
-        acc[location].push(ref);
+  return (classificationReferences || []).reduce<{ [key: string]: IfcClassificationReference[] }>((acc, ref) => {
+    const location = ref?.referencedSource?.location;
+    if (location) {
+      if (!acc[location]) {
+        acc[location] = [];
       }
-      return acc;
-    },
-    {},
-  );
+      acc[location].push(ref);
+    }
+    return acc;
+  }, {});
 };
 
 export const selectIsDefinedByIncludingAttributes = (state: IfcDataState): IfcPropertySet[] => {

@@ -1,9 +1,13 @@
 import { Accordion, Stack } from '@mantine/core';
 import { Children, useEffect, useMemo, useState } from 'react';
 
-import type { ClassContractV1, ClassPropertyContractV1, ClassPropertyValueContractV1 } from '../../../../../shared/bsdd-api/generated/types.gen';
-import { getPropertyClassificationUris } from '../../../common/tools/bsddClassHelpers';
-import {
+import type {
+  ClassContractV1,
+  ClassPropertyContractV1,
+  ClassPropertyValueContractV1,
+} from '../../../../../shared/bsdd-api/generated/types.gen';
+import { usePropertyNames } from '../../../api/hooks/usePropertyNames';
+import type {
   IfcEntity,
   IfcProperty,
   IfcPropertyEnumeratedValue,
@@ -11,9 +15,8 @@ import {
   IfcPropertySingleValue,
   IfcValue,
 } from '../../../common/IfcData/ifc';
+import { getPropertyClassificationUris } from '../../../common/tools/bsddClassHelpers';
 import { mergeIfcEntities } from '../../../common/tools/mergeIfcEntities';
-import { usePropertyNames } from '../../../api/hooks/usePropertyNames';
-import { useBsddBridge } from '../../../providers/BsddBridgeContext';
 import { useIfcDataStore } from '../../../stores/ifcDataStore';
 import { useSettingsStore } from '../../../stores/settingsStore';
 import type { PropertySetMap } from '../../BsddSearch';
@@ -287,7 +290,6 @@ function PropertySets({ activeClassifications, recursiveMode, mainClassification
   const setIsDefinedBy = useIfcDataStore((s) => s.setIsDefinedBy);
   const languageCode = useSettingsStore((s) => s.language);
   const ifcDictionaryUri = useSettingsStore((s) => s.ifcDictionary?.ifcClassification.location);
-  const { accessToken } = useBsddBridge();
 
   const mainDictionaryClassification = activeClassifications[0] ?? null;
 
@@ -296,7 +298,7 @@ function PropertySets({ activeClassifications, recursiveMode, mainClassification
     () => activeClassifications.flatMap((c) => c.classProperties || []),
     [activeClassifications],
   );
-  const { data: propertyNamesMap } = usePropertyNames(allClassProperties, languageCode, accessToken);
+  const { data: propertyNamesMap } = usePropertyNames(allClassProperties, languageCode);
 
   const [propertyNaturalLanguageNamesMap, setPropertyNaturalLanguageNamesMap] = useState<Record<string, string>>({});
   const [mergedIfcPropertySets, setMergedIfcPropertySets] = useState<IfcPropertySet[]>([]);
@@ -312,10 +314,7 @@ function PropertySets({ activeClassifications, recursiveMode, mainClassification
       if (classification.dictionaryUri === ifcDictionaryUri && classification.uri !== mainClassificationUri) {
         return; // Skip the IFC dictionary as we only add explicitly added IFC properties
       }
-      if (
-        classification.uri === mainClassificationUri ||
-        applicableClassificationUris.includes(classification.uri)
-      ) {
+      if (classification.uri === mainClassificationUri || applicableClassificationUris.includes(classification.uri)) {
         classification.classProperties?.forEach((classProperty: ClassPropertyContractV1) => {
           if (!classProperty || !classProperty.propertySet) return;
           const propertySetName = classProperty.propertySet || classification.name;

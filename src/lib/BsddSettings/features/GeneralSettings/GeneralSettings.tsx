@@ -1,7 +1,7 @@
 import { Accordion, Checkbox, Space, Text, Title } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-import { BsddSettings } from '../../../common/IfcData/bsddBridgeData';
+import type { BsddSettings } from '../../../common/IfcData/bsddBridgeData';
 import LanguageSelect from './LanguageSelect';
 
 interface GeneralSettingsProps {

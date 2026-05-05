@@ -3,19 +3,19 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useShallow } from 'zustand/react/shallow';
 
-import { useBsddBridge } from '../providers/BsddBridgeContext';
 import type { ClassContractV1 } from '../../../shared/bsdd-api/generated/types.gen';
-import { BsddDictionary } from '../common/IfcData/bsddBridgeData';
-import { IfcEntity, IfcPropertySet } from '../common/IfcData/ifc';
 import { useClassDetails } from '../api/hooks/useClassDetails';
 import { usePropertyNames } from '../api/hooks/usePropertyNames';
-import { useIfcDataStore, selectSelectedIfcEntities } from '../stores/ifcDataStore';
+import type { BsddDictionary } from '../common/IfcData/bsddBridgeData';
+import type { IfcEntity, IfcPropertySet } from '../common/IfcData/ifc';
 import { mergeIfcEntities } from '../common/tools/mergeIfcEntities';
-import { useSettingsStore, selectActiveDictionaryUris } from '../stores/settingsStore';
+import { useBsddBridge } from '../providers/BsddBridgeContext';
+import { selectSelectedIfcEntities, useIfcDataStore } from '../stores/ifcDataStore';
+import { selectActiveDictionaryUris, useSettingsStore } from '../stores/settingsStore';
 import Apply from './Apply';
+import Search from './Search';
 import Classifications from './features/Classifications/Classifications';
 import PropertySets from './features/PropertySets/PropertySets';
-import Search from './Search';
 
 export interface Option {
   label: string;
@@ -85,7 +85,7 @@ const getDefaultSearchOption = (
 function BsddSearch({ searchKey = 'objectType' }: BsddSearchProps) {
   const { t } = useTranslation();
 
-  const { onSave, onCancel, accessToken } = useBsddBridge();
+  const { onSave, onCancel } = useBsddBridge();
 
   const mainDictionary = useSettingsStore((s) => s.mainDictionary);
   const languageCode = useSettingsStore((s) => s.language);
@@ -110,12 +110,11 @@ function BsddSearch({ searchKey = 'objectType' }: BsddSearchProps) {
     mainClassificationUri,
     languageCode,
     filterDictionaryUris,
-    accessToken,
   );
 
   // Fetch property names when property sets panel is opened
   const classProperties = mainDictionaryClassification?.classProperties || [];
-  usePropertyNames(propertySetsOpened ? classProperties : [], languageCode, accessToken);
+  usePropertyNames(propertySetsOpened ? classProperties : [], languageCode);
 
   useEffect(() => {
     const defaultSearchOption = getDefaultSearchOption(

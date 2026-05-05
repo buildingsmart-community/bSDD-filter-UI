@@ -1,13 +1,12 @@
-import { Accordion, ComboboxItem, MultiSelect, Space, Text, Title } from '@mantine/core';
+import { Accordion, type ComboboxItem, MultiSelect, Space, Text, Title } from '@mantine/core';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type { DictionaryContractV1 } from '../../../../../shared/bsdd-api/generated/types.gen';
-import { DraggableMultiSelect } from '../../../common/components/DraggableMultiSelect/DraggableMultiSelect';
-import { BsddDictionary, BsddSettings } from '../../../common/IfcData/bsddBridgeData';
-import { convertBsddDictionaryToIfcClassification } from '../../../common/IfcData/ifcBsddConverters';
 import { useDictionaries } from '../../../api/hooks/useDictionaries';
-import { useBsddBridge } from '../../../providers/BsddBridgeContext';
+import type { BsddDictionary, BsddSettings } from '../../../common/IfcData/bsddBridgeData';
+import { convertBsddDictionaryToIfcClassification } from '../../../common/IfcData/ifcBsddConverters';
+import { DraggableMultiSelect } from '../../../common/components/DraggableMultiSelect/DraggableMultiSelect';
 
 interface DictionarySelectionProps {
   id: number;
@@ -61,12 +60,8 @@ function DictionarySelection({
 }: DictionarySelectionProps) {
   const { t } = useTranslation();
 
-  const { accessToken } = useBsddBridge();
   // Use localSettings.includeTestDictionaries for live preview while editing
-  const { data: bsddDictionaries = {} } = useDictionaries(
-    localSettings.includeTestDictionaries ?? false,
-    accessToken,
-  );
+  const { data: bsddDictionaries = {} } = useDictionaries(localSettings.includeTestDictionaries ?? false);
 
   const bsddDictionaryOptions = useMemo(() => {
     const uniqueOptionsMap = new Map<string, ComboboxItem>();
@@ -101,8 +96,7 @@ function DictionarySelection({
     return (
       localSettings?.filterDictionaries
         ?.filter((item) => item.ifcClassification && item.ifcClassification.location)
-        .map(getComboboxItem)
-        .flat() || []
+        .flatMap(getComboboxItem) || []
     );
   }, [localSettings?.filterDictionaries]);
 
