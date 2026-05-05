@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs ls:*)",
+      "Bash(yarn info:*)",
+      "Bash(npm view:*)",
+      "Bash(npx vite:*)",
+      "Bash(npx tsc:*)",
+      "Bash(npx vitest:*)",
+      "Bash(yarn test *)",
+      "Bash(yarn tsc *)",
+      "Bash(grep -n \"dictionaryClassesGetWithClasses\\\\|languageCode\" /Users/janbrouwer/Downloads/IFC.On-Track.nl/shared/bsdd-api/BsddApiWrapper.ts 2>&1 | head -20)",
+      "Read(//Users/janbrouwer/Downloads/IFC.On-Track.nl/shared/bsdd-api/**)"
+    ]
+  }
+}

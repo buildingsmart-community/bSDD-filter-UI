@@ -6,7 +6,7 @@
     "save": "Enregistrer",
     "cancel": "Annuler",
     "groupBy": "Grouper",
-    "checkbox":{
+    "checkbox": {
       "true": "Oui",
       "false": "Non",
       "indeterminate": "Indéterminé"
@@ -56,6 +56,13 @@
         "tooltipEditInstance": "Il n'est pas possible de modifier les propriétés d'instance pour les types",
         "setAsInstanceCheckboxTooltip": "Définir comme propriété d'instance"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "Se connecter pour une API plus rapide",
+      "authenticatedViaBsdd": "Compte buildingSMART",
+      "authError": "Erreur d'authentification",
+      "logout": "Se déconnecter",
+      "user": "Utilisateur"
     }
   }
 }

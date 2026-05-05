@@ -1,8 +1,11 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import i18n from '../common/i18n';
 import { BsddDictionary, BsddSettings } from '../common/IfcData/bsddBridgeData';
+
+// Note: this store is the single source of truth for `language`. i18next is
+// subscribed to it inside `BsddProvider` (see `useI18nLanguageSubscription`),
+// so the setter stays a pure state mutation — no side effects here.
 
 interface SettingsState extends BsddSettings {
   setMainDictionary: (dict: BsddDictionary | null) => void;
@@ -25,23 +28,16 @@ export const useSettingsStore = create<SettingsState>()(
       setMainDictionary: (dict) => set({ mainDictionary: dict }),
       setIfcDictionary: (dict) => set({ ifcDictionary: dict }),
       setFilterDictionaries: (dicts) => set({ filterDictionaries: dicts }),
-      setLanguage: (lang) => {
-        i18n.changeLanguage(lang);
-        set({ language: lang });
-      },
+      setLanguage: (lang) => set({ language: lang }),
       setIncludeTestDictionaries: (include) => set({ includeTestDictionaries: include }),
-      setSettings: (settings) => {
-        if (settings.language) {
-          i18n.changeLanguage(settings.language);
-        }
+      setSettings: (settings) =>
         set({
           mainDictionary: settings.mainDictionary,
           ifcDictionary: settings.ifcDictionary,
           filterDictionaries: settings.filterDictionaries,
           language: settings.language,
           includeTestDictionaries: settings.includeTestDictionaries,
-        });
-      },
+        }),
     }),
     {
       name: 'bsdd-settings',
@@ -74,5 +70,15 @@ export const selectMainDictionaryUri = (state: SettingsState) => state.mainDicti
 
 export const selectIfcDictionaryUri = (state: SettingsState) => state.ifcDictionary?.ifcClassification.location;
 
-export const selectActiveDictionaryUris = (state: SettingsState) =>
+// selectActiveDictionaryUris must be used with useShallow — it derives an array from state.
+// Defined here as a plain selector (not memoized) so useShallow does the shallow comparison.
+export const selectActiveDictionaryUris = (state: SettingsState): string[] =>
   selectActiveDictionaries(state).map((d) => d.ifcClassification.location);
+
+export const selectSettings = (state: SettingsState): BsddSettings => ({
+  mainDictionary: state.mainDictionary,
+  ifcDictionary: state.ifcDictionary,
+  filterDictionaries: state.filterDictionaries,
+  language: state.language,
+  includeTestDictionaries: state.includeTestDictionaries,
+});

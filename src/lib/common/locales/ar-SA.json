@@ -6,7 +6,7 @@
     "save": "حفظ",
     "cancel": "إلغاء",
     "groupBy": "تجميع",
-    "checkbox":{
+    "checkbox": {
       "true": "نعم",
       "false": "لا",
       "indeterminate": "غير محدد"
@@ -56,6 +56,13 @@
         "tooltipEditInstance": "لا يمكن تحرير خصائص النسخة للأنواع",
         "setAsInstanceCheckboxTooltip": "تعيين كخاصية النسخة"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "تسجيل الدخول لواجهة برمجة أسرع",
+      "authenticatedViaBsdd": "حساب buildingSMART",
+      "authError": "خطأ في المصادقة",
+      "logout": "تسجيل الخروج",
+      "user": "المستخدم"
     }
   }
 }

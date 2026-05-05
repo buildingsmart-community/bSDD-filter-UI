@@ -285,13 +285,12 @@ export const DraggableMultiSelect = factory<MultiSelectFactory>((_props, ref) =>
   };
 
   const values = _value.map((item, index) => (
-    <Draggable key={item} draggableId={item} index={index}>
+    <Draggable key={`${item}-${index}`} draggableId={`${item}-${index}`} index={index}>
       {(provided, snapshot) => (
         <Pill
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          key={`${item}-${index}`}
           withRemoveButton={!readOnly && !optionsLockup[item]?.disabled}
           onRemove={() => {
             setValue(_value.filter((i) => item !== i));

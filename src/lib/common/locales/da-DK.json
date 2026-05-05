@@ -56,6 +56,13 @@
         "tooltipEditInstance": "Redigering af instansegenskaber for typer er ikke mulig",
         "setAsInstanceCheckboxTooltip": "Indstil som instansegenskab"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "Log ind for hurtigere API",
+      "authenticatedViaBsdd": "buildingSMART-konto",
+      "authError": "Godkendelsesfejl",
+      "logout": "Log ud",
+      "user": "Bruger"
     }
   }
 }

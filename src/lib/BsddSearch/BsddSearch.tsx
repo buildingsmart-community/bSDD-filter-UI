@@ -1,25 +1,17 @@
 import { Accordion, Alert, Box, Button, Group, Space, TextInput, Title } from '@mantine/core';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useShallow } from 'zustand/react/shallow';
 
-import { useApiFunctions } from '../common/apiFunctionsContext';
-import { useAppDispatch, useAppSelector } from '../common/app/hooks';
-import { BsddApi } from '../common/BsddApi/BsddApi';
-import { ClassContractV1 } from '../common/BsddApi/BsddApiBase';
-import { bsddEnvironments } from '../common/BsddApi/BsddApiEnvironments';
-import { defaultEnvironment } from '../common/env';
+import { useBsddBridge } from '../providers/BsddBridgeContext';
+import type { ClassContractV1 } from '../../../shared/bsdd-api/generated/types.gen';
 import { BsddDictionary } from '../common/IfcData/bsddBridgeData';
 import { IfcEntity, IfcPropertySet } from '../common/IfcData/ifc';
-import {
-  selectFilterDictionaryClassifications,
-  selectIfcDictionaryClassification,
-  selectMainDictionaryClassification,
-  selectMainDictionaryClassificationUri,
-  updateMainDictionaryClassificationUri,
-  updatePropertyNaturalLanguageNames,
-} from '../common/slices/bsddSlice';
-import { selectMergedIfcEntity } from '../common/slices/ifcDataSlice';
-import { selectActiveDictionaryUris, selectLanguage, selectMainDictionary } from '../common/slices/settingsSlice';
+import { useClassDetails } from '../api/hooks/useClassDetails';
+import { usePropertyNames } from '../api/hooks/usePropertyNames';
+import { useIfcDataStore, selectSelectedIfcEntities } from '../stores/ifcDataStore';
+import { mergeIfcEntities } from '../common/tools/mergeIfcEntities';
+import { useSettingsStore, selectActiveDictionaryUris } from '../stores/settingsStore';
 import Apply from './Apply';
 import Classifications from './features/Classifications/Classifications';
 import PropertySets from './features/PropertySets/PropertySets';
@@ -51,7 +43,7 @@ const getDefaultSearchOption = (
   selectedMergedIfcEntity: IfcEntity | null,
   mainDictionary: BsddDictionary | null,
   searchKey: keyof IfcEntity,
-  dispatch: any,
+  setMainClassificationUri: (uri: string | null) => void,
 ): Option | undefined => {
   if (!selectedMergedIfcEntity || !mainDictionary) return undefined;
 
@@ -64,7 +56,7 @@ const getDefaultSearchOption = (
       const classificationReference = association;
       if (classificationReference.referencedSource?.location === newActiveClassificationUri) {
         if (classificationReference.location) {
-          dispatch(updateMainDictionaryClassificationUri(classificationReference.location));
+          setMainClassificationUri(classificationReference.location);
         }
         defaultSearchOption = {
           label: classificationReference.name,
@@ -92,47 +84,55 @@ const getDefaultSearchOption = (
 
 function BsddSearch({ searchKey = 'objectType' }: BsddSearchProps) {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
 
-  const { bsddSearchSave, bsddSearchCancel } = useApiFunctions();
+  const { onSave, onCancel, accessToken } = useBsddBridge();
 
-  const mainDictionary = useAppSelector(selectMainDictionary);
-  const languageCode = useAppSelector(selectLanguage);
-  const activeDictionaryLocations = useAppSelector(selectActiveDictionaryUris);
-  const selectedMergedIfcEntity = useAppSelector(selectMergedIfcEntity);
-  const mainDictionaryClassificationUri = useAppSelector(selectMainDictionaryClassificationUri);
-  const mainDictionaryClassification = useAppSelector(selectMainDictionaryClassification);
-  const ifcDictionaryClassification = useAppSelector(selectIfcDictionaryClassification);
-  const filterDictionaryClassifications = useAppSelector(selectFilterDictionaryClassifications);
+  const mainDictionary = useSettingsStore((s) => s.mainDictionary);
+  const languageCode = useSettingsStore((s) => s.language);
+  const activeDictionaryLocations = useSettingsStore(useShallow(selectActiveDictionaryUris));
+  const filterDictionaryUris = useSettingsStore(
+    useShallow((s) => s.filterDictionaries.map((d) => d.ifcClassification.location)),
+  );
+  const selectedIfcEntities = useIfcDataStore(useShallow(selectSelectedIfcEntities));
+  const selectedMergedIfcEntity = useMemo(() => mergeIfcEntities(selectedIfcEntities), [selectedIfcEntities]);
 
+  const [mainClassificationUri, setMainClassificationUri] = useState<string | null>(null);
   const [defaultSearch, setDefaultSearch] = useState<Option | undefined>();
   const [activeClassifications, setActiveClassifications] = useState<ClassContractV1[]>([]);
   const [recursiveMode, setRecursiveMode] = useState<boolean>(false);
 
-  const [height, setHeight] = useState(minHeight); // Initial height
-  const [panelHeight, setPanelHeight] = useState('auto'); // Initial height of the Accordion Panel
+  const [height, setHeight] = useState(minHeight);
+  const [panelHeight, setPanelHeight] = useState('auto');
   const [propertySetsOpened, setPropertySetsOpened] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (!mainDictionaryClassification || !propertySetsOpened) return;
-    const classProperties = mainDictionaryClassification.classProperties || [];
-    dispatch(updatePropertyNaturalLanguageNames({ classProperties, languageCode }));
-  }, [mainDictionaryClassification, propertySetsOpened, languageCode, dispatch]);
+  // Fetch main classification details
+  const { data: mainDictionaryClassification } = useClassDetails(
+    mainClassificationUri,
+    languageCode,
+    filterDictionaryUris,
+    accessToken,
+  );
+
+  // Fetch property names when property sets panel is opened
+  const classProperties = mainDictionaryClassification?.classProperties || [];
+  usePropertyNames(propertySetsOpened ? classProperties : [], languageCode, accessToken);
 
   useEffect(() => {
-    const defaultSearchOption = getDefaultSearchOption(selectedMergedIfcEntity, mainDictionary, searchKey, dispatch);
+    const defaultSearchOption = getDefaultSearchOption(
+      selectedMergedIfcEntity,
+      mainDictionary,
+      searchKey,
+      setMainClassificationUri,
+    );
     setDefaultSearch(defaultSearchOption);
-  }, [mainDictionary, selectedMergedIfcEntity, dispatch, searchKey]);
+  }, [mainDictionary, selectedMergedIfcEntity, searchKey]);
 
   useEffect(() => {
-    const classifications = [
-      mainDictionaryClassification,
-      ifcDictionaryClassification,
-      ...filterDictionaryClassifications,
-    ].filter((classification) => classification !== null);
-
+    const classifications = [mainDictionaryClassification].filter(
+      (classification) => classification !== null && classification !== undefined,
+    ) as ClassContractV1[];
     setActiveClassifications(classifications);
-  }, [mainDictionaryClassification, filterDictionaryClassifications, ifcDictionaryClassification]);
+  }, [mainDictionaryClassification]);
 
   useEffect(() => {
     setPanelHeight(`${height * activeDictionaryLocations.length + 48}px`);
@@ -165,9 +165,9 @@ function BsddSearch({ searchKey = 'objectType' }: BsddSearchProps) {
       <TextInput type="hidden" name="name" id="name" value="" />
       <TextInput type="hidden" name="material" id="material" value="" />
       <Group mx="md" mt="lg" mb="sm">
-        <Search defaultSelection={defaultSearch} />
+        <Search defaultSelection={defaultSearch} onClassificationSelect={setMainClassificationUri} />
       </Group>
-      {mainDictionaryClassificationUri ? (
+      {mainClassificationUri ? (
         <>
           <Accordion defaultValue={['Classifications']} multiple onChange={handleAccordionChange}>
             <Accordion.Item key="Classifications" value="Classifications">
@@ -175,7 +175,13 @@ function BsddSearch({ searchKey = 'objectType' }: BsddSearchProps) {
                 <Title order={5}>{t('classificationsLabel')}</Title>
               </Accordion.Control>
               <Accordion.Panel style={{ height: panelHeight }}>
-                <Classifications height={height} handleMouseDown={handleMouseDown} />
+                <Classifications
+                  height={height}
+                  handleMouseDown={handleMouseDown}
+                  mainDictionaryClassification={mainDictionaryClassification ?? null}
+                  mainClassificationUri={mainClassificationUri}
+                  onMainClassificationChange={setMainClassificationUri}
+                />
               </Accordion.Panel>
             </Accordion.Item>
             <Accordion.Item key="Propertysets" value="Propertysets">
@@ -183,13 +189,17 @@ function BsddSearch({ searchKey = 'objectType' }: BsddSearchProps) {
                 <Title order={5}>{t('propertysetsLabel')}</Title>
               </Accordion.Control>
               <Accordion.Panel>
-                <PropertySets activeClassifications={activeClassifications} recursiveMode={recursiveMode} />
+                <PropertySets
+                  activeClassifications={activeClassifications}
+                  recursiveMode={recursiveMode}
+                  mainClassificationUri={mainClassificationUri}
+                />
               </Accordion.Panel>
             </Accordion.Item>
           </Accordion>
           <Group my="sm" justify="center">
-            <Apply bsddSearchSave={bsddSearchSave} />
-            <Button fullWidth variant="light" color="gray" onClick={bsddSearchCancel}>
+            <Apply onSave={onSave} />
+            <Button fullWidth variant="light" color="gray" onClick={onCancel}>
               {t('cancel')}
             </Button>
           </Group>

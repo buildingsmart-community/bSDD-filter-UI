@@ -56,6 +56,13 @@
         "tooltipEditInstance": "Nie można edytować właściwości instancji dla typów",
         "setAsInstanceCheckboxTooltip": "Ustaw jako właściwość instancji"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "Zaloguj się dla szybszego API",
+      "authenticatedViaBsdd": "Konto buildingSMART",
+      "authError": "Błąd uwierzytelniania",
+      "logout": "Wyloguj się",
+      "user": "Użytkownik"
     }
   }
 }

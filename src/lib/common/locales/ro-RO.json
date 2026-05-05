@@ -56,6 +56,13 @@
         "tooltipEditInstance": "Nu se poate edita proprietățile instanței pentru tipuri",
         "setAsInstanceCheckboxTooltip": "Setați ca proprietate de instanță"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "Conectați-vă pentru API mai rapid",
+      "authenticatedViaBsdd": "Cont buildingSMART",
+      "authError": "Eroare de autentificare",
+      "logout": "Deconectare",
+      "user": "Utilizator"
     }
   }
 }

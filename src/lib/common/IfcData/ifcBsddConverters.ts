@@ -1,4 +1,4 @@
-import { ClassContractV1, DictionaryClassesResponseContractV1Classes, DictionaryContractV1 } from '../BsddApi/BsddApiBase';
+import type { ClassContractV1, DictionaryClassesResponseContractV1Classes, DictionaryContractV1 } from '../../../../shared/bsdd-api/generated/types.gen';
 import { IfcClassification, IfcEntity } from './ifc';
 
 /**

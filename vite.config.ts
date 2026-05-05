@@ -12,6 +12,16 @@ export default defineConfig(({ mode }) => {
     base,
     server: {
       open: '/index.html',
+      proxy: {
+        // Route bSDD API calls through proxy to bypass localhost CORS restriction.
+        // The production bSDD API (api.bsdd.buildingsmart.org) does not allow
+        // localhost in its CORS whitelist. The test environment does.
+        '/bsdd-api': {
+          target: 'https://api.bsdd.buildingsmart.org',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/bsdd-api/, ''),
+        },
+      },
     },
     build: {
       target: 'esnext',
@@ -40,6 +50,7 @@ export default defineConfig(({ mode }) => {
     test: {
       globals: true,
       environment: 'jsdom',
+      setupFiles: ['./src/test/setup.ts'],
     },
     define: {
       'process.env.NODE_ENV': `"${process.env.NODE_ENV}"`,

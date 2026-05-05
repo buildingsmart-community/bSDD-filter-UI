@@ -1,16 +1,16 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
+
 import { mockData } from '../../../mocks/mockData';
-import { useSelector } from 'react-redux';
-import { useAppDispatch } from '../app/hooks';
+import { validateIfcData, validateSettings } from '../../api/validation/validateIfcData';
+import { useIfcDataStore } from '../../stores/ifcDataStore';
+import { useSettingsStore } from '../../stores/settingsStore';
 import { BsddBridgeData, BsddSettings } from '../IfcData/bsddBridgeData';
 import { IfcEntity } from '../IfcData/ifc';
 import defaultSettings from '../settings/defaultSettings';
-import { setSavedPropertyIsInstanceMap, setValidatedIfcData, setValidatedSelectedIfcEntities } from '../slices/ifcDataSlice';
-import { setIfcEntity } from '../slices/ifcEntitySlice';
-import { setSettingsWithValidation } from '../slices/settingsSlice';
-import { selectActiveDictionaries } from '../slices/settingsSlice';
+import { mergeIfcEntities } from '../tools/mergeIfcEntities';
 import { BsddBridge } from './BsddBridgeInterface';
-import {mergeIfcEntities} from '../tools/mergeIfcEntities';
+import { applyDisplayScale } from '../hooks/useDisplayScale';
 
 export interface CefSharpWindow extends Window {
   CefSharp?: {
@@ -25,8 +25,13 @@ export interface CefSharpWindow extends Window {
 declare let window: CefSharpWindow;
 
 const useCefSharpBridge = () => {
-  const dispatch = useAppDispatch();
-  const activeDictionaries = useSelector(selectActiveDictionaries);
+  const queryClient = useQueryClient();
+  const setSettings = useSettingsStore((s) => s.setSettings);
+  const setLoadedIfcEntities = useIfcDataStore((s) => s.setLoadedIfcEntities);
+  const setSelectedIfcEntities = useIfcDataStore((s) => s.setSelectedIfcEntities);
+  const setLoadingEntities = useIfcDataStore((s) => s.setLoadingEntities);
+  const setSavedPropertyIsInstanceMap = useIfcDataStore((s) => s.setSavedPropertyIsInstanceMap);
+  const setIfcEntity = useIfcDataStore((s) => s.setIfcEntity);
 
   useEffect(() => {
     let cefSharpCheckInterval: ReturnType<typeof setInterval>;
@@ -34,51 +39,59 @@ const useCefSharpBridge = () => {
 
     const initializeCefSharpBridge = async () => {
       try {
-        // Bind the object from CefSharp to the window
         await window.CefSharp?.BindObjectAsync('bsddBridge');
 
         if (window.bsddBridge) {
-          // Define global functions that can be called from the CefSharp backend
+          // Register global callbacks for CefSharp to call
           window.updateSelection = async (selection: IfcEntity[]) => {
-            dispatch(setValidatedIfcData(selection));
-            console.log('CefSharp updateSelection:', selection);
-          };
-          window.updateEditSelection = async (selection: IfcEntity[]) => {
-            dispatch(setValidatedSelectedIfcEntities(selection));
-            console.log('CefSharp updateEditSelection:', selection);
-          };
-          window.updateSettings = async (settings: BsddSettings) => {
-            dispatch(setSettingsWithValidation(settings));
-            console.log('CefSharp updateSettings:', settings);
+            const language = useSettingsStore.getState().language;
+            const validated = await validateIfcData(selection, queryClient, language);
+            setLoadedIfcEntities(validated);
           };
 
-          // Call the loadBridgeData function on the bridge object
-          const BridgeDataJson = await window.bsddBridge.loadBridgeData();
-          console.log('CefSharp loadBridgeData.');
-          const bsddBridgeData: BsddBridgeData = JSON.parse(BridgeDataJson);
-          console.log('CefSharp bsddBridgeData:', bsddBridgeData);
-          const { ifcData, settings, propertyIsInstanceMap } = bsddBridgeData;
+          window.updateEditSelection = async (selection: IfcEntity[]) => {
+            const language = useSettingsStore.getState().language;
+            const validated = await validateIfcData(selection, queryClient, language);
+            setSelectedIfcEntities(validated);
+          };
+
+          window.updateSettings = async (settings: BsddSettings) => {
+            const validated = await validateSettings(queryClient, settings);
+            setSettings(validated);
+          };
+
+          // Load initial bridge data
+          const bridgeDataJson = await window.bsddBridge.loadBridgeData();
+          const bsddBridgeData: BsddBridgeData = JSON.parse(bridgeDataJson);
+          const { ifcData, settings, propertyIsInstanceMap, displayScale } = bsddBridgeData;
+
+          // Apply host DPI scale so rem units match the modeller's UI density
+          applyDisplayScale(displayScale);
 
           if (settings) {
-            await dispatch(setSettingsWithValidation(settings));
-            console.log('CefSharp settings:', settings);
+            const validated = await validateSettings(queryClient, settings);
+            setSettings(validated);
           }
 
           if (ifcData?.length > 0) {
+            setLoadingEntities(true);
+            const language = useSettingsStore.getState().language;
+            const validated = await validateIfcData(ifcData, queryClient, language);
+            setSelectedIfcEntities(validated);
             const mergedIfcEntity = mergeIfcEntities(ifcData);
-            await dispatch(setValidatedSelectedIfcEntities(ifcData));
-            if (mergedIfcEntity) dispatch(setIfcEntity(mergedIfcEntity));
+            if (mergedIfcEntity) setIfcEntity(mergedIfcEntity);
+            setLoadingEntities(false);
+          } else {
+            setLoadingEntities(false);
           }
 
           if (propertyIsInstanceMap) {
-            dispatch(setSavedPropertyIsInstanceMap(propertyIsInstanceMap));
-            console.log('CefSharp propertyIsInstanceMap:', propertyIsInstanceMap);
+            setSavedPropertyIsInstanceMap(propertyIsInstanceMap);
           }
-
-          console.log('CefSharp connection and global functions are set up successfully.');
         } else {
           console.error('Failed to bind the bsddBridge object.');
-          await dispatch(setSettingsWithValidation(defaultSettings));
+          const validated = await validateSettings(queryClient, defaultSettings);
+          setSettings(validated);
         }
       } catch (error) {
         console.error('Error setting up CefSharp connection:', error);
@@ -90,64 +103,61 @@ const useCefSharpBridge = () => {
         clearInterval(cefSharpCheckInterval);
         clearTimeout(cefSharpTimeout);
         initializeCefSharpBridge();
-      } else {
-        console.log('Waiting for CefSharp to be available...');
       }
     };
 
-    // Start checking for CefSharp availability
-    cefSharpCheckInterval = setInterval(checkCefSharpAvailability, 100); // Check every 100ms
+    cefSharpCheckInterval = setInterval(checkCefSharpAvailability, 100);
 
-    cefSharpTimeout = setTimeout(() => {
+    cefSharpTimeout = setTimeout(async () => {
       clearInterval(cefSharpCheckInterval);
       console.log('CefSharp not available, loading default settings.');
-      dispatch(setSettingsWithValidation(defaultSettings));
-      dispatch(setValidatedIfcData(mockData?.ifcData || []));
-    }, 1000); // 1 second
+      const validated = await validateSettings(queryClient, defaultSettings);
+      setSettings(validated);
+      if (mockData?.ifcData) {
+        setLoadingEntities(true);
+        const language = useSettingsStore.getState().language;
+        const validatedEntities = await validateIfcData(mockData.ifcData, queryClient, language);
+        setLoadedIfcEntities(validatedEntities);
+      } else {
+        setLoadingEntities(false);
+      }
+    }, 1000);
 
     return () => {
       clearInterval(cefSharpCheckInterval);
       clearTimeout(cefSharpTimeout);
     };
-  }, [dispatch]);
+  }, [queryClient, setSettings, setLoadedIfcEntities, setLoadingEntities, setSelectedIfcEntities, setSavedPropertyIsInstanceMap, setIfcEntity]);
 
-  const bsddSearch = (ifcEntities: IfcEntity[]) => {
+  const onSearch = (ifcEntities: IfcEntity[]) => {
     const ifcEntityJson = JSON.stringify(ifcEntities);
     if (window?.bsddBridge?.bsddSearch) {
       window.bsddBridge.bsddSearch(ifcEntityJson);
-    } else {
-      console.error('bsddBridge or bsddSearch method is not available.');
     }
   };
 
-  const bsddSelect = (ifcEntities: IfcEntity[]) => {
+  const onSelect = (ifcEntities: IfcEntity[]) => {
     const ifcEntityJson = JSON.stringify(ifcEntities);
     if (window?.bsddBridge?.bsddSelect) {
       window.bsddBridge.bsddSelect(ifcEntityJson);
-    } else {
-      console.error('bsddBridge or bsddSelect method is not available.');
     }
   };
 
-  const bsddSearchSave = (bsddBridgeData: BsddBridgeData) => {
+  const onSave = (bsddBridgeData: BsddBridgeData) => {
     const ifcEntitiesJson = JSON.stringify(bsddBridgeData);
-    console.log('bsddBridge save:', ifcEntitiesJson);
     if (window?.bsddBridge?.save) {
       return window.bsddBridge.save(ifcEntitiesJson);
     }
-    console.error('bsddBridge or save method is not available.');
     return Promise.resolve('error');
   };
 
-  const bsddSearchCancel = () => {
+  const onCancel = () => {
     if (window?.bsddBridge?.cancel) {
       window.bsddBridge.cancel();
-    } else {
-      console.error('bsddBridge or cancel method is not available.');
     }
   };
 
-  return { bsddSearch, bsddSelect, bsddSearchSave, bsddSearchCancel };
+  return { onSearch, onSelect, onSave, onCancel };
 };
 
 export default useCefSharpBridge;

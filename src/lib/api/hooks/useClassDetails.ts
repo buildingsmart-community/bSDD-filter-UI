@@ -7,27 +7,29 @@ export function useClassDetails(
   uri: string | null | undefined,
   language: string,
   filterDictionaryUris: string[] = [],
+  accessToken?: string,
 ) {
   return useQuery({
-    queryKey: bsddKeys.classDetails(uri!, language, filterDictionaryUris),
+    // filterDictionaryUris excluded from key — same class data regardless of filter
+    queryKey: bsddKeys.classDetails(uri!, language),
     queryFn: () =>
       fetchClassDetail(uri!, language, {
         includeClassProperties: true,
         includeClassRelations: true,
         includeReverseRelations: true,
         reverseRelationDictionaryUris: filterDictionaryUris,
-      }),
-    staleTime: 1000 * 60 * 15, // 15 minutes
-    gcTime: 1000 * 60 * 60, // 1 hour
+      }, accessToken),
+    staleTime: 1000 * 60 * 60, // 1 hour
+    gcTime: 1000 * 60 * 60 * 24,
     enabled: !!uri,
   });
 }
 
-export function useClasses(uris: string[], language: string) {
+export function useClasses(uris: string[], language: string, accessToken?: string) {
   return useQuery({
     queryKey: bsddKeys.classes(uris, language),
-    queryFn: () => fetchMultipleClasses(uris, language),
-    staleTime: 1000 * 60 * 15,
+    queryFn: () => fetchMultipleClasses(uris, language, accessToken),
+    staleTime: 1000 * 60 * 30,
     gcTime: 1000 * 60 * 60,
     enabled: uris.length > 0,
   });

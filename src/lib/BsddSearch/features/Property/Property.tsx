@@ -2,7 +2,6 @@ import { Checkbox, Group, Select, TextInput, Tooltip } from '@mantine/core';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 
-import { useAppDispatch, useAppSelector } from '../../../common/app/hooks';
 import {
   IfcProperty,
   IfcPropertyEnumeratedValue,
@@ -10,13 +9,7 @@ import {
   IfcPropertySingleValue,
   IfcValue,
 } from '../../../common/IfcData/ifc';
-import { setPropertyIsInstance } from '../../../common/slices/ifcDataSlice';
-import {
-  selectIsDefinedBy,
-  setDescription,
-  setIsDefinedBy,
-  setObjectType,
-} from '../../../common/slices/ifcEntitySlice';
+import { useIfcDataStore } from '../../../stores/ifcDataStore';
 import { getInputDescription } from '../../../common/tools/utils';
 import Check from '../../Checkbox';
 
@@ -99,10 +92,14 @@ const getDefaultValue = (
 };
 
 function Property({ propertySet, property, propertyNaturalLanguageName }: PropertyProps) {
-  const dispatch = useAppDispatch();
-  const propertyIsInstanceMap = useAppSelector((state) => state.ifcData.propertyIsInstanceMap);
-  const savedPropertyIsInstanceMap = useAppSelector((state) => state.ifcData.savedPropertyIsInstanceMap);
-  const propertySets = useAppSelector(selectIsDefinedBy);
+  const propertyIsInstanceMap = useIfcDataStore((s) => s.propertyIsInstanceMap);
+  const savedPropertyIsInstanceMap = useIfcDataStore((s) => s.savedPropertyIsInstanceMap);
+  const propertySets = useIfcDataStore((s) => s.currentEntity.isDefinedBy);
+  const setIsDefinedBy = useIfcDataStore((s) => s.setIsDefinedBy);
+  const setObjectType = useIfcDataStore((s) => s.setObjectType);
+  const setDescription = useIfcDataStore((s) => s.setDescription);
+  const setPropertyIsInstance = useIfcDataStore((s) => s.setPropertyIsInstance);
+
   const instanceEnabled = propertySet.name !== 'Attributes';
   const propertyKey = `${propertySet.name}/${property.name}`;
   const isSwitchDisabled =
@@ -143,13 +140,13 @@ function Property({ propertySet, property, propertyNaturalLanguageName }: Proper
       }
 
       const updatedPropertySets = updatePropertySets(propertySets, propertySet.name, property.name, newValue);
-      dispatch(setIsDefinedBy(updatedPropertySets));
+      setIsDefinedBy(updatedPropertySets);
 
       if (propertySet.name === 'Attributes') {
         if (property.name === 'ObjectType') {
-          dispatch(setObjectType(value));
+          setObjectType(value);
         } else if (property.name === 'Description') {
-          dispatch(setDescription(value));
+          setDescription(value);
         }
       }
     }
@@ -236,7 +233,7 @@ function Property({ propertySet, property, propertyNaturalLanguageName }: Proper
             onChange={(event) => {
               if (!isSwitchDisabled) {
                 handleBlur(undefined);
-                dispatch(setPropertyIsInstance({ propertyName: propertyKey, value: event.currentTarget.checked }));
+                setPropertyIsInstance(propertyKey, event.currentTarget.checked);
               }
             }}
           />

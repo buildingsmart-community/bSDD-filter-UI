@@ -56,6 +56,13 @@
         "tooltipEditInstance": "Non è possibile modificare le proprietà di istanza per i tipi",
         "setAsInstanceCheckboxTooltip": "Imposta come proprietà di istanza"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "Accedi per API più veloce",
+      "authenticatedViaBsdd": "Account buildingSMART",
+      "authError": "Errore di autenticazione",
+      "logout": "Esci",
+      "user": "Utente"
     }
   }
 }

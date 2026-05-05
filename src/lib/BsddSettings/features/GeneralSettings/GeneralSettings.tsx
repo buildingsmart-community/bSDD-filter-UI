@@ -1,11 +1,7 @@
 import { Accordion, Checkbox, Space, Text, Title } from '@mantine/core';
-import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useAppDispatch, useAppSelector } from '../../../common/app/hooks';
 import { BsddSettings } from '../../../common/IfcData/bsddBridgeData';
-import { fetchDictionaries } from '../../../common/slices/bsddSlice';
-import { selectIncludeTestDictionaries } from '../../../common/slices/settingsSlice';
 import LanguageSelect from './LanguageSelect';
 
 interface GeneralSettingsProps {
@@ -16,26 +12,8 @@ interface GeneralSettingsProps {
   activeTab: boolean;
 }
 
-function GeneralSettings({ id, localSettings, setLocalSettings, setUnsavedChanges, activeTab }: GeneralSettingsProps) {
+function GeneralSettings({ id, localSettings, setLocalSettings, setUnsavedChanges }: GeneralSettingsProps) {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
-  const includeTestDictionaries = useAppSelector(selectIncludeTestDictionaries);
-
-  const prevIncludeTestDictionariesRef = useRef<boolean | null>(null);
-
-  // Update dictionary selection list when parameters change
-  useEffect(() => {
-    if (!activeTab) return;
-    if (includeTestDictionaries === undefined) return;
-
-    if (prevIncludeTestDictionariesRef.current === includeTestDictionaries) {
-      return;
-    }
-
-    dispatch(fetchDictionaries(includeTestDictionaries));
-
-    prevIncludeTestDictionariesRef.current = includeTestDictionaries;
-  }, [dispatch, includeTestDictionaries, activeTab]);
 
   return (
     <Accordion.Item key={id} value={id.toString()}>

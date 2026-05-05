@@ -56,6 +56,13 @@
         "tooltipEditInstance": "Uređivanje instanci svojstava za tipove nije moguće",
         "setAsInstanceCheckboxTooltip": "Postavi kao instancu svojstva"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "Prijavite se za brži API",
+      "authenticatedViaBsdd": "buildingSMART račun",
+      "authError": "Pogreška autentifikacije",
+      "logout": "Odjava",
+      "user": "Korisnik"
     }
   }
 }

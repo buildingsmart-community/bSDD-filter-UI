@@ -56,6 +56,13 @@
         "tooltipEditInstance": "Ekki er hægt að breyta eiginleikum tilviks fyrir gerðir",
         "setAsInstanceCheckboxTooltip": "Setja sem eiginleika tilviks"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "Skráðu þig inn fyrir hraðari API",
+      "authenticatedViaBsdd": "buildingSMART reikningur",
+      "authError": "Auðkenningarvilla",
+      "logout": "Skrá út",
+      "user": "Notandi"
     }
   }
 }

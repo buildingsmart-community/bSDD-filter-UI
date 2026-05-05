@@ -1,4 +1,4 @@
-import { CheckIcon, CloseButton, Combobox, Group, InputBase, Paper, Text, useCombobox } from '@mantine/core';
+import { CheckIcon, CloseButton, Combobox, Group, InputBase, Loader, Paper, Text, useCombobox } from '@mantine/core';
 import { useEffect, useRef, useState } from 'react';
 
 interface Option {
@@ -14,16 +14,25 @@ interface SlicerProps {
   value: Option | null;
   setValue: (newValue: Option | null) => void;
   placeholder: string | undefined;
+  /** When provided, called with the search query for server-side filtering.
+   *  The parent should update `options` with the results. */
+  onSearch?: (query: string) => void;
+  /** Indicates that a server-side search is in progress */
+  isSearching?: boolean;
+  /** Forces the slicer into a disabled/loading state */
+  loading?: boolean;
 }
 
 const INITIAL_RENDER_LIMIT = 25;
 const RENDER_MORE_LIMIT = 25;
+const SEARCH_DEBOUNCE_MS = 300;
 
-function Slicer({ height, options, label, value, setValue, placeholder = 'Search values' }: SlicerProps) {
+function Slicer({ height, options, label, value, setValue, placeholder = 'Search values', onSearch, isSearching, loading }: SlicerProps) {
   const [search, setSearch] = useState('');
   const [renderedOptions, setRenderedOptions] = useState(options.slice(0, INITIAL_RENDER_LIMIT));
-  const [disabled, setDisabled] = useState(options.length === 1);
+  const [disabled, setDisabled] = useState(loading || options.length === 1);
   const optionsContainerRef = useRef(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const combobox = useCombobox({
     onDropdownClose: () => {
@@ -45,23 +54,43 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
   }, [value]);
 
   useEffect(() => {
-    setDisabled(options.length === 1);
-  }, [options]);
+    setDisabled(loading || options.length === 1);
+  }, [options, loading]);
 
   useEffect(() => {
-    // filter options based on search string, if no value is selected show all options
-    const optionsToShow =
-      value === null
-        ? options.filter(
-            (item) =>
-              item?.label.toLowerCase().includes(search.toLowerCase().trim()) ||
-              item?.value.toString().toLowerCase().includes(search.toLowerCase().trim()),
-          )
-        : options;
+    if (onSearch) {
+      // Server-side search mode: show all options as-is (already filtered by server)
+      setRenderedOptions(options.slice(0, INITIAL_RENDER_LIMIT));
+    } else {
+      // Client-side filter mode
+      const optionsToShow =
+        value === null
+          ? options.filter(
+              (item) =>
+                item?.label.toLowerCase().includes(search.toLowerCase().trim()) ||
+                item?.value.toString().toLowerCase().includes(search.toLowerCase().trim()),
+            )
+          : options;
+      setRenderedOptions(optionsToShow.slice(0, INITIAL_RENDER_LIMIT));
+    }
+  }, [options, search, value, onSearch]);
 
-    // Only show limited options until scroll
-    setRenderedOptions(optionsToShow.slice(0, INITIAL_RENDER_LIMIT));
-  }, [options, search, value]);
+  const handleSearchChange = (query: string) => {
+    setSearch(query);
+    if (onSearch) {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+      debounceRef.current = setTimeout(() => {
+        onSearch(query);
+      }, SEARCH_DEBOUNCE_MS);
+    }
+  };
+
+  // Cleanup debounce on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, []);
 
   const handleScroll = (e: { currentTarget: { scrollTop: any; scrollHeight: any; clientHeight: any } }) => {
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
@@ -70,8 +99,9 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
     if (isAtBottom) {
       setRenderedOptions((prevRenderedOptions) => {
         const nextIndex = prevRenderedOptions.length;
-        const optionsToShow =
-          value === null
+        const optionsToShow = onSearch
+          ? options
+          : value === null
             ? options.filter(
                 (item) =>
                   item?.label.toLowerCase().includes(search.toLowerCase().trim()) ||
@@ -98,6 +128,14 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
     </Combobox.Option>
   ));
 
+  const optionsContent = isSearching ? (
+    <Combobox.Empty><Group gap="xs"><Loader size="xs" />Searching...</Group></Combobox.Empty>
+  ) : comboboxOptions.length > 0 ? (
+    comboboxOptions
+  ) : (
+    <Combobox.Empty>Nothing found...</Combobox.Empty>
+  );
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <Combobox
@@ -115,7 +153,9 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
         <Combobox.Target>
           <InputBase
             rightSection={
-              !disabled && (
+              loading ? (
+                <Loader size="xs" />
+              ) : !disabled ? (
                 <CloseButton
                   size="sm"
                   onMouseDown={(event) => {
@@ -127,7 +167,7 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
                   }}
                   aria-label="Clear value"
                 />
-              )
+              ) : null
             }
             label={label}
             value={value ? `${value.label} (${value.value})` : search}
@@ -135,7 +175,7 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
               if (!disabled) {
                 setValue(null);
                 combobox.updateSelectedOptionIndex();
-                setSearch(event.currentTarget.value);
+                handleSearchChange(event.currentTarget.value);
               }
             }}
             onClick={() => {
@@ -155,7 +195,7 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
             onScroll={handleScroll}
           >
             <Combobox.Options>
-              {comboboxOptions.length > 0 ? comboboxOptions : <Combobox.Empty>Nothing found...</Combobox.Empty>}
+              {optionsContent}
             </Combobox.Options>
           </Combobox.Dropdown>
         ) : (
@@ -173,7 +213,7 @@ function Slicer({ height, options, label, value, setValue, placeholder = 'Search
             onScroll={handleScroll}
           >
             <Combobox.Options>
-              {comboboxOptions.length > 0 ? comboboxOptions : <Combobox.Empty>Nothing found...</Combobox.Empty>}
+              {optionsContent}
             </Combobox.Options>
           </Paper>
         )}

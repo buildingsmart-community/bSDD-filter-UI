@@ -1,139 +1,97 @@
-import { useEffect, useMemo, useRef } from 'react';
-import { ArrayParam, BooleanParam, StringParam, useQueryParams, withDefault } from 'use-query-params';
+import { useQueryClient } from '@tanstack/react-query';
+import { useEffect, useRef } from 'react';
 
 import { mockData } from '../../../mocks/mockData';
-import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { validateIfcData, validateSettings } from '../../api/validation/validateIfcData';
+import { useIfcDataStore } from '../../stores/ifcDataStore';
+import { useSettingsStore } from '../../stores/settingsStore';
 import { BsddBridgeData, BsddDictionary, BsddSettings } from '../IfcData/bsddBridgeData';
 import { IfcEntity } from '../IfcData/ifc';
 import defaultSettings from '../settings/defaultSettings';
-import { setSavedPropertyIsInstanceMap, setValidatedIfcData } from '../slices/ifcDataSlice';
-import {
-  selectFilterDictionaries,
-  selectIfcDictionary,
-  selectIncludeTestDictionaries,
-  selectLanguage,
-  selectMainDictionary,
-  setSettingsWithValidation,
-} from '../slices/settingsSlice';
 
 const useBrowserBridge = () => {
-  const dispatch = useAppDispatch();
-  const mainDictionary = useAppSelector(selectMainDictionary);
-  const ifcDictionary = useAppSelector(selectIfcDictionary);
-  const filterDictionaries = useAppSelector(selectFilterDictionaries);
-  const language = useAppSelector(selectLanguage);
-  const includeTestDictionaries = useAppSelector(selectIncludeTestDictionaries);
-
-  const [query, setQuery] = useQueryParams({
-    mainDictionary: StringParam,
-    ifcDictionary: StringParam,
-    filterDictionaries: withDefault(ArrayParam, []),
-    language: StringParam,
-    includeTestDictionaries: BooleanParam,
-  });
-
+  const queryClient = useQueryClient();
+  const setSettings = useSettingsStore((s) => s.setSettings);
+  const setLoadedIfcEntities = useIfcDataStore((s) => s.setLoadedIfcEntities);
+  const setLoadingEntities = useIfcDataStore((s) => s.setLoadingEntities);
+  const setSavedPropertyIsInstanceMap = useIfcDataStore((s) => s.setSavedPropertyIsInstanceMap);
   const initialLoad = useRef(true);
 
-  const setSettings = async () => {
-    const hasQueryParams = Object.values(query).some((param) => {
-      if (Array.isArray(param)) {
-        return param.length > 0;
-      }
-      return param !== undefined && param !== null && param !== '';
-    });
-
-    if (!hasQueryParams) {
-      await dispatch(setSettingsWithValidation(defaultSettings));
-    } else {
-      const settings: BsddSettings = {
-        mainDictionary: query.mainDictionary
-          ? ({
-              ifcClassification: {
-                type: 'IfcClassification',
-                location: query.mainDictionary,
-              },
-            } as BsddDictionary)
-          : null,
-        ifcDictionary: query.ifcDictionary
-          ? ({
-              ifcClassification: {
-                type: 'IfcClassification',
-                location: query.ifcDictionary,
-              },
-            } as BsddDictionary)
-          : null,
-        filterDictionaries: query.filterDictionaries.map(
-          (location) =>
-            ({
-              ifcClassification: {
-                type: 'IfcClassification',
-                location,
-              },
-            }) as BsddDictionary,
-        ),
-        language: query.language || 'en-GB',
-        includeTestDictionaries: query.includeTestDictionaries || false,
-      };
-      await dispatch(setSettingsWithValidation(settings));
-    }
-
-    if (mockData.propertyIsInstanceMap) {
-      await dispatch(setSavedPropertyIsInstanceMap(mockData.propertyIsInstanceMap));
-    }
-  };
-
-  // Read query parameters on page load and update settings state
   useEffect(() => {
-    setSettings().then(() => {
+    if (!initialLoad.current) return;
+    initialLoad.current = false;
+
+    const init = async () => {
+      // Read URL query params
+      const params = new URLSearchParams(window.location.search);
+      const hasQueryParams = params.has('mainDictionary') || params.has('language');
+
+      let settings: BsddSettings;
+      if (!hasQueryParams) {
+        settings = defaultSettings;
+      } else {
+        settings = {
+          mainDictionary: params.get('mainDictionary')
+            ? ({
+                ifcClassification: { type: 'IfcClassification', location: params.get('mainDictionary') },
+              } as BsddDictionary)
+            : null,
+          ifcDictionary: params.get('ifcDictionary')
+            ? ({
+                ifcClassification: { type: 'IfcClassification', location: params.get('ifcDictionary') },
+              } as BsddDictionary)
+            : null,
+          filterDictionaries: (params.get('filterDictionaries')?.split(',') || [])
+            .filter(Boolean)
+            .map(
+              (location) =>
+                ({ ifcClassification: { type: 'IfcClassification', location } }) as BsddDictionary,
+            ),
+          language: params.get('language') || 'en-GB',
+          includeTestDictionaries: params.get('includeTestDictionaries') === 'true',
+        };
+      }
+
+      // Validate and apply settings first (caches dictionaries for entity validation)
+      const validatedSettings = await validateSettings(queryClient, settings);
+      setSettings(validatedSettings);
+
+      if (mockData.propertyIsInstanceMap) {
+        setSavedPropertyIsInstanceMap(mockData.propertyIsInstanceMap);
+      }
+
+      // Then validate and load IFC entities (uses cached dictionaries)
       if (mockData.ifcData) {
-        dispatch(setValidatedIfcData(mockData.ifcData));
+        setLoadingEntities(true);
+        const language = validatedSettings.language || 'en-GB';
+        const validatedEntities = await validateIfcData(mockData.ifcData, queryClient, language);
+        setLoadedIfcEntities(validatedEntities);
+      } else {
+        setLoadingEntities(false);
       }
-    });
-  }, []);
-
-  const settings: BsddSettings = useMemo(() => {
-    return {
-      mainDictionary,
-      ifcDictionary,
-      filterDictionaries,
-      language,
-      includeTestDictionaries,
-    };
-  }, [mainDictionary, ifcDictionary, filterDictionaries, language, includeTestDictionaries]);
-
-  // Synchronize settings state with URL query parameters
-  useEffect(() => {
-    const newQuery = {
-      mainDictionary: mainDictionary?.ifcClassification.location,
-      ifcDictionary: ifcDictionary?.ifcClassification.location,
-      filterDictionaries: filterDictionaries.map((dict) => dict.ifcClassification.location),
-      language,
-      includeTestDictionaries,
     };
 
-    if (JSON.stringify(query) !== JSON.stringify(newQuery)) {
-      setQuery(newQuery);
-    }
-  }, [mainDictionary, ifcDictionary, filterDictionaries, language, includeTestDictionaries, setQuery, query]);
+    init();
+  }, [queryClient, setSettings, setLoadedIfcEntities, setLoadingEntities, setSavedPropertyIsInstanceMap]);
 
-  const bsddSearch = (ifcEntities: IfcEntity[]) => {
-    console.log('bsddSearch called with:', ifcEntities);
+  const onSearch = (ifcEntities: IfcEntity[]) => {
+    console.log('onSearch called with:', ifcEntities);
   };
 
-  const bsddSelect = (ifcEntities: IfcEntity[]) => {
-    console.log('bsddSelect called with:', ifcEntities);
+  const onSelect = (ifcEntities: IfcEntity[]) => {
+    console.log('onSelect called with:', ifcEntities);
   };
 
-  const bsddSearchSave = (bsddBridgeData: BsddBridgeData) => {
-    console.log('bsddSearchSave called with:', bsddBridgeData);
+  const onSave = (bsddBridgeData: BsddBridgeData) => {
+    console.log('onSave called with:', bsddBridgeData);
     return Promise.resolve('success');
   };
 
-  const bsddSearchCancel = () => {
-    console.log('bsddSearchCancel called');
+  const onCancel = () => {
+    console.log('onCancel called');
   };
 
-  return { bsddSearch, bsddSelect, bsddSearchSave, bsddSearchCancel };
+  return { onSearch, onSelect, onSave, onCancel };
 };
 
 export default useBrowserBridge;

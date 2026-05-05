@@ -1,9 +1,9 @@
 import { QueryClient } from '@tanstack/react-query';
 
-import {
+import type {
   ClassListItemContractV1Classes,
   DictionaryContractV1,
-} from '../../common/BsddApi/BsddApiBase';
+} from '../../../../shared/bsdd-api/generated/types.gen';
 import { BsddDictionary } from '../../common/IfcData/bsddBridgeData';
 import {
   Association,

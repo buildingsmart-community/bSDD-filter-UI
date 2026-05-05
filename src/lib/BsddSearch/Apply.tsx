@@ -1,29 +1,25 @@
 import { Button } from '@mantine/core';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useShallow } from 'zustand/react/shallow';
 
-import { useAppSelector } from '../common/app/hooks';
-import { ClassContractV1, DictionaryContractV1 } from '../common/BsddApi/BsddApiBase';
-import { BsddBridgeData, BsddSettings } from '../common/IfcData/bsddBridgeData';
-import { IfcClassification, IfcClassificationReference, IfcEntity } from '../common/IfcData/ifc';
-import { convertBsddDictionaryToIfcClassification } from '../common/IfcData/ifcBsddConverters';
-import { selectBsddDictionaries } from '../common/slices/bsddSlice';
-import { selectPropertyIsInstanceMap, selectSelectedIfcEntities } from '../common/slices/ifcDataSlice';
-import { selectIfcEntity } from '../common/slices/ifcEntitySlice';
-import { selectSettings } from '../common/slices/settingsSlice';
+import { BsddBridgeData } from '../common/IfcData/bsddBridgeData';
+import { IfcEntity } from '../common/IfcData/ifc';
+import { selectIfcEntity, useIfcDataStore } from '../stores/ifcDataStore';
+import { selectSettings, useSettingsStore } from '../stores/settingsStore';
 import { updateEntitiesWithIfcEntity } from '../common/tools/mergeIfcEntities';
 
 interface ApplyProps {
-  bsddSearchSave: (bsddBridgeData: BsddBridgeData) => Promise<string>;
+  onSave: (bsddBridgeData: BsddBridgeData) => Promise<string>;
 }
 
 function createBridgeData(
   ifcEntity: IfcEntity,
   propertyIsInstanceMap: Record<string, boolean>,
-  settings: BsddSettings,
+  settings: ReturnType<typeof selectSettings>,
   selectedIfcEntities: IfcEntity[],
 ): BsddBridgeData {
-  console.log('Creating bsddSearchSave data', selectedIfcEntities);
+  console.log('Creating onSave data', selectedIfcEntities);
   if (!selectedIfcEntities) {
     return {
       ifcData: [],
@@ -38,53 +34,30 @@ function createBridgeData(
   };
 }
 
-function Apply({ bsddSearchSave }: ApplyProps) {
+function Apply({ onSave }: ApplyProps) {
   const { t } = useTranslation();
 
-  const dictionaries = useAppSelector(selectBsddDictionaries);
-  const ifcEntity = useAppSelector(selectIfcEntity);
-  const settings = useAppSelector(selectSettings);
-  const propertyIsInstanceMap = useAppSelector(selectPropertyIsInstanceMap);
-  const selectedIfcEntities = useAppSelector(selectSelectedIfcEntities);
+  const settings = useSettingsStore(useShallow(selectSettings));
+  const propertyIsInstanceMap = useIfcDataStore((s) => s.propertyIsInstanceMap);
+  const selectedIfcEntities = useIfcDataStore((s) => s.selectedIfcEntities);
 
   const callback = useCallback(
     (ifcProduct: IfcEntity) => {
-      console.log('Sending bsddSearchSave data back to host', ifcProduct);
-      bsddSearchSave(createBridgeData(ifcProduct, propertyIsInstanceMap, settings, selectedIfcEntities)).then(
+      console.log('Sending onSave data back to host', ifcProduct);
+      onSave(createBridgeData(ifcProduct, propertyIsInstanceMap, settings, selectedIfcEntities)).then(
         (actualResult) => {
           console.log('Sent iFC data back to host', actualResult);
         },
       );
     },
-    [bsddSearchSave, propertyIsInstanceMap, selectedIfcEntities, settings],
+    [onSave, propertyIsInstanceMap, selectedIfcEntities, settings],
   );
 
-  function getIfcClassification(domainNamespaceUri: string): IfcClassification | null {
-    if (domainNamespaceUri in dictionaries) {
-      const dictionary: DictionaryContractV1 = dictionaries[domainNamespaceUri];
-      if (dictionary) {
-        return convertBsddDictionaryToIfcClassification(dictionary);
-      }
-    }
-    return null;
-  }
-
-  function getIfcClassificationReference(classContract: ClassContractV1): IfcClassificationReference | null {
-    const ifc: IfcClassificationReference = {
-      type: 'IfcClassificationReference',
-      name: classContract.name,
-      location: classContract.uri || undefined,
-      identification: classContract.code || undefined,
-      referencedSource: classContract.dictionaryUri
-        ? getIfcClassification(classContract.dictionaryUri) || undefined
-        : undefined,
-    };
-
-    return ifc;
-  }
-
+  // selectIfcEntity is a derived projection (deep-cloned object). Reading via
+  // getState() inside the handler avoids subscribing the component to a value
+  // that produces a new reference on every read.
   const handleOnChange = () => {
-    console.log(ifcEntity);
+    const ifcEntity = selectIfcEntity(useIfcDataStore.getState());
     callback(ifcEntity);
   };
 

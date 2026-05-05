@@ -56,6 +56,13 @@
         "tooltipEditInstance": "Instanssiominaisuuksien muokkaaminen tyypeille ei ole mahdollista",
         "setAsInstanceCheckboxTooltip": "Aseta instanssiominaisuutena"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "Kirjaudu nopeampaan API:in",
+      "authenticatedViaBsdd": "buildingSMART-tili",
+      "authError": "Todennusvirhe",
+      "logout": "Kirjaudu ulos",
+      "user": "Käyttäjä"
     }
   }
 }

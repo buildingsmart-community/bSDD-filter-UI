@@ -55,6 +55,13 @@
         "tooltipEditInstance": "Türler için örnek özellikleri düzenlemek mümkün değil",
         "setAsInstanceCheckboxTooltip": "Örnek özellik olarak ayarla"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "Sign in for faster API",
+      "authenticatedViaBsdd": "buildingSMART account",
+      "authError": "Authentication error",
+      "logout": "Sign out",
+      "user": "User"
     }
   }
 }

@@ -1,32 +1,34 @@
 import { Box, Button, Paper, Tooltip } from '@mantine/core';
 import { IconGripHorizontal } from '@tabler/icons-react';
-import { MouseEventHandler, useEffect, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { MouseEventHandler, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useShallow } from 'zustand/react/shallow';
 
-import { useAppDispatch, useAppSelector } from '../../../common/app/hooks';
-import { DictionaryContractV1 } from '../../../common/BsddApi/BsddApiBase';
-import { getSlicerClassificationUris } from '../../../common/BsddApi/BsddApiHelpers';
+import type { ClassContractV1, DictionaryContractV1 } from '../../../../../shared/bsdd-api/generated/types.gen';
+import { getSlicerClassificationUris } from '../../../common/tools/bsddClassHelpers';
 import { IfcClassification, IfcClassificationReference } from '../../../common/IfcData/ifc';
+import { useDictionaries } from '../../../api/hooks/useDictionaries';
+import { useClasses } from '../../../api/hooks/useClassDetails';
+import { fetchFirstPageDictionaryClasses } from '../../../api/fetchers/dictionaries';
+import { searchInDictionary } from '../../../api/fetchers/search';
+import { bsddKeys } from '../../../api/queryKeys';
+import { useBsddBridge } from '../../../providers/BsddBridgeContext';
+import { useIfcDataStore } from '../../../stores/ifcDataStore';
 import {
-  fetchDictionaryClasses,
-  selectBsddDictionaries,
-  selectGroupedClasses,
-  selectMainDictionaryClassification,
-  selectMainDictionaryClassificationUri,
-  updateFilterDictionaryClassificationUris,
-  updateMainDictionaryClassificationUri,
-} from '../../../common/slices/bsddSlice';
-import { selectHasAssociationsMap, setHasAssociations } from '../../../common/slices/ifcEntitySlice';
-import {
-  selectActiveDictionariesMap,
+  selectActiveDictionaries,
   selectIfcDictionaryUri,
   selectMainDictionaryUri,
-} from '../../../common/slices/settingsSlice';
+  useSettingsStore,
+} from '../../../stores/settingsStore';
 import Slicer from '../../Slicer';
 
 interface ClassificationsProps {
   height: number;
   handleMouseDown: MouseEventHandler<HTMLDivElement>;
+  mainDictionaryClassification: ClassContractV1 | null;
+  mainClassificationUri: string | null;
+  onMainClassificationChange: (uri: string | null) => void;
 }
 
 interface Option {
@@ -68,66 +70,106 @@ const convertToIfcClassificationReference = (
   } as IfcClassificationReference;
 };
 
-/**
- * Fetches bSDD classes and updates the classification references in the state.
- *
- * @param selectedIfcClassificationReferences - The selected IFC classification references.
- * @param dictionaries - The dictionaries object from the state.
- * @param dispatch - The Redux dispatch function.
- */
-const fetchBsddClasses = (
-  selectedIfcClassificationReferences: Map<string, Option | null>,
-  dictionaries: Record<string, DictionaryContractV1>,
-  dispatch: any,
-) => {
-  const newClassificationReferences = Array.from(selectedIfcClassificationReferences.entries())
-    .map(([dictionaryUri, option]) => convertToIfcClassificationReference(dictionaryUri, option, dictionaries))
-    .filter((ref): ref is IfcClassificationReference => ref !== null);
-
-  if (newClassificationReferences.length > 0) {
-    dispatch(setHasAssociations(newClassificationReferences));
-  }
-};
-
-function Classifications({ height, handleMouseDown }: ClassificationsProps) {
-  const dispatch = useAppDispatch();
+function Classifications({
+  height,
+  handleMouseDown,
+  mainDictionaryClassification,
+  mainClassificationUri,
+  onMainClassificationChange,
+}: ClassificationsProps) {
+  const queryClient = useQueryClient();
   const { t } = useTranslation();
   const [optionsMap, setOptionsMap] = useState<Map<string, Option[]>>(new Map());
-
+  const [searchingDictionaries, setSearchingDictionaries] = useState<Set<string>>(new Set());
   const [selectedIfcClassificationReferences, setSelectedIfcClassificationReferences] = useState<
     Map<string, Option | null>
   >(new Map());
-  const activeDictionariesMap = useAppSelector(selectActiveDictionariesMap);
-  const hasAssociations = useAppSelector(selectHasAssociationsMap);
-  const dictionaries = useAppSelector(selectBsddDictionaries);
-  const groupedClassRelations = useAppSelector(selectGroupedClasses);
-  const mainDictionaryClassification = useAppSelector(selectMainDictionaryClassification);
-  const mainDictionaryClassificationUri = useAppSelector(selectMainDictionaryClassificationUri);
-  const mainDictionaryUri = useAppSelector(selectMainDictionaryUri);
-  const ifcDictionaryUri = useAppSelector(selectIfcDictionaryUri);
 
+  // Settings
+  const activeDictionaries = useSettingsStore(useShallow(selectActiveDictionaries));
+  const activeDictionariesMap = useMemo(
+    () => new Map(activeDictionaries.map((d) => [d.ifcClassification.location, d.ifcClassification])),
+    [activeDictionaries],
+  );
+  const mainDictionaryUri = useSettingsStore(selectMainDictionaryUri);
+  const ifcDictionaryUri = useSettingsStore(selectIfcDictionaryUri);
+  const includeTestDictionaries = useSettingsStore((s) => s.includeTestDictionaries);
+  const languageCode = useSettingsStore((s) => s.language);
+  const { accessToken } = useBsddBridge();
+
+  // IFC data
+  // selectHasAssociationsMap builds a fresh object whose values are fresh arrays
+  // every call, which breaks shallow equality and triggers an infinite loop in
+  // useSyncExternalStore. Subscribe to the stable source array and derive via
+  // useMemo instead.
+  const hasAssociationsList = useIfcDataStore((s) => s.currentEntity.hasAssociations);
+  const hasAssociations = useMemo<{ [key: string]: IfcClassificationReference[] }>(() => {
+    const refs = (hasAssociationsList ?? []).filter(
+      (a) => a && a.type === 'IfcClassificationReference',
+    ) as IfcClassificationReference[];
+    return refs.reduce<{ [key: string]: IfcClassificationReference[] }>((acc, ref) => {
+      const location = ref?.referencedSource?.location;
+      if (location) {
+        if (!acc[location]) acc[location] = [];
+        acc[location].push(ref);
+      }
+      return acc;
+    }, {});
+  }, [hasAssociationsList]);
+  const setHasAssociations = useIfcDataStore((s) => s.setHasAssociations);
+
+  // Fetch dictionaries for creating classification references
+  const { data: dictionariesMap = {} } = useDictionaries(includeTestDictionaries ?? false, accessToken);
+
+  // Compute class relation URIs from main classification
+  const classRelationUris = useMemo(
+    () => getSlicerClassificationUris(mainDictionaryClassification, ifcDictionaryUri),
+    [mainDictionaryClassification, ifcDictionaryUri],
+  );
+
+  // Fetch related classes to get their actual name/code/dictionaryUri
+  const { data: relatedClassesMap, isPending: isClassesLoading } = useClasses(classRelationUris, languageCode, accessToken);
+
+  // Group related classes by dictionary URI
+  const groupedClassRelations = useMemo(() => {
+    if (!relatedClassesMap) return {} as Record<string, ClassContractV1[]>;
+    const grouped: Record<string, ClassContractV1[]> = {};
+    for (const cls of Object.values(relatedClassesMap)) {
+      const { dictionaryUri } = cls;
+      if (dictionaryUri) {
+        if (!grouped[dictionaryUri]) grouped[dictionaryUri] = [];
+        grouped[dictionaryUri].push(cls);
+      }
+    }
+    return grouped;
+  }, [mainDictionaryClassification]);
+
+  // Build options map for each dictionary slicer
   useEffect(() => {
     const updateOptionsMap = async () => {
       const entries = Array.from(activeDictionariesMap.entries());
       const optionsMapPromises = entries.map(async ([dictionaryUri, dictionary]): Promise<[string, Option[]]> => {
-        if (mainDictionaryClassification && dictionaryUri === mainDictionaryUri) {
-          const { code, name, uri } = mainDictionaryClassification;
-          return [
-            dictionaryUri,
-            [
-              {
-                value: code,
-                label: name,
-                uri,
-              } as Option,
-            ],
-          ];
+        if (dictionaryUri === mainDictionaryUri) {
+          if (mainDictionaryClassification) {
+            // Class details loaded — lock to the single selected class
+            const { code, name, uri } = mainDictionaryClassification;
+            return [
+              dictionaryUri,
+              [
+                {
+                  value: code,
+                  label: name,
+                  uri,
+                } as Option,
+              ],
+            ];
+          }
+          // mainClassificationUri exists but details not loaded yet — keep empty (loading)
+          return [dictionaryUri, []];
         }
 
         let options: Option[] = [];
         const classRelationGroup = groupedClassRelations[dictionaryUri];
-
-        const classRelationUris = getSlicerClassificationUris(mainDictionaryClassification, ifcDictionaryUri);
 
         const filteredGroup = classRelationGroup?.filter((classRelation) => {
           return classRelationUris.includes(classRelation.uri);
@@ -140,18 +182,26 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
             uri: classRelation.uri,
           }));
         } else {
+          // No class relations found — fetch only the first page of classes
+          // to prefill the searchable dropdown without blocking on all pages.
           try {
-            const fetchedClasses = await dispatch(fetchDictionaryClasses(dictionaryUri)).unwrap();
+            const fetchedClasses = await queryClient.fetchQuery({
+              queryKey: [...bsddKeys.dictionaryClasses(dictionaryUri, languageCode), 'firstPage'],
+              queryFn: () => fetchFirstPageDictionaryClasses(dictionaryUri, languageCode, accessToken),
+              staleTime: 1000 * 60 * 30,
+            });
 
             options =
-              fetchedClasses?.map(
-                (fetchedClass) =>
-                  ({
-                    value: fetchedClass.code as string,
-                    label: fetchedClass.name || '',
-                    uri: fetchedClass.uri,
-                  }) as Option,
-              ) ?? [];
+              (fetchedClasses ?? [])
+                .filter((fetchedClass) => fetchedClass.uri && fetchedClass.code)
+                .map(
+                  (fetchedClass) =>
+                    ({
+                      value: fetchedClass.code as string,
+                      label: fetchedClass.name || '',
+                      uri: fetchedClass.uri as string,
+                    }) as Option,
+                );
           } catch (error) {
             console.error('Failed to fetch dictionary classes for', dictionaryUri, error);
             options = [];
@@ -194,16 +244,88 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
   }, [
     activeDictionariesMap,
     groupedClassRelations,
-    dispatch,
+    classRelationUris,
+    queryClient,
+    languageCode,
+    accessToken,
     hasAssociations,
     mainDictionaryClassification,
     mainDictionaryUri,
     ifcDictionaryUri,
   ]);
 
+  // Update associations when selections change
   useEffect(() => {
-    fetchBsddClasses(selectedIfcClassificationReferences, dictionaries, dispatch);
-  }, [dictionaries, dispatch, selectedIfcClassificationReferences]);
+    const newClassificationReferences = Array.from(selectedIfcClassificationReferences.entries())
+      .map(([dictionaryUri, option]) => convertToIfcClassificationReference(dictionaryUri, option, dictionariesMap))
+      .filter((ref): ref is IfcClassificationReference => ref !== null);
+
+    if (newClassificationReferences.length > 0) {
+      setHasAssociations(newClassificationReferences);
+    }
+  }, [dictionariesMap, selectedIfcClassificationReferences, setHasAssociations]);
+
+  // Determine which dictionaries have no class relations (need server-side search)
+  const dictionariesWithoutRelations = useMemo(() => {
+    const set = new Set<string>();
+    for (const [dictionaryUri] of activeDictionariesMap.entries()) {
+      if (dictionaryUri === mainDictionaryUri) continue;
+      const group = groupedClassRelations[dictionaryUri];
+      const filtered = group?.filter((c) => classRelationUris.includes(c.uri));
+      if (!filtered || filtered.length === 0) {
+        set.add(dictionaryUri);
+      }
+    }
+    return set;
+  }, [activeDictionariesMap, groupedClassRelations, classRelationUris, mainDictionaryUri]);
+
+  // Server-side search for filter dictionaries without relations
+  const handleSlicerSearch = async (dictionaryUri: string, query: string) => {
+    if (!query.trim()) {
+      // Reset to first page when search is cleared
+      try {
+        const fetchedClasses = await queryClient.fetchQuery({
+          queryKey: [...bsddKeys.dictionaryClasses(dictionaryUri, languageCode), 'firstPage'],
+          queryFn: () => fetchFirstPageDictionaryClasses(dictionaryUri, languageCode, accessToken),
+          staleTime: 1000 * 60 * 30,
+        });
+        const options: Option[] = (fetchedClasses ?? [])
+          .filter((c) => c.uri && c.code)
+          .map((c) => ({
+            value: c.code as string,
+            label: c.name || '',
+            uri: c.uri as string,
+          }));
+        setOptionsMap((prev) => new Map(prev).set(dictionaryUri, options));
+      } catch { /* keep existing options */ }
+      return;
+    }
+
+    setSearchingDictionaries((prev) => new Set(prev).add(dictionaryUri));
+    try {
+      const result = await searchInDictionary({
+        DictionaryUri: dictionaryUri,
+        SearchText: query,
+        languageCode: languageCode,
+      }, accessToken);
+      const options: Option[] = (result.dictionary?.classes ?? [])
+        .filter((c) => c.uri && c.referenceCode)
+        .map((c) => ({
+          value: c.referenceCode as string,
+          label: c.name || '',
+          uri: c.uri as string,
+        }));
+      setOptionsMap((prev) => new Map(prev).set(dictionaryUri, options));
+    } catch (error) {
+      console.error('Search failed for', dictionaryUri, error);
+    } finally {
+      setSearchingDictionaries((prev) => {
+        const next = new Set(prev);
+        next.delete(dictionaryUri);
+        return next;
+      });
+    }
+  };
 
   return (
     <Paper style={{ height: `${height}px`, position: 'relative' }}>
@@ -212,6 +334,7 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
         const isIfcDictionary = dictionaryUri === mainDictionaryClassification?.dictionaryUri;
 
         if (isMainDictionary) {
+          const isMainLoading = !!mainClassificationUri && !mainDictionaryClassification;
           return (
             <Slicer
               key={dictionaryUri}
@@ -220,15 +343,16 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
               options={optionsMap.get(dictionaryUri) || []}
               value={selectedIfcClassificationReferences.get(dictionaryUri) || null}
               setValue={(newValue) => {
-                if (newValue?.uri && newValue?.uri !== mainDictionaryClassificationUri) {
+                if (newValue?.uri && newValue?.uri !== mainClassificationUri) {
                   const newValues = new Map(selectedIfcClassificationReferences);
                   newValues.set(dictionaryUri, newValue);
                   setSelectedIfcClassificationReferences(newValues);
 
-                  dispatch(updateMainDictionaryClassificationUri(newValue.uri));
+                  onMainClassificationChange(newValue.uri);
                 }
               }}
               placeholder={t('classifications.searchClassesPlaceholder')}
+              loading={isMainLoading}
             />
           );
         }
@@ -248,14 +372,11 @@ function Classifications({ height, handleMouseDown }: ClassificationsProps) {
               const newValues = new Map(selectedIfcClassificationReferences);
               newValues.set(dictionaryUri, newValue);
               setSelectedIfcClassificationReferences(newValues);
-
-              // Dispatch the action to update filter dictionaries
-              const newUris = Array.from(newValues.values())
-                .filter((option) => option !== null && option.uri !== mainDictionaryClassificationUri)
-                .map((option) => option!.uri);
-              dispatch(updateFilterDictionaryClassificationUris(newUris));
             }}
             placeholder={t('classifications.searchClassesPlaceholder')}
+            onSearch={dictionariesWithoutRelations.has(dictionaryUri) ? (query) => handleSlicerSearch(dictionaryUri, query) : undefined}
+            isSearching={searchingDictionaries.has(dictionaryUri)}
+            loading={isClassesLoading && !!mainClassificationUri}
           />
         );
       })}

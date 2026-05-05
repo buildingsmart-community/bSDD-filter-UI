@@ -8,11 +8,11 @@ export function useSearchInDictionary(dictionaryUri: string | null | undefined, 
     queryKey: bsddKeys.search(dictionaryUri!, searchText),
     queryFn: () =>
       searchInDictionary({
-        DictionaryUri: dictionaryUri,
+        DictionaryUri: dictionaryUri!,
         SearchText: searchText,
       }),
     staleTime: 1000 * 60 * 5, // 5 minutes
     gcTime: 1000 * 60 * 15, // 15 minutes
-    enabled: !!dictionaryUri && searchText.length > 0,
+    enabled: !!dictionaryUri,
   });
 }

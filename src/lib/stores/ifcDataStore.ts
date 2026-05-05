@@ -25,6 +25,7 @@ interface IfcDataState {
   // Loaded IFC entities from host application
   loadedIfcEntities: IfcEntity[];
   selectedIfcEntities: IfcEntity[];
+  loadingEntities: boolean;
   savedPropertyIsInstanceMap: Record<string, boolean>;
   propertyIsInstanceMap: Record<string, boolean>;
 
@@ -34,6 +35,7 @@ interface IfcDataState {
   // IFC data actions
   setLoadedIfcEntities: (entities: IfcEntity[]) => void;
   setSelectedIfcEntities: (entities: IfcEntity[]) => void;
+  setLoadingEntities: (loading: boolean) => void;
   setSavedPropertyIsInstanceMap: (map: Record<string, boolean>) => void;
   setPropertyIsInstance: (propertyName: string, value: boolean) => void;
 
@@ -115,12 +117,14 @@ const initialEntityState: EntityState = {
 export const useIfcDataStore = create<IfcDataState>()((set) => ({
   loadedIfcEntities: [],
   selectedIfcEntities: [],
+  loadingEntities: true,
   savedPropertyIsInstanceMap: {},
   propertyIsInstanceMap: {},
   currentEntity: initialEntityState,
 
-  setLoadedIfcEntities: (entities) => set({ loadedIfcEntities: entities }),
+  setLoadedIfcEntities: (entities) => set({ loadedIfcEntities: entities, loadingEntities: false }),
   setSelectedIfcEntities: (entities) => set({ selectedIfcEntities: entities }),
+  setLoadingEntities: (loading) => set({ loadingEntities: loading }),
   setSavedPropertyIsInstanceMap: (map) => set({ savedPropertyIsInstanceMap: map, propertyIsInstanceMap: map }),
   setPropertyIsInstance: (propertyName, value) =>
     set((state) => ({
@@ -186,7 +190,7 @@ export const useIfcDataStore = create<IfcDataState>()((set) => ({
 }));
 
 // Derived selectors
-export const selectMergedIfcEntity = (state: IfcDataState) => mergeIfcEntities(state.selectedIfcEntities);
+export const selectSelectedIfcEntities = (state: IfcDataState) => state.selectedIfcEntities;
 
 export const selectIfcEntity = (state: IfcDataState): IfcEntity => {
   const entityInput = state.currentEntity;

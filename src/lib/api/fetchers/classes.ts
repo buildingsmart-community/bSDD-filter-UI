@@ -1,5 +1,9 @@
-import { ClassContractV1, ClassPropertyContractV1, RequestParams } from '../../common/BsddApi/BsddApiBase';
-import { apiHeaders, getBsddApi } from '../bsddApiInstance';
+// Purpose: bSDD class fetchers using the generated hey-api SDK with rate-limited transport
+import type { ClassContractV1, ClassPropertyContractV1 } from '../../../../shared/bsdd-api/generated/types.gen';
+import { classGet, propertyGet } from '../../../../shared/bsdd-api/generated/sdk.gen';
+import { apiHeaders } from '../bsddApiInstance';
+
+export type { ClassContractV1, ClassPropertyContractV1 };
 
 export async function fetchClassDetail(
   uri: string,
@@ -10,95 +14,58 @@ export async function fetchClassDetail(
     includeReverseRelations?: boolean;
     reverseRelationDictionaryUris?: string[];
   },
+  accessToken?: string,
 ): Promise<ClassContractV1 | null> {
-  const bsddApi = getBsddApi();
-  const params: RequestParams = { headers: apiHeaders };
+  const authHeaders = accessToken
+    ? { ...apiHeaders, Authorization: `Bearer ${accessToken}` }
+    : apiHeaders;
 
-  const queryParameters = {
-    Uri: uri,
-    IncludeClassProperties: options?.includeClassProperties ?? true,
-    IncludeClassRelations: options?.includeClassRelations ?? true,
-    IncludeReverseRelations: options?.includeReverseRelations ?? true,
-    ReverseRelationDictionaryUris: options?.reverseRelationDictionaryUris,
-    languageCode,
-  };
-
-  try {
-    const response = await bsddApi.api.classGet(queryParameters, params);
-    if (response.status !== 200) {
-      console.error(`API request failed with status ${response.status}`);
-      return null;
-    }
-    return response.data;
-  } catch (err) {
-    console.error('Error fetching classification:', err);
-    return null;
-  }
+  const { data } = await classGet({
+    query: {
+      Uri: uri,
+      IncludeClassProperties: options?.includeClassProperties ?? true,
+      IncludeClassRelations: options?.includeClassRelations ?? true,
+      IncludeReverseRelations: options?.includeReverseRelations ?? true,
+      ReverseRelationDictionaryUris: options?.reverseRelationDictionaryUris,
+      languageCode,
+    },
+    headers: authHeaders,
+    throwOnError: true,
+  });
+  return data;
 }
 
 export async function fetchMultipleClasses(
   uris: string[],
   languageCode: string,
+  accessToken?: string,
 ): Promise<{ [key: string]: ClassContractV1 }> {
-  const bsddApi = getBsddApi();
-  const classesAccumulator: { [key: string]: ClassContractV1 } = {};
-
-  const fetchClass = async (uri: string) => {
-    const response = await bsddApi.api.classGet({ Uri: uri, languageCode });
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    classesAccumulator[uri] = response.data;
-  };
-
-  await Promise.all(uris.map(fetchClass));
-  return classesAccumulator;
+  const results = await Promise.all(
+    uris.map(async (uri) => {
+      const data = await fetchClassDetail(uri, languageCode, {}, accessToken);
+      return [uri, data] as const;
+    }),
+  );
+  return Object.fromEntries(results.filter(([, v]) => v !== null)) as { [key: string]: ClassContractV1 };
 }
 
-const TRANSLATABLE_ATTRIBUTES: ClassPropertyContractV1[] = [
-  {
-    name: 'Name',
-    propertyUri: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/prop/Name',
-  },
-  {
-    name: 'Description',
-    propertyUri: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/prop/Description',
-  },
-  {
-    name: 'ObjectType',
-    propertyUri: 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/4.3/prop/ObjectType',
-  },
-];
-
-export async function fetchPropertyNaturalLanguageNames(
-  classProperties: ClassPropertyContractV1[],
+/** Fetches the natural-language name for a single property — used for per-property caching. */
+export async function fetchPropertyName(
+  property: ClassPropertyContractV1 & { propertyUri: string },
   languageCode: string,
-): Promise<{ [propertyUri: string]: string }> {
-  const bsddApi = getBsddApi();
-  const propertyNames: { [propertyUri: string]: string } = {};
-
-  const fetchPropertyDetails = async (property: ClassPropertyContractV1) => {
-    if (property.propertyUri) {
-      try {
-        const response = await bsddApi.api.propertyGet(
-          {
-            uri: property.propertyUri,
-            languageCode,
-            includeClasses: false,
-          },
-          { headers: apiHeaders },
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        propertyNames[property.propertyUri] = response.data.name || property.name;
-      } catch {
-        propertyNames[property.propertyUri] = property.name;
-      }
-    }
-  };
-
-  const properties = [...TRANSLATABLE_ATTRIBUTES, ...classProperties];
-  await Promise.all(properties.map(fetchPropertyDetails));
-  return propertyNames;
+  accessToken?: string,
+): Promise<string> {
+  const authHeaders = accessToken
+    ? { ...apiHeaders, Authorization: `Bearer ${accessToken}` }
+    : apiHeaders;
+  try {
+    const { data } = await propertyGet({
+      query: { uri: property.propertyUri, languageCode },
+      headers: authHeaders,
+      throwOnError: true,
+    });
+    return data.name || property.name || '';
+  } catch {
+    return property.name || '';
+  }
 }

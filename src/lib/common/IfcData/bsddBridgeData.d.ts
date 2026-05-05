@@ -25,4 +25,9 @@ export interface BsddBridgeData {
   settings: BsddSettings;
   ifcData: IfcEntity[];
   propertyIsInstanceMap?: Record<string, boolean>;
+  /**
+   * Host application display scale factor (e.g. 1.25 for 125% DPI in Revit).
+   * When provided, overrides the auto-detected scale. Absent in standalone webapp mode.
+   */
+  displayScale?: number;
 }

@@ -1,26 +1,35 @@
-import { Container, Paper, Space, Tabs } from '@mantine/core';
-import { t } from 'i18next';
+import { Container, Group, Paper, Space, Tabs } from '@mantine/core';
+import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import { useAuthToken } from './auth/useAuthToken';
+import { AuthButton } from './components/AuthButton';
 import BsddSelection from './lib/BsddSelection';
 import Settings from './lib/BsddSettings/SettingsComponent';
-import { ApiFunctionsProvider } from './lib/common/apiFunctionsContext';
 import useCefSharpBridge from './lib/common/bsddBridge/useCefSharpBridge';
-import { useState } from 'react';
+import { BsddBridgeContext } from './lib/providers/BsddBridgeContext';
 
 const defaultTab = 'link';
 
 function BsddSelectionLoader() {
-  const apiFunctions = useCefSharpBridge();
+  const { t } = useTranslation();
+  const callbacks = useCefSharpBridge();
+  const accessToken = useAuthToken();
   const [activeTab, setActiveTab] = useState(defaultTab);
 
+  const bridge = useMemo(() => ({ ...callbacks, accessToken }), [callbacks, accessToken]);
+
   return (
-    <ApiFunctionsProvider value={apiFunctions}>
+    <BsddBridgeContext.Provider value={bridge}>
       <Container>
         <Tabs defaultValue={defaultTab} onChange={(value) => setActiveTab(value ?? defaultTab)}>
-          <Tabs.List grow>
-            <Tabs.Tab value="link">{t('linkTabTitle')}</Tabs.Tab>
-            <Tabs.Tab value="settings">{t('settingsTabTitle')}</Tabs.Tab>
-          </Tabs.List>
+          <Group gap="xs" wrap="nowrap" align="center">
+            <Tabs.List grow style={{ flex: 1 }}>
+              <Tabs.Tab value="link">{t('linkTabTitle')}</Tabs.Tab>
+              <Tabs.Tab value="settings">{t('settingsTabTitle')}</Tabs.Tab>
+            </Tabs.List>
+            <AuthButton />
+          </Group>
           <Tabs.Panel value="link">
             <Space h="sm" />
             <BsddSelection />
@@ -33,7 +42,7 @@ function BsddSelectionLoader() {
           </Tabs.Panel>
         </Tabs>
       </Container>
-    </ApiFunctionsProvider>
+    </BsddBridgeContext.Provider>
   );
 }
 

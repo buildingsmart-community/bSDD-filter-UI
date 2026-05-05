@@ -56,6 +56,13 @@
         "tooltipEditInstance": "유형의 인스턴스 속성을 편집할 수 없습니다",
         "setAsInstanceCheckboxTooltip": "인스턴스 속성으로 설정"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "더 빠른 API를 위해 로그인",
+      "authenticatedViaBsdd": "buildingSMART 계정",
+      "authError": "인증 오류",
+      "logout": "로그아웃",
+      "user": "사용자"
     }
   }
 }

@@ -56,6 +56,13 @@
         "tooltipEditInstance": "Não é possível editar propriedades de instância para tipos",
         "setAsInstanceCheckboxTooltip": "Definir como propriedade de instância"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "Entrar para API mais rápida",
+      "authenticatedViaBsdd": "Conta buildingSMART",
+      "authError": "Erro de autenticação",
+      "logout": "Sair",
+      "user": "Usuário"
     }
   }
 }
