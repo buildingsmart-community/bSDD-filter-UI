@@ -1,6 +1,7 @@
 declare const _default: {
   "translation": {
     "appTitle": "bSDD BIM data verrijking",
+    "resetCache": "Cache wissen",
     "updateSelection": "Update selectie",
     "apply": "Toewijzen",
     "save": "Opslaan",
@@ -49,15 +50,23 @@ declare const _default: {
     "entitySelectionInstruction": "Selecteer objecten in de dropdown bovenaan in het paneel.",
     "needHelp": "Hulp nodig?",
     "checkDocumentation": "Bekijk onze documentatie",
-    "appInfoLabel": "App info",
+    "appInfoLabel": "Informatie en documentatie",
     "appInfoInstruction": "Informatie over deze plugin",
     "bsddSearch": {
       "property": {
         "tooltipEditInstance": "Het bewerken van instantie eigenschappen voor typen is niet mogelijk",
         "setAsInstanceCheckboxTooltip": "Instellen als instantie eigenschap"
       }
+    },
+    "auth": {
+      "loginForFasterApi": "Inloggen voor snellere API",
+      "authenticatedViaBsdd": "buildingSMART account",
+      "authError": "Authenticatiefout",
+      "logout": "Uitloggen",
+      "user": "Gebruiker"
     }
   }
-};
+}
+;
 
 export default _default;

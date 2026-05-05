@@ -1,3 +1,3 @@
-import { MantineTheme } from '@mantine/core';
-declare const theme: import('type-fest/source/partial-deep').PartialObjectDeep<MantineTheme, {}>;
+import { MantineThemeOverride } from '@mantine/core';
+declare const theme: MantineThemeOverride;
 export { theme };

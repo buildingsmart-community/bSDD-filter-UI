@@ -9,6 +9,9 @@ export interface BsddConfig {
     defaultSearch?: Option;
     ifcEntity?: IfcEntity;
 }
+interface BsddSearchProps {
+    searchKey?: keyof IfcEntity;
+}
 export type PropertySetMap = Record<string, IfcPropertySet>;
-declare function BsddSearch(): import("react/jsx-runtime").JSX.Element;
+declare function BsddSearch({ searchKey }: BsddSearchProps): import("react/jsx-runtime").JSX.Element;
 export default BsddSearch;

@@ -1,4 +1,5 @@
 import { default as i18n } from 'i18next';
+/** Friendly label per locale; the keys are the full set of supported BCP-47 codes. */
 export declare const languages: {
     'en-GB': string;
     'nl-NL': string;

@@ -11,9 +11,9 @@ export interface CefSharpWindow extends Window {
     updateSettings?: (settings: BsddSettings) => void;
 }
 declare const useCefSharpBridge: () => {
-    bsddSearch: (ifcEntities: IfcEntity[]) => void;
-    bsddSelect: (ifcEntities: IfcEntity[]) => void;
-    bsddSearchSave: (bsddBridgeData: BsddBridgeData) => Promise<string>;
-    bsddSearchCancel: () => void;
+    onSearch: (ifcEntities: IfcEntity[]) => void;
+    onSelect: (ifcEntities: IfcEntity[]) => void;
+    onSave: (bsddBridgeData: BsddBridgeData) => Promise<string>;
+    onCancel: () => void;
 };
 export default useCefSharpBridge;
