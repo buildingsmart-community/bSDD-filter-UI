@@ -1,0 +1,1 @@
+export declare function useSearchInDictionary(dictionaryUri: string | null | undefined, searchText: string): import('@tanstack/react-query').UseQueryResult<import('../../../../shared/bsdd-api/generated/types.gen').SearchInDictionaryResponseContractV1, Error>;
