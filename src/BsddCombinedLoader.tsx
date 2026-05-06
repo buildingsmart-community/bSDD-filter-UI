@@ -1,6 +1,6 @@
 import { Container, Group, Modal, Paper, Space, Tabs } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAuthToken } from './auth/useAuthToken';
@@ -23,7 +23,21 @@ function BsddCombinedLoader() {
   const setSavedPropertyIsInstanceMap = useIfcDataStore((s) => s.setSavedPropertyIsInstanceMap);
 
   const [opened, { open, close }] = useDisclosure(false);
-  const { onSave, onCancel } = useBrowserBridge();
+  const { onSave: bridgeOnSave, onCancel: bridgeOnCancel } = useBrowserBridge();
+
+  const onSave = useCallback(
+    (bsddBridgeData: Parameters<typeof bridgeOnSave>[0]) =>
+      bridgeOnSave(bsddBridgeData).then((result) => {
+        close();
+        return result;
+      }),
+    [bridgeOnSave, close],
+  );
+
+  const onCancel = useCallback(() => {
+    close();
+    return bridgeOnCancel();
+  }, [bridgeOnCancel, close]);
   const accessToken = useAuthToken();
   const [activeTab, setActiveTab] = useState(defaultTab);
   const [searchKey, setSearchKey] = useState<keyof IfcEntity | undefined>();
