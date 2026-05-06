@@ -1,4 +1,5 @@
 // Purpose: bSDD API client entry — re-exports the shared rate-limited transport and generated client
+import { bsddTransport } from '../../../shared/bsdd-api/BsddApiClient';
 import { client } from '../../../shared/bsdd-api/generated/client.gen';
 
 export { client as bsddHeyApiClient } from '../../../shared/bsdd-api/generated/client.gen';
@@ -21,6 +22,7 @@ let _accessToken: string | undefined;
 
 export const setBsddAccessToken = (token: string | undefined): void => {
   _accessToken = token;
+  bsddTransport.setAuthenticated(!!token);
 };
 
 // Inject Authorization header on every request when a token is available.

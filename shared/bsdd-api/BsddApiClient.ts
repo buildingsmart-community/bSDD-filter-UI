@@ -3,7 +3,10 @@
 
 interface BsddApiClientConfig {
   baseURL?: string;
+  /** Floor between requests when unauthenticated. Defaults to 200 ms (10 calls/2s per IP). */
   minDelay?: number;
+  /** Floor between requests when authenticated. Defaults to 100 ms (30 calls/2s per user, with margin). */
+  authenticatedMinDelay?: number;
   appName?: string;
   appVersion?: string;
 }
@@ -29,7 +32,11 @@ const delay = (ms: number): Promise<void> =>
 export class BsddApiClient {
   private readonly _baseURL: string;
   private lastCallTime = 0;
-  private readonly minDelay: number;
+  // Active floor — swapped by setAuthenticated based on auth state.
+  // Per buildingSMART (2026-05-06): unauth 10 calls/2s/IP, auth 30 calls/2s/user.
+  private minDelay: number;
+  private readonly unauthenticatedMinDelay: number;
+  private readonly authenticatedMinDelay: number;
   private readonly appName: string;
   private readonly appVersion: string;
 
@@ -48,10 +55,24 @@ export class BsddApiClient {
 
   constructor(config: BsddApiClientConfig = {}) {
     this._baseURL = config.baseURL ?? 'https://api.bsdd.buildingsmart.org';
-    this.minDelay = config.minDelay ?? 1_000;
+    this.unauthenticatedMinDelay = config.minDelay ?? 200;
+    this.authenticatedMinDelay = config.authenticatedMinDelay ?? 100;
+    this.minDelay = this.unauthenticatedMinDelay;
     this.appName = config.appName ?? 'bsdd-filter-ui';
     this.appVersion = config.appVersion ?? '1.0.0';
     this.adaptiveMinDelay = this.minDelay;
+  }
+
+  /**
+   * Switch the floor between authenticated and anonymous tiers.
+   * Authenticated users get a 3× higher rate ceiling per buildingSMART.
+   * Resets the adaptive floor to the new baseline; backoff re-grows on 429.
+   */
+  setAuthenticated(authenticated: boolean): void {
+    const next = authenticated ? this.authenticatedMinDelay : this.unauthenticatedMinDelay;
+    if (next === this.minDelay) return;
+    this.minDelay = next;
+    this.adaptiveMinDelay = Math.max(next, Math.min(this.adaptiveMinDelay, this.adaptiveMaxDelay));
   }
 
   get baseURL(): string {
