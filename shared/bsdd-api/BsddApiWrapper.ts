@@ -568,7 +568,7 @@ export class BsddApiWrapper {
         if (isTest) formData.append('IsTest', 'true')
 
         const headers: Record<string, string> = {
-          'X-Client-Name': this.transport.getUserAgent(),
+          'X-User-Agent': this.transport.getUserAgent(),
         }
         if (accessToken) headers['Authorization'] = `Bearer ${accessToken}`
 
@@ -665,7 +665,7 @@ export class BsddApiWrapper {
       if (isTest) formData.append('IsTest', 'true')
 
       const headers: Record<string, string> = {
-        'X-Client-Name': this.transport.getUserAgent(),
+        'X-User-Agent': this.transport.getUserAgent(),
       }
       if (accessToken) headers['Authorization'] = `Bearer ${accessToken}`
 
