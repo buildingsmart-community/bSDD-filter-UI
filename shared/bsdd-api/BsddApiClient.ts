@@ -72,7 +72,9 @@ export class BsddApiClient {
     const next = authenticated ? this.authenticatedMinDelay : this.unauthenticatedMinDelay;
     if (next === this.minDelay) return;
     this.minDelay = next;
-    this.adaptiveMinDelay = Math.max(next, Math.min(this.adaptiveMinDelay, this.adaptiveMaxDelay));
+    // Reset adaptive to the new tier's baseline — the prior backoff was for a
+    // different rate ceiling, so carrying it forward would penalise the new tier.
+    this.adaptiveMinDelay = next;
   }
 
   get baseURL(): string {

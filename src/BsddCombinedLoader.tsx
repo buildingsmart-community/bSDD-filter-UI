@@ -23,7 +23,7 @@ function BsddCombinedLoader() {
   const setSavedPropertyIsInstanceMap = useIfcDataStore((s) => s.setSavedPropertyIsInstanceMap);
 
   const [opened, { open, close }] = useDisclosure(false);
-  const { onSave: bridgeOnSave, onCancel } = useBrowserBridge();
+  const { onSave: bridgeOnSave, onCancel: bridgeOnCancel } = useBrowserBridge();
 
   const onSave = useCallback(
     (bsddBridgeData: Parameters<typeof bridgeOnSave>[0]) =>
@@ -33,6 +33,11 @@ function BsddCombinedLoader() {
       }),
     [bridgeOnSave, close],
   );
+
+  const onCancel = useCallback(() => {
+    close();
+    return bridgeOnCancel();
+  }, [bridgeOnCancel, close]);
   const accessToken = useAuthToken();
   const [activeTab, setActiveTab] = useState(defaultTab);
   const [searchKey, setSearchKey] = useState<keyof IfcEntity | undefined>();
