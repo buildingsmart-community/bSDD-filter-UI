@@ -72,17 +72,21 @@ jobs:
                 // URL stored in sessionStorage (navigateToLoginRequestUrl: true).
                 // Uses ESM import — MSAL v5 no longer ships a UMD/global bundle.
                 // Falls back to /main/ for logout redirects (handleRedirectPromise
-                // returns null and does not navigate, which would leave a white page).
+                // returns null) and also on any error (e.g. invalid state, CDN fail).
                 import { PublicClientApplication } from 'https://cdn.jsdelivr.net/npm/@azure/msal-browser@5.9.0/+esm';
-                const app = new PublicClientApplication({
-                  auth: {
-                    clientId: 'ba6a70eb-8e2d-4caa-ae3d-22fc1765c0a5',
-                    redirectUri: window.location.href.split('?')[0].split('#')[0],
-                  },
-                });
-                await app.initialize();
-                const result = await app.handleRedirectPromise();
-                if (!result) {
+                try {
+                  const app = new PublicClientApplication({
+                    auth: {
+                      clientId: 'ba6a70eb-8e2d-4caa-ae3d-22fc1765c0a5',
+                      redirectUri: window.location.href.split('?')[0].split('#')[0],
+                    },
+                  });
+                  await app.initialize();
+                  const result = await app.handleRedirectPromise();
+                  if (!result) {
+                    window.location.replace('/bSDD-filter-UI/main/');
+                  }
+                } catch {
                   window.location.replace('/bSDD-filter-UI/main/');
                 }
               </script>
@@ -102,18 +106,34 @@ jobs:
             v[0-9]*
             latest
 
-      - name: Prepare deploy folder (release)
+      - name: Build for latest (release)
         if: startsWith(github.ref, 'refs/tags/')
+        env:
+          BASE_PATH: '/bSDD-filter-UI/latest/'
+          VITE_APP_VERSION: ${{ github.ref_name }}
+          VITE_BSDD_CLIENT_ID: 'ba6a70eb-8e2d-4caa-ae3d-22fc1765c0a5'
+          VITE_BSDD_SCOPE: 'https://buildingSMARTservices.onmicrosoft.com/bsddapi/read'
+          VITE_BSDD_REDIRECT_URI: 'https://buildingsmart-community.github.io/bSDD-filter-UI/'
         run: |
-          mkdir -p deploy-release/latest deploy-release/${{ github.ref_name }}
-          cp -r dist/. deploy-release/latest/
-          cp -r dist/. deploy-release/${{ github.ref_name }}/
+          mv dist dist-versioned
+          yarn run build
+          mv dist dist-latest
+          mv dist-versioned dist
 
-      - name: Deploy to GitHub Pages (release)
+      - name: Deploy to GitHub Pages (versioned release)
         if: startsWith(github.ref, 'refs/tags/')
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           branch: gh-pages
-          folder: deploy-release
-          target-folder: .
-          clean: false
+          folder: dist
+          target-folder: ${{ github.ref_name }}
+          clean: true
+
+      - name: Deploy to GitHub Pages (latest)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        with:
+          branch: gh-pages
+          folder: dist-latest
+          target-folder: latest
+          clean: true
