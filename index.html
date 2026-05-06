@@ -7,15 +7,24 @@
       // processes the auth code and navigates back to the versioned app
       // URL stored in sessionStorage (navigateToLoginRequestUrl: true).
       // Uses ESM import — MSAL v5 no longer ships a UMD/global bundle.
+      // Falls back to /main/ for logout redirects (handleRedirectPromise
+      // returns null) and also on any error (e.g. invalid state, CDN fail).
       import { PublicClientApplication } from 'https://cdn.jsdelivr.net/npm/@azure/msal-browser@5.9.0/+esm';
-      const app = new PublicClientApplication({
-        auth: {
-          clientId: 'ba6a70eb-8e2d-4caa-ae3d-22fc1765c0a5',
-          redirectUri: window.location.href.split('?')[0].split('#')[0],
-        },
-      });
-      await app.initialize();
-      await app.handleRedirectPromise();
+      try {
+        const app = new PublicClientApplication({
+          auth: {
+            clientId: 'ba6a70eb-8e2d-4caa-ae3d-22fc1765c0a5',
+            redirectUri: window.location.href.split('?')[0].split('#')[0],
+          },
+        });
+        await app.initialize();
+        const result = await app.handleRedirectPromise();
+        if (!result) {
+          window.location.replace('/bSDD-filter-UI/main/');
+        }
+      } catch {
+        window.location.replace('/bSDD-filter-UI/main/');
+      }
     </script>
   </body>
 </html>
