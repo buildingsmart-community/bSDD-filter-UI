@@ -2,21 +2,20 @@
 <html>
   <head><title>bSDD filter UI</title></head>
   <body>
-    <script src="https://alcdn.msauth.net/browser/5.9.0/js/msal-browser.min.js"></script>
-    <script>
+    <script type="module">
       // Handles the MSAL redirect flow. After B2C redirects here, MSAL
       // processes the auth code and navigates back to the versioned app
       // URL stored in sessionStorage (navigateToLoginRequestUrl: true).
-      (async () => {
-        const app = new msal.PublicClientApplication({
-          auth: {
-            clientId: 'ba6a70eb-8e2d-4caa-ae3d-22fc1765c0a5',
-            redirectUri: window.location.href.split('?')[0].split('#')[0],
-          },
-        });
-        await app.initialize();
-        await app.handleRedirectPromise();
-      })();
+      // Uses ESM import — MSAL v5 no longer ships a UMD/global bundle.
+      import { PublicClientApplication } from 'https://cdn.jsdelivr.net/npm/@azure/msal-browser@5.9.0/+esm';
+      const app = new PublicClientApplication({
+        auth: {
+          clientId: 'ba6a70eb-8e2d-4caa-ae3d-22fc1765c0a5',
+          redirectUri: window.location.href.split('?')[0].split('#')[0],
+        },
+      });
+      await app.initialize();
+      await app.handleRedirectPromise();
     </script>
   </body>
 </html>
