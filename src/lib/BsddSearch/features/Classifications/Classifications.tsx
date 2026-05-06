@@ -14,7 +14,6 @@ import type { IfcClassification, IfcClassificationReference } from '../../../com
 import { useIfcDataStore } from '../../../stores/ifcDataStore';
 import {
   selectActiveDictionaries,
-  selectIfcDictionaryUri,
   selectMainDictionaryUri,
   useSettingsStore,
 } from '../../../stores/settingsStore';
@@ -89,7 +88,6 @@ function Classifications({
     [activeDictionaries],
   );
   const mainDictionaryUri = useSettingsStore(selectMainDictionaryUri);
-  const ifcDictionaryUri = useSettingsStore(selectIfcDictionaryUri);
   const includeTestDictionaries = useSettingsStore((s) => s.includeTestDictionaries);
   const languageCode = useSettingsStore((s) => s.language);
 
@@ -321,35 +319,15 @@ function Classifications({
     <Paper style={{ height: `${height}px`, position: 'relative' }}>
       {Array.from(activeDictionariesMap.entries()).map(([dictionaryUri, dictionary]) => {
         const isMainDictionary = dictionaryUri === mainDictionaryUri;
-        const isIfcDictionary = dictionaryUri === ifcDictionaryUri;
         const isMainLoading = !!mainClassificationUri && !mainDictionaryClassification;
 
-        if (isMainDictionary) {
-          return (
-            <Slicer
-              key={dictionaryUri}
-              height={height}
-              label={dictionary.name}
-              options={optionsMap.get(dictionaryUri) || []}
-              value={selectedIfcClassificationReferences.get(dictionaryUri) || null}
-              setValue={(newValue) => {
-                if (newValue?.uri && newValue?.uri !== mainClassificationUri) {
-                  const newValues = new Map(selectedIfcClassificationReferences);
-                  newValues.set(dictionaryUri, newValue);
-                  setSelectedIfcClassificationReferences(newValues);
-
-                  onMainClassificationChange(newValue.uri);
-                }
-              }}
-              placeholder={t('classifications.searchClassesPlaceholder')}
-              loading={isMainLoading}
-            />
-          );
-        }
-
-        if (isIfcDictionary) {
-          return null;
-        }
+        const handleSetValue = (newValue: Option | null) => {
+          const updated = new Map(selectedIfcClassificationReferences).set(dictionaryUri, newValue);
+          setSelectedIfcClassificationReferences(updated);
+          if (isMainDictionary && newValue?.uri && newValue.uri !== mainClassificationUri) {
+            onMainClassificationChange(newValue.uri);
+          }
+        };
 
         return (
           <Slicer
@@ -358,18 +336,14 @@ function Classifications({
             label={dictionary.name}
             options={optionsMap.get(dictionaryUri) || []}
             value={selectedIfcClassificationReferences.get(dictionaryUri) || null}
-            setValue={(newValue) => {
-              const newValues = new Map(selectedIfcClassificationReferences);
-              newValues.set(dictionaryUri, newValue);
-              setSelectedIfcClassificationReferences(newValues);
-            }}
+            setValue={handleSetValue}
             placeholder={t('classifications.searchClassesPlaceholder')}
             onSearch={
-              dictionariesWithoutRelations.has(dictionaryUri)
+              !isMainDictionary && dictionariesWithoutRelations.has(dictionaryUri)
                 ? (query) => handleSlicerSearch(dictionaryUri, query)
                 : undefined
             }
-            isSearching={searchingDictionaries.has(dictionaryUri)}
+            isSearching={!isMainDictionary && searchingDictionaries.has(dictionaryUri)}
             loading={isMainLoading}
           />
         );
