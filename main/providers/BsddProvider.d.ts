@@ -11,8 +11,7 @@ export interface BsddProviderProps {
     loadBridgeData?: () => Promise<string>;
     /** bSDD bearer token. Hosts compute via `useAuthToken()`; library reads via `useBsddBridge()`. */
     accessToken?: string;
-    syncToUrl?: boolean;
     locale?: string;
     children: ReactNode;
 }
-export declare function BsddProvider({ settings, onSave, onCancel, onSearch, onSelect, loadSettings, loadBridgeData, accessToken, syncToUrl, locale, children, }: BsddProviderProps): import("react/jsx-runtime").JSX.Element;
+export declare function BsddProvider({ settings, onSave, onCancel, onSearch, onSelect, loadSettings, loadBridgeData, accessToken, locale, children, }: BsddProviderProps): import("react/jsx-runtime").JSX.Element;
