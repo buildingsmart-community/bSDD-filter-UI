@@ -1,4 +1,4 @@
-import { Accordion, type ComboboxItem, type ComboboxLikeRenderOptionInput, Group, HoverCard, MultiSelect, Space, Stack, Text, Title } from '@mantine/core';
+import { Accordion, type ComboboxItem, type ComboboxLikeRenderOptionInput, MultiSelect, Space, Text, Title } from '@mantine/core';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -20,39 +20,16 @@ const IFC_DICTIONARY_URL = 'https://identifier.buildingsmart.org/uri/buildingsma
 const DEFAULT_IFC_PARAMETER = 'Export Type to IFC As';
 
 type DictionaryComboboxItem = ComboboxItem & {
-  dictionaryName: string;
-  version: string;
-  code: string;
   organizationNameOwner: string;
 };
 
 function renderDictionaryOption({ option }: ComboboxLikeRenderOptionInput<ComboboxItem>) {
   const item = option as DictionaryComboboxItem;
   return (
-    <HoverCard width={320} shadow="md" position="right" openDelay={300} withinPortal>
-      <HoverCard.Target>
-        <span>{option.label}</span>
-      </HoverCard.Target>
-      <HoverCard.Dropdown>
-        <Stack gap={4}>
-          {(
-            [
-              ['Name', item.dictionaryName],
-              ['Version', item.version],
-              ['Code', item.code],
-              ['Organization', item.organizationNameOwner],
-            ] as [string, string][]
-          ).map(([key, val]) => (
-            <Group key={key} justify="space-between" gap="xl" wrap="nowrap">
-              <Text size="xs" c="dimmed" style={{ flexShrink: 0 }}>
-                {key}
-              </Text>
-              <Text size="xs" ta="right">{val}</Text>
-            </Group>
-          ))}
-        </Stack>
-      </HoverCard.Dropdown>
-    </HoverCard>
+    <div>
+      <Text size="sm">{option.label}</Text>
+      <Text size="xs" c="dimmed">{item.organizationNameOwner}</Text>
+    </div>
   );
 }
 
@@ -106,9 +83,6 @@ function DictionarySelection({
       uniqueOptionsMap.set(item.uri, {
         value: item.uri,
         label: `${item.name} (${item.version})`,
-        dictionaryName: item.name,
-        version: item.version,
-        code: item.code,
         organizationNameOwner: item.organizationNameOwner,
       });
     });
