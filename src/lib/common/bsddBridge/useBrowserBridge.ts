@@ -94,11 +94,19 @@ const useBrowserBridge = () => {
   const language = useSettingsStore((s) => s.language);
   const includeTestDictionaries = useSettingsStore((s) => s.includeTestDictionaries);
 
+  // Skip the first run so the write-back never fires with pre-init store values and
+  // clobbers URL params before validateSettings has applied them to the store.
+  const settingsInitialized = useRef(false);
+
   // Sync settings → URL on every change so the address bar is always shareable.
   // Uses full bSDD dictionary URIs — no shortcuts or mapping tables; the URI is the
   // only reliable version identifier for external bSDD content.
   // Foreign params (e.g. ?scale= set by plugin hosts) are preserved unchanged.
   useEffect(() => {
+    if (!settingsInitialized.current) {
+      settingsInitialized.current = true;
+      return;
+    }
     const params = new URLSearchParams(window.location.search);
     for (const key of SETTINGS_PARAM_KEYS) {
       params.delete(key);
