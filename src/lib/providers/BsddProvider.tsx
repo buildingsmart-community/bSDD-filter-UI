@@ -15,7 +15,6 @@ import defaultSettings from '../common/settings/defaultSettings';
 import { theme } from '../common/theme/theme';
 import { useSettingsStore } from '../stores/settingsStore';
 import { type BsddBridgeCallbacks, BsddBridgeContext } from './BsddBridgeContext';
-import UrlSyncManager from './UrlSyncManager';
 
 export interface BsddProviderProps {
   settings?: Partial<BsddSettings>;
@@ -27,7 +26,6 @@ export interface BsddProviderProps {
   loadBridgeData?: () => Promise<string>;
   /** bSDD bearer token. Hosts compute via `useAuthToken()`; library reads via `useBsddBridge()`. */
   accessToken?: string;
-  syncToUrl?: boolean;
   locale?: string;
   children: ReactNode;
 }
@@ -60,7 +58,6 @@ export function BsddProvider({
   loadSettings,
   loadBridgeData,
   accessToken,
-  syncToUrl = false,
   locale,
   children,
 }: BsddProviderProps) {
@@ -94,7 +91,6 @@ export function BsddProvider({
     <PersistQueryClientProvider client={queryClient} persistOptions={persistOptions}>
       <MantineProvider theme={theme}>
         <BsddBridgeContext.Provider value={bridgeCallbacks}>
-          {syncToUrl && <UrlSyncManager />}
           <Suspense fallback={null}>{children}</Suspense>
         </BsddBridgeContext.Provider>
       </MantineProvider>

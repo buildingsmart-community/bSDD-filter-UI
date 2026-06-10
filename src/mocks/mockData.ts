@@ -39,12 +39,12 @@ export const mockData: BsddBridgeData = {
     includeTestDictionaries: true,
   },
   propertyIsInstanceMap: {
-    'Attributes/Name': true,
-    IsExternal: false,
-    'Omvang/Bouwnummer': true,
-    FireRating: true,
-    ObjectType: false,
-    'ILS O&E/Kleur': true,
+    // 'Attributes/Name': true,
+    // IsExternal: false,
+    // 'Omvang/Bouwnummer': true,
+    // FireRating: true,
+    // ObjectType: false,
+    // 'ILS O&E/Kleur': true,
   },
   ifcData: [
     {

@@ -9,6 +9,43 @@ import type { BsddBridgeData, BsddDictionary, BsddSettings } from '../IfcData/bs
 import type { IfcEntity } from '../IfcData/ifc';
 import defaultSettings from '../settings/defaultSettings';
 
+const SETTINGS_PARAM_KEYS = [
+  'mainDictionary',
+  'ifcDictionary',
+  'filterDictionaries',
+  'language',
+  'includeTestDictionaries',
+] as const;
+
+const toDictionary = (location: string): BsddDictionary => ({
+  ifcClassification: { type: 'IfcClassification', location },
+  parameterMapping: '',
+});
+
+function readSettingsFromUrl(): BsddSettings | null {
+  const params = new URLSearchParams(window.location.search);
+  if (!SETTINGS_PARAM_KEYS.some((key) => params.has(key))) return null;
+
+  const mainDictionary = params.get('mainDictionary');
+  const ifcDictionary = params.get('ifcDictionary');
+  // Accept both repeated keys (?filterDictionaries=a&filterDictionaries=b) and
+  // comma-separated values (?filterDictionaries=a,b) for back-compat with old URLs.
+  const filterDictionaries = params
+    .getAll('filterDictionaries')
+    .flatMap((v) => v.split(','))
+    .filter(Boolean);
+  const includeTestDictionaries = params.get('includeTestDictionaries');
+
+  return {
+    mainDictionary: mainDictionary ? toDictionary(mainDictionary) : null,
+    ifcDictionary: ifcDictionary ? toDictionary(ifcDictionary) : null,
+    filterDictionaries: filterDictionaries.map(toDictionary),
+    language: params.get('language') || 'en-GB',
+    // Accept '1' as well as 'true' (back-compat with pre-refactor BooleanParam).
+    includeTestDictionaries: includeTestDictionaries === 'true' || includeTestDictionaries === '1',
+  };
+}
+
 const useBrowserBridge = () => {
   const queryClient = useQueryClient();
   const setSettings = useSettingsStore((s) => s.setSettings);
@@ -21,35 +58,13 @@ const useBrowserBridge = () => {
     if (!initialLoad.current) return;
     initialLoad.current = false;
 
+    // Capture URL params synchronously before the write-back effect below rewrites them.
+    const urlSettings = readSettingsFromUrl();
+
     const init = async () => {
-      // Read URL query params
-      const params = new URLSearchParams(window.location.search);
-      const hasQueryParams = params.has('mainDictionary') || params.has('language');
+      const settings = urlSettings ?? defaultSettings;
 
-      let settings: BsddSettings;
-      if (!hasQueryParams) {
-        settings = defaultSettings;
-      } else {
-        settings = {
-          mainDictionary: params.get('mainDictionary')
-            ? ({
-                ifcClassification: { type: 'IfcClassification', location: params.get('mainDictionary') },
-              } as BsddDictionary)
-            : null,
-          ifcDictionary: params.get('ifcDictionary')
-            ? ({
-                ifcClassification: { type: 'IfcClassification', location: params.get('ifcDictionary') },
-              } as BsddDictionary)
-            : null,
-          filterDictionaries: (params.get('filterDictionaries')?.split(',') || [])
-            .filter(Boolean)
-            .map((location) => ({ ifcClassification: { type: 'IfcClassification', location } }) as BsddDictionary),
-          language: params.get('language') || 'en-GB',
-          includeTestDictionaries: params.get('includeTestDictionaries') === 'true',
-        };
-      }
-
-      // Validate and apply settings first (caches dictionaries for entity validation)
+      // Validate and apply settings first (caches dictionaries for entity validation).
       const validatedSettings = await validateSettings(queryClient, settings);
       setSettings(validatedSettings);
 
@@ -57,7 +72,7 @@ const useBrowserBridge = () => {
         setSavedPropertyIsInstanceMap(mockData.propertyIsInstanceMap);
       }
 
-      // Then validate and load IFC entities (uses cached dictionaries)
+      // Then validate and load IFC entities (uses cached dictionaries).
       if (mockData.ifcData) {
         setLoadingEntities(true);
         const language = validatedSettings.language || 'en-GB';
@@ -71,6 +86,35 @@ const useBrowserBridge = () => {
 
     init();
   }, [queryClient, setSettings, setLoadedIfcEntities, setLoadingEntities, setSavedPropertyIsInstanceMap]);
+
+  // Per-field selectors — never return a fresh object/array to avoid getSnapshot warnings.
+  const mainDictionary = useSettingsStore((s) => s.mainDictionary);
+  const ifcDictionary = useSettingsStore((s) => s.ifcDictionary);
+  const filterDictionaries = useSettingsStore((s) => s.filterDictionaries);
+  const language = useSettingsStore((s) => s.language);
+  const includeTestDictionaries = useSettingsStore((s) => s.includeTestDictionaries);
+
+  // Sync settings → URL on every change so the address bar is always shareable.
+  // Uses full bSDD dictionary URIs — no shortcuts or mapping tables; the URI is the
+  // only reliable version identifier for external bSDD content.
+  // Foreign params (e.g. ?scale= set by plugin hosts) are preserved unchanged.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    for (const key of SETTINGS_PARAM_KEYS) {
+      params.delete(key);
+    }
+    if (mainDictionary) params.set('mainDictionary', mainDictionary.ifcClassification.location);
+    if (ifcDictionary) params.set('ifcDictionary', ifcDictionary.ifcClassification.location);
+    for (const dict of filterDictionaries) {
+      params.append('filterDictionaries', dict.ifcClassification.location);
+    }
+    if (language) params.set('language', language);
+    if (includeTestDictionaries !== undefined) params.set('includeTestDictionaries', String(includeTestDictionaries));
+
+    const search = params.toString();
+    const newUrl = `${window.location.pathname}${search ? `?${search}` : ''}${window.location.hash}`;
+    window.history.replaceState({}, '', newUrl);
+  }, [mainDictionary, ifcDictionary, filterDictionaries, language, includeTestDictionaries]);
 
   const onSearch = (ifcEntities: IfcEntity[]) => {
     console.log('onSearch called with:', ifcEntities);
