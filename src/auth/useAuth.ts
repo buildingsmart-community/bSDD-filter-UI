@@ -54,6 +54,7 @@ export const useAuth = (): UseAuthResult => {
     setError(null);
 
     try {
+      sessionStorage.setItem('bsdd.postLogoutReturnTo', window.location.href);
       await instance.logoutRedirect();
     } catch (err) {
       console.error('bSDD logout error:', err);
