@@ -84,7 +84,9 @@ jobs:
                   await app.initialize();
                   const result = await app.handleRedirectPromise();
                   if (!result) {
-                    window.location.replace('/bSDD-filter-UI/main/');
+                    const returnTo = sessionStorage.getItem('bsdd.postLogoutReturnTo');
+                    sessionStorage.removeItem('bsdd.postLogoutReturnTo');
+                    window.location.replace(returnTo || '/bSDD-filter-UI/main/');
                   }
                 } catch {
                   window.location.replace('/bSDD-filter-UI/main/');

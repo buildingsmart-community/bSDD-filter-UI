@@ -53,6 +53,18 @@ export const useAuth = (): UseAuthResult => {
     setIsLoading(true);
     setError(null);
 
+    // Store path-only (pathname+search+hash) so the redirect handler can return
+    // here. Isolated try/catch: storage failures (quota, private mode) must not
+    // block the logout — the app will just fall back to the default redirect URI.
+    try {
+      sessionStorage.setItem(
+        'bsdd.postLogoutReturnTo',
+        window.location.pathname + window.location.search + window.location.hash,
+      );
+    } catch {
+      // Storage unavailable — logout proceeds, return-URL restore is skipped.
+    }
+
     try {
       await instance.logoutRedirect();
     } catch (err) {
