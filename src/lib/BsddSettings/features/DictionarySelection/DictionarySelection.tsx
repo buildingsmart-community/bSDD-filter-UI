@@ -1,4 +1,4 @@
-import { Accordion, type ComboboxItem, MultiSelect, Space, Text, Title } from '@mantine/core';
+import { Accordion, type ComboboxItem, type ComboboxLikeRenderOptionInput, Group, HoverCard, MultiSelect, Space, Stack, Text, Title } from '@mantine/core';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -18,6 +18,43 @@ interface DictionarySelectionProps {
 
 const IFC_DICTIONARY_URL = 'https://identifier.buildingsmart.org/uri/buildingsmart/ifc/';
 const DEFAULT_IFC_PARAMETER = 'Export Type to IFC As';
+
+type DictionaryComboboxItem = ComboboxItem & {
+  dictionaryName: string;
+  version: string;
+  code: string;
+  organizationNameOwner: string;
+};
+
+function renderDictionaryOption({ option }: ComboboxLikeRenderOptionInput<ComboboxItem>) {
+  const item = option as DictionaryComboboxItem;
+  return (
+    <HoverCard width={320} shadow="md" position="right" openDelay={300} withinPortal>
+      <HoverCard.Target>
+        <span>{option.label}</span>
+      </HoverCard.Target>
+      <HoverCard.Dropdown>
+        <Stack gap={4}>
+          {(
+            [
+              ['Name', item.dictionaryName],
+              ['Version', item.version],
+              ['Code', item.code],
+              ['Organization', item.organizationNameOwner],
+            ] as [string, string][]
+          ).map(([key, val]) => (
+            <Group key={key} justify="space-between" gap="xl" wrap="nowrap">
+              <Text size="xs" c="dimmed" style={{ flexShrink: 0 }}>
+                {key}
+              </Text>
+              <Text size="xs" ta="right">{val}</Text>
+            </Group>
+          ))}
+        </Stack>
+      </HoverCard.Dropdown>
+    </HoverCard>
+  );
+}
 
 function findDictionaryByUri(dictionaries: DictionaryContractV1[], uri: string | null) {
   return Object.values(dictionaries).find((item) => item.uri === uri);
@@ -64,12 +101,16 @@ function DictionarySelection({
   const { data: bsddDictionaries = {} } = useDictionaries(localSettings.includeTestDictionaries ?? false);
 
   const bsddDictionaryOptions = useMemo(() => {
-    const uniqueOptionsMap = new Map<string, ComboboxItem>();
+    const uniqueOptionsMap = new Map<string, DictionaryComboboxItem>();
     Object.values(bsddDictionaries).forEach((item) => {
       uniqueOptionsMap.set(item.uri, {
         value: item.uri,
         label: `${item.name} (${item.version})`,
-      } as ComboboxItem);
+        dictionaryName: item.name,
+        version: item.version,
+        code: item.code,
+        organizationNameOwner: item.organizationNameOwner,
+      });
     });
     return Array.from(uniqueOptionsMap.values());
   }, [bsddDictionaries]);
@@ -214,6 +255,7 @@ function DictionarySelection({
           onChange={changeMainDictionaryOption}
           placeholder="Select main dictionary"
           data={bsddDictionaryOptions}
+          renderOption={renderDictionaryOption}
           searchable
           clearable
         />
@@ -226,6 +268,7 @@ function DictionarySelection({
           onChange={changeIfcDictionaryOption}
           placeholder="Select filter dictionaries"
           data={bsddIfcDictionaryOptions}
+          renderOption={renderDictionaryOption}
           searchable
           clearable
         />
@@ -238,6 +281,7 @@ function DictionarySelection({
           onChange={changeFilterDictionaries}
           placeholder="Select filter dictionaries"
           data={bsddFilterDictionaryOptions}
+          renderOption={renderDictionaryOption}
           searchable
           clearable
         />
