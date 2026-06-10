@@ -1,7 +1,7 @@
 import { QueryClient } from '@tanstack/react-query';
 import { BsddDictionary } from '../../common/IfcData/bsddBridgeData';
 import { IfcClassificationReference, IfcEntity } from '../../common/IfcData/ifc';
-type ValidationState = 'valid' | 'invalid' | 'fixed';
+type ValidationState = 'valid' | 'fixed';
 type ValidationResult = {
     ifcClassificationReference: IfcClassificationReference;
     validationState: ValidationState;
