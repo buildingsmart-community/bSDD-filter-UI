@@ -18,7 +18,7 @@ import { convertBsddDictionaryToIfcClassification } from '../../common/IfcData/i
 import { fetchAllDictionaryClasses, fetchDictionaryByUri } from '../fetchers/dictionaries';
 import { bsddKeys } from '../queryKeys';
 
-type ValidationState = 'valid' | 'invalid' | 'fixed';
+type ValidationState = 'valid' | 'fixed';
 
 type ValidationResult = {
   ifcClassificationReference: IfcClassificationReference;
@@ -69,11 +69,6 @@ function findMatchedClass(
   );
 }
 
-function handleError(message: string, ifcClassificationReference: IfcClassificationReference): ValidationResult {
-  console.error(message);
-  return { ifcClassificationReference, validationState: 'invalid', message };
-}
-
 export async function patchIfcClassificationReference(
   ifcClassificationReference: IfcClassificationReference,
   queryClient: QueryClient,
@@ -83,29 +78,26 @@ export async function patchIfcClassificationReference(
     return { ifcClassificationReference, validationState: 'valid', message: 'Location is already set' };
   }
 
-  const location = ifcClassificationReference.referencedSource?.location ?? ifcClassificationReference.location;
+  const location = ifcClassificationReference.referencedSource?.location;
   if (!location) {
-    return handleError(
-      'Cannot patch IfcClassificationReference: missing referencedSource or its location',
-      ifcClassificationReference,
-    );
+    // No dictionary to look up against — pass through unchanged.
+    return { ifcClassificationReference, validationState: 'valid', message: null };
   }
 
   const classes = await ensureDictionaryClasses(queryClient, location, language);
   if (!classes) {
-    return handleError('Failed to fetch classes for the referencedSource location', ifcClassificationReference);
+    // ensureDictionaryClasses already logs the network error — pass through unchanged.
+    return { ifcClassificationReference, validationState: 'valid', message: null };
   }
 
   const matchedClass = findMatchedClass(ifcClassificationReference, classes);
   if (!matchedClass) {
-    return handleError(
-      'Failed to find a match for the IfcClassificationReference code or name in the classes',
-      ifcClassificationReference,
-    );
+    // No matching class found — pass through unchanged rather than dropping the reference.
+    return { ifcClassificationReference, validationState: 'valid', message: null };
   }
 
   if (!matchedClass.uri) {
-    return handleError('Failed to find a URI for the matched class', ifcClassificationReference);
+    return { ifcClassificationReference, validationState: 'valid', message: null };
   }
 
   const { uri, code, name } = matchedClass;
@@ -118,12 +110,12 @@ export async function patchIfcClassificationReference(
   };
 
   if (!newRef.referencedSource?.location) {
-    return handleError('referencedSource or its location is missing', newRef);
+    return { ifcClassificationReference: newRef, validationState: 'valid', message: null };
   }
 
   const bsddDictionary = await ensureDictionary(queryClient, newRef.referencedSource.location);
   if (!bsddDictionary) {
-    return handleError(`Failed to find a matching dictionary for: ${newRef.location}`, newRef);
+    return { ifcClassificationReference: newRef, validationState: 'valid', message: null };
   }
 
   newRef.referencedSource = convertBsddDictionaryToIfcClassification(bsddDictionary);
@@ -136,21 +128,15 @@ async function processAssociations(
   queryClient: QueryClient,
   language: string,
 ): Promise<Association[]> {
-  const processedAssociations = await Promise.all(
+  return Promise.all(
     associations.map(async (association) => {
       if (association.type === 'IfcClassificationReference') {
-        const { ifcClassificationReference, validationState } = await patchIfcClassificationReference(
-          association,
-          queryClient,
-          language,
-        );
-        if (validationState === 'invalid') return null;
+        const { ifcClassificationReference } = await patchIfcClassificationReference(association, queryClient, language);
         return ifcClassificationReference;
       }
       return association;
     }),
   );
-  return processedAssociations.filter((a) => a !== null) as Association[];
 }
 
 function ifcEntityAsType(ifcEntity: string) {

@@ -42,13 +42,12 @@ describe('patchIfcClassificationReference', () => {
     expect(fetchClasses).not.toHaveBeenCalled();
   });
 
-  it('returns invalid when no location and no referencedSource location', async () => {
-    const result = await patchIfcClassificationReference(
-      { type: 'IfcClassificationReference', name: 'X' } as any,
-      makeClient(),
-      'en-GB',
-    );
-    expect(result.validationState).toBe('invalid');
+  it('passes through unchanged when no location and no referencedSource location', async () => {
+    const ref = { type: 'IfcClassificationReference', name: 'X' } as any;
+    const result = await patchIfcClassificationReference(ref, makeClient(), 'en-GB');
+    expect(result.validationState).toBe('valid');
+    expect(result.ifcClassificationReference).toBe(ref);
+    expect(fetchClasses).not.toHaveBeenCalled();
   });
 
   it('fixes a reference by matching identification against fetched classes and re-resolving the dictionary', async () => {
@@ -81,19 +80,17 @@ describe('patchIfcClassificationReference', () => {
     expect(fetchDictionary).toHaveBeenCalled();
   });
 
-  it('reports invalid when the fetcher returns no matching class', async () => {
+  it('passes through unchanged when the fetcher returns no matching class', async () => {
     fetchClasses.mockResolvedValue([{ code: 'OTHER', name: 'Other', uri: 'https://x' }]);
-    const result = await patchIfcClassificationReference(
-      {
-        type: 'IfcClassificationReference',
-        identification: 'nope',
-        name: 'Nope',
-        referencedSource: { type: 'IfcClassification', location: 'https://example.org/dict' } as any,
-      } as any,
-      makeClient(),
-      'en-GB',
-    );
-    expect(result.validationState).toBe('invalid');
+    const ref = {
+      type: 'IfcClassificationReference',
+      identification: 'nope',
+      name: 'Nope',
+      referencedSource: { type: 'IfcClassification', location: 'https://example.org/dict' } as any,
+    } as any;
+    const result = await patchIfcClassificationReference(ref, makeClient(), 'en-GB');
+    expect(result.validationState).toBe('valid');
+    expect(result.ifcClassificationReference).toBe(ref);
   });
 });
 
@@ -132,20 +129,15 @@ describe('validateIfcData', () => {
     expect(result[0].isDefinedBy?.[0].hasProperties).toHaveLength(2);
   });
 
-  it('drops invalid IfcClassificationReference associations', async () => {
+  it('passes through unresolvable IfcClassificationReference associations unchanged', async () => {
+    const ref = { type: 'IfcClassificationReference', name: 'Bad' } as any;
     const result = await validateIfcData(
-      [
-        {
-          type: 'IfcWall',
-          hasAssociations: [
-            { type: 'IfcClassificationReference', name: 'Bad' } as any, // missing location and referencedSource
-          ],
-        },
-      ],
+      [{ type: 'IfcWall', hasAssociations: [ref] }],
       makeClient(),
       'en-GB',
     );
-    expect(result[0].hasAssociations).toEqual([]);
+    expect(result[0].hasAssociations).toHaveLength(1);
+    expect(result[0].hasAssociations?.[0]).toEqual(ref);
   });
 
   it('passes through IfcMaterial associations untouched', async () => {
