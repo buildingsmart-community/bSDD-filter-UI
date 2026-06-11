@@ -84,11 +84,14 @@ jobs:
                   await app.initialize();
                   const result = await app.handleRedirectPromise();
                   if (!result) {
-                    const returnTo = sessionStorage.getItem('bsdd.postLogoutReturnTo');
+                    const raw = sessionStorage.getItem('bsdd.postLogoutReturnTo');
                     sessionStorage.removeItem('bsdd.postLogoutReturnTo');
-                    window.location.replace(returnTo || '/bSDD-filter-UI/main/');
+                    // Validate path is within this app to prevent open-redirect.
+                    const safe = typeof raw === 'string' && raw.startsWith('/bSDD-filter-UI/');
+                    window.location.replace(safe ? raw : '/bSDD-filter-UI/main/');
                   }
                 } catch {
+                  sessionStorage.removeItem('bsdd.postLogoutReturnTo');
                   window.location.replace('/bSDD-filter-UI/main/');
                 }
               </script>
