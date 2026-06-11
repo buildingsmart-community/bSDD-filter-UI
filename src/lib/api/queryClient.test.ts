@@ -26,16 +26,25 @@ describe('createBsddQueryClient', () => {
     expect(retry(5, rateLimit)).toBe(true);
     expect(retry(6, rateLimit)).toBe(false);
 
+    // CORS-masked 429s from the transport get the same full retry budget.
+    const masked = new BsddRateLimitError(2_100, 429, true);
+    expect(retry(5, masked)).toBe(true);
+    expect(retry(6, masked)).toBe(false);
+
     const generic = new Error('boom');
     expect(retry(0, generic)).toBe(true);
     expect(retry(1, generic)).toBe(true);
     expect(retry(2, generic)).toBe(false);
   });
 
-  it('retryDelay honours BsddRateLimitError.retryAfterMs but falls back to a 1s default', () => {
+  it('retryDelay honours BsddRateLimitError.retryAfterMs, uses 3s for TypeError, falls back to 1s', () => {
     const opts = createBsddQueryClient().getDefaultOptions().queries!;
     const retryDelay = opts.retryDelay as (n: number, e: unknown) => number;
     expect(retryDelay(0, new BsddRateLimitError(2500, 429))).toBe(2500);
+    // Masked (CORS-blocked) 429s carry a synthetic escalating retryAfterMs from the transport.
+    expect(retryDelay(0, new BsddRateLimitError(2100, 429, true))).toBe(2100);
+    // The TypeError branch only covers fetches that bypass the transport.
+    expect(retryDelay(0, new TypeError('Failed to fetch'))).toBe(3000);
     expect(retryDelay(0, new Error('other'))).toBe(1000);
   });
 });
