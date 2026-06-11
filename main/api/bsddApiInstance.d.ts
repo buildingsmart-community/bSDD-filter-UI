@@ -5,3 +5,4 @@ export declare const apiHeaders: {
 };
 export declare const setBsddAccessToken: (token: string | undefined) => void;
 export declare const _authInterceptor: (request: Request) => Request;
+export declare const _errorInterceptor: (body: unknown, response: Response | undefined) => unknown;
