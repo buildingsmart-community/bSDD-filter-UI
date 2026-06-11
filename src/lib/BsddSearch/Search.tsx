@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useSearchInDictionary } from '../api/hooks/useSearchInDictionary';
+import { type SearchMatchedOn, rankClassSearchResults } from '../common/tools/rankClassSearchResults';
 import { useSettingsStore } from '../stores/settingsStore';
 
 export const SEARCH_INPUT_ID = 'bsdd-class-search';
@@ -12,7 +13,7 @@ interface Option {
   label: string;
   value: string;
   code?: string;
-  matchedOn?: 'synonym' | 'description';
+  matchedOn?: SearchMatchedOn;
 }
 
 interface Props {
@@ -46,38 +47,18 @@ function Search({ value, onCommit, seedText, resolving }: Props) {
   const query = combobox.dropdownOpened ? queryText.trim() : '';
   const { data: searchResult, isFetching } = useSearchInDictionary(dictionaryUri, query);
 
-  // The bSDD search matches names, codes, synonyms and descriptions but returns
-  // hits alphabetically. Rank name matches first so the highlighted first option
-  // (committed on Enter) is the best match, and tag the indirect hits with why
-  // they matched.
-  const options = useMemo<Option[]>(() => {
-    const lcQuery = query.toLowerCase();
-    const ranked = (searchResult?.dictionary?.classes ?? [])
-      .filter((c) => c.uri && c.name)
-      .map((c) => {
-        const name = (c.name as string).toLowerCase();
-        const code = c.referenceCode?.toLowerCase() ?? '';
-        let tier: number;
-        let matchedOn: Option['matchedOn'];
-        if (name === lcQuery) tier = 0;
-        else if (name.startsWith(lcQuery)) tier = 1;
-        else if (name.includes(lcQuery)) tier = 2;
-        else if (code.includes(lcQuery)) tier = 3;
-        else if (c.synonyms?.some((s) => s.toLowerCase().includes(lcQuery))) {
-          tier = 4;
-          matchedOn = 'synonym';
-        } else {
-          tier = 5;
-          if (c.definition?.toLowerCase().includes(lcQuery)) matchedOn = 'description';
-        }
-        return {
-          tier,
-          option: { value: c.uri as string, label: c.name as string, code: c.referenceCode ?? undefined, matchedOn },
-        };
-      });
-    ranked.sort((a, b) => a.tier - b.tier || a.option.label.localeCompare(b.option.label));
-    return ranked.map((r) => r.option);
-  }, [searchResult, query]);
+  // Rank name matches first so the highlighted first option (committed on
+  // Enter) is the best match, and tag the indirect hits with why they matched.
+  const options = useMemo<Option[]>(
+    () =>
+      rankClassSearchResults(searchResult?.dictionary?.classes, query).map(({ bsddClass, matchedOn }) => ({
+        value: bsddClass.uri,
+        label: bsddClass.name,
+        code: bsddClass.referenceCode ?? undefined,
+        matchedOn,
+      })),
+    [searchResult, query],
+  );
 
   // Sync the draft text when the committed selection changes externally
   // (async seed resolution, reconciliation after a dictionary change).
