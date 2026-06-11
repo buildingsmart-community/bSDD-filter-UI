@@ -1,7 +1,9 @@
+import { SearchMatchedOn } from '../common/tools/rankClassSearchResults';
 interface Option {
     label: string;
     value: string;
     uri: string;
+    matchedOn?: SearchMatchedOn;
 }
 interface SlicerProps {
     height: number;
@@ -15,8 +17,13 @@ interface SlicerProps {
     onSearch?: (query: string) => void;
     /** Indicates that a server-side search is in progress */
     isSearching?: boolean;
+    /** When provided, called when scrolling reaches the end of `options` outside
+     *  of an active search. The parent should append the next page to `options`. */
+    onLoadMore?: () => void;
+    /** Indicates that more options are being fetched after an onLoadMore call */
+    isLoadingMore?: boolean;
     /** Forces the slicer into a disabled/loading state */
     loading?: boolean;
 }
-declare function Slicer({ height, options, label, value, setValue, placeholder, onSearch, isSearching, loading, }: SlicerProps): import("react/jsx-runtime").JSX.Element;
+declare function Slicer({ height, options, label, value, setValue, placeholder, onSearch, isSearching, onLoadMore, isLoadingMore, loading, }: SlicerProps): import("react/jsx-runtime").JSX.Element;
 export default Slicer;

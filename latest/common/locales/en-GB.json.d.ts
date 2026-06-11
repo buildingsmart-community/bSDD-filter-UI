@@ -66,7 +66,11 @@ declare const _default: {
         "inputTooltipEditInstance": "Editing instance properties for types is not possible",
         "setAsInstanceCheckboxTooltip": "Set as instance property"
       }
-    }
+    },
+    "classSearchTitle": "{{dictionary}} classification",
+    "classSearchHint": "Type to search for a classification",
+    "matchedOnSynonym": "via synonym",
+    "matchedOnDescription": "via description"
   }
 }
 ;

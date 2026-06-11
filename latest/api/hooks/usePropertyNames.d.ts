@@ -2,7 +2,7 @@ import { ClassPropertyContractV1 } from '../../../../shared/bsdd-api/generated/t
 /**
  * Fetches natural-language property names, one query per property so each is
  * individually cached and re-used across different classes.
- * Returns a merged map of { [propertyUri]: name }.
+ * Returns a stable-reference map { [propertyUri]: name } via combine's structural sharing.
  */
 export declare function usePropertyNames(classProperties: ClassPropertyContractV1[], language: string): {
     data: Record<string, string>;

@@ -64,7 +64,11 @@ declare const _default: {
       "authError": "Authenticatiefout",
       "logout": "Uitloggen",
       "user": "Gebruiker"
-    }
+    },
+    "classSearchTitle": "{{dictionary}} classificatie",
+    "classSearchHint": "Typ om een classificatie te zoeken",
+    "matchedOnSynonym": "via synoniem",
+    "matchedOnDescription": "via omschrijving"
   }
 }
 ;
