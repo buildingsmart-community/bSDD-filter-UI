@@ -86,9 +86,14 @@ jobs:
                   if (!result) {
                     const raw = sessionStorage.getItem('bsdd.postLogoutReturnTo');
                     sessionStorage.removeItem('bsdd.postLogoutReturnTo');
-                    // Validate path is within this app to prevent open-redirect.
-                    const safe = typeof raw === 'string' && raw.startsWith('/bSDD-filter-UI/');
-                    window.location.replace(safe ? raw : '/bSDD-filter-UI/main/');
+                    // Normalize via URL constructor so dot-segment sequences are
+                    // resolved before the prefix check (prevents open-redirect bypass).
+                    let dest = '/bSDD-filter-UI/main/';
+                    if (raw) try {
+                      const url = new URL(raw, location.origin);
+                      if (url.origin === location.origin && url.pathname.startsWith('/bSDD-filter-UI/')) dest = url.href;
+                    } catch {}
+                    window.location.replace(dest);
                   }
                 } catch {
                   sessionStorage.removeItem('bsdd.postLogoutReturnTo');

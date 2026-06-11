@@ -42,7 +42,6 @@ function Settings({ activeTab }: SettingsProps) {
     // the rate-limited queue, and the other views must not wait seconds for that.
     // The host receives the validated result so its persisted settings match the store.
     setSettings(localSettings);
-    setUnsavedChanges(false);
 
     const validated = await validateSettings(queryClient, localSettings);
     setSettings(validated);
@@ -52,6 +51,8 @@ function Settings({ activeTab }: SettingsProps) {
     } else {
       console.error('window.bsddBridge.saveSettings is not a function');
     }
+
+    setUnsavedChanges(false);
   };
 
   const handleCancel = () => {

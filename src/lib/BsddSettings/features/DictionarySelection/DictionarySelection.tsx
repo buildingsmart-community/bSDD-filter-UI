@@ -24,11 +24,11 @@ type DictionaryComboboxItem = ComboboxItem & {
 };
 
 function renderDictionaryOption({ option }: ComboboxLikeRenderOptionInput<ComboboxItem>) {
-  const item = option as DictionaryComboboxItem;
+  const { label, organizationNameOwner } = option as DictionaryComboboxItem;
   return (
     <div>
-      <Text size="sm">{option.label}</Text>
-      <Text size="xs" c="dimmed">{item.organizationNameOwner}</Text>
+      <Text size="sm">{label}</Text>
+      <Text size="xs" c="dimmed">{organizationNameOwner}</Text>
     </div>
   );
 }

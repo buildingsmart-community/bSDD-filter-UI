@@ -68,7 +68,7 @@
       }
     },
     "classSearchTitle": "{{dictionary}} classification",
-    "classSearchHint": "Type to search a classification",
+    "classSearchHint": "Type to search for a classification",
     "matchedOnSynonym": "via synonym",
     "matchedOnDescription": "via description"
   }
