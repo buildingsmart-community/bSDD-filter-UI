@@ -20,11 +20,19 @@
         await app.initialize();
         const result = await app.handleRedirectPromise();
         if (!result) {
-          const returnTo = sessionStorage.getItem('bsdd.postLogoutReturnTo');
+          const raw = sessionStorage.getItem('bsdd.postLogoutReturnTo');
           sessionStorage.removeItem('bsdd.postLogoutReturnTo');
-          window.location.replace(returnTo || '/bSDD-filter-UI/main/');
+          // Normalize via URL constructor so dot-segment sequences are
+          // resolved before the prefix check (prevents open-redirect bypass).
+          let dest = '/bSDD-filter-UI/main/';
+          if (raw) try {
+            const url = new URL(raw, location.origin);
+            if (url.origin === location.origin && url.pathname.startsWith('/bSDD-filter-UI/')) dest = url.href;
+          } catch {}
+          window.location.replace(dest);
         }
       } catch {
+        sessionStorage.removeItem('bsdd.postLogoutReturnTo');
         window.location.replace('/bSDD-filter-UI/main/');
       }
     </script>
