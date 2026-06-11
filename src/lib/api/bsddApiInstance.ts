@@ -41,8 +41,8 @@ client.interceptors.request.use(_authInterceptor);
 // hey-api with throwOnError:true throws the parsed response body (a plain object/string),
 // not an Error instance. isClientError() in queryClient checks for Error-with-.status,
 // so plain-object 4xx throws would bypass it and get retried unnecessarily.
-// This interceptor wraps them so the check works. 429 and 503 are intercepted upstream
-// by the transport and never reach here.
+// This interceptor wraps them so the check works. Raw 429/503 responses are converted upstream
+// into BsddRateLimitError (a fetch exception), so they arrive here with `response` undefined.
 // Exported for unit testing only.
 export const _errorInterceptor = (body: unknown, response: Response | undefined): unknown => {
   // hey-api also calls error interceptors for fetch exceptions (network/AbortError),
