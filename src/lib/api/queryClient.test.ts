@@ -32,10 +32,13 @@ describe('createBsddQueryClient', () => {
     expect(retry(2, generic)).toBe(false);
   });
 
-  it('retryDelay honours BsddRateLimitError.retryAfterMs but falls back to a 1s default', () => {
+  it('retryDelay honours BsddRateLimitError.retryAfterMs, uses 3s for TypeError, falls back to 1s', () => {
     const opts = createBsddQueryClient().getDefaultOptions().queries!;
     const retryDelay = opts.retryDelay as (n: number, e: unknown) => number;
     expect(retryDelay(0, new BsddRateLimitError(2500, 429))).toBe(2500);
+    // TypeError covers CORS-blocked 429s (bSDD omits CORS headers on rate-limited responses).
+    // A longer delay lets the transport cooldown take effect before the retry is queued.
+    expect(retryDelay(0, new TypeError('Failed to fetch'))).toBe(3000);
     expect(retryDelay(0, new Error('other'))).toBe(1000);
   });
 });
