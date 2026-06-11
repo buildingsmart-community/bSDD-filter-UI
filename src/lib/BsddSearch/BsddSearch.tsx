@@ -67,7 +67,9 @@ const findAssociationOption = (entity: IfcEntity | null, dictionaryUri: string):
 
 const getTextSeed = (entity: IfcEntity | null, searchKey: keyof IfcEntity): string | undefined => {
   const seed = entity?.[searchKey];
-  return typeof seed === 'string' && seed !== '' && seed !== '...' ? seed : undefined;
+  if (typeof seed !== 'string') return undefined;
+  const trimmed = seed.trim();
+  return trimmed && trimmed !== '...' ? trimmed : undefined;
 };
 
 // One-shot resolution of a text seed (objectType, or the previous selection's label
@@ -78,15 +80,17 @@ async function resolveClassInDictionary(
   dictionaryUri: string,
   text: string,
 ): Promise<SearchOption | null> {
+  const query = text.trim();
+  if (!query) return null;
   try {
     const result = await queryClient.fetchQuery({
-      queryKey: bsddKeys.search(dictionaryUri, text),
-      queryFn: () => searchInDictionary({ DictionaryUri: dictionaryUri, SearchText: text }),
+      queryKey: bsddKeys.search(dictionaryUri, query),
+      queryFn: () => searchInDictionary({ DictionaryUri: dictionaryUri, SearchText: query }),
       staleTime: 1000 * 60 * 5,
       retry: 1,
     });
     const classes = (result.dictionary?.classes ?? []).filter((c) => c.uri && c.name);
-    const exact = classes.filter((c) => (c.name as string).toLowerCase() === text.toLowerCase());
+    const exact = classes.filter((c) => (c.name as string).toLowerCase() === query.toLowerCase());
     const match = exact.length === 1 ? exact[0] : classes.length === 1 ? classes[0] : null;
     return match
       ? { value: match.uri as string, label: match.name as string, code: match.referenceCode ?? undefined }
