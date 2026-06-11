@@ -115,6 +115,7 @@ jobs:
           clean-exclude: |
             v[0-9]*
             latest
+            v[0-9]*.[0-9]*
 
       - name: Build for latest (release)
         if: startsWith(github.ref, 'refs/tags/')
@@ -130,6 +131,13 @@ jobs:
           mv dist dist-latest
           mv dist-versioned dist
 
+      - name: Compute version aliases
+        if: startsWith(github.ref, 'refs/tags/')
+        id: semver
+        run: |
+          TAG="${{ github.ref_name }}"
+          echo "patch_alias=${TAG%.*}" >> "$GITHUB_OUTPUT"
+
       - name: Deploy to GitHub Pages (versioned release)
         if: startsWith(github.ref, 'refs/tags/')
         uses: JamesIves/github-pages-deploy-action@v4.5.0
@@ -137,6 +145,15 @@ jobs:
           branch: gh-pages
           folder: dist
           target-folder: ${{ github.ref_name }}
+          clean: true
+
+      - name: Deploy to GitHub Pages (patch alias)
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: JamesIves/github-pages-deploy-action@v4.5.0
+        with:
+          branch: gh-pages
+          folder: dist
+          target-folder: ${{ steps.semver.outputs.patch_alias }}
           clean: true
 
       - name: Deploy to GitHub Pages (latest)
