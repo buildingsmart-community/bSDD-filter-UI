@@ -459,7 +459,7 @@ function Selection({ loading }: SelectionProps) {
             <Button
               leftSection={<IconPencil />}
               onClick={handleEditEntities(table.table.getState().rowSelection)}
-              disabled={!mainDictionary}
+              disabled={!mainDictionary || getSelectedEntities(table.table.getState().rowSelection).length === 0}
             >
               {t('editEntities')}
             </Button>
