@@ -8,7 +8,7 @@
 //    dictionaries, ranked because the endpoint also matches synonyms and
 //    descriptions but returns hits alphabetically.
 import { useDebouncedValue } from '@mantine/hooks';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 
 import type { ClassListItemContractV1Classes } from '../../../../../shared/bsdd-api/generated/types.gen';
@@ -45,8 +45,15 @@ export const toOptions = (classes: ClassListItemContractV1Classes[]): ClassOptio
     }));
 
 export function useDictionaryClassOptions(dictionaryUri: string, searchText: string, enabled: boolean) {
+  const queryClient = useQueryClient();
   const languageCode = useSettingsStore((s) => s.language);
   const [debouncedSearchText] = useDebouncedValue(searchText, SEARCH_DEBOUNCE_MS);
+
+  // Skip even the first browse page when the complete list is already cached
+  // (validation flow, or a restored persister snapshot). Re-evaluated on every
+  // render; the fullListQuery observer below triggers one when the list lands.
+  const hasCachedFullList =
+    queryClient.getQueryData(bsddKeys.dictionaryClasses(dictionaryUri, languageCode)) !== undefined;
 
   const browseQuery = useInfiniteQuery({
     queryKey: bsddKeys.dictionaryClassesInfinite(dictionaryUri, languageCode),
@@ -55,7 +62,7 @@ export function useDictionaryClassOptions(dictionaryUri: string, searchText: str
     getNextPageParam: (lastPage, _pages, lastOffset) =>
       lastOffset + CLASS_ITEM_PAGE_SIZE < lastPage.totalCount ? lastOffset + CLASS_ITEM_PAGE_SIZE : undefined,
     staleTime: 1000 * 60 * 30,
-    enabled,
+    enabled: enabled && !hasCachedFullList,
   });
 
   const totalCount = browseQuery.data?.pages[0]?.totalCount;
