@@ -161,7 +161,7 @@ export class BsddApiClient {
             Math.max(this.adaptiveMinDelay * 2, this.minDelay * 2),
           );
           this.maskedCooldownMs = Math.min(this.maskedCooldownMaxMs, this.maskedCooldownMs * 2);
-          const waitMs = this.maskedCooldownMs + 100;
+          const waitMs = Math.min(this.maskedCooldownMaxMs, this.maskedCooldownMs + 100);
           const until = Date.now() + waitMs;
           if (until > this.cooldownUntil) this.cooldownUntil = until;
           throw new BsddRateLimitError(waitMs, 429, true);
