@@ -2,12 +2,13 @@ import '@mantine/core/styles.css';
 import 'mantine-react-table/styles.css';
 
 import { MantineProvider } from '@mantine/core';
-import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
+import { type PersistQueryClientOptions, PersistQueryClientProvider } from '@tanstack/react-query-persist-client';
 import { type ReactNode, Suspense, useEffect, useMemo } from 'react';
 
 import { setBsddAccessToken } from '../api/bsddApiInstance';
 import { bsddPersister } from '../api/persister';
 import { createBsddQueryClient } from '../api/queryClient';
+import { isPersistableQueryKey } from '../api/queryKeys';
 import type { BsddBridgeData, BsddSettings } from '../common/IfcData/bsddBridgeData';
 import type { IfcEntity } from '../common/IfcData/ifc';
 import i18n from '../common/i18n';
@@ -62,7 +63,18 @@ export function BsddProvider({
   children,
 }: BsddProviderProps) {
   const queryClient = useMemo(() => createBsddQueryClient(), []);
-  const persistOptions = useMemo(() => ({ persister: bsddPersister, maxAge: 1000 * 60 * 60 * 24 }), []);
+  const persistOptions = useMemo<Omit<PersistQueryClientOptions, 'queryClient'>>(
+    () => ({
+      persister: bsddPersister,
+      maxAge: 1000 * 60 * 60 * 24,
+      dehydrateOptions: {
+        // status check = defaultShouldDehydrateQuery, inlined because the
+        // persist-client's nested query-core copy makes the import type-incompatible
+        shouldDehydrateQuery: (query) => query.state.status === 'success' && isPersistableQueryKey(query.queryKey),
+      },
+    }),
+    [],
+  );
 
   useI18nLanguageSubscription();
 

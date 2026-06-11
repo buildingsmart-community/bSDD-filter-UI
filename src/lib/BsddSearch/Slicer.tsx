@@ -2,10 +2,13 @@ import { CheckIcon, CloseButton, Combobox, Group, InputBase, Loader, Paper, Text
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import type { SearchMatchedOn } from '../common/tools/rankClassSearchResults';
+
 interface Option {
   label: string;
   value: string;
   uri: string;
+  matchedOn?: SearchMatchedOn;
 }
 
 interface SlicerProps {
@@ -31,7 +34,6 @@ interface SlicerProps {
 
 const INITIAL_RENDER_LIMIT = 25;
 const RENDER_MORE_LIMIT = 25;
-const SEARCH_DEBOUNCE_MS = 300;
 
 function Slicer({
   height,
@@ -51,7 +53,6 @@ function Slicer({
   const [renderCount, setRenderCount] = useState(INITIAL_RENDER_LIMIT);
   const [disabled, setDisabled] = useState(loading || options.length === 1);
   const optionsContainerRef = useRef(null);
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const combobox = useCombobox({
     onDropdownClose: () => {
@@ -91,23 +92,12 @@ function Slicer({
 
   const renderedOptions = filteredOptions.slice(0, renderCount);
 
+  // Debouncing lives with the server-search consumer (useDictionaryClassOptions)
   const handleSearchChange = (query: string) => {
     setSearch(query);
     setRenderCount(INITIAL_RENDER_LIMIT);
-    if (onSearch) {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-      debounceRef.current = setTimeout(() => {
-        onSearch(query);
-      }, SEARCH_DEBOUNCE_MS);
-    }
+    onSearch?.(query);
   };
-
-  // Cleanup debounce on unmount
-  useEffect(() => {
-    return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
-    };
-  }, []);
 
   const handleScroll = (e: { currentTarget: { scrollTop: any; scrollHeight: any; clientHeight: any } }) => {
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
@@ -128,15 +118,20 @@ function Slicer({
   };
 
   const comboboxOptions = renderedOptions.map((item) => (
-    <Combobox.Option key={item.value} value={item.value} active={value?.value === item.value}>
+    <Combobox.Option key={item.uri} value={item.uri} active={value?.uri === item.uri}>
       <Group gap="sm">
-        {value?.value === item.value ? <CheckIcon size={12} /> : null}
+        {value?.uri === item.uri ? <CheckIcon size={12} /> : null}
         <Text fz="sm" opacity={disabled ? 0.6 : 1.0}>
           {item.label}
         </Text>
         <Text fz="xs" opacity={0.6}>
           ({item.value})
         </Text>
+        {item.matchedOn && (
+          <Text fz="xs" c="dimmed" fs="italic" ml="auto">
+            {item.matchedOn === 'synonym' ? t('matchedOnSynonym') : t('matchedOnDescription')}
+          </Text>
+        )}
       </Group>
     </Combobox.Option>
   ));
@@ -167,8 +162,8 @@ function Slicer({
         store={combobox}
         onOptionSubmit={(newValue) => {
           if (!disabled) {
-            const newOption = options.find((option) => option.value === newValue);
-            const newValueToSet = newOption && value?.value !== newOption.value ? newOption : null;
+            const newOption = options.find((option) => option.uri === newValue);
+            const newValueToSet = newOption && value?.uri !== newOption.uri ? newOption : null;
             setValue(newValueToSet);
             combobox.closeDropdown();
           }
@@ -189,6 +184,7 @@ function Slicer({
                   onClick={() => {
                     setSearch('');
                     setValue(null);
+                    onSearch?.('');
                   }}
                   aria-label="Clear value"
                 />
