@@ -44,7 +44,10 @@ client.interceptors.request.use(_authInterceptor);
 // This interceptor wraps them so the check works. 429 and 503 are intercepted upstream
 // by the transport and never reach here.
 // Exported for unit testing only.
-export const _errorInterceptor = (body: unknown, response: Response): unknown => {
+export const _errorInterceptor = (body: unknown, response: Response | undefined): unknown => {
+  // hey-api also calls error interceptors for fetch exceptions (network/AbortError),
+  // where `response` is undefined. Pass those through unchanged.
+  if (!response) return body;
   // 429 and 503 are handled by the transport (BsddRateLimitError) before hey-api sees them;
   // they never reach this interceptor in normal operation. Exclude them defensively so that
   // if they ever did arrive here they would not be misidentified as permanent client errors.

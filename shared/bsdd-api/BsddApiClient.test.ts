@@ -45,17 +45,27 @@ describe('BsddApiClient', () => {
   });
 
   describe('TypeError backoff (CORS-blocked 429)', () => {
-    it('doubles adaptiveMinDelay and sets a 2s cooldown when fetch() throws TypeError', async () => {
+    it('increments rateLimitHits and sets a 2s cooldown when fetch() throws TypeError', async () => {
       mockFetch.mockRejectedValueOnce(new TypeError('Failed to fetch'));
       const client = new BsddApiClient({ minDelay: 0 });
 
       await expect(client.fetch('https://example.com')).rejects.toBeInstanceOf(TypeError);
 
       const stats = client.getRateLimitStats();
-      // adaptiveMinDelay should have doubled from the floor (0 → max(0*2, 0*2)=0 but minDelay*2=0).
-      // Use a non-zero floor to verify the doubling:
       expect(stats.rateLimitHits).toBe(1);
       expect(stats.cooldownRemainingMs).toBeGreaterThan(1_500);
+    });
+
+    it('does not apply backoff for non-TypeError exceptions (e.g. AbortError)', async () => {
+      const abortError = new DOMException('Aborted', 'AbortError');
+      mockFetch.mockRejectedValueOnce(abortError);
+      const client = new BsddApiClient({ minDelay: 0 });
+
+      await expect(client.fetch('https://example.com')).rejects.toThrow('Aborted');
+
+      const stats = client.getRateLimitStats();
+      expect(stats.rateLimitHits).toBe(0);
+      expect(stats.cooldownRemainingMs).toBe(0);
     });
 
     it('doubles adaptiveMinDelay from a non-zero floor on TypeError', async () => {

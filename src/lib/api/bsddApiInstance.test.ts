@@ -52,6 +52,11 @@ describe('bSDD error interceptor', () => {
     expect(_errorInterceptor(body, response)).toBe(body);
   });
 
+  it('passes body through unchanged when response is undefined (fetch exception path)', () => {
+    const body = new TypeError('Failed to fetch');
+    expect(_errorInterceptor(body, undefined)).toBe(body);
+  });
+
   it('passes 429 body through unchanged — 429 is handled by the transport, not this interceptor', () => {
     // Defensive: if a 429 somehow reaches this interceptor it must NOT be converted to a
     // permanent client error, or TanStack Query would skip the rate-limit retry logic.

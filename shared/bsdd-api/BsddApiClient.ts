@@ -7,7 +7,7 @@ interface BsddApiClientConfig {
    * Floor between requests when unauthenticated. Defaults to 400 ms (~2.5 calls/s).
    * bSDD's anonymous ceiling is 10 calls/2s per IP. The floor is the minimum *between*
    * requests, not the call duration; fast responses (sub-200 ms) would push actual
-   * throughput above the ceiling at 200 ms, so 400 ms gives 4× headroom.
+   * throughput above the ceiling at 200 ms, so 400 ms gives ~2× headroom.
    */
   minDelay?: number;
   /** Floor between requests when authenticated. Defaults to 100 ms (30 calls/2s per user, with margin). */
@@ -128,17 +128,21 @@ export class BsddApiClient {
       try {
         response = await fetch(url, init);
       } catch (err) {
+        // Only TypeError indicates a network/CORS block — AbortError and others should
+        // propagate without being counted as rate-limit hits.
         // fetch() throws TypeError when the browser blocks a response for CORS violations.
         // bSDD's CDN omits Access-Control-Allow-Origin on 429 responses, so a CORS block
         // here is likely a masked rate limit. Apply the same doubling backoff as a real 429
         // so the queue slows down even though we cannot confirm the HTTP status.
-        this.stats.rateLimitHits++;
-        this.adaptiveMinDelay = Math.min(
-          this.adaptiveMaxDelay,
-          Math.max(this.adaptiveMinDelay * 2, this.minDelay * 2),
-        );
-        const until = Date.now() + 2_000;
-        if (until > this.cooldownUntil) this.cooldownUntil = until;
+        if (err instanceof TypeError) {
+          this.stats.rateLimitHits++;
+          this.adaptiveMinDelay = Math.min(
+            this.adaptiveMaxDelay,
+            Math.max(this.adaptiveMinDelay * 2, this.minDelay * 2),
+          );
+          const until = Date.now() + 2_000;
+          if (until > this.cooldownUntil) this.cooldownUntil = until;
+        }
         throw err;
       }
 
