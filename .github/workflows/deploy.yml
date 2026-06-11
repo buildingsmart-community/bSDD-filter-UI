@@ -115,7 +115,13 @@ jobs:
           clean-exclude: |
             v[0-9]*
             latest
-            v[0-9]*.[0-9]*
+
+      - name: Compute version aliases
+        if: startsWith(github.ref, 'refs/tags/')
+        id: semver
+        run: |
+          TAG="${{ github.ref_name }}"
+          echo "patch_alias=${TAG%.*}" >> "$GITHUB_OUTPUT"
 
       - name: Build for latest (release)
         if: startsWith(github.ref, 'refs/tags/')
@@ -131,12 +137,19 @@ jobs:
           mv dist dist-latest
           mv dist-versioned dist
 
-      - name: Compute version aliases
+      - name: Build for patch alias (release)
         if: startsWith(github.ref, 'refs/tags/')
-        id: semver
+        env:
+          BASE_PATH: '/bSDD-filter-UI/${{ steps.semver.outputs.patch_alias }}/'
+          VITE_APP_VERSION: ${{ github.ref_name }}
+          VITE_BSDD_CLIENT_ID: 'ba6a70eb-8e2d-4caa-ae3d-22fc1765c0a5'
+          VITE_BSDD_SCOPE: 'https://buildingSMARTservices.onmicrosoft.com/bsddapi/read'
+          VITE_BSDD_REDIRECT_URI: 'https://buildingsmart-community.github.io/bSDD-filter-UI/'
         run: |
-          TAG="${{ github.ref_name }}"
-          echo "patch_alias=${TAG%.*}" >> "$GITHUB_OUTPUT"
+          mv dist dist-versioned
+          yarn run build
+          mv dist dist-alias
+          mv dist-versioned dist
 
       - name: Deploy to GitHub Pages (versioned release)
         if: startsWith(github.ref, 'refs/tags/')
@@ -152,7 +165,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4.5.0
         with:
           branch: gh-pages
-          folder: dist
+          folder: dist-alias
           target-folder: ${{ steps.semver.outputs.patch_alias }}
           clean: true
 
