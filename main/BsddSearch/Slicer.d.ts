@@ -1,7 +1,9 @@
+import { SearchMatchedOn } from '../common/tools/rankClassSearchResults';
 interface Option {
     label: string;
     value: string;
     uri: string;
+    matchedOn?: SearchMatchedOn;
 }
 interface SlicerProps {
     height: number;

@@ -1,9 +1,10 @@
+import { SearchMatchedOn } from '../common/tools/rankClassSearchResults';
 export declare const SEARCH_INPUT_ID = "bsdd-class-search";
 interface Option {
     label: string;
     value: string;
     code?: string;
-    matchedOn?: 'synonym' | 'description';
+    matchedOn?: SearchMatchedOn;
 }
 interface Props {
     value: Option | null;
