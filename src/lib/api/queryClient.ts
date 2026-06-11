@@ -19,11 +19,18 @@ export function createBsddQueryClient() {
         gcTime: 1000 * 60 * 60 * 24, // 24 hours — must be ≥ persister maxAge
         refetchOnWindowFocus: false,
         // 4xx errors are permanent — never retry. Respect Retry-After for 429/503.
+        // TypeErrors (including CORS-blocked 429s — bSDD omits CORS headers on rate-limit
+        // responses) get a longer initial delay so the transport cooldown has time to take
+        // effect before the retry lands in the queue.
         retry: (failureCount: number, error: unknown) => {
           if (isClientError(error)) return false;
           return error instanceof BsddRateLimitError ? failureCount < 6 : failureCount < 2;
         },
-        retryDelay: (_: number, error: unknown) => (error instanceof BsddRateLimitError ? error.retryAfterMs : 1_000),
+        retryDelay: (_: number, error: unknown) => {
+          if (error instanceof BsddRateLimitError) return error.retryAfterMs;
+          if (error instanceof TypeError) return 3_000;
+          return 1_000;
+        },
       },
     },
   });

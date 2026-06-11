@@ -3,7 +3,12 @@
 
 interface BsddApiClientConfig {
   baseURL?: string;
-  /** Floor between requests when unauthenticated. Defaults to 200 ms (10 calls/2s per IP). */
+  /**
+   * Floor between requests when unauthenticated. Defaults to 400 ms (~2.5 calls/s).
+   * bSDD's anonymous ceiling is 10 calls/2s per IP. The floor is the minimum *between*
+   * requests, not the call duration; fast responses (sub-200 ms) would push actual
+   * throughput above the ceiling at 200 ms, so 400 ms gives ~2× headroom.
+   */
   minDelay?: number;
   /** Floor between requests when authenticated. Defaults to 100 ms (30 calls/2s per user, with margin). */
   authenticatedMinDelay?: number;
@@ -55,7 +60,7 @@ export class BsddApiClient {
 
   constructor(config: BsddApiClientConfig = {}) {
     this._baseURL = config.baseURL ?? 'https://api.bsdd.buildingsmart.org';
-    this.unauthenticatedMinDelay = config.minDelay ?? 200;
+    this.unauthenticatedMinDelay = config.minDelay ?? 400;
     this.authenticatedMinDelay = config.authenticatedMinDelay ?? 100;
     this.minDelay = this.unauthenticatedMinDelay;
     this.appName = config.appName ?? 'bsdd-filter-ui';
@@ -118,7 +123,28 @@ export class BsddApiClient {
       this.stats.totalRequests++;
       await this.waitMinDelay();
       const { url, init } = buildRequest();
-      const response = await fetch(url, init);
+
+      let response: Response;
+      try {
+        response = await fetch(url, init);
+      } catch (err) {
+        // Only TypeError indicates a network/CORS block — AbortError and others should
+        // propagate without being counted as rate-limit hits.
+        // fetch() throws TypeError when the browser blocks a response for CORS violations.
+        // bSDD's CDN omits Access-Control-Allow-Origin on 429 responses, so a CORS block
+        // here is likely a masked rate limit. Apply the same doubling backoff as a real 429
+        // so the queue slows down even though we cannot confirm the HTTP status.
+        if (err instanceof TypeError) {
+          this.stats.rateLimitHits++;
+          this.adaptiveMinDelay = Math.min(
+            this.adaptiveMaxDelay,
+            Math.max(this.adaptiveMinDelay * 2, this.minDelay * 2),
+          );
+          const until = Date.now() + 2_000;
+          if (until > this.cooldownUntil) this.cooldownUntil = until;
+        }
+        throw err;
+      }
 
       if (response.status === 429 || response.status === 503) {
         this.stats.rateLimitHits++;
