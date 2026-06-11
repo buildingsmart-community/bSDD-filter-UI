@@ -19,9 +19,10 @@ export function createBsddQueryClient() {
         gcTime: 1000 * 60 * 60 * 24, // 24 hours — must be ≥ persister maxAge
         refetchOnWindowFocus: false,
         // 4xx errors are permanent — never retry. Respect Retry-After for 429/503.
-        // TypeErrors (including CORS-blocked 429s — bSDD omits CORS headers on rate-limit
-        // responses) get a longer initial delay so the transport cooldown has time to take
-        // effect before the retry lands in the queue.
+        // CORS-blocked 429s (bSDD omits CORS headers on rate-limit responses) arrive as
+        // masked BsddRateLimitError from the transport, with a synthetic escalating
+        // retryAfterMs — they get the full 6-retry budget. The TypeError branch below only
+        // covers fetches that bypass the transport.
         retry: (failureCount: number, error: unknown) => {
           if (isClientError(error)) return false;
           return error instanceof BsddRateLimitError ? failureCount < 6 : failureCount < 2;

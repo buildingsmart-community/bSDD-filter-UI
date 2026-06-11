@@ -45,11 +45,15 @@ describe('BsddApiClient', () => {
   });
 
   describe('TypeError backoff (CORS-blocked 429)', () => {
-    it('increments rateLimitHits and sets a 2s cooldown when fetch() throws TypeError', async () => {
+    it('wraps the TypeError in a masked BsddRateLimitError and sets a 2s cooldown', async () => {
       mockFetch.mockRejectedValueOnce(new TypeError('Failed to fetch'));
       const client = new BsddApiClient({ minDelay: 0 });
 
-      await expect(client.fetch('https://example.com')).rejects.toBeInstanceOf(TypeError);
+      await expect(client.fetch('https://example.com')).rejects.toMatchObject({
+        name: 'BsddRateLimitError',
+        masked: true,
+        retryAfterMs: 2_100,
+      });
 
       const stats = client.getRateLimitStats();
       expect(stats.rateLimitHits).toBe(1);
@@ -72,7 +76,7 @@ describe('BsddApiClient', () => {
       mockFetch.mockRejectedValueOnce(new TypeError('Failed to fetch'));
       const client = new BsddApiClient({ minDelay: 100 });
 
-      await expect(client.fetch('https://example.com')).rejects.toBeInstanceOf(TypeError);
+      await expect(client.fetch('https://example.com')).rejects.toBeInstanceOf(BsddRateLimitError);
 
       const stats = client.getRateLimitStats();
       // adaptiveMinDelay starts at 100, doubles to 200 on TypeError.
@@ -80,27 +84,42 @@ describe('BsddApiClient', () => {
       expect(stats.rateLimitHits).toBe(1);
     });
 
-    it('does not suppress the TypeError — it propagates to the caller', async () => {
-      mockFetch.mockRejectedValueOnce(new TypeError('Failed to fetch'));
+    it('escalates the masked cooldown on consecutive CORS-blocked failures', async () => {
+      vi.useFakeTimers();
+      mockFetch.mockRejectedValue(new TypeError('Failed to fetch'));
       const client = new BsddApiClient({ minDelay: 0 });
 
-      await expect(client.fetch('https://example.com')).rejects.toThrow(TypeError);
+      await expect(client.fetch('https://example.com')).rejects.toMatchObject({ retryAfterMs: 2_100 });
+
+      const second = client.fetch('https://example.com');
+      second.catch(() => undefined);
+      await vi.advanceTimersByTimeAsync(2_100);
+      await expect(second).rejects.toMatchObject({ retryAfterMs: 4_100 });
+
+      const third = client.fetch('https://example.com');
+      third.catch(() => undefined);
+      await vi.advanceTimersByTimeAsync(4_100);
+      await expect(third).rejects.toMatchObject({ retryAfterMs: 8_100 });
+      vi.useRealTimers();
     });
 
-    it('recovers after a TypeError: next successful fetch decays adaptiveMinDelay', async () => {
+    it('recovers after a TypeError: next response resets the masked cooldown', async () => {
       mockFetch
         .mockRejectedValueOnce(new TypeError('Failed to fetch'))
-        .mockResolvedValueOnce(makeOk());
+        .mockResolvedValueOnce(makeOk())
+        .mockRejectedValueOnce(new TypeError('Failed to fetch'));
 
       const client = new BsddApiClient({ minDelay: 0 });
-      await expect(client.fetch('https://example.com')).rejects.toBeInstanceOf(TypeError);
+      await expect(client.fetch('https://example.com')).rejects.toBeInstanceOf(BsddRateLimitError);
 
       vi.useFakeTimers();
-      // Advance past the 2s cooldown so the next request is not blocked.
-      vi.advanceTimersByTime(3_000);
 
-      const response = await client.fetch('https://example.com');
-      expect(response.status).toBe(200);
+      const ok = client.fetch('https://example.com');
+      await vi.advanceTimersByTimeAsync(2_100);
+      expect((await ok).status).toBe(200);
+
+      // The escalation restarts at 2s instead of continuing to 4s.
+      await expect(client.fetch('https://example.com')).rejects.toMatchObject({ retryAfterMs: 2_100 });
       vi.useRealTimers();
     });
   });

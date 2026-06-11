@@ -16,13 +16,26 @@ interface BsddApiClientConfig {
   appVersion?: string;
 }
 
-/** Thrown when bSDD responds 429/503. TanStack Query retryDelay reads retryAfterMs. */
+/**
+ * Thrown when bSDD responds 429/503. TanStack Query retryDelay reads retryAfterMs.
+ * `masked: true` means the browser blocked the response for CORS (bSDD omits
+ * Access-Control-Allow-Origin on rate-limited responses), so the status is presumed
+ * and retryAfterMs is a synthetic escalating estimate rather than a server value.
+ * Deliberately carries no `status` property: queryClient's isClientError treats
+ * Error-with-status as permanent, which would disable retries.
+ */
 export class BsddRateLimitError extends Error {
   readonly retryAfterMs: number;
-  constructor(retryAfterMs: number, status: number) {
-    super(`bSDD rate limit (${status}): retry after ${retryAfterMs}ms`);
+  readonly masked: boolean;
+  constructor(retryAfterMs: number, status: number, masked = false) {
+    super(
+      masked
+        ? `bSDD rate limit (CORS-masked, presumed ${status}): retry after ${retryAfterMs}ms`
+        : `bSDD rate limit (${status}): retry after ${retryAfterMs}ms`,
+    );
     this.name = 'BsddRateLimitError';
     this.retryAfterMs = retryAfterMs;
+    this.masked = masked;
   }
 }
 
@@ -54,6 +67,12 @@ export class BsddApiClient {
   // Adaptive min-delay: doubles on 429, decays 0.95x per success.
   private adaptiveMinDelay = 0;
   private readonly adaptiveMaxDelay = 5_000;
+
+  // Escalating cooldown for CORS-masked 429s, where Retry-After is unreadable:
+  // 2s on first hit, doubling to 30s. Resets once any real response arrives.
+  private maskedCooldownMs = 1_000;
+  private readonly maskedCooldownBaseMs = 1_000;
+  private readonly maskedCooldownMaxMs = 30_000;
 
   // Observability.
   private stats = { totalRequests: 0, rateLimitHits: 0 };
@@ -132,19 +151,24 @@ export class BsddApiClient {
         // propagate without being counted as rate-limit hits.
         // fetch() throws TypeError when the browser blocks a response for CORS violations.
         // bSDD's CDN omits Access-Control-Allow-Origin on 429 responses, so a CORS block
-        // here is likely a masked rate limit. Apply the same doubling backoff as a real 429
-        // so the queue slows down even though we cannot confirm the HTTP status.
+        // here is likely a masked rate limit. Convert it to a masked BsddRateLimitError so
+        // callers retry it on the rate-limit path (escalating waits) instead of treating it
+        // as a generic network failure that exhausts retries while the penalty still runs.
         if (err instanceof TypeError) {
           this.stats.rateLimitHits++;
           this.adaptiveMinDelay = Math.min(
             this.adaptiveMaxDelay,
             Math.max(this.adaptiveMinDelay * 2, this.minDelay * 2),
           );
-          const until = Date.now() + 2_000;
+          this.maskedCooldownMs = Math.min(this.maskedCooldownMaxMs, this.maskedCooldownMs * 2);
+          const until = Date.now() + this.maskedCooldownMs;
           if (until > this.cooldownUntil) this.cooldownUntil = until;
+          throw new BsddRateLimitError(this.maskedCooldownMs + 100, 429, true);
         }
         throw err;
       }
+      // A real response arrived, so CORS is not being masked any more.
+      this.maskedCooldownMs = this.maskedCooldownBaseMs;
 
       if (response.status === 429 || response.status === 503) {
         this.stats.rateLimitHits++;
