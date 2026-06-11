@@ -5,6 +5,7 @@ export declare const bsddKeys: {
     }];
     readonly dictionary: (uri: string) => readonly ["bsdd", "dictionary", string];
     readonly dictionaryClasses: (uri: string, lang: string) => readonly ["bsdd", "dictionaryClasses", string, string];
+    readonly dictionaryClassesPage: (uri: string, lang: string, offset: number) => readonly ["bsdd", "dictionaryClasses", string, string, "page", number];
     readonly classDetails: (uri: string, lang: string, filterUris?: string[]) => readonly ["bsdd", "classDetails", string, string, string[]];
     readonly classes: (uris: string[], lang: string) => readonly ["bsdd", "classes", string[], string];
     readonly search: (dictUri: string, searchText: string) => readonly ["bsdd", "search", string, string];
