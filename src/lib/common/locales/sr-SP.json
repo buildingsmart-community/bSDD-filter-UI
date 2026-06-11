@@ -63,6 +63,10 @@
       "authError": "Greška autentifikacije",
       "logout": "Odjava",
       "user": "Korisnik"
-    }
+    },
+    "classSearchTitle": "Klasifikacija {{dictionary}}",
+    "classSearchHint": "Unesite tekst za pretragu klasifikacije",
+    "matchedOnSynonym": "preko sinonima",
+    "matchedOnDescription": "preko opisa"
   }
 }

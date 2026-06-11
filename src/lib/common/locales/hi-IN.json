@@ -63,6 +63,10 @@
       "authError": "प्रमाणीकरण त्रुटि",
       "logout": "साइन आउट",
       "user": "उपयोगकर्ता"
-    }
+    },
+    "classSearchTitle": "{{dictionary}} वर्गीकरण",
+    "classSearchHint": "वर्गीकरण खोजने के लिए टाइप करें",
+    "matchedOnSynonym": "पर्यायवाची से",
+    "matchedOnDescription": "विवरण से"
   }
 }

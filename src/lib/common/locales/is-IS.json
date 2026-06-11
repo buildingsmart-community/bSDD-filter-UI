@@ -63,6 +63,10 @@
       "authError": "Auðkenningarvilla",
       "logout": "Skrá út",
       "user": "Notandi"
-    }
+    },
+    "classSearchTitle": "{{dictionary}} flokkun",
+    "classSearchHint": "Sláðu inn til að leita að flokkun",
+    "matchedOnSynonym": "gegnum samheiti",
+    "matchedOnDescription": "gegnum lýsingu"
   }
 }

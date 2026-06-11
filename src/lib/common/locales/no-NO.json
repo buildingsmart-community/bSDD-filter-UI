@@ -63,6 +63,10 @@
       "authError": "Autentiseringsfeil",
       "logout": "Logg ut",
       "user": "Bruker"
-    }
+    },
+    "classSearchTitle": "{{dictionary}}-klassifikasjon",
+    "classSearchHint": "Skriv for å søke etter en klassifikasjon",
+    "matchedOnSynonym": "via synonym",
+    "matchedOnDescription": "via beskrivelse"
   }
 }

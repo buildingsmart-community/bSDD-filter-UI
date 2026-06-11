@@ -63,6 +63,10 @@
       "authError": "Authentication error",
       "logout": "Sign out",
       "user": "User"
-    }
+    },
+    "classSearchTitle": "{{dictionary}} 分類",
+    "classSearchHint": "入力して分類を検索",
+    "matchedOnSynonym": "同義語に一致",
+    "matchedOnDescription": "説明に一致"
   }
 }

@@ -63,6 +63,10 @@
       "authError": "خطأ في المصادقة",
       "logout": "تسجيل الخروج",
       "user": "المستخدم"
-    }
+    },
+    "classSearchTitle": "تصنيف {{dictionary}}",
+    "classSearchHint": "اكتب للبحث عن تصنيف",
+    "matchedOnSynonym": "عبر مرادف",
+    "matchedOnDescription": "عبر الوصف"
   }
 }

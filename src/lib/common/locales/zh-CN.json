@@ -62,6 +62,10 @@
       "authError": "Authentication error",
       "logout": "Sign out",
       "user": "User"
-    }
+    },
+    "classSearchTitle": "{{dictionary}} 分类",
+    "classSearchHint": "输入以搜索分类",
+    "matchedOnSynonym": "同义词匹配",
+    "matchedOnDescription": "描述匹配"
   }
 }

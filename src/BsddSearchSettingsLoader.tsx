@@ -3,10 +3,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useAuthToken } from './auth/useAuthToken';
-import { setBsddAccessToken } from './lib/api/bsddApiInstance';
 import { AuthButton } from './components/AuthButton';
 import BsddSearch from './lib/BsddSearch';
+import { SEARCH_INPUT_ID } from './lib/BsddSearch/Search';
 import Settings from './lib/BsddSettings/SettingsComponent';
+import { setBsddAccessToken } from './lib/api/bsddApiInstance';
 import useBrowserBridge from './lib/common/bsddBridge/useBrowserBridge';
 import { BsddBridgeContext } from './lib/providers/BsddBridgeContext';
 
@@ -27,7 +28,16 @@ function BsddSearchSettingsLoader() {
   return (
     <BsddBridgeContext.Provider value={bridge}>
       <Container>
-        <Tabs defaultValue={defaultTab} onChange={(value) => setActiveTab(value ?? defaultTab)}>
+        <Tabs
+          defaultValue={defaultTab}
+          onChange={(value) => {
+            const tab = value ?? defaultTab;
+            setActiveTab(tab);
+            if (tab === 'search') {
+              requestAnimationFrame(() => document.getElementById(SEARCH_INPUT_ID)?.focus());
+            }
+          }}
+        >
           <Group gap="xs" wrap="nowrap" align="center">
             <Tabs.List grow style={{ flex: 1 }}>
               <Tabs.Tab value="search">{t('searchTabTitle')}</Tabs.Tab>

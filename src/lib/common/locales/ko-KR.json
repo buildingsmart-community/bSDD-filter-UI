@@ -63,6 +63,10 @@
       "authError": "인증 오류",
       "logout": "로그아웃",
       "user": "사용자"
-    }
+    },
+    "classSearchTitle": "{{dictionary}} 분류",
+    "classSearchHint": "분류를 검색하려면 입력하세요",
+    "matchedOnSynonym": "동의어 일치",
+    "matchedOnDescription": "설명 일치"
   }
 }

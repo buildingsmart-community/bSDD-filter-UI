@@ -62,6 +62,10 @@
       "authError": "Authentication error",
       "logout": "Sign out",
       "user": "User"
-    }
+    },
+    "classSearchTitle": "{{dictionary}} sınıflandırması",
+    "classSearchHint": "Sınıflandırma aramak için yazın",
+    "matchedOnSynonym": "eş anlamlıyla eşleşti",
+    "matchedOnDescription": "açıklamayla eşleşti"
   }
 }

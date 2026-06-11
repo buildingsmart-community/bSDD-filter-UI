@@ -1,30 +1,28 @@
 import { Box, Button, Paper, Tooltip } from '@mantine/core';
 import { IconGripHorizontal } from '@tabler/icons-react';
 import { useQueryClient } from '@tanstack/react-query';
-import { type MouseEventHandler, useEffect, useMemo, useState } from 'react';
+import { type MouseEventHandler, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useShallow } from 'zustand/react/shallow';
 
-import type { ClassContractV1, DictionaryContractV1 } from '../../../../../shared/bsdd-api/generated/types.gen';
-import { fetchFirstPageDictionaryClasses } from '../../../api/fetchers/dictionaries';
+import type {
+  ClassContractV1,
+  ClassListItemContractV1Classes,
+  DictionaryContractV1,
+} from '../../../../../shared/bsdd-api/generated/types.gen';
+import { CLASS_ITEM_PAGE_SIZE, fetchDictionaryClassesPage } from '../../../api/fetchers/dictionaries';
 import { searchInDictionary } from '../../../api/fetchers/search';
 import { useDictionaries } from '../../../api/hooks/useDictionaries';
 import { bsddKeys } from '../../../api/queryKeys';
 import type { IfcClassification, IfcClassificationReference } from '../../../common/IfcData/ifc';
 import { useIfcDataStore } from '../../../stores/ifcDataStore';
-import {
-  selectActiveDictionaries,
-  selectMainDictionaryUri,
-  useSettingsStore,
-} from '../../../stores/settingsStore';
+import { selectActiveDictionaries, selectMainDictionaryUri, useSettingsStore } from '../../../stores/settingsStore';
 import Slicer from '../../Slicer';
 
 interface ClassificationsProps {
   height: number;
   handleMouseDown: MouseEventHandler<HTMLDivElement>;
   mainDictionaryClassification: ClassContractV1 | null;
-  mainClassificationUri: string | null;
-  onMainClassificationChange: (uri: string | null) => void;
 }
 
 interface Option {
@@ -32,6 +30,21 @@ interface Option {
   value: string;
   uri: string;
 }
+
+interface BrowseState {
+  options: Option[];
+  nextOffset: number;
+  totalCount: number;
+}
+
+const toOptions = (classes: ClassListItemContractV1Classes[]): Option[] =>
+  classes
+    .filter((c) => c.uri && c.code)
+    .map((c) => ({
+      value: c.code as string,
+      label: c.name || '',
+      uri: c.uri as string,
+    }));
 
 /**
  * Converts a selected classification reference option to an IfcClassificationReference object.
@@ -66,17 +79,28 @@ const convertToIfcClassificationReference = (
   } as IfcClassificationReference;
 };
 
-function Classifications({
-  height,
-  handleMouseDown,
-  mainDictionaryClassification,
-  mainClassificationUri,
-  onMainClassificationChange,
-}: ClassificationsProps) {
+const selectionsEqual = (a: Map<string, Option | null>, b: Map<string, Option | null>): boolean => {
+  if (a.size !== b.size) return false;
+  for (const [key, optionA] of a) {
+    if (!b.has(key)) return false;
+    const optionB = b.get(key);
+    if (optionA?.uri !== optionB?.uri || optionA?.value !== optionB?.value || optionA?.label !== optionB?.label) {
+      return false;
+    }
+  }
+  return true;
+};
+
+function Classifications({ height, handleMouseDown, mainDictionaryClassification }: ClassificationsProps) {
   const queryClient = useQueryClient();
   const { t } = useTranslation();
   const [optionsMap, setOptionsMap] = useState<Map<string, Option[]>>(new Map());
   const [searchingDictionaries, setSearchingDictionaries] = useState<Set<string>>(new Set());
+  // Accumulated browse pages per `${dictionaryUri}|${languageCode}`, so paging
+  // survives effect re-runs and search-clear restores without refetching.
+  const browseStateRef = useRef<Map<string, BrowseState>>(new Map());
+  const loadingMoreRef = useRef<Set<string>>(new Set());
+  const [loadingMoreDictionaries, setLoadingMoreDictionaries] = useState<Set<string>>(new Set());
   const [selectedIfcClassificationReferences, setSelectedIfcClassificationReferences] = useState<
     Map<string, Option | null>
   >(new Map());
@@ -144,30 +168,13 @@ function Classifications({
     return grouped;
   }, [mainDictionaryClassification, activeDictionariesMap, mainDictionaryUri]);
 
-  // Build options map for each dictionary slicer
+  // Build options map for each filter-dictionary slicer. The main dictionary has
+  // no slicer — the Search input is its editor — but its selection is pinned into
+  // the selections map below so it still reaches hasAssociations / Apply.
   useEffect(() => {
     const updateOptionsMap = async () => {
-      const entries = Array.from(activeDictionariesMap.entries());
-      const optionsMapPromises = entries.map(async ([dictionaryUri, dictionary]): Promise<[string, Option[]]> => {
-        if (dictionaryUri === mainDictionaryUri) {
-          if (mainDictionaryClassification) {
-            // Class details loaded — lock to the single selected class
-            const { code, name, uri } = mainDictionaryClassification;
-            return [
-              dictionaryUri,
-              [
-                {
-                  value: code,
-                  label: name,
-                  uri,
-                } as Option,
-              ],
-            ];
-          }
-          // mainClassificationUri exists but details not loaded yet — keep empty (loading)
-          return [dictionaryUri, []];
-        }
-
+      const entries = Array.from(activeDictionariesMap.entries()).filter(([uri]) => uri !== mainDictionaryUri);
+      const optionsMapPromises = entries.map(async ([dictionaryUri]): Promise<[string, Option[]]> => {
         let options: Option[] = [];
         const relationOptions = groupedRelationOptions[dictionaryUri];
 
@@ -175,27 +182,29 @@ function Classifications({
           // Options come directly from the main class relations — no fetch needed
           options = relationOptions;
         } else {
-          // No relations for this dictionary — fetch the first page as a searchable fallback
-          try {
-            const fetchedClasses = await queryClient.fetchQuery({
-              queryKey: [...bsddKeys.dictionaryClasses(dictionaryUri, languageCode), 'firstPage'],
-              queryFn: () => fetchFirstPageDictionaryClasses(dictionaryUri, languageCode),
-              staleTime: 1000 * 60 * 30,
-            });
-
-            options = (fetchedClasses ?? [])
-              .filter((fetchedClass) => fetchedClass.uri && fetchedClass.code)
-              .map(
-                (fetchedClass) =>
-                  ({
-                    value: fetchedClass.code as string,
-                    label: fetchedClass.name || '',
-                    uri: fetchedClass.uri as string,
-                  }) as Option,
-              );
-          } catch (error) {
-            console.error('Failed to fetch dictionary classes for', dictionaryUri, error);
-            options = [];
+          // No relations for this dictionary — page through classes on demand,
+          // starting with the first page as a searchable fallback
+          const browseKey = `${dictionaryUri}|${languageCode}`;
+          const browseState = browseStateRef.current.get(browseKey);
+          if (browseState) {
+            options = browseState.options;
+          } else {
+            try {
+              const page = await queryClient.fetchQuery({
+                queryKey: bsddKeys.dictionaryClassesPage(dictionaryUri, languageCode, 0),
+                queryFn: () => fetchDictionaryClassesPage(dictionaryUri, 0, languageCode),
+                staleTime: 1000 * 60 * 30,
+              });
+              options = toOptions(page.classes);
+              browseStateRef.current.set(browseKey, {
+                options,
+                nextOffset: CLASS_ITEM_PAGE_SIZE,
+                totalCount: page.totalCount,
+              });
+            } catch (error) {
+              console.error('Failed to fetch dictionary classes for', dictionaryUri, error);
+              options = [];
+            }
           }
         }
 
@@ -206,29 +215,59 @@ function Classifications({
       const newOptionsMap = new Map(resolvedOptionsMap);
       setOptionsMap(newOptionsMap);
 
-      const newSelectedIfcClassificationReferences = new Map<string, Option | null>();
+      // Reconcile instead of rebuilding: keep still-valid selections, fill only
+      // empty rows from the single-option / association seeds, clear only what no
+      // longer matches the new main class.
+      setSelectedIfcClassificationReferences((prev) => {
+        const next = new Map<string, Option | null>();
 
-      newOptionsMap.forEach((options, dictionaryUri) => {
-        if (options.length === 1) {
-          newSelectedIfcClassificationReferences.set(dictionaryUri, options[0]);
-        } else if (dictionaryUri in hasAssociations) {
+        if (mainDictionaryUri && mainDictionaryClassification) {
+          next.set(mainDictionaryUri, {
+            value: mainDictionaryClassification.code,
+            label: mainDictionaryClassification.name,
+            uri: mainDictionaryClassification.uri,
+          } as Option);
+        }
+
+        newOptionsMap.forEach((options, dictionaryUri) => {
+          if (options.length === 1) {
+            next.set(dictionaryUri, options[0]);
+            return;
+          }
+
+          const hasRelations = !!groupedRelationOptions[dictionaryUri]?.length;
+          const previous = prev.get(dictionaryUri);
+          if (previous) {
+            // Relation-less rows don't depend on the main class — never invalidated
+            // by it. Relation-backed rows survive iff still among the new options.
+            if (!hasRelations || options.some((option) => option.uri === previous.uri)) {
+              next.set(dictionaryUri, previous);
+              return;
+            }
+          } else if (prev.has(dictionaryUri)) {
+            // Explicitly cleared by the user — seeding must not refill it
+            next.set(dictionaryUri, null);
+            return;
+          }
+
           const dictionaryAssociations = hasAssociations[dictionaryUri];
-          if (dictionaryAssociations.length === 1) {
+          if (dictionaryAssociations?.length === 1) {
             const dictionaryAssociation = dictionaryAssociations[0];
-            const isValidOption = options.some((option) => option.value === dictionaryAssociation.identification);
+            const isValidOption =
+              !hasRelations || options.some((option) => option.value === dictionaryAssociation.identification);
 
             if (isValidOption) {
-              const dictionaryOption: Option = {
+              next.set(dictionaryUri, {
                 label: dictionaryAssociation.name || '',
                 value: dictionaryAssociation.identification || '',
                 uri: dictionaryAssociation.location || '',
-              };
-              newSelectedIfcClassificationReferences.set(dictionaryUri, dictionaryOption);
+              });
             }
           }
-        }
+        });
+
+        return selectionsEqual(prev, next) ? prev : next;
       });
-      setSelectedIfcClassificationReferences(newSelectedIfcClassificationReferences);
     };
 
     updateOptionsMap();
@@ -268,20 +307,25 @@ function Classifications({
   // Server-side search for filter dictionaries without relations
   const handleSlicerSearch = async (dictionaryUri: string, query: string) => {
     if (!query.trim()) {
-      // Reset to first page when search is cleared
+      // Search cleared — restore the accumulated browse list
+      const browseKey = `${dictionaryUri}|${languageCode}`;
+      const browseState = browseStateRef.current.get(browseKey);
+      if (browseState) {
+        setOptionsMap((prev) => new Map(prev).set(dictionaryUri, browseState.options));
+        return;
+      }
       try {
-        const fetchedClasses = await queryClient.fetchQuery({
-          queryKey: [...bsddKeys.dictionaryClasses(dictionaryUri, languageCode), 'firstPage'],
-          queryFn: () => fetchFirstPageDictionaryClasses(dictionaryUri, languageCode),
+        const page = await queryClient.fetchQuery({
+          queryKey: bsddKeys.dictionaryClassesPage(dictionaryUri, languageCode, 0),
+          queryFn: () => fetchDictionaryClassesPage(dictionaryUri, 0, languageCode),
           staleTime: 1000 * 60 * 30,
         });
-        const options: Option[] = (fetchedClasses ?? [])
-          .filter((c) => c.uri && c.code)
-          .map((c) => ({
-            value: c.code as string,
-            label: c.name || '',
-            uri: c.uri as string,
-          }));
+        const options = toOptions(page.classes);
+        browseStateRef.current.set(browseKey, {
+          options,
+          nextOffset: CLASS_ITEM_PAGE_SIZE,
+          totalCount: page.totalCount,
+        });
         setOptionsMap((prev) => new Map(prev).set(dictionaryUri, options));
       } catch {
         /* keep existing options */
@@ -315,39 +359,72 @@ function Classifications({
     }
   };
 
+  // Fetch the next page of classes when the slicer scrolls past the loaded set
+  const handleSlicerLoadMore = async (dictionaryUri: string) => {
+    const browseKey = `${dictionaryUri}|${languageCode}`;
+    const browseState = browseStateRef.current.get(browseKey);
+    if (!browseState || browseState.nextOffset >= browseState.totalCount) return;
+    if (loadingMoreRef.current.has(browseKey)) return;
+    loadingMoreRef.current.add(browseKey);
+    setLoadingMoreDictionaries((prev) => new Set(prev).add(dictionaryUri));
+    try {
+      const offset = browseState.nextOffset;
+      const page = await queryClient.fetchQuery({
+        queryKey: bsddKeys.dictionaryClassesPage(dictionaryUri, languageCode, offset),
+        queryFn: () => fetchDictionaryClassesPage(dictionaryUri, offset, languageCode),
+        staleTime: 1000 * 60 * 30,
+      });
+      const updated: BrowseState = {
+        options: [...browseState.options, ...toOptions(page.classes)],
+        nextOffset: offset + CLASS_ITEM_PAGE_SIZE,
+        totalCount: page.totalCount,
+      };
+      browseStateRef.current.set(browseKey, updated);
+      setOptionsMap((prev) => new Map(prev).set(dictionaryUri, updated.options));
+    } catch (error) {
+      console.error('Failed to fetch more dictionary classes for', dictionaryUri, error);
+    } finally {
+      loadingMoreRef.current.delete(browseKey);
+      setLoadingMoreDictionaries((prev) => {
+        const next = new Set(prev);
+        next.delete(dictionaryUri);
+        return next;
+      });
+    }
+  };
+
   return (
     <Paper style={{ height: `${height}px`, position: 'relative' }}>
-      {Array.from(activeDictionariesMap.entries()).map(([dictionaryUri, dictionary]) => {
-        const isMainDictionary = dictionaryUri === mainDictionaryUri;
-        const isMainLoading = !!mainClassificationUri && !mainDictionaryClassification;
+      {Array.from(activeDictionariesMap.entries())
+        .filter(([dictionaryUri]) => dictionaryUri !== mainDictionaryUri)
+        .map(([dictionaryUri, dictionary]) => {
+          const handleSetValue = (newValue: Option | null) => {
+            setSelectedIfcClassificationReferences((prev) => new Map(prev).set(dictionaryUri, newValue));
+          };
 
-        const handleSetValue = (newValue: Option | null) => {
-          const updated = new Map(selectedIfcClassificationReferences).set(dictionaryUri, newValue);
-          setSelectedIfcClassificationReferences(updated);
-          if (isMainDictionary && newValue?.uri && newValue.uri !== mainClassificationUri) {
-            onMainClassificationChange(newValue.uri);
-          }
-        };
-
-        return (
-          <Slicer
-            key={dictionaryUri}
-            height={height}
-            label={dictionary.name}
-            options={optionsMap.get(dictionaryUri) || []}
-            value={selectedIfcClassificationReferences.get(dictionaryUri) || null}
-            setValue={handleSetValue}
-            placeholder={t('classifications.searchClassesPlaceholder')}
-            onSearch={
-              !isMainDictionary && dictionariesWithoutRelations.has(dictionaryUri)
-                ? (query) => handleSlicerSearch(dictionaryUri, query)
-                : undefined
-            }
-            isSearching={!isMainDictionary && searchingDictionaries.has(dictionaryUri)}
-            loading={isMainLoading}
-          />
-        );
-      })}
+          return (
+            <Slicer
+              key={dictionaryUri}
+              height={height}
+              label={dictionary.name}
+              options={optionsMap.get(dictionaryUri) || []}
+              value={selectedIfcClassificationReferences.get(dictionaryUri) || null}
+              setValue={handleSetValue}
+              placeholder={t('classifications.searchClassesPlaceholder')}
+              onSearch={
+                dictionariesWithoutRelations.has(dictionaryUri)
+                  ? (query) => handleSlicerSearch(dictionaryUri, query)
+                  : undefined
+              }
+              isSearching={searchingDictionaries.has(dictionaryUri)}
+              onLoadMore={
+                dictionariesWithoutRelations.has(dictionaryUri) ? () => handleSlicerLoadMore(dictionaryUri) : undefined
+              }
+              isLoadingMore={loadingMoreDictionaries.has(dictionaryUri)}
+              loading={!mainDictionaryClassification}
+            />
+          );
+        })}
       <Box onMouseDown={handleMouseDown} style={{ marginTop: '4px' }}>
         <Tooltip label={t('classifications.dragResize')} withArrow>
           <Button fullWidth variant="subtle" size="sm" color="gray" aria-label={t('classifications.dragResize')}>

@@ -1,13 +1,15 @@
 import { Accordion, Alert, Box, Button, Group, Space, TextInput, Title } from '@mantine/core';
-import { useEffect, useMemo, useState } from 'react';
+import { type QueryClient, useQueryClient } from '@tanstack/react-query';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useShallow } from 'zustand/react/shallow';
 
 import type { ClassContractV1 } from '../../../shared/bsdd-api/generated/types.gen';
+import { searchInDictionary } from '../api/fetchers/search';
 import { useClassDetails } from '../api/hooks/useClassDetails';
 import { usePropertyNames } from '../api/hooks/usePropertyNames';
-import type { BsddDictionary } from '../common/IfcData/bsddBridgeData';
-import type { IfcEntity, IfcPropertySet } from '../common/IfcData/ifc';
+import { bsddKeys } from '../api/queryKeys';
+import type { IfcClassificationReference, IfcEntity, IfcPropertySet } from '../common/IfcData/ifc';
 import { mergeIfcEntities } from '../common/tools/mergeIfcEntities';
 import { useBsddBridge } from '../providers/BsddBridgeContext';
 import { selectSelectedIfcEntities, useIfcDataStore } from '../stores/ifcDataStore';
@@ -35,55 +37,68 @@ interface BsddSearchProps {
 
 export type PropertySetMap = Record<string, IfcPropertySet>;
 
+// The committed main class, tagged with the dictionary it was committed under so
+// validity after a dictionary change is an exact check, not a URI-prefix guess.
+interface CommittedClass {
+  uri: string;
+  label: string;
+  code?: string;
+  dictionaryUri: string;
+}
+
+interface SearchOption extends Option {
+  code?: string;
+}
+
 const minHeight = 60.7969;
 let startY = 0;
 let startHeight = 0;
 
-const getDefaultSearchOption = (
-  selectedMergedIfcEntity: IfcEntity | null,
-  mainDictionary: BsddDictionary | null,
-  searchKey: keyof IfcEntity,
-  setMainClassificationUri: (uri: string | null) => void,
-): Option | undefined => {
-  if (!selectedMergedIfcEntity || !mainDictionary) return undefined;
-
-  const newActiveClassificationUri = mainDictionary.ifcClassification.location;
-
-  let defaultSearchOption: Option | undefined;
-
-  selectedMergedIfcEntity.hasAssociations?.forEach((association) => {
-    if (association.type === 'IfcClassificationReference') {
-      const classificationReference = association;
-      if (classificationReference.referencedSource?.location === newActiveClassificationUri) {
-        if (classificationReference.location) {
-          setMainClassificationUri(classificationReference.location);
-        }
-        defaultSearchOption = {
-          label: classificationReference.name,
-          value: classificationReference.location,
-        } as Option;
-      }
+const findAssociationOption = (entity: IfcEntity | null, dictionaryUri: string): SearchOption | null => {
+  for (const association of entity?.hasAssociations ?? []) {
+    if (association.type !== 'IfcClassificationReference') continue;
+    const reference = association as IfcClassificationReference;
+    if (reference.referencedSource?.location === dictionaryUri && reference.location) {
+      return { label: reference.name ?? '', value: reference.location, code: reference.identification ?? undefined };
     }
-  });
-
-  if (
-    !defaultSearchOption &&
-    searchKey &&
-    selectedMergedIfcEntity[searchKey] &&
-    selectedMergedIfcEntity[searchKey] !== '' &&
-    selectedMergedIfcEntity[searchKey] !== '...'
-  ) {
-    defaultSearchOption = {
-      label: selectedMergedIfcEntity[searchKey] as string,
-      value: selectedMergedIfcEntity[searchKey] as string,
-    } as Option;
   }
-
-  return defaultSearchOption;
+  return null;
 };
+
+const getTextSeed = (entity: IfcEntity | null, searchKey: keyof IfcEntity): string | undefined => {
+  const seed = entity?.[searchKey];
+  return typeof seed === 'string' && seed !== '' && seed !== '...' ? seed : undefined;
+};
+
+// One-shot resolution of a text seed (objectType, or the previous selection's label
+// after a dictionary change) to a class. Commits only on an unambiguous match:
+// a unique exact-name hit, or a single search result.
+async function resolveClassInDictionary(
+  queryClient: QueryClient,
+  dictionaryUri: string,
+  text: string,
+): Promise<SearchOption | null> {
+  try {
+    const result = await queryClient.fetchQuery({
+      queryKey: bsddKeys.search(dictionaryUri, text),
+      queryFn: () => searchInDictionary({ DictionaryUri: dictionaryUri, SearchText: text }),
+      staleTime: 1000 * 60 * 5,
+      retry: 1,
+    });
+    const classes = (result.dictionary?.classes ?? []).filter((c) => c.uri && c.name);
+    const exact = classes.filter((c) => (c.name as string).toLowerCase() === text.toLowerCase());
+    const match = exact.length === 1 ? exact[0] : classes.length === 1 ? classes[0] : null;
+    return match
+      ? { value: match.uri as string, label: match.name as string, code: match.referenceCode ?? undefined }
+      : null;
+  } catch {
+    return null;
+  }
+}
 
 function BsddSearch({ searchKey = 'objectType' }: BsddSearchProps) {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const { onSave, onCancel } = useBsddBridge();
 
@@ -96,8 +111,21 @@ function BsddSearch({ searchKey = 'objectType' }: BsddSearchProps) {
   const selectedIfcEntities = useIfcDataStore(useShallow(selectSelectedIfcEntities));
   const selectedMergedIfcEntity = useMemo(() => mergeIfcEntities(selectedIfcEntities), [selectedIfcEntities]);
 
-  const [mainClassificationUri, setMainClassificationUri] = useState<string | null>(null);
-  const [defaultSearch, setDefaultSearch] = useState<Option | undefined>();
+  const mainDictionaryUri = mainDictionary?.ifcClassification.location;
+
+  const [committedClass, setCommittedClass] = useState<CommittedClass | null>(null);
+  const [isResolving, setIsResolving] = useState(false);
+  const committedClassRef = useRef<CommittedClass | null>(null);
+  const commitClass = useCallback((option: SearchOption | null, dictionaryUri: string | undefined) => {
+    const next =
+      option && dictionaryUri ? { uri: option.value, label: option.label, code: option.code, dictionaryUri } : null;
+    committedClassRef.current = next;
+    setCommittedClass(next);
+  }, []);
+
+  const mainClassificationUri =
+    committedClass && committedClass.dictionaryUri === mainDictionaryUri ? committedClass.uri : null;
+
   const [activeClassifications, setActiveClassifications] = useState<ClassContractV1[]>([]);
   const [recursiveMode, setRecursiveMode] = useState<boolean>(false);
 
@@ -116,15 +144,73 @@ function BsddSearch({ searchKey = 'objectType' }: BsddSearchProps) {
   const classProperties = mainDictionaryClassification?.classProperties || [];
   usePropertyNames(propertySetsOpened ? classProperties : [], languageCode);
 
+  // Seed / reconcile the committed class. A new host selection (Revit selection
+  // window → updateSelection) always re-seeds from the incoming entity, like the
+  // old defaultSelection flow. A dictionary change keeps a still-valid class or
+  // re-maps it (association URI, or exact-match search on the previous label /
+  // entity seed) and clears only when nothing resolves.
+  const seededEntityRef = useRef<IfcEntity | null>(null);
   useEffect(() => {
-    const defaultSearchOption = getDefaultSearchOption(
-      selectedMergedIfcEntity,
-      mainDictionary,
-      searchKey,
-      setMainClassificationUri,
-    );
-    setDefaultSearch(defaultSearchOption);
-  }, [mainDictionary, selectedMergedIfcEntity, searchKey]);
+    const entityChanged = seededEntityRef.current !== selectedMergedIfcEntity;
+    seededEntityRef.current = selectedMergedIfcEntity;
+    if (!mainDictionaryUri) {
+      commitClass(null, undefined);
+      return;
+    }
+    const current = committedClassRef.current;
+    if (!entityChanged && current && current.dictionaryUri === mainDictionaryUri) return;
+
+    const association = findAssociationOption(selectedMergedIfcEntity, mainDictionaryUri);
+    if (association) {
+      commitClass(association, mainDictionaryUri);
+      return;
+    }
+
+    const seedText = entityChanged
+      ? getTextSeed(selectedMergedIfcEntity, searchKey)
+      : current?.label || getTextSeed(selectedMergedIfcEntity, searchKey);
+    commitClass(null, undefined);
+    if (!seedText) return;
+
+    let cancelled = false;
+    setIsResolving(true);
+    resolveClassInDictionary(queryClient, mainDictionaryUri, seedText).then((option) => {
+      if (cancelled) return;
+      setIsResolving(false);
+      // Don't overwrite a selection the user committed while we were resolving
+      if (option && !committedClassRef.current) {
+        commitClass(option, mainDictionaryUri);
+      }
+    });
+    return () => {
+      cancelled = true;
+      setIsResolving(false);
+    };
+  }, [mainDictionaryUri, selectedMergedIfcEntity, searchKey, queryClient, commitClass]);
+
+  // Upgrade the committed label/code to the bSDD-canonical name and code once the
+  // class details arrive — association seeds carry whatever the model stored.
+  useEffect(() => {
+    const current = committedClassRef.current;
+    if (!mainDictionaryClassification || !current) return;
+    if (current.uri !== mainDictionaryClassification.uri) return;
+    const { name, code, uri } = mainDictionaryClassification;
+    if (current.label !== name || current.code !== code) {
+      commitClass({ label: name, value: uri, code }, current.dictionaryUri);
+    }
+  }, [mainDictionaryClassification, commitClass]);
+
+  const searchValue = useMemo<SearchOption | null>(
+    () =>
+      mainClassificationUri && committedClass
+        ? { value: committedClass.uri, label: committedClass.label, code: committedClass.code }
+        : null,
+    [mainClassificationUri, committedClass],
+  );
+  const handleSearchCommit = useCallback(
+    (option: SearchOption | null) => commitClass(option, mainDictionaryUri),
+    [commitClass, mainDictionaryUri],
+  );
 
   useEffect(() => {
     const classifications = [mainDictionaryClassification].filter(
@@ -133,12 +219,18 @@ function BsddSearch({ searchKey = 'objectType' }: BsddSearchProps) {
     setActiveClassifications(classifications);
   }, [mainDictionaryClassification]);
 
+  // The main dictionary has no Slicer row — the Search input is its editor.
+  const renderedDictionaryCount = Math.max(
+    activeDictionaryLocations.filter((uri) => uri !== mainDictionaryUri).length,
+    1,
+  );
+
   useEffect(() => {
-    setPanelHeight(`${height * activeDictionaryLocations.length + 48}px`);
-  }, [activeDictionaryLocations.length, height]);
+    setPanelHeight(`${height * renderedDictionaryCount + 48}px`);
+  }, [renderedDictionaryCount, height]);
 
   const handleMouseMove = (e: { clientY: number }) => {
-    const newHeight = startHeight + (e.clientY - startY) / activeDictionaryLocations.length;
+    const newHeight = startHeight + (e.clientY - startY) / renderedDictionaryCount;
     setHeight(newHeight > minHeight ? newHeight : minHeight);
   };
 
@@ -164,7 +256,13 @@ function BsddSearch({ searchKey = 'objectType' }: BsddSearchProps) {
       <TextInput type="hidden" name="name" id="name" value="" />
       <TextInput type="hidden" name="material" id="material" value="" />
       <Group mx="md" mt="lg" mb="sm">
-        <Search defaultSelection={defaultSearch} onClassificationSelect={setMainClassificationUri} />
+        <Search
+          key={mainDictionaryUri ?? 'no-dictionary'}
+          value={searchValue}
+          onCommit={handleSearchCommit}
+          seedText={getTextSeed(selectedMergedIfcEntity, searchKey)}
+          resolving={isResolving}
+        />
       </Group>
       {mainClassificationUri ? (
         <>
@@ -178,8 +276,6 @@ function BsddSearch({ searchKey = 'objectType' }: BsddSearchProps) {
                   height={height}
                   handleMouseDown={handleMouseDown}
                   mainDictionaryClassification={mainDictionaryClassification ?? null}
-                  mainClassificationUri={mainClassificationUri}
-                  onMainClassificationChange={setMainClassificationUri}
                 />
               </Accordion.Panel>
             </Accordion.Item>

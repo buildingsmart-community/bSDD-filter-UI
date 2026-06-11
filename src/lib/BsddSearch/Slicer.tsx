@@ -1,5 +1,5 @@
 import { CheckIcon, CloseButton, Combobox, Group, InputBase, Loader, Paper, Text, useCombobox } from '@mantine/core';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface Option {
@@ -20,6 +20,11 @@ interface SlicerProps {
   onSearch?: (query: string) => void;
   /** Indicates that a server-side search is in progress */
   isSearching?: boolean;
+  /** When provided, called when scrolling reaches the end of `options` outside
+   *  of an active search. The parent should append the next page to `options`. */
+  onLoadMore?: () => void;
+  /** Indicates that more options are being fetched after an onLoadMore call */
+  isLoadingMore?: boolean;
   /** Forces the slicer into a disabled/loading state */
   loading?: boolean;
 }
@@ -37,11 +42,13 @@ function Slicer({
   placeholder = 'Search values',
   onSearch,
   isSearching,
+  onLoadMore,
+  isLoadingMore,
   loading,
 }: SlicerProps) {
   const { t } = useTranslation();
   const [search, setSearch] = useState('');
-  const [renderedOptions, setRenderedOptions] = useState(options.slice(0, INITIAL_RENDER_LIMIT));
+  const [renderCount, setRenderCount] = useState(INITIAL_RENDER_LIMIT);
   const [disabled, setDisabled] = useState(loading || options.length === 1);
   const optionsContainerRef = useRef(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -63,32 +70,30 @@ function Slicer({
 
   useEffect(() => {
     setSearch(value?.label || '');
+    // Reset the render window on a new selection, but not when `options` grows
+    // through onLoadMore — that would yank the scroll position back to the top.
+    setRenderCount(INITIAL_RENDER_LIMIT);
   }, [value]);
 
   useEffect(() => {
     setDisabled(loading || options.length === 1);
   }, [options, loading]);
 
-  useEffect(() => {
-    if (onSearch) {
-      // Server-side search mode: show all options as-is (already filtered by server)
-      setRenderedOptions(options.slice(0, INITIAL_RENDER_LIMIT));
-    } else {
-      // Client-side filter mode
-      const optionsToShow =
-        value === null
-          ? options.filter(
-              (item) =>
-                item?.label.toLowerCase().includes(search.toLowerCase().trim()) ||
-                item?.value.toString().toLowerCase().includes(search.toLowerCase().trim()),
-            )
-          : options;
-      setRenderedOptions(optionsToShow.slice(0, INITIAL_RENDER_LIMIT));
-    }
+  // Server-side search mode shows options as-is (already filtered by the server);
+  // client-side mode filters locally while no value is selected.
+  const filteredOptions = useMemo(() => {
+    if (onSearch || value !== null) return options;
+    const query = search.toLowerCase().trim();
+    return options.filter(
+      (item) => item?.label.toLowerCase().includes(query) || item?.value.toString().toLowerCase().includes(query),
+    );
   }, [options, search, value, onSearch]);
+
+  const renderedOptions = filteredOptions.slice(0, renderCount);
 
   const handleSearchChange = (query: string) => {
     setSearch(query);
+    setRenderCount(INITIAL_RENDER_LIMIT);
     if (onSearch) {
       if (debounceRef.current) clearTimeout(debounceRef.current);
       debounceRef.current = setTimeout(() => {
@@ -108,21 +113,17 @@ function Slicer({
     const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
     const threshold = 5;
     const isAtBottom = scrollHeight - scrollTop <= clientHeight + threshold;
-    if (isAtBottom) {
-      setRenderedOptions((prevRenderedOptions) => {
-        const nextIndex = prevRenderedOptions.length;
-        const optionsToShow = onSearch
-          ? options
-          : value === null
-            ? options.filter(
-                (item) =>
-                  item?.label.toLowerCase().includes(search.toLowerCase().trim()) ||
-                  item?.value.toString().toLowerCase().includes(search.toLowerCase().trim()),
-              )
-            : options;
-        const moreOptions = optionsToShow.slice(nextIndex, nextIndex + RENDER_MORE_LIMIT);
-        return [...prevRenderedOptions, ...moreOptions];
-      });
+    if (!isAtBottom) return;
+    if (renderCount < filteredOptions.length) {
+      const nextCount = renderCount + RENDER_MORE_LIMIT;
+      setRenderCount(nextCount);
+      // Prefetch the next server page one batch early so it arrives before the
+      // user scrolls into the gap at the end of the current fetched set.
+      if (onLoadMore && !isLoadingMore && !search.trim() && nextCount + RENDER_MORE_LIMIT >= filteredOptions.length) {
+        onLoadMore();
+      }
+    } else if (onLoadMore && !isLoadingMore && !search.trim()) {
+      onLoadMore();
     }
   };
 
@@ -148,7 +149,14 @@ function Slicer({
       </Group>
     </Combobox.Empty>
   ) : comboboxOptions.length > 0 ? (
-    comboboxOptions
+    <>
+      {comboboxOptions}
+      {isLoadingMore && (
+        <Group gap="xs" p="xs" justify="center">
+          <Loader size="xs" />
+        </Group>
+      )}
+    </>
   ) : (
     <Combobox.Empty>{t('nothingFound')}</Combobox.Empty>
   );

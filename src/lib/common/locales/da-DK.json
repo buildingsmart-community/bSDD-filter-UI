@@ -63,6 +63,10 @@
       "authError": "Godkendelsesfejl",
       "logout": "Log ud",
       "user": "Bruger"
-    }
+    },
+    "classSearchTitle": "{{dictionary}}-klassifikation",
+    "classSearchHint": "Skriv for at søge efter en klassifikation",
+    "matchedOnSynonym": "via synonym",
+    "matchedOnDescription": "via beskrivelse"
   }
 }

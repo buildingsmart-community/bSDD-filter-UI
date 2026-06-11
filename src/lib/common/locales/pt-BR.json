@@ -63,6 +63,10 @@
       "authError": "Erro de autenticação",
       "logout": "Sair",
       "user": "Usuário"
-    }
+    },
+    "classSearchTitle": "Classificação {{dictionary}}",
+    "classSearchHint": "Digite para pesquisar uma classificação",
+    "matchedOnSynonym": "por sinônimo",
+    "matchedOnDescription": "por descrição"
   }
 }

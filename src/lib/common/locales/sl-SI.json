@@ -63,6 +63,10 @@
       "authError": "Napaka pri preverjanju pristnosti",
       "logout": "Odjava",
       "user": "Uporabnik"
-    }
+    },
+    "classSearchTitle": "Klasifikacija {{dictionary}}",
+    "classSearchHint": "Vnesite besedilo za iskanje klasifikacije",
+    "matchedOnSynonym": "prek sopomenke",
+    "matchedOnDescription": "prek opisa"
   }
 }

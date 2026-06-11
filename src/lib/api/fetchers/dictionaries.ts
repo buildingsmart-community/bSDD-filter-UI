@@ -9,7 +9,7 @@ import { apiHeaders } from '../bsddApiInstance';
 export type { DictionaryContractV1, ClassListItemContractV1Classes };
 
 const DICTIONARIES_PAGE_SIZE = 1000;
-const CLASS_ITEM_PAGE_SIZE = 500;
+export const CLASS_ITEM_PAGE_SIZE = 500;
 
 export async function fetchAllDictionaries(includeTest?: boolean): Promise<{ [key: string]: DictionaryContractV1 }> {
   const limit = DICTIONARIES_PAGE_SIZE;
@@ -93,10 +93,19 @@ export async function fetchAllDictionaryClasses(
   return classes;
 }
 
-export async function fetchFirstPageDictionaryClasses(
+export interface DictionaryClassesPage {
+  classes: ClassListItemContractV1Classes[];
+  totalCount: number;
+}
+
+export async function fetchDictionaryClassesPage(
   location: string,
+  offset: number,
   languageCode?: string,
-): Promise<ClassListItemContractV1Classes[]> {
-  const data = await fetchDictionaryClassPage(location, 0, languageCode);
-  return (data.classes as ClassListItemContractV1Classes[]) ?? [];
+): Promise<DictionaryClassesPage> {
+  const data = await fetchDictionaryClassPage(location, offset, languageCode);
+  return {
+    classes: (data.classes as ClassListItemContractV1Classes[]) ?? [],
+    totalCount: data.classesTotalCount ?? 0,
+  };
 }

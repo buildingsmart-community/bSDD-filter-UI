@@ -63,6 +63,10 @@
       "authError": "Eroare de autentificare",
       "logout": "Deconectare",
       "user": "Utilizator"
-    }
+    },
+    "classSearchTitle": "Clasificare {{dictionary}}",
+    "classSearchHint": "Tastați pentru a căuta o clasificare",
+    "matchedOnSynonym": "prin sinonim",
+    "matchedOnDescription": "prin descriere"
   }
 }

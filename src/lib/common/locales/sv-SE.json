@@ -63,6 +63,10 @@
       "authError": "Autentiseringsfel",
       "logout": "Logga ut",
       "user": "Användare"
-    }
+    },
+    "classSearchTitle": "{{dictionary}}-klassifikation",
+    "classSearchHint": "Skriv för att söka efter en klassifikation",
+    "matchedOnSynonym": "via synonym",
+    "matchedOnDescription": "via beskrivning"
   }
 }

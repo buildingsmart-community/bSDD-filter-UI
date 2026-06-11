@@ -63,6 +63,10 @@
       "authError": "Chyba ověření",
       "logout": "Odhlásit se",
       "user": "Uživatel"
-    }
+    },
+    "classSearchTitle": "Klasifikace {{dictionary}}",
+    "classSearchHint": "Pište pro vyhledání klasifikace",
+    "matchedOnSynonym": "podle synonyma",
+    "matchedOnDescription": "podle popisu"
   }
 }
